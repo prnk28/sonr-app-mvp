@@ -1,5 +1,6 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'settings_controller.dart';
+
 class SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -7,7 +8,7 @@ class SettingsSheet extends StatelessWidget {
       init: SettingsController(),
       builder: (controller) {
         return Container(
-          decoration: Neumorph.floating(),
+          decoration: Neumorphic.floating(),
           height: Get.height / 2,
           child: Stack(children: [
             Container(
@@ -28,14 +29,14 @@ class SettingsSheet extends StatelessWidget {
                       "Dark Mode".h6,
 
                       // Dark Mode Switch
-                      NeumorphicSwitch(
-                        style: NeumorphicSwitchStyle(
-                          activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
-                          inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                        ),
-                        value: controller.isDarkModeEnabled.value,
-                        onChanged: (val) => controller.setDarkMode(val),
-                      )
+                      // NeumorphicSwitch(
+                      //   style: NeumorphicSwitchStyle(
+                      //     activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
+                      //     inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+                      //   ),
+                      //   value: controller.isDarkModeEnabled.value,
+                      //   onChanged: (val) => controller.setDarkMode(val),
+                      // )
                     ]),
                     Padding(padding: EdgeWith.top(16)),
 
@@ -45,14 +46,14 @@ class SettingsSheet extends StatelessWidget {
                       "Flat Mode".h6,
 
                       // Dark Mode Switch
-                      NeumorphicSwitch(
-                        style: NeumorphicSwitchStyle(
-                          activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
-                          inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                        ),
-                        value: controller.isFlatModeEnabled.value,
-                        onChanged: (val) => controller.setFlatMode(val),
-                      )
+                      // NeumorphicSwitch(
+                      //   style: NeumorphicSwitchStyle(
+                      //     activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
+                      //     inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+                      //   ),
+                      //   value: controller.isFlatModeEnabled.value,
+                      //   onChanged: (val) => controller.setFlatMode(val),
+                      // )
                     ]),
                     Padding(padding: EdgeWith.top(16)),
 
@@ -62,15 +63,15 @@ class SettingsSheet extends StatelessWidget {
                       "Point To Share".h6,
 
                       // Point Share Mode Switch
-                      NeumorphicSwitch(
-                          style: NeumorphicSwitchStyle(
-                            activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
-                            inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                          ),
-                          value: controller.isDarkModeEnabled.value,
-                          onChanged: (val) async {
-                            controller.setPointShare(val);
-                          })
+                      // NeumorphicSwitch(
+                      //     style: NeumorphicSwitchStyle(
+                      //       activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
+                      //       inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+                      //     ),
+                      //     value: controller.isDarkModeEnabled.value,
+                      //     onChanged: (val) async {
+                      //       controller.setPointShare(val);
+                      //     })
                     ]),
 
                     Spacer(),

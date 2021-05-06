@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'fixed_overlay.dart';
 import 'positioned_overlay.dart';
 export 'fixed_overlay.dart';
@@ -21,8 +21,8 @@ class BaseOverlayView extends StatefulWidget {
 }
 
 class _BaseOverlayViewState extends State<BaseOverlayView> with TickerProviderStateMixin {
-  Animation<Offset> position;
-  AnimationController controller;
+  late Animation<Offset> position;
+  late AnimationController controller;
   void initState() {
     controller = AnimationController(vsync: this, duration: widget.duration);
     position = widget.entryLocation.tweenTo(Offset.zero).animatedBy(controller);
@@ -61,7 +61,7 @@ class AlertOverlayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       // backendColor: Colors.transparent,
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
@@ -100,16 +100,16 @@ class DropdownOverlayView extends StatelessWidget {
   final List<SonrDropdownItem> items;
   final GlobalKey parentKey;
   final Function(int idx) onChanged;
-  final double height;
-  final double width;
-  final EdgeInsets margin;
+  final double? height;
+  final double? width;
+  final EdgeInsets? margin;
 
   // Constructer
   DropdownOverlayView(this.index, this.items, this.parentKey, this.onChanged, {this.height = 20, this.width = 20, this.margin});
 
   @override
   Widget build(BuildContext context) {
-    RenderBox renderBox = parentKey.currentContext.findRenderObject();
+    RenderBox renderBox = parentKey.currentContext!.findRenderObject() as RenderBox;
     var size = renderBox.size;
     return Stack(children: [
       Container(
@@ -127,11 +127,11 @@ class DropdownOverlayView extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.only(top: 16.0),
         child: Container(
-          height: (items.length * size.height) / 1.5 + height,
-          width: size.width + width,
+          height: (items.length * size.height) / 1.5 + height!,
+          width: size.width + width!,
           child: Container(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            decoration: Neumorph.floating(radius: 0),
+            decoration: Neumorphic.floating(radius: 0),
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,
@@ -174,7 +174,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       margin: EdgeInsets.symmetric(horizontal: 16),
       height: Get.height / 3 + 50,
       child: Container(

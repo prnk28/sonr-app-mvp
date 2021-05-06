@@ -1,150 +1,145 @@
-import 'package:sonr_app/data/model/model_file.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'transfer_controller.dart';
 
-class PayloadView extends GetView<TransferController> {
-  const PayloadView();
+class PayloadSheetView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.widthTransformer(reducedBy: 20),
-      height: context.heightTransformer(reducedBy: 60),
-      child: Stack(
-        children: [
-          /// Poistioned Top Right
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding: EdgeInsets.all(4),
-              height: 32,
-              width: 86,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [SonrIcons.Discover.white, Obx(() => " ${controller.directionTitle.value}".h6_White)]),
-            ),
-          ),
-
-          /// Central Polygon
-          Container(
-            margin: EdgeInsets.all(24),
-            padding: EdgeInsets.only(bottom: 16),
-            alignment: Alignment.center,
-            child: Opacity(
-              opacity: 0.5,
-              child: Container(
-                width: 250,
-                height: 250,
-                decoration: Neumorph.rainbow(shape: BoxShape.circle),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _BulbViewChild(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          /// Cancel Button
-          Container(
-            alignment: Alignment.topLeft,
-            child: Opacity(
-              opacity: 0.6,
-              child: PlainIconButton(
-                onPressed: () {},
-                icon: SonrIcons.Close.gradient(gradient: SonrGradient.Critical),
-              ),
-            ),
-          ),
-
-          /// Replace Button
-          Container(
-            alignment: Alignment.topRight,
-            child: Opacity(
-              opacity: 0.6,
-              child: PlainIconButton(
-                onPressed: () {},
-                icon: SonrIcons.MoreVertical.gradient(gradient: SonrGradient.Secondary),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+        padding: EdgeInsets.all(8),
+        decoration: Neumorphic.floating(),
+        child: Container(decoration: Neumorphic.floating(), height: Height.ratio(0.15), child: _PayloadListItem()));
   }
 }
 
-// ^ Builds Hexagon Child View
-class _BulbViewChild extends GetView<TransferController> {
+class _PayloadListItem extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      // # Undefined Type
-      if (controller.inviteRequest.value.payload == Payload.UNDEFINED) {
-        return CircularProgressIndicator();
-      }
+    return Container(
+        child: Obx(() => Row(children: [
+              _buildLeading(),
+              _buildTitle(),
+              Container(
+                padding: EdgeInsets.only(left: 8),
+                alignment: Alignment.topRight,
+                child: PlainIconButton(
+                  onPressed: () {},
+                  icon: SonrIcons.MoreVertical.gradient(value: SonrGradient.Primary),
+                ),
+              ),
+            ])));
+  }
 
-      // # Check for Media File Type
-      else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
-        // Image
-        if (controller.fileItem.value.mime.type == MIME_Type.image) {
-          return _BulbViewThumbnail(item: controller.fileItem.value);
-        }
+  Widget _buildLeading() {
+    // # Undefined Type
+    if (controller.inviteRequest.value.payload == Payload.NONE) {
+      return CircularProgressIndicator();
+    }
 
-        // Other Media (Video, Audio)
-        else {
-          return controller.fileItem.value.mime.type.gradient(size: 80);
-        }
-      }
+    // # Check for Media File Type
+    else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
+      return _PayloadItemThumbnail();
+    }
 
-      // # Other File
-      else {
-        return controller.inviteRequest.value.payload.gradient(size: 80);
-      }
-    });
+    // # Other Types
+    else {
+      return controller.inviteRequest.value.payload.gradient(size: Height.ratio(0.125));
+    }
+  }
+
+  Widget _buildTitle() {
+    if (controller.inviteRequest.value.payload == Payload.CONTACT) {
+      // Build Text View
+      return Container(
+          width: Width.ratio(0.5),
+          height: Height.ratio(0.15),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: [UserService.contact.value.firstName.h6, " ".h6, UserService.contact.value.lastName.l].row(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: "Contact Card".p_Grey,
+            )
+          ]));
+    } else if (controller.inviteRequest.value.payload == Payload.URL) {
+      // Build Text View
+      return Container(
+          width: Width.ratio(0.5),
+          height: Height.ratio(0.15),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: controller.sonrFile.value!.prettyName().h6,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: controller.sonrFile.value!.sizeToString().p_Grey,
+            )
+          ]));
+    } else {
+      // Build Text View
+      return Container(
+          width: Width.ratio(0.5),
+          height: Height.ratio(0.15),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: controller.sonrFile.value!.prettyName().h6,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: controller.sonrFile.value!.sizeToString().p_Grey,
+            )
+          ]));
+    }
   }
 }
 
 // ^ Builds Thumbnail from Future
-class _BulbViewThumbnail extends StatelessWidget {
-  final FileItem item;
-
-  const _BulbViewThumbnail({Key key, @required this.item}) : super(key: key);
+class _PayloadItemThumbnail extends GetView<TransferController> {
+  const _PayloadItemThumbnail({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: item.isThumbnailReady(),
-      initialData: false,
-      builder: (context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.data) {
+    return Obx(() {
+      // Thumbnail Loading
+      if (controller.thumbStatus.value == ThumbnailStatus.Loading) {
+        return Container(
+          height: Height.ratio(0.125),
+          width: Height.ratio(0.125),
+          decoration: Neumorphic.compact(),
+          child: CircularProgressIndicator(),
+        );
+      }
 
+      // Media with Thumbnail
+      else if (controller.thumbStatus.value == ThumbnailStatus.Complete) {
+        return GestureDetector(
+          onTap: () => OpenFile.open(controller.sonrFile.value!.single.path),
+          child: Container(
+              height: Height.ratio(0.125),
+              width: Height.ratio(0.125),
+              decoration: Neumorphic.indented(),
+              clipBehavior: Clip.hardEdge,
+              child: Image.memory(
+                controller.sonrFile.value!.single.thumbnail as Uint8List,
+                fit: BoxFit.cover,
+              )),
+        );
+      }
 
-          // Return View
-          return GestureDetector(
-            onTap: () => OpenFile.open(item.path),
-            child: Container(
-                decoration: Neumorph.indented(),
-                width: 140,
-                height: 140,
-                clipBehavior: Clip.hardEdge,
-                child: Image.memory(
-                  item.thumbnail,
-                  fit: BoxFit.cover,
-                )),
-          );
-        } else {
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.grey[100], Colors.grey[300]],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-            ),
-          );
-        }
-      },
-    );
+      // Non Thumbnail Media
+      else {
+        return Container(
+          height: Height.ratio(0.125),
+          width: Height.ratio(0.125),
+          decoration: Neumorphic.compact(),
+          child: controller.sonrFile.value!.single.mime.type.gradient(size: Height.ratio(0.125)),
+        );
+      }
+    });
   }
 }

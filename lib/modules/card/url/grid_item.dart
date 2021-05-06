@@ -1,8 +1,8 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class URLGridItemView extends StatelessWidget {
   final TransferCardItem item;
-  const URLGridItemView(this.item, {Key key}) : super(key: key);
+  const URLGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -10,7 +10,7 @@ class URLGridItemView extends StatelessWidget {
               width: 160,
               height: 190,
               clipBehavior: Clip.antiAlias,
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               margin: EdgeInsets.all(32),
               child: Stack(children: [
                 // Content
@@ -40,9 +40,9 @@ class URLGridItemView extends StatelessWidget {
 
 // ^ Main URL Grid Item View ^ //
 class _URLGridItemMainView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _URLGridItemMainView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _URLGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,38 +56,25 @@ class _URLGridItemMainView extends StatelessWidget {
               alignment: Alignment.topRight,
               child: GestureDetector(
                 onTap: () {
-                  isFlipped(true);
-                  isFlipped.refresh();
+                  isFlipped!(true);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.About.gradient(gradient: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.About.gradient(value: SonrGradient.Secondary, size: 24),
                 ),
               )),
 
-          // Avatar
-          OpacityAnimatedWidget(
-            // TODO: enabled: controller.isVisible.value,
-            duration: 125.milliseconds,
-            // TODO: child: controller.peer.value.profilePicture(size: 68),
-          ),
-
           Spacer(),
-
-          // Device Icon and Full Name
-          // TODO: "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h6,
-
-          // Username
-          // TODO: controller.peer.value.profile.username.p_Grey,
         ].column());
   }
 }
 
 // ^ Details URL Grid Item View ^ //
 class _URLGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _URLGridItemDetailsView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _URLGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,12 +87,12 @@ class _URLGridItemDetailsView extends StatelessWidget {
             // Align Platform
             GestureDetector(
                 onTap: () {
-                  isFlipped(false);
-                  isFlipped.refresh();
+                  isFlipped!(false);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
                 )),
 
             // Align Compass

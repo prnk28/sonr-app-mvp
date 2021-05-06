@@ -1,22 +1,20 @@
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:sonr_app/modules/peer/item_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'remote_controller.dart';
 
 // ^ Main Card View ^ //
 class RemoteView extends GetView<RemoteController> {
-  RemoteView({Key key}) : super(key: key);
+  RemoteView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphCard(
-        parameters: controller.viewParameters,
+    return NeumorphicCard(
         child: Obx(
-          () => AnimatedSlideSwitcher.fade(
-            child: _buildView(controller.status.value),
-            duration: const Duration(milliseconds: 2500),
-          ),
-        ));
+      () => AnimatedSlideSwitcher.fade(
+        child: _buildView(controller.status.value),
+        duration: const Duration(milliseconds: 2500),
+      ),
+    ));
   }
 
   // @ Build Page View by Navigation Item
@@ -38,7 +36,7 @@ class RemoteView extends GetView<RemoteController> {
 
 // ^ Join a Remote View ^ //
 class _JoinRemoteView extends GetView<RemoteController> {
-  _JoinRemoteView({Key key}) : super(key: key);
+  _JoinRemoteView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
@@ -79,24 +77,21 @@ class _JoinRemoteView extends GetView<RemoteController> {
 }
 
 // ^ Card Aspect Ratio Remote View ^ //
-class RemoteLobbyView extends HookWidget {
-  RemoteLobbyView({Key key}) : super(key: key);
+class RemoteLobbyView extends GetView<RemoteController> {
+  RemoteLobbyView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final remote = Get.find<RemoteController>().remoteInfo.value;
-    final remoteStream = LobbyService.useRemoteLobby(remote);
-
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "${remote.display}".h2,
+      "${controller.remoteInfo.value!.display}".h2,
       Expanded(
           child: ListView.builder(
-        itemCount: remoteStream.data != null ? remoteStream.data.length : 0,
+        itemCount: controller.remoteLobby.value!.count,
         itemBuilder: (BuildContext context, int index) {
           // Build List Item
           return PeerListItem(
-            remoteStream.data.atIndex(index - 1),
+            controller.remoteLobby.value!.peerAtIndex(index - 1),
             index - 1,
-            remote: remote,
+            remote: controller.remoteInfo.value,
           );
         },
       )),
@@ -110,12 +105,10 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       padding: EdgeInsets.only(bottom: 8),
       margin: EdgeInsets.symmetric(horizontal: 16),
-      child: OpacityAnimatedWidget(
-        duration: 400.milliseconds,
-        enabled: controller.isJoinFieldTapped.value,
+      child: FadeInDownBig(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -166,7 +159,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
 
 // ^ Received Remote Invite View ^ //
 class RemoteInviteView extends GetView<RemoteController> {
-  RemoteInviteView({Key key}) : super(key: key);
+  RemoteInviteView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -180,7 +173,7 @@ class RemoteInviteView extends GetView<RemoteController> {
 // ^ During Remote Transfer View ^ //
 
 class RemoteProgressView extends GetView<RemoteController> {
-  RemoteProgressView({Key key}) : super(key: key);
+  RemoteProgressView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     //return Center();
@@ -195,7 +188,7 @@ class RemoteProgressView extends GetView<RemoteController> {
 // ^  Remote Completed View ^ //
 
 class RemoteCompletedView extends GetView<RemoteController> {
-  RemoteCompletedView({Key key}) : super(key: key);
+  RemoteCompletedView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [

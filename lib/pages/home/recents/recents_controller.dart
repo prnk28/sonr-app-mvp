@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 import 'recents_view.dart';
 
@@ -14,8 +14,8 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   final chartActiveIndex = (-1).obs;
 
   // References
-  TabController tabController;
-  ScrollController scrollController;
+  TabController? tabController;
+  ScrollController? scrollController;
 
   // ^ Controller Constructer ^
   @override
@@ -29,8 +29,8 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
 
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
-    tabController.addListener(() {
-      tagIndex(tabController.index);
+    tabController!.addListener(() {
+      tagIndex(tabController!.index);
     });
 
     // Initialize
@@ -41,7 +41,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   setTag(int index) {
     tagIndex(index);
     category(ToggleFilter.values[index]);
-    tabController.animateTo(index);
+    tabController!.animateTo(index);
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();
@@ -51,7 +51,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   void tapChart(PieTouchResponse pieTouchResponse) {
     final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent && pieTouchResponse.touchInput is! PointerUpEvent;
     if (desiredTouch && pieTouchResponse.touchedSection != null) {
-      chartActiveIndex(pieTouchResponse.touchedSection.touchedSectionIndex);
+      chartActiveIndex(pieTouchResponse.touchedSection!.touchedSectionIndex);
     } else {
       chartActiveIndex(-1);
     }
@@ -76,7 +76,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             badgeWidget: Badge(
               size: widgetSize,
               borderColor: SonrColor.Secondary,
-              child: SonrIcons.Video.gradient(gradient: SonrGradient.Primary, size: 18),
+              child: SonrIcons.Video.gradient(value: SonrGradient.Primary, size: 18),
             ),
             badgePositionPercentageOffset: .96,
           );
@@ -90,11 +90,11 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             badgeWidget: Badge(
               size: widgetSize,
               borderColor: SonrColor.Tertiary,
-              child: SonrIcons.Files.gradient(gradient: SonrGradient.Tertiary, size: 18),
+              child: SonrIcons.Files.gradient(value: SonrGradient.Tertiary, size: 18),
             ),
             badgePositionPercentageOffset: 1.02,
           );
-        case 2:
+        default:
           return PieChartSectionData(
             color: SonrColor.AccentPink,
             value: 16,
@@ -104,12 +104,10 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             badgeWidget: Badge(
               size: widgetSize,
               borderColor: SonrColor.AccentPink,
-              child: SonrIcons.Photos.gradient(gradient: SonrGradient.Critical, size: 18),
+              child: SonrIcons.Photos.gradient(value: SonrGradient.Critical, size: 18),
             ),
             badgePositionPercentageOffset: .96,
           );
-        default:
-          return null;
       }
     });
   }

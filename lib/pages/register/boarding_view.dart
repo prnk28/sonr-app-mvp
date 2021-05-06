@@ -1,8 +1,8 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'register_controller.dart';
 
 class BoardingLocationView extends GetView<RegisterController> {
-  BoardingLocationView({Key key}) : super(key: key);
+  BoardingLocationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +24,7 @@ class BoardingLocationView extends GetView<RegisterController> {
 }
 
 class BoardingGalleryView extends GetView<RegisterController> {
-  BoardingGalleryView({Key key}) : super(key: key);
+  BoardingGalleryView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

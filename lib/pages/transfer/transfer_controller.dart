@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/data/model/model_file.dart';
-import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
+
+enum ThumbnailStatus { None, Loading, Complete }
 
 class TransferController extends GetxController {
   // @ Accessors
@@ -13,14 +11,15 @@ class TransferController extends GetxController {
 
   // @ Properties
   final title = "Nobody Here".obs;
-  final isNotEmpty = false.obs;
   final isFacingPeer = false.obs;
+  final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final fileItem = Rx<FileItem>(null);
+  final sonrFile = Rx<SonrFile?>(null);
+  final thumbStatus = ThumbnailStatus.None.obs;
 
   // @ Remote Properties
   final counter = 0.obs;
-  final remote = Rx<RemoteInfo>(null);
+  final remote = Rx<RemoteInfo?>(null);
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -33,21 +32,19 @@ class TransferController extends GetxController {
   final cardinalTitle = "".obs;
 
   // References
-  StreamSubscription<int> _lobbySizeStream;
-  StreamSubscription<Position> _positionStream;
-  PeerController currentPeerController;
-  CarouselController carouselController = CarouselController();
+  late StreamSubscription<Lobby?> _lobbySizeStream;
+  late StreamSubscription<Position> _positionStream;
+  ScrollController scrollController = ScrollController();
 
   // ^ Controller Constructer ^
   void onInit() {
     // Set Initial Value
     _handlePositionUpdate(MobileService.position.value);
-    _handleLobbySizeUpdate(LobbyService.localSize.value);
+    _handleLobbyUpdate(LobbyService.local.value);
 
     // Add Stream Handlers
     _positionStream = MobileService.position.listen(_handlePositionUpdate);
-    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
-
+    _lobbySizeStream = LobbyService.local.listen(_handleLobbyUpdate);
     super.onInit();
   }
 
@@ -60,29 +57,13 @@ class TransferController extends GetxController {
   }
 
   // ^ Send Invite with Peer ^ //
-  void inviteWithPeer(Peer peer) {
-    // Update Request
-    inviteRequest.update((val) {
-      val.to = peer;
-    });
-
-    // Send Invite
-    SonrService.invite(inviteRequest.value);
-  }
-
-  // ^ Send Invite with Bubble Controller ^ //
-  void inviteWithBubble(PeerController bubble) {
-    // Set Controller
-    currentPeerController = bubble;
+  void invitePeer(Peer? peer) {
     setFacingPeer(false);
     isShiftingEnabled(false);
 
-    // Register Callback
-    Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
-
     // Update Request
     inviteRequest.update((val) {
-      val.to = bubble.peer.value;
+      val!.to = peer!;
     });
 
     // Send Invite
@@ -90,53 +71,34 @@ class TransferController extends GetxController {
   }
 
   // ^ Set Transfer Payload ^ //
-  void setPayload(dynamic args) {
-    // Validate Args
-    if (args is TransferArguments) {
-      // Set Payload
-
-      // Contact
-      if (args.payload == Payload.CONTACT) {
-        inviteRequest.update((val) {
-          val.payload = args.payload;
-          val.contact = args.contact;
-          val.type = InviteRequest_TransferType.Contact;
-        });
-      }
-      // URL
-      else if (args.payload == Payload.URL) {
-        inviteRequest.update((val) {
-          val.payload = args.payload;
-          val.url = args.url;
-          val.type = InviteRequest_TransferType.URL;
-        });
-      }
-      // File
-      else {
-        // Set File Item
-        fileItem(args.item);
-        inviteRequest.update((val) {
-          val.payload = args.payload;
-          val.files.add(args.metadata);
-          val.type = InviteRequest_TransferType.File;
-        });
-      }
-    } else {
-      print("Invalid Arguments Provided for Transfer");
-    }
-  }
-
-  // ^ Set Thumbnail ^ //
-  void setThumbnail(List<int> thumb) {
-    // Validate Thumbnail
-    if (thumb.length > 0) {
+  void setPayload(TransferArguments args) {
+    // Contact
+    if (args.payload == Payload.CONTACT) {
       inviteRequest.update((val) {
-        // Validate File Exists
-        assert(val.files.length > 0);
-
-        // Set thumbnail
-        val.files.first.thumbnail = thumb;
-        print("Thumbnail Set");
+        val!.payload = args.payload;
+        val.contact = args.contact!;
+        val.payload = Payload.CONTACT;
+      });
+    }
+    // URL
+    else if (args.payload == Payload.URL) {
+      inviteRequest.update((val) {
+        val!.payload = args.payload;
+        val.url = args.url!;
+        val.payload = Payload.URL;
+      });
+    }
+    // Media
+    else if (args.payload == Payload.MEDIA) {
+      _setMediaPayload(args.file);
+    }
+    // File
+    else {
+      // Set File Item
+      sonrFile(args.file);
+      inviteRequest.update((val) {
+        val!.file = args.file!;
+        val.payload = args.payload;
       });
     }
   }
@@ -155,72 +117,44 @@ class TransferController extends GetxController {
   // # Handle Compass Update ^ //
   _handlePositionUpdate(Position pos) {
     // Update String Elements
-    if (pos != null && !isClosed) {
-      directionTitle(_stringForDirection(pos.facing));
-      cardinalTitle(_cardinalStringForDirection(pos.facing));
+    if (!isClosed) {
+      // Set Titles
+      directionTitle(pos.facing.directionString);
+      cardinalTitle(pos.facing.cardinalString);
 
-      // Reference
-      direction(pos.facing);
-      angle(((pos.facing ?? 0) * (pi / 180) * -1));
-
-      // Calculate Degrees
-      if (pos.facing + 90 > 360) {
-        degrees(pos.facing - 270);
-      } else {
-        degrees(pos.facing + 90);
-      }
+      // Update Properties
+      direction(pos.facing.direction);
+      angle(pos.facing.angle);
+      degrees(pos.facing.degrees);
     }
   }
 
   // # Handle Lobby Size Update ^ //
-  _handleLobbySizeUpdate(int size) {
-    if (size == 0) {
-      isNotEmpty(false);
-      title("Nobody Here");
-    } else if (size == 1) {
-      isNotEmpty(true);
-      title("1 Person");
+  _handleLobbyUpdate(Lobby? data) {
+    if (data != null && !isClosed) {
+      isNotEmpty(data.isNotEmpty);
+      title(data.countString);
+    }
+  }
+
+  // # Loads SonrFile for Media Payload
+  _setMediaPayload(SonrFile? file) async {
+    // Update Request
+    inviteRequest.update((val) {
+      val!.file = file!;
+      val.payload = Payload.MEDIA;
+    });
+
+    // Set File Item
+    sonrFile(file);
+    thumbStatus(ThumbnailStatus.Loading);
+    await sonrFile.value!.setThumbnail();
+
+    // Check Result
+    if (sonrFile.value!.single.hasThumbnail()) {
+      thumbStatus(ThumbnailStatus.Complete);
     } else {
-      isNotEmpty(true);
-      title("$size People");
+      thumbStatus(ThumbnailStatus.None);
     }
-  }
-
-  // # Handle Peer Response ^ //
-  _handleTransferStatus(TransferStatus data) {
-    if (currentPeerController != null) {
-      // Check Decision
-      if (data == TransferStatus.Accepted) {
-        currentPeerController.updateStatus(PeerStatus.Accepted);
-      } else if (data == TransferStatus.Denied) {
-        currentPeerController.updateStatus(PeerStatus.Declined);
-      } else {
-        currentPeerController.updateStatus(PeerStatus.Complete);
-        inviteRequest.value.clear();
-      }
-    }
-  }
-
-  // # Return String Value for Direction ^ //
-  _stringForDirection(double dir) {
-    // Calculated
-    var adjustedDegrees = dir.round();
-    final unit = "°";
-
-    // @ Convert To String
-    if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
-      return "0" + "0" + adjustedDegrees.toString() + unit;
-    } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
-      return "0" + adjustedDegrees.toString() + unit;
-    } else {
-      return adjustedDegrees.toString() + unit;
-    }
-  }
-
-  // # Return Cardinal Value for Direction ^ //
-  _cardinalStringForDirection(double dir) {
-    var adjustedDesignation = ((dir.round() / 11.25) + 0.25).toInt();
-    var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];
-    return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }

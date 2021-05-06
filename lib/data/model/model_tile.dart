@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/profile/profile.dart';
 
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:sonr_plugin/sonr_social.dart';
 
 // ** Focused Tile ** //
 class FocusedTile {
@@ -18,30 +17,29 @@ class TileStep {
   int _step = 0;
   int get current => _step;
   set current(int s) => _step;
-  bool get hasCurrent => _step != null;
 
   // @ Form -> Provider
-  Contact_SocialTile_Provider _provider;
-  Contact_SocialTile_Provider get provider => _provider;
-  set provider(Contact_SocialTile_Provider s) => _provider;
+  Contact_Social_Provider? _provider;
+  Contact_Social_Provider? get provider => _provider;
+  set provider(Contact_Social_Provider? s) => _provider;
   bool get hasProvider => _provider != null;
 
   // @ Form -> User Data
-  SocialUser _user;
-  SocialUser get user => _user;
-  set user(SocialUser s) => _user;
+  SocialUser? _user;
+  SocialUser? get user => _user;
+  set user(SocialUser? s) => _user;
   bool get hasUser => _user != null;
 
   // @ Form -> Privacy
-  bool _isPrivate;
-  bool get isPrivate => _isPrivate;
-  set isPrivate(bool s) => _isPrivate;
+  bool? _isPrivate;
+  bool? get isPrivate => _isPrivate;
+  set isPrivate(bool? s) => _isPrivate;
   bool get hasPrivate => _isPrivate != null;
 
   // @ Form -> Type
-  Contact_SocialTile_Type _type;
-  Contact_SocialTile_Type get type => _type;
-  set type(Contact_SocialTile_Type s) => _type;
+  Contact_Social_Tile_Display? _type;
+  Contact_Social_Tile_Display? get type => _type;
+  set type(Contact_Social_Tile_Display? s) => _type;
   bool get hasType => _type != null;
 
   // @ Properties
@@ -118,7 +116,7 @@ class TileStep {
     }
   }
 
-  Contact_SocialTile_Links get links {
-    return provider.links(user.username);
+  Contact_Social_Links get links {
+    return provider!.links(user!.username);
   }
 }

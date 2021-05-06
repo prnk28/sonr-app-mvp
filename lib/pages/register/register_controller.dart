@@ -2,7 +2,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum RegisterStatus { Form, Location, Gallery }
 
@@ -26,12 +26,17 @@ class RegisterController extends GetxController {
   setContact() async {
     if (validate()) {
       // Get Contact from Values
-      var contact = Contact(firstName: firstName.value, lastName: lastName.value);
+      var contact = Contact(
+          profile: Profile(
+        firstName: firstName.value,
+        lastName: lastName.value,
+        username: "@TempUsername",
+      ));
 
       // Remove Textfield Focus
-      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus.unfocus();
+        FocusManager.instance.primaryFocus!.unfocus();
       }
 
       // Process data.

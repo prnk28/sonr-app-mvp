@@ -1,11 +1,11 @@
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 class ContactGridItemView extends StatelessWidget {
   final TransferCardItem item;
-  const ContactGridItemView(this.item, {Key key}) : super(key: key);
+  const ContactGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -13,7 +13,7 @@ class ContactGridItemView extends StatelessWidget {
               width: 160,
               height: 190,
               clipBehavior: Clip.antiAlias,
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               margin: EdgeInsets.all(32),
               child: Stack(children: [
                 // Content
@@ -43,9 +43,9 @@ class ContactGridItemView extends StatelessWidget {
 
 // ^ Main Contact Grid Item View ^ //
 class _ContactGridItemMainView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _ContactGridItemMainView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _ContactGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,44 +53,28 @@ class _ContactGridItemMainView extends StatelessWidget {
         width: context.widthTransformer(reducedBy: 0.8),
         height: context.heightTransformer(reducedBy: 0.6),
         alignment: Alignment.center,
-        child: [
-          // Align Back Button
-          Align(
-              alignment: Alignment.topRight,
-              child: GestureDetector(
-                onTap: () {
-                  isFlipped(true);
-                  isFlipped.refresh();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.About.gradient(gradient: SonrGradient.Secondary, size: 24),
-                ),
-              )),
-
-          // Avatar
-          OpacityAnimatedWidget(
-            // TODO: enabled: controller.isVisible.value,
-            duration: 125.milliseconds,
-            // TODO: child: controller.peer.value.profilePicture(size: 68),
-          ),
-
-          Spacer(),
-
-          // Device Icon and Full Name
-          // TODO: "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h6,
-
-          // Username
-          // TODO: controller.peer.value.profile.username.p_Grey,
-        ].column());
+        child:
+            // Align Back Button
+            Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    isFlipped!(true);
+                    isFlipped!.refresh();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: SonrIcons.About.gradient(value: SonrGradient.Secondary, size: 24),
+                  ),
+                )));
   }
 }
 
 // ^ Details Contact Grid Item View ^ //
 class _ContactGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _ContactGridItemDetailsView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _ContactGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -103,12 +87,12 @@ class _ContactGridItemDetailsView extends StatelessWidget {
             // Align Platform
             GestureDetector(
                 onTap: () {
-                  isFlipped(false);
-                  isFlipped.refresh();
+                  isFlipped!(false);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
                 )),
 
             // Align Compass

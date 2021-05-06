@@ -9,7 +9,7 @@ part 'cards_db.g.dart';
 
 enum ActivityType { Deleted, Shared, Received }
 
-extension ActivityTypeUtils on ActivityType {
+extension ActivityTypeUtils on ActivityType? {
   String get value {
     return this.toString().substring(this.toString().indexOf('.') + 1);
   }
@@ -17,19 +17,20 @@ extension ActivityTypeUtils on ActivityType {
 
 @DataClassName("TransferCardActivity")
 class TransferCardActivities extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get card => text().map(const CardConverter())();
-  IntColumn get activity => integer().map(const ActivityConverter())();
+  IntColumn? get id => integer().autoIncrement()();
+  TextColumn? get card => text().map(const CardConverter())();
+  IntColumn? get activity => integer().map(const ActivityConverter())();
 }
 
 class TransferCardItems extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get owner => text().map(const ProfileConverter())();
-  IntColumn get payload => integer().map(const PayloadConverter())();
-  TextColumn get contact => text().map(const ContactConverter()).nullable()();
-  TextColumn get metadata => text().map(const MetadataConverter()).nullable()();
-  TextColumn get url => text().map(const URLConverter()).nullable()();
-  DateTimeColumn get received => dateTime()();
+  IntColumn? get id => integer().autoIncrement()();
+  TextColumn? get owner => text().map(const ProfileConverter())();
+  IntColumn? get mime => integer().map(const MimeConverter())();
+  IntColumn? get payload => integer().map(const PayloadConverter())();
+  TextColumn? get contact => text().map(const ContactConverter()).nullable()();
+  TextColumn? get file => text().map(const FileConverter()).nullable()();
+  TextColumn? get url => text().map(const URLConverter()).nullable()();
+  DateTimeColumn? get received => dateTime()();
 }
 
 // this annotation tells moor to prepare a database class that uses both of the
@@ -60,13 +61,7 @@ class CardsDatabase extends _$CardsDatabase {
 
   Stream<List<TransferCardItem>> watchMetadata() {
     return (select(transferCardItems)
-          ..where((t) =>
-              t.payload.equals(Payload.MEDIA.value) |
-              t.payload.equals(Payload.PDF.value) |
-              t.payload.equals(Payload.PRESENTATION.value) |
-              t.payload.equals(Payload.SPREADSHEET.value) |
-              t.payload.equals(Payload.TEXT.value) |
-              t.payload.equals(Payload.OTHER.value)))
+          ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.MULTI_FILES.value)))
         .watch();
   }
 
@@ -80,25 +75,38 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   Future<int> addCard(TransferCard card) async {
+    Value<MIME_Type> mime = Value.absent();
+
+    if (card.hasFile()) {
+      if (!card.file.isMultiple) {
+        mime = Value(card.file.single.mime.type);
+      }
+    }
+
     return into(transferCardItems).insert(TransferCardItemsCompanion(
         owner: Value(card.owner),
+        mime: mime,
         payload: Value(card.payload),
         contact: card.hasContact() ? Value(card.contact) : Value.absent(),
-        metadata: card.hasMetadata() ? Value(card.metadata) : Value.absent(),
+        file: card.hasFile() ? Value(card.file) : Value.absent(),
         url: card.hasUrl() ? Value(card.url) : Value.absent(),
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
   }
 
-  Future clearActivity(TransferCardActivity activity) {
+  Future<void> clearActivity(TransferCardActivity activity) {
     return (delete(transferCardActivities)..where((t) => t.id.equals(activity.id))).go();
   }
 
-  Future clearAllActivity() {
-    return (delete(transferCardActivities).go());
+  Future<void> clearAllActivity() {
+    return delete(transferCardActivities).go();
   }
 
-  Future deleteCard(TransferCardItem item) {
+  Future<void> deleteCard(TransferCardItem item) {
     return (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
+  }
+
+  Future<void> deleteAllCards() {
+    return delete(transferCardItems).go();
   }
 }
 

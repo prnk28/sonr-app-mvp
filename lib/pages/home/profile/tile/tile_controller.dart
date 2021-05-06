@@ -1,5 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_plugin/sonr_social.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../profile_controller.dart';
 
@@ -11,25 +10,25 @@ class TileController extends GetxController {
   final isFetched = false.obs;
 
   // Social Media Properties
-  final medium = Rx<MediumModel>(null);
-  final twitter = Rx<TwitterModel>(null);
-  final youtube = Rx<YoutubeModel>(null);
+  final medium = Rx<MediumModel?>(null);
+  final twitter = Rx<TwitterModel?>(null);
+  final youtube = Rx<YoutubeModel?>(null);
 
   // ^ Create New Tile ^ //
-  initialize(Contact_SocialTile tile, int i) async {
+  initialize(Contact_Social tile, int i) async {
     // Medium Data
-    if (tile.provider == Contact_SocialTile_Provider.Medium) {
+    if (tile.provider == Contact_Social_Provider.Medium) {
       medium(await MediumController.getUser(tile.username));
       isFetched(true);
     }
     // Twitter Data
-    else if (tile.provider == Contact_SocialTile_Provider.Twitter) {
+    else if (tile.provider == Contact_Social_Provider.Twitter) {
       twitter(await TwitterController.getUser(tile.username));
       isFetched(true);
     }
     // Youtube Data
-    else if (tile.provider == Contact_SocialTile_Provider.YouTube) {
-      youtube(await YoutubeController.searchVideo(tile.links.postLink));
+    else if (tile.provider == Contact_Social_Provider.YouTube) {
+      youtube(await YoutubeController.searchVideo(tile.links.postLink.link));
       isFetched(true);
     }
   }
@@ -44,8 +43,8 @@ class TileController extends GetxController {
   }
 
   // ^ Removes Current Tile ^ //
-  deleteTile(Contact_SocialTile tile) {
-    UserService.deleteSocial(tile);
+  deleteTile(Contact_Social tile) {
+    UserService.contact.deleteSocial(tile);
   }
 
   // ^ Toggles Between Expanded and Normal ^ //

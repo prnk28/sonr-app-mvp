@@ -1,27 +1,28 @@
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:get/get.dart';
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
 class ContactAuthView extends StatelessWidget {
-  final AuthInvite invite;
-  final AuthReply reply;
+  final AuthInvite? invite;
+  final AuthReply? reply;
   final bool isReply;
   ContactAuthView(this.isReply, {this.invite, this.reply});
 
   @override
   Widget build(BuildContext context) {
-    TransferCard card;
+    Contact card;
     if (isReply) {
-      card = reply.card;
+      card = reply!.card.contact;
     } else {
-      card = invite.card;
+      card = invite!.contact;
     }
     return Container(
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -29,9 +30,9 @@ class ContactAuthView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8),
               child: Container(
-                decoration: Neumorph.floating(),
+                decoration: Neumorphic.floating(),
                 padding: EdgeInsets.all(4),
-                child: card.contact.profilePicture,
+                child: card.pictureImage(),
               ),
             ),
           ),
@@ -42,15 +43,15 @@ class ContactAuthView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              card.contact.headerName,
+              card.headerNameText(),
 
               // Phone/ Website
               Row(children: [
-                card.owner.platform.gradient(size: 20),
+                card.platform.gradient(size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
-                card.contact.phoneNumber,
-                card.contact.webSite,
+                // card.contact.phoneNumber,
+                // card.contact.webSite,
               ]),
             ]),
           ),
@@ -58,10 +59,7 @@ class ContactAuthView extends StatelessWidget {
         // Social Media
         Container(
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
-          child: Row(
-              children: List.generate(card.contact.socials.length, (index) {
-            return card.contact.socials[index].provider.gradient(size: 32);
-          })),
+          child: Row(children: card.mapSocials((social) => social.provider.gradient(size: 32)) as List<Widget>),
         ),
         Divider(),
         Padding(padding: EdgeInsets.all(4)),
@@ -75,9 +73,9 @@ class ContactAuthView extends StatelessWidget {
                 SonrOverlay.back();
                 if (!isReply) {
                   var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  CardService.handleInviteResponse(true, invite, card, sendBackContact: result);
+                  CardService.handleInviteResponse(true, invite!, sendBackContact: result);
                 } else {
-                  CardService.handleInviteResponse(true, invite, card, sendBackContact: false);
+                  CardService.handleInviteResponse(true, invite!);
                 }
               },
               text: "Accept",
@@ -87,6 +85,78 @@ class ContactAuthView extends StatelessWidget {
           ],
         ),
       ]),
+    );
+  }
+}
+
+// ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
+class ContactFlatCard extends StatelessWidget {
+  final double? scale;
+  final Contact? contact;
+  ContactFlatCard(this.contact, {this.scale, Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 420 * scale!,
+      width: (Get.width - 64) * scale!,
+      decoration: Neumorphic.floating(),
+      child: Container(
+        height: 75,
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Padding(padding: EdgeInsets.all(4)),
+          // Build Profile Pic
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Container(padding: EdgeInsets.all(10), decoration: Neumorphic.floating(shape: BoxShape.circle), child: contact!.pictureImage()),
+          ),
+
+          // Build Name
+          contact!.fullNameText(),
+          Divider(),
+          Padding(padding: EdgeInsets.all(4)),
+
+          // Quick Actions
+          Container(
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ActionButton(
+              onPressed: () {},
+              label: "Mobile",
+              icon: SonrIcons.Call.gradient(
+                value: SonrGradients.CrystalRiver,
+                size: 36,
+              ),
+              size: 72,
+            ),
+            Padding(padding: EdgeInsets.all(6)),
+            ActionButton(
+              onPressed: () {},
+              label: "Text",
+              icon: SonrIcons.Mail.gradient(
+                value: SonrGradients.NightCall,
+                size: 36,
+              ),
+              size: 72,
+            ),
+            Padding(padding: EdgeInsets.all(6)),
+            ActionButton(
+                onPressed: () {},
+                label: "Video",
+                size: 72,
+                icon: SonrIcons.VideoCamera.gradient(
+                  value: SonrGradients.OctoberSilence,
+                  size: 36,
+                )),
+          ])),
+
+          Divider(),
+          Padding(padding: EdgeInsets.all(4)),
+
+          // Brief Contact Card Info
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
+        ]),
+      ),
     );
   }
 }

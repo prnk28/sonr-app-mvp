@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class RegisterDesktopView extends GetView<LinkController> {
   final RxInt counter = 0.obs;
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();
-  RegisterDesktopView({Key key}) : super(key: key);
+  RegisterDesktopView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class RegisterDesktopView extends GetView<LinkController> {
                     autoCorrect: false,
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(lastNameFocus);
-                      controller.firstName(controller.firstName.value.capitalizeFirst);
+                      controller.firstName(controller.firstName.value.capitalizeFirst!);
                       controller.firstName.refresh();
                     },
                     onChanged: (String value) {
@@ -57,11 +57,11 @@ class RegisterDesktopView extends GetView<LinkController> {
                     status: controller.lastNameStatus,
                     autoCorrect: false,
                     onEditingComplete: () {
-                      controller.lastName(controller.lastName.value.capitalizeFirst);
+                      controller.lastName(controller.lastName.value.capitalizeFirst!);
                       controller.lastName.refresh();
-                      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
                       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                         controller.setContact();
                       }
                     },

@@ -1,4 +1,6 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
+
+import 'window_controller.dart';
 
 class LinkController extends GetxController {
   final firstName = "".obs;
@@ -24,16 +26,17 @@ class LinkController extends GetxController {
   setContact() async {
     if (validate()) {
       // Get Contact from Values
-      var contact = Contact(firstName: firstName.value, lastName: lastName.value);
+      var contact = Contact(profile: Profile(firstName: firstName.value, lastName: lastName.value));
 
       // Remove Textfield Focus
-      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus.unfocus();
+        FocusManager.instance.primaryFocus!.unfocus();
       }
 
       // Process data.
       await UserService.newUser(contact, withSonrConnect: true);
+      Get.find<WindowController>().changeView(DesktopView.Explorer);
     }
   }
 }

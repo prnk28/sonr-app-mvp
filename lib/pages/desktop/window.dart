@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/desktop/views/explorer_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'controllers/window_controller.dart';
 import 'views/register_view.dart';
 
@@ -11,7 +11,7 @@ class DesktopWindow extends GetView<WindowController> {
       appBar: DesignAppBar(
         subtitle: Obx(() => controller.view.value == DesktopView.Register
             ? "Hello,".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
-            : "Hi ${UserService.firstName.value},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
+            : "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
         title: Obx(() => controller.view.value == DesktopView.Register
             ? "Let's Register".headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start)
             : AnimatedSlideSwitcher.fade(
@@ -20,7 +20,7 @@ class DesktopWindow extends GetView<WindowController> {
                   key: ValueKey<String>(controller.titleText.value),
                   onTap: () {
                     if (controller.isTitleVisible.value) {
-                      controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                      controller.swapTitleText("${LobbyService.local.value!.size} Around", timeout: 2500.milliseconds);
                     }
                   },
                   child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
@@ -38,10 +38,8 @@ class DesktopWindow extends GetView<WindowController> {
     switch (view) {
       case DesktopView.Explorer:
         return ExplorerDesktopView(key: ValueKey<DesktopView>(view));
-        break;
       case DesktopView.Register:
         return RegisterDesktopView(key: ValueKey<DesktopView>(view));
-        break;
       default:
         return Container();
     }

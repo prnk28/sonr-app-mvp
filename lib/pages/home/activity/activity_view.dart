@@ -1,8 +1,8 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 // ^ Activity View ^ //
 class ActivityView extends StatelessWidget {
-  ActivityView({Key key}) : super(key: key);
+  ActivityView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +27,7 @@ class ActivityView extends StatelessWidget {
 class _ActivityListItem extends StatelessWidget {
   final TransferCardActivity item;
 
-  const _ActivityListItem({Key key, @required this.item}) : super(key: key);
+  const _ActivityListItem({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,7 +45,7 @@ class _ActivityListItem extends StatelessWidget {
           ),
         ),
         child: Container(
-          decoration: Neumorph.floating(),
+          decoration: Neumorphic.floating(),
           child: ListTile(
             title: _buildMessage(),
           ),
@@ -57,16 +57,27 @@ class _ActivityListItem extends StatelessWidget {
   Widget _buildMessage() {
     switch (item.activity) {
       case ActivityType.Deleted:
-        return [item.card.payload.black, " You ".h6, item.activity.value.h6_Red].row();
-        break;
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Red, _description(item.card!).h6].row();
       case ActivityType.Shared:
-        return [item.card.payload.black, " You ".h6, item.activity.value.h6_Blue].row();
-        break;
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Blue, _description(item.card!).h6].row();
       case ActivityType.Received:
-        return [item.card.payload.black, " You ".h6, item.activity.value.h6_Purple].row();
-        break;
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Purple, _description(item.card!).h6].row();
+      default:
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Grey, _description(item.card!).h6]
+            .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }
-    return [item.card.payload.black, " You ".h6, item.activity.value.h6_Grey]
-        .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
+  }
+
+  String _description(TransferCard card) {
+    if (card.payload == Payload.MULTI_FILES) {
+      return " some Files"; //+ " from ${card.owner.firstName}";
+    } else if (card.payload == Payload.FILE || card.payload == Payload.MEDIA) {
+      return " a " + card.file.single.mime.type.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";
+    } else {
+      if (card.payload == Payload.CONTACT) {
+        return " a Contact"; // + " from ${card.owner.firstName}";
+      }
+      return " a Link"; // + " from ${card.owner.firstName}";
+    }
   }
 }

@@ -1,17 +1,15 @@
 import 'dart:io';
-
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 import 'profile_controller.dart';
 
 // ^ Edit Profile Picture View ^ //
 class EditPictureView extends GetView<ProfileController> {
   final String headerText;
-  EditPictureView({this.headerText = "Edit Picture", Key key}) : super(key: key);
+  EditPictureView({this.headerText = "Edit Picture", Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() => Get.find<ProfilePictureController>().status.value == ProfilePictureStatus.NeedsPermissions
@@ -59,10 +57,9 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
     switch (status) {
       case ProfilePictureStatus.Captured:
         return _buildCaptured();
-        break;
+
       default:
         return _buildCamera();
-        break;
     }
   }
 
@@ -70,7 +67,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   Widget _buildCamera() {
     return Container(
         padding: EdgeInsets.all(10),
-        decoration: Neumorph.indented(shape: BoxShape.circle),
+        decoration: Neumorphic.indented(shape: BoxShape.circle),
         child: GestureDetector(
           onTap: controller.capturePhoto,
           child: CameraAwesome(
@@ -88,12 +85,12 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
       // @ Picture Preview
       Container(
           padding: EdgeInsets.all(10),
-          decoration: Neumorph.floating(shape: BoxShape.circle),
+          decoration: Neumorphic.floating(shape: BoxShape.circle),
           child: Container(
             width: 120,
             height: 120,
             child: CircleAvatar(
-              backgroundImage: FileImage(controller.result.value.file),
+              backgroundImage: FileImage(controller.result.value!),
             ),
           )),
       Padding(padding: EdgeWith.bottom(8)),
@@ -147,7 +144,7 @@ class ProfilePictureController extends GetxController {
   ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.FRONT);
 
   // Properties
-  final result = Rx<MediaFile>(null);
+  final result = Rx<File?>(null);
   final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(MobileService.hasCamera.value));
 
   // References
@@ -163,15 +160,17 @@ class ProfilePictureController extends GetxController {
 
     // Capture Photo
     await _pictureController.takePicture(_photoCapturePath);
-    result(MediaFile.capture(_photoCapturePath, false, 0));
+    result(File(_photoCapturePath));
     status(ProfilePictureStatus.Captured);
   }
 
   // @ Method to Confirm New Picture
   confirm() async {
     if (_photoCapturePath != "") {
-      UserService.picture(await result.value.toUint8List());
-      await UserService.saveChanges();
+      if (result.value != null) {
+        UserService.contact.setPicture(result.value!.readAsBytesSync());
+      }
+
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,7 +9,7 @@ void main() async {
 }
 
 class DesktopApp extends StatefulWidget {
-  const DesktopApp({Key key}) : super(key: key);
+  const DesktopApp({Key? key}) : super(key: key);
 
   @override
   _DesktopAppState createState() => _DesktopAppState();
@@ -21,7 +21,7 @@ class _DesktopAppState extends State<DesktopApp> {
     super.initState();
 
     // Shift Page
-    DeviceService.shiftPage(delay: 2500.milliseconds);
+    DeviceService.initialPage(delay: 3500.milliseconds);
   }
 
   @override
@@ -46,7 +46,7 @@ class _DesktopAppState extends State<DesktopApp> {
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: OpacityAnimatedWidget(enabled: true, duration: 350.milliseconds, child: "Sonr".hero),
+                child: FadeInUp(child: "Sonr".hero),
               ),
             ],
           )),

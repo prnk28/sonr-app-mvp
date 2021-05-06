@@ -7,7 +7,7 @@ import 'package:sonr_app/service/device/desktop.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/service/client/lobby.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
 // ^ Constant Routing Information ^ //
@@ -19,7 +19,7 @@ class SonrRouting {
             page: () {
               // Update Contact for New User
               if (UserService.isNewUser.value) {
-                Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+                Get.find<SonrService>().connectNewUser(UserService.contact.value);
               } else {
                 Get.find<SonrService>().connect();
               }
@@ -84,4 +84,13 @@ class SonrRouting {
         LobbyService.isRegistered &&
         UserService.isRegistered;
   }
+
+  static List<String> get excludedModules => [
+        'open_file',
+        'animated_widgets',
+        'get',
+        'path_provider',
+        'camerawesome_plugin',
+        'file_picker',
+      ];
 }

@@ -1,12 +1,12 @@
 import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_view.dart';
-import 'package:sonr_app/theme/theme.dart';
-import 'action_button.dart';
+import 'package:sonr_app/style/style.dart';
 import 'recents/recents_view.dart';
 import 'home_controller.dart';
 import 'activity/activity_view.dart';
 import 'profile/profile_view.dart';
+import 'search_bar.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -15,45 +15,14 @@ class HomePage extends GetView<HomeController> {
         resizeToAvoidBottomInset: false,
         floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
-        appBar: HomeSearchAppBar(
-          subtitle: Obx(() => controller.view.value == HomeView.Main
-              ? "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
-              : Container()),
-          action: HomeActionButton(),
-          title: Obx(() => AnimatedSlideSwitcher.fade(
-                duration: 2.seconds,
-                child: GestureDetector(
-                  key: ValueKey<String>(controller.titleText.value),
-                  onTap: () {
-                    if (controller.isTitleVisible.value) {
-                      controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                    }
-                  },
-                  child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
-                ),
-              )),
-        ),
-        body: _HomePageView());
-  }
-}
-
-// ^ Handles Active Views on Home Page ^ //
-class _HomePageView extends GetView<HomeController> {
-  // View References
-  final main = CardMainView(key: ValueKey<HomeView>(HomeView.Main));
-  final profile = ProfileView(key: ValueKey<HomeView>(HomeView.Profile));
-  final alerts = ActivityView(key: ValueKey<HomeView>(HomeView.Activity));
-  final remote = RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: TabBarView(controller: controller.tabController, children: [
-      CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-      ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-      ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
-      RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-    ]));
+        appBar: HomeAppBar(),
+        body: Container(
+            child: TabBarView(controller: controller.tabController, children: [
+          CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+          ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+        ])));
   }
 }
 
@@ -64,7 +33,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
     return ClipPath(
       clipper: BottomBarClip(),
       child: Container(
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         width: Get.width,
         height: 80,
         child: Row(
@@ -73,7 +42,14 @@ class HomeBottomNavBar extends GetView<HomeController> {
             HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
+              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
+                if (controller.view.value == HomeView.Profile) {
+                  if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
+                    DeviceService.factoryReset();
+                  }
+                  ;
+                }
+              }),
             ),
             Container(
               width: Get.width * 0.20,
@@ -93,14 +69,20 @@ class HomeBottomNavBar extends GetView<HomeController> {
 // ^ Bottom Bar Button Widget ^ //
 class HomeBottomTabButton extends StatelessWidget {
   final HomeView view;
-  final Function(int) onPressed;
+  final void Function(int) onPressed;
+  final void Function(int)? onLongPressed;
   final RxInt currentIndex;
-  HomeBottomTabButton(this.view, this.onPressed, this.currentIndex);
+  HomeBottomTabButton(this.view, this.onPressed, this.currentIndex, {this.onLongPressed});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
           onPressed(view.index);
+        },
+        onLongPress: () {
+          if (onLongPressed != null) {
+            onLongPressed!(view.index);
+          }
         },
         child: Container(
           constraints: BoxConstraints(maxHeight: 80, maxWidth: Get.width / 6),

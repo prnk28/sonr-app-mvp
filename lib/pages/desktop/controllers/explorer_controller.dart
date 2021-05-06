@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ExplorerController extends GetxController {
   // @ Accessors
@@ -10,22 +8,26 @@ class ExplorerController extends GetxController {
   // @ Properties
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final fileItem = Rx<FileItem>(null);
+  final fileItem = Rx<SonrFile?>(null);
   final location = Rx<Location>(Location());
 
   // References
-  StreamSubscription<int> _lobbySizeStream;
-  CarouselController carouselController = CarouselController();
+  late StreamSubscription<Lobby?> _lobbySizeStream;
+  ScrollController scrollController = ScrollController();
 
   // ^ Controller Constructer ^
   void onInit() async {
     // Set Initial Value
-    _handleLobbySizeUpdate(LobbyService.localSize.value);
-    location(await SonrService.locationInfo());
+    _handleLobbySizeUpdate(LobbyService.local.value);
+    var info = await SonrService.locationInfo();
+    if (info != null) {
+      location(info);
+    }
+
     location.refresh();
 
     // Add Stream Handlers
-    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
+    _lobbySizeStream = LobbyService.local.listen(_handleLobbySizeUpdate);
     super.onInit();
   }
 
@@ -37,13 +39,9 @@ class ExplorerController extends GetxController {
   }
 
   // # Handle Lobby Size Update ^ //
-  _handleLobbySizeUpdate(int size) {
-    if (size == 0) {
-      isNotEmpty(false);
-    } else if (size == 1) {
-      isNotEmpty(true);
-    } else {
-      isNotEmpty(true);
+  _handleLobbySizeUpdate(Lobby? lobby) {
+    if (lobby != null) {
+      isNotEmpty(lobby.isNotEmpty);
     }
   }
 }

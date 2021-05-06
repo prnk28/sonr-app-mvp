@@ -4,9 +4,8 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:path_provider/path_provider.dart';
 import 'preview_widget.dart';
 
@@ -14,11 +13,11 @@ enum CameraViewType { Default, Preview }
 
 class CameraView extends GetView<CameraController> {
   // Properties
-  final Function(MediaFile file) onMediaSelected;
+  final Function(SonrFile file) onMediaSelected;
   final CameraViewType type;
-  CameraView({@required this.onMediaSelected, this.type = CameraViewType.Default});
+  CameraView({required this.onMediaSelected, this.type = CameraViewType.Default});
 
-  factory CameraView.withPreview({@required Function(MediaFile file) onMediaSelected}) {
+  factory CameraView.withPreview({required Function(SonrFile file) onMediaSelected}) {
     return CameraView(onMediaSelected: onMediaSelected, type: CameraViewType.Preview);
   }
 
@@ -28,11 +27,11 @@ class CameraView extends GetView<CameraController> {
     controller.hasCaptured.listen((val) {
       if (val) {
         if (type == CameraViewType.Default) {
-          onMediaSelected(controller.getMediaFile());
+          onMediaSelected(controller.getFile());
         } else if (type == CameraViewType.Preview) {
           Get.dialog(
               MediaPreviewView(
-                  mediaFile: controller.getMediaFile(),
+                  file: controller.getFile(),
                   onDecision: (value) {
                     value ? controller.continueWithCapture(onMediaSelected) : controller.clearFromPreview();
                   }),
@@ -86,7 +85,7 @@ class CameraView extends GetView<CameraController> {
               onPressed: () {
                 Get.back();
               },
-              icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
+              icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart)),
         ),
         Obx(() {
           if (controller.videoInProgress.value) {
@@ -123,7 +122,7 @@ class _CameraToolsView extends GetView<CameraController> {
     return Container(
       alignment: Alignment.bottomCenter,
       child: Container(
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         padding: EdgeInsets.only(top: 20, bottom: 40),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           // Switch Camera
@@ -131,7 +130,12 @@ class _CameraToolsView extends GetView<CameraController> {
             var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
             return GestureDetector(
                 child: AnimatedSlideSwitcher.slideUp(
-                    child: iconData.gradientNamed(name: FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
+                    child: Container(
+                        key: ValueKey<IconData>(iconData),
+                        child: iconData.gradient(
+                          value: SonrGradients.LoveKiss,
+                          size: 36,
+                        ))),
                 onTap: () async {
                   await HapticFeedback.heavyImpact();
                   controller.toggleCameraSensor();
@@ -143,16 +147,18 @@ class _CameraToolsView extends GetView<CameraController> {
 
           // Media Gallery Picker
           GestureDetector(
-              child: SonrIcons.Photos.gradientNamed(
-                name: FlutterGradientNames.octoberSilence,
+              child: SonrIcons.Photos.gradient(
+                value: SonrGradients.OctoberSilence,
                 size: 36,
               ),
               onTap: () async {
                 await HapticFeedback.heavyImpact();
                 // Check for Permssions
                 var result = await FileService.selectMedia();
-                if (result.hasItem) {
-                  Transfer.transferWithFile(result.fileItem);
+
+                // Selected Item
+                if (result.item1) {
+                  Transfer.transferWithFile(result.item2!);
                 }
               }),
         ]),
@@ -172,9 +178,9 @@ class _CaptureButton extends GetView<CameraController> {
           aspectRatio: 1,
           child: Container(
             margin: EdgeInsets.all(14),
-            decoration: Neumorph.floating(shape: BoxShape.circle),
+            decoration: Neumorphic.floating(shape: BoxShape.circle),
             child: Container(
-              decoration: Neumorph.floating(shape: BoxShape.circle),
+              decoration: Neumorphic.floating(shape: BoxShape.circle),
               margin: EdgeInsets.all(14),
               child: GestureDetector(
                 onTap: () {
@@ -193,11 +199,11 @@ class _CaptureButton extends GetView<CameraController> {
                 child: Obx(
                   () => Container(
                     child: Center(
-                        child: SonrIcons.Camera.gradientNamed(
-                      name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                        child: SonrIcons.Camera.gradient(
+                      value: UserService.isDarkMode ? SonrGradients.PremiumWhite : SonrGradients.PremiumDark,
                       size: 40,
                     )),
-                    decoration: Neumorph.floating(
+                    decoration: Neumorphic.floating(
                         shape: BoxShape.circle,
                         border: controller.videoInProgress.value
                             ? Border.all(color: SonrColor.Critical, width: 4)
@@ -243,7 +249,7 @@ class CameraController extends GetxController {
 
   // Video Duration Handling
   Stopwatch _stopwatch = Stopwatch();
-  Timer _timer;
+  late Timer _timer;
 
   // ** Constructer ** //
   CameraController() {
@@ -260,9 +266,9 @@ class CameraController extends GetxController {
     Get.back();
   }
 
-  continueWithCapture(Function(MediaFile file) selected) {
+  continueWithCapture(Function(SonrFile file) selected) {
     Get.back();
-    selected(getMediaFile());
+    selected(getFile());
     _photoCapturePath = "";
     _videoCapturePath = "";
     _isVideo = false;
@@ -283,8 +289,8 @@ class CameraController extends GetxController {
   }
 
   // ^ Returns Captured Media File ^ //
-  MediaFile getMediaFile() {
-    return MediaFile.capture(_isVideo ? _videoCapturePath : _photoCapturePath, _isVideo, videoDuration.value);
+  SonrFile getFile() {
+    return SonrFileUtils.newWith(path: _isVideo ? _videoCapturePath : _photoCapturePath, duration: videoDuration.value);
   }
 
   // ^ Captures Video ^ //

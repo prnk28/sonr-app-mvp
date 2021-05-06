@@ -1,11 +1,10 @@
 import 'package:intl/intl.dart';
-import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_plugin/sonr_social.dart';
+import 'package:sonr_app/style/style.dart';
 import 'tile_controller.dart';
 
 class SocialView extends StatelessWidget {
   final TileController controller;
-  final Contact_SocialTile item;
+  final Contact_Social item;
   final int index;
   SocialView(this.controller, this.item, this.index);
 
@@ -21,27 +20,27 @@ class SocialView extends StatelessWidget {
 
         switch (item.provider) {
           // Medium
-          case Contact_SocialTile_Provider.Medium:
+          case Contact_Social_Provider.Medium:
             var posts = controller.medium.value;
             return Stack(children: [_MediumItem(posts, 0, true), item.provider.black]);
-            break;
+
 
           // Twitter
-          case Contact_SocialTile_Provider.Twitter:
+          case Contact_Social_Provider.Twitter:
             var twitter = controller.twitter.value;
             return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.black]);
-            break;
+
 
           // Youtube
-          case Contact_SocialTile_Provider.YouTube:
+          case Contact_Social_Provider.YouTube:
             var youtube = controller.youtube.value;
             return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.black]);
-            break;
+
 
           // Other
           default:
             return Container();
-            break;
+
         }
       }
 
@@ -53,11 +52,11 @@ class SocialView extends StatelessWidget {
   }
 
   // ** Builds Expanded Tile View - List/Grid ** //
-  _buildExpanded(Contact_SocialTile_Provider provider) {
+  _buildExpanded(Contact_Social_Provider provider) {
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: controller.twitter.value.count,
-      scrollDirection: provider == Contact_SocialTile_Provider.Twitter ? Axis.vertical : Axis.horizontal,
+      itemCount: controller.twitter.value!.count,
+      scrollDirection: provider == Contact_Social_Provider.Twitter ? Axis.vertical : Axis.horizontal,
       itemBuilder: (BuildContext context, int index) {
         return _TweetItem(controller.twitter.value, index, false, controller);
       },
@@ -73,10 +72,10 @@ class SocialView extends StatelessWidget {
 
 // ^ Medium Item ^ //
 class _MediumItem extends StatelessWidget {
-  final MediumModel medium;
+  final MediumModel? medium;
   final int index;
   final bool isTile;
-  const _MediumItem(this.medium, this.index, this.isTile, {Key key}) : super(key: key);
+  const _MediumItem(this.medium, this.index, this.isTile, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +86,8 @@ class _MediumItem extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ShapeContainer.wave(child: Image.network(medium.posts.first.thumbnail), width: 150, height: 120),
-              medium.posts.first.title.gradient(gradient: FlutterGradientNames.premiumDark, size: 16)
+              ShapeContainer.wave(child: Image.network(medium!.posts!.first.thumbnail!), width: 150, height: 120),
+              medium!.posts!.first.title!.gradient(value: SonrGradients.PremiumDark, size: 16)
             ],
           ),
         ),
@@ -100,10 +99,10 @@ class _MediumItem extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            ShapeContainer.wave(child: Image.network(medium.posts[index].thumbnail), width: 275, height: 140),
-            medium.posts[index].title.gradient(gradient: FlutterGradientNames.premiumDark, size: 20),
-            PostText.description(medium.posts[index].title.length, medium.posts[index].description),
-            PostText.date(medium.posts[index].pubDate)
+            ShapeContainer.wave(child: Image.network(medium!.posts![index].thumbnail!), width: 275, height: 140),
+            medium!.posts![index].title!.gradient(value: SonrGradients.PremiumDark, size: 20),
+            PostText.description(medium!.posts![index].title!.length, medium!.posts![index].description!),
+            PostText.date(medium!.posts![index].pubDate!)
           ],
         ),
       ),
@@ -114,7 +113,7 @@ class _MediumItem extends StatelessWidget {
 // ^ Twitter Item ^ //
 class _TweetItem extends StatelessWidget {
   final TileController controller;
-  final TwitterModel twitter;
+  final TwitterModel? twitter;
   final int index;
   final bool isTile;
   const _TweetItem(
@@ -122,14 +121,14 @@ class _TweetItem extends StatelessWidget {
     this.index,
     this.isTile,
     this.controller, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var latestTweet = twitter.tweets.first;
-    var user = twitter.user;
-    var tweets = twitter.tweets;
+    var latestTweet = twitter!.tweets!.first;
+    var user = twitter!.user;
+    var tweets = twitter!.tweets;
 
     if (isTile) {
       return Container(
@@ -137,15 +136,15 @@ class _TweetItem extends StatelessWidget {
         width: 150,
         child: SingleChildScrollView(
           child: Column(
-            children: [latestTweet.text.p, PostText.date(latestTweet.createdAt)],
+            children: [latestTweet.text!.p, PostText.date(latestTweet.createdAt!)],
           ),
         ),
       );
     }
-    return NeumorphicButton(
+    return ColorButton.primary(
       padding: EdgeInsets.all(12),
       onPressed: () {
-        controller.launchURL("https://twitter.com/${user.username}/status/${tweets[index].id}");
+        controller.launchURL("https://twitter.com/${user!.username}/status/${tweets![index].id}");
       },
       child: Container(
         width: 275,
@@ -154,15 +153,15 @@ class _TweetItem extends StatelessWidget {
             Container(
               width: 55,
               child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user.profilePicUrl)), user.username.p]),
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.p]),
             ),
             Container(
               width: 265,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  PostText.date((tweets[index].createdAt)),
-                  tweets[index].text.p,
+                  PostText.date(tweets![index].createdAt!),
+                  tweets[index].text!.p,
                 ],
               ),
             ),
@@ -175,21 +174,21 @@ class _TweetItem extends StatelessWidget {
 
 // ^ Youtube Item ^ //
 class _YoutubeItem extends StatelessWidget {
-  final YoutubeModel youtube;
+  final YoutubeModel? youtube;
   final int index;
   final bool isTile;
-  const _YoutubeItem(this.youtube, this.index, this.isTile, {Key key}) : super(key: key);
+  const _YoutubeItem(this.youtube, this.index, this.isTile, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var video = youtube.items.first.video;
+    var video = youtube!.items!.first.video!;
     // Build View
     return Container(
       padding: EdgeInsets.all(12),
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [video.title.p, PostText.date(video.publishTime)],
+          children: [video.title!.p, PostText.date(video.publishTime!)],
         ),
       ),
     );

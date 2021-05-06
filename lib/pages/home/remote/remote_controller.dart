@@ -1,6 +1,5 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:sonr_app/data/data.dart';
 
 enum RemoteViewStatus { NotJoined, Created, Joined, Invited, InProgress, Done }
 
@@ -18,18 +17,18 @@ class RemoteController extends GetxController {
   final thirdWord = "".obs;
 
   // Information Properties
-  final remoteInfo = Rx<RemoteInfo>(null);
-  final currentInvite = Rx<AuthInvite>(null);
-  final receivedCard = Rx<TransferCard>(null);
+  final remoteInfo = Rx<RemoteInfo?>(null);
+  final currentInvite = Rx<AuthInvite?>(null);
+  final receivedCard = Rx<TransferCard?>(null);
 
   // Status Properties
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
-  final viewParameters = Rx<NeumorphCardParams>(NeumorphCardParams());
   final isJoinFieldTapped = false.obs;
   final isRemoteActive = false.obs;
 
+  final remoteLobby = Rx<Lobby?>(null);
+
   // References
-  LobbyStream _lobbyStream;
   final _keyboardVisible = KeyboardVisibilityController();
 
   // ** Initializer ** //
@@ -41,9 +40,6 @@ class RemoteController extends GetxController {
 
   // ** Disposer ** //
   void onClose() {
-    if (_lobbyStream != null) {
-      _lobbyStream.close();
-    }
     super.onClose();
   }
 
@@ -57,14 +53,21 @@ class RemoteController extends GetxController {
     // Start Remote
     remoteInfo(await SonrService.createRemote());
     isRemoteActive(true);
+    LobbyService.registerRemoteCallback(remoteInfo.value, _handleRemoteLobby);
   }
 
   // ^ Method to End Created Remote Lobby ^ //
   void stop() async {
-    // Start Remote
-    SonrService.leaveRemote(remoteInfo.value);
-    remoteInfo(RemoteInfo());
-    isRemoteActive(false);
+    if (remoteInfo.value != null) {
+      // Start Remote
+      SonrService.leaveRemote(remoteInfo.value!);
+      remoteInfo(RemoteInfo());
+      isRemoteActive(false);
+    }
+
+    if (remoteLobby.value != null) {
+      LobbyService.unregisterRemoteCallback(remoteLobby.value!);
+    }
   }
 
   // ^ Method to Join New Remote Lobby ^ //
@@ -77,16 +80,20 @@ class RemoteController extends GetxController {
   // ^ Method to Leave Current Remote Lobby ^ //
   void leave() async {
     if (remoteInfo.value != null) {
-      SonrService.leaveRemote(remoteInfo.value);
+      SonrService.leaveRemote(remoteInfo.value!);
       remoteInfo(null);
       currentInvite(null);
       status(RemoteViewStatus.NotJoined);
+    }
+
+    if (remoteLobby.value != null) {
+      LobbyService.unregisterRemoteCallback(remoteLobby.value!);
     }
   }
 
   // ^ Method to Respond to Invite ^ //
   void respond(bool decision) {
-    if (remoteInfo.value != null && currentInvite != null) {
+    if (remoteInfo.value != null && currentInvite.value != null) {
       // Respond Decision
       SonrService.respond(decision, info: remoteInfo.value);
 
@@ -122,5 +129,9 @@ class RemoteController extends GetxController {
   void _handleRemoteInvite(AuthInvite invite) {
     currentInvite(invite);
     status(RemoteViewStatus.Invited);
+  }
+
+  void _handleRemoteLobby(Lobby lobby) {
+    remoteLobby(lobby);
   }
 }

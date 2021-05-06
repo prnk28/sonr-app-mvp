@@ -1,32 +1,26 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Contact Model Extensions ^ //
 extension ContactUtils on Contact {
-  Widget get phoneNumber {
-    return this.hasPhone() ? this.phone.l : "1-555-555-5555".l;
-  }
-
-  Row get headerName {
+  Widget headerNameText() {
     return Row(children: [
       "${this.firstName} ".h6,
       this.lastName.l,
     ]);
   }
 
-  Widget get fullName {
-    return this.hasLastName()
-        ? "${this.firstName} ${this.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
-        : "${this.firstName}".gradient(gradient: FlutterGradientNames.solidStone);
+  Widget fullNameText() {
+    return "${this.fullName}".gradient(value: SonrGradients.SolidStone);
   }
 
-  Widget get profilePicture {
+  Widget pictureImage() {
     return this.hasPicture()
         ? Container(
             width: 120,
             height: 120,
             child: CircleAvatar(
-              backgroundImage: MemoryImage(this.picture),
+              backgroundImage: MemoryImage(this.profile.picture as Uint8List),
             ),
           )
         : Icon(
@@ -34,9 +28,5 @@ extension ContactUtils on Contact {
             size: 120,
             color: SonrColor.Black.withOpacity(0.5),
           );
-  }
-
-  Widget get webSite {
-    return this.hasWebsite() ? this.website.p : Container();
   }
 }

@@ -3,7 +3,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeView { Main, Profile, Activity, Remote }
@@ -21,12 +21,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // Controllers
-  TabController tabController;
-  FloatingSearchBarController searchBarController;
+  TabController? tabController;
+  FloatingSearchBarController? searchBarController;
 
   // References
-  StreamSubscription<int> _lobbySizeStream;
-  StreamSubscription<Status> _statusStream;
+  late StreamSubscription<Lobby?> _lobbyStream;
+  late StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
@@ -38,12 +38,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     searchBarController = FloatingSearchBarController();
 
     // Listen for Updates
-    tabController.addListener(() {
+    tabController!.addListener(() {
       // Set Index
-      bottomIndex(tabController.index);
+      bottomIndex(tabController!.index);
 
       // Set Page
-      view(HomeView.values[tabController.index]);
+      view(HomeView.values[tabController!.index]);
 
       // Update Title
       titleText(view.value.title);
@@ -59,14 +59,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
 
     // Handle Streams
-    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
+    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
   // ^ On Dispose ^ //
   @override
   void onClose() {
-    _lobbySizeStream.cancel();
+    _lobbyStream.cancel();
     _statusStream.cancel();
     pageIndex(0);
     super.onClose();
@@ -81,7 +81,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Change Index
       bottomIndex(newIndex);
-      tabController.animateTo(newIndex);
+      tabController!.animateTo(newIndex);
 
       // Set Page
       view(HomeView.values[newIndex]);
@@ -125,24 +125,24 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Present View
     if (isSearchVisible.value) {
-      searchBarController.open();
+      searchBarController!.open();
     }
   }
 
   // @ Handle Size Update ^ //
-  _handleLobbySizeStream(int onData) {
+  _handleLobbyStream(Lobby? onData) {
     // Peer Joined
-    if (onData > _lobbySizeRef) {
-      var diff = onData - _lobbySizeRef;
+    if (onData!.count > _lobbySizeRef) {
+      var diff = onData.count - _lobbySizeRef;
       swapTitleText("$diff Joined");
       DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
-    else if (onData < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData;
+    else if (onData.count < _lobbySizeRef) {
+      var diff = _lobbySizeRef - onData.count;
       swapTitleText("$diff Left");
     }
-    _lobbySizeRef = onData;
+    _lobbySizeRef = onData.count;
   }
 
   // @ Handle Status Update ^ //
@@ -150,7 +150,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.localSize.value} Nearby");
+      titleText("${LobbyService.local.value!.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text
@@ -166,6 +166,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
 // ^ Home View Enum Extension ^ //
 extension HomeViewUtils on HomeView {
+  bool get isMain => this == HomeView.Main;
+
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {

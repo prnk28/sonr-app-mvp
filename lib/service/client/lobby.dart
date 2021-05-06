@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/data/model/model_lobby.dart';
-import 'package:sonr_app/modules/peer/vector_position.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 class LobbyService extends GetxService {
@@ -17,25 +13,25 @@ class LobbyService extends GetxService {
   final _flatModeCancelled = false.obs;
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
-  final _lobbies = RxList<LobbyModel>();
-  final _local = Rx<LobbyModel>(null);
+  final _lobbies = RxList<Lobby>();
+  final _local = Rx<Lobby?>(null);
   final _localFlatPeers = RxMap<String, Peer>();
-  final _localSize = 0.obs;
-  final _position = Rx<VectorPosition>(null);
+  final _position = Rx<Position?>(null);
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
   // @ Routing to Reactive
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
-  static RxList<LobbyModel> get lobbies => Get.find<LobbyService>()._lobbies;
-  static Rx<LobbyModel> get local => Get.find<LobbyService>()._local;
-  static RxInt get localSize => Get.find<LobbyService>()._localSize;
-  static Rx<VectorPosition> get userPosition => to._position;
+  static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
+  static Rx<Lobby?> get local => Get.find<LobbyService>()._local;
+  static Rx<Position?> get userPosition => to._position;
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
-  StreamSubscription<Position> _positionStream;
-  Timer _timer;
+  StreamSubscription<Position>? _positionStream;
+  Timer? _timer;
+  Map<Lobby?, LobbyCallback> _lobbyCallbacks = <Lobby?, LobbyCallback>{};
+  Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
@@ -49,7 +45,7 @@ class LobbyService extends GetxService {
   @override
   void onClose() {
     if (_positionStream != null) {
-      _positionStream.cancel();
+      _positionStream!.cancel();
     }
 
     super.onClose();
@@ -66,23 +62,45 @@ class LobbyService extends GetxService {
     });
   }
 
-  // ^ Method to Listen to Specified Peer ^ //
-  static AsyncSnapshot<Peer> usePeer<T>(Peer peer) {
-    return useStream(PeerStream(peer, local.value).stream, initialData: peer);
+  // ^ Registers RemoteInfo to Lobby to Manage Callback
+  static void registerRemoteCallback(RemoteInfo? info, LobbyCallback callback) {
+    // Initialize
+    Lobby? remote;
+
+    // Find Remote Lobby
+    to._lobbies.forEach((e) {
+      if (e.isRemoteLobby(info!)) {
+        remote = e;
+      }
+    });
+
+    // Check if Found
+    if (remote != null) {
+      to._lobbyCallbacks[remote] = callback;
+    }
   }
 
-  // ^ Method to Listen to Specified Lobby ^ //
-  static AsyncSnapshot<LobbyModel> useRemoteLobby<T>(RemoteInfo remote) {
-    return useStream(LobbyStream(remote).stream, initialData: LobbyModel());
+  // ^ Registers Peer to Callback
+  static void registerPeerCallback(Peer? peer, PeerCallback callback) {
+    to._peerCallbacks[peer] = callback;
   }
 
-  // ^ Method to Listen to Specified Peer ^ //
-  static PeerStream listenToPeer(Peer peer, {Lobby lobby}) {
-    return PeerStream(peer, lobby != null ? lobby : local.value);
+  // ^ Removes Lobby Callback
+  static void unregisterRemoteCallback(Lobby lobby) {
+    if (to._lobbyCallbacks.containsKey(lobby)) {
+      to._lobbyCallbacks.remove(lobby);
+    }
+  }
+
+  // ^ Removes Peer Callback
+  static void unregisterPeerCallback(Peer? peer) {
+    if (to._peerCallbacks.containsKey(peer)) {
+      to._peerCallbacks.remove(peer);
+    }
   }
 
   // ^ Method to Cancel Flat Mode ^ //
-  bool sendFlatMode(Peer peer) {
+  bool sendFlatMode(Peer? peer) {
     // Send Invite
     SonrService.sendFlat(peer);
 
@@ -92,7 +110,7 @@ class LobbyService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-    var flatPeer = LobbyService.local.value.firstFlat();
+    var flatPeer = LobbyService.local.value!.flatFirst()!;
     SonrSnack.success("Sent Contact to ${flatPeer.profile.firstName}");
     Get.back();
     return true;
@@ -100,21 +118,34 @@ class LobbyService extends GetxService {
 
   // # Handle Lobby Update //
   void handleRefresh(Lobby data) {
+    // @ Callbacks
+    // Handle Lobby Callbacks
+    if (_lobbyCallbacks.containsKey(data)) {
+      var call = _lobbyCallbacks[data]!;
+      call(data);
+    }
+
+    // Handle Peer Callbacks
+    data.peers.forEach((id, peer) {
+      if (_peerCallbacks.containsKey(peer)) {
+        var call = _peerCallbacks[peer]!;
+        call(peer);
+      }
+    });
+
     // @ Update Local Topics
     if (data.isLocal) {
       // Update Local
       _handleFlatPeers(data);
-      _local(LobbyModel(lobby: data));
-      _localSize(data.count);
+      _local(data);
 
       // Refresh Values
       _local.refresh();
-      _localSize.refresh();
     }
 
     // @ Update Other Topics
     else {
-      _lobbies.add(LobbyModel(lobby: data));
+      _lobbies.add(data);
       _lobbies.refresh();
     }
   }
@@ -155,7 +186,7 @@ class LobbyService extends GetxService {
     }
 
     // Set Vector Position
-    _position(VectorPosition(data));
+    _position(data);
   }
 
   // # Begin Facing Invite Check
@@ -189,7 +220,7 @@ class LobbyService extends GetxService {
     _isFlatMode(false);
     SonrService.setFlatMode(false);
     if (_timer != null) {
-      _timer.cancel();
+      _timer!.cancel();
       _timer = null;
       _lastIsFacingFlat(false);
       counter(0);

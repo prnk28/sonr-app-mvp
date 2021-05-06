@@ -1,10 +1,10 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'social_view.dart';
 import 'tile_controller.dart';
 
 // ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {
-  final Contact_SocialTile item;
+  final Contact_Social item;
   final int index;
   SocialTileItem(this.item, this.index);
   @override
@@ -25,7 +25,7 @@ class SocialTileItem extends GetWidget<TileController> {
             controller.isDragging(true);
           }),
 
-      DragTarget<Contact_SocialTile>(
+      DragTarget<Contact_Social>(
         builder: (context, candidateData, rejectedData) {
           return Container();
         },
@@ -50,11 +50,11 @@ class SocialTileItem extends GetWidget<TileController> {
         HapticFeedback.lightImpact();
       },
       onDoubleTap: () {
-        controller.launchURL(item.links.postLink);
+        controller.launchURL(item.links.postLink.link);
         HapticFeedback.mediumImpact();
       },
       child: Container(
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,

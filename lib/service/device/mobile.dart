@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/share/sheet_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -35,7 +35,7 @@ class MobileService extends GetxService {
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
-  final _location = Rx<geo.Position>(null);
+  final _location = Rx<Location>(Location());
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -50,6 +50,7 @@ class MobileService extends GetxService {
   static RxBool get hasNotifications => to._hasNotifications;
   static RxBool get hasPhotos => to._hasPhotos;
   static RxBool get hasStorage => to._hasStorage;
+
   static RxBool get hasGallery {
     if (DeviceService.isIOS) {
       return to._hasPhotos;
@@ -59,13 +60,13 @@ class MobileService extends GetxService {
   }
 
   // References
-  StreamSubscription _externalMediaStream;
-  StreamSubscription _externalTextStream;
-  StreamSubscription<AccelerometerEvent> _accelStream;
-  StreamSubscription<CompassEvent> _compassStream;
-  StreamSubscription<GyroscopeEvent> _gyroStream;
-  StreamSubscription<MagnetometerEvent> _magnoStream;
-  StreamSubscription<OrientationEvent> _orienStream;
+  late StreamSubscription _externalMediaStream;
+  late StreamSubscription _externalTextStream;
+  late StreamSubscription<AccelerometerEvent> _accelStream;
+  late StreamSubscription<CompassEvent> _compassStream;
+  late StreamSubscription<GyroscopeEvent> _gyroStream;
+  late StreamSubscription<MagnetometerEvent> _magnoStream;
+  late StreamSubscription<OrientationEvent> _orienStream;
 
   // * Device Service Initialization * //
   Future<MobileService> init() async {
@@ -82,7 +83,7 @@ class MobileService extends GetxService {
 
     // Bind Sensor Streams
     _accelStream = motionSensors.accelerometer.listen(_handleAccelerometer);
-    _compassStream = FlutterCompass.events.listen(_handleCompass);
+    _compassStream = FlutterCompass.events!.listen(_handleCompass);
     _gyroStream = motionSensors.gyroscope.listen(_handleGyroscope);
     _magnoStream = motionSensors.magnetometer.listen(_handleMagnometer);
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
@@ -95,7 +96,7 @@ class MobileService extends GetxService {
     updatePermissionsStatus();
 
     // For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> data) {
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {
       if (data != null) {
         _incomingMedia(data);
         _incomingMedia.refresh();
@@ -103,7 +104,7 @@ class MobileService extends GetxService {
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String text) {
+    ReceiveSharingIntent.getInitialText().then((String? text) {
       if (text != null) {
         _incomingText(text);
         _incomingText.refresh();
@@ -133,7 +134,7 @@ class MobileService extends GetxService {
   // ^ Checks for Initial Media/Text to Share ^ //
   static checkInitialShare() async {
     // @ Check for Media
-    if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen) {
+    if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
       // Open Sheet
       await Get.bottomSheet(ShareSheet.media(to._incomingMedia), isDismissible: false);
 
@@ -143,7 +144,7 @@ class MobileService extends GetxService {
     }
 
     // @ Check for Text
-    if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen) {
+    if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
       var data = await SonrService.getURL(to._incomingText.value);
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
@@ -155,16 +156,17 @@ class MobileService extends GetxService {
   }
 
   // ^ Method Closes Keyboard if Active ^ //
-  static void closeKeyboard({BuildContext context}) async {
+  static void closeKeyboard({BuildContext? context}) async {
     if (to._keyboardVisible.value) {
-      FocusScope.of(context ?? Get.context).unfocus();
+      FocusScope.of(context ?? Get.context!).unfocus();
     }
   }
 
   // ^ Refresh User Location Position ^ //
-  static Future<geo.Position> currentLocation() async {
+  static Future<Location?> currentLocation() async {
     if (to._hasLocation.value) {
-      to._location(await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high));
+      var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
+      to._location(Location(latitude: result.latitude, longitude: result.longitude));
       return to._location.value;
     } else {
       print("No Location Permissions");
@@ -189,7 +191,7 @@ class MobileService extends GetxService {
       if (isVideo) {
         // Set Video File
         File videoFile = File(path);
-        var asset = await PhotoManager.editor.saveVideo(videoFile);
+        var asset = await (PhotoManager.editor.saveVideo(videoFile) as FutureOr<AssetEntity>);
         var result = await asset.exists;
 
         // Visualize Result
@@ -199,7 +201,7 @@ class MobileService extends GetxService {
         return result;
       } else {
         // Save Image to Gallery
-        var asset = await PhotoManager.editor.saveImageWithPath(path);
+        var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
         var result = await asset.exists;
         if (!result) {
           SonrSnack.error("Unable to save Captured Video to your Gallery");
@@ -210,40 +212,43 @@ class MobileService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  static Future<void> saveTransfer(Metadata meta) async {
+  static Future<bool> saveTransfer(SonrFile_Metadata meta) async {
+    // Initialize
+    AssetEntity? asset;
+
     // Get Data from Media
-    final path = meta.path;
-    // Save Image to Gallery
-    if (meta.mime.type == MIME_Type.image && MobileService.hasGallery.value) {
-      var asset = await PhotoManager.editor.saveImageWithPath(path);
-      var result = await asset.exists;
+    if (meta.mime.isImage && MobileService.hasGallery.value) {
+      asset = await PhotoManager.editor.saveImageWithPath(meta.path);
 
       // Visualize Result
-      if (result) {
+      if (asset != null) {
         meta.id = asset.id;
         SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
+        return await asset.exists;
       } else {
         SonrSnack.error("Unable to save Photo to your Gallery");
+        return false;
       }
     }
 
     // Save Video to Gallery
-    else if (meta.mime.type == MIME_Type.video && MobileService.hasGallery.value) {
+    else if (meta.mime.isVideo && MobileService.hasGallery.value) {
       // Set Video File
-      File videoFile = File(path);
-      var asset = await PhotoManager.editor.saveVideo(videoFile);
-      var result = await asset.exists;
+      asset = await PhotoManager.editor.saveVideo(meta.file);
 
       // Visualize Result
-      if (result) {
+      if (asset != null) {
+        meta.id = asset.id;
         SonrSnack.success("Saved Transferred Video to your Device's Gallery");
+        return await asset.exists;
       } else {
         SonrSnack.error("Unable to save Video to your Gallery");
+        return false;
       }
-      return asset;
-    } else {
-      return null;
     }
+
+    // Return Status
+    return false;
   }
 
   // ^ Update Method ^ //
@@ -417,7 +422,7 @@ class MobileService extends GetxService {
           buttonText: "Continue",
           barrierDismissible: false);
 
-      await SonrService.requestLocalNetwork();
+      SonrService.requestLocalNetwork();
       updatePermissionsStatus();
       SonrOverlay.back();
     }
@@ -427,49 +432,49 @@ class MobileService extends GetxService {
   // # Handle Accelerometer
   void _handleAccelerometer(AccelerometerEvent event) {
     _position.update((val) {
-      val.accelerometer = Position_Accelerometer(x: event.x, y: event.y, z: event.z);
+      val!.accelerometer = Position_Accelerometer(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Compass
   void _handleCompass(CompassEvent event) {
     _position.update((val) {
-      val.heading = event.heading;
-      val.facing = event.headingForCameraMode;
+      val!.heading = Position_Compass(direction: event.heading);
+      val.facing = Position_Compass(direction: event.headingForCameraMode);
     });
   }
 
   // # Handle Gyroscope
   void _handleGyroscope(GyroscopeEvent event) {
     _position.update((val) {
-      val.gyroscope = Position_Gyroscope(x: event.x, y: event.y, z: event.z);
+      val!.gyroscope = Position_Gyroscope(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Magnometer
   void _handleMagnometer(MagnetometerEvent event) {
     _position.update((val) {
-      val.magnometer = Position_Magnometer(x: event.x, y: event.y, z: event.z);
+      val!.magnometer = Position_Magnometer(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Orientation
   void _handleOrientation(OrientationEvent event) {
     _position.update((val) {
-      val.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
+      val!.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
     });
   }
 
   // # Saves Received Media to Gallery
   _handleSharedFiles(List<SharedMediaFile> data) async {
-    if (!Get.isBottomSheetOpen && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen! && UserService.hasUser.value) {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
     }
   }
 
   // # Saves Received Media to Gallery
   _handleSharedText(String text) async {
-    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text) && UserService.hasUser.value) {
       // Get Data
       var data = await SonrService.getURL(text);
 

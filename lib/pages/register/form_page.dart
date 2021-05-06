@@ -1,10 +1,10 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'register_controller.dart';
 
 class FormPage extends GetView<RegisterController> {
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();
-  FormPage({Key key}) : super(key: key);
+  FormPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class FormPage extends GetView<RegisterController> {
                       autoCorrect: false,
                       onEditingComplete: () {
                         FocusScope.of(context).requestFocus(lastNameFocus);
-                        controller.firstName(controller.firstName.value.capitalizeFirst);
+                        controller.firstName(controller.firstName.value.capitalizeFirst!);
                         controller.firstName.refresh();
                       },
                       onChanged: (String value) {
@@ -59,11 +59,11 @@ class FormPage extends GetView<RegisterController> {
                       status: controller.lastNameStatus,
                       autoCorrect: false,
                       onEditingComplete: () {
-                        controller.lastName(controller.lastName.value.capitalizeFirst);
+                        controller.lastName(controller.lastName.value.capitalizeFirst!);
                         controller.lastName.refresh();
-                        FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                        FocusScopeNode currentFocus = FocusScope.of(Get.context!);
                         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                          FocusManager.instance.primaryFocus.unfocus();
+                          FocusManager.instance.primaryFocus!.unfocus();
                           controller.setContact();
                         }
                       },

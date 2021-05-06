@@ -1,12 +1,12 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'profile.dart';
 import 'tile/tile_item.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  ProfileView({Key key}) : super(key: key);
+  ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => NeumorphCard(parameters: controller.viewParameters, child: _buildView(controller.status.value)));
+    return Obx(() => NeumorphicCard(child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -34,7 +34,7 @@ class ProfileView extends GetView<ProfileController> {
 }
 
 class _DefaultProfileView extends GetView<ProfileController> {
-  _DefaultProfileView({Key key}) : super(key: key);
+  _DefaultProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -52,9 +52,10 @@ class _DefaultProfileView extends GetView<ProfileController> {
               return SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return SocialTileItem(UserService.socials[index], index);
+                      var socialsList = UserService.contact.value.socials.values.toList();
+                      return SocialTileItem(socialsList[index], index);
                     },
-                    childCount: UserService.socials.length,
+                    childCount: UserService.contact.value.socials.length,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12.0, crossAxisSpacing: 6.0));
             })
@@ -65,10 +66,10 @@ class _DefaultProfileView extends GetView<ProfileController> {
 
 class _ProfileHeaderBar extends GetView<ProfileController> {
   // Sliver Attributes
-  final bool automaticallyImplyLeading;
-  final double expandedHeight;
+  final bool? automaticallyImplyLeading;
+  final double? expandedHeight;
 
-  const _ProfileHeaderBar({Key key, this.automaticallyImplyLeading, this.expandedHeight}) : super(key: key);
+  const _ProfileHeaderBar({Key? key, this.automaticallyImplyLeading, this.expandedHeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,8 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
                 _ProfileAvatarField(),
                 Padding(padding: EdgeInsets.all(8)),
                 GestureDetector(
-                    onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
+                    onLongPress: controller.setEditingMode,
+                    child: Obx(() => "${UserService.contact.value.firstName} ${UserService.contact.value.lastName}".h4)),
               ],
             ),
           ),
@@ -105,7 +107,7 @@ class _ProfileAvatarField extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (UserService.picture.value.length > 0) {
+      if (UserService.contact.value.hasPicture()) {
         return GestureDetector(
           onLongPress: () async {
             controller.setAddPicture();
@@ -114,13 +116,13 @@ class _ProfileAvatarField extends GetView<ProfileController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
               padding: EdgeInsets.all(10),
-              decoration: Neumorph.indented(shape: BoxShape.circle),
+              decoration: Neumorphic.indented(shape: BoxShape.circle),
               child: Obx(() => Container(
                     width: 120,
                     height: 120,
-                    child: UserService.picture.value.length > 0
+                    child: UserService.contact.value.hasPicture()
                         ? CircleAvatar(
-                            backgroundImage: MemoryImage(UserService.picture.value),
+                            backgroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
                           )
                         : SonrIcons.Avatar.greyWith(size: 120),
                   )),
@@ -136,7 +138,7 @@ class _ProfileAvatarField extends GetView<ProfileController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(10),
-                decoration: Neumorph.indented(shape: BoxShape.circle),
+                decoration: Neumorphic.indented(shape: BoxShape.circle),
                 child: Container(
                     width: 120,
                     height: 120,

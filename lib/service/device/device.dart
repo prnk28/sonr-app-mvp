@@ -1,27 +1,30 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
+import '../../env.dart';
 import 'desktop.dart';
 import 'mobile.dart';
-import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DeviceService extends GetxService {
   // Initializers
-  bool _isDesktop;
-  bool _isMobile;
+  late final bool _isDesktop;
+  late bool _isMobile;
 
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-  final _platform = Rx<Platform>(null);
+  final _platform = Rx<Platform>(Platform.Undefined);
 
   // Platform Checkers
-  static bool get isDesktop => Get.find<DeviceService>()._isDesktop;
-  static bool get isMobile => Get.find<DeviceService>()._isMobile;
-  static bool get isAndroid => Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.IOS;
-  static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
-  static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
-  static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+  static bool get isDesktop => to._isDesktop;
+  static bool get isMobile => to._isMobile;
+  static bool get isAndroid => to._platform.value.isAndroid;
+  static bool get isIOS => to._platform.value.isIOS;
+  static bool get isLinux => to._platform.value.isLinux;
+  static bool get isMacOS => to._platform.value.isMacOS;
+  static bool get isWindows => to._platform.value.isWindows;
+  static Platform get platform => to._platform.value;
 
   // Connection Requirements
   static bool get isReadyToConnect {
@@ -33,74 +36,47 @@ class DeviceService extends GetxService {
   }
 
   // * Device Service Initialization * //
-  Future<DeviceService> init(bool isDesktop) async {
+  Future<DeviceService> init(isDesktop) async {
     // Set Initializers
     _isDesktop = isDesktop;
     _isMobile = !isDesktop;
 
     // Set Platform
-    _platform(PlatformUtils.determineFromIO());
+    _platform(PlatformUtils.find());
 
     // Audio Player
     return this;
-  }
-
-  // ^ Builds Connection Request based on Platform ^
-  static Future<ConnectionRequest> buildConnectionRequest() async {
-    // Initialize Variables
-    var device = await provider.buildDevice(platform: to._platform.value);
-
-    // @ Mobile - Passes Location
-    if (isMobile) {
-      var pos = await MobileService.currentLocation();
-      return ConnectionRequest(
-        latitude: pos.latitude,
-        longitude: pos.longitude,
-        username: UserService.username,
-        contact: UserService.contact.value,
-        device: device,
-      );
-    }
-
-    // @ Desktop - Calculates Location
-    else {
-      return ConnectionRequest(
-        username: UserService.username,
-        contact: UserService.contact.value,
-        device: device,
-      );
-    }
   }
 
   // ^ Provide Device Feedback ^ //
   static void feedback() async {
     if (DeviceService.isMobile) {
       await HapticFeedback.heavyImpact();
-    } else {
-      DesktopService.openWindow();
     }
   }
 
-  // ^ Method Plays a UI Sound ^
-  static void playSound({@required UISoundType type}) async {
-    if (isMobile) {
-      await MobileService.playSound(type);
-    } else {
-      await DesktopService.playSound(type);
-    }
-  }
+  // ^ Retreive Location by IP Address ^ //
+  static Future<Location> findIPLocation() async {
+    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${EnvConfig.ip_key}");
 
-  // ^ Saves Received Media to Gallery by Platform ^ //
-  static void saveTransfer(Metadata metadata) async {
-    if (isMobile) {
-      await MobileService.saveTransfer(metadata);
+    final response = await http.get(url, headers: {'x-rapidapi-key': EnvConfig.rapid_key, 'x-rapidapi-host': EnvConfig.rapid_host});
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      return Location(
+        state: json["state"],
+        continent: json["continent"],
+        country: json["country"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+      );
     } else {
-      OpenFile.open(metadata.path);
+      throw Exception('Failed to Fetch Geolocation IP');
     }
   }
 
   // ^ Method Determines LaunchPage and Changes Screen ^
-  static void shiftPage({@required Duration delay}) async {
+  static void initialPage({required Duration delay}) async {
     Future.delayed(delay, () {
       // @ Mobile Page
       if (isMobile) {
@@ -128,6 +104,29 @@ class DeviceService extends GetxService {
         Get.offNamed("/desktop");
       }
     });
+  }
+
+  // ^ Method Plays a UI Sound ^
+  static void playSound({required UISoundType type}) async {
+    if (isMobile) {
+      MobileService.playSound(type);
+    } else {
+      DesktopService.playSound(type);
+    }
+  }
+
+  // ^ Saves Received Media to Gallery by Platform ^ //
+  static Future<void> saveTransfer(SonrFile file) async {
+    if (isMobile) {
+      await MobileService.saveTransfer(file.single);
+    } else {
+      await OpenFile.open(file.single.path);
+    }
+  }
+
+  static void factoryReset() {
+    UserService.reset();
+    //Get.find<CardService>().
   }
 }
 

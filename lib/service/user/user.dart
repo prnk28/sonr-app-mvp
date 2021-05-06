@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/style/style.dart';
+import 'package:sentry/sentry.dart';
 
 class UserService extends GetxService {
   // Accessors
@@ -13,20 +12,13 @@ class UserService extends GetxService {
   // ** User Reactive Properties **
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-  final _contact = Rx<Contact>(null);
-  final _user = Rx<User>(null);
+  final _user = User().obs;
 
   // ** Contact Reactive Properties **
-  final _firstName = "".obs;
-  final _lastName = "".obs;
-  final _phone = "".obs;
-  final _email = "".obs;
-  final _website = "".obs;
-  final _picture = Rx<Uint8List>(null);
-  final _socials = <Contact_SocialTile>[].obs;
+  final _contact = Contact().obs;
+  final _profile = Profile().obs;
 
   // Preferences
-  final _brightness = Rx<Brightness>(Brightness.light);
   final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
   final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
   final _hasPointToShare = false.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
@@ -36,27 +28,12 @@ class UserService extends GetxService {
   static RxBool get isNewUser => to._isNewUser;
   static Rx<User> get user => to._user;
   static Rx<Contact> get contact => to._contact;
+  static Rx<Profile> get profile => to._profile;
 
   // Getters for Preferences
-  static Rx<Brightness> get brightness => to._brightness;
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
-
-  // Contact Values
-  static RxString get firstName => to._firstName;
-  static RxString get lastName => to._lastName;
-  static RxString get phone => to._phone;
-  static Rx<Uint8List> get picture => to._picture;
-  static RxString get email => to._email;
-  static RxString get website => to._website;
-  static RxList<Contact_SocialTile> get socials => to._socials;
-  static int get tileCount => to._socials.length;
-
-  // Username
-  static String get username => UserService.user.value.hasProfile() ? UserService.user.value.profile.username : "@TempUsername";
-
-  // ** Checks if Required Data for Connection Exists ** //
 
   // ** References **
   final _userBox = GetStorage('User');
@@ -67,10 +44,10 @@ class UserService extends GetxService {
     await GetStorage.init('User');
     await GetStorage.init('Preferences');
 
-    // @ Check User Status
+    // Check User Status
     _hasUser(_userBox.hasData("user"));
 
-    // @ Check if User Exists
+    // Check if Exists
     if (_hasUser.value) {
       // Get Json Value
       var profileJson = _userBox.read("user");
@@ -79,70 +56,35 @@ class UserService extends GetxService {
       // Set Contact Values
       _user(user);
       _contact(user.contact);
-      _firstName(user.contact.firstName);
-      _lastName(user.contact.lastName);
-      _phone(user.contact.phone);
-      _email(user.contact.email);
-      _website(user.contact.website);
-      _picture(Uint8List.fromList(user.contact.picture));
-      _socials(user.contact.socials);
+      _isNewUser(false);
+
+      // Configure Sentry
+      Sentry.configureScope((scope) => scope.user = SentryUser(
+            id: '1234',
+            username: _contact.value.username,
+            extras: {
+              "firstName": _contact.value.firstName,
+              "lastName": _contact.value.lastName,
+            },
+          ));
     } else {
       _isNewUser(true);
     }
 
-    // Set Preferences
-    _brightness(_isDarkMode.val ? Brightness.dark : Brightness.light);
+    // Handle Contact Updates
+    _contact.listen(_handleContact);
 
-    // Update Android and iOS Status Bar
-    _isDarkMode.val
-        ? SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
-        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
-
-    // @ Listen to Contact Updates
-    _contact.listen(_handleContactUpdate);
+    // Set Theme
+    SonrTheme.setDarkMode(isDark: _isDarkMode.val);
     return this;
   }
 
-  // ^ Add Social to List ^ //
-  static addSocial(Contact_SocialTile value) {
-    var controller = to;
-    controller._socials.add(value);
-    saveChanges();
-  }
-
-  // ^ Delete Social from List ^ //
-  static bool deleteSocial(Contact_SocialTile value) {
-    var controller = to;
-    if (controller._socials.contains(value)) {
-      controller._socials.remove(value);
-      saveChanges();
-      return true;
-    }
-    return false;
-  }
-
   // ^ Update Social in List ^ //
-  static bool swapSocials(Contact_SocialTile first, Contact_SocialTile second) {
-    var controller = to;
-    int idxOne = controller._socials.indexOf(first);
-    int idxTwo = controller._socials.indexOf(second);
-    controller._socials.swap(idxOne, idxTwo);
-    saveChanges();
+  static bool swapSocials(Contact_Social first, Contact_Social second) {
+    // int idxOne = to._socials.keys.toList().indexOf(first.username);
+    //int idxTwo = to._socials.keys.toList().indexOf(second.username);
+    // controller._socials.swap(idxOne, idxTwo);
     return true;
-  }
-
-  // ^ Update Social in List ^ //
-  static bool updateSocial(Contact_SocialTile value) {
-    var controller = to;
-    if (controller._socials.contains(value)) {
-      var idx = controller._socials.indexOf(value);
-      controller._socials[idx] = value;
-      saveChanges();
-      return true;
-    }
-    return false;
   }
 
   // ^ Method to Create New User from Contact ^ //
@@ -152,87 +94,30 @@ class UserService extends GetxService {
 
     // Connect Sonr Node
     if (withSonrConnect) {
-      Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+      Get.find<SonrService>().connectNewUser(UserService.contact.value);
     }
 
     // Set Contact for User
-    return await to._saveContactForUser(providedContact);
+    to._contact(providedContact);
+    to._contact.refresh();
+
+    // Save User/Contact to Disk
+    var permUser = User(contact: to._contact.value);
+    await to._userBox.write("user", permUser.writeToJson());
+    to._hasUser(true);
+    return to._user.value;
   }
 
-  // ^ Method to Save Changes ^ //
-  static Future<User> saveChanges() async {
-    // Set Contact for User
-    return await to._saveContactForUser(Contact(
-        firstName: to._firstName.value,
-        lastName: to._lastName.value,
-        phone: to._phone.value,
-        email: to._email.value,
-        website: to._website.value,
-        picture: to._picture.value.toList() ?? [],
-        socials: to._socials ?? []));
+  // # Resets User Data
+  static void reset() async {
+    to._userBox.remove('user');
   }
-
-  // # Saves Contact User to Disk
-  Future<User> _saveContactForUser(Contact contact) async {
-    // @ Initialize
-    _contact(contact);
-    _contact.refresh();
-
-    User userValue;
-    if (_hasUser.value) {
-      // Update Existing User with new Contact
-      var profileJson = _userBox.read("user");
-      userValue = User.fromJson(profileJson);
-      userValue.contact = contact;
-
-      // @ Save to SharedPreferences, Update SonrNode
-      await _userBox.write("user", userValue.writeToJson());
-      SonrService.setProfile(contact);
-    }
-    // Create New User with Contact
-    else {
-      userValue = User(contact: contact);
-      await _userBox.write("user", userValue.writeToJson());
-      _hasUser(true);
-    }
-    user(userValue);
-    return user.value;
-  }
-
-  // # Listen to Contact Updates
-  _handleContactUpdate(Contact contact) async {
-    // Set Values
-    to._firstName(contact.firstName);
-    to._lastName(contact.lastName);
-    to._phone(contact.phone);
-    to._email(contact.email);
-    to._website(contact.website);
-    to._picture(Uint8List.fromList(contact.picture));
-    to._socials(contact.socials);
-
-    // Refresh Lists
-    to._socials.refresh();
-    to._picture.refresh();
-  }
-
-  // ************************* //
-  // ** Preference Requests ** //
-  // ************************* //
 
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
     // Update Value
     to._isDarkMode.val = !to._isDarkMode.val;
-
-    // Update Android and iOS Status Bar
-    to._isDarkMode.val
-        ? SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
-        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
-
-    // Update Theme
-    Get.changeThemeMode(to._isDarkMode.val ? ThemeMode.dark : ThemeMode.light);
+    SonrTheme.setDarkMode(isDark: to._isDarkMode.val);
     return true;
   }
 
@@ -245,4 +130,107 @@ class UserService extends GetxService {
   static togglePointToShare() async {
     to._hasPointToShare.val = !to._hasPointToShare.val;
   }
+
+  // # Helper Method to Handle Contact Updates
+  void _handleContact(Contact data) async {
+    // Check if User Exists
+    if (_userBox.hasData("user")) {
+      // Retreive User from Disk
+      var permJson = _userBox.read("user");
+      User permUser = User.fromJson(permJson)..contact = data;
+
+      // Refresh Reactive Vars
+      _user(permUser);
+      _user.refresh();
+
+      // Save Updated User to Disk
+      await to._userBox.write("user", permUser.writeToJson());
+    }
+
+    // Send Update to Node
+    SonrService.setProfile(data);
+  }
+}
+
+extension RxContact on Rx<Contact> {
+  /// Add Address for Rx<Contact>
+  void addAddress(
+          {required String street,
+          required String city,
+          required String state,
+          String streetTwo = "",
+          String zipcode = "",
+          String country = "",
+          String countryCode = "",
+          String label = ContactUtils.K_DEFAULT_LABEL}) =>
+      this.update((val) {
+        val?.addAddress(Contact_Address(
+          label: label,
+          street: street,
+          state: state,
+          streetTwo: streetTwo,
+          zipcode: zipcode,
+          country: country,
+          countryCode: countryCode,
+        ));
+      });
+
+  /// Add Date for Rx<Contact>
+  void addDate(DateTime data, {String label = ContactUtils.K_DEFAULT_DATE_LABEL}) => this.update((val) {
+        val?.addDate(data, label: label);
+      });
+
+  /// Add Email for Rx<Contact>
+  void addEmail(String data) => this.update((val) {
+        val?.addEmail(data);
+      });
+
+  /// Add Name for Rx<Contact>
+  void addName(String data, String label) => this.update((val) {
+        val?.addName(data, label);
+      });
+
+  /// Add Phone for Rx<Contact>
+  void addPhone(String data, {String label = ContactUtils.K_DEFAULT_PHONE_LABEL}) => this.update((val) {
+        val?.addPhone(data, label: label);
+      });
+
+  /// Add a Social Media Provider
+  void addSocial(Contact_Social data) => this.update((val) {
+        val?.addSocial(data);
+      });
+
+  /// Add Website for Rx<Contact>
+  void addWebsite(String data, {String label = ContactUtils.K_DEFAULT_LABEL}) => this.update((val) async {
+        // Get URL Link
+        var link = await SonrService.getURL(data);
+
+        // Set Website
+        val?.addWebsite(link, label: label);
+      });
+
+  /// Delete a Social Media Provider
+  void deleteSocial(Contact_Social data) => this.update((val) {
+        val?.deleteSocial(data);
+      });
+
+  /// Set FirstName for Rx<Contact>
+  void setFirstName(String data) => this.update((val) {
+        val?.setFirstName(data);
+      });
+
+  /// Set LastName for Rx<Contact>
+  void setLastName(String data) => this.update((val) {
+        val?.setLastName(data);
+      });
+
+  /// Set Picture for Rx<Contact>
+  void setPicture(Uint8List data) => this.update((val) {
+        val?.setPicture(data);
+      });
+
+  /// Delete a Social Media Provider
+  void updateSocial(Contact_Social data) => this.update((val) {
+        val?.updateSocial(data);
+      });
 }

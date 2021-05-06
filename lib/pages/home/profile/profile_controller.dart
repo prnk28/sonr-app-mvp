@@ -1,5 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_plugin/sonr_social.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
@@ -18,18 +17,18 @@ class ProfileController extends GetxController {
   // Properties
   final status = ProfileViewStatus.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
-  final options = SonrSocial.options(UserService.socials);
+  final options = Contact_Social_Provider.values;
   final dropdownIndex = (-1).obs;
 
   // Edited Values
-  final editedFirstName = RxString(UserService.firstName.value);
-  final editedLastName = RxString(UserService.lastName.value);
-  final editedPhone = RxString(UserService.phone.value);
+  final editedFirstName = RxString(UserService.contact.value.firstName);
+  final editedLastName = RxString(UserService.contact.value.lastName);
+  final editedPhone = RxString("");
 
   // References
-  final step = Rx<TileStep>(null);
+  final step = Rx<TileStep?>(null);
   final pageController = PageController();
-  final viewParameters = Rx<NeumorphCardParams>(NeumorphCardParams());
+  final cardSelection = ValueNotifier<int>(0);
 
   // ** Initialize Method ** //
   onInit() async {
@@ -64,17 +63,16 @@ class ProfileController extends GetxController {
   // ^ Completed Editing Details ^ //
   void saveEditedDetails() {
     // Update Values in Profile Controller
-    UserService.firstName(editedFirstName.value);
-    UserService.lastName(editedLastName.value);
-    UserService.phone(editedPhone.value);
-    UserService.saveChanges();
+    UserService.contact.setFirstName(editedFirstName.value);
+    UserService.contact.setLastName(editedLastName.value);
+    UserService.contact.addPhone(editedPhone.value);
     status(ProfileViewStatus.Viewing);
   }
 
   // -- Set Privacy -- //
   isPrivate(bool value) {
     step.update((val) {
-      val.isPrivate = value;
+      val!.isPrivate = value;
     });
     step.refresh();
   }
@@ -82,15 +80,15 @@ class ProfileController extends GetxController {
   // -- Set Current Provider -- //
   provider(int index) {
     step.update((val) {
-      val.provider = options[index];
+      val!.provider = options[index];
     });
     step.refresh();
   }
 
   // -- Set Tile Type -- //
-  type(Contact_SocialTile_Type type) {
+  type(Contact_Social_Tile_Display type) {
     step.update((val) {
-      val.type = type;
+      val!.type = type;
     });
     step.refresh();
   }
@@ -98,7 +96,7 @@ class ProfileController extends GetxController {
   // -- Set Social User -- //
   user(SocialUser user) {
     step.update((val) {
-      val.user = user;
+      val!.user = user;
     });
     step.refresh();
   }
@@ -106,11 +104,11 @@ class ProfileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (step.value.current == 0) {
+    if (step.value!.current == 0) {
       if (dropdownIndex.value != -1) {
         provider(dropdownIndex.value);
         step.update((val) {
-          val.current = 1;
+          val!.current = 1;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         });
         step.refresh();
@@ -120,18 +118,18 @@ class ProfileController extends GetxController {
       }
     }
     // @ Step 3
-    else if (step.value.current == 1) {
+    else if (step.value!.current == 1) {
       // Update State
-      if (step.value.hasUser) {
+      if (step.value!.hasUser) {
         step.update((val) {
-          val.current = 2;
+          val!.current = 2;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         });
         step.refresh();
 
-        FocusScopeNode currentFocus = FocusScope.of(Get.context);
+        FocusScopeNode currentFocus = FocusScope.of(Get.context!);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
         }
       }
     } else {
@@ -143,17 +141,17 @@ class ProfileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
     // Step 2
-    if (step.value.current == 1) {
+    if (step.value!.current == 1) {
       step.update((val) {
-        val.current = 0;
+        val!.current = 0;
         pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       });
       step.refresh();
     }
     // Step 3
-    else if (step.value.current == 2) {
+    else if (step.value!.current == 2) {
       step.update((val) {
-        val.current = 1;
+        val!.current = 1;
         pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       });
       step.refresh();
@@ -163,19 +161,19 @@ class ProfileController extends GetxController {
   // ^ Finish and Save new Tile ^ //
   saveTile() {
     // Validate
-    if (step.value.hasType && step.value.current == 2) {
+    if (step.value!.hasType && step.value!.current == 2) {
       // Create Tile from Values
-      var tile = Contact_SocialTile(
-        username: step.value.user.username,
-        isPrivate: step.value.isPrivate,
-        provider: step.value.provider,
-        type: step.value.type,
-        links: step.value.links,
-        position: Contact_SocialTile_Position(index: UserService.tileCount),
+      var tile = Contact_Social(
+        username: step.value!.user!.username,
+        provider: step.value!.provider,
+        links: step.value!.links,
+        tile: Contact_Social_Tile(index: UserService.contact.value.socialsCount, type: step.value!.type),
       );
 
       // Save to Profile
-      UserService.addSocial(tile);
+      UserService.contact.addSocial(tile);
+
+      // Revert Status
       status(ProfileViewStatus.Viewing);
       reset();
     } else {

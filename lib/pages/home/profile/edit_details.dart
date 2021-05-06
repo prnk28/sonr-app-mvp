@@ -1,18 +1,20 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'profile.dart';
 
 // ^ Edit Profile Details View ^ //
 class EditDetailsView extends GetView<ProfileController> {
-  EditDetailsView({Key key}) : super(key: key);
+  EditDetailsView({Key? key}) : super(key: key);
+  final FocusNode _firstNameFocus = FocusNode();
+  final FocusNode _lastNameFocus = FocusNode();
+  final FocusNode _phoneNumberFocus = FocusNode();
+  final scrollController = ScrollController();
+  final hintName = SonrTextField.hintName();
 
   @override
   Widget build(BuildContext context) {
-    // Extract Data
-    final hintName = SonrTextField.hintName();
-
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      child: CustomScrollView(slivers: [
+      margin: EdgeInsets.only(left: 8, right: 8),
+      child: CustomScrollView(controller: scrollController, slivers: [
         // @ Top Banner
         SliverToBoxAdapter(
           child: Container(
@@ -22,9 +24,9 @@ class EditDetailsView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  PlainIconButton(icon: SonrIcons.Plus.gradient(gradient: SonrGradient.Secondary), onPressed: controller.setAddTile),
+                  PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Secondary), onPressed: controller.setAddTile),
                   Expanded(child: Center(child: "Edit Details".h4)),
-                  PlainIconButton(icon: SonrIcons.Check.gradient(gradient: SonrGradient.Tertiary), onPressed: controller.saveEditedDetails)
+                  PlainIconButton(icon: SonrIcons.Check.gradient(value: SonrGradient.Tertiary), onPressed: controller.saveEditedDetails)
                 ]),
           ),
         ),
@@ -32,37 +34,49 @@ class EditDetailsView extends GetView<ProfileController> {
         SliverFillRemaining(
           hasScrollBody: true,
           child: SingleChildScrollView(
-            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrTextField(
-                  hint: hintName.item1,
-                  label: "First Name",
-                  autoFocus: true,
-                  textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.firstName.value),
-                  value: controller.editedFirstName.value,
-                  onChanged: (val) => controller.editedFirstName(val)),
-              SonrTextField(
-                  hint: hintName.item2,
-                  label: "Last Name",
-                  textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.lastName.value),
-                  value: controller.editedLastName.value,
-                  onChanged: (val) => controller.editedLastName(val)),
-              SonrTextField(
-                  hint: "+1-555-555-5555",
-                  label: "Phone",
-                  textInputAction: TextInputAction.done,
-                  controller: TextEditingController(text: UserService.phone.value),
-                  value: controller.editedLastName.value,
-                  onEditingComplete: () {
-                    controller.saveEditedDetails();
-                    FocusScopeNode currentFocus = FocusScope.of(Get.context);
-                    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                      FocusManager.instance.primaryFocus.unfocus();
-                    }
-                  },
-                  onChanged: (val) => controller.editedPhone(val)),
-            ]),
+            controller: scrollController,
+            child: Form(
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                SonrTextField(
+                    hint: hintName.item1,
+                    label: "First Name",
+                    autoFocus: true,
+                    focusNode: _firstNameFocus,
+                    textInputAction: TextInputAction.next,
+                    controller: TextEditingController(text: UserService.contact.value.firstName),
+                    onEditingComplete: () {
+                      _lastNameFocus.requestFocus();
+                      scrollController.animateTo(40, duration: 250.milliseconds, curve: Curves.easeOut);
+                    },
+                    value: controller.editedFirstName.value,
+                    onChanged: (val) => controller.editedFirstName(val)),
+                SonrTextField(
+                    hint: hintName.item2,
+                    label: "Last Name",
+                    textInputAction: TextInputAction.next,
+                    controller: TextEditingController(text: UserService.contact.value.lastName),
+                    focusNode: _lastNameFocus,
+                    value: controller.editedLastName.value,
+                    onEditingComplete: () {
+                      _phoneNumberFocus.requestFocus();
+                      scrollController.animateTo(80, duration: 250.milliseconds, curve: Curves.easeOut);
+                    },
+                    onChanged: (val) => controller.editedLastName(val)),
+                SonrTextField(
+                    hint: "+1-555-555-5555",
+                    label: "Phone",
+                    textInputAction: TextInputAction.done,
+                    controller:
+                        TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary!.value : ""),
+                    value: controller.editedLastName.value,
+                    focusNode: _phoneNumberFocus,
+                    onEditingComplete: () {
+                      controller.saveEditedDetails();
+                      _phoneNumberFocus.unfocus();
+                    },
+                    onChanged: (val) => controller.editedPhone(val))
+              ]),
+            ),
           ),
         ),
       ]),

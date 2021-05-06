@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/pages/overlay/overlay.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 export 'package:sonr_app/data/database/cards_db.dart';
 
@@ -79,7 +80,7 @@ class CardService extends GetxService {
   static addCard(TransferCard card) async {
     // Save Media to Device
     if (card.payload == Payload.MEDIA) {
-      await DeviceService.saveTransfer(card.metadata);
+      await DeviceService.saveTransfer(card.file);
     }
 
     // Store in Database
@@ -98,7 +99,7 @@ class CardService extends GetxService {
       cards.removeWhere((element) => element.payload == Payload.CONTACT);
     }
     if (withoutMedia) {
-      cards.removeWhere((element) => element.payload == Payload.MEDIA);
+      cards.removeWhere((element) => element.payload == Payload.FILE);
     }
     if (withoutURLs) {
       cards.removeWhere((element) => element.payload == Payload.URL);
@@ -130,15 +131,18 @@ class CardService extends GetxService {
   }
 
   // ^ Load IO File from Metadata ^ //
-  static Future<File> loadFileFromMetadata(Metadata metadata) async {
+  static Future<File?> loadFileFromMetadata(SonrFile_Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
-    return await asset.file;
+    if (asset != null) {
+      return await asset.file;
+    } else {
+      return null;
+    }
   }
 
-  // ^ Load MediaItem from Metadata ^ //
-  static Future<MediaItem> loadItemFromMetadata(Metadata metadata) async {
-    var asset = await AssetEntity.fromId(metadata.id);
-    return MediaItem(asset, -1);
+  // ^ Load SonrFile from Metadata ^ //
+  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
+    return SonrFileUtils.newWithItem(metadata);
   }
 
   // ^ Add Shared Card to Activity Datavase
@@ -147,16 +151,21 @@ class CardService extends GetxService {
   }
 
   // ^ Handles User Invite Response
-  static handleInviteResponse(bool decision, AuthInvite invite, TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
+  static handleInviteResponse(bool decision, AuthInvite invite, {bool sendBackContact = false, bool closeOverlay = false}) {
     if (invite.payload == Payload.CONTACT) {
-      to._handleAcceptContact(invite, card, sendBackContact);
+      to._handleAcceptContact(invite, sendBackContact);
     } else {
-      decision ? to._handleAcceptTransfer(invite, card) : to._handleDeclineTransfer(invite);
+      decision ? to._handleAcceptTransfer(invite) : to._handleDeclineTransfer(invite);
     }
   }
 
+  static void reset() {
+    to._database.clearAllActivity();
+    to._database.deleteAllCards();
+  }
+
   // @ Handle Accept Transfer Response
-  _handleAcceptTransfer(AuthInvite invite, TransferCard card) {
+  _handleAcceptTransfer(AuthInvite invite) {
     // Check for Remote
     if (invite.hasRemote()) {
       SonrService.respond(true, info: invite.remote);
@@ -167,12 +176,12 @@ class CardService extends GetxService {
     // Switch View
     SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(card, card.metadata.size > 5000000),
+      ProgressView(invite.file, invite.file.single.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
 
-    if (card.metadata.size > 5000000) {
+    if (invite.file.single.size > 5000000) {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();
@@ -196,9 +205,9 @@ class CardService extends GetxService {
   }
 
 // @ Handle Accept Contact Response
-  _handleAcceptContact(AuthInvite invite, TransferCard card, bool sendBackContact) {
+  _handleAcceptContact(AuthInvite invite, bool sendBackContact) {
     // Save Card
-    _database.addCard(card);
+    // _database.addCard(card);
 
     // Check if Send Back
     if (sendBackContact) {
@@ -230,13 +239,13 @@ class CardService extends GetxService {
 
     // Set Individual File Count
     if (hasMetadata) {
-      to._documentCount(to._metadata.count((i) => i.payload == Payload.TEXT));
-      to._pdfCount(to._metadata.count((i) => i.payload == Payload.PDF));
-      to._presentationCount(to._metadata.count((i) => i.payload == Payload.PRESENTATION));
-      to._spreadsheetCount(to._metadata.count((i) => i.payload == Payload.SPREADSHEET));
-      to._otherCount(to._metadata.count((i) => i.payload == Payload.OTHER));
-      to._photosCount(to._metadata.count((i) => i.metadata.mime.type == MIME_Type.image));
-      to._videosCount(to._metadata.count((i) => i.metadata.mime.type == MIME_Type.video));
+      to._documentCount(to._metadata.count((i) => i.mime == MIME_Type.TEXT));
+      to._pdfCount(to._metadata.count((i) => i.mime == MIME_Type.PDF));
+      to._presentationCount(to._metadata.count((i) => i.mime == MIME_Type.PRESENTATION));
+      to._spreadsheetCount(to._metadata.count((i) => i.mime == MIME_Type.SPREADSHEET));
+      to._otherCount(to._metadata.count((i) => i.mime == MIME_Type.OTHER));
+      to._photosCount(to._metadata.count((i) => i.mime == MIME_Type.IMAGE));
+      to._videosCount(to._metadata.count((i) => i.mime == MIME_Type.VIDEO));
     }
   }
 
@@ -246,20 +255,20 @@ class CardService extends GetxService {
     var card = TransferCard(
       id: item.id,
       payload: item.payload,
-      received: item.received.millisecondsSinceEpoch,
+      received: item.received!.millisecondsSinceEpoch,
       owner: item.owner,
     );
 
     // Check Payload
     switch (item.payload) {
       case Payload.CONTACT:
-        card.contact = item.contact;
+        card.contact = item.contact!;
         break;
       case Payload.URL:
-        card.url = item.url;
+        card.url = item.url!;
         break;
       default:
-        card.metadata = item.metadata;
+        card.file = item.file!;
         break;
     }
     return card;

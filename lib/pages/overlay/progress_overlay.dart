@@ -1,17 +1,17 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 class ProgressView extends HookWidget {
   //  Properties
-  final TransferCard card;
+  final SonrFile file;
   final Gradient gradient = SonrGradient.Progress;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
 
   // Constructer
-  ProgressView(this.card, this.utilizeProgress) : super(key: UniqueKey());
+  ProgressView(this.file, this.utilizeProgress) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class ProgressView extends HookWidget {
       width: Get.width,
       child: AnimatedBuilder(
         animation: hookController,
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           return Opacity(
               opacity: 0.85,
               child: utilizeProgress
@@ -97,14 +97,14 @@ class ProgressView extends HookWidget {
         child: utilizeProgress
             ? Obx(() {
                 if (SonrService.progress.value >= 0.5) {
-                  return OpacityAnimatedWidget(duration: Duration(milliseconds: 200), child: card.metadata.mime.type.gradient(size: 165));
+                  return FadeIn(child: file.single.mime.type.gradient(size: 165));
                 } else {
                   return Container();
                 }
               })
-            : OpacityAnimatedWidget(
+            : FadeIn(
                 delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
                 duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-                child: card.metadata.mime.type.gradient(size: 165)));
+                child: file.single.mime.type.gradient(size: 165)));
   }
 }
