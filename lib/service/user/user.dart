@@ -63,7 +63,7 @@ class UserService extends GetxService {
     // @ Init Shared Preferences
     await GetStorage.init('User');
     await GetStorage.init('Preferences');
-    _userBox.remove('user');
+
     // @ Check User Status
     _hasUser(_userBox.hasData("user"));
 
@@ -211,6 +211,10 @@ class UserService extends GetxService {
     // Refresh Lists
     to._socials.refresh();
     to._picture.refresh();
+  }
+
+  static void reset() async {
+    to._userBox.remove('user');
   }
 
   // ************************* //

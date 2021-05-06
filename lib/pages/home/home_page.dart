@@ -2,11 +2,11 @@ import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'action_button.dart';
 import 'recents/recents_view.dart';
 import 'home_controller.dart';
 import 'activity/activity_view.dart';
 import 'profile/profile_view.dart';
+import 'search_bar.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -15,46 +15,14 @@ class HomePage extends GetView<HomeController> {
         resizeToAvoidBottomInset: false,
         floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
-        appBar: HomeSearchAppBar(
-          subtitle: Obx(() => controller.view.value == HomeView.Main
-              ? "Hi ${UserService.contact.value!.profile.firstName},"
-                  .headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
-              : Container()),
-          action: HomeActionButton(),
-          title: Obx(() => AnimatedSlideSwitcher.fade(
-                duration: 2.seconds,
-                child: GestureDetector(
-                  key: ValueKey<String>(controller.titleText.value),
-                  onTap: () {
-                    if (controller.isTitleVisible.value) {
-                      controller.swapTitleText("${LobbyService.local.value!.count} Around", timeout: 2500.milliseconds);
-                    }
-                  },
-                  child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
-                ),
-              )),
-        ),
-        body: _HomePageView());
-  }
-}
-
-// ^ Handles Active Views on Home Page ^ //
-class _HomePageView extends GetView<HomeController> {
-  // View References
-  final main = CardMainView(key: ValueKey<HomeView>(HomeView.Main));
-  final profile = ProfileView(key: ValueKey<HomeView>(HomeView.Profile));
-  final alerts = ActivityView(key: ValueKey<HomeView>(HomeView.Activity));
-  final remote = RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: TabBarView(controller: controller.tabController, children: [
-      CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-      ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-      ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
-      RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-    ]));
+        appBar: HomeAppBar(),
+        body: Container(
+            child: TabBarView(controller: controller.tabController, children: [
+          CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+          ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+        ])));
   }
 }
 

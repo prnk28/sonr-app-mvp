@@ -3,9 +3,9 @@ import 'package:sonr_app/modules/card/url/list_item.dart';
 import 'contact/card_item.dart';
 import 'contact/grid_item.dart';
 import 'contact/list_item.dart';
-import 'metadata/card_item.dart';
-import 'metadata/grid_item.dart';
-import 'metadata/list_item.dart';
+import 'file/card_item.dart';
+import 'file/grid_item.dart';
+import 'file/list_item.dart';
 import 'url/card_item.dart';
 import 'package:sonr_app/style/style.dart';
 

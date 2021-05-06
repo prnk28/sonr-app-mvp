@@ -75,26 +75,8 @@ class DeviceService extends GetxService {
     }
   }
 
-  // ^ Method Plays a UI Sound ^
-  static void playSound({required UISoundType type}) async {
-    if (isMobile) {
-      MobileService.playSound(type);
-    } else {
-      DesktopService.playSound(type);
-    }
-  }
-
-  // ^ Saves Received Media to Gallery by Platform ^ //
-  static void saveTransfer(SonrFile file) async {
-    if (isMobile) {
-      await MobileService.saveTransfer(file.single);
-    } else {
-      OpenFile.open(file.single.path);
-    }
-  }
-
   // ^ Method Determines LaunchPage and Changes Screen ^
-  static void shiftPage({required Duration delay}) async {
+  static void initialPage({required Duration delay}) async {
     Future.delayed(delay, () {
       // @ Mobile Page
       if (isMobile) {
@@ -122,6 +104,29 @@ class DeviceService extends GetxService {
         Get.offNamed("/desktop");
       }
     });
+  }
+
+  // ^ Method Plays a UI Sound ^
+  static void playSound({required UISoundType type}) async {
+    if (isMobile) {
+      MobileService.playSound(type);
+    } else {
+      DesktopService.playSound(type);
+    }
+  }
+
+  // ^ Saves Received Media to Gallery by Platform ^ //
+  static Future<void> saveTransfer(SonrFile file) async {
+    if (isMobile) {
+      await MobileService.saveTransfer(file.single);
+    } else {
+      await OpenFile.open(file.single.path);
+    }
+  }
+
+  static void factoryReset() {
+    UserService.reset();
+    //Get.find<CardService>().
   }
 }
 

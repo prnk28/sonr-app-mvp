@@ -221,11 +221,13 @@ class MobileService extends GetxService {
       asset = await PhotoManager.editor.saveImageWithPath(meta.path);
 
       // Visualize Result
-      if (await asset!.exists) {
+      if (asset != null) {
         meta.id = asset.id;
         SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
+        return await asset.exists;
       } else {
         SonrSnack.error("Unable to save Photo to your Gallery");
+        return false;
       }
     }
 
@@ -235,15 +237,18 @@ class MobileService extends GetxService {
       asset = await PhotoManager.editor.saveVideo(meta.file);
 
       // Visualize Result
-      if (await asset!.exists) {
+      if (asset != null) {
+        meta.id = asset.id;
         SonrSnack.success("Saved Transferred Video to your Device's Gallery");
+        return await asset.exists;
       } else {
         SonrSnack.error("Unable to save Video to your Gallery");
+        return false;
       }
     }
 
     // Return Status
-    return asset != null ? await asset.exists : false;
+    return false;
   }
 
   // ^ Update Method ^ //

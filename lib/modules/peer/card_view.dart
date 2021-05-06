@@ -91,7 +91,6 @@ class _PeerMainCard extends StatelessWidget {
 
           // Avatar
           Obx(() => FadeInDownBig(
-                manualTrigger: controller.isVisible.value,
                 duration: 125.milliseconds,
                 child: controller.peer.value!.profilePicture(size: 68),
               )),

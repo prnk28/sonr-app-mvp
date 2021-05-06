@@ -132,17 +132,17 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // @ Handle Size Update ^ //
   _handleLobbyStream(Lobby? onData) {
     // Peer Joined
-    if (onData!.size > _lobbySizeRef) {
-      var diff = onData.size - _lobbySizeRef;
+    if (onData!.count > _lobbySizeRef) {
+      var diff = onData.count - _lobbySizeRef;
       swapTitleText("$diff Joined");
       DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
-    else if (onData.size < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData.size;
+    else if (onData.count < _lobbySizeRef) {
+      var diff = _lobbySizeRef - onData.count;
       swapTitleText("$diff Left");
     }
-    _lobbySizeRef = onData.size;
+    _lobbySizeRef = onData.count;
   }
 
   // @ Handle Status Update ^ //
@@ -166,6 +166,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
 // ^ Home View Enum Extension ^ //
 extension HomeViewUtils on HomeView {
+  bool get isMain => this == HomeView.Main;
+
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {

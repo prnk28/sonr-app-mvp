@@ -36,7 +36,7 @@ class _MobileAppState extends State<MobileApp> {
     super.initState();
 
     // Shift Page
-    DeviceService.shiftPage(delay: 3.seconds);
+    DeviceService.initialPage(delay: 3.seconds);
   }
 
   @override

@@ -80,7 +80,7 @@ class CardService extends GetxService {
   static addCard(TransferCard card) async {
     // Save Media to Device
     if (card.payload == Payload.MEDIA) {
-      DeviceService.saveTransfer(card.file);
+      await DeviceService.saveTransfer(card.file);
     }
 
     // Store in Database
@@ -132,8 +132,12 @@ class CardService extends GetxService {
 
   // ^ Load IO File from Metadata ^ //
   static Future<File?> loadFileFromMetadata(SonrFile_Metadata metadata) async {
-    var asset = await (AssetEntity.fromId(metadata.id) as FutureOr<AssetEntity>);
-    return await asset.file;
+    var asset = await AssetEntity.fromId(metadata.id);
+    if (asset != null) {
+      return await asset.file;
+    } else {
+      return null;
+    }
   }
 
   // ^ Load SonrFile from Metadata ^ //
@@ -153,6 +157,11 @@ class CardService extends GetxService {
     } else {
       decision ? to._handleAcceptTransfer(invite) : to._handleDeclineTransfer(invite);
     }
+  }
+
+  static void reset() {
+    to._database.clearAllActivity();
+    to._database.deleteAllCards();
   }
 
   // @ Handle Accept Transfer Response
@@ -230,7 +239,7 @@ class CardService extends GetxService {
 
     // Set Individual File Count
     if (hasMetadata) {
-      to._documentCount(to._metadata.count((i) => i.mime == MIME_Type.DOCUMENT));
+      to._documentCount(to._metadata.count((i) => i.mime == MIME_Type.TEXT));
       to._pdfCount(to._metadata.count((i) => i.mime == MIME_Type.PDF));
       to._presentationCount(to._metadata.count((i) => i.mime == MIME_Type.PRESENTATION));
       to._spreadsheetCount(to._metadata.count((i) => i.mime == MIME_Type.SPREADSHEET));

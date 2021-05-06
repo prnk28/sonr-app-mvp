@@ -16,12 +16,12 @@ class MetaBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return metadata.properties.isImage
+    return metadata.mime.isImage
         ? FutureBuilder<File?>(
             initialData: null,
             future: CardService.loadFileFromMetadata(metadata),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.data != null) {
                 return GestureDetector(
                   onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
                   child: Container(
@@ -36,12 +36,14 @@ class MetaBox extends StatelessWidget {
                 );
               } else {
                 return Container(
-                  child: CircularProgressIndicator(),
+                  alignment: Alignment.center,
+                  child: SonrAssetIllustration.NoFiles2.widget,
                 );
               }
             })
         : Container(
-            child: child ?? Container(),
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
           );
   }
 }
@@ -80,7 +82,7 @@ class MetaImageBox extends StatelessWidget {
   const MetaImageBox({Key? key, required this.metadata, this.width = 150, this.height = 150, this.fit = BoxFit.contain}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return metadata.properties.isImage
+    return metadata.mime.isImage
         ? FutureBuilder<File?>(
             initialData: null,
             future: CardService.loadFileFromMetadata(metadata),
@@ -126,7 +128,7 @@ class MetaVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return metadata.properties.isVideo
+    return metadata.mime.isVideo
         ? FutureBuilder<File?>(
             initialData: null,
             future: CardService.loadFileFromMetadata(metadata),

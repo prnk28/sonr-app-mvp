@@ -60,7 +60,8 @@ class _QueueView extends GetView<ShareController> {
       child: Container(
         decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(24)),
         child: FadeInUpBig(
-            delay: 350.milliseconds,
+            delay: 100.milliseconds,
+            duration: 300.milliseconds,
             child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               Padding(padding: EdgeInsets.all(4)),
               const _ShareCameraButtonItem(),
@@ -88,7 +89,6 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
         if (controller.cameraPermitted.value) {
           controller.presentCameraView();
         }
-
         // Request Permissions
         else {
           var result = await Get.find<MobileService>().requestCamera();

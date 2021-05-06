@@ -17,7 +17,7 @@ extension PeerStatusUtils on PeerStatus {
 }
 
 // ^ Reactive Controller for Peer Bubble ^ //
-class PeerController extends GetxController {
+class PeerController extends GetxController with SingleGetTickerProviderMixin {
   // Required Properties
   final Future<RiveFile> riveFile;
 
@@ -38,6 +38,7 @@ class PeerController extends GetxController {
   final userVector = Rx<Position?>(null);
 
   // References
+  AnimationController? visibilityController;
   StreamSubscription<Position?>? _userStream;
   FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
@@ -52,6 +53,7 @@ class PeerController extends GetxController {
 
   @override
   void onInit() {
+    visibilityController = AnimationController(vsync: this);
     super.onInit();
   }
 

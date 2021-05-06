@@ -61,8 +61,7 @@ class CardsDatabase extends _$CardsDatabase {
 
   Stream<List<TransferCardItem>> watchMetadata() {
     return (select(transferCardItems)
-          ..where(
-              (t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MULTI_FILES.value) | t.payload.equals(MIME_Type.OTHER.value)))
+          ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.MULTI_FILES.value)))
         .watch();
   }
 
@@ -94,16 +93,20 @@ class CardsDatabase extends _$CardsDatabase {
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
   }
 
-  Future clearActivity(TransferCardActivity activity) {
+  Future<void> clearActivity(TransferCardActivity activity) {
     return (delete(transferCardActivities)..where((t) => t.id.equals(activity.id))).go();
   }
 
-  Future clearAllActivity() {
-    return (delete(transferCardActivities).go());
+  Future<void> clearAllActivity() {
+    return delete(transferCardActivities).go();
   }
 
-  Future deleteCard(TransferCardItem item) {
+  Future<void> deleteCard(TransferCardItem item) {
     return (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
+  }
+
+  Future<void> deleteAllCards() {
+    return delete(transferCardItems).go();
   }
 }
 
