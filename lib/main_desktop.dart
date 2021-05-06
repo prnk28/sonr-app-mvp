@@ -21,7 +21,7 @@ class _DesktopAppState extends State<DesktopApp> {
     super.initState();
 
     // Shift Page
-    DeviceService.initialPage(delay: 2500.milliseconds);
+    DeviceService.initialPage(delay: 3500.milliseconds);
   }
 
   @override

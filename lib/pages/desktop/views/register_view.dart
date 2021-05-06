@@ -27,7 +27,7 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ****************** //
                 SonrTextField(
                     label: "First Name",
-                    hint: hintName!.item1,
+                    hint: hintName.item1,
                     value: controller.firstName.value,
                     status: controller.firstNameStatus,
                     textInputAction: TextInputAction.next,
@@ -49,7 +49,7 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ***************** //
                 SonrTextField(
                     label: "Last Name",
-                    hint: hintName!.item2,
+                    hint: hintName.item2,
                     textInputAction: TextInputAction.next,
                     value: controller.lastName.value,
                     textCapitalization: TextCapitalization.words,

@@ -38,11 +38,11 @@ class SonrTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final Rx<TextInputValidStatus>? status;
   final ValueChanged<String>? onChanged;
-  final Function? onEditingComplete;
+  final void Function()? onEditingComplete;
   final Iterable<String>? autofillHints;
 
   // ^ Returns Random Hint Name ^
-  static Tuple<String, String>? hintName() {
+  static Tuple<String, String> hintName() {
     return <Tuple<String, String>>[
       !DeviceService.isIOS && !DeviceService.isMacOS ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
       Tuple("Michelangelo", "Buonarroti"),
@@ -122,7 +122,7 @@ class SonrTextField extends StatelessWidget {
             textCapitalization: textCapitalization,
             focusNode: focusNode,
             autofillHints: autofillHints,
-            onEditingComplete: onEditingComplete as void Function()?,
+            onEditingComplete: onEditingComplete,
             onChanged: onChanged,
             decoration: decoration != null
                 ? decoration

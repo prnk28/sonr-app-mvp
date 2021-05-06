@@ -28,6 +28,7 @@ class ProfileController extends GetxController {
   // References
   final step = Rx<TileStep?>(null);
   final pageController = PageController();
+  final cardSelection = ValueNotifier<int>(0);
 
   // ** Initialize Method ** //
   onInit() async {
