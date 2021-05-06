@@ -16,8 +16,8 @@ extension TextUtils on TransferCardItem {
     final timeFormat = DateFormat.jm();
 
     // Get String
-    String dateText = dateFormat.format(this.received);
-    String timeText = timeFormat.format(this.received);
+    String dateText = dateFormat.format(this.received!);
+    String timeText = timeFormat.format(this.received!);
     return Row(children: [dateText.h6_White, timeText.p_White]);
   }
 
@@ -26,7 +26,7 @@ extension TextUtils on TransferCardItem {
     final dateFormat = DateFormat.yMd();
 
     // Get String
-    return dateFormat.format(this.received).h6_White;
+    return dateFormat.format(this.received!).h6_White;
   }
 }
 

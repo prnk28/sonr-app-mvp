@@ -14,28 +14,28 @@ class LobbyService extends GetxService {
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
   final _lobbies = RxList<Lobby>();
-  final _local = Rx<Lobby>(null);
+  final _local = Rx<Lobby?>(null);
   final _localFlatPeers = RxMap<String, Peer>();
-  final _position = Rx<Position>(null);
+  final _position = Rx<Position?>(null);
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
   // @ Routing to Reactive
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
   static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
-  static Rx<Lobby> get local => Get.find<LobbyService>()._local;
-  static Rx<Position> get userPosition => to._position;
+  static Rx<Lobby?> get local => Get.find<LobbyService>()._local;
+  static Rx<Position?> get userPosition => to._position;
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
-  StreamSubscription<Position> _positionStream;
-  Timer _timer;
-  Map<Lobby, LobbyCallback> _lobbyCallbacks = <Lobby, LobbyCallback>{};
-  Map<Peer, PeerCallback> _peerCallbacks = <Peer, PeerCallback>{};
+  StreamSubscription<Position>? _positionStream;
+  Timer? _timer;
+  Map<Lobby?, LobbyCallback> _lobbyCallbacks = <Lobby?, LobbyCallback>{};
+  Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       _positionStream = MobileService.position.listen(_handlePosition);
     }
     return this;
@@ -45,7 +45,7 @@ class LobbyService extends GetxService {
   @override
   void onClose() {
     if (_positionStream != null) {
-      _positionStream.cancel();
+      _positionStream!.cancel();
     }
 
     super.onClose();
@@ -63,13 +63,13 @@ class LobbyService extends GetxService {
   }
 
   // ^ Registers RemoteInfo to Lobby to Manage Callback
-  static void registerRemoteCallback(RemoteInfo info, LobbyCallback callback) {
+  static void registerRemoteCallback(RemoteInfo? info, LobbyCallback callback) {
     // Initialize
-    Lobby remote;
+    Lobby? remote;
 
     // Find Remote Lobby
     to._lobbies.forEach((e) {
-      if (e.isRemoteLobby(info)) {
+      if (e.isRemoteLobby(info!)) {
         remote = e;
       }
     });
@@ -81,7 +81,7 @@ class LobbyService extends GetxService {
   }
 
   // ^ Registers Peer to Callback
-  static void registerPeerCallback(Peer peer, PeerCallback callback) {
+  static void registerPeerCallback(Peer? peer, PeerCallback callback) {
     to._peerCallbacks[peer] = callback;
   }
 
@@ -93,14 +93,14 @@ class LobbyService extends GetxService {
   }
 
   // ^ Removes Peer Callback
-  static void unregisterPeerCallback(Peer peer) {
+  static void unregisterPeerCallback(Peer? peer) {
     if (to._peerCallbacks.containsKey(peer)) {
       to._peerCallbacks.remove(peer);
     }
   }
 
   // ^ Method to Cancel Flat Mode ^ //
-  bool sendFlatMode(Peer peer) {
+  bool sendFlatMode(Peer? peer) {
     // Send Invite
     SonrService.sendFlat(peer);
 
@@ -110,7 +110,7 @@ class LobbyService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-    var flatPeer = LobbyService.local.value.flatFirst();
+    var flatPeer = LobbyService.local.value!.flatFirst()!;
     SonrSnack.success("Sent Contact to ${flatPeer.profile.firstName}");
     Get.back();
     return true;
@@ -121,14 +121,14 @@ class LobbyService extends GetxService {
     // @ Callbacks
     // Handle Lobby Callbacks
     if (_lobbyCallbacks.containsKey(data)) {
-      var call = _lobbyCallbacks[data];
+      var call = _lobbyCallbacks[data]!;
       call(data);
     }
 
     // Handle Peer Callbacks
     data.peers.forEach((id, peer) {
       if (_peerCallbacks.containsKey(peer)) {
-        var call = _peerCallbacks[peer];
+        var call = _peerCallbacks[peer]!;
         call(peer);
       }
     });
@@ -220,7 +220,7 @@ class LobbyService extends GetxService {
     _isFlatMode(false);
     SonrService.setFlatMode(false);
     if (_timer != null) {
-      _timer.cancel();
+      _timer!.cancel();
       _timer = null;
       _lastIsFacingFlat(false);
       counter(0);

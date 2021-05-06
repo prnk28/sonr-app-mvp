@@ -67,13 +67,13 @@ class CurveWave extends Curve {
 class IconWavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
   final GlobalKey iconKey;
-  final Animation<double> waveAnimation;
-  final double percent;
-  final double boxHeight;
-  final Gradient gradient;
+  final Animation<double>? waveAnimation;
+  final double? percent;
+  final double? boxHeight;
+  final Gradient? gradient;
 
   IconWavePainter({
-    @required this.iconKey,
+    required this.iconKey,
     this.waveAnimation,
     this.percent,
     this.boxHeight,
@@ -82,18 +82,18 @@ class IconWavePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final RenderBox iconBox = iconKey.currentContext.findRenderObject();
+    final RenderBox iconBox = iconKey.currentContext!.findRenderObject() as RenderBox;
     final iconHeight = iconBox.size.height;
-    final baseHeight = (boxHeight / 2) + (iconHeight / 2) - (percent * iconHeight);
+    final baseHeight = (boxHeight! / 2) + (iconHeight / 2) - (percent! * iconHeight);
 
-    final width = size.width ?? 325;
-    final height = size.height ?? 325;
+    final width = size.width;
+    final height = size.height;
     final path = Path();
     path.moveTo(0.0, baseHeight);
     for (var i = 0.0; i < width; i++) {
       path.lineTo(
         i,
-        baseHeight + sin((i / width * _pi2) + (waveAnimation.value * _pi2)) * 8,
+        baseHeight + sin((i / width * _pi2) + (waveAnimation!.value * _pi2)) * 8,
       );
     }
 
@@ -101,7 +101,7 @@ class IconWavePainter extends CustomPainter {
     path.lineTo(0.0, height);
     path.close();
     final wavePaint = Paint()
-      ..shader = gradient.createShader(
+      ..shader = gradient!.createShader(
         Rect.fromLTWH(0, 0, width, height),
       );
     canvas.drawPath(path, wavePaint);
@@ -119,8 +119,8 @@ class PolygonPathDrawer {
   final PolygonPathSpecs specs;
 
   PolygonPathDrawer({
-    @required this.size,
-    @required this.specs,
+    required this.size,
+    required this.specs,
   }) : path = Path();
 
   Path draw() {
@@ -192,9 +192,9 @@ class PolygonPathSpecs {
   final double halfBorderRadiusAngle;
 
   PolygonPathSpecs({
-    @required this.sides,
-    @required this.rotate,
-    @required this.borderRadiusAngle,
+    required this.sides,
+    required this.rotate,
+    required this.borderRadiusAngle,
   }) : halfBorderRadiusAngle = borderRadiusAngle / 2;
 }
 
@@ -216,9 +216,9 @@ extension SonrOffset on Offset {
 // ^ Wave Painter for File Progress ^ //
 class WavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
-  final Animation<double> waveAnimation;
-  final double percent;
-  final Gradient gradient;
+  final Animation<double>? waveAnimation;
+  final double? percent;
+  final Gradient? gradient;
 
   WavePainter({
     this.waveAnimation,
@@ -228,13 +228,13 @@ class WavePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final baseHeight = (size.height + 10) - (percent * size.height);
+    final baseHeight = (size.height + 10) - (percent! * size.height);
     final path = Path();
     path.moveTo(0.0, baseHeight);
     for (var i = 0.0; i < size.width; i++) {
       path.lineTo(
         i,
-        baseHeight + sin((i / size.width * _pi2) + (waveAnimation.value * _pi2)) * 16,
+        baseHeight + sin((i / size.width * _pi2) + (waveAnimation!.value * _pi2)) * 16,
       );
     }
 
@@ -242,7 +242,7 @@ class WavePainter extends CustomPainter {
     path.lineTo(0.0, size.height);
     path.close();
     final wavePaint = Paint()
-      ..shader = gradient.createShader(
+      ..shader = gradient!.createShader(
         Rect.fromCenter(center: Offset.zero, width: size.width, height: size.height),
       );
     canvas.drawPath(path, wavePaint);

@@ -24,7 +24,7 @@ void main() async {
 }
 
 class DesktopApp extends StatefulWidget {
-  const DesktopApp({Key key}) : super(key: key);
+  const DesktopApp({Key? key}) : super(key: key);
 
   @override
   _DesktopAppState createState() => _DesktopAppState();

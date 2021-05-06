@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 class MediaPreviewView extends StatelessWidget {
   final SonrFile file;
   final Function(bool decision) onDecision;
-  MediaPreviewView({@required this.file, @required this.onDecision});
+  MediaPreviewView({required this.file, required this.onDecision});
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -8,12 +8,12 @@ class ActionButton extends StatelessWidget {
   final Widget icon;
 
   /// String for Text Below Button
-  final String label;
+  final String? label;
 
   /// Button Size: Menu Button = 56, Contact button = 72. Defaults to 56
   final double size;
 
-  const ActionButton({Key key, @required this.onPressed, @required this.icon, this.size = 56, this.label}) : super(key: key);
+  const ActionButton({Key? key, required this.onPressed, required this.icon, this.size = 56, this.label}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     if (label != null) {
@@ -24,7 +24,7 @@ class ActionButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _ActionIconButton(onPressed, icon, size),
-            label.h5_Grey,
+            label!.h5_Grey,
           ],
         ),
       );
@@ -43,7 +43,7 @@ class _ActionIconButton extends StatelessWidget {
   /// Button Size: Menu Button = 56, Contact button = 72. Defaults to 56
   final double size;
 
-  const _ActionIconButton(this.onPressed, this.icon, this.size, {Key key}) : super(key: key);
+  const _ActionIconButton(this.onPressed, this.icon, this.size, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(

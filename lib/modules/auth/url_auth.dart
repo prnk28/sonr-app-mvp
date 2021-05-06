@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
 class URLAuthView extends StatelessWidget {
-  final AuthInvite invite;
+  final AuthInvite? invite;
   URLAuthView(this.invite);
 
   @override
@@ -20,8 +20,8 @@ class URLAuthView extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(4),
               decoration: Neumorphic.floating(shape: BoxShape.circle),
-              child: invite.from.profile.hasPicture()
-                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+              child: invite!.from.profile.hasPicture()
+                  ? Image.memory(Uint8List.fromList(invite!.from.profile.picture))
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
@@ -32,9 +32,9 @@ class URLAuthView extends StatelessWidget {
 
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
-            invite.from.profile.hasLastName()
-                ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(value: SonrGradients.SolidStone)
-                : "${invite.from.profile.firstName}".gradient(value: SonrGradients.SolidStone),
+            invite!.from.profile.hasLastName()
+                ? "${invite!.from.profile.firstName} ${invite!.from.profile.lastName}".gradient(value: SonrGradients.SolidStone)
+                : "${invite!.from.profile.firstName}".gradient(value: SonrGradients.SolidStone),
             Center(child: "Website Link".gradient(value: SonrGradients.PlumBath, size: 22)),
           ]),
         ]),
@@ -45,7 +45,7 @@ class URLAuthView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(child: Container(child: _buildURLView(invite.url))),
+            Expanded(child: Container(child: _buildURLView(invite!.url))),
           ],
         ),
 
@@ -58,7 +58,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
-              onPressed: () => launchURL(invite.url.link),
+              onPressed: () => launchURL(invite!.url.link),
               text: "Open",
               icon: SonrIcons.Discover,
             ),

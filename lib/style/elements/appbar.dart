@@ -5,16 +5,16 @@ import '../style.dart';
 class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const draggableChannel = MethodChannel('io.sonr.desktop/window');
   final Widget title;
-  final Widget subtitle;
-  final Widget leading;
-  final Widget action;
+  final Widget? subtitle;
+  final Widget? leading;
+  final Widget? action;
   final bool centerTitle;
   DesignAppBar({
-    @required this.title,
+    required this.title,
     this.leading,
     this.action,
     this.subtitle,
-    Key key,
+    Key? key,
     this.centerTitle = false,
   }) : super(key: key);
   @override
@@ -34,7 +34,7 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                subtitle != null ? subtitle : Container(),
+                subtitle != null ? subtitle! : Container(),
                 title,
               ],
             ),
@@ -49,14 +49,14 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   // Handles Drag Update for Desktop Build
   void onPanUpdate(DragUpdateDetails details) async {
-    if (DeviceService.isDesktop) {
+    if (DeviceService.isDesktop!) {
       await draggableChannel.invokeMethod('onPanUpdate');
     }
   }
 
   // Handles Drag Start for Desktop Build
   void onPanStart(DragStartDetails details) async {
-    if (DeviceService.isDesktop) {
+    if (DeviceService.isDesktop!) {
       await draggableChannel.invokeMethod('onPanStart', {"dx": details.globalPosition.dx, "dy": details.globalPosition.dy});
     }
   }
@@ -64,8 +64,8 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   // ^ Closes Desktop Window
   static void closeWindow() async {}
 
-  Widget _buildTrailing() {
-    if (DeviceService.isDesktop) {
+  Widget? _buildTrailing() {
+    if (DeviceService.isDesktop!) {
       return Container(
           width: 56,
           height: 56,

@@ -6,7 +6,7 @@ class ColorPickerKeyboard extends StatelessWidget with KeyboardCustomPanelMixin<
   final ValueNotifier<Color> notifier;
   static const double _kKeyboardHeight = 200;
 
-  ColorPickerKeyboard({Key key, this.notifier}) : super(key: key);
+  ColorPickerKeyboard({Key? key, required this.notifier}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class CardPickerKeyboard extends StatelessWidget with KeyboardCustomPanelMixin<i
   final ValueNotifier<int> notifier;
   static const double _kKeyboardHeight = 200;
 
-  CardPickerKeyboard({Key key, this.notifier}) : super(key: key);
+  CardPickerKeyboard({Key? key, required this.notifier}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

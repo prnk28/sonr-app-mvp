@@ -15,9 +15,9 @@ class CameraView extends GetView<CameraController> {
   // Properties
   final Function(SonrFile file) onMediaSelected;
   final CameraViewType type;
-  CameraView({@required this.onMediaSelected, this.type = CameraViewType.Default});
+  CameraView({required this.onMediaSelected, this.type = CameraViewType.Default});
 
-  factory CameraView.withPreview({@required Function(SonrFile file) onMediaSelected}) {
+  factory CameraView.withPreview({required Function(SonrFile file) onMediaSelected}) {
     return CameraView(onMediaSelected: onMediaSelected, type: CameraViewType.Preview);
   }
 
@@ -158,7 +158,7 @@ class _CameraToolsView extends GetView<CameraController> {
 
                 // Selected Item
                 if (result.item1) {
-                  Transfer.transferWithFile(result.item2);
+                  Transfer.transferWithFile(result.item2!);
                 }
               }),
         ]),
@@ -249,7 +249,7 @@ class CameraController extends GetxController {
 
   // Video Duration Handling
   Stopwatch _stopwatch = Stopwatch();
-  Timer _timer;
+  late Timer _timer;
 
   // ** Constructer ** //
   CameraController() {

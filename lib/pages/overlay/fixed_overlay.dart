@@ -15,7 +15,7 @@ class SonrOverlay extends GetxService {
 
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
-  final currentOverlay = Rx<_SonrFixedOverlayEntry>(null);
+  final currentOverlay = Rx<_SonrFixedOverlayEntry?>(null);
 
   // References
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
@@ -48,8 +48,8 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller and Prompts Question ^ //
   static Future<bool> question(
-      {@required String title,
-      @required String description,
+      {required String title,
+      required String description,
       String acceptTitle = "Yes!",
       String declineTitle = "No",
       bool barrierDismissible = true,
@@ -85,8 +85,8 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
   static Future<bool> alert(
-      {@required String title,
-      @required String description,
+      {required String title,
+      required String description,
       String buttonText = "Okay",
       bool barrierDismissible = true,
       bool closeOnResponse = true,
@@ -115,7 +115,7 @@ class SonrOverlay extends GetxService {
     // Add Overlay to List
     _controller.currentOverlay(alertOverlay);
     _controller.overlays.add(alertOverlay);
-    return completer.future;
+    return completer.future as Future<bool>;
   }
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
@@ -164,7 +164,7 @@ class SonrOverlay extends GetxService {
     if (isOpen) {
       // Pop Current Overlay
       if (_controller.currentOverlay.value != null) {
-        _controller.currentOverlay.value.dismiss();
+        _controller.currentOverlay.value!.dismiss();
       }
 
       // Refresh List
@@ -209,21 +209,21 @@ class _SonrFixedOverlayEntry {
   final Duration entryDuration;
   final Widget overlayWidget;
   final double blur;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final bool barrierDismissible;
   final bool disableAnimation;
   final MainAxisAlignment mainAxisAlignment;
 
   // References
-  Function dismiss;
-  OverlayEntry overlay, overlayBackground;
+  late Function dismiss;
+  OverlayEntry? overlay, overlayBackground;
 
   // ^ Constructer ** //
   _SonrFixedOverlayEntry(this.entryLocation, this.entryDuration, this.barrierDismissible, this.overlayWidget,
       {this.blur = 5.0, this.backgroundColor, this.mainAxisAlignment = MainAxisAlignment.center, this.disableAnimation = false}) {
     dismiss = () {
-      overlayBackground.remove();
-      overlay.remove();
+      overlayBackground!.remove();
+      overlay!.remove();
     };
     overlayBackground = OverlayEntry(builder: (context) {
       return Positioned.fill(
@@ -249,6 +249,6 @@ class _SonrFixedOverlayEntry {
   }
 
   void buildOverlay() {
-    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
+    Navigator.of(Get.context!).overlay!.insertAll([overlayBackground!, overlay!]);
   }
 }

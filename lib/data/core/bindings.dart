@@ -20,7 +20,7 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<AssetController>(AssetController(), permanent: true);
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       Get.lazyPut<CameraController>(() => CameraController());
     }
   }

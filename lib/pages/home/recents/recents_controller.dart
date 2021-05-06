@@ -14,23 +14,23 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   final chartActiveIndex = (-1).obs;
 
   // References
-  TabController tabController;
-  ScrollController scrollController;
+  TabController? tabController;
+  ScrollController? scrollController;
 
   // ^ Controller Constructer ^
   @override
   onInit() {
     // Set Scroll Controller
     scrollController = ScrollController(keepScrollOffset: false);
-    chartData(refreshChart());
+    chartData(refreshChart() as List<PieChartSectionData>);
 
     // Set Default Properties
     tagIndex(0);
 
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
-    tabController.addListener(() {
-      tagIndex(tabController.index);
+    tabController!.addListener(() {
+      tagIndex(tabController!.index);
     });
 
     // Initialize
@@ -41,7 +41,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   setTag(int index) {
     tagIndex(index);
     category(ToggleFilter.values[index]);
-    tabController.animateTo(index);
+    tabController!.animateTo(index);
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();
@@ -51,14 +51,14 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   void tapChart(PieTouchResponse pieTouchResponse) {
     final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent && pieTouchResponse.touchInput is! PointerUpEvent;
     if (desiredTouch && pieTouchResponse.touchedSection != null) {
-      chartActiveIndex(pieTouchResponse.touchedSection.touchedSectionIndex);
+      chartActiveIndex(pieTouchResponse.touchedSection!.touchedSectionIndex);
     } else {
       chartActiveIndex(-1);
     }
   }
 
   // ^ Method Sets Pie Chart Data
-  List<PieChartSectionData> refreshChart() {
+  List<PieChartSectionData?> refreshChart() {
     return List.generate(3, (i) {
       final isTouched = i == chartActiveIndex.value;
       final double fontSize = isTouched ? 16 : 12;

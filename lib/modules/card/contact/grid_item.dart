@@ -5,7 +5,7 @@ import 'package:sonr_app/data/data.dart';
 
 class ContactGridItemView extends StatelessWidget {
   final TransferCardItem item;
-  const ContactGridItemView(this.item, {Key key}) : super(key: key);
+  const ContactGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -43,9 +43,9 @@ class ContactGridItemView extends StatelessWidget {
 
 // ^ Main Contact Grid Item View ^ //
 class _ContactGridItemMainView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _ContactGridItemMainView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _ContactGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +59,8 @@ class _ContactGridItemMainView extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: GestureDetector(
                   onTap: () {
-                    isFlipped(true);
-                    isFlipped.refresh();
+                    isFlipped!(true);
+                    isFlipped!.refresh();
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -72,9 +72,9 @@ class _ContactGridItemMainView extends StatelessWidget {
 
 // ^ Details Contact Grid Item View ^ //
 class _ContactGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _ContactGridItemDetailsView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _ContactGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,8 @@ class _ContactGridItemDetailsView extends StatelessWidget {
             // Align Platform
             GestureDetector(
                 onTap: () {
-                  isFlipped(false);
-                  isFlipped.refresh();
+                  isFlipped!(false);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),

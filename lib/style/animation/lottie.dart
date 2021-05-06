@@ -5,11 +5,11 @@ import 'package:lottie/lottie.dart';
 
 // ^ Lottie Icon Widget ^ //
 class LottieIcon extends HookWidget {
-  final Function onComplete;
+  final Function? onComplete;
   final String link;
   final double size;
 
-  LottieIcon({@required this.link, this.onComplete, this.size = 24, Key key}) : super(key: key);
+  LottieIcon({required this.link, this.onComplete, this.size = 24, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     assert(link.isURL);
@@ -35,7 +35,7 @@ class LottieIcon extends HookWidget {
   _callbackComplete(Duration time) {
     Future.delayed(time, () {
       if (onComplete != null) {
-        onComplete();
+        onComplete!();
       }
     });
   }
@@ -47,12 +47,12 @@ class LottieContainer extends HookWidget {
   final double height;
   final BoxFit fit;
   final SonrAssetLottie type;
-  final Function onComplete;
+  final Function? onComplete;
   final bool repeat;
   final bool animate;
   const LottieContainer(
-      {Key key,
-      @required this.type,
+      {Key? key,
+      required this.type,
       this.onComplete,
       this.width = 200,
       this.height = 200,
@@ -87,7 +87,7 @@ class LottieContainer extends HookWidget {
 // ^ Lottie Animation Container Widget ^ //
 class LottieShareContainer extends HookWidget {
   final SonrAssetLottie type;
-  const LottieShareContainer({Key key, @required this.type}) : super(key: key);
+  const LottieShareContainer({Key? key, required this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

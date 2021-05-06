@@ -7,14 +7,14 @@ import 'package:sonr_app/data/data.dart';
 // ^ TransferCard Contact Item Details ^ //
 class ContactCardItemView extends StatelessWidget {
   final TransferCardItem card;
-  ContactCardItemView(this.card, {Key key}) : super(key: key);
+  ContactCardItemView(this.card, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 420,
       decoration: Neumorphic.floating(),
       child: Hero(
-        tag: card.id,
+        tag: card.id!,
         child: Container(
           height: 75,
           decoration: BoxDecoration(
@@ -31,12 +31,12 @@ class ContactCardItemView extends StatelessWidget {
               child: Container(
                 decoration: Neumorphic.indented(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
-                child: card.contact.pictureImage(),
+                child: card.contact!.pictureImage(),
               ),
             ),
 
             // Build Name
-            card.contact.fullNameText(),
+            card.contact!.fullNameText(),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 
@@ -77,7 +77,7 @@ class ContactCardItemView extends StatelessWidget {
             Padding(padding: EdgeInsets.all(4)),
 
             // Brief Contact Card Info
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: card.contact.mapSocials((social) => social.provider.gradient(size: 35)))
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: card.contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
           ]),
         ),
       ),

@@ -40,7 +40,7 @@ class ProgressView extends HookWidget {
       width: Get.width,
       child: AnimatedBuilder(
         animation: hookController,
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           return Opacity(
               opacity: 0.85,
               child: utilizeProgress

@@ -20,7 +20,7 @@ extension ContactUtils on Contact {
             width: 120,
             height: 120,
             child: CircleAvatar(
-              backgroundImage: MemoryImage(this.profile.picture),
+              backgroundImage: MemoryImage(this.profile.picture as Uint8List),
             ),
           )
         : Icon(

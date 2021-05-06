@@ -9,18 +9,18 @@ class ExplorerController extends GetxController {
   // @ Properties
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final fileItem = Rx<SonrFile>(null);
+  final fileItem = Rx<SonrFile?>(null);
   final location = Rx<Location>(Location());
 
   // References
-  StreamSubscription<Lobby> _lobbySizeStream;
+  late StreamSubscription<Lobby?> _lobbySizeStream;
   CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
   void onInit() async {
     // Set Initial Value
     _handleLobbySizeUpdate(LobbyService.local.value);
-    location(await SonrService.locationInfo());
+    location(await (SonrService.locationInfo() as FutureOr<Location>));
     location.refresh();
 
     // Add Stream Handlers
@@ -36,7 +36,7 @@ class ExplorerController extends GetxController {
   }
 
   // # Handle Lobby Size Update ^ //
-  _handleLobbySizeUpdate(Lobby lobby) {
-    isNotEmpty(lobby.isNotEmpty);
+  _handleLobbySizeUpdate(Lobby? lobby) {
+    isNotEmpty(lobby!.isNotEmpty);
   }
 }

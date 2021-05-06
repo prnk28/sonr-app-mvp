@@ -4,14 +4,14 @@ import 'package:sonr_app/style/style.dart';
 
 // ** Builds Add Social Form Dialog ** //
 class AddTileView extends GetView<ProfileController> {
-  AddTileView({Key key}) : super(key: key);
+  AddTileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       // Update State
       return AnimatedContainer(
         duration: 250.milliseconds,
-        margin: EdgeInsets.symmetric(vertical: controller.step.value.verticalMargin, horizontal: 6),
+        margin: EdgeInsets.symmetric(vertical: controller.step.value!.verticalMargin, horizontal: 6),
         child: Material(
           color: Colors.transparent,
           child: Column(children: [
@@ -21,7 +21,7 @@ class AddTileView extends GetView<ProfileController> {
                 child: PlainIconButton(
                     onPressed: controller.exitToViewing, icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart, size: 38))),
             Container(
-              height: controller.step.value.height,
+              height: controller.step.value!.height,
               child: PageView.builder(
                 controller: controller.pageController,
                 physics: NeverScrollableScrollPhysics(),
@@ -41,7 +41,7 @@ class AddTileView extends GetView<ProfileController> {
             Spacer(),
             Align(
               alignment: Alignment.bottomCenter,
-              child: controller.step.value.bottomButtons,
+              child: controller.step.value!.bottomButtons,
             ),
             Spacer(),
           ]),
@@ -93,13 +93,13 @@ class SetInfoView extends GetView<ProfileController> {
     return Container(
       margin: EdgeInsets.only(right: 4),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        _InfoText(index: 2, text: controller.step.value.provider.infoText),
+        _InfoText(index: 2, text: controller.step.value!.provider!.infoText),
         Padding(padding: EdgeInsets.all(20)),
-        (controller.step.value.provider.authType == SocialAuthType.Link)
+        (controller.step.value!.provider!.authType == SocialAuthType.Link)
             ? Obx(() => SocialUserSearchField(
-                  controller.step.value.provider,
+                  controller.step.value!.provider,
                   value: "",
-                  onEditingComplete: (value) => controller.user(value),
+                  onEditingComplete: (value) => controller.user(value!),
                 ))
             : Container()
       ]),
@@ -109,7 +109,7 @@ class SetInfoView extends GetView<ProfileController> {
 
 // ^ Step 3 Set the Social Tile type ^ //
 class SetTypeView extends GetView<ProfileController> {
-  const SetTypeView({Key key}) : super(key: key);
+  const SetTypeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -129,7 +129,7 @@ class _InfoText extends StatelessWidget {
   final int index;
   final String text;
 
-  const _InfoText({Key key, @required this.index, @required this.text}) : super(key: key);
+  const _InfoText({Key? key, required this.index, required this.text}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [

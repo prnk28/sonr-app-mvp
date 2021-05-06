@@ -27,22 +27,22 @@ extension TextInputValidStatusUtils on TextInputValidStatus {
 
 // ^ Builds Neumorphic Text Field ^ //
 class SonrTextField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String hint;
   final String value;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final bool autoFocus;
   final bool autoCorrect;
   final TextCapitalization textCapitalization;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputAction textInputAction;
-  final Rx<TextInputValidStatus> status;
-  final ValueChanged<String> onChanged;
-  final Function onEditingComplete;
-  final Iterable<String> autofillHints;
+  final Rx<TextInputValidStatus>? status;
+  final ValueChanged<String>? onChanged;
+  final Function? onEditingComplete;
+  final Iterable<String>? autofillHints;
 
   // ^ Returns Random Hint Name ^
-  static Tuple<String, String> hintName() {
+  static Tuple<String, String>? hintName() {
     return <Tuple<String, String>>[
       !DeviceService.isIOS && !DeviceService.isMacOS ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
       Tuple("Michelangelo", "Buonarroti"),
@@ -60,8 +60,8 @@ class SonrTextField extends StatelessWidget {
   }
 
   SonrTextField(
-      {@required this.hint,
-      @required this.value,
+      {required this.hint,
+      required this.value,
       this.label,
       this.status,
       this.controller,
@@ -83,11 +83,11 @@ class SonrTextField extends StatelessWidget {
             } else {
               return buildDefault(context);
             }
-          }, status)
+          }, status!)
         : buildDefault(context);
   }
 
-  Widget buildDefault(BuildContext context, {InputDecoration decoration, bool isError = false}) {
+  Widget buildDefault(BuildContext context, {InputDecoration? decoration, bool isError = false}) {
     return ValueBuilder<String>(
       initialValue: value,
       builder: (value, updateFn) {
@@ -99,7 +99,7 @@ class SonrTextField extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
                     child: Row(children: [
                       Text(
-                        label,
+                        label!,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                         ),
@@ -125,7 +125,7 @@ class SonrTextField extends StatelessWidget {
                 textCapitalization: textCapitalization,
                 focusNode: focusNode,
                 autofillHints: autofillHints,
-                onEditingComplete: onEditingComplete,
+                onEditingComplete: onEditingComplete as void Function()?,
                 onChanged: updateFn,
                 decoration: decoration != null
                     ? decoration
@@ -173,29 +173,29 @@ enum SearchFieldType { Username, Cards }
 // ^ Builds Neumorphic Text Field for Search ^ //
 class SonrSearchField extends StatelessWidget {
   final String value;
-  final ValueChanged<String> onChanged;
-  final Function onEditingComplete;
-  final Iterable<String> autofillHints;
+  final ValueChanged<String>? onChanged;
+  final Function? onEditingComplete;
+  final Iterable<String>? autofillHints;
   final SearchFieldType type;
-  final Widget suggestion;
+  final Widget? suggestion;
 
   factory SonrSearchField.forUsername({
-    @required Widget suggestion,
-    @required String value,
-    ValueChanged<String> onChanged,
-    Function onEditingComplete,
-    Iterable<String> autofillHints,
-    Function onSuggestionTap,
+    required Widget suggestion,
+    required String value,
+    ValueChanged<String>? onChanged,
+    Function? onEditingComplete,
+    Iterable<String>? autofillHints,
+    Function? onSuggestionTap,
   }) {
     return SonrSearchField(SearchFieldType.Username, value: value);
   }
 
   factory SonrSearchField.forCards({
-    @required Widget suggestion,
-    @required String value,
-    ValueChanged<String> onChanged,
-    Function onEditingComplete,
-    Iterable<String> autofillHints,
+    required Widget suggestion,
+    required String value,
+    ValueChanged<String>? onChanged,
+    Function? onEditingComplete,
+    Iterable<String>? autofillHints,
   }) {
     return SonrSearchField(
       SearchFieldType.Cards,
@@ -209,7 +209,7 @@ class SonrSearchField extends StatelessWidget {
 
   SonrSearchField(
     this.type, {
-    @required this.value,
+    required this.value,
     this.onChanged,
     this.onEditingComplete,
     this.autofillHints,
@@ -240,7 +240,7 @@ class SonrSearchField extends StatelessWidget {
                               autofillHints: autofillHints,
                               showCursor: false,
                               autofocus: true,
-                              onEditingComplete: onEditingComplete,
+                              onEditingComplete: onEditingComplete as void Function()?,
                               onChanged: updateFn,
                               decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
                             ),

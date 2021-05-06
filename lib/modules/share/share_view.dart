@@ -33,7 +33,7 @@ class ShareView extends GetView<ShareController> {
 
 // ** Close Share Button View ** //
 class _DefaultButtonView extends GetView<ShareController> {
-  _DefaultButtonView({Key key}) : super(key: key);
+  _DefaultButtonView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,7 +52,7 @@ class _DefaultButtonView extends GetView<ShareController> {
 
 // ** Expanded Share Button View ** //
 class _QueueView extends GetView<ShareController> {
-  _QueueView({Key key}) : super(key: key);
+  _QueueView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

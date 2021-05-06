@@ -11,7 +11,7 @@ const K_LIST_HEIGHT = 225.0;
 
 // ^ Root Grid View ^ //
 class CardMainView extends GetView<RecentsController> {
-  CardMainView({Key key}) : super(key: key);
+  CardMainView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -116,10 +116,10 @@ class Badge extends StatelessWidget {
   final Widget child;
 
   const Badge({
-    Key key,
-    @required this.size,
-    @required this.borderColor,
-    @required this.child,
+    Key? key,
+    required this.size,
+    required this.borderColor,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -136,9 +136,9 @@ class Badge extends StatelessWidget {
 
 // ^ Card Tag View ^ //
 class TagsView extends GetView<RecentsController> {
-  final List<Tuple<String, int>> tags;
+  final List<Tuple<String, int>>? tags;
 
-  const TagsView({Key key, this.tags}) : super(key: key);
+  const TagsView({Key? key, this.tags}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -149,12 +149,12 @@ class TagsView extends GetView<RecentsController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List<Widget>.generate(
-              tags.length,
+              tags!.length,
               (index) => GestureDetector(
                     onTap: () {
-                      controller.setTag(tags[index].item2);
+                      controller.setTag(tags![index].item2);
                     },
-                    child: _TagItem(tags[index].item1, tags[index].item2),
+                    child: _TagItem(tags![index].item1, tags![index].item2),
                   )),
         ),
       ),
@@ -166,7 +166,7 @@ class TagsView extends GetView<RecentsController> {
 class _TagItem extends GetView<RecentsController> {
   final String data;
   final int index;
-  const _TagItem(this.data, this.index, {Key key}) : super(key: key);
+  const _TagItem(this.data, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

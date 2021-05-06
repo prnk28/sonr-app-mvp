@@ -60,13 +60,13 @@ class MobileService extends GetxService {
   }
 
   // References
-  StreamSubscription _externalMediaStream;
-  StreamSubscription _externalTextStream;
-  StreamSubscription<AccelerometerEvent> _accelStream;
-  StreamSubscription<CompassEvent> _compassStream;
-  StreamSubscription<GyroscopeEvent> _gyroStream;
-  StreamSubscription<MagnetometerEvent> _magnoStream;
-  StreamSubscription<OrientationEvent> _orienStream;
+  late StreamSubscription _externalMediaStream;
+  late StreamSubscription _externalTextStream;
+  late StreamSubscription<AccelerometerEvent> _accelStream;
+  late StreamSubscription<CompassEvent> _compassStream;
+  late StreamSubscription<GyroscopeEvent> _gyroStream;
+  late StreamSubscription<MagnetometerEvent> _magnoStream;
+  late StreamSubscription<OrientationEvent> _orienStream;
 
   // * Device Service Initialization * //
   Future<MobileService> init() async {
@@ -83,7 +83,7 @@ class MobileService extends GetxService {
 
     // Bind Sensor Streams
     _accelStream = motionSensors.accelerometer.listen(_handleAccelerometer);
-    _compassStream = FlutterCompass.events.listen(_handleCompass);
+    _compassStream = FlutterCompass.events!.listen(_handleCompass);
     _gyroStream = motionSensors.gyroscope.listen(_handleGyroscope);
     _magnoStream = motionSensors.magnetometer.listen(_handleMagnometer);
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
@@ -96,7 +96,7 @@ class MobileService extends GetxService {
     updatePermissionsStatus();
 
     // For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> data) {
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {
       if (data != null) {
         _incomingMedia(data);
         _incomingMedia.refresh();
@@ -104,7 +104,7 @@ class MobileService extends GetxService {
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String text) {
+    ReceiveSharingIntent.getInitialText().then((String? text) {
       if (text != null) {
         _incomingText(text);
         _incomingText.refresh();
@@ -134,7 +134,7 @@ class MobileService extends GetxService {
   // ^ Checks for Initial Media/Text to Share ^ //
   static checkInitialShare() async {
     // @ Check for Media
-    if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen) {
+    if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
       // Open Sheet
       await Get.bottomSheet(ShareSheet.media(to._incomingMedia), isDismissible: false);
 
@@ -144,7 +144,7 @@ class MobileService extends GetxService {
     }
 
     // @ Check for Text
-    if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen) {
+    if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
       var data = await SonrService.getURL(to._incomingText.value);
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
@@ -156,14 +156,14 @@ class MobileService extends GetxService {
   }
 
   // ^ Method Closes Keyboard if Active ^ //
-  static void closeKeyboard({BuildContext context}) async {
+  static void closeKeyboard({BuildContext? context}) async {
     if (to._keyboardVisible.value) {
-      FocusScope.of(context ?? Get.context).unfocus();
+      FocusScope.of(context ?? Get.context!).unfocus();
     }
   }
 
   // ^ Refresh User Location Position ^ //
-  static Future<Location> currentLocation() async {
+  static Future<Location?> currentLocation() async {
     if (to._hasLocation.value) {
       var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
       to._location(Location(latitude: result.latitude, longitude: result.longitude));
@@ -191,7 +191,7 @@ class MobileService extends GetxService {
       if (isVideo) {
         // Set Video File
         File videoFile = File(path);
-        var asset = await PhotoManager.editor.saveVideo(videoFile);
+        var asset = await (PhotoManager.editor.saveVideo(videoFile) as FutureOr<AssetEntity>);
         var result = await asset.exists;
 
         // Visualize Result
@@ -201,7 +201,7 @@ class MobileService extends GetxService {
         return result;
       } else {
         // Save Image to Gallery
-        var asset = await PhotoManager.editor.saveImageWithPath(path);
+        var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
         var result = await asset.exists;
         if (!result) {
           SonrSnack.error("Unable to save Captured Video to your Gallery");
@@ -214,14 +214,14 @@ class MobileService extends GetxService {
   // ^ Saves Received Media to Gallery ^ //
   static Future<bool> saveTransfer(SonrFile_Metadata meta) async {
     // Initialize
-    AssetEntity asset;
+    AssetEntity? asset;
 
     // Get Data from Media
     if (meta.mime.isImage && MobileService.hasGallery.value) {
       asset = await PhotoManager.editor.saveImageWithPath(meta.path);
 
       // Visualize Result
-      if (await asset.exists) {
+      if (await asset!.exists) {
         meta.id = asset.id;
         SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
       } else {
@@ -235,7 +235,7 @@ class MobileService extends GetxService {
       asset = await PhotoManager.editor.saveVideo(meta.file);
 
       // Visualize Result
-      if (await asset.exists) {
+      if (await asset!.exists) {
         SonrSnack.success("Saved Transferred Video to your Device's Gallery");
       } else {
         SonrSnack.error("Unable to save Video to your Gallery");
@@ -258,7 +258,7 @@ class MobileService extends GetxService {
 
   // ^ Request Camera optional overlay ^ //
   Future<bool> requestCamera() async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Requires Permission',
@@ -286,7 +286,7 @@ class MobileService extends GetxService {
 
   // ^ Request Gallery optional overlay ^ //
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       // Present Overlay
       if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
         if (DeviceService.isAndroid) {
@@ -326,7 +326,7 @@ class MobileService extends GetxService {
 
   // ^ Request Location optional overlay ^ //
   Future<bool> requestLocation() async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Location',
@@ -356,7 +356,7 @@ class MobileService extends GetxService {
 
   // ^ Request Microphone optional overlay ^ //
   Future<bool> requestMicrophone() async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Microphone',
@@ -387,7 +387,7 @@ class MobileService extends GetxService {
   // ^ Request Notifications optional overlay ^ //
   Future<bool> requestNotifications() async {
     // Present Overlay
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       if (await SonrOverlay.question(
           title: 'Requires Permission',
           description: 'Sonr would like to send you Notifications for Transfer Invites.',
@@ -417,7 +417,7 @@ class MobileService extends GetxService {
           buttonText: "Continue",
           barrierDismissible: false);
 
-      await SonrService.requestLocalNetwork();
+      SonrService.requestLocalNetwork();
       updatePermissionsStatus();
       SonrOverlay.back();
     }
@@ -427,14 +427,14 @@ class MobileService extends GetxService {
   // # Handle Accelerometer
   void _handleAccelerometer(AccelerometerEvent event) {
     _position.update((val) {
-      val.accelerometer = Position_Accelerometer(x: event.x, y: event.y, z: event.z);
+      val!.accelerometer = Position_Accelerometer(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Compass
   void _handleCompass(CompassEvent event) {
     _position.update((val) {
-      val.heading = Position_Compass(direction: event.heading);
+      val!.heading = Position_Compass(direction: event.heading);
       val.facing = Position_Compass(direction: event.headingForCameraMode);
     });
   }
@@ -442,34 +442,34 @@ class MobileService extends GetxService {
   // # Handle Gyroscope
   void _handleGyroscope(GyroscopeEvent event) {
     _position.update((val) {
-      val.gyroscope = Position_Gyroscope(x: event.x, y: event.y, z: event.z);
+      val!.gyroscope = Position_Gyroscope(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Magnometer
   void _handleMagnometer(MagnetometerEvent event) {
     _position.update((val) {
-      val.magnometer = Position_Magnometer(x: event.x, y: event.y, z: event.z);
+      val!.magnometer = Position_Magnometer(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Orientation
   void _handleOrientation(OrientationEvent event) {
     _position.update((val) {
-      val.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
+      val!.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
     });
   }
 
   // # Saves Received Media to Gallery
   _handleSharedFiles(List<SharedMediaFile> data) async {
-    if (!Get.isBottomSheetOpen && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen! && UserService.hasUser.value) {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
     }
   }
 
   // # Saves Received Media to Gallery
   _handleSharedText(String text) async {
-    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text) && UserService.hasUser.value) {
       // Get Data
       var data = await SonrService.getURL(text);
 

@@ -22,31 +22,31 @@ class PeerController extends GetxController {
   final Future<RiveFile> riveFile;
 
   // Reactive Elements
-  final board = Rx<Artboard>(null);
+  final board = Rx<Artboard?>(null);
   final counter = 0.0.obs;
   final isFlipped = false.obs;
   final isReady = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
-  final peer = Rx<Peer>(null);
+  final peer = Rx<Peer?>(null);
   final status = Rx<PeerStatus>(PeerStatus.Default);
 
   // Vector Properties
   final offset = Offset(0, 0).obs;
-  final peerVector = Rx<Position>(null);
-  final userVector = Rx<Position>(null);
+  final peerVector = Rx<Position?>(null);
+  final userVector = Rx<Position?>(null);
 
   // References
-  StreamSubscription<Position> _userStream;
+  StreamSubscription<Position?>? _userStream;
   FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
   // State Machine
-  SMIInput<bool> _isIdle;
-  SMIInput<bool> _isPending;
-  SMIInput<bool> _hasAccepted;
-  SMIInput<bool> _hasDenied;
-  SMIInput<bool> _isComplete;
+  SMIInput<bool>? _isIdle;
+  SMIInput<bool>? _isPending;
+  SMIInput<bool>? _hasAccepted;
+  SMIInput<bool>? _hasDenied;
+  SMIInput<bool>? _isComplete;
 
   PeerController(this.riveFile);
 
@@ -60,7 +60,7 @@ class PeerController extends GetxController {
   void onClose() {
     LobbyService.unregisterPeerCallback(peer.value);
     if (_userStream != null) {
-      _userStream.cancel();
+      _userStream!.cancel();
     }
     super.onClose();
   }
@@ -70,20 +70,20 @@ class PeerController extends GetxController {
     // Set Initial
     peer(data);
     isVisible(true);
-    peerVector(peer.value.position);
+    peerVector(peer.value!.position);
     userVector(LobbyService.userPosition.value);
 
-    if (peer.value.platform.isDesktop) {
+    if (peer.value!.platform.isDesktop) {
       offset(Offset.zero);
     } else {
-      offset(peerVector.value.offsetAgainstVector(userVector.value));
+      offset(peerVector.value!.offsetAgainstVector(userVector.value!));
     }
 
     // Add Stream Handlers
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
 
     // Check for Mobile
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile!) {
       _userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     }
 
@@ -105,11 +105,11 @@ class PeerController extends GetxController {
         _isComplete = controller.findInput('IsComplete');
 
         // Set Defaults
-        _isComplete.value = false;
-        _isPending.value = false;
-        _hasAccepted.value = false;
-        _hasDenied.value = false;
-        _isIdle.value = true;
+        _isComplete!.value = false;
+        _isPending!.value = false;
+        _hasAccepted!.value = false;
+        _hasDenied!.value = false;
+        _isIdle!.value = true;
 
         // Observable Artboard
         board(artboard);
@@ -136,7 +136,7 @@ class PeerController extends GetxController {
     // Check Animated
     if (isReady.value) {
       // Check not already Pending
-      if (!_isPending.value) {
+      if (!_isPending!.value) {
         // Register Callback
         Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
 
@@ -145,7 +145,7 @@ class PeerController extends GetxController {
 
         // Check for File
         if (Get.find<TransferController>().currentPayload.isTransfer) {
-          _isPending.value = true;
+          _isPending!.value = true;
         }
         // Contact/URL
         else {
@@ -168,27 +168,27 @@ class PeerController extends GetxController {
         switch (status.value) {
           case PeerStatus.Default:
             isVisible(true);
-            _isComplete.value = false;
-            _isPending.value = false;
-            _hasAccepted.value = false;
-            _hasDenied.value = false;
-            _isIdle.value = true;
+            _isComplete!.value = false;
+            _isPending!.value = false;
+            _hasAccepted!.value = false;
+            _hasDenied!.value = false;
+            _isIdle!.value = true;
             break;
           case PeerStatus.Pending:
             isVisible(true);
-            _isPending.value = true;
+            _isPending!.value = true;
             break;
           case PeerStatus.Accepted:
             isVisible(false);
-            _hasAccepted.value = true;
+            _hasAccepted!.value = true;
             break;
           case PeerStatus.Declined:
             isVisible(false);
-            _hasDenied.value = true;
+            _hasDenied!.value = true;
             break;
           case PeerStatus.Complete:
             isVisible(false);
-            _isComplete.value = true;
+            _isComplete!.value = true;
 
             // Reset Status
             updateStatus(PeerStatus.Default, delay: 1200.milliseconds);
@@ -202,7 +202,7 @@ class PeerController extends GetxController {
   void _handlePeerUpdate(Peer data) {
     if (!isClosed && !status.value.isComplete) {
       // Update Direction
-      if (data.id.peer == peer.value.id.peer && !_isPending.value) {
+      if (data.id.peer == peer.value!.id.peer && !_isPending!.value) {
         peer(data);
         peerVector(data.position);
 
@@ -226,22 +226,22 @@ class PeerController extends GetxController {
   }
 
   // @ Handle Peer Position ^ //
-  void _handleUserUpdate(Position pos) {
+  void _handleUserUpdate(Position? pos) {
     if (!isClosed && !status.value.isComplete) {
       // Initialize
       userVector(pos);
 
       // Find Offset
       if (Get.find<TransferController>().isShiftingEnabled.value) {
-        if (peer.value.platform.isDesktop) {
+        if (peer.value!.platform.isDesktop) {
           offset(Offset.zero);
         } else {
-          offset(peerVector.value.offsetAgainstVector(userVector.value));
+          offset(peerVector.value!.offsetAgainstVector(userVector.value!));
         }
       }
 
       // Check if Facing
-      var newIsFacing = userVector.value.isPointingAt(peerVector.value);
+      var newIsFacing = userVector.value!.isPointingAt(peerVector.value!);
       if (isFacing.value != newIsFacing) {
         // Check if Device Permits PointToShare
         if (UserService.pointShareEnabled) {
@@ -249,7 +249,7 @@ class PeerController extends GetxController {
           if (newIsFacing) {
             Get.find<TransferController>().setFacingPeer(true);
             _timer.start(isValid: _checkFacingValid, onComplete: invite);
-            isFacing(userVector.value.isPointingAt(peerVector.value));
+            isFacing(userVector.value!.isPointingAt(peerVector.value!));
           } else {
             _timer.stop();
           }
@@ -262,14 +262,14 @@ class PeerController extends GetxController {
   void _handleFacingUpdate() {
     if (!isClosed && !status.value.isComplete) {
       // Find Offset
-      if (peer.value.platform.isDesktop) {
+      if (peer.value!.platform.isDesktop) {
         offset(Offset.zero);
       } else {
-        offset(peerVector.value.offsetAgainstVector(userVector.value));
+        offset(peerVector.value!.offsetAgainstVector(userVector.value!));
       }
 
       // Check if Facing
-      var newIsFacing = userVector.value.isPointingAt(peerVector.value);
+      var newIsFacing = userVector.value!.isPointingAt(peerVector.value!);
       if (isFacing.value != newIsFacing) {
         // Check if Device Permits PointToShare
         if (UserService.pointShareEnabled) {
@@ -277,7 +277,7 @@ class PeerController extends GetxController {
           if (newIsFacing) {
             Get.find<TransferController>().setFacingPeer(true);
             _timer.start(isValid: _checkFacingValid, onComplete: invite);
-            isFacing(userVector.value.isPointingAt(peerVector.value));
+            isFacing(userVector.value!.isPointingAt(peerVector.value!));
           } else {
             _timer.stop();
           }

@@ -8,7 +8,7 @@ class ClipPolygon extends StatelessWidget {
   final double borderRadius;
   final List<PolygonBoxShadow> boxShadows;
 
-  ClipPolygon({@required this.child, @required this.sides, this.rotate = 0.0, this.borderRadius = 0.0, this.boxShadows = const []});
+  ClipPolygon({required this.child, required this.sides, this.rotate = 0.0, this.borderRadius = 0.0, this.boxShadows = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class PolygonBoxShadow {
   final double elevation;
 
   PolygonBoxShadow({
-    @required this.color,
-    @required this.elevation,
+    required this.color,
+    required this.elevation,
   });
 }

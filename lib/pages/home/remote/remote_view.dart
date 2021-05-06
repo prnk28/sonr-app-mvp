@@ -4,7 +4,7 @@ import 'remote_controller.dart';
 
 // ^ Main Card View ^ //
 class RemoteView extends GetView<RemoteController> {
-  RemoteView({Key key}) : super(key: key);
+  RemoteView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class RemoteView extends GetView<RemoteController> {
 
 // ^ Join a Remote View ^ //
 class _JoinRemoteView extends GetView<RemoteController> {
-  _JoinRemoteView({Key key}) : super(key: key);
+  _JoinRemoteView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
@@ -78,18 +78,18 @@ class _JoinRemoteView extends GetView<RemoteController> {
 
 // ^ Card Aspect Ratio Remote View ^ //
 class RemoteLobbyView extends GetView<RemoteController> {
-  RemoteLobbyView({Key key}) : super(key: key);
+  RemoteLobbyView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "${controller.remoteInfo.value.display}".h2,
+      "${controller.remoteInfo.value!.display}".h2,
       Expanded(
           child: ListView.builder(
-        itemCount: controller.remoteLobby.value.count,
+        itemCount: controller.remoteLobby.value!.count,
         itemBuilder: (BuildContext context, int index) {
           // Build List Item
           return PeerListItem(
-            controller.remoteLobby.value.peerAtIndex(index - 1),
+            controller.remoteLobby.value!.peerAtIndex(index - 1),
             index - 1,
             remote: controller.remoteInfo.value,
           );
@@ -159,7 +159,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
 
 // ^ Received Remote Invite View ^ //
 class RemoteInviteView extends GetView<RemoteController> {
-  RemoteInviteView({Key key}) : super(key: key);
+  RemoteInviteView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -173,7 +173,7 @@ class RemoteInviteView extends GetView<RemoteController> {
 // ^ During Remote Transfer View ^ //
 
 class RemoteProgressView extends GetView<RemoteController> {
-  RemoteProgressView({Key key}) : super(key: key);
+  RemoteProgressView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     //return Center();
@@ -188,7 +188,7 @@ class RemoteProgressView extends GetView<RemoteController> {
 // ^  Remote Completed View ^ //
 
 class RemoteCompletedView extends GetView<RemoteController> {
-  RemoteCompletedView({Key key}) : super(key: key);
+  RemoteCompletedView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [

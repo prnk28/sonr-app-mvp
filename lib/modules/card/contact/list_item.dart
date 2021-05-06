@@ -6,7 +6,7 @@ import 'package:sonr_app/data/data.dart';
 class ContactListItemView extends StatelessWidget {
   final TransferCardItem item;
 
-  const ContactListItemView(this.item, {Key key}) : super(key: key);
+  const ContactListItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container();

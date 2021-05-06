@@ -8,11 +8,11 @@ class URLCardItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => launchURL(item.url.link),
+      onTap: () => launchURL(item.url!.link),
       child: Container(
         decoration: Neumorphic.floating(),
         child: Hero(
-          tag: item.id,
+          tag: item.id!,
           child: Container(
             height: 75,
             child: Container(),

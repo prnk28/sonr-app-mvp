@@ -5,13 +5,13 @@ import '../style.dart';
 // ^ Builds Overlay Based Positional Dropdown Menu ^ //
 class SonrDropdown extends StatelessWidget {
   // Properties
-  final int selectedFlex;
+  final int? selectedFlex;
   // final NeumorphicStyle style;
 
   // Overlay Properties
-  final double overlayHeight;
-  final double overlayWidth;
-  final EdgeInsets overlayMargin;
+  final double? overlayHeight;
+  final double? overlayWidth;
+  final EdgeInsets? overlayMargin;
   final WidgetPosition selectedIconPosition;
 
   // References
@@ -21,7 +21,7 @@ class SonrDropdown extends StatelessWidget {
 
   // * Builds Social Media Dropdown * //
   factory SonrDropdown.social(List<Contact_Social_Provider> data,
-      {@required RxInt index, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
+      {required RxInt index, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double? width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].gradient());
     });
@@ -41,7 +41,7 @@ class SonrDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
-    items.removeWhere((value) => value == null);
+    items.toSet();
     return Obx(() {
       return Container(
         key: _dropKey,
@@ -67,10 +67,10 @@ class SonrDropdown extends StatelessWidget {
     if (index == -1) {
       return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Spacer(),
-        initial.hasIcon ? initial.icon : Container(),
+        initial.hasIcon ? initial.icon! : Container(),
         Padding(padding: EdgeInsets.all(4)),
         initial.text.h6,
-        Spacer(flex: selectedFlex),
+        Spacer(flex: selectedFlex!),
         Get.find<SonrPositionedOverlay>().overlays.length == 0
             ? UserService.isDarkMode
                 ? SonrIcons.Up.black
@@ -88,10 +88,10 @@ class SonrDropdown extends StatelessWidget {
       if (selectedIconPosition == WidgetPosition.Left) {
         return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Spacer(),
-          item.hasIcon ? item.icon : Container(),
+          item.hasIcon ? item.icon! : Container(),
           Padding(padding: EdgeInsets.only(right: 10)),
           item.text.headSix(color: SonrColor.Grey),
-          Spacer(flex: selectedFlex),
+          Spacer(flex: selectedFlex!),
           Get.find<SonrPositionedOverlay>().overlays.length == 0
               ? UserService.isDarkMode
                   ? SonrIcons.Up.black
@@ -105,7 +105,7 @@ class SonrDropdown extends StatelessWidget {
         return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
           item.text.headSix(color: SonrColor.Grey),
           Padding(padding: EdgeInsets.only(right: 6)),
-          item.hasIcon ? item.icon : Container(),
+          item.hasIcon ? item.icon! : Container(),
           Get.find<SonrPositionedOverlay>().overlays.length == 0
               ? UserService.isDarkMode
                   ? SonrIcons.Up.white
@@ -121,11 +121,11 @@ class SonrDropdown extends StatelessWidget {
 
 // ^ Builds Dropdown Menu Item Widget ^ //
 class SonrDropdownItem extends StatelessWidget {
-  final Widget icon;
+  final Widget? icon;
   final String text;
   final bool hasIcon;
 
-  const SonrDropdownItem(this.hasIcon, this.text, {this.icon, Key key}) : super(key: key);
+  const SonrDropdownItem(this.hasIcon, this.text, {this.icon, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     if (hasIcon) {

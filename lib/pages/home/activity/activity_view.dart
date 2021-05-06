@@ -2,7 +2,7 @@ import 'package:sonr_app/style/style.dart';
 
 // ^ Activity View ^ //
 class ActivityView extends StatelessWidget {
-  ActivityView({Key key}) : super(key: key);
+  ActivityView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +27,7 @@ class ActivityView extends StatelessWidget {
 class _ActivityListItem extends StatelessWidget {
   final TransferCardActivity item;
 
-  const _ActivityListItem({Key key, @required this.item}) : super(key: key);
+  const _ActivityListItem({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,16 +57,14 @@ class _ActivityListItem extends StatelessWidget {
   Widget _buildMessage() {
     switch (item.activity) {
       case ActivityType.Deleted:
-        return [item.card.payload.black, " You ".h6, item.activity.value.h6_Red].row();
-        break;
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Red].row();
       case ActivityType.Shared:
-        return [item.card.payload.black, " You ".h6, item.activity.value.h6_Blue].row();
-        break;
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Blue].row();
       case ActivityType.Received:
-        return [item.card.payload.black, " You ".h6, item.activity.value.h6_Purple].row();
-        break;
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Purple].row();
+      default:
+        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Grey]
+            .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }
-    return [item.card.payload.black, " You ".h6, item.activity.value.h6_Grey]
-        .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
   }
 }

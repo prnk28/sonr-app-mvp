@@ -4,16 +4,16 @@ import 'dart:math';
 
 // ^ Standardized Uniform Scaffold ^ //
 class SonrScaffold extends StatelessWidget {
-  final Widget body;
-  final Widget bottomSheet;
-  final Widget bottomNavigationBar;
-  final Widget floatingAction;
-  final PreferredSizeWidget appBar;
-  final bool resizeToAvoidBottomInset;
-  final Gradient gradient;
+  final Widget? body;
+  final Widget? bottomSheet;
+  final Widget? bottomNavigationBar;
+  final Widget? floatingAction;
+  final PreferredSizeWidget? appBar;
+  final bool? resizeToAvoidBottomInset;
+  final Gradient? gradient;
 
   SonrScaffold({
-    Key key,
+    Key? key,
     this.body,
     this.appBar,
     this.resizeToAvoidBottomInset,
@@ -74,7 +74,7 @@ class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
     final double bottomSheetHeight = scaffoldGeometry.bottomSheetSize.height;
     final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
     final double snackBarHeight = scaffoldGeometry.snackBarSize.height;
-    double bottomDistance = MediaQuery.of(Get.context).viewInsets.bottom;
+    double bottomDistance = MediaQuery.of(Get.context!).viewInsets.bottom;
     double fabY = contentBottom + bottomDistance - fabHeight / 2.0;
 
     // The FAB should sit with a margin between it and the snack bar.
@@ -95,8 +95,8 @@ class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
 
 // ^ Animated Background Gradient ^ //
 class _BackgroundGradient extends StatelessWidget {
-  final Gradient gradient;
-  const _BackgroundGradient({Key key, this.gradient}) : super(key: key);
+  final Gradient? gradient;
+  const _BackgroundGradient({Key? key, this.gradient}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     if (gradient != SonrGradients.NorthMiracle) {

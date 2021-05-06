@@ -7,8 +7,8 @@ enum ConfirmButtonType { Save, Delete }
 
 class ConfirmButton extends StatefulWidget {
   final ConfirmButtonType type;
-  final EdgeInsets margin;
-  final EdgeInsets padding;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
   final Widget defaultChild;
   final Widget confirmChild;
   final Widget completeChild;
@@ -16,21 +16,21 @@ class ConfirmButton extends StatefulWidget {
   final Decoration confirmDecoration;
   final Decoration completeDecoration;
   final Function onConfirmed;
-  final String tooltip;
-  final double width;
+  final String? tooltip;
+  final double? width;
   final double pressedScale;
 
   const ConfirmButton({
-    Key key,
-    @required this.onConfirmed,
-    @required this.defaultChild,
-    @required this.confirmChild,
-    @required this.completeChild,
-    @required this.defaultDecoration,
-    @required this.confirmDecoration,
-    @required this.completeDecoration,
-    @required this.pressedScale,
-    @required this.type,
+    Key? key,
+    required this.onConfirmed,
+    required this.defaultChild,
+    required this.confirmChild,
+    required this.completeChild,
+    required this.defaultDecoration,
+    required this.confirmDecoration,
+    required this.completeDecoration,
+    required this.pressedScale,
+    required this.type,
     this.margin,
     this.padding,
     this.tooltip,
@@ -39,27 +39,27 @@ class ConfirmButton extends StatefulWidget {
 
   // @ Save Button //
   factory ConfirmButton.save({
-    @required Function onConfirmed,
+    required Function onConfirmed,
     // Default
-    Widget defaultChild,
-    IconData defaultIcon,
-    String defaultText,
+    Widget? defaultChild,
+    IconData? defaultIcon,
+    String? defaultText,
 
     // Confirm
-    Widget confirmChild,
-    IconData confirmIcon,
-    String confirmText,
+    Widget? confirmChild,
+    IconData? confirmIcon,
+    String? confirmText,
 
     // Complete
-    Widget completeChild,
-    IconData completeIcon,
-    String completeText,
+    Widget? completeChild,
+    IconData? completeIcon,
+    String? completeText,
 
     // Properties
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    double width,
+    String? tooltip,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    double? width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
@@ -100,27 +100,27 @@ class ConfirmButton extends StatefulWidget {
 
   // @ Delete Button //
   factory ConfirmButton.delete({
-    @required Function onConfirmed,
+    required Function onConfirmed,
     // Default
-    Widget defaultChild,
-    IconData defaultIcon,
-    String defaultText,
+    Widget? defaultChild,
+    IconData? defaultIcon,
+    String? defaultText,
 
     // Confirm
-    Widget confirmChild,
-    IconData confirmIcon,
-    String confirmText,
+    Widget? confirmChild,
+    IconData? confirmIcon,
+    String? confirmText,
 
     // Complete
-    Widget completeChild,
-    IconData completeIcon,
-    String completeText,
+    Widget? completeChild,
+    IconData? completeIcon,
+    String? completeText,
 
     // Properties
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    double width,
+    String? tooltip,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    double? width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
@@ -191,7 +191,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     final result = _build(context);
     if (widget.tooltip != null) {
       return Tooltip(
-        message: widget.tooltip,
+        message: widget.tooltip!,
         child: result,
       );
     } else {
@@ -243,11 +243,11 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
   BoxDecoration _buildDecoration() {
     if (status.isDefault || status.isPressed) {
-      return widget.defaultDecoration;
+      return widget.defaultDecoration as BoxDecoration;
     } else if (status.isPending || status.isConfirmed) {
-      return widget.confirmDecoration;
+      return widget.confirmDecoration as BoxDecoration;
     } else {
-      return widget.completeDecoration;
+      return widget.completeDecoration as BoxDecoration;
     }
   }
 

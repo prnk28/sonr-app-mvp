@@ -4,12 +4,12 @@ import 'profile.dart';
 
 // ^ Edit Profile Details View ^ //
 class EditDetailsView extends GetView<ProfileController> {
-  EditDetailsView({Key key}) : super(key: key);
+  EditDetailsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Extract Data
-    final hintName = SonrTextField.hintName();
+    final hintName = SonrTextField.hintName()!;
 
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10),
@@ -57,9 +57,9 @@ class EditDetailsView extends GetView<ProfileController> {
                   value: controller.editedLastName.value,
                   onEditingComplete: () {
                     controller.saveEditedDetails();
-                    FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                    FocusScopeNode currentFocus = FocusScope.of(Get.context!);
                     if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                      FocusManager.instance.primaryFocus.unfocus();
+                      FocusManager.instance.primaryFocus!.unfocus();
                     }
                   },
                   onChanged: (val) => controller.editedPhone(val)),

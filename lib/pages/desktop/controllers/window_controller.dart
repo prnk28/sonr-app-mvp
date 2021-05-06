@@ -13,8 +13,8 @@ class WindowController extends GetxController {
   final view = Rx<DesktopView>(DesktopView.Default);
 
   // References
-  StreamSubscription<Lobby> _lobbySizeStream;
-  StreamSubscription<Status> _statusStream;
+  late StreamSubscription<Lobby?> _lobbySizeStream;
+  late StreamSubscription<Status> _statusStream;
   bool _timeoutActive = false;
   int _lobbySizeRef = 0;
 
@@ -49,9 +49,9 @@ class WindowController extends GetxController {
   }
 
   // @ Handle Size Update ^ //
-  _handleLobbySizeStream(Lobby onData) {
+  _handleLobbySizeStream(Lobby? onData) {
     // Peer Joined
-    if (onData.size > _lobbySizeRef) {
+    if (onData!.size > _lobbySizeRef) {
       var diff = onData.size - _lobbySizeRef;
       swapTitleText("$diff Joined");
       DeviceService.playSound(type: UISoundType.Joined);
@@ -69,7 +69,7 @@ class WindowController extends GetxController {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.local.value.count} Nearby");
+      titleText("${LobbyService.local.value!.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text

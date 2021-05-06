@@ -35,21 +35,21 @@ class SonrService extends GetxService {
   static Rx<Status> get status => to._status;
 
   // @ Set References
-  Node _node;
+  Node? _node;
   var _received = Completer<TransferCard>();
   Completer<TransferCard> get received => _received;
 
   // Registered Callbacks
-  Function(AuthInvite) _remoteCallback;
-  Function(TransferStatus) _transferCallback;
+  Function(AuthInvite)? _remoteCallback;
+  Function(TransferStatus)? _transferCallback;
 
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
+      if (DeviceService.isMobile! && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          MobileService.position.value ?? _node.update(position: MobileService.position.value);
+          _node!.update(position: MobileService.position.value);
         }
       }
     });
@@ -74,21 +74,21 @@ class SonrService extends GetxService {
     if (DeviceService.isReadyToConnect) {
       // Create Request
       var connReq = await RequestUtility.newRequest(
-        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
+        geoLocation: DeviceService.isMobile! ? await (MobileService.currentLocation() as FutureOr<Location>) : null,
         ipLocation: await DeviceService.findIPLocation(),
-        contact: UserService.contact.value,
+        contact: UserService.contact.value!,
       );
 
       // Create Node
       _node = await SonrCore.initialize(connReq);
-      _node.onStatus = _handleStatus;
-      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
+      _node!.onStatus = _handleStatus;
+      _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node!.onInvited = _handleInvited;
+      _node!.onReplied = _handleResponded;
+      _node!.onProgressed = _handleProgress;
+      _node!.onReceived = _handleReceived;
+      _node!.onTransmitted = _handleTransmitted;
+      _node!.onError = _handleError;
       return this;
     } else {
       return this;
@@ -100,92 +100,92 @@ class SonrService extends GetxService {
     if (_node == null) {
       // Create Request
       var connReq = await RequestUtility.newRequest(
-        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
+        geoLocation: DeviceService.isMobile! ? await (MobileService.currentLocation() as FutureOr<Location>) : null,
         ipLocation: await DeviceService.findIPLocation(),
-        contact: UserService.contact.value,
+        contact: UserService.contact.value!,
       );
 
       // Create Node
       _node = await SonrCore.initialize(connReq);
-      _node.onStatus = _handleStatus;
-      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
+      _node!.onStatus = _handleStatus;
+      _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node!.onInvited = _handleInvited;
+      _node!.onReplied = _handleResponded;
+      _node!.onProgressed = _handleProgress;
+      _node!.onReceived = _handleReceived;
+      _node!.onTransmitted = _handleTransmitted;
+      _node!.onError = _handleError;
 
       // Connect Node
-      _node.connect();
+      _node!.connect();
 
       // Update for Mobile
-      if (DeviceService.isMobile) {
-        _node.update(position: MobileService.position.value);
+      if (DeviceService.isMobile!) {
+        _node!.update(position: MobileService.position.value);
       }
     } else {
       if (_status.value == Status.IDLE) {
         // Connect Node
-        _node.connect();
+        _node!.connect();
 
         // Update for Mobile
-        if (DeviceService.isMobile) {
-          _node.update(position: MobileService.position.value);
+        if (DeviceService.isMobile!) {
+          _node!.update(position: MobileService.position.value);
         }
       }
     }
   }
 
   // ^ Connect to Service Method ^ //
-  Future<void> connectNewUser(Contact contact) async {
+  Future<void> connectNewUser(Contact? contact) async {
     // Create Request
     var connReq = await RequestUtility.newRequest(
-      geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
+      geoLocation: DeviceService.isMobile! ? await (MobileService.currentLocation() as FutureOr<Location>) : null,
       ipLocation: await DeviceService.findIPLocation(),
-      contact: UserService.contact.value,
+      contact: UserService.contact.value!,
     );
 
     // Create Node
     _node = await SonrCore.initialize(connReq);
-    _node.onStatus = _handleStatus;
-    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-    _node.onInvited = _handleInvited;
-    _node.onReplied = _handleResponded;
-    _node.onProgressed = _handleProgress;
-    _node.onReceived = _handleReceived;
-    _node.onTransmitted = _handleTransmitted;
-    _node.onError = _handleError;
+    _node!.onStatus = _handleStatus;
+    _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
+    _node!.onInvited = _handleInvited;
+    _node!.onReplied = _handleResponded;
+    _node!.onProgressed = _handleProgress;
+    _node!.onReceived = _handleReceived;
+    _node!.onTransmitted = _handleTransmitted;
+    _node!.onError = _handleError;
 
     // Connect Node
     if (_status.value == Status.IDLE) {
       // Connect Node
-      _node.connect();
+      _node!.connect();
 
       // Update for Mobile
-      if (DeviceService.isMobile) {
-        _node.update(position: MobileService.position.value);
+      if (DeviceService.isMobile!) {
+        _node!.update(position: MobileService.position.value);
       }
     }
   }
 
   // ^ Retreive Node Location Info ^ //
-  static Future<Location> locationInfo() async {
-    return await to._node.location();
+  static Future<Location?> locationInfo() async {
+    return await to._node!.location();
   }
 
   // ^ Retreive URLLink Metadata ^ //
-  static Future<URLLink> getURL(String url) async {
-    return await to._node.getURL(url);
+  static Future<URLLink?> getURL(String url) async {
+    return await to._node!.getURL(url);
   }
 
   // ^ Request Local Network Access on iOS ^
   static void requestLocalNetwork() async {
-    await to._node.requestLocalNetwork();
+    to._node!.requestLocalNetwork();
   }
 
   // ^ Create a New Remote ^
-  static Future<RemoteInfo> createRemote() async {
-    var data = await to._node.createRemote();
+  static Future<RemoteInfo?> createRemote() async {
+    var data = await to._node!.createRemote();
     return data;
   }
 
@@ -197,50 +197,50 @@ class SonrService extends GetxService {
 
     // Perform Routine
     var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
-    await to._node.joinRemote(remote);
+    to._node!.joinRemote(remote);
     return remote;
   }
 
   // ^ Leave a Remote Group ^
   static void leaveRemote(RemoteInfo info) async {
     // Perform Routine
-    await to._node.leaveRemote(info);
+    to._node!.leaveRemote(info);
   }
 
   // ^ Sets Properties for Node ^
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
       to._properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
-      await to._node.update(properties: to._properties.value);
+      to._node!.update(properties: to._properties.value);
     }
   }
 
   // ^ Sets Contact for Node ^
   static void setProfile(Contact contact) async {
-    await to._node.update(contact: contact);
+    to._node!.update(contact: contact);
   }
 
   // ^ Direct Message a Peer ^
   static void message(Peer peer, String content) {
-    to._node.message(peer, content);
+    to._node!.message(peer, content);
   }
 
   // ^ Invite Peer with Built Request ^ //
   static void invite(InviteRequest request) async {
     // Send Invite
-    await to._node.invite(request);
+    to._node!.invite(request);
   }
 
   // ^ Respond-Peer Event ^
-  static void respond(bool decision, {RemoteInfo info}) async {
-    await to._node.respond(decision, info: info);
+  static void respond(bool decision, {RemoteInfo? info}) async {
+    to._node!.respond(decision, info: info);
   }
 
   // ^ Invite Peer with Built Request ^ //
-  static void sendFlat(Peer peer) async {
+  static void sendFlat(Peer? peer) async {
     // Send Invite
     InviteRequest request = InviteRequest(payload: Payload.FLAT_CONTACT, to: peer, isRemote: false, contact: UserService.contact.value);
-    await to._node.invite(request);
+    to._node!.invite(request);
   }
 
   // ^ Async Function notifies transfer complete ^ //
@@ -262,8 +262,8 @@ class SonrService extends GetxService {
       DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
-      if (DeviceService.isMobile) {
-        _node.update(position: MobileService.position.value);
+      if (DeviceService.isMobile!) {
+        _node!.update(position: MobileService.position.value);
       }
     }
   }
@@ -272,7 +272,7 @@ class SonrService extends GetxService {
   void _handleInvited(AuthInvite data) async {
     // Check for Overlay
     if (data.hasRemote() && _remoteCallback != null) {
-      _remoteCallback(data);
+      _remoteCallback!(data);
     }
 
     // Handle Feedback
@@ -304,7 +304,7 @@ class SonrService extends GetxService {
     } else {
       // Check for Callback
       if (_transferCallback != null) {
-        _transferCallback(TransferStatusUtil.statusFromReply(data));
+        _transferCallback!(TransferStatusUtil.statusFromReply(data));
       }
     }
   }
@@ -319,7 +319,7 @@ class SonrService extends GetxService {
     print(data.toString());
     // Check for Callback
     if (_transferCallback != null) {
-      _transferCallback(TransferStatus.Completed);
+      _transferCallback!(TransferStatus.Completed);
       _transferCallback = null;
     }
 

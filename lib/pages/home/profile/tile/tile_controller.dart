@@ -10,9 +10,9 @@ class TileController extends GetxController {
   final isFetched = false.obs;
 
   // Social Media Properties
-  final medium = Rx<MediumModel>(null);
-  final twitter = Rx<TwitterModel>(null);
-  final youtube = Rx<YoutubeModel>(null);
+  final medium = Rx<MediumModel?>(null);
+  final twitter = Rx<TwitterModel?>(null);
+  final youtube = Rx<YoutubeModel?>(null);
 
   // ^ Create New Tile ^ //
   initialize(Contact_Social tile, int i) async {

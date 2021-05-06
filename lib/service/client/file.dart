@@ -10,7 +10,7 @@ class FileService extends GetxService {
   static FileService get to => Get.find<FileService>();
 
   // References
-  Isolate isolate;
+  Isolate? isolate;
 
   // ^ Initialize Service ^ //
   Future<FileService> init() async {
@@ -18,7 +18,7 @@ class FileService extends GetxService {
   }
 
   // @ Select Audio File //
-  static Future<Tuple<bool, SonrFile>> selectAudio() async {
+  static Future<Tuple<bool, SonrFile?>> selectAudio() async {
     var result = await _handleSelectRequest(FileType.audio);
     // Check File
     if (result != null) {
@@ -26,8 +26,7 @@ class FileService extends GetxService {
           true,
           await SonrFileUtils.newWith(
             payload: Payload.MEDIA,
-            path: result.files.first.path,
-            size: result.files.first.size,
+            path: result.files.first.path!,
           ));
     }
 
@@ -38,7 +37,7 @@ class FileService extends GetxService {
   }
 
   // @ Select Media File //
-  static Future<Tuple<bool, SonrFile>> selectMedia() async {
+  static Future<Tuple<bool, SonrFile?>> selectMedia() async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.media);
 
@@ -48,8 +47,7 @@ class FileService extends GetxService {
           true,
           await SonrFileUtils.newWith(
             payload: Payload.MEDIA,
-            path: result.files.first.path,
-            size: result.files.first.size,
+            path: result.files.first.path!,
           ));
     }
 
@@ -60,7 +58,7 @@ class FileService extends GetxService {
   }
 
   // @ Select Other File //
-  static Future<Tuple<bool, SonrFile>> selectFile() async {
+  static Future<Tuple<bool, SonrFile?>> selectFile() async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.custom);
 
@@ -72,8 +70,7 @@ class FileService extends GetxService {
             true,
             SonrFileUtils.newWith(
               payload: Payload.FILE,
-              path: result.files.first.path,
-              size: result.files.first.size,
+              path: result.files.first.path!,
             ));
       }
       // Multiple: Iterate Items
@@ -83,7 +80,7 @@ class FileService extends GetxService {
 
         // Add Items
         result.files.forEach((e) {
-          file.addItem(path: e.path, size: e.size);
+          file.addItem(path: e.path!);
         });
 
         return Tuple(true, file);
@@ -97,7 +94,7 @@ class FileService extends GetxService {
   }
 
   // # Generic Method for Different File Types
-  static Future<FilePickerResult> _handleSelectRequest(FileType type) async {
+  static Future<FilePickerResult?> _handleSelectRequest(FileType type) async {
     // @ Check if File Already Queued
     // Check Type for Custom Files
     if (type == FileType.custom) {

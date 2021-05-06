@@ -6,7 +6,7 @@ import 'cards_db.dart';
 class ActivityConverter extends TypeConverter<ActivityType, int> {
   const ActivityConverter();
   @override
-  ActivityType mapToDart(int fromDb) {
+  ActivityType? mapToDart(int? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -14,7 +14,7 @@ class ActivityConverter extends TypeConverter<ActivityType, int> {
   }
 
   @override
-  int mapToSql(ActivityType value) {
+  int? mapToSql(ActivityType? value) {
     if (value == null) {
       return null;
     }
@@ -25,7 +25,7 @@ class ActivityConverter extends TypeConverter<ActivityType, int> {
 class CardConverter extends TypeConverter<TransferCard, String> {
   const CardConverter();
   @override
-  TransferCard mapToDart(String fromDb) {
+  TransferCard? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -33,7 +33,7 @@ class CardConverter extends TypeConverter<TransferCard, String> {
   }
 
   @override
-  String mapToSql(TransferCard value) {
+  String? mapToSql(TransferCard? value) {
     if (value == null) {
       return null;
     }
@@ -44,7 +44,7 @@ class CardConverter extends TypeConverter<TransferCard, String> {
 class ContactConverter extends TypeConverter<Contact, String> {
   const ContactConverter();
   @override
-  Contact mapToDart(String fromDb) {
+  Contact? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -52,7 +52,7 @@ class ContactConverter extends TypeConverter<Contact, String> {
   }
 
   @override
-  String mapToSql(Contact value) {
+  String? mapToSql(Contact? value) {
     if (value == null) {
       return null;
     }
@@ -63,7 +63,7 @@ class ContactConverter extends TypeConverter<Contact, String> {
 class FileConverter extends TypeConverter<SonrFile, String> {
   const FileConverter();
   @override
-  SonrFile mapToDart(String fromDb) {
+  SonrFile? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -71,7 +71,7 @@ class FileConverter extends TypeConverter<SonrFile, String> {
   }
 
   @override
-  String mapToSql(SonrFile value) {
+  String? mapToSql(SonrFile? value) {
     if (value == null) {
       return null;
     }
@@ -82,7 +82,7 @@ class FileConverter extends TypeConverter<SonrFile, String> {
 class MimeConverter extends TypeConverter<MIME_Type, int> {
   const MimeConverter();
   @override
-  MIME_Type mapToDart(int fromDb) {
+  MIME_Type? mapToDart(int? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -90,7 +90,7 @@ class MimeConverter extends TypeConverter<MIME_Type, int> {
   }
 
   @override
-  int mapToSql(MIME_Type value) {
+  int? mapToSql(MIME_Type? value) {
     if (value == null) {
       return null;
     }
@@ -101,7 +101,7 @@ class MimeConverter extends TypeConverter<MIME_Type, int> {
 class PayloadConverter extends TypeConverter<Payload, int> {
   const PayloadConverter();
   @override
-  Payload mapToDart(int fromDb) {
+  Payload? mapToDart(int? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -109,7 +109,7 @@ class PayloadConverter extends TypeConverter<Payload, int> {
   }
 
   @override
-  int mapToSql(Payload value) {
+  int? mapToSql(Payload? value) {
     if (value == null) {
       return null;
     }
@@ -120,7 +120,7 @@ class PayloadConverter extends TypeConverter<Payload, int> {
 class ProfileConverter extends TypeConverter<Profile, String> {
   const ProfileConverter();
   @override
-  Profile mapToDart(String fromDb) {
+  Profile? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -128,7 +128,7 @@ class ProfileConverter extends TypeConverter<Profile, String> {
   }
 
   @override
-  String mapToSql(Profile value) {
+  String? mapToSql(Profile? value) {
     if (value == null) {
       return null;
     }
@@ -139,7 +139,7 @@ class ProfileConverter extends TypeConverter<Profile, String> {
 class URLConverter extends TypeConverter<URLLink, String> {
   const URLConverter();
   @override
-  URLLink mapToDart(String fromDb) {
+  URLLink? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
@@ -147,7 +147,7 @@ class URLConverter extends TypeConverter<URLLink, String> {
   }
 
   @override
-  String mapToSql(URLLink value) {
+  String? mapToSql(URLLink? value) {
     if (value == null) {
       return null;
     }

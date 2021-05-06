@@ -15,12 +15,12 @@ class TransferController extends GetxController {
   final isFacingPeer = false.obs;
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final sonrFile = Rx<SonrFile>(null);
+  final sonrFile = Rx<SonrFile?>(null);
   final thumbStatus = Rx<ThumbnailStatus>(ThumbnailStatus.None);
 
   // @ Remote Properties
   final counter = 0.obs;
-  final remote = Rx<RemoteInfo>(null);
+  final remote = Rx<RemoteInfo?>(null);
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -33,8 +33,8 @@ class TransferController extends GetxController {
   final cardinalTitle = "".obs;
 
   // References
-  StreamSubscription<Lobby> _lobbySizeStream;
-  StreamSubscription<Position> _positionStream;
+  late StreamSubscription<Lobby?> _lobbySizeStream;
+  late StreamSubscription<Position> _positionStream;
   CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
@@ -58,13 +58,13 @@ class TransferController extends GetxController {
   }
 
   // ^ Send Invite with Peer ^ //
-  void invitePeer(Peer peer) {
+  void invitePeer(Peer? peer) {
     setFacingPeer(false);
     isShiftingEnabled(false);
 
     // Update Request
     inviteRequest.update((val) {
-      val.to = peer;
+      val!.to = peer!;
     });
 
     // Send Invite
@@ -76,16 +76,16 @@ class TransferController extends GetxController {
     // Contact
     if (args.payload == Payload.CONTACT) {
       inviteRequest.update((val) {
-        val.payload = args.payload;
-        val.contact = args.contact;
+        val!.payload = args.payload;
+        val.contact = args.contact!;
         val.payload = Payload.CONTACT;
       });
     }
     // URL
     else if (args.payload == Payload.URL) {
       inviteRequest.update((val) {
-        val.payload = args.payload;
-        val.url = args.url;
+        val!.payload = args.payload;
+        val.url = args.url!;
         val.payload = Payload.URL;
       });
     }
@@ -98,7 +98,7 @@ class TransferController extends GetxController {
       // Set File Item
       sonrFile(args.file);
       inviteRequest.update((val) {
-        val.file = args.file;
+        val!.file = args.file!;
         val.payload = args.payload;
       });
     }
@@ -118,7 +118,7 @@ class TransferController extends GetxController {
   // # Handle Compass Update ^ //
   _handlePositionUpdate(Position pos) {
     // Update String Elements
-    if (pos != null && !isClosed) {
+    if (!isClosed) {
       // Set Titles
       directionTitle(pos.facing.directionString);
       cardinalTitle(pos.facing.cardinalString);
@@ -131,7 +131,7 @@ class TransferController extends GetxController {
   }
 
   // # Handle Lobby Size Update ^ //
-  _handleLobbyUpdate(Lobby data) {
+  _handleLobbyUpdate(Lobby? data) {
     if (data != null && !isClosed) {
       isNotEmpty(data.isNotEmpty);
       title(data.countString);
@@ -139,20 +139,20 @@ class TransferController extends GetxController {
   }
 
   // # Loads SonrFile for Media Payload
-  _setMediaPayload(SonrFile file) async {
+  _setMediaPayload(SonrFile? file) async {
     // Update Request
     inviteRequest.update((val) {
-      val.file = file;
+      val!.file = file!;
       val.payload = Payload.MEDIA;
     });
 
     // Set File Item
     sonrFile(file);
     thumbStatus(ThumbnailStatus.Loading);
-    await sonrFile.value.setThumbnail();
+    await sonrFile.value!.setThumbnail();
 
     // Check Result
-    if (sonrFile.value.single.hasThumbnail()) {
+    if (sonrFile.value!.single.hasThumbnail()) {
       thumbStatus(ThumbnailStatus.Complete);
     } else {
       thumbStatus(ThumbnailStatus.None);

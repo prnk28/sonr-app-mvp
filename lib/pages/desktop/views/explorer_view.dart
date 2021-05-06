@@ -5,7 +5,7 @@ import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
 class ExplorerDesktopView extends GetView<ExplorerController> {
-  ExplorerDesktopView({Key key}) : super(key: key);
+  ExplorerDesktopView({Key? key}) : super(key: key);
 
   final K_CAROUSEL_OPTS = CarouselOptions(
     height: 260.0,
@@ -23,7 +23,7 @@ class ExplorerDesktopView extends GetView<ExplorerController> {
           return CarouselSlider(
             carouselController: controller.carouselController,
             options: K_CAROUSEL_OPTS,
-            items: LobbyService.local.value.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
+            items: LobbyService.local.value!.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
           );
         }
 

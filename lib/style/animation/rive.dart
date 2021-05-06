@@ -9,9 +9,9 @@ class RiveContainer extends StatefulWidget {
   final double width;
   final double height;
   final RiveBoard type;
-  final Widget placeholder;
+  final Widget? placeholder;
 
-  const RiveContainer({Key key, @required this.type, this.width = 55, this.height = 55, this.placeholder}) : super(key: key);
+  const RiveContainer({Key? key, required this.type, this.width = 55, this.height = 55, this.placeholder}) : super(key: key);
   @override
   _RiveContainer createState() => _RiveContainer();
 }
@@ -21,7 +21,7 @@ class _RiveContainer extends State<RiveContainer> {
   final String _documentsPath = 'assets/rive/documents.riv';
 
   // Properties
-  Artboard _riveArtboard;
+  Artboard? _riveArtboard;
 
   // ** Constructer Initial ** //
   @override
@@ -87,7 +87,7 @@ class _RiveContainer extends State<RiveContainer> {
           child: _riveArtboard == null
               ? widget.placeholder ?? Container()
               : Rive(
-                  artboard: _riveArtboard,
+                  artboard: _riveArtboard!,
                 )),
     );
   }

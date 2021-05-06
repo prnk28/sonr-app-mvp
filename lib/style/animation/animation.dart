@@ -6,7 +6,7 @@ import '../style.dart';
 
 // ^ Animated Scale  ^ //
 class AnimatedScale extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final double scale;
   final Duration duration;
   final Alignment alignment;
@@ -23,8 +23,8 @@ class AnimatedScale extends StatefulWidget {
 }
 
 class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
+  late AnimationController _controller;
+  late Animation<double> _animation;
   double oldScale = 1;
 
   @override
@@ -67,8 +67,8 @@ class AnimatedWaveIcon extends HookWidget {
   final IconData iconData;
   final double size;
   final Duration duration;
-  final Function onCompleted;
-  final Gradient gradient;
+  final Function? onCompleted;
+  final Gradient? gradient;
 
   // Constructer
   AnimatedWaveIcon(this.iconData, {this.gradient, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
@@ -91,7 +91,7 @@ class AnimatedWaveIcon extends HookWidget {
           width: size,
           child: AnimatedBuilder(
             animation: controller,
-            builder: (BuildContext context, Widget child) {
+            builder: (BuildContext context, Widget? child) {
               return CustomPaint(
                 painter: IconWavePainter(
                   iconKey: iconKey,
@@ -135,8 +135,8 @@ class AnimatedWaveIcon extends HookWidget {
 // ^ Sonr Ripples ^ //
 class AnimatedRipples extends HookWidget {
   const AnimatedRipples({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -180,27 +180,27 @@ class AnimatedSlideSwitcher extends StatelessWidget {
   const AnimatedSlideSwitcher(this._animation, this.child, this.duration);
 
   // * Factory Fade * //
-  factory AnimatedSlideSwitcher.fade({@required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+  factory AnimatedSlideSwitcher.fade({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
     return AnimatedSlideSwitcher(SwitchType.Fade, child, duration);
   }
 
   // * Factory Slide Up * //
-  factory AnimatedSlideSwitcher.slideUp({@required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+  factory AnimatedSlideSwitcher.slideUp({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
     return AnimatedSlideSwitcher(SwitchType.SlideUp, child, duration);
   }
 
   // * Factory Slide Down * //
-  factory AnimatedSlideSwitcher.slideDown({@required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+  factory AnimatedSlideSwitcher.slideDown({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
     return AnimatedSlideSwitcher(SwitchType.SlideDown, child, duration);
   }
 
   // * Factory Slide Left * //
-  factory AnimatedSlideSwitcher.slideLeft({@required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+  factory AnimatedSlideSwitcher.slideLeft({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
     return AnimatedSlideSwitcher(SwitchType.SlideLeft, child, duration);
   }
 
   // * Factory Slide Right * //
-  factory AnimatedSlideSwitcher.slideRight({@required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+  factory AnimatedSlideSwitcher.slideRight({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
     return AnimatedSlideSwitcher(SwitchType.SlideRight, child, duration);
   }
 
@@ -221,9 +221,9 @@ class AnimatedSlideSwitcher extends StatelessWidget {
         duration: duration,
         switchOutCurve: Curves.easeInOutSine,
         switchInCurve: Curves.fastLinearToSlowEaseIn,
-        transitionBuilder: transitionMap[_animation],
-        layoutBuilder: (Widget currentChild, List<Widget> previousChildren) {
-          return currentChild;
+        transitionBuilder: transitionMap[_animation]!,
+        layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
+          return currentChild!;
         },
         child: child);
   }

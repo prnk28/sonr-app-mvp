@@ -6,9 +6,9 @@ import 'url_auth.dart';
 
 /// ^ TransferCardView: Builds Invite View based on AuthInvite Payload Type ^
 class InviteOverlayView extends StatelessWidget {
-  final AuthInvite invite;
+  final AuthInvite? invite;
 
-  const InviteOverlayView({this.invite, Key key}) : super(key: key);
+  const InviteOverlayView({this.invite, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,13 +20,13 @@ class InviteOverlayView extends StatelessWidget {
 
   // Builds View By Payload
   Widget _buildView() {
-    if (invite.payload == Payload.FILE) {
+    if (invite!.payload == Payload.FILE) {
       return FileAuthView(invite);
-    } else if (invite.payload == Payload.MEDIA) {
+    } else if (invite!.payload == Payload.MEDIA) {
       return MediaAuthView(invite);
-    } else if (invite.payload == Payload.CONTACT) {
+    } else if (invite!.payload == Payload.CONTACT) {
       return ContactAuthView(false, invite: invite);
-    } else if (invite.payload == Payload.URL) {
+    } else if (invite!.payload == Payload.URL) {
       return URLAuthView(invite);
     } else {
       return FileAuthView(invite);
@@ -36,9 +36,9 @@ class InviteOverlayView extends StatelessWidget {
 
 /// ^ TransferCardView: Builds Invite View based on AuthInvite Payload Type - Contact Only ^
 class ReplyOverlayView extends StatelessWidget {
-  final AuthReply reply;
+  final AuthReply? reply;
 
-  const ReplyOverlayView({this.reply, Key key}) : super(key: key);
+  const ReplyOverlayView({this.reply, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

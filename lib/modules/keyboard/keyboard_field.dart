@@ -43,7 +43,7 @@ class ColorField extends StatelessWidget {
                 builder: (context, val, hasFocus) {
                   return Container(
                     width: double.maxFinite,
-                    color: val ?? Colors.transparent,
+                    color: val,
                   );
                 },
               ),
@@ -94,12 +94,10 @@ class CardField extends StatelessWidget {
                 builder: (context, val, hasFocus) {
                   return Container(
                     width: double.maxFinite,
-                    decoration: val != null
-                        ? BoxDecoration(
-                            image: DecorationImage(
-                            image: AssetImage("assets/cards/0$val.png"),
-                          ))
-                        : BoxDecoration(),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: AssetImage("assets/cards/0$val.png"),
+                    )),
                   );
                 },
               ),

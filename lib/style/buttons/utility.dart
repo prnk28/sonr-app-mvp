@@ -6,7 +6,7 @@ class ButtonUtility {
   static const K_BUTTON_PADDING = EdgeInsets.symmetric(horizontal: 24, vertical: 8);
 
   // @ Helper Method to Build Icon View //
-  static Widget buildChild(WidgetPosition iconPosition, IconData icon, String text, Widget child) {
+  static Widget buildChild(WidgetPosition iconPosition, IconData? icon, String? text, Widget? child) {
     if (child != null) {
       return child;
     } else if (icon != null && text == null) {

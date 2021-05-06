@@ -36,7 +36,7 @@ class PeerCard extends GetWidget<PeerController> {
                 child: controller.board.value == null || controller.isFlipped.value
                     ? Container()
                     : Rive(
-                        artboard: controller.board.value,
+                        artboard: controller.board.value!,
                       ),
               ),
             ),
@@ -69,7 +69,7 @@ class PeerCard extends GetWidget<PeerController> {
 // ^ Main Peer Card View ^ //
 class _PeerMainCard extends StatelessWidget {
   final PeerController controller;
-  const _PeerMainCard({Key key, @required this.controller}) : super(key: key);
+  const _PeerMainCard({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,16 +93,16 @@ class _PeerMainCard extends StatelessWidget {
           Obx(() => FadeInDownBig(
                 manualTrigger: controller.isVisible.value,
                 duration: 125.milliseconds,
-                child: controller.peer.value.profilePicture(size: 68),
+                child: controller.peer.value!.profilePicture(size: 68),
               )),
 
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h6,
+          "${controller.peer.value!.profile.firstName} ${controller.peer.value!.profile.lastName}".h6,
 
           // Username
-          controller.peer.value.profile.username.p_Grey,
+          controller.peer.value!.profile.username.p_Grey,
         ].column());
   }
 }
@@ -110,7 +110,7 @@ class _PeerMainCard extends StatelessWidget {
 // ^ Details Peer Card View ^ //
 class _PeerDetailsCard extends StatelessWidget {
   final PeerController controller;
-  const _PeerDetailsCard({Key key, @required this.controller}) : super(key: key);
+  const _PeerDetailsCard({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ class _PeerDetailsCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-              child: Obx(() => " ${controller.peerVector.value.heading.directionString}".h6_White),
+              child: Obx(() => " ${controller.peerVector.value!.heading.directionString}".h6_White),
             ),
           ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center),
 
@@ -140,11 +140,11 @@ class _PeerDetailsCard extends StatelessWidget {
           Spacer(),
 
           // Device Information
-          controller.peer.value.platform.grey(size: 92),
+          controller.peer.value!.platform.grey(size: 92),
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.model}".h5,
+          "${controller.peer.value!.model}".h5,
         ].column());
   }
 }

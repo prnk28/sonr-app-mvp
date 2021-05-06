@@ -37,7 +37,6 @@ extension LottieNetworkUtils on SonrAssetLottie {
       case SonrAssetLottie.Denied:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6083451f8a710f4661f235b2_denied.json";
     }
-    return "";
   }
 }
 
@@ -98,7 +97,6 @@ extension IconNetworkUtils on SonrAssetIcon {
       case SonrAssetIcon.HomeSelected:
         return AssetController.to._homeSelectIcon;
     }
-    return Container();
   }
 }
 
@@ -148,7 +146,6 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
       case SonrAssetIllustration.AddPicture:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607f3b7fc0b85aedda12ed5f_add-picture.png";
     }
-    return "";
   }
 
   // ^ Get Illustration ^ //
@@ -179,7 +176,6 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
       case SonrAssetIllustration.AddPicture:
         return AssetController.to._addPicture;
     }
-    return AssetController.to._noFiles4;
   }
 
   ImageProvider<Object> get image {
@@ -209,7 +205,6 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
       case SonrAssetIllustration.AddPicture:
         return AssetController.to._addPicture.image;
     }
-    return AssetController.to._noFiles4.image;
   }
 }
 
@@ -325,31 +320,31 @@ class AssetController extends GetxController {
   // * Constructer * //
   onReady() async {
     // Load Icons
-    precacheImage(_homeDefaultIcon.image, Get.context);
-    precacheImage(_profileDefaultIcon.image, Get.context);
-    precacheImage(_activityDefaultIcon.image, Get.context);
-    precacheImage(_remoteDefaultIcon.image, Get.context);
+    precacheImage(_homeDefaultIcon.image!, Get.context!);
+    precacheImage(_profileDefaultIcon.image!, Get.context!);
+    precacheImage(_activityDefaultIcon.image!, Get.context!);
+    precacheImage(_remoteDefaultIcon.image!, Get.context!);
 
     // Load Logos
-    precacheImage(_logoTop.image, Get.context);
-    precacheImage(_logoSide.image, Get.context);
+    precacheImage(_logoTop.image, Get.context!);
+    precacheImage(_logoSide.image, Get.context!);
 
     // Load Illustrations
-    precacheImage(_cameraAccess.image, Get.context);
-    precacheImage(_createGroup.image, Get.context);
-    precacheImage(_locationAccess.image, Get.context);
-    precacheImage(_mediaAccess.image, Get.context);
-    precacheImage(_noConnection.image, Get.context);
+    precacheImage(_cameraAccess.image, Get.context!);
+    precacheImage(_createGroup.image, Get.context!);
+    precacheImage(_locationAccess.image, Get.context!);
+    precacheImage(_mediaAccess.image, Get.context!);
+    precacheImage(_noConnection.image, Get.context!);
 
     // Load Empty States
-    precacheImage(_addPicture.image, Get.context);
-    precacheImage(_noAlerts.image, Get.context);
-    precacheImage(_noPeers.image, Get.context);
+    precacheImage(_addPicture.image, Get.context!);
+    precacheImage(_noAlerts.image, Get.context!);
+    precacheImage(_noPeers.image, Get.context!);
     super.onReady();
   }
 
   // ^ Static Get Icon for Home Tab Bar ^ //
-  static Widget getHomeTabBarIcon({@required HomeView view, @required bool isSelected}) {
+  static Widget getHomeTabBarIcon({required HomeView view, required bool isSelected}) {
     switch (view) {
       case HomeView.Main:
         return isSelected ? to._homeSelectIcon : to._homeDefaultIcon;
@@ -360,7 +355,6 @@ class AssetController extends GetxController {
       case HomeView.Remote:
         return isSelected ? to._remoteSelectIcon : to._remoteDefaultIcon;
     }
-    return Container();
   }
 
   //  ^ Get Random No Files Image ^ //

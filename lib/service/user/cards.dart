@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:photo_manager/photo_manager.dart';
@@ -79,7 +80,7 @@ class CardService extends GetxService {
   static addCard(TransferCard card) async {
     // Save Media to Device
     if (card.payload == Payload.MEDIA) {
-      await DeviceService.saveTransfer(card.file);
+      DeviceService.saveTransfer(card.file);
     }
 
     // Store in Database
@@ -130,8 +131,8 @@ class CardService extends GetxService {
   }
 
   // ^ Load IO File from Metadata ^ //
-  static Future<File> loadFileFromMetadata(SonrFile_Metadata metadata) async {
-    var asset = await AssetEntity.fromId(metadata.id);
+  static Future<File?> loadFileFromMetadata(SonrFile_Metadata metadata) async {
+    var asset = await (AssetEntity.fromId(metadata.id) as FutureOr<AssetEntity>);
     return await asset.file;
   }
 
@@ -245,20 +246,20 @@ class CardService extends GetxService {
     var card = TransferCard(
       id: item.id,
       payload: item.payload,
-      received: item.received.millisecondsSinceEpoch,
+      received: item.received!.millisecondsSinceEpoch,
       owner: item.owner,
     );
 
     // Check Payload
     switch (item.payload) {
       case Payload.CONTACT:
-        card.contact = item.contact;
+        card.contact = item.contact!;
         break;
       case Payload.URL:
-        card.url = item.url;
+        card.url = item.url!;
         break;
       default:
-        card.file = item.file;
+        card.file = item.file!;
         break;
     }
     return card;

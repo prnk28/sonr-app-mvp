@@ -5,8 +5,8 @@ import 'package:sonr_app/data/data.dart';
 
 class SonrSnack {
   // Properties
-  final Color color;
-  final String title;
+  final Color? color;
+  final String? title;
   final String message;
   final Widget icon;
   final int duration;
@@ -14,8 +14,8 @@ class SonrSnack {
 
   // ^ Default Constructer ^ //
   SonrSnack(this.title, this.message, this.icon, this.color, this.duration, this.shouldIconPulse) {
-    if (!Get.isSnackbarOpen) {
-      Get.snackbar(title, message,
+    if (!Get.isSnackbarOpen!) {
+      Get.snackbar(title!, message,
           snackStyle: SnackStyle.FLOATING,
           duration: Duration(milliseconds: duration),
           snackPosition: SnackPosition.BOTTOM,
@@ -27,12 +27,12 @@ class SonrSnack {
   }
 
   // ^ Custom Alert ^ //
-  factory SonrSnack.remote({@required String message, int duration = 45000, Color color = Colors.purple}) {
+  factory SonrSnack.remote({required String message, int duration = 45000, Color color = Colors.purple}) {
     return SonrSnack("Remote Code", message, SonrIcons.Remote.white, color, duration, true);
   }
 
   // ^ Custom Alert ^ //
-  factory SonrSnack.alert({@required String title, @required String message, @required Icon icon, Color color = Colors.orange}) {
+  factory SonrSnack.alert({required String title, required String message, required Icon icon, Color color = Colors.orange}) {
     return SonrSnack(title, message, icon, color, 2600, false);
   }
 
@@ -42,7 +42,7 @@ class SonrSnack {
   }
 
   // ^ Error on Operation ^ //
-  factory SonrSnack.error(String message, {ErrorMessage error}) {
+  factory SonrSnack.error(String message, {ErrorMessage? error}) {
     // @ Internal Error
     if (error != null) {
       switch (error.severity) {

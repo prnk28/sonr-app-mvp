@@ -9,7 +9,7 @@ enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }
 // ** Flat Mode Handler ** //
 class FlatMode {
   static outgoing() {
-    if (!Get.isDialogOpen) {
+    if (!Get.isDialogOpen!) {
       Get.dialog(_FlatModeView(), barrierColor: Colors.transparent, useSafeArea: false);
     }
   }
@@ -46,7 +46,7 @@ class _FlatModeView extends StatelessWidget {
                   switchOutCurve: controller.animation.value.switchOutCurve,
                   switchInCurve: controller.animation.value.switchInCurve,
                   transitionBuilder: controller.animation.value.transition(),
-                  layoutBuilder: controller.animation.value.layout(),
+                  layoutBuilder: controller.animation.value.layout() as Widget Function(Widget?, List<Widget>),
                   child: _buildChild(controller))),
         );
       },
@@ -79,7 +79,7 @@ class _FlatModeView extends StatelessWidget {
 // ** Reactive Flat Mode Controller ** //
 class _FlatModeController extends GetxController {
   // Properties
-  final received = Rx<Contact>(null);
+  final received = Rx<Contact?>(null);
   final status = Rx<FlatModeState>(FlatModeState.Standby);
   final animation = Rx<_FlatModeAnimation>(_FlatModeAnimation(FlatModeTransition.Standby));
   final transition = Rx<FlatModeTransition>(FlatModeTransition.Standby);
@@ -94,7 +94,7 @@ class _FlatModeController extends GetxController {
   bool get isDone => status.value == FlatModeState.Done;
 
   // References
-  StreamSubscription<bool> _isFlatStream;
+  late StreamSubscription<bool> _isFlatStream;
 
   // # Initialize Service Method ^ //
   @override
@@ -156,11 +156,11 @@ class _FlatModeController extends GetxController {
         transition(FlatModeTransition.SlideOut);
         animation(_FlatModeAnimation(transition.value));
         // No Peers
-        if (LobbyService.local.value.flatCount() == 0) {
+        if (LobbyService.local.value!.flatCount() == 0) {
           Get.back();
           SonrSnack.error("No Peers in Flat Mode");
-        } else if (LobbyService.local.value.flatCount() == 1) {
-          if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value.flatFirst())) {
+        } else if (LobbyService.local.value!.flatCount() == 1) {
+          if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value!.flatFirst())) {
             Future.delayed(K_TRANSLATE_DURATION, () {
               status(FlatModeState.Pending);
             });
@@ -202,7 +202,7 @@ class _FlatModeAnimation {
           TweenSequenceItem(tween: Offset(0, -1).tweenTo(Offset(0.0, 0.0)), weight: 1),
           TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
         ]);
-        break;
+
 
       // @ Slide In Single
       case FlatModeTransition.SlideInSingle:
@@ -210,7 +210,7 @@ class _FlatModeAnimation {
           TweenSequenceItem(tween: Offset(0, -1).tweenTo(Offset(0.0, 0.0)), weight: 1),
           TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
         ]);
-        break;
+
 
       // @ Slide Out
       case FlatModeTransition.SlideOut:
@@ -228,7 +228,7 @@ class _FlatModeAnimation {
 
       default:
         return TweenSequence([TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1)]);
-        break;
+
     }
   }
 
@@ -244,8 +244,8 @@ class _FlatModeAnimation {
   }
 
   // # Switcher Layout Method
-  Widget Function(Widget currentChild, List<Widget> previousChildren) layout() {
-    return (Widget currentChild, List<Widget> previousChildren) {
+  Widget? Function(Widget? currentChild, List<Widget> previousChildren) layout() {
+    return (Widget? currentChild, List<Widget> previousChildren) {
       if (type == FlatModeTransition.SlideIn) {
         List<Widget> children = previousChildren;
         if (currentChild != null) children = children.toList()..add(currentChild);

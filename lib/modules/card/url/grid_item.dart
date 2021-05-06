@@ -2,7 +2,7 @@ import 'package:sonr_app/style/style.dart';
 
 class URLGridItemView extends StatelessWidget {
   final TransferCardItem item;
-  const URLGridItemView(this.item, {Key key}) : super(key: key);
+  const URLGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -40,9 +40,9 @@ class URLGridItemView extends StatelessWidget {
 
 // ^ Main URL Grid Item View ^ //
 class _URLGridItemMainView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _URLGridItemMainView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _URLGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +56,8 @@ class _URLGridItemMainView extends StatelessWidget {
               alignment: Alignment.topRight,
               child: GestureDetector(
                 onTap: () {
-                  isFlipped(true);
-                  isFlipped.refresh();
+                  isFlipped!(true);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -72,9 +72,9 @@ class _URLGridItemMainView extends StatelessWidget {
 
 // ^ Details URL Grid Item View ^ //
 class _URLGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _URLGridItemDetailsView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _URLGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,8 @@ class _URLGridItemDetailsView extends StatelessWidget {
             // Align Platform
             GestureDetector(
                 onTap: () {
-                  isFlipped(false);
-                  isFlipped.refresh();
+                  isFlipped!(false);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),

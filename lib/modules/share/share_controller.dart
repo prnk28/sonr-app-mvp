@@ -19,7 +19,6 @@ extension ShareStatusUtils on ShareStatus {
     switch (this) {
       case ShareStatus.Queue:
         return Size(Width.ratio(0.95), 110);
-        break;
       default:
         return Size(60, 60);
     }
@@ -37,11 +36,11 @@ class ShareController extends GetxController {
   final status = ShareStatus.Default.obs;
 
   // Shared Files
-  final currentMedia = Rx<SonrFile>(null);
+  final currentMedia = Rx<SonrFile?>(null);
 
   // References
   int _counter = 0;
-  Timer _timer;
+  Timer? _timer;
 
   @override
   onInit() {
@@ -99,7 +98,7 @@ class ShareController extends GetxController {
         shrink(delay: 150.milliseconds);
 
         // Push to Transfer Screen
-        Transfer.transferWithFile(result.item2);
+        Transfer.transferWithFile(result.item2!);
       }
     } else {
       // Request Permissions
@@ -117,7 +116,7 @@ class ShareController extends GetxController {
           shrink(delay: 150.milliseconds);
 
           // Push to Transfer
-          Transfer.transferWithFile(result.item2);
+          Transfer.transferWithFile(result.item2!);
         }
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
@@ -132,7 +131,7 @@ class ShareController extends GetxController {
       var result = await FileService.selectMedia();
       if (result.item1) {
         // Push to Transfer
-        Transfer.transferWithFile(result.item2);
+        Transfer.transferWithFile(result.item2!);
 
         // Shrink Button after Delay
         shrink(delay: 150.milliseconds);
@@ -150,7 +149,7 @@ class ShareController extends GetxController {
         var result = await FileService.selectMedia();
         if (result.item1) {
           // Push to Transfer
-          Transfer.transferWithFile(result.item2);
+          Transfer.transferWithFile(result.item2!);
 
           // Shrink Button after Delay
           shrink(delay: 150.milliseconds);
@@ -162,11 +161,11 @@ class ShareController extends GetxController {
   }
 
   // ^ Select a URL ^ //
-  selectExternal(Payload payload, URLLink url, SonrFile mediaFile) {
+  selectExternal(Payload payload, URLLink? url, SonrFile? mediaFile) {
     if (payload == Payload.URL) {
-      Transfer.transferWithUrl(url.link);
+      Transfer.transferWithUrl(url!.link);
     } else {
-      Transfer.transferWithFile(mediaFile);
+      Transfer.transferWithFile(mediaFile!);
     }
   }
 
@@ -174,7 +173,7 @@ class ShareController extends GetxController {
   void shrink({Duration delay = const Duration(milliseconds: 600)}) {
     Future.delayed(delay, () {
       if (_timer != null) {
-        _timer.cancel();
+        _timer!.cancel();
         _timer = null;
         status(ShareStatus.Default);
         HapticFeedback.mediumImpact();

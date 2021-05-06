@@ -13,8 +13,8 @@ class UserService extends GetxService {
   // ** User Reactive Properties **
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-  final _contact = Rx<Contact>(null);
-  final _user = Rx<User>(null);
+  final _contact = Rx<Contact?>(null);
+  final _user = Rx<User?>(null);
 
   // ** Contact Reactive Properties **
   final _username = "@TempUsername".obs;
@@ -23,7 +23,7 @@ class UserService extends GetxService {
   final _phone = "".obs;
   final _email = "".obs;
   final _website = "".obs;
-  final _picture = Rx<Uint8List>(null);
+  final _picture = Rx<Uint8List?>(null);
   final _socials = <String, Contact_Social>{}.obs;
 
   // Preferences
@@ -35,8 +35,8 @@ class UserService extends GetxService {
   // **  Getter Methods for Contact Properties **
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
-  static Rx<User> get user => to._user;
-  static Rx<Contact> get contact => to._contact;
+  static Rx<User?> get user => to._user;
+  static Rx<Contact?> get contact => to._contact;
 
   // Getters for Preferences
   static Rx<Brightness> get brightness => to._brightness;
@@ -49,7 +49,7 @@ class UserService extends GetxService {
   static RxString get firstName => to._firstName;
   static RxString get lastName => to._lastName;
   static RxString get phone => to._phone;
-  static Rx<Uint8List> get picture => to._picture;
+  static Rx<Uint8List?> get picture => to._picture;
   static RxString get email => to._email;
   static RxString get website => to._website;
   static RxMap<String, Contact_Social> get socials => to._socials;
@@ -144,7 +144,7 @@ class UserService extends GetxService {
   }
 
   // ^ Method to Create New User from Contact ^ //
-  static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
+  static Future<User?> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
     // Set Valuse
     to._isNewUser(true);
 
@@ -158,20 +158,20 @@ class UserService extends GetxService {
   }
 
   // ^ Method to Save Changes ^ //
-  static Future<User> saveChanges() async {
+  static Future<User?> saveChanges() async {
     // Set Contact for User
     return await to._saveContactForUser(Contact(
         profile: Profile(
           username: to._username.value,
           firstName: to._firstName.value,
           lastName: to._lastName.value,
-          picture: to._picture.value.toList() ?? [],
+          picture: to._picture.value!.toList(),
         ),
-        socials: to._socials ?? []));
+        socials: (to._socials)));
   }
 
   // # Saves Contact User to Disk
-  Future<User> _saveContactForUser(Contact contact) async {
+  Future<User?> _saveContactForUser(Contact contact) async {
     // @ Initialize
     _contact(contact);
     _contact.refresh();
@@ -198,9 +198,9 @@ class UserService extends GetxService {
   }
 
   // # Listen to Contact Updates
-  _handleContactUpdate(Contact contact) async {
+  _handleContactUpdate(Contact? contact) async {
     // Set Values
-    to._firstName(contact.profile.firstName);
+    to._firstName(contact!.profile.firstName);
     to._lastName(contact.profile.lastName);
     // to._phone(contact.phone);
     // to._email(contact.email);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:warble/warble.dart';
@@ -39,7 +41,7 @@ class DesktopService extends GetxService {
 
   // ^ Method Plays a UI Sound ^
   static void playSound(UISoundType type) async {
-    WarbleStream stream = (await Warble.wrapAsset(rootBundle, "assets/${type.file}", buffered: true));
+    WarbleStream stream = (await (Warble.wrapAsset(rootBundle, "assets/${type.file}", buffered: true) as FutureOr<WarbleStream>));
     await stream.play();
     await stream.close();
   }

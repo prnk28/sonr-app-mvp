@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
 class ContactAuthView extends StatelessWidget {
-  final AuthInvite invite;
-  final AuthReply reply;
+  final AuthInvite? invite;
+  final AuthReply? reply;
   final bool isReply;
   ContactAuthView(this.isReply, {this.invite, this.reply});
 
@@ -15,9 +15,9 @@ class ContactAuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     Contact card;
     if (isReply) {
-      card = reply.card.contact;
+      card = reply!.card.contact;
     } else {
-      card = invite.contact;
+      card = invite!.contact;
     }
     return Container(
       height: context.heightTransformer(reducedBy: 35),
@@ -59,7 +59,7 @@ class ContactAuthView extends StatelessWidget {
         // Social Media
         Container(
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
-          child: Row(children: card.mapSocials((social) => social.provider.gradient(size: 32))),
+          child: Row(children: card.mapSocials((social) => social.provider.gradient(size: 32)) as List<Widget>),
         ),
         Divider(),
         Padding(padding: EdgeInsets.all(4)),
@@ -73,9 +73,9 @@ class ContactAuthView extends StatelessWidget {
                 SonrOverlay.back();
                 if (!isReply) {
                   var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  CardService.handleInviteResponse(true, invite, sendBackContact: result);
+                  CardService.handleInviteResponse(true, invite!, sendBackContact: result);
                 } else {
-                  CardService.handleInviteResponse(true, invite);
+                  CardService.handleInviteResponse(true, invite!);
                 }
               },
               text: "Accept",
@@ -91,14 +91,14 @@ class ContactAuthView extends StatelessWidget {
 
 // ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
 class ContactFlatCard extends StatelessWidget {
-  final double scale;
-  final Contact contact;
-  ContactFlatCard(this.contact, {this.scale, Key key}) : super(key: key);
+  final double? scale;
+  final Contact? contact;
+  ContactFlatCard(this.contact, {this.scale, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 420 * scale,
-      width: (Get.width - 64) * scale,
+      height: 420 * scale!,
+      width: (Get.width - 64) * scale!,
       decoration: Neumorphic.floating(),
       child: Container(
         height: 75,
@@ -107,11 +107,11 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Container(padding: EdgeInsets.all(10), decoration: Neumorphic.floating(shape: BoxShape.circle), child: contact.pictureImage()),
+            child: Container(padding: EdgeInsets.all(10), decoration: Neumorphic.floating(shape: BoxShape.circle), child: contact!.pictureImage()),
           ),
 
           // Build Name
-          contact.fullNameText(),
+          contact!.fullNameText(),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
 
@@ -152,7 +152,7 @@ class ContactFlatCard extends StatelessWidget {
           Padding(padding: EdgeInsets.all(4)),
 
           // Brief Contact Card Info
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: contact.mapSocials((social) => social.provider.gradient(size: 35)))
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
         ]),
       ),
     );

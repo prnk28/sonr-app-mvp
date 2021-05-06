@@ -5,7 +5,7 @@ import 'package:sonr_app/style/style.dart';
 import 'views.dart';
 class MetaListItemView extends StatelessWidget {
   final TransferCardItem item;
-  const MetaListItemView(this.item, {Key key}) : super(key: key);
+  const MetaListItemView(this.item, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +32,21 @@ class MetaListItemView extends StatelessWidget {
     }
 
     // # Check for Media File Type
-    else if (item.file.isMedia) {
+    else if (item.file!.isMedia) {
       // Image
-      if (item.file.single.mime.type == MIME_Type.IMAGE) {
-        return MetaImageBox(metadata: item.file.single, width: 72);
+      if (item.file!.single.mime.type == MIME_Type.IMAGE) {
+        return MetaImageBox(metadata: item.file!.single, width: 72);
       }
 
       // Other Media (Video, Audio)
       else {
-        return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.single);
+        return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file!.single);
       }
     }
 
     // # Other File
     else {
-      return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.single);
+      return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file!.single);
     }
   }
 
@@ -74,11 +74,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.file.prettyName().h6,
+              child: item.file!.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file.sizeToString().p_Grey,
+              child: item.file!.sizeToString().p_Grey,
             )
           ]));
     } else {
@@ -88,11 +88,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.file.prettyName().h6,
+              child: item.file!.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file.sizeToString().p_Grey,
+              child: item.file!.sizeToString().p_Grey,
             )
           ]));
     }

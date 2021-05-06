@@ -10,12 +10,12 @@ enum VideoPlayerViewType {
 
 class VideoPlayerView extends StatefulWidget {
   final VideoPlayerViewType type;
-  final String source;
-  final File sourceFile;
-  const VideoPlayerView(this.type, {Key key, this.source, this.sourceFile}) : super(key: key);
+  final String? source;
+  final File? sourceFile;
+  const VideoPlayerView(this.type, {Key? key, this.source, this.sourceFile}) : super(key: key);
 
   factory VideoPlayerView.asset(String source) => VideoPlayerView(VideoPlayerViewType.Asset, source: source);
-  factory VideoPlayerView.file(File source) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source);
+  factory VideoPlayerView.file(File? source) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source);
   factory VideoPlayerView.network(String source) => VideoPlayerView(VideoPlayerViewType.File, source: source);
 
   @override
@@ -23,28 +23,28 @@ class VideoPlayerView extends StatefulWidget {
 }
 
 class _VideoPlayerViewState extends State<VideoPlayerView> {
-  VideoPlayerController _controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
     // Check Type
     if (widget.type == VideoPlayerViewType.Asset) {
-      _controller = VideoPlayerController.asset(widget.source)
+      _controller = VideoPlayerController.asset(widget.source!)
         ..initialize().then((_) {
           setState(() {
             _controller.play();
           });
         });
     } else if (widget.type == VideoPlayerViewType.File) {
-      _controller = VideoPlayerController.file(widget.sourceFile)
+      _controller = VideoPlayerController.file(widget.sourceFile!)
         ..initialize().then((_) {
           setState(() {
             _controller.play();
           });
         });
     } else {
-      _controller = VideoPlayerController.network(widget.source)
+      _controller = VideoPlayerController.network(widget.source!)
         ..initialize().then((_) {
           setState(() {
             _controller.play();

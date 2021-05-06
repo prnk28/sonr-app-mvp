@@ -13,7 +13,7 @@ class SonrPositionedOverlay extends GetxService {
 
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
-  final currentOverlay = Rx<_SonrPositionedOverlayEntry>(null);
+  final currentOverlay = Rx<_SonrPositionedOverlayEntry?>(null);
 
   // References
   static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length == 0;
@@ -44,11 +44,11 @@ class SonrPositionedOverlay extends GetxService {
   static void dropdown(List<SonrDropdownItem> items, GlobalKey key, Function(int idx) onChanged,
       {Duration entryDuration = const Duration(milliseconds: 600),
       Offset entryLocation = SonrOffset.Top,
-      double height,
-      double width,
-      EdgeInsets margin}) {
+      double? height,
+      double? width,
+      EdgeInsets? margin}) {
     // Get Position
-    RenderBox renderBox = key.currentContext.findRenderObject();
+    RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
     var size = renderBox.size;
     var position = renderBox.localToGlobal(Offset.zero);
 
@@ -66,7 +66,7 @@ class SonrPositionedOverlay extends GetxService {
     if (isOpen) {
       // Pop Current Overlay
       if (_controller.currentOverlay.value != null) {
-        _controller.currentOverlay.value.dismiss();
+        _controller.currentOverlay.value!.dismiss();
       }
 
       // Refresh List
@@ -85,14 +85,14 @@ class _SonrPositionedOverlayEntry {
   final Offset position;
 
   // References
-  Function dismiss;
-  OverlayEntry overlay, overlayBackground;
+  late Function dismiss;
+  OverlayEntry? overlay, overlayBackground;
 
   // ^ Constructer ** //
   _SonrPositionedOverlayEntry(this.size, this.position, this.widget, this.barrierDismissible) {
     dismiss = () {
-      overlayBackground.remove();
-      overlay.remove();
+      overlayBackground!.remove();
+      overlay!.remove();
     };
     overlayBackground = OverlayEntry(builder: (context) {
       return Positioned.fill(
@@ -110,6 +110,6 @@ class _SonrPositionedOverlayEntry {
   }
 
   void buildOverlay() {
-    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
+    Navigator.of(Get.context!).overlay!.insertAll([overlayBackground!, overlay!]);
   }
 }

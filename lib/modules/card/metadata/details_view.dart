@@ -6,7 +6,7 @@ import 'package:sonr_app/style/style.dart';
 // ^ Widget for Details Media View
 class MetaDetailsView extends StatelessWidget {
   final SonrFile_Metadata card;
-  final File mediaFile;
+  final File? mediaFile;
   const MetaDetailsView(this.card, this.mediaFile);
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MetaDetailsView extends StatelessWidget {
             tag: card.path,
             child: Material(
               color: Colors.transparent,
-              child: PhotoView(imageProvider: FileImage(mediaFile)),
+              child: PhotoView(imageProvider: FileImage(mediaFile!)),
             ),
           ),
         ),

@@ -3,23 +3,23 @@ import '../style.dart';
 import 'utility.dart';
 
 class ColorButton extends StatefulWidget {
-  final EdgeInsets margin;
-  final EdgeInsets padding;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
   final Widget child;
   final Decoration decoration;
   final Function onPressed;
-  final Function onLongPressed;
-  final String tooltip;
+  final Function? onLongPressed;
+  final String? tooltip;
   final bool isEnabled;
-  final double width;
+  final double? width;
   final double pressedScale;
 
   const ColorButton({
-    Key key,
-    @required this.onPressed,
-    @required this.child,
-    @required this.decoration,
-    @required this.pressedScale,
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    required this.decoration,
+    required this.pressedScale,
     this.margin,
     this.padding,
     this.onLongPressed,
@@ -30,16 +30,16 @@ class ColorButton extends StatefulWidget {
 
   // @ Primary Button //
   factory ColorButton.primary({
-    @required Function onPressed,
-    Gradient gradient,
-    Function onLongPressed,
-    Widget child,
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    IconData icon,
-    String text,
-    double width,
+    required Function onPressed,
+    Gradient? gradient,
+    Function? onLongPressed,
+    Widget? child,
+    String? tooltip,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    IconData? icon,
+    String? text,
+    double? width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Build Child
@@ -60,16 +60,16 @@ class ColorButton extends StatefulWidget {
 
   // @ Secondary Button //
   factory ColorButton.secondary({
-    @required Function onPressed,
-    Color color,
-    Function onLongPressed,
-    Widget child,
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    double width,
-    IconData icon,
-    String text,
+    required Function onPressed,
+    Color? color,
+    Function? onLongPressed,
+    Widget? child,
+    String? tooltip,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    double? width,
+    IconData? icon,
+    String? text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Build Child
@@ -90,13 +90,13 @@ class ColorButton extends StatefulWidget {
 
   // @ Neutral Button //
   factory ColorButton.neutral({
-    @required Function onPressed,
-    Function onLongPressed,
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    double width,
-    String text,
+    required Function onPressed,
+    Function? onLongPressed,
+    String? tooltip,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    double? width,
+    required String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Build Child
@@ -139,7 +139,7 @@ class _ColorButtonState extends State<ColorButton> {
     final result = _build(context);
     if (widget.tooltip != null) {
       return Tooltip(
-        message: widget.tooltip,
+        message: widget.tooltip!,
         child: result,
       );
     } else {
@@ -168,7 +168,7 @@ class _ColorButtonState extends State<ColorButton> {
       },
       onLongPressUp: () {
         if (widget.onLongPressed != null) {
-          widget.onLongPressed();
+          widget.onLongPressed!();
         }
         hasLongTapUp = true;
         _resetIfLongTapUp();

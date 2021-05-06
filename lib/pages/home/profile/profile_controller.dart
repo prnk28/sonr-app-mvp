@@ -26,7 +26,7 @@ class ProfileController extends GetxController {
   final editedPhone = RxString(UserService.phone.value);
 
   // References
-  final step = Rx<TileStep>(null);
+  final step = Rx<TileStep?>(null);
   final pageController = PageController();
 
   // ** Initialize Method ** //
@@ -72,7 +72,7 @@ class ProfileController extends GetxController {
   // -- Set Privacy -- //
   isPrivate(bool value) {
     step.update((val) {
-      val.isPrivate = value;
+      val!.isPrivate = value;
     });
     step.refresh();
   }
@@ -80,7 +80,7 @@ class ProfileController extends GetxController {
   // -- Set Current Provider -- //
   provider(int index) {
     step.update((val) {
-      val.provider = options[index];
+      val!.provider = options[index];
     });
     step.refresh();
   }
@@ -88,7 +88,7 @@ class ProfileController extends GetxController {
   // -- Set Tile Type -- //
   type(Contact_Social_Tile_Display type) {
     step.update((val) {
-      val.type = type;
+      val!.type = type;
     });
     step.refresh();
   }
@@ -96,7 +96,7 @@ class ProfileController extends GetxController {
   // -- Set Social User -- //
   user(SocialUser user) {
     step.update((val) {
-      val.user = user;
+      val!.user = user;
     });
     step.refresh();
   }
@@ -104,11 +104,11 @@ class ProfileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (step.value.current == 0) {
+    if (step.value!.current == 0) {
       if (dropdownIndex.value != -1) {
         provider(dropdownIndex.value);
         step.update((val) {
-          val.current = 1;
+          val!.current = 1;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         });
         step.refresh();
@@ -118,18 +118,18 @@ class ProfileController extends GetxController {
       }
     }
     // @ Step 3
-    else if (step.value.current == 1) {
+    else if (step.value!.current == 1) {
       // Update State
-      if (step.value.hasUser) {
+      if (step.value!.hasUser) {
         step.update((val) {
-          val.current = 2;
+          val!.current = 2;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         });
         step.refresh();
 
-        FocusScopeNode currentFocus = FocusScope.of(Get.context);
+        FocusScopeNode currentFocus = FocusScope.of(Get.context!);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
         }
       }
     } else {
@@ -141,17 +141,17 @@ class ProfileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
     // Step 2
-    if (step.value.current == 1) {
+    if (step.value!.current == 1) {
       step.update((val) {
-        val.current = 0;
+        val!.current = 0;
         pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       });
       step.refresh();
     }
     // Step 3
-    else if (step.value.current == 2) {
+    else if (step.value!.current == 2) {
       step.update((val) {
-        val.current = 1;
+        val!.current = 1;
         pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       });
       step.refresh();
@@ -161,13 +161,13 @@ class ProfileController extends GetxController {
   // ^ Finish and Save new Tile ^ //
   saveTile() {
     // Validate
-    if (step.value.hasType && step.value.current == 2) {
+    if (step.value!.hasType && step.value!.current == 2) {
       // Create Tile from Values
       var tile = Contact_Social(
-        username: step.value.user.username,
-        provider: step.value.provider,
-        links: step.value.links,
-        tile: Contact_Social_Tile(index: UserService.tileCount, type: step.value.type),
+        username: step.value!.user!.username,
+        provider: step.value!.provider,
+        links: step.value!.links,
+        tile: Contact_Social_Tile(index: UserService.tileCount, type: step.value!.type),
       );
 
       // Save to Profile

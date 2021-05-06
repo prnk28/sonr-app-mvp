@@ -9,7 +9,7 @@ import 'profile_controller.dart';
 // ^ Edit Profile Picture View ^ //
 class EditPictureView extends GetView<ProfileController> {
   final String headerText;
-  EditPictureView({this.headerText = "Edit Picture", Key key}) : super(key: key);
+  EditPictureView({this.headerText = "Edit Picture", Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() => Get.find<ProfilePictureController>().status.value == ProfilePictureStatus.NeedsPermissions
@@ -57,10 +57,10 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
     switch (status) {
       case ProfilePictureStatus.Captured:
         return _buildCaptured();
-        break;
+
       default:
         return _buildCamera();
-        break;
+        
     }
   }
 
@@ -91,7 +91,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
             width: 120,
             height: 120,
             child: CircleAvatar(
-              backgroundImage: FileImage(controller.result.value),
+              backgroundImage: FileImage(controller.result.value!),
             ),
           )),
       Padding(padding: EdgeWith.bottom(8)),
@@ -145,7 +145,7 @@ class ProfilePictureController extends GetxController {
   ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.FRONT);
 
   // Properties
-  final result = Rx<File>(null);
+  final result = Rx<File?>(null);
   final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(MobileService.hasCamera.value));
 
   // References
@@ -168,7 +168,7 @@ class ProfilePictureController extends GetxController {
   // @ Method to Confirm New Picture
   confirm() async {
     if (_photoCapturePath != "") {
-      UserService.picture(await result.value.readAsBytes());
+      UserService.picture(await result.value!.readAsBytes());
       await UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);

@@ -29,9 +29,9 @@ class RegisterController extends GetxController {
       var contact = Contact(profile: Profile(firstName: firstName.value, lastName: lastName.value));
 
       // Remove Textfield Focus
-      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus.unfocus();
+        FocusManager.instance.primaryFocus!.unfocus();
       }
 
       // Process data.

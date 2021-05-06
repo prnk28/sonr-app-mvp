@@ -6,7 +6,7 @@ class RegisterDesktopView extends GetView<LinkController> {
   final RxInt counter = 0.obs;
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();
-  RegisterDesktopView({Key key}) : super(key: key);
+  RegisterDesktopView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ****************** //
                 SonrTextField(
                     label: "First Name",
-                    hint: hintName.item1,
+                    hint: hintName!.item1,
                     value: controller.firstName.value,
                     status: controller.firstNameStatus,
                     textInputAction: TextInputAction.next,
@@ -36,7 +36,7 @@ class RegisterDesktopView extends GetView<LinkController> {
                     autoCorrect: false,
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(lastNameFocus);
-                      controller.firstName(controller.firstName.value.capitalizeFirst);
+                      controller.firstName(controller.firstName.value.capitalizeFirst!);
                       controller.firstName.refresh();
                     },
                     onChanged: (String value) {
@@ -49,7 +49,7 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ***************** //
                 SonrTextField(
                     label: "Last Name",
-                    hint: hintName.item2,
+                    hint: hintName!.item2,
                     textInputAction: TextInputAction.next,
                     value: controller.lastName.value,
                     textCapitalization: TextCapitalization.words,
@@ -57,11 +57,11 @@ class RegisterDesktopView extends GetView<LinkController> {
                     status: controller.lastNameStatus,
                     autoCorrect: false,
                     onEditingComplete: () {
-                      controller.lastName(controller.lastName.value.capitalizeFirst);
+                      controller.lastName(controller.lastName.value.capitalizeFirst!);
                       controller.lastName.refresh();
-                      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
                       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                         controller.setContact();
                       }
                     },

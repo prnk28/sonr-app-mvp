@@ -20,7 +20,7 @@ class TransferItem extends StatelessWidget {
 
   /// Size/Shape of TransferCard View
   final TransferItemView type;
-  const TransferItem(this.item, {Key key, this.type = TransferItemView.CardItem}) : super(key: key);
+  const TransferItem(this.item, {Key? key, this.type = TransferItemView.CardItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,16 +77,15 @@ extension CardsViewElementTypeUtils on TransferItemsType {
     switch (this) {
       case TransferItemsType.Metadata:
         return CardService.metadata.length;
-        break;
+
       case TransferItemsType.Contacts:
         return CardService.contacts.length;
-        break;
+
       case TransferItemsType.Links:
         return CardService.links.length;
-        break;
+
       default:
         return CardService.all.length;
-        break;
     }
   }
 
@@ -95,16 +94,15 @@ extension CardsViewElementTypeUtils on TransferItemsType {
     switch (this) {
       case TransferItemsType.Metadata:
         return CardService.metadata[index];
-        break;
+
       case TransferItemsType.Contacts:
         return CardService.contacts[index];
-        break;
+
       case TransferItemsType.Links:
         return CardService.links[index];
-        break;
+
       default:
         return CardService.all[index];
-        break;
     }
   }
 }
@@ -113,7 +111,7 @@ extension CardsViewElementTypeUtils on TransferItemsType {
 /// Displays Cards in a Grid Based on Element Type
 class CardsGridView extends StatelessWidget {
   final TransferItemsType type;
-  CardsGridView({@required this.type, Key key}) : super(key: key);
+  CardsGridView({required this.type, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +135,7 @@ class CardsGridView extends StatelessWidget {
 // ^ Card List View - By Elements Type ^ //
 class CardsListView extends StatelessWidget {
   final TransferItemsType type;
-  CardsListView({@required this.type, Key key}) : super(key: key);
+  CardsListView({required this.type, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +158,7 @@ class CardsListView extends StatelessWidget {
 // @ Helper Method to Build Empty List Value
 class _CardsViewEmpty extends StatelessWidget {
   final TransferItemsType type;
-  const _CardsViewEmpty(this.type, {Key key}) : super(key: key);
+  const _CardsViewEmpty(this.type, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -9,7 +9,7 @@ part 'cards_db.g.dart';
 
 enum ActivityType { Deleted, Shared, Received }
 
-extension ActivityTypeUtils on ActivityType {
+extension ActivityTypeUtils on ActivityType? {
   String get value {
     return this.toString().substring(this.toString().indexOf('.') + 1);
   }
@@ -17,20 +17,20 @@ extension ActivityTypeUtils on ActivityType {
 
 @DataClassName("TransferCardActivity")
 class TransferCardActivities extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get card => text().map(const CardConverter())();
-  IntColumn get activity => integer().map(const ActivityConverter())();
+  IntColumn? get id => integer().autoIncrement()();
+  TextColumn? get card => text().map(const CardConverter())();
+  IntColumn? get activity => integer().map(const ActivityConverter())();
 }
 
 class TransferCardItems extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get owner => text().map(const ProfileConverter())();
-  IntColumn get mime => integer().map(const MimeConverter())();
-  IntColumn get payload => integer().map(const PayloadConverter())();
-  TextColumn get contact => text().map(const ContactConverter()).nullable()();
-  TextColumn get file => text().map(const FileConverter()).nullable()();
-  TextColumn get url => text().map(const URLConverter()).nullable()();
-  DateTimeColumn get received => dateTime()();
+  IntColumn? get id => integer().autoIncrement()();
+  TextColumn? get owner => text().map(const ProfileConverter())();
+  IntColumn? get mime => integer().map(const MimeConverter())();
+  IntColumn? get payload => integer().map(const PayloadConverter())();
+  TextColumn? get contact => text().map(const ContactConverter()).nullable()();
+  TextColumn? get file => text().map(const FileConverter()).nullable()();
+  TextColumn? get url => text().map(const URLConverter()).nullable()();
+  DateTimeColumn? get received => dateTime()();
 }
 
 // this annotation tells moor to prepare a database class that uses both of the

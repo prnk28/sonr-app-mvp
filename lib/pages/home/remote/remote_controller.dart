@@ -17,16 +17,16 @@ class RemoteController extends GetxController {
   final thirdWord = "".obs;
 
   // Information Properties
-  final remoteInfo = Rx<RemoteInfo>(null);
-  final currentInvite = Rx<AuthInvite>(null);
-  final receivedCard = Rx<TransferCard>(null);
+  final remoteInfo = Rx<RemoteInfo?>(null);
+  final currentInvite = Rx<AuthInvite?>(null);
+  final receivedCard = Rx<TransferCard?>(null);
 
   // Status Properties
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
   final isJoinFieldTapped = false.obs;
   final isRemoteActive = false.obs;
 
-  final remoteLobby = Rx<Lobby>(Lobby());
+  final remoteLobby = Rx<Lobby?>(null);
 
   // References
   final _keyboardVisible = KeyboardVisibilityController();
@@ -60,13 +60,13 @@ class RemoteController extends GetxController {
   void stop() async {
     if (remoteInfo.value != null) {
       // Start Remote
-      SonrService.leaveRemote(remoteInfo.value);
+      SonrService.leaveRemote(remoteInfo.value!);
       remoteInfo(RemoteInfo());
       isRemoteActive(false);
     }
 
     if (remoteLobby.value != null) {
-      LobbyService.unregisterRemoteCallback(remoteLobby.value);
+      LobbyService.unregisterRemoteCallback(remoteLobby.value!);
     }
   }
 
@@ -80,20 +80,20 @@ class RemoteController extends GetxController {
   // ^ Method to Leave Current Remote Lobby ^ //
   void leave() async {
     if (remoteInfo.value != null) {
-      SonrService.leaveRemote(remoteInfo.value);
+      SonrService.leaveRemote(remoteInfo.value!);
       remoteInfo(null);
       currentInvite(null);
       status(RemoteViewStatus.NotJoined);
     }
 
     if (remoteLobby.value != null) {
-      LobbyService.unregisterRemoteCallback(remoteLobby.value);
+      LobbyService.unregisterRemoteCallback(remoteLobby.value!);
     }
   }
 
   // ^ Method to Respond to Invite ^ //
   void respond(bool decision) {
-    if (remoteInfo.value != null && currentInvite != null) {
+    if (remoteInfo.value != null && currentInvite.value != null) {
       // Respond Decision
       SonrService.respond(decision, info: remoteInfo.value);
 

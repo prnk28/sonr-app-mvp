@@ -45,7 +45,7 @@ class TransferScreen extends GetView<TransferController> {
             centerTitle: true,
             leading: PlainIconButton(icon: SonrIcons.Close.black, onPressed: () => Get.offNamed("/home")),
             subtitle: Container(child: controller.title.value.headFive(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
-            title: "Sharing ${controller.sonrFile.value.payload.toString().capitalizeFirst}".h3,
+            title: "Sharing ${controller.sonrFile.value!.payload.toString().capitalizeFirst}".h3,
           ),
           bottomSheet: PayloadSheetView(),
           body: Column(
@@ -58,7 +58,7 @@ class TransferScreen extends GetView<TransferController> {
                   return CarouselSlider(
                     carouselController: controller.carouselController,
                     options: K_CAROUSEL_OPTS,
-                    items: LobbyService.local.value.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
+                    items: LobbyService.local.value!.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
                   );
                 }
 

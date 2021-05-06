@@ -5,9 +5,9 @@ import 'profile/profile_controller.dart';
 import 'remote/remote_controller.dart';
 
 class HomeSearchAppBar extends GetView<HomeController> implements PreferredSizeWidget {
-  final Widget title;
-  final Widget subtitle;
-  final Widget action;
+  final Widget? title;
+  final Widget? subtitle;
+  final Widget? action;
 
   HomeSearchAppBar({
     this.title,
@@ -21,15 +21,15 @@ class HomeSearchAppBar extends GetView<HomeController> implements PreferredSizeW
       controller: controller.searchBarController,
       height: kToolbarHeight + 64,
       padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
-      actions: [action],
+      actions: [action!],
       title: AnimatedSlideSwitcher.fade(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            subtitle != null ? subtitle : Container(),
-            title,
+            subtitle != null ? subtitle! : Container(),
+            title!,
           ],
         ),
       ),
@@ -139,13 +139,12 @@ class _RemoteActionButton extends GetView<RemoteController> {
     switch (status) {
       case RemoteViewStatus.Created:
         return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
-        break;
+
       case RemoteViewStatus.Joined:
         return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
-        break;
+
       default:
         return SonrIcons.Plus.gradient(size: 28);
-        break;
     }
   }
 }

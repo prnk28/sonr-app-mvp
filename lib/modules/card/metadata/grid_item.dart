@@ -7,7 +7,7 @@ import 'views.dart';
 
 class MetaGridItemView extends StatelessWidget {
   final TransferCardItem item;
-  const MetaGridItemView(this.item, {Key key}) : super(key: key);
+  const MetaGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -44,22 +44,22 @@ class MetaGridItemView extends StatelessWidget {
 
 // ^ Main Media Grid Item View ^ //
 class _MediaGridItemMainView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _MediaGridItemMainView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _MediaGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MetaBox(
-        metadata: item.file.single,
+        metadata: item!.file!.single,
         child: Stack(children: [
           // Align Platform
           Align(
               alignment: Alignment.topRight,
               child: GestureDetector(
                 onTap: () {
-                  isFlipped(true);
-                  isFlipped.refresh();
+                  isFlipped!(true);
+                  isFlipped!.refresh();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -72,9 +72,9 @@ class _MediaGridItemMainView extends StatelessWidget {
 
 // ^ Details Media Grid Item View ^ //
 class _MediaGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem item;
-  final RxBool isFlipped;
-  const _MediaGridItemDetailsView({Key key, this.item, this.isFlipped}) : super(key: key);
+  final TransferCardItem? item;
+  final RxBool? isFlipped;
+  const _MediaGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +85,8 @@ class _MediaGridItemDetailsView extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: GestureDetector(
             onTap: () {
-              isFlipped(false);
-              isFlipped.refresh();
+              isFlipped!(false);
+              isFlipped!.refresh();
             },
             child: Padding(
               padding: const EdgeInsets.all(4.0),
@@ -102,9 +102,9 @@ class _MediaGridItemDetailsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Mime Icon
-            item.file.single.mime.type.gradient(size: 96),
+            item!.file!.single.mime.type.gradient(size: 96),
 
-            item.file.sizeToString().p_Grey,
+            item!.file!.sizeToString().p_Grey,
 
             // Basic Info
             Padding(
@@ -112,7 +112,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-                child: SizedBox(height: 30, child: item.dateText),
+                child: SizedBox(height: 30, child: item!.dateText),
               ),
             )
           ],

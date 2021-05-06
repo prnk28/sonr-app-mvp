@@ -3,7 +3,7 @@ import 'profile.dart';
 import 'tile/tile_item.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  ProfileView({Key key}) : super(key: key);
+  ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() => NeumorphicCard(child: _buildView(controller.status.value)));
@@ -34,7 +34,7 @@ class ProfileView extends GetView<ProfileController> {
 }
 
 class _DefaultProfileView extends GetView<ProfileController> {
-  _DefaultProfileView({Key key}) : super(key: key);
+  _DefaultProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -66,10 +66,10 @@ class _DefaultProfileView extends GetView<ProfileController> {
 
 class _ProfileHeaderBar extends GetView<ProfileController> {
   // Sliver Attributes
-  final bool automaticallyImplyLeading;
-  final double expandedHeight;
+  final bool? automaticallyImplyLeading;
+  final double? expandedHeight;
 
-  const _ProfileHeaderBar({Key key, this.automaticallyImplyLeading, this.expandedHeight}) : super(key: key);
+  const _ProfileHeaderBar({Key? key, this.automaticallyImplyLeading, this.expandedHeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class _ProfileAvatarField extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (UserService.picture.value.length > 0) {
+      if (UserService.picture.value!.length > 0) {
         return GestureDetector(
           onLongPress: () async {
             controller.setAddPicture();
@@ -119,9 +119,9 @@ class _ProfileAvatarField extends GetView<ProfileController> {
               child: Obx(() => Container(
                     width: 120,
                     height: 120,
-                    child: UserService.picture.value.length > 0
+                    child: UserService.picture.value!.length > 0
                         ? CircleAvatar(
-                            backgroundImage: MemoryImage(UserService.picture.value),
+                            backgroundImage: MemoryImage(UserService.picture.value!),
                           )
                         : SonrIcons.Avatar.greyWith(size: 120),
                   )),

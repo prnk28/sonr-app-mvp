@@ -9,6 +9,6 @@ class KeyboardController extends GetxController {
   }
 
   void selectColor(Color color) {
-    _selectedColor(color);
+    _selectedColor(color as MaterialColor);
   }
 }

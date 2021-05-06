@@ -14,13 +14,13 @@ class ShareSheet extends GetView<ShareController> {
   final Widget child;
   final Size size;
   final Payload payload;
-  final SonrFile mediaFile;
-  final URLLink url;
+  final SonrFile? mediaFile;
+  final URLLink? url;
   const ShareSheet({
-    Key key,
-    @required this.child,
-    @required this.size,
-    @required this.payload,
+    Key? key,
+    required this.child,
+    required this.size,
+    required this.payload,
     this.mediaFile,
     this.url,
   }) : super(key: key);
@@ -35,7 +35,7 @@ class ShareSheet extends GetView<ShareController> {
     SharedMediaFile mediaShared = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
 
     // Initialize
-    Uint8List thumbdata = File(mediaShared.thumbnail).readAsBytesSync();
+    Uint8List thumbdata = File(mediaShared.thumbnail!).readAsBytesSync();
     List<int> thumbnail = thumbdata.toList();
 
     // Build View
@@ -52,7 +52,7 @@ class ShareSheet extends GetView<ShareController> {
   }
 
   // @ Bottom Sheet for URL
-  factory ShareSheet.url(URLLink value) {
+  factory ShareSheet.url(URLLink? value) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 5 + 40);
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
@@ -96,14 +96,14 @@ class ShareSheet extends GetView<ShareController> {
 
 // ^ Share Item Media View ^ //
 class _ShareItemMedia extends StatelessWidget {
-  final List<SharedMediaFile> sharedFiles;
-  final Size size;
+  final List<SharedMediaFile>? sharedFiles;
+  final Size? size;
 
-  const _ShareItemMedia({Key key, this.sharedFiles, this.size}) : super(key: key);
+  const _ShareItemMedia({Key? key, this.sharedFiles, this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // Get Shared File
-    SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+    SharedMediaFile sharedIntent = sharedFiles!.length > 1 ? sharedFiles!.last : sharedFiles!.first;
     return Container(
         decoration: Neumorphic.indented(),
         margin: EdgeInsets.all(10),
@@ -115,7 +115,7 @@ class _ShareItemMedia extends StatelessWidget {
                 constraints: BoxConstraints(
                   minWidth: 1,
                   minHeight: 1,
-                  maxHeight: size.height - 20,
+                  maxHeight: size!.height - 20,
                 ),
                 child: Image.file(File(sharedIntent.path)),
               )),
@@ -125,9 +125,9 @@ class _ShareItemMedia extends StatelessWidget {
 
 // ^ Share Item URL View ^ //
 class _ShareItemURL extends StatelessWidget {
-  final URLLink url;
-  final Size size;
-  const _ShareItemURL({Key key, this.url, this.size}) : super(key: key);
+  final URLLink? url;
+  final Size? size;
+  const _ShareItemURL({Key? key, this.url, this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -147,7 +147,7 @@ class _ShareItemURL extends StatelessWidget {
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: _buildURLView(url),
+                child: _buildURLView(url!),
               )),
         ),
       ],

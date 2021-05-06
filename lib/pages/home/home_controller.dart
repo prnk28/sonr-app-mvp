@@ -21,12 +21,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // Controllers
-  TabController tabController;
-  FloatingSearchBarController searchBarController;
+  TabController? tabController;
+  FloatingSearchBarController? searchBarController;
 
   // References
-  StreamSubscription<Lobby> _lobbyStream;
-  StreamSubscription<Status> _statusStream;
+  late StreamSubscription<Lobby?> _lobbyStream;
+  late StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
@@ -38,12 +38,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     searchBarController = FloatingSearchBarController();
 
     // Listen for Updates
-    tabController.addListener(() {
+    tabController!.addListener(() {
       // Set Index
-      bottomIndex(tabController.index);
+      bottomIndex(tabController!.index);
 
       // Set Page
-      view(HomeView.values[tabController.index]);
+      view(HomeView.values[tabController!.index]);
 
       // Update Title
       titleText(view.value.title);
@@ -81,7 +81,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Change Index
       bottomIndex(newIndex);
-      tabController.animateTo(newIndex);
+      tabController!.animateTo(newIndex);
 
       // Set Page
       view(HomeView.values[newIndex]);
@@ -125,14 +125,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Present View
     if (isSearchVisible.value) {
-      searchBarController.open();
+      searchBarController!.open();
     }
   }
 
   // @ Handle Size Update ^ //
-  _handleLobbyStream(Lobby onData) {
+  _handleLobbyStream(Lobby? onData) {
     // Peer Joined
-    if (onData.size > _lobbySizeRef) {
+    if (onData!.size > _lobbySizeRef) {
       var diff = onData.size - _lobbySizeRef;
       swapTitleText("$diff Joined");
       DeviceService.playSound(type: UISoundType.Joined);
@@ -150,7 +150,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.local.value.count} Nearby");
+      titleText("${LobbyService.local.value!.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text
