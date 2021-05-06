@@ -11,7 +11,7 @@ class DesktopWindow extends GetView<WindowController> {
       appBar: DesignAppBar(
         subtitle: Obx(() => controller.view.value == DesktopView.Register
             ? "Hello,".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
-            : "Hi ${UserService.firstName.value},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
+            : "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
         title: Obx(() => controller.view.value == DesktopView.Register
             ? "Let's Register".headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start)
             : AnimatedSlideSwitcher.fade(

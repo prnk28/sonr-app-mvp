@@ -56,7 +56,7 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: [UserService.firstName.value.h6, " ".h6, UserService.lastName.value.l].row(),
+              child: [UserService.contact.value.firstName.h6, " ".h6, UserService.contact.value.lastName.l].row(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),

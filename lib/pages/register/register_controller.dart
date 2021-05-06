@@ -26,7 +26,12 @@ class RegisterController extends GetxController {
   setContact() async {
     if (validate()) {
       // Get Contact from Values
-      var contact = Contact(profile: Profile(firstName: firstName.value, lastName: lastName.value));
+      var contact = Contact(
+          profile: Profile(
+        firstName: firstName.value,
+        lastName: lastName.value,
+        username: "@TempUsername",
+      ));
 
       // Remove Textfield Focus
       FocusScopeNode currentFocus = FocusScope.of(Get.context!);

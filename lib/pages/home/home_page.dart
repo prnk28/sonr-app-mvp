@@ -42,7 +42,14 @@ class HomeBottomNavBar extends GetView<HomeController> {
             HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
+              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
+                if (controller.view.value == HomeView.Profile) {
+                  if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
+                    DeviceService.factoryReset();
+                  }
+                  ;
+                }
+              }),
             ),
             Container(
               width: Get.width * 0.20,
@@ -62,14 +69,20 @@ class HomeBottomNavBar extends GetView<HomeController> {
 // ^ Bottom Bar Button Widget ^ //
 class HomeBottomTabButton extends StatelessWidget {
   final HomeView view;
-  final Function(int) onPressed;
+  final void Function(int) onPressed;
+  final void Function(int)? onLongPressed;
   final RxInt currentIndex;
-  HomeBottomTabButton(this.view, this.onPressed, this.currentIndex);
+  HomeBottomTabButton(this.view, this.onPressed, this.currentIndex, {this.onLongPressed});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
           onPressed(view.index);
+        },
+        onLongPress: () {
+          if (onLongPressed != null) {
+            onLongPressed!(view.index);
+          }
         },
         child: Container(
           constraints: BoxConstraints(maxHeight: 80, maxWidth: Get.width / 6),

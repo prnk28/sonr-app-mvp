@@ -60,7 +60,6 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
 
       default:
         return _buildCamera();
-        
     }
   }
 
@@ -168,8 +167,14 @@ class ProfilePictureController extends GetxController {
   // @ Method to Confirm New Picture
   confirm() async {
     if (_photoCapturePath != "") {
-      UserService.picture(await result.value!.readAsBytes());
-      await UserService.saveChanges();
+      if (result.value != null) {
+        UserService.contact.update((val) async {
+          if (val != null) {
+            val.setPicture(await result.value!.readAsBytes());
+          }
+        });
+      }
+      
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);
     }

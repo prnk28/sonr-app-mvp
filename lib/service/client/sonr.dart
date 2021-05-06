@@ -76,7 +76,7 @@ class SonrService extends GetxService {
       var connReq = await RequestUtility.newRequest(
         geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
-        contact: UserService.contact.value!,
+        contact: UserService.contact.value,
       );
 
       // Create Node
@@ -102,7 +102,7 @@ class SonrService extends GetxService {
       var connReq = await RequestUtility.newRequest(
         geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
-        contact: UserService.contact.value!,
+        contact: UserService.contact.value,
       );
 
       // Create Node
@@ -142,7 +142,7 @@ class SonrService extends GetxService {
     var connReq = await RequestUtility.newRequest(
       geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
       ipLocation: await DeviceService.findIPLocation(),
-      contact: UserService.contact.value!,
+      contact: UserService.contact.value,
     );
 
     // Create Node

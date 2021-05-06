@@ -17,13 +17,13 @@ class ProfileController extends GetxController {
   // Properties
   final status = ProfileViewStatus.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
-  final options = SonrSocial.options(UserService.socials);
+  final options = Contact_Social_Provider.values;
   final dropdownIndex = (-1).obs;
 
   // Edited Values
-  final editedFirstName = RxString(UserService.firstName.value);
-  final editedLastName = RxString(UserService.lastName.value);
-  final editedPhone = RxString(UserService.phone.value);
+  final editedFirstName = RxString(UserService.contact.value.firstName);
+  final editedLastName = RxString(UserService.contact.value.lastName);
+  final editedPhone = RxString("");
 
   // References
   final step = Rx<TileStep?>(null);
@@ -63,10 +63,13 @@ class ProfileController extends GetxController {
   // ^ Completed Editing Details ^ //
   void saveEditedDetails() {
     // Update Values in Profile Controller
-    UserService.firstName(editedFirstName.value);
-    UserService.lastName(editedLastName.value);
-    UserService.phone(editedPhone.value);
-    UserService.saveChanges();
+    UserService.contact.update((val) {
+      if (val != null) {
+        val.setFirstName(editedFirstName.value);
+        val.setLastName(editedLastName.value);
+        val.addPhone(editedPhone.value);
+      }
+    });
     status(ProfileViewStatus.Viewing);
   }
 
@@ -168,11 +171,17 @@ class ProfileController extends GetxController {
         username: step.value!.user!.username,
         provider: step.value!.provider,
         links: step.value!.links,
-        tile: Contact_Social_Tile(index: UserService.tileCount, type: step.value!.type),
+        tile: Contact_Social_Tile(index: UserService.contact.value.socialsCount, type: step.value!.type),
       );
 
       // Save to Profile
-      UserService.addSocial(tile);
+      UserService.contact.update((val) {
+        if (val != null) {
+          val.socialAdd(tile);
+        }
+      });
+
+      // Revert Status
       status(ProfileViewStatus.Viewing);
       reset();
     } else {

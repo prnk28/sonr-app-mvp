@@ -40,6 +40,7 @@ export 'package:flutter/material.dart';
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 
@@ -93,7 +94,7 @@ extension WidgetListUtils on List<Widget> {
 /// * Class that Handles Device Screen Width Management * //
 class Width {
   /// Return Full Screen Width
-  static double get full => DeviceService.isDesktop? 1280 : Get.width;
+  static double get full => DeviceService.isDesktop ? 1280 : Get.width;
 
   /// Return Full Screen Width Divided by Value <= ScreenWidth
   static double divided(double val) {
@@ -118,7 +119,7 @@ class Width {
 /// * Class that Handles Device Screen Height Management * //
 class Height {
   /// Return Full Screen Height
-  static double get full => DeviceService.isDesktop? 800 : Get.height;
+  static double get full => DeviceService.isDesktop ? 800 : Get.height;
 
   /// Return Full Screen Height Divided by Value <= ScreenHeight
   static double divided(double val) {
@@ -152,5 +153,26 @@ class Margin {
   static EdgeInsetsGeometry ratioCentered(double vertical, {double horizontal = 24}) {
     var difference = Height.full - Height.ratio(vertical);
     return EdgeInsets.symmetric(horizontal: horizontal, vertical: difference / 2);
+  }
+}
+
+class SonrTheme {
+  /// Method sets [DarkMode] for Device and Updates [ThemeData]
+  static void setDarkMode({required bool isDark}) {
+    // Dark Mode
+    if (isDark) {
+      // Set Status Bar
+      SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light));
+    }
+
+    // Light Mode
+    else {
+      SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
+    }
+
+    // Set Theme Mode
+    Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
 }

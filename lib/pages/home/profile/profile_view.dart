@@ -52,10 +52,10 @@ class _DefaultProfileView extends GetView<ProfileController> {
               return SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      var socialsList = UserService.socials.values.toList();
+                      var socialsList = UserService.contact.value.socials.values.toList();
                       return SocialTileItem(socialsList[index], index);
                     },
-                    childCount: UserService.socials.length,
+                    childCount: UserService.contact.value.socials.length,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12.0, crossAxisSpacing: 6.0));
             })
@@ -92,7 +92,8 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
                 _ProfileAvatarField(),
                 Padding(padding: EdgeInsets.all(8)),
                 GestureDetector(
-                    onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
+                    onLongPress: controller.setEditingMode,
+                    child: Obx(() => "${UserService.contact.value.firstName} ${UserService.contact.value.lastName}".h4)),
               ],
             ),
           ),
@@ -106,7 +107,7 @@ class _ProfileAvatarField extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (UserService.picture.value!.length > 0) {
+      if (UserService.contact.value.hasPicture()) {
         return GestureDetector(
           onLongPress: () async {
             controller.setAddPicture();
@@ -119,9 +120,9 @@ class _ProfileAvatarField extends GetView<ProfileController> {
               child: Obx(() => Container(
                     width: 120,
                     height: 120,
-                    child: UserService.picture.value!.length > 0
+                    child: UserService.contact.value.hasPicture()
                         ? CircleAvatar(
-                            backgroundImage: MemoryImage(UserService.picture.value!),
+                            backgroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
                           )
                         : SonrIcons.Avatar.greyWith(size: 120),
                   )),

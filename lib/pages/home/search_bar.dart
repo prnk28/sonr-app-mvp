@@ -57,7 +57,7 @@ class _HomeAppBarSubtitle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.view.value == HomeView.Main
-        ? "Hi ${UserService.contact.value!.profile.firstName},".headThree(
+        ? "Hi ${UserService.contact.value.firstName},".headThree(
             color: SonrColor.Black,
             weight: FontWeight.w400,
             align: TextAlign.start,

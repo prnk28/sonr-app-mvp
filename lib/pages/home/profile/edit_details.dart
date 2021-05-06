@@ -43,7 +43,7 @@ class EditDetailsView extends GetView<ProfileController> {
                     autoFocus: true,
                     focusNode: _firstNameFocus,
                     textInputAction: TextInputAction.next,
-                    controller: TextEditingController(text: UserService.firstName.value),
+                    controller: TextEditingController(text: UserService.contact.value.firstName),
                     onEditingComplete: () {
                       _lastNameFocus.requestFocus();
                       scrollController.animateTo(40, duration: 250.milliseconds, curve: Curves.easeOut);
@@ -54,7 +54,7 @@ class EditDetailsView extends GetView<ProfileController> {
                     hint: hintName.item2,
                     label: "Last Name",
                     textInputAction: TextInputAction.next,
-                    controller: TextEditingController(text: UserService.lastName.value),
+                    controller: TextEditingController(text: UserService.contact.value.lastName),
                     focusNode: _lastNameFocus,
                     value: controller.editedLastName.value,
                     onEditingComplete: () {
@@ -66,7 +66,7 @@ class EditDetailsView extends GetView<ProfileController> {
                     hint: "+1-555-555-5555",
                     label: "Phone",
                     textInputAction: TextInputAction.done,
-                    controller: TextEditingController(text: UserService.phone.value),
+                    controller: TextEditingController(text: UserService.contact.value.phonePrimary?.value ?? ""),
                     value: controller.editedLastName.value,
                     focusNode: _phoneNumberFocus,
                     onEditingComplete: () {

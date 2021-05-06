@@ -59,7 +59,7 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: [UserService.firstName.value.h6, " ".h6, UserService.lastName.value.l].row(),
+              child: [item.contact!.firstName.h6, " ".h6, item.contact!.lastName.l].row(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
