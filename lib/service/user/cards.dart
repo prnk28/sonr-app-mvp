@@ -78,7 +78,7 @@ class CardService extends GetxService {
   // ^ Add New Card to Database ^ //
   static addCard(TransferCard card) async {
     // Save Media to Device
-    if (card.payload == Payload.FILE) {
+    if (card.payload == Payload.MEDIA) {
       await DeviceService.saveTransfer(card.file);
     }
 

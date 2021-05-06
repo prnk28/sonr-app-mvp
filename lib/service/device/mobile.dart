@@ -212,17 +212,16 @@ class MobileService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  static Future<void> saveTransfer(SonrFile file) async {
+  static Future<bool> saveTransfer(SonrFile_Metadata meta) async {
+    // Initialize
+    AssetEntity asset;
+
     // Get Data from Media
-    final meta = file.single;
-    final path = meta.path;
-    // Save Image to Gallery
-    if (meta.mime.type == MIME_Type.IMAGE && MobileService.hasGallery.value) {
-      var asset = await PhotoManager.editor.saveImageWithPath(path);
-      var result = await asset.exists;
+    if (meta.mime.isImage && MobileService.hasGallery.value) {
+      asset = await PhotoManager.editor.saveImageWithPath(meta.path);
 
       // Visualize Result
-      if (result) {
+      if (await asset.exists) {
         meta.id = asset.id;
         SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
       } else {
@@ -231,22 +230,20 @@ class MobileService extends GetxService {
     }
 
     // Save Video to Gallery
-    else if (meta.mime.type == MIME_Type.VIDEO && MobileService.hasGallery.value) {
+    else if (meta.mime.isVideo && MobileService.hasGallery.value) {
       // Set Video File
-      File videoFile = File(path);
-      var asset = await PhotoManager.editor.saveVideo(videoFile);
-      var result = await asset.exists;
+      asset = await PhotoManager.editor.saveVideo(meta.file);
 
       // Visualize Result
-      if (result) {
+      if (await asset.exists) {
         SonrSnack.success("Saved Transferred Video to your Device's Gallery");
       } else {
         SonrSnack.error("Unable to save Video to your Gallery");
       }
-      return asset;
-    } else {
-      return null;
     }
+
+    // Return Status
+    return asset != null ? await asset.exists : false;
   }
 
   // ^ Update Method ^ //

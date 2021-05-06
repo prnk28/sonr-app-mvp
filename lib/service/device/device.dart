@@ -89,7 +89,7 @@ class DeviceService extends GetxService {
   // ^ Saves Received Media to Gallery by Platform ^ //
   static void saveTransfer(SonrFile file) async {
     if (isMobile) {
-      await MobileService.saveTransfer(file);
+      await MobileService.saveTransfer(file.single);
     } else {
       OpenFile.open(file.single.path);
     }
