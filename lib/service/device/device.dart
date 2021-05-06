@@ -52,8 +52,6 @@ class DeviceService extends GetxService {
   static void feedback() async {
     if (DeviceService.isMobile) {
       await HapticFeedback.heavyImpact();
-    } else {
-      DesktopService.openWindow();
     }
   }
 

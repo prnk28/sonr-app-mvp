@@ -19,7 +19,6 @@ class DesktopService extends GetxService {
   // References
   MainEntry _main;
   FlutterSystray _systemTray;
-  static const _channel = MethodChannel('io.sonr.desktop/window');
 
   // * Initialize * //
   Future<DesktopService> init() async {
@@ -39,22 +38,6 @@ class DesktopService extends GetxService {
     // Init Tray
     _systemTray = FlutterSystray.init();
     return this;
-  }
-
-  // ^ Closes Desktop Window
-  static void closeWindow() async {
-    if (to._isWindowOpen.value) {
-      await _channel.invokeMethod("onClose");
-      to._isWindowOpen(false);
-    }
-  }
-
-  // ^ Opens Desktop Window
-  static void openWindow() async {
-    if (!to._isWindowOpen.value) {
-      await _channel.invokeMethod("onOpen");
-      to._isWindowOpen(true);
-    }
   }
 
   // ^ Method Plays a UI Sound ^
