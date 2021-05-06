@@ -168,13 +168,9 @@ class ProfilePictureController extends GetxController {
   confirm() async {
     if (_photoCapturePath != "") {
       if (result.value != null) {
-        UserService.contact.update((val) async {
-          if (val != null) {
-            val.setPicture(await result.value!.readAsBytes());
-          }
-        });
+        UserService.contact.setPicture(result.value!.readAsBytesSync());
       }
-      
+
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);
     }

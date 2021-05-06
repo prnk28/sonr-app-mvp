@@ -66,7 +66,8 @@ class EditDetailsView extends GetView<ProfileController> {
                     hint: "+1-555-555-5555",
                     label: "Phone",
                     textInputAction: TextInputAction.done,
-                    controller: TextEditingController(text: UserService.contact.value.phonePrimary?.value ?? ""),
+                    controller:
+                        TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary!.value : ""),
                     value: controller.editedLastName.value,
                     focusNode: _phoneNumberFocus,
                     onEditingComplete: () {

@@ -176,10 +176,12 @@ class SonrService extends GetxService {
   }
 
   // ^ Retreive URLLink Metadata ^ //
-  static Future<URLLink?> getURL(String url) async {
+  static Future<URLLink> getURL(String url) async {
     if (to._node != null) {
-      return await to._node!.getURL(url);
+      var link = await to._node!.getURL(url);
+      return link ?? URLLink(link: url);
     }
+    return URLLink(link: url);
   }
 
   // ^ Request Local Network Access on iOS ^

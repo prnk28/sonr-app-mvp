@@ -5,7 +5,6 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 import 'payload_view.dart';
 import 'transfer_controller.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
 
 // ^ Transfer Screen Entry with Arguments ^ //
@@ -25,14 +24,6 @@ class Transfer {
 
 // ^ Transfer Screen Entry Point ^ //
 class TransferScreen extends GetView<TransferController> {
-  // # Carousel Options
-  final K_CAROUSEL_OPTS = CarouselOptions(
-    height: 260.0,
-    enableInfiniteScroll: false,
-    enlargeCenterPage: true,
-    scrollPhysics: NeverScrollableScrollPhysics(),
-  );
-
   @override
   Widget build(BuildContext context) {
     // Set Payload from Args
@@ -55,10 +46,14 @@ class TransferScreen extends GetView<TransferController> {
               Obx(() {
                 // Carousel View
                 if (controller.isNotEmpty.value) {
-                  return CarouselSlider(
-                    carouselController: controller.carouselController,
-                    options: K_CAROUSEL_OPTS,
-                    items: LobbyService.local.value!.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
+                  return Container(
+                    height: 260,
+                    child: CustomScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      controller: controller.scrollController,
+                      slivers: LobbyService.local.value!.map((i) => Builder(builder: (context) => SliverToBoxAdapter(child: PeerCard(i)))).toList(),
+                    ),
                   );
                 }
 

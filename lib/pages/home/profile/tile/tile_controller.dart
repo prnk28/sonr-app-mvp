@@ -44,7 +44,7 @@ class TileController extends GetxController {
 
   // ^ Removes Current Tile ^ //
   deleteTile(Contact_Social tile) {
-    UserService.contact.value.socialDelete(tile);
+    UserService.contact.deleteSocial(tile);
   }
 
   // ^ Toggles Between Expanded and Normal ^ //

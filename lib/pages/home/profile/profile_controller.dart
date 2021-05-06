@@ -63,13 +63,9 @@ class ProfileController extends GetxController {
   // ^ Completed Editing Details ^ //
   void saveEditedDetails() {
     // Update Values in Profile Controller
-    UserService.contact.update((val) {
-      if (val != null) {
-        val.setFirstName(editedFirstName.value);
-        val.setLastName(editedLastName.value);
-        val.addPhone(editedPhone.value);
-      }
-    });
+    UserService.contact.setFirstName(editedFirstName.value);
+    UserService.contact.setLastName(editedLastName.value);
+    UserService.contact.addPhone(editedPhone.value);
     status(ProfileViewStatus.Viewing);
   }
 
@@ -175,11 +171,7 @@ class ProfileController extends GetxController {
       );
 
       // Save to Profile
-      UserService.contact.update((val) {
-        if (val != null) {
-          val.socialAdd(tile);
-        }
-      });
+      UserService.contact.addSocial(tile);
 
       // Revert Status
       status(ProfileViewStatus.Viewing);

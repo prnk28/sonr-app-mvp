@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
@@ -16,7 +15,7 @@ class TransferController extends GetxController {
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
   final sonrFile = Rx<SonrFile?>(null);
-  final thumbStatus = Rx<ThumbnailStatus>(ThumbnailStatus.None);
+  final thumbStatus = ThumbnailStatus.None.obs;
 
   // @ Remote Properties
   final counter = 0.obs;
@@ -35,7 +34,7 @@ class TransferController extends GetxController {
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
-  CarouselController carouselController = CarouselController();
+  ScrollController scrollController = ScrollController();
 
   // ^ Controller Constructer ^
   void onInit() {

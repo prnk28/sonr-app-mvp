@@ -133,59 +133,104 @@ class UserService extends GetxService {
 
   // # Helper Method to Handle Contact Updates
   void _handleContact(Contact data) async {
-    // Retreive User from Disk
-    var profileJson = _userBox.read("user");
-    User permUser = User.fromJson(profileJson);
+    // Check if User Exists
+    if (_userBox.hasData("user")) {
+      // Retreive User from Disk
+      var permJson = _userBox.read("user");
+      User permUser = User.fromJson(permJson)..contact = data;
 
-    // Set New Contact Value
-    permUser.contact = _contact.value;
+      // Refresh Reactive Vars
+      _user(permUser);
+      _user.refresh();
 
-    // Save Updated User to Disk
-    await to._userBox.write("user", permUser.writeToJson());
-
-    // Refresh Reactive Vars
-    _user(permUser);
-    _user.refresh();
-    _contact.refresh();
+      // Save Updated User to Disk
+      await to._userBox.write("user", permUser.writeToJson());
+    }
 
     // Send Update to Node
-    SonrService.setProfile(_contact.value);
+    SonrService.setProfile(data);
   }
 }
 
 extension RxContact on Rx<Contact> {
-  /// Add Phone for Rx<Contact>
-  void addPhone(String data, {String? label}) => this.update((val) {
-        if (val != null) {
-          val.addPhone(data, label: label ?? 'Mobile');
-        }
+  /// Add Address for Rx<Contact>
+  void addAddress(
+          {required String street,
+          required String city,
+          required String state,
+          String streetTwo = "",
+          String zipcode = "",
+          String country = "",
+          String countryCode = "",
+          String label = ContactUtils.K_DEFAULT_LABEL}) =>
+      this.update((val) {
+        val?.addAddress(Contact_Address(
+          label: label,
+          street: street,
+          state: state,
+          streetTwo: streetTwo,
+          zipcode: zipcode,
+          country: country,
+          countryCode: countryCode,
+        ));
+      });
+
+  /// Add Date for Rx<Contact>
+  void addDate(DateTime data, {String label = ContactUtils.K_DEFAULT_DATE_LABEL}) => this.update((val) {
+        val?.addDate(data, label: label);
+      });
+
+  /// Add Email for Rx<Contact>
+  void addEmail(String data) => this.update((val) {
+        val?.addEmail(data);
+      });
+
+  /// Add Name for Rx<Contact>
+  void addName(String data, String label) => this.update((val) {
+        val?.addName(data, label);
       });
 
   /// Add Phone for Rx<Contact>
-  void addWebsite(String data, {String? label}) => this.update((val) {
-        if (val != null) {
-          val.addPhone(data, label: label ?? 'Home');
-        }
+  void addPhone(String data, {String label = ContactUtils.K_DEFAULT_PHONE_LABEL}) => this.update((val) {
+        val?.addPhone(data, label: label);
+      });
+
+  /// Add a Social Media Provider
+  void addSocial(Contact_Social data) => this.update((val) {
+        val?.addSocial(data);
+      });
+
+  /// Add Website for Rx<Contact>
+  void addWebsite(String data, {String label = ContactUtils.K_DEFAULT_LABEL}) => this.update((val) async {
+        // Get URL Link
+        var link = await SonrService.getURL(data);
+
+        // Set Website
+        val?.addWebsite(link, label: label);
+      });
+
+  /// Delete a Social Media Provider
+  void deleteSocial(Contact_Social data) => this.update((val) {
+        val?.deleteSocial(data);
       });
 
   /// Set FirstName for Rx<Contact>
   void setFirstName(String data) => this.update((val) {
-        if (val != null) {
-          val.setFirstName(data);
-        }
+        val?.setFirstName(data);
       });
 
   /// Set LastName for Rx<Contact>
   void setLastName(String data) => this.update((val) {
-        if (val != null) {
-          val.setLastName(data);
-        }
+        val?.setLastName(data);
       });
 
   /// Set Picture for Rx<Contact>
   void setPicture(Uint8List data) => this.update((val) {
-        if (val != null) {
-          val.setPicture(data);
-        }
+        val?.setPicture(data);
+      });
+
+  /// Delete a Social Media Provider
+  void updateSocial(Contact_Social data) => this.update((val) {
+        val?.updateSocial(data);
       });
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sonr_app/style/style.dart';
 
 class ExplorerController extends GetxController {
@@ -14,7 +13,7 @@ class ExplorerController extends GetxController {
 
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
-  CarouselController carouselController = CarouselController();
+  ScrollController scrollController = ScrollController();
 
   // ^ Controller Constructer ^
   void onInit() async {

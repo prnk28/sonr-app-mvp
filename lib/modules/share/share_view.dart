@@ -60,8 +60,8 @@ class _QueueView extends GetView<ShareController> {
       child: Container(
         decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(24)),
         child: FadeInUpBig(
-            delay: 100.milliseconds,
-            duration: 300.milliseconds,
+            delay: 200.milliseconds,
+            duration: 250.milliseconds,
             child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               Padding(padding: EdgeInsets.all(4)),
               const _ShareCameraButtonItem(),
@@ -129,7 +129,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.selectFile,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.LoveKiss, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.ItmeoBranding, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'File'.p_White,
       ]),
@@ -145,7 +145,7 @@ class _ShareContactButtonItem extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.selectContact,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.NightCall, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.LoveKiss, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Contact'.p_White,
       ]),

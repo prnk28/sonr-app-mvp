@@ -77,7 +77,6 @@ dependencies:
 
   # -- UI/UX --
   animate_do: ^2.0.0
-  carousel_slider: ^4.0.0-nullsafety.0
   fl_chart: ^0.36.0
   lottie: ^1.0.1
   material_floating_search_bar: ^0.3.4
