@@ -93,7 +93,7 @@ extension WidgetListUtils on List<Widget> {
 /// * Class that Handles Device Screen Width Management * //
 class Width {
   /// Return Full Screen Width
-  static double get full => DeviceService.isDesktop! ? 1280 : Get.width;
+  static double get full => DeviceService.isDesktop? 1280 : Get.width;
 
   /// Return Full Screen Width Divided by Value <= ScreenWidth
   static double divided(double val) {
@@ -118,7 +118,7 @@ class Width {
 /// * Class that Handles Device Screen Height Management * //
 class Height {
   /// Return Full Screen Height
-  static double get full => DeviceService.isDesktop! ? 800 : Get.height;
+  static double get full => DeviceService.isDesktop? 800 : Get.height;
 
   /// Return Full Screen Height Divided by Value <= ScreenHeight
   static double divided(double val) {

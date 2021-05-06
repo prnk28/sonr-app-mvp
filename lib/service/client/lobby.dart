@@ -35,7 +35,7 @@ class LobbyService extends GetxService {
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       _positionStream = MobileService.position.listen(_handlePosition);
     }
     return this;

@@ -22,7 +22,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   onInit() {
     // Set Scroll Controller
     scrollController = ScrollController(keepScrollOffset: false);
-    chartData(refreshChart() as List<PieChartSectionData>);
+    chartData(refreshChart());
 
     // Set Default Properties
     tagIndex(0);
@@ -58,7 +58,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   }
 
   // ^ Method Sets Pie Chart Data
-  List<PieChartSectionData?> refreshChart() {
+  List<PieChartSectionData> refreshChart() {
     return List.generate(3, (i) {
       final isTouched = i == chartActiveIndex.value;
       final double fontSize = isTouched ? 16 : 12;
@@ -94,7 +94,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             ),
             badgePositionPercentageOffset: 1.02,
           );
-        case 2:
+        default:
           return PieChartSectionData(
             color: SonrColor.AccentPink,
             value: 16,
@@ -108,8 +108,6 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             ),
             badgePositionPercentageOffset: .96,
           );
-        default:
-          return null;
       }
     });
   }

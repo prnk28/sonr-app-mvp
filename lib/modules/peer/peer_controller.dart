@@ -83,7 +83,7 @@ class PeerController extends GetxController {
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
 
     // Check for Mobile
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       _userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     }
 

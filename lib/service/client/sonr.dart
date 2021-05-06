@@ -46,7 +46,7 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (DeviceService.isMobile! && SonrRouting.areServicesRegistered && isRegistered) {
+      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
           _node!.update(position: MobileService.position.value);
@@ -74,7 +74,7 @@ class SonrService extends GetxService {
     if (DeviceService.isReadyToConnect) {
       // Create Request
       var connReq = await RequestUtility.newRequest(
-        geoLocation: DeviceService.isMobile! ? await (MobileService.currentLocation() as FutureOr<Location>) : null,
+        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
         contact: UserService.contact.value!,
       );
@@ -100,7 +100,7 @@ class SonrService extends GetxService {
     if (_node == null) {
       // Create Request
       var connReq = await RequestUtility.newRequest(
-        geoLocation: DeviceService.isMobile! ? await (MobileService.currentLocation() as FutureOr<Location>) : null,
+        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
         contact: UserService.contact.value!,
       );
@@ -120,7 +120,7 @@ class SonrService extends GetxService {
       _node!.connect();
 
       // Update for Mobile
-      if (DeviceService.isMobile!) {
+      if (DeviceService.isMobile) {
         _node!.update(position: MobileService.position.value);
       }
     } else {
@@ -129,7 +129,7 @@ class SonrService extends GetxService {
         _node!.connect();
 
         // Update for Mobile
-        if (DeviceService.isMobile!) {
+        if (DeviceService.isMobile) {
           _node!.update(position: MobileService.position.value);
         }
       }
@@ -140,7 +140,7 @@ class SonrService extends GetxService {
   Future<void> connectNewUser(Contact? contact) async {
     // Create Request
     var connReq = await RequestUtility.newRequest(
-      geoLocation: DeviceService.isMobile! ? await (MobileService.currentLocation() as FutureOr<Location>) : null,
+      geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
       ipLocation: await DeviceService.findIPLocation(),
       contact: UserService.contact.value!,
     );
@@ -162,7 +162,7 @@ class SonrService extends GetxService {
       _node!.connect();
 
       // Update for Mobile
-      if (DeviceService.isMobile!) {
+      if (DeviceService.isMobile) {
         _node!.update(position: MobileService.position.value);
       }
     }
@@ -262,7 +262,7 @@ class SonrService extends GetxService {
       DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
-      if (DeviceService.isMobile!) {
+      if (DeviceService.isMobile) {
         _node!.update(position: MobileService.position.value);
       }
     }

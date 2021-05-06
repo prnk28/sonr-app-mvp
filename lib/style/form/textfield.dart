@@ -88,57 +88,51 @@ class SonrTextField extends StatelessWidget {
   }
 
   Widget buildDefault(BuildContext context, {InputDecoration? decoration, bool isError = false}) {
-    return ValueBuilder<String>(
-      initialValue: value,
-      builder: (value, updateFn) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            label != null
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-                    child: Row(children: [
-                      Text(
-                        label!,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      isError
-                          ? Text(
-                              " *Error",
-                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrColor.Critical),
-                            )
-                          : Container(),
-                    ]))
-                : Container(),
-            Container(
-              decoration: Neumorphic.floating(),
-              margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-              child: TextField(
-                style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
-                controller: controller,
-                autofocus: autoFocus,
-                textInputAction: textInputAction,
-                autocorrect: autoCorrect,
-                textCapitalization: textCapitalization,
-                focusNode: focusNode,
-                autofillHints: autofillHints,
-                onEditingComplete: onEditingComplete as void Function()?,
-                onChanged: updateFn,
-                decoration: decoration != null
-                    ? decoration
-                    : InputDecoration.collapsed(
-                        hintText: hint,
-                        hintStyle: TextStyle(
-                            fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
-              ),
-            )
-          ],
-        );
-      },
-      onUpdate: onChanged,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        label != null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+                child: Row(children: [
+                  Text(
+                    label!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  isError
+                      ? Text(
+                          " *Error",
+                          style: TextStyle(fontWeight: FontWeight.w500, color: SonrColor.Critical),
+                        )
+                      : Container(),
+                ]))
+            : Container(),
+        Container(
+          decoration: Neumorphic.floating(),
+          margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+          child: TextField(
+            style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+            controller: controller,
+            autofocus: autoFocus,
+            textInputAction: textInputAction,
+            autocorrect: autoCorrect,
+            textCapitalization: textCapitalization,
+            focusNode: focusNode,
+            autofillHints: autofillHints,
+            onEditingComplete: onEditingComplete as void Function()?,
+            onChanged: onChanged,
+            decoration: decoration != null
+                ? decoration
+                : InputDecoration.collapsed(
+                    hintText: hint,
+                    hintStyle: TextStyle(
+                        fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+          ),
+        )
+      ],
     );
   }
 

@@ -49,14 +49,14 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   // Handles Drag Update for Desktop Build
   void onPanUpdate(DragUpdateDetails details) async {
-    if (DeviceService.isDesktop!) {
+    if (DeviceService.isDesktop) {
       await draggableChannel.invokeMethod('onPanUpdate');
     }
   }
 
   // Handles Drag Start for Desktop Build
   void onPanStart(DragStartDetails details) async {
-    if (DeviceService.isDesktop!) {
+    if (DeviceService.isDesktop) {
       await draggableChannel.invokeMethod('onPanStart', {"dx": details.globalPosition.dx, "dy": details.globalPosition.dy});
     }
   }
@@ -64,14 +64,14 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   // ^ Closes Desktop Window
   static void closeWindow() async {}
 
-  Widget? _buildTrailing() {
-    if (DeviceService.isDesktop!) {
+  Widget _buildTrailing() {
+    if (DeviceService.isDesktop) {
       return Container(
           width: 56,
           height: 56,
           child: PlainIconButton(icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose")));
     } else {
-      return action != null ? action : Container(width: 56, height: 56);
+      return action != null ? action! : Container(width: 56, height: 56);
     }
   }
 }

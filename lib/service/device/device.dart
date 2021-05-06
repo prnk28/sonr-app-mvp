@@ -8,8 +8,8 @@ import 'dart:convert';
 
 class DeviceService extends GetxService {
   // Initializers
-  bool? _isDesktop;
-  bool? _isMobile;
+  late final bool _isDesktop;
+  late bool _isMobile;
 
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
@@ -17,8 +17,8 @@ class DeviceService extends GetxService {
   final _platform = Rx<Platform>(Platform.Undefined);
 
   // Platform Checkers
-  static bool? get isDesktop => to._isDesktop;
-  static bool? get isMobile => to._isMobile;
+  static bool get isDesktop => to._isDesktop;
+  static bool get isMobile => to._isMobile;
   static bool get isAndroid => to._platform.value.isAndroid;
   static bool get isIOS => to._platform.value.isIOS;
   static bool get isLinux => to._platform.value.isLinux;
@@ -28,7 +28,7 @@ class DeviceService extends GetxService {
 
   // Connection Requirements
   static bool get isReadyToConnect {
-    if (isMobile!) {
+    if (isMobile) {
       return MobileService.hasLocation.value && MobileService.hasLocalNetwork.value && UserService.hasUser.value;
     } else {
       return UserService.hasUser.value;
@@ -36,7 +36,7 @@ class DeviceService extends GetxService {
   }
 
   // * Device Service Initialization * //
-  Future<DeviceService> init(bool isDesktop) async {
+  Future<DeviceService> init(isDesktop) async {
     // Set Initializers
     _isDesktop = isDesktop;
     _isMobile = !isDesktop;
@@ -50,7 +50,7 @@ class DeviceService extends GetxService {
 
   // ^ Provide Device Feedback ^ //
   static void feedback() async {
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       await HapticFeedback.heavyImpact();
     }
   }
@@ -77,7 +77,7 @@ class DeviceService extends GetxService {
 
   // ^ Method Plays a UI Sound ^
   static void playSound({required UISoundType type}) async {
-    if (isMobile!) {
+    if (isMobile) {
       MobileService.playSound(type);
     } else {
       DesktopService.playSound(type);
@@ -86,7 +86,7 @@ class DeviceService extends GetxService {
 
   // ^ Saves Received Media to Gallery by Platform ^ //
   static void saveTransfer(SonrFile file) async {
-    if (isMobile!) {
+    if (isMobile) {
       await MobileService.saveTransfer(file.single);
     } else {
       OpenFile.open(file.single.path);
@@ -97,7 +97,7 @@ class DeviceService extends GetxService {
   static void shiftPage({required Duration delay}) async {
     Future.delayed(delay, () {
       // @ Mobile Page
-      if (isMobile!) {
+      if (isMobile) {
         // Check for User
         if (!UserService.hasUser.value) {
           Get.offNamed("/register");

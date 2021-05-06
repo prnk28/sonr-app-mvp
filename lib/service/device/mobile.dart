@@ -258,7 +258,7 @@ class MobileService extends GetxService {
 
   // ^ Request Camera optional overlay ^ //
   Future<bool> requestCamera() async {
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Requires Permission',
@@ -286,7 +286,7 @@ class MobileService extends GetxService {
 
   // ^ Request Gallery optional overlay ^ //
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
         if (DeviceService.isAndroid) {
@@ -326,7 +326,7 @@ class MobileService extends GetxService {
 
   // ^ Request Location optional overlay ^ //
   Future<bool> requestLocation() async {
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Location',
@@ -356,7 +356,7 @@ class MobileService extends GetxService {
 
   // ^ Request Microphone optional overlay ^ //
   Future<bool> requestMicrophone() async {
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Microphone',
@@ -387,7 +387,7 @@ class MobileService extends GetxService {
   // ^ Request Notifications optional overlay ^ //
   Future<bool> requestNotifications() async {
     // Present Overlay
-    if (DeviceService.isMobile!) {
+    if (DeviceService.isMobile) {
       if (await SonrOverlay.question(
           title: 'Requires Permission',
           description: 'Sonr would like to send you Notifications for Transfer Invites.',
