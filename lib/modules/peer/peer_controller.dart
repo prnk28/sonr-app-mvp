@@ -42,11 +42,11 @@ class PeerController extends GetxController {
   FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
   // State Machine
-  StateMachineInput<bool> _isIdle;
-  StateMachineInput<bool> _isPending;
-  StateMachineInput<bool> _hasAccepted;
-  StateMachineInput<bool> _hasDenied;
-  StateMachineInput<bool> _isComplete;
+  SMIInput<bool> _isIdle;
+  SMIInput<bool> _isPending;
+  SMIInput<bool> _hasAccepted;
+  SMIInput<bool> _hasDenied;
+  SMIInput<bool> _isComplete;
 
   PeerController(this.riveFile);
 
