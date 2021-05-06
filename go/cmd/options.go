@@ -7,6 +7,7 @@ import (
 	"github.com/go-flutter-desktop/plugins/path_provider"
 	"github.com/go-flutter-desktop/plugins/video_player"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	open_file "github.com/jld3103/go-flutter-open_file"
 	warble "github.com/jslater89/warble/go"
 	file_picker "github.com/miguelpruivo/flutter_file_picker/go"
 )
@@ -22,6 +23,7 @@ var options = []flutter.Option{
 		VendorName:      "https://sonr.io",
 		ApplicationName: "Sonr",
 	}),
+	flutter.AddPlugin(&open_file.OpenFilePlugin{}),
 	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 	flutter.AddPlugin(&AppBarDraggable{}),
 }

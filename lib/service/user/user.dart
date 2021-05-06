@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style/style.dart';
+import 'package:sentry/sentry.dart';
 
 class UserService extends GetxService {
   // Accessors
@@ -83,6 +84,11 @@ class UserService extends GetxService {
       _website("");
       _picture(Uint8List.fromList(user.contact.profile.picture));
       _socials(user.contact.socials);
+
+      // Configure Sentry Scope
+      Sentry.configureScope(
+        (scope) => scope.user = SentryUser(id: '1234', email: 'jane.doe@example.com'),
+      );
     } else {
       _isNewUser(true);
     }

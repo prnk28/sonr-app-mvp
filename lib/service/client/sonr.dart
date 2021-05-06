@@ -72,11 +72,15 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
-      // Get Request
-      var connReq = await DeviceService.connectionRequest();
+      // Create Request
+      var connReq = await RequestUtility.newRequest(
+        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
+        ipLocation: await DeviceService.findIPLocation(),
+        contact: UserService.contact.value,
+      );
 
       // Create Node
-      _node = await SonrCore.initRequest(connReq);
+      _node = await SonrCore.initialize(connReq);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -94,11 +98,15 @@ class SonrService extends GetxService {
   // ^ Connect to Service Method ^ //
   Future<void> connect() async {
     if (_node == null) {
-      // Get Request
-      var connReq = await DeviceService.connectionRequest();
+      // Create Request
+      var connReq = await RequestUtility.newRequest(
+        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
+        ipLocation: await DeviceService.findIPLocation(),
+        contact: UserService.contact.value,
+      );
 
       // Create Node
-      _node = await SonrCore.initRequest(connReq);
+      _node = await SonrCore.initialize(connReq);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -124,20 +132,21 @@ class SonrService extends GetxService {
         if (DeviceService.isMobile) {
           _node.update(position: MobileService.position.value);
         }
-
-        var locInfo = await locationInfo();
-        print(locInfo.toString());
       }
     }
   }
 
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact) async {
-    // Get Request
-    var connReq = await DeviceService.connectionRequest();
+    // Create Request
+    var connReq = await RequestUtility.newRequest(
+      geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
+      ipLocation: await DeviceService.findIPLocation(),
+      contact: UserService.contact.value,
+    );
 
     // Create Node
-    _node = await SonrCore.initRequest(connReq);
+    _node = await SonrCore.initialize(connReq);
     _node.onStatus = _handleStatus;
     _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
     _node.onInvited = _handleInvited;
@@ -156,9 +165,6 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile) {
         _node.update(position: MobileService.position.value);
       }
-
-      var locInfo = await locationInfo();
-      print(locInfo.toString());
     }
   }
 

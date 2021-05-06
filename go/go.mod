@@ -8,6 +8,7 @@ require (
 	github.com/go-flutter-desktop/plugins/path_provider v0.4.0
 	github.com/go-flutter-desktop/plugins/video_player v0.0.3
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20201108214237-06ea97f0c265
+	github.com/jld3103/go-flutter-open_file v0.0.0-20191015224027-100716ccb0bd
 	github.com/jslater89/warble/go v0.0.0-20210417181811-06746cd37a46
 	github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210401125244-74289af412c2
 	github.com/pkg/errors v0.9.1
