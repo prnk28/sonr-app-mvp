@@ -108,9 +108,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
       decoration: Neumorphic.floating(),
       padding: EdgeInsets.only(bottom: 8),
       margin: EdgeInsets.symmetric(horizontal: 16),
-      child: OpacityAnimatedWidget(
-        duration: 400.milliseconds,
-        enabled: controller.isJoinFieldTapped.value,
+      child: FadeInDownBig(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

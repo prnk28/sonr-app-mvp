@@ -14,7 +14,7 @@ export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
 export 'package:sonr_app/style/elements/clipper.dart';
-export 'package:animated_widgets/animated_widgets.dart';
+export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 
 // Custom Theme Aspects

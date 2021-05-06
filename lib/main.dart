@@ -63,7 +63,7 @@ class _MobileAppState extends State<MobileApp> {
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: OpacityAnimatedWidget(enabled: true, duration: 350.milliseconds, delay: 2222.milliseconds, child: "Sonr".hero),
+                child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero),
               ),
             ],
           )),

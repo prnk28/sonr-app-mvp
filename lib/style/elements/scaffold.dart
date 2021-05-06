@@ -100,22 +100,15 @@ class _BackgroundGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (gradient != SonrGradients.NorthMiracle) {
-      return CustomAnimatedWidget(
-          enabled: true,
-          duration: Duration(seconds: 4),
-          curve: Curves.easeOut,
-          builder: (context, percent) {
-            return Container(
-              height: Get.height,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                gradient: SonrGradients.NorthMiracle
-                    // ignore: invalid_use_of_protected_member
-                    .lerpTo(gradient, percent),
-              ),
-            );
-          });
+      return Pulse(
+        infinite: true,
+        duration: Duration(seconds: 4),
+        child: Container(
+          height: Get.height,
+          width: Get.width,
+          decoration: BoxDecoration(color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White, gradient: SonrGradients.NorthMiracle),
+        ),
+      );
     } else {
       return Opacity(
         opacity: 0.5,

@@ -65,20 +65,7 @@ class _URLGridItemMainView extends StatelessWidget {
                 ),
               )),
 
-          // Avatar
-          OpacityAnimatedWidget(
-            // TODO: enabled: controller.isVisible.value,
-            duration: 125.milliseconds,
-            // TODO: child: controller.peer.value.profilePicture(size: 68),
-          ),
-
           Spacer(),
-
-          // Device Icon and Full Name
-          // TODO: "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h6,
-
-          // Username
-          // TODO: controller.peer.value.profile.username.p_Grey,
         ].column());
   }
 }

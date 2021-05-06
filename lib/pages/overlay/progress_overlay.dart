@@ -97,12 +97,12 @@ class ProgressView extends HookWidget {
         child: utilizeProgress
             ? Obx(() {
                 if (SonrService.progress.value >= 0.5) {
-                  return OpacityAnimatedWidget(duration: Duration(milliseconds: 200), child: file.single.mime.type.gradient(size: 165));
+                  return FadeIn(child: file.single.mime.type.gradient(size: 165));
                 } else {
                   return Container();
                 }
               })
-            : OpacityAnimatedWidget(
+            : FadeIn(
                 delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
                 duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
                 child: file.single.mime.type.gradient(size: 165)));

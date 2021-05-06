@@ -61,7 +61,7 @@ class _DesktopAppState extends State<DesktopApp> {
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: OpacityAnimatedWidget(enabled: true, duration: 350.milliseconds, child: "Sonr".hero),
+                child: FadeInUp(child: "Sonr".hero),
               ),
             ],
           )),

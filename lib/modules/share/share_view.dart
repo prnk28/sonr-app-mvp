@@ -59,11 +59,8 @@ class _QueueView extends GetView<ShareController> {
       onTap: controller.toggle,
       child: Container(
         decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(24)),
-        child: OpacityAnimatedWidget(
-            enabled: true,
-            duration: 150.milliseconds,
+        child: FadeInUpBig(
             delay: 350.milliseconds,
-            curve: Curves.easeIn,
             child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               Padding(padding: EdgeInsets.all(4)),
               const _ShareCameraButtonItem(),
