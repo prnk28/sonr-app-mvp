@@ -72,11 +72,11 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: controller.sonrFile.value!.prettyName().h6,
+              child: controller.sonrFile.value.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: controller.sonrFile.value!.sizeToString().p_Grey,
+              child: controller.sonrFile.value.prettySize().p_Grey,
             )
           ]));
     } else {
@@ -88,11 +88,11 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: controller.sonrFile.value!.prettyName().h6,
+              child: controller.sonrFile.value.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: controller.sonrFile.value!.sizeToString().p_Grey,
+              child: controller.sonrFile.value.prettySize().p_Grey,
             )
           ]));
     }
@@ -118,14 +118,14 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
       // Media with Thumbnail
       else if (controller.thumbStatus.value == ThumbnailStatus.Complete) {
         return GestureDetector(
-          onTap: () => OpenFile.open(controller.sonrFile.value!.single.path),
+          onTap: () => OpenFile.open(controller.sonrFile.value.single.path),
           child: Container(
               height: Height.ratio(0.125),
               width: Height.ratio(0.125),
               decoration: Neumorphic.indented(),
               clipBehavior: Clip.hardEdge,
               child: Image.memory(
-                Uint8List.fromList(controller.sonrFile.value!.single.thumbnail),
+                Uint8List.fromList(controller.sonrFile.value.single.thumbnail),
                 fit: BoxFit.cover,
               )),
         );
@@ -136,7 +136,7 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
-          child: controller.sonrFile.value!.single.mime.type.gradient(size: Height.ratio(0.125)),
+          child: controller.sonrFile.value.single.mime.type.gradient(size: Height.ratio(0.125)),
         );
       }
     });

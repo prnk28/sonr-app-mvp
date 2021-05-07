@@ -126,7 +126,9 @@ class DeviceService extends GetxService {
 
   static void factoryReset() {
     UserService.reset();
-    //Get.find<CardService>().
+    CardService.deleteAllCards();
+    CardService.clearAllActivity();
+    Get.offAllNamed("/register");
   }
 }
 

@@ -44,7 +44,13 @@ class MetaCardItemView extends StatelessWidget {
                     child: ActionButton(
                       icon: SonrIcons.About.grey,
                       onPressed: () {
-                        SonrOverlay.show(_MediaInfoView(card), disableAnimation: true, barrierDismissible: true);
+                        SonrOverlay.show(
+                            _MediaInfoView(card.file!, card.owner!, onConfirmed: () {
+                              SonrOverlay.back();
+                              CardService.deleteCard(card);
+                            }),
+                            disableAnimation: true,
+                            barrierDismissible: true);
                       },
                     )),
               ),
@@ -69,8 +75,10 @@ class MetaCardItemView extends StatelessWidget {
 
 // ^ Overlay View for Media Info
 class _MediaInfoView extends StatelessWidget {
-  final TransferCardItem card;
-  _MediaInfoView(this.card);
+  final SonrFile file;
+  final Profile owner;
+  final Function onConfirmed;
+  _MediaInfoView(this.file, this.owner, {required this.onConfirmed});
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +88,13 @@ class _MediaInfoView extends StatelessWidget {
           decoration: Neumorphic.floating(),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            "${card.file!.typeToString()} From".h3,
+            "${file.prettySize()} From".h3,
 
             // Owner
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [card.owner!.platform.gradient(), card.owner!.nameText]),
+                children: [owner.platform.gradient(), owner.nameText]),
 
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
@@ -97,7 +105,7 @@ class _MediaInfoView extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: "${card.file!.single.name}".p,
+                child: "${file.single.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -107,21 +115,21 @@ class _MediaInfoView extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "Size ".h6,
               Spacer(),
-              "${card.file!.sizeToString()}".p,
+              "${file.prettySize()}".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "Kind ".h6,
               Spacer(),
-              "${card.file!.single.mime.value}".p,
+              "${file.single.mime.value}".p,
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "ID ".h6,
               Spacer(),
-              "${card.file!.single.id}".p,
+              "${file.single.id}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
@@ -130,10 +138,7 @@ class _MediaInfoView extends StatelessWidget {
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               ConfirmButton.delete(
-                onConfirmed: () {
-                  SonrOverlay.back();
-                  CardService.deleteCard(card);
-                },
+                onConfirmed: onConfirmed,
                 defaultIcon: SonrIcons.Trash,
                 defaultText: "Delete",
                 confirmIcon: SonrIcons.Check,

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:sonr_app/data/database/cards_db.dart';
+import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
@@ -31,12 +32,14 @@ class ContactCardItemView extends StatelessWidget {
               child: Container(
                 decoration: Neumorphic.indented(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
-                child: card.contact!.pictureImage(),
+                child: ProfileAvatar(profile: card.contact!.profile),
               ),
             ),
 
             // Build Name
-            card.contact!.fullNameText(),
+            ProfileHeaderName(
+              profile: card.contact!.profile,
+            ),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 
@@ -77,7 +80,9 @@ class ContactCardItemView extends StatelessWidget {
             Padding(padding: EdgeInsets.all(4)),
 
             // Brief Contact Card Info
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: card.contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: card.contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
           ]),
         ),
       ),

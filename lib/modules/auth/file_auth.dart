@@ -27,7 +27,7 @@ class FileAuthView extends StatelessWidget {
                     : "${invite!.from.profile.firstName}".gradient(value: SonrGradients.SolidStone),
                 Row(children: [
                   invite!.payload.toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
-                  "   ${invite!.file.sizeToString()}".h5
+                  "   ${invite!.file.prettySize()}".h5
                 ]),
               ]),
             ]),

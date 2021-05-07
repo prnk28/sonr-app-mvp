@@ -29,8 +29,8 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
-  final peer = Rx<Peer?>(null);
-  final status = Rx<PeerStatus>(PeerStatus.Default);
+  final peer = Rx<Peer>(Peer());
+  final status = PeerStatus.Default.obs;
 
   // Vector Properties
   final offset = Offset(0, 0).obs;
@@ -204,7 +204,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   void _handlePeerUpdate(Peer data) {
     if (!isClosed && !status.value.isComplete) {
       // Update Direction
-      if (data.id.peer == peer.value!.id.peer && !_isPending!.value) {
+      if (data.id.peer == peer.value.id.peer && !_isPending!.value) {
         peer(data);
         peerVector(data.position);
 
@@ -233,10 +233,9 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       // Initialize
       userVector(pos);
 
-
       // Find Offset
       if (Get.find<TransferController>().isShiftingEnabled.value) {
-        if (peer.value!.platform.isDesktop) {
+        if (peer.value.platform.isDesktop) {
           offset(Offset.zero);
         } else {
           offset(peerVector.value!.offsetAgainstVector(userVector.value!));
@@ -265,7 +264,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   void _handleFacingUpdate() {
     if (!isClosed && !status.value.isComplete) {
       // Find Offset
-      if (peer.value!.platform.isDesktop) {
+      if (peer.value.platform.isDesktop) {
         offset(Offset.zero);
       } else {
         offset(peerVector.value!.offsetAgainstVector(userVector.value!));

@@ -87,12 +87,19 @@ class RemoteLobbyView extends GetView<RemoteController> {
           child: ListView.builder(
         itemCount: controller.remoteLobby.value!.count,
         itemBuilder: (BuildContext context, int index) {
+          // Get Data
+          var peer = controller.remoteLobby.value!.peerAtIndex(index - 1);
+
           // Build List Item
-          return PeerListItem(
-            controller.remoteLobby.value!.peerAtIndex(index - 1),
-            index - 1,
-            remote: controller.remoteInfo.value,
-          );
+          if (peer != null) {
+            return PeerListItem(
+              peer,
+              index - 1,
+              remote: controller.remoteInfo.value,
+            );
+          } else {
+            return Container();
+          }
         },
       )),
       Padding(padding: EdgeInsets.all(8)),

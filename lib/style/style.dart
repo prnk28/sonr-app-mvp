@@ -16,6 +16,7 @@ export 'package:open_file/open_file.dart';
 export 'package:sonr_app/style/elements/clipper.dart';
 export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
+export 'package:sonr_app/data/data.dart';
 
 // Custom Theme Aspects
 export 'buttons/action.dart';

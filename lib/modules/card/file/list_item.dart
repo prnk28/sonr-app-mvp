@@ -78,7 +78,7 @@ class MetaListItemView extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file!.sizeToString().p_Grey,
+              child: item.file!.prettySize().p_Grey,
             )
           ]));
     } else {
@@ -92,7 +92,7 @@ class MetaListItemView extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file!.sizeToString().p_Grey,
+              child: item.file!.prettySize().p_Grey,
             )
           ]));
     }

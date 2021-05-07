@@ -1,7 +1,7 @@
+import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:get/get.dart';
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
@@ -32,7 +32,7 @@ class ContactAuthView extends StatelessWidget {
               child: Container(
                 decoration: Neumorphic.floating(),
                 padding: EdgeInsets.all(4),
-                child: card.pictureImage(),
+                child: ProfileAvatar(profile: card.profile),
               ),
             ),
           ),
@@ -43,7 +43,9 @@ class ContactAuthView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              card.headerNameText(),
+              ProfileHeaderName(
+                profile: card.profile,
+              ),
 
               // Phone/ Website
               Row(children: [
@@ -107,11 +109,16 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Container(padding: EdgeInsets.all(10), decoration: Neumorphic.floating(shape: BoxShape.circle), child: contact!.pictureImage()),
+            child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: Neumorphic.floating(shape: BoxShape.circle),
+                child: ProfileAvatar(
+                  profile: contact!.profile,
+                )),
           ),
 
           // Build Name
-          contact!.fullNameText(),
+          contact!.fullName.gradient(value: SonrGradients.SolidStone),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
 

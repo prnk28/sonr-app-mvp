@@ -10,11 +10,13 @@ class TransferController extends GetxController {
   Payload get currentPayload => inviteRequest.value.payload;
 
   // @ Properties
-  final title = "Nobody Here".obs;
+  final title = "Sharing".obs;
+  final subtitle = "Nobody Here".obs;
+  final payload = Payload.NONE.obs;
   final isFacingPeer = false.obs;
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final sonrFile = Rx<SonrFile?>(null);
+  final sonrFile = SonrFile().obs;
   final thumbStatus = ThumbnailStatus.None.obs;
 
   // @ Remote Properties
@@ -57,49 +59,38 @@ class TransferController extends GetxController {
   }
 
   // ^ Send Invite with Peer ^ //
-  void invitePeer(Peer? peer) {
+  void invitePeer(Peer peer) {
     setFacingPeer(false);
     isShiftingEnabled(false);
 
     // Update Request
-    inviteRequest.update((val) {
-      val!.to = peer!;
-    });
+    inviteRequest.setPeer(peer);
 
     // Send Invite
     SonrService.invite(inviteRequest.value);
   }
 
   // ^ Set Transfer Payload ^ //
-  void setPayload(TransferArguments args) {
-    // Contact
-    if (args.payload == Payload.CONTACT) {
-      inviteRequest.update((val) {
-        val!.payload = args.payload;
-        val.contact = args.contact!;
-        val.payload = Payload.CONTACT;
-      });
-    }
-    // URL
-    else if (args.payload == Payload.URL) {
-      inviteRequest.update((val) {
-        val!.payload = args.payload;
-        val.url = args.url!;
-        val.payload = Payload.URL;
-      });
-    }
-    // Media
-    else if (args.payload == Payload.MEDIA) {
-      _setMediaPayload(args.file);
-    }
-    // File
-    else {
+  void setPayload(TransferArguments args) async {
+    // Set Title
+    _setTitle(args.payload);
+
+    // Initialize Request
+    inviteRequest.init(args);
+
+    // Check for Media
+    if (inviteRequest.isMedia) {
       // Set File Item
-      sonrFile(args.file);
-      inviteRequest.update((val) {
-        val!.file = args.file!;
-        val.payload = args.payload;
-      });
+      sonrFile(args.file!);
+      thumbStatus(ThumbnailStatus.Loading);
+      await sonrFile.value.setThumbnail();
+
+      // Check Result
+      if (sonrFile.value.single.hasThumbnail()) {
+        thumbStatus(ThumbnailStatus.Complete);
+      } else {
+        thumbStatus(ThumbnailStatus.None);
+      }
     }
   }
 
@@ -133,28 +124,27 @@ class TransferController extends GetxController {
   _handleLobbyUpdate(Lobby? data) {
     if (data != null && !isClosed) {
       isNotEmpty(data.isNotEmpty);
-      title(data.countString);
+      subtitle(data.countString);
     }
   }
 
-  // # Loads SonrFile for Media Payload
-  _setMediaPayload(SonrFile? file) async {
-    // Update Request
-    inviteRequest.update((val) {
-      val!.file = file!;
-      val.payload = Payload.MEDIA;
-    });
+  // # Updates Title Value by Payload
+  void _setTitle(Payload payload) {
+    // Set Payload
+    this.payload(payload);
 
-    // Set File Item
-    sonrFile(file);
-    thumbStatus(ThumbnailStatus.Loading);
-    await sonrFile.value!.setThumbnail();
-
-    // Check Result
-    if (sonrFile.value!.single.hasThumbnail()) {
-      thumbStatus(ThumbnailStatus.Complete);
-    } else {
-      thumbStatus(ThumbnailStatus.None);
+    // Update Title
+    switch (payload) {
+      case Payload.CONTACT:
+        this.title("Sharing Contact Card");
+        break;
+      case Payload.URL:
+        this.title("Sending Link");
+        break;
+      default:
+        if (sonrFile.value.exists) {
+          this.title("Sharing " + sonrFile.value.prettyType());
+        }
     }
   }
 }

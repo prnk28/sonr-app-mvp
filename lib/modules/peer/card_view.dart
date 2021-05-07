@@ -92,16 +92,16 @@ class _PeerMainCard extends StatelessWidget {
           // Avatar
           Obx(() => FadeInDownBig(
                 duration: 125.milliseconds,
-                child: controller.peer.value!.profilePicture(size: 68),
+                child: controller.peer.value.profilePicture(size: 68),
               )),
 
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value!.profile.firstName} ${controller.peer.value!.profile.lastName}".h6,
+          "${controller.peer.value.fullName}".h6,
 
           // Username
-          controller.peer.value!.profile.username.p_Grey,
+          controller.peer.value.profile.username.p_Grey,
         ].column());
   }
 }
@@ -139,11 +139,11 @@ class _PeerDetailsCard extends StatelessWidget {
           Spacer(),
 
           // Device Information
-          controller.peer.value!.platform.grey(size: 92),
+          controller.peer.value.platform.grey(size: 92),
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value!.model}".h5,
+          "${controller.peer.value.model}".h5,
         ].column());
   }
 }

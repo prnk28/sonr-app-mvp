@@ -130,6 +130,13 @@ class CardService extends GetxService {
     _refreshCount();
   }
 
+  // ^ Remove Card and Add Deleted Activity to Database ^ //
+  static deleteAllCards() async {
+    if (to._all.length > 0) {
+      await to._database.deleteAllCards();
+    }
+  }
+
   // ^ Load IO File from Metadata ^ //
   static Future<File?> loadFileFromMetadata(SonrFile_Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
