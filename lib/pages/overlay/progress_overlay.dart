@@ -33,7 +33,7 @@ class ProgressView extends HookWidget {
         ));
   }
 
-  // ^ Method Builds Wave Painter Canvas ^ //
+  /// ^ Method Builds Wave Painter Canvas ^ //
   Widget buildPainter(AnimationController hookController, bool utilizeProgress) {
     return SizedBox(
       height: Get.height,
@@ -68,7 +68,7 @@ class ProgressView extends HookWidget {
     );
   }
 
-  // ^ Method Builds Shader Box ^ //
+  /// ^ Method Builds Shader Box ^ //
   Widget buildShaderMask(AnimationController hookController, bool utilizeProgress) {
     return SizedBox(
       height: Get.width,
@@ -91,7 +91,7 @@ class ProgressView extends HookWidget {
     );
   }
 
-  // ^ Method Builds Shader Box ^ //
+  /// ^ Method Builds Shader Box ^ //
   Widget buildTransferIcon(AnimationController hookController, bool utilizeProgress) {
     return Center(
         child: utilizeProgress

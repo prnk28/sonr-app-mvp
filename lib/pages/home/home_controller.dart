@@ -30,7 +30,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
-  // ^ Controller Constructer ^
+  /// ^ Controller Constructer ^
   @override
   onInit() {
     // Handle Tab Controller
@@ -63,7 +63,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
-  // ^ On Dispose ^ //
+  /// ^ On Dispose ^ //
   @override
   void onClose() {
     _lobbyStream.cancel();
@@ -72,7 +72,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
-  // ^ Update Bottom Bar Index ^ //
+  /// ^ Update Bottom Bar Index ^ //
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
     if (newIndex != bottomIndex.value) {
@@ -164,7 +164,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   }
 }
 
-// ^ Home View Enum Extension ^ //
+/// ^ Home View Enum Extension ^ //
 extension HomeViewUtils on HomeView {
   bool get isMain => this == HomeView.Main;
 

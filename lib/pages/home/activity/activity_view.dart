@@ -1,6 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 
-// ^ Activity View ^ //
+/// ^ Activity View ^ //
 class ActivityView extends StatelessWidget {
   ActivityView({Key? key}) : super(key: key);
   @override
@@ -23,7 +23,7 @@ class ActivityView extends StatelessWidget {
   }
 }
 
-// ^ Activity List Item ^ //
+/// ^ Activity List Item ^ //
 class _ActivityListItem extends StatelessWidget {
   final TransferCardActivity item;
 
@@ -57,24 +57,24 @@ class _ActivityListItem extends StatelessWidget {
   Widget _buildMessage() {
     switch (item.activity) {
       case ActivityType.Deleted:
-        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Red, _description(item.card!).h6].row();
+        return [item.payload.black, " You ".h6, item.activity.value.h6_Red, _description(item).h6].row();
       case ActivityType.Shared:
-        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Blue, _description(item.card!).h6].row();
+        return [item.payload.black, " You ".h6, item.activity.value.h6_Blue, _description(item).h6].row();
       case ActivityType.Received:
-        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Purple, _description(item.card!).h6].row();
+        return [item.payload.black, " You ".h6, item.activity.value.h6_Purple, _description(item).h6].row();
       default:
-        return [item.card!.payload.black, " You ".h6, item.activity.value.h6_Grey, _description(item.card!).h6]
+        return [item.payload.black, " You ".h6, item.activity.value.h6_Grey, _description(item).h6]
             .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }
   }
 
-  String _description(TransferCard card) {
-    if (card.payload == Payload.MULTI_FILES) {
+  String _description(TransferCardActivity activity) {
+    if (activity.payload == Payload.MULTI_FILES) {
       return " some Files"; //+ " from ${card.owner.firstName}";
-    } else if (card.payload == Payload.FILE || card.payload == Payload.MEDIA) {
-      return " a " + card.file.single.mime.type.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";
+    } else if (activity.payload == Payload.FILE || activity.payload == Payload.MEDIA) {
+      return " a " + activity.mime.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";
     } else {
-      if (card.payload == Payload.CONTACT) {
+      if (activity.payload == Payload.CONTACT) {
         return " a Contact"; // + " from ${card.owner.firstName}";
       }
       return " a Link"; // + " from ${card.owner.firstName}";

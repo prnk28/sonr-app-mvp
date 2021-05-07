@@ -41,7 +41,7 @@ class ContactGridItemView extends StatelessWidget {
   }
 }
 
-// ^ Main Contact Grid Item View ^ //
+/// ^ Main Contact Grid Item View ^ //
 class _ContactGridItemMainView extends StatelessWidget {
   final TransferCardItem? item;
   final RxBool? isFlipped;
@@ -70,7 +70,7 @@ class _ContactGridItemMainView extends StatelessWidget {
   }
 }
 
-// ^ Details Contact Grid Item View ^ //
+/// ^ Details Contact Grid Item View ^ //
 class _ContactGridItemDetailsView extends StatelessWidget {
   final TransferCardItem? item;
   final RxBool? isFlipped;

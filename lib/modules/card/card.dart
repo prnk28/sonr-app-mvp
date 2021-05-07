@@ -9,11 +9,11 @@ import 'file/list_item.dart';
 import 'url/card_item.dart';
 import 'package:sonr_app/style/style.dart';
 
-// ^ Card Element/View type Enums ^ //
+/// ^ Card Element/View type Enums ^ //
 enum TransferItemsType { All, Metadata, Contacts, Links }
 enum TransferItemView { CardItem, GridItem, ListItem }
 
-/// ^ TransferCardView: Builds View based on TransferCardItem Payload Type ^
+//// ^ TransferCardView: Builds View based on TransferCardItem Payload Type ^
 class TransferItem extends StatelessWidget {
   /// TransferCardItem: SQL Reference to Protobuf
   final TransferCardItem item;
@@ -107,7 +107,7 @@ extension CardsViewElementTypeUtils on TransferItemsType {
   }
 }
 
-// ^ Card Grid View - By Elements Type ^ //
+/// ^ Card Grid View - By Elements Type ^ //
 /// Displays Cards in a Grid Based on Element Type
 class CardsGridView extends StatelessWidget {
   final TransferItemsType type;
@@ -132,7 +132,7 @@ class CardsGridView extends StatelessWidget {
   }
 }
 
-// ^ Card List View - By Elements Type ^ //
+/// ^ Card List View - By Elements Type ^ //
 class CardsListView extends StatelessWidget {
   final TransferItemsType type;
   CardsListView({required this.type, Key? key}) : super(key: key);

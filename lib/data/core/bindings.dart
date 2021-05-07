@@ -15,7 +15,7 @@ import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-// ^ Initial Controller Bindings ^ //
+/// ^ Initial Controller Bindings ^ //
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
@@ -26,7 +26,7 @@ class InitialBinding implements Bindings {
   }
 }
 
-// ^ Desktop Window Bindings ^ //
+/// ^ Desktop Window Bindings ^ //
 class DesktopBinding implements Bindings {
   @override
   void dependencies() {
@@ -43,7 +43,7 @@ class DesktopBinding implements Bindings {
   }
 }
 
-// ^ Home Controller Bindings ^ //
+/// ^ Home Controller Bindings ^ //
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
@@ -57,7 +57,7 @@ class HomeBinding implements Bindings {
   }
 }
 
-// ^ Register Page Bindings ^ //
+/// ^ Register Page Bindings ^ //
 class RegisterBinding implements Bindings {
   @override
   void dependencies() {
@@ -65,7 +65,7 @@ class RegisterBinding implements Bindings {
   }
 }
 
-// ^ Transfer Screen Bindings ^ //
+/// ^ Transfer Screen Bindings ^ //
 class TransferBinding implements Bindings {
   @override
   void dependencies() {

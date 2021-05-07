@@ -3,7 +3,7 @@ import 'package:sonr_app/service/client/sonr.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-// ^ Contact Protobuf ^ //
+/// ^ Contact Protobuf ^ //
 /// Extension Manages Contact Protobof as Rx Type
 extension RxContact on Rx<Contact> {
   /// Add Address for Rx<Contact>
@@ -88,7 +88,7 @@ extension RxContact on Rx<Contact> {
       });
 }
 
-// ^ InviteRequest Protobuf ^ //
+/// ^ InviteRequest Protobuf ^ //
 /// Extension Manages InviteRequest Protobuf as Rx Type
 extension RxInviteRequest on Rx<InviteRequest> {
   /// Checks if InviteRequest Payload is Media

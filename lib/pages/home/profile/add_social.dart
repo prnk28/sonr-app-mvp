@@ -51,7 +51,7 @@ class AddTileView extends GetView<ProfileController> {
   }
 }
 
-// ^ Step 1 Select Provider ^ //
+/// ^ Step 1 Select Provider ^ //
 class DropdownAddView extends GetView<ProfileController> {
   // Build View As Stateless
   @override
@@ -84,7 +84,7 @@ class DropdownAddView extends GetView<ProfileController> {
   }
 }
 
-// ^ Step 2 Connect to the provider API ^ //
+/// ^ Step 2 Connect to the provider API ^ //
 class SetInfoView extends GetView<ProfileController> {
   SetInfoView();
 
@@ -107,7 +107,7 @@ class SetInfoView extends GetView<ProfileController> {
   }
 }
 
-// ^ Step 3 Set the Social Tile type ^ //
+/// ^ Step 3 Set the Social Tile type ^ //
 class SetTypeView extends GetView<ProfileController> {
   const SetTypeView({Key? key}) : super(key: key);
   @override
@@ -124,7 +124,7 @@ class SetTypeView extends GetView<ProfileController> {
   }
 }
 
-// ^ Creates Infographic Text thats used in all Views ^ //
+/// ^ Creates Infographic Text thats used in all Views ^ //
 class _InfoText extends StatelessWidget {
   final int index;
   final String text;

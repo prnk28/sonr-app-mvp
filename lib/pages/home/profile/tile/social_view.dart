@@ -24,23 +24,19 @@ class SocialView extends StatelessWidget {
             var posts = controller.medium.value;
             return Stack(children: [_MediumItem(posts, 0, true), item.provider.black]);
 
-
           // Twitter
           case Contact_Social_Provider.Twitter:
             var twitter = controller.twitter.value;
             return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.black]);
-
 
           // Youtube
           case Contact_Social_Provider.YouTube:
             var youtube = controller.youtube.value;
             return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.black]);
 
-
           // Other
           default:
             return Container();
-
         }
       }
 
@@ -70,7 +66,7 @@ class SocialView extends StatelessWidget {
   }
 }
 
-// ^ Medium Item ^ //
+/// ^ Medium Item ^ //
 class _MediumItem extends StatelessWidget {
   final MediumModel? medium;
   final int index;
@@ -110,7 +106,7 @@ class _MediumItem extends StatelessWidget {
   }
 }
 
-// ^ Twitter Item ^ //
+/// ^ Twitter Item ^ //
 class _TweetItem extends StatelessWidget {
   final TileController controller;
   final TwitterModel? twitter;
@@ -152,8 +148,8 @@ class _TweetItem extends StatelessWidget {
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Container(
               width: 55,
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.p]),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.p]),
             ),
             Container(
               width: 265,
@@ -172,7 +168,7 @@ class _TweetItem extends StatelessWidget {
   }
 }
 
-// ^ Youtube Item ^ //
+/// ^ Youtube Item ^ //
 class _YoutubeItem extends StatelessWidget {
   final YoutubeModel? youtube;
   final int index;

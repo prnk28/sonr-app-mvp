@@ -9,7 +9,7 @@ export 'flat_overlay.dart';
 export 'positioned_overlay.dart';
 export 'progress_overlay.dart';
 
-// ^ Class Builds Base Animated Overlay View ** //
+/// ^ Class Builds Base Animated Overlay View ** //
 class BaseOverlayView extends StatefulWidget {
   final Widget child;
   final Duration duration;
@@ -46,7 +46,7 @@ class _BaseOverlayViewState extends State<BaseOverlayView> with TickerProviderSt
   }
 }
 
-// ^ Class Builds Alert View Widget for Overlay ** //
+/// ^ Class Builds Alert View Widget for Overlay ** //
 class AlertOverlayView extends StatelessWidget {
   final int index; // Index of Overlay
   final String title;
@@ -94,7 +94,7 @@ class AlertOverlayView extends StatelessWidget {
   }
 }
 
-// ^ Class Builds Dropdown View Widget for Positioned Overlay ** //
+/// ^ Class Builds Dropdown View Widget for Positioned Overlay ** //
 class DropdownOverlayView extends StatelessWidget {
   final int index; // Index of Overlay
   final List<SonrDropdownItem> items;
@@ -158,7 +158,7 @@ class DropdownOverlayView extends StatelessWidget {
   }
 }
 
-// ^ Class Builds Question View Widget for Overlay ** //
+/// ^ Class Builds Question View Widget for Overlay ** //
 class QuestionOverlayView extends GetView<SonrOverlay> {
   final int index; // Index of Overlay
   final String title;

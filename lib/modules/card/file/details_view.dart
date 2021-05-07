@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
 
-// ^ Widget for Details Media View
+/// ^ Widget for Details Media View
 class MetaDetailsView extends StatelessWidget {
   final SonrFile_Metadata card;
   final File? mediaFile;

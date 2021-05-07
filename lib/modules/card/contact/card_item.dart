@@ -5,7 +5,7 @@ import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
-// ^ TransferCard Contact Item Details ^ //
+/// ^ TransferCard Contact Item Details ^ //
 class ContactCardItemView extends StatelessWidget {
   final TransferCardItem card;
   ContactCardItemView(this.card, {Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class ContactCardItemView extends StatelessWidget {
       height: 420,
       decoration: Neumorphic.floating(),
       child: Hero(
-        tag: card.id!,
+        tag: card.id,
         child: Container(
           height: 75,
           decoration: BoxDecoration(
@@ -37,9 +37,7 @@ class ContactCardItemView extends StatelessWidget {
             ),
 
             // Build Name
-            ProfileHeaderName(
-              profile: card.contact!.profile,
-            ),
+            ProfileName(profile: card.contact!.profile, isHeader: false),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 

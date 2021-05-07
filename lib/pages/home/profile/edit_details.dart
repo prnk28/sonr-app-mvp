@@ -1,7 +1,7 @@
 import 'package:sonr_app/style/style.dart';
 import 'profile.dart';
 
-// ^ Edit Profile Details View ^ //
+/// ^ Edit Profile Details View ^ //
 class EditDetailsView extends GetView<ProfileController> {
   EditDetailsView({Key? key}) : super(key: key);
   final FocusNode _firstNameFocus = FocusNode();

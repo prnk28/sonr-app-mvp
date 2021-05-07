@@ -17,7 +17,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   TabController? tabController;
   ScrollController? scrollController;
 
-  // ^ Controller Constructer ^
+  /// ^ Controller Constructer ^
   @override
   onInit() {
     // Set Scroll Controller
@@ -37,7 +37,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     super.onInit();
   }
 
-  // ^ Method for Setting Category Filter ^ //
+  /// ^ Method for Setting Category Filter ^ //
   setTag(int index) {
     tagIndex(index);
     category(ToggleFilter.values[index]);
@@ -47,7 +47,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     HapticFeedback.mediumImpact();
   }
 
-  // ^ Handles Chart Item Tap ^ //
+  /// ^ Handles Chart Item Tap ^ //
   void tapChart(PieTouchResponse pieTouchResponse) {
     final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent && pieTouchResponse.touchInput is! PointerUpEvent;
     if (desiredTouch && pieTouchResponse.touchedSection != null) {
@@ -57,7 +57,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     }
   }
 
-  // ^ Method Sets Pie Chart Data
+  /// ^ Method Sets Pie Chart Data
   List<PieChartSectionData> refreshChart() {
     return List.generate(3, (i) {
       final isTouched = i == chartActiveIndex.value;

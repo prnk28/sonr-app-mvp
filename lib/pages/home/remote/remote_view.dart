@@ -2,7 +2,7 @@ import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'remote_controller.dart';
 
-// ^ Main Card View ^ //
+/// ^ Main Card View ^ //
 class RemoteView extends GetView<RemoteController> {
   RemoteView({Key? key}) : super(key: key);
 
@@ -34,7 +34,7 @@ class RemoteView extends GetView<RemoteController> {
   }
 }
 
-// ^ Join a Remote View ^ //
+/// ^ Join a Remote View ^ //
 class _JoinRemoteView extends GetView<RemoteController> {
   _JoinRemoteView({Key? key}) : super(key: key);
   @override
@@ -76,7 +76,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
   }
 }
 
-// ^ Card Aspect Ratio Remote View ^ //
+/// ^ Card Aspect Ratio Remote View ^ //
 class RemoteLobbyView extends GetView<RemoteController> {
   RemoteLobbyView({Key? key}) : super(key: key);
   @override
@@ -107,7 +107,7 @@ class RemoteLobbyView extends GetView<RemoteController> {
   }
 }
 
-// ^ Enter Code View ^ //
+/// ^ Enter Code View ^ //
 class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
@@ -164,7 +164,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
   }
 }
 
-// ^ Received Remote Invite View ^ //
+/// ^ Received Remote Invite View ^ //
 class RemoteInviteView extends GetView<RemoteController> {
   RemoteInviteView({Key? key}) : super(key: key);
   @override
@@ -177,7 +177,7 @@ class RemoteInviteView extends GetView<RemoteController> {
   }
 }
 
-// ^ During Remote Transfer View ^ //
+/// ^ During Remote Transfer View ^ //
 
 class RemoteProgressView extends GetView<RemoteController> {
   RemoteProgressView({Key? key}) : super(key: key);
@@ -192,7 +192,7 @@ class RemoteProgressView extends GetView<RemoteController> {
   }
 }
 
-// ^  Remote Completed View ^ //
+/// ^  Remote Completed View ^ //
 
 class RemoteCompletedView extends GetView<RemoteController> {
   RemoteCompletedView({Key? key}) : super(key: key);

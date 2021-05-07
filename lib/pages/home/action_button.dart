@@ -3,7 +3,6 @@ import 'home_controller.dart';
 import 'profile/profile_controller.dart';
 import 'remote/remote_controller.dart';
 
-
 class HomeActionButton extends GetView<HomeController> {
   HomeActionButton();
 
@@ -38,7 +37,7 @@ class HomeActionButton extends GetView<HomeController> {
   }
 }
 
-// ^ Profile Action Button Widget ^ //
+/// ^ Profile Action Button Widget ^ //
 class _ProfileActionButton extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,7 @@ class _ProfileActionButton extends GetView<ProfileController> {
   }
 }
 
-// ^ Profile Action Button Widget ^ //
+/// ^ Profile Action Button Widget ^ //
 class _RemoteActionButton extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {

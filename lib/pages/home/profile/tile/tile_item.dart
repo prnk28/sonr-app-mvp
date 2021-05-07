@@ -41,7 +41,7 @@ class SocialTileItem extends GetWidget<TileController> {
     ]);
   }
 
-  // ^ Builds Neumorohic Item ^ //
+  /// ^ Builds Neumorohic Item ^ //
   Widget _buildView(bool isEditing, {bool isDragging = false}) {
     // Theming View with Drag
     return GestureDetector(

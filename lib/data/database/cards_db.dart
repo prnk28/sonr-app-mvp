@@ -18,7 +18,9 @@ extension ActivityTypeUtils on ActivityType? {
 @DataClassName("TransferCardActivity")
 class TransferCardActivities extends Table {
   IntColumn? get id => integer().autoIncrement()();
-  TextColumn? get card => text().map(const CardConverter())();
+  TextColumn? get owner => text().map(const ProfileConverter())();
+  IntColumn? get mime => integer().map(const MimeConverter())();
+  IntColumn? get payload => integer().map(const PayloadConverter())();
   IntColumn? get activity => integer().map(const ActivityConverter())();
 }
 
@@ -43,7 +45,7 @@ class CardsDatabase extends _$CardsDatabase {
   // you should bump this number whenever you change or add a table definition. Migrations
   // are covered later in this readme.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   // loads all todo entries
   Future<List<TransferCardItem>> get allCardEntries => select(transferCardItems).get();
@@ -70,8 +72,13 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   // returns the generated id
-  Future<int> addActivity(ActivityType type, TransferCard card) {
-    return into(transferCardActivities).insert(TransferCardActivitiesCompanion(card: Value(card), activity: Value(type)));
+  Future<int> addActivity(ActivityType type, Payload payload, Profile owner, {MIME_Type mime = MIME_Type.OTHER}) {
+    return into(transferCardActivities).insert(TransferCardActivitiesCompanion(
+      payload: Value(payload),
+      owner: Value(owner),
+      mime: Value(mime),
+      activity: Value(type),
+    ));
   }
 
   Future<int> addCard(TransferCard card) async {
@@ -103,6 +110,10 @@ class CardsDatabase extends _$CardsDatabase {
 
   Future<void> deleteCard(TransferCardItem item) {
     return (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
+  }
+
+  Future<void> deleteCardFromID(int id) {
+    return (delete(transferCardItems)..where((t) => t.id.equals(id))).go();
   }
 
   Future<void> deleteAllCards() {

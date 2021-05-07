@@ -4,7 +4,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum RiveBoard { SplashPortrait, SplashLandscape, Documents }
 
-// ^ Rive Animation Container Widget ^ //
+/// ^ Rive Animation Container Widget ^ //
 class RiveContainer extends StatefulWidget {
   final double width;
   final double height;

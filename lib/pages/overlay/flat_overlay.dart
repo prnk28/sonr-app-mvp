@@ -110,7 +110,7 @@ class _FlatModeController extends GetxController {
     super.onClose();
   }
 
-  // ^ Method to Animate in Responded Card ^ //
+  /// ^ Method to Animate in Responded Card ^ //
   animateIn(Contact card, {double delayModifier = 1.0}) {
     received(card);
     Future.delayed(K_TRANSLATE_DURATION * delayModifier, () {
@@ -120,7 +120,7 @@ class _FlatModeController extends GetxController {
     });
   }
 
-  // ^ Method to Animate in Invited Card ^ //
+  /// ^ Method to Animate in Invited Card ^ //
   animateSwap(Contact card) {
     // Set Received Card
     received(card);
@@ -141,7 +141,7 @@ class _FlatModeController extends GetxController {
     });
   }
 
-  // ^ Method to Animate out Sent Card  and Update Drage Position ^ //
+  /// ^ Method to Animate out Sent Card  and Update Drage Position ^ //
   setDrag(double y) {
     // @ Check for Valid State
     if (status.value == FlatModeState.Dragging || status.value == FlatModeState.Standby) {
@@ -180,7 +180,7 @@ class _FlatModeController extends GetxController {
   }
 }
 
-// ^ Method Builds Slide Transition ^ //
+/// ^ Method Builds Slide Transition ^ //
 class _FlatModeAnimation {
   final FlatModeTransition type;
   _FlatModeAnimation(this.type);
@@ -203,14 +203,12 @@ class _FlatModeAnimation {
           TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
         ]);
 
-
       // @ Slide In Single
       case FlatModeTransition.SlideInSingle:
         return TweenSequence([
           TweenSequenceItem(tween: Offset(0, -1).tweenTo(Offset(0.0, 0.0)), weight: 1),
           TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
         ]);
-
 
       // @ Slide Out
       case FlatModeTransition.SlideOut:
@@ -228,7 +226,6 @@ class _FlatModeAnimation {
 
       default:
         return TweenSequence([TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1)]);
-
     }
   }
 

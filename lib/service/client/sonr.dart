@@ -43,7 +43,7 @@ class SonrService extends GetxService {
   Function(AuthInvite)? _remoteCallback;
   Function(TransferStatus)? _transferCallback;
 
-  // ^ Updates Node^ //
+  /// ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
       if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
@@ -65,7 +65,7 @@ class SonrService extends GetxService {
     _transferCallback = reply;
   }
 
-  // ^ Initialize Service Method ^ //
+  /// ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
     // Initialize
     _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
@@ -95,7 +95,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Connect to Service Method ^ //
+  /// ^ Connect to Service Method ^ //
   Future<void> connect() async {
     if (_node == null) {
       // Create Request
@@ -136,7 +136,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Connect to Service Method ^ //
+  /// ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact? contact) async {
     // Create Request
     var connReq = await RequestUtility.newRequest(
@@ -168,14 +168,14 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Retreive Node Location Info ^ //
+  /// ^ Retreive Node Location Info ^ //
   static Future<Location?> locationInfo() async {
     if (to._node != null) {
       return await to._node!.location();
     }
   }
 
-  // ^ Retreive URLLink Metadata ^ //
+  /// ^ Retreive URLLink Metadata ^ //
   static Future<URLLink> getURL(String url) async {
     if (to._node != null) {
       var link = await to._node!.getURL(url);
@@ -184,19 +184,19 @@ class SonrService extends GetxService {
     return URLLink(link: url);
   }
 
-  // ^ Request Local Network Access on iOS ^
+  /// ^ Request Local Network Access on iOS ^
   static void requestLocalNetwork() async {
     to._node!.requestLocalNetwork();
   }
 
-  // ^ Create a New Remote ^
+  /// ^ Create a New Remote ^
   static Future<RemoteInfo?> createRemote() async {
     if (to._node != null) {
       return await to._node!.createRemote();
     }
   }
 
-  // ^ Join an Existing Remote ^
+  /// ^ Join an Existing Remote ^
   static Future<RemoteInfo> joinRemote(List<String> words) async {
     // Extract Data
     var display = "${words[0]} ${words[1]} ${words[2]}";
@@ -211,7 +211,7 @@ class SonrService extends GetxService {
     return remote;
   }
 
-  // ^ Leave a Remote Group ^
+  /// ^ Leave a Remote Group ^
   static void leaveRemote(RemoteInfo info) async {
     // Perform Routine
     if (to._node != null) {
@@ -219,7 +219,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Sets Properties for Node ^
+  /// ^ Sets Properties for Node ^
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
       to._properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
@@ -230,21 +230,21 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Sets Contact for Node ^
+  /// ^ Sets Contact for Node ^
   static void setProfile(Contact contact) async {
     if (to._node != null) {
       to._node!.update(contact: contact);
     }
   }
 
-  // ^ Direct Message a Peer ^
+  /// ^ Direct Message a Peer ^
   static void message(Peer peer, String content) {
     if (to._node != null) {
       to._node!.message(peer, content);
     }
   }
 
-  // ^ Invite Peer with Built Request ^ //
+  /// ^ Invite Peer with Built Request ^ //
   static void invite(InviteRequest request) async {
     // Send Invite
     if (to._node != null) {
@@ -252,14 +252,14 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Respond-Peer Event ^
+  /// ^ Respond-Peer Event ^
   static void respond(bool decision, {RemoteInfo? info}) async {
     if (to._node != null) {
       to._node!.respond(decision, info: info);
     }
   }
 
-  // ^ Invite Peer with Built Request ^ //
+  /// ^ Invite Peer with Built Request ^ //
   static void sendFlat(Peer? peer) async {
     // Send Invite
     InviteRequest request = InviteRequest(payload: Payload.FLAT_CONTACT, to: peer, isRemote: false, contact: UserService.contact.value);
@@ -269,7 +269,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Async Function notifies transfer complete ^ //
+  /// ^ Async Function notifies transfer complete ^ //
   static Future<TransferCard> completed() async {
     return to.received.future;
   }
@@ -277,7 +277,7 @@ class SonrService extends GetxService {
   // **************************
   // ******* Callbacks ********
   // **************************
-  // ^ Handle Bootstrap Result ^ //
+  /// ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     print(data.value.toString());
     // Check for Homescreen Controller
@@ -294,7 +294,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Node Has Been Invited ^ //
+  /// ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
     // Check for Overlay
     if (data.hasRemote() && _remoteCallback != null) {
@@ -313,7 +313,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Node Has Been Accepted ^ //
+  /// ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
     // Handle Contact Response
     if (data.type == AuthReply_Type.FlatContact) {
@@ -335,12 +335,12 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Transfer Has Updated Progress ^ //
+  /// ^ Transfer Has Updated Progress ^ //
   void _handleProgress(double data) async {
     _progress(data);
   }
 
-  // ^ Completes Transmission Sequence ^
+  /// ^ Completes Transmission Sequence ^
   void _handleTransmitted(TransferCard data) async {
     print(data.toString());
     // Check for Callback
@@ -354,10 +354,10 @@ class SonrService extends GetxService {
     await HapticFeedback.heavyImpact();
 
     // Log Activity
-    CardService.sharedCard(data);
+    CardService.addActivityShared(payload: data.payload, file: data.file);
   }
 
-  // ^ Mark as Received File ^ //
+  /// ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
     print(data.toString());
     // Save Card to Gallery
@@ -374,7 +374,7 @@ class SonrService extends GetxService {
     DeviceService.playSound(type: UISoundType.Received);
   }
 
-  // ^ An Error Has Occurred ^ //
+  /// ^ An Error Has Occurred ^ //
   void _handleError(ErrorMessage data) async {
     print(data.toString());
     if (data.severity != ErrorMessage_Severity.LOG) {
@@ -383,7 +383,7 @@ class SonrService extends GetxService {
   }
 }
 
-// ^ Transfer Status Enum ^ //
+/// ^ Transfer Status Enum ^ //
 enum TransferStatus { Accepted, Denied, Completed }
 
 extension TransferStatusUtil on TransferStatus {

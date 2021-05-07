@@ -6,7 +6,7 @@ import 'package:sonr_app/style/style.dart';
 
 import 'profile_controller.dart';
 
-// ^ Edit Profile Picture View ^ //
+/// ^ Edit Profile Picture View ^ //
 class EditPictureView extends GetView<ProfileController> {
   final String headerText;
   EditPictureView({this.headerText = "Edit Picture", Key? key}) : super(key: key);
@@ -39,7 +39,7 @@ class EditPictureView extends GetView<ProfileController> {
   }
 }
 
-// ^ Circular Camera View ^ //
+/// ^ Circular Camera View ^ //
 class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class _CameraPermissionsView extends GetView<ProfilePictureController> {
   }
 }
 
-// ^ Profile Picture Controller Status ^ //
+/// ^ Profile Picture Controller Status ^ //
 enum ProfilePictureStatus {
   NeedsPermissions,
   Ready,
@@ -136,7 +136,7 @@ extension ProfilePictureStatusUtils on ProfilePictureStatus {
   }
 }
 
-// ^ Profile Picture Reactive Controller ^ //
+/// ^ Profile Picture Reactive Controller ^ //
 class ProfilePictureController extends GetxController {
   // Notifiers
   ValueNotifier<CaptureModes> captureMode = ValueNotifier(CaptureModes.PHOTO);

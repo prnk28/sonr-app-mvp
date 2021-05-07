@@ -7,7 +7,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'overlay.dart';
 
-// ^ Class Controls Active Overlays ** //
+/// ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<SonrOverlay>();
@@ -23,12 +23,12 @@ class SonrOverlay extends GetxService {
   static int get count => Get.find<SonrOverlay>().overlays.length;
   static SonrOverlay get _controller => Get.find<SonrOverlay>();
 
-  // ^ Initialize Service Method ^ //
+  /// ^ Initialize Service Method ^ //
   Future<SonrOverlay> init() async {
     return this;
   }
 
-  // ^ Method Finds Overlay Controller and Opens View ^ //
+  /// ^ Method Finds Overlay Controller and Opens View ^ //
   static int show(Widget view,
       {bool barrierDismissible = true,
       Duration entryDuration = const Duration(milliseconds: 300),
@@ -46,7 +46,7 @@ class SonrOverlay extends GetxService {
     return _controller.overlays.indexOf(overlay);
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Question ^ //
+  /// ^ Method Finds Overlay Controller and Prompts Question ^ //
   static Future<bool> question(
       {required String title,
       required String description,
@@ -83,7 +83,7 @@ class SonrOverlay extends GetxService {
     return completer.future;
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
+  /// ^ Method Finds Overlay Controller and Prompts Alert ^ //
   static Future<bool> alert(
       {required String title,
       required String description,
@@ -118,7 +118,7 @@ class SonrOverlay extends GetxService {
     return completer.future as Future<bool>;
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Invite ^ //
+  /// ^ Method Finds Overlay Controller and Prompts Invite ^ //
   static void invite(AuthInvite invite,
       {bool barrierDismissible = false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
@@ -139,7 +139,7 @@ class SonrOverlay extends GetxService {
     }
   }
 
-  // ^ Method Finds Overlay Controller to Show Reply ^ //
+  /// ^ Method Finds Overlay Controller to Show Reply ^ //
   static void reply(AuthReply reply,
       {bool barrierDismissible = false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
@@ -159,7 +159,7 @@ class SonrOverlay extends GetxService {
     }
   }
 
-  // ^ Method Pops Current Overlay ^ //
+  /// ^ Method Pops Current Overlay ^ //
   static void back() {
     if (isOpen) {
       // Pop Current Overlay
@@ -173,7 +173,7 @@ class SonrOverlay extends GetxService {
     }
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
+  /// ^ Method Finds Overlay Controller and Prompts Alert ^ //
   static void closeAt(int index) {
     if (isOpen && index >= 0) {
       _controller.overlays[index].dismiss();
@@ -185,7 +185,7 @@ class SonrOverlay extends GetxService {
     }
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
+  /// ^ Method Finds Overlay Controller and Prompts Alert ^ //
   static void closeAll() {
     if (isOpen) {
       // Iterate through Overlays
@@ -202,7 +202,7 @@ class SonrOverlay extends GetxService {
   }
 }
 
-// ^ Class Presents Overlay Widget Entry on Context ** //
+/// ^ Class Presents Overlay Widget Entry on Context ** //
 class _SonrFixedOverlayEntry {
   // Properties
   final Offset entryLocation;
@@ -218,7 +218,7 @@ class _SonrFixedOverlayEntry {
   late Function dismiss;
   OverlayEntry? overlay, overlayBackground;
 
-  // ^ Constructer ** //
+  /// ^ Constructer ** //
   _SonrFixedOverlayEntry(this.entryLocation, this.entryDuration, this.barrierDismissible, this.overlayWidget,
       {this.blur = 5.0, this.backgroundColor, this.mainAxisAlignment = MainAxisAlignment.center, this.disableAnimation = false}) {
     dismiss = () {

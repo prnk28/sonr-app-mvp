@@ -42,7 +42,7 @@ class MetaGridItemView extends StatelessWidget {
   }
 }
 
-// ^ Main Media Grid Item View ^ //
+/// ^ Main Media Grid Item View ^ //
 class _MediaGridItemMainView extends StatelessWidget {
   final TransferCardItem? item;
   final RxBool? isFlipped;
@@ -70,7 +70,7 @@ class _MediaGridItemMainView extends StatelessWidget {
   }
 }
 
-// ^ Details Media Grid Item View ^ //
+/// ^ Details Media Grid Item View ^ //
 class _MediaGridItemDetailsView extends StatelessWidget {
   final TransferCardItem? item;
   final RxBool? isFlipped;

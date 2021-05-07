@@ -35,7 +35,7 @@ class WindowController extends GetxController {
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
-  // ^ On Dispose ^ //
+  /// ^ On Dispose ^ //
   @override
   void onClose() {
     _lobbySizeStream.cancel();

@@ -24,14 +24,18 @@ class ProfileAvatar extends StatelessWidget {
 }
 
 /// Builds Header Style text from [Profile] data
-class ProfileHeaderName extends StatelessWidget {
+class ProfileName extends StatelessWidget {
   final Profile profile;
-  const ProfileHeaderName({Key? key, required this.profile}) : super(key: key);
+
+  /// If true Widget will use Gradient Text
+  final bool isHeader;
+  const ProfileName({Key? key, required this.profile, required this.isHeader}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      "${profile.firstName} ".h6,
-      profile.lastName.l,
-    ]);
+    if (this.isHeader) {
+      return "${profile.firstName} ${profile.lastName}".gradient(value: SonrGradients.SolidStone);
+    } else {
+      return Row(children: ["${profile.firstName} ".h6, profile.lastName.l]);
+    }
   }
 }

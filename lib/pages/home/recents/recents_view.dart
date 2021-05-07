@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 const K_LIST_HEIGHT = 225.0;
 
-// ^ Root Grid View ^ //
+/// ^ Root Grid View ^ //
 class CardMainView extends GetView<RecentsController> {
   CardMainView({Key? key}) : super(key: key);
   @override
@@ -62,7 +62,7 @@ class CardMainView extends GetView<RecentsController> {
   }
 }
 
-// ^ Card Stats View - Displays Pie Chart ^ //
+/// ^ Card Stats View - Displays Pie Chart ^ //
 class _CardStatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class _CardStatsView extends StatelessWidget {
   }
 }
 
-// ^ Card Storage Chart Widget ^ //
+/// ^ Card Storage Chart Widget ^ //
 class StorageChart extends GetView<RecentsController> {
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class StorageChart extends GetView<RecentsController> {
   }
 }
 
-// ^ Graph Element Badge Widget ^ //
+/// ^ Graph Element Badge Widget ^ //
 class Badge extends StatelessWidget {
   final double size;
   final Color borderColor;
@@ -134,7 +134,7 @@ class Badge extends StatelessWidget {
   }
 }
 
-// ^ Card Tag View ^ //
+/// ^ Card Tag View ^ //
 class TagsView extends GetView<RecentsController> {
   final List<Tuple<String, int>>? tags;
 
@@ -162,7 +162,7 @@ class TagsView extends GetView<RecentsController> {
   }
 }
 
-// ^ Card Tag Item ^ //
+/// ^ Card Tag Item ^ //
 class _TagItem extends GetView<RecentsController> {
   final String data;
   final int index;

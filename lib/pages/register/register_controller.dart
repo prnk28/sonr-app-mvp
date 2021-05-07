@@ -22,7 +22,7 @@ class RegisterController extends GetxController {
     super.onInit();
   }
 
-  // ^ Submits Contact ^ //
+  /// ^ Submits Contact ^ //
   setContact() async {
     if (validate()) {
       // Get Contact from Values
@@ -45,7 +45,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  // ^ Validates Fields ^ //
+  /// ^ Validates Fields ^ //
   bool validate() {
     // Check Valid
     bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
@@ -59,7 +59,7 @@ class RegisterController extends GetxController {
     return firstNameValid && lastNameValid;
   }
 
-  // ^ Request Location Permissions ^ //
+  /// ^ Request Location Permissions ^ //
   Future<bool> requestLocation() async {
     if (await Permission.locationWhenInUse.request().isGranted) {
       Get.find<MobileService>().updatePermissionsStatus();
@@ -71,7 +71,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  // ^ Request Gallery Permissions ^ //
+  /// ^ Request Gallery Permissions ^ //
   Future<bool> requestGallery() async {
     if (DeviceService.isAndroid) {
       if (await Permission.storage.request().isGranted) {

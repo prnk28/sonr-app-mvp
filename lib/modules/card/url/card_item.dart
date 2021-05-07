@@ -1,7 +1,7 @@
 import 'package:sonr_app/style/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ^ Widget for Expanded Media View
+/// ^ Widget for Expanded Media View
 class URLCardItemView extends StatelessWidget {
   final TransferCardItem item;
   const URLCardItemView(this.item);
@@ -12,7 +12,7 @@ class URLCardItemView extends StatelessWidget {
       child: Container(
         decoration: Neumorphic.floating(),
         child: Hero(
-          tag: item.id!,
+          tag: item.id,
           child: Container(
             height: 75,
             child: Container(),
@@ -22,7 +22,7 @@ class URLCardItemView extends StatelessWidget {
     );
   }
 
-  // ^ Launch a URL Event ^ //
+  /// ^ Launch a URL Event ^ //
   Future launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);

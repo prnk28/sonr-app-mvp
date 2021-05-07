@@ -5,7 +5,7 @@ import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
-// ^ Peer Controller Status ^ //
+/// ^ Peer Controller Status ^ //
 enum PeerStatus { Default, Pending, Accepted, Declined, Complete }
 
 extension PeerStatusUtils on PeerStatus {
@@ -16,7 +16,7 @@ extension PeerStatusUtils on PeerStatus {
   bool get isComplete => this == PeerStatus.Complete;
 }
 
-// ^ Reactive Controller for Peer Bubble ^ //
+/// ^ Reactive Controller for Peer Bubble ^ //
 class PeerController extends GetxController with SingleGetTickerProviderMixin {
   // Required Properties
   final Future<RiveFile> riveFile;
@@ -67,7 +67,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
-  // ^ Method that Initializes Peer and Streams ^ //
+  /// ^ Method that Initializes Peer and Streams ^ //
   void initalize(Peer data, {bool setAnimated = true}) async {
     // Set Initial
     peer(data);
@@ -126,14 +126,14 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // ^ Toggle Expanded View
+  /// ^ Toggle Expanded View
   void flipView(bool value) {
     isFlipped(value);
     isFlipped.refresh();
     HapticFeedback.heavyImpact();
   }
 
-  // ^ Handle User Invitation ^
+  /// ^ Handle User Invitation ^
   void invite() {
     // Check Animated
     if (isReady.value) {
@@ -157,7 +157,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // ^ Handle Updated Bubble Status ^ //
+  /// ^ Handle Updated Bubble Status ^ //
   void updateStatus(PeerStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
     // @ Update Status
     status(newStatus);
@@ -200,7 +200,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // ^ Handle Peer Position ^ //
+  /// ^ Handle Peer Position ^ //
   void _handlePeerUpdate(Peer data) {
     if (!isClosed && !status.value.isComplete) {
       // Update Direction

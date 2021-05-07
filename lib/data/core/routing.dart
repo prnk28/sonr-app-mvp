@@ -10,7 +10,7 @@ import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
-// ^ Constant Routing Information ^ //
+/// ^ Constant Routing Information ^ //
 class SonrRouting {
   static get pages => [
         // ** Home Page ** //
@@ -61,7 +61,7 @@ class SonrRouting {
         ),
       ];
 
-  // ^ Application Services ^ //
+  /// ^ Application Services ^ //
   static initServices({bool isDesktop = false}) async {
     // First Services
     await Get.putAsync(() => DeviceService().init(isDesktop), permanent: true);
@@ -83,7 +83,7 @@ class SonrRouting {
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
   }
 
-  // ^ Method Validates Required Services Registered ^ //
+  /// ^ Method Validates Required Services Registered ^ //
   static bool get areServicesRegistered {
     return DeviceService.isRegistered &&
         UserService.isRegistered &&

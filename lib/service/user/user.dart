@@ -38,7 +38,7 @@ class UserService extends GetxService {
   // ** References **
   final _userBox = GetStorage('User');
 
-  // ^ Open SharedPreferences on Init ^ //
+  /// ^ Open SharedPreferences on Init ^ //
   Future<UserService> init() async {
     // @ Init Shared Preferences
     await GetStorage.init('User');
@@ -79,7 +79,7 @@ class UserService extends GetxService {
     return this;
   }
 
-  // ^ Update Social in List ^ //
+  /// ^ Update Social in List ^ //
   static bool swapSocials(Contact_Social first, Contact_Social second) {
     // int idxOne = to._socials.keys.toList().indexOf(first.username);
     //int idxTwo = to._socials.keys.toList().indexOf(second.username);
@@ -87,7 +87,7 @@ class UserService extends GetxService {
     return true;
   }
 
-  // ^ Method to Create New User from Contact ^ //
+  /// ^ Method to Create New User from Contact ^ //
   static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
     // Set Valuse
     to._isNewUser(true);
@@ -113,7 +113,7 @@ class UserService extends GetxService {
     to._userBox.remove('user');
   }
 
-  // ^ Trigger iOS Local Network with Alert ^ //
+  /// ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
     // Update Value
     to._isDarkMode.val = !to._isDarkMode.val;
@@ -121,12 +121,12 @@ class UserService extends GetxService {
     return true;
   }
 
-  // ^ Trigger iOS Local Network with Alert ^ //
+  /// ^ Trigger iOS Local Network with Alert ^ //
   static toggleFlatMode() async {
     to._hasFlatMode.val = !to._hasFlatMode.val;
   }
 
-  // ^ Trigger iOS Local Network with Alert ^ //
+  /// ^ Trigger iOS Local Network with Alert ^ //
   static togglePointToShare() async {
     to._hasPointToShare.val = !to._hasPointToShare.val;
   }

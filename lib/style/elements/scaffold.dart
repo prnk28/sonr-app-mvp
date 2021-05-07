@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:sonr_app/style/style.dart';
 import 'dart:math';
 
-// ^ Standardized Uniform Scaffold ^ //
+/// ^ Standardized Uniform Scaffold ^ //
 class SonrScaffold extends StatelessWidget {
   final Widget? body;
   final Widget? bottomSheet;
@@ -64,7 +64,7 @@ class SonrScaffold extends StatelessWidget {
   }
 }
 
-// ^ Fixed Location for Center Docked ^ //
+/// ^ Fixed Location for Center Docked ^ //
 class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
   const _FixedCenterDockedFabLocation();
 
@@ -93,7 +93,7 @@ class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
   }
 }
 
-// ^ Animated Background Gradient ^ //
+/// ^ Animated Background Gradient ^ //
 class _BackgroundGradient extends StatelessWidget {
   final Gradient? gradient;
   const _BackgroundGradient({Key? key, this.gradient}) : super(key: key);

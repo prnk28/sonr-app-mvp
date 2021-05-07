@@ -3,7 +3,7 @@ import 'package:sonr_app/style/style.dart';
 import 'data/data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-// ^ Main Method ^ //
+/// ^ Main Method ^ //
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices();
@@ -24,7 +24,7 @@ Future<void> main() async {
   );
 }
 
-// ^ Root App Widget ^ //
+/// ^ Root App Widget ^ //
 class MobileApp extends StatefulWidget {
   @override
   _MobileAppState createState() => _MobileAppState();

@@ -38,7 +38,7 @@ class URLGridItemView extends StatelessWidget {
   }
 }
 
-// ^ Main URL Grid Item View ^ //
+/// ^ Main URL Grid Item View ^ //
 class _URLGridItemMainView extends StatelessWidget {
   final TransferCardItem? item;
   final RxBool? isFlipped;
@@ -70,7 +70,7 @@ class _URLGridItemMainView extends StatelessWidget {
   }
 }
 
-// ^ Details URL Grid Item View ^ //
+/// ^ Details URL Grid Item View ^ //
 class _URLGridItemDetailsView extends StatelessWidget {
   final TransferCardItem? item;
   final RxBool? isFlipped;

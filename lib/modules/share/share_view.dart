@@ -78,7 +78,7 @@ class _QueueView extends GetView<ShareController> {
   }
 }
 
-// ^ Camera Share Button ^ //
+/// ^ Camera Share Button ^ //
 class _ShareCameraButtonItem extends GetView<ShareController> {
   const _ShareCameraButtonItem();
   @override
@@ -104,7 +104,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
   }
 }
 
-// ^ Gallery Share Button ^ //
+/// ^ Gallery Share Button ^ //
 class _ShareGalleryButtonItem extends GetView<ShareController> {
   const _ShareGalleryButtonItem();
   @override
@@ -121,7 +121,7 @@ class _ShareGalleryButtonItem extends GetView<ShareController> {
   }
 }
 
-// ^ File Share Button ^ //
+/// ^ File Share Button ^ //
 class _ShareFileButtonItem extends GetView<ShareController> {
   const _ShareFileButtonItem();
   @override
@@ -137,7 +137,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
   }
 }
 
-// ^ Contact Share Button ^ //
+/// ^ Contact Share Button ^ //
 class _ShareContactButtonItem extends GetView<ShareController> {
   const _ShareContactButtonItem();
   @override

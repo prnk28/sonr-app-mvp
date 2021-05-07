@@ -48,7 +48,7 @@ class ShareController extends GetxController {
     super.onInit();
   }
 
-  // ^ Expand Share Button ^ //
+  /// ^ Expand Share Button ^ //
   expand(double timeout, ShareStatus previousState) {
     HapticFeedback.heavyImpact();
 
@@ -66,7 +66,7 @@ class ShareController extends GetxController {
     });
   }
 
-  // ^ Present Camera View ^ //
+  /// ^ Present Camera View ^ //
   presentCameraView() {
     // Move to View
     Get.to(CameraView.withPreview(onMediaSelected: (SonrFile file) {
@@ -78,7 +78,7 @@ class ShareController extends GetxController {
     }), transition: Transition.downToUp);
   }
 
-  // ^ Select Contact to Transfer ^
+  /// ^ Select Contact to Transfer ^
   selectContact() async {
     // Shrink Button after Delay
     shrink(delay: 150.milliseconds);
@@ -87,7 +87,7 @@ class ShareController extends GetxController {
     Transfer.transferWithContact();
   }
 
-  // ^ Select a File
+  /// ^ Select a File
   selectFile() async {
     // Check Permissions
     if (MobileService.hasGallery.value) {
@@ -124,7 +124,7 @@ class ShareController extends GetxController {
     }
   }
 
-  // ^ Select Media
+  /// ^ Select Media
   selectMedia() async {
     // Check Permissions
     if (MobileService.hasGallery.value) {
@@ -160,7 +160,7 @@ class ShareController extends GetxController {
     }
   }
 
-  // ^ Select a URL ^ //
+  /// ^ Select a URL ^ //
   selectExternal(Payload payload, URLLink? url, SonrFile? mediaFile) {
     if (payload == Payload.URL) {
       Transfer.transferWithUrl(url!.link);
@@ -169,7 +169,7 @@ class ShareController extends GetxController {
     }
   }
 
-  // ^ Close Share Button ^ //
+  /// ^ Close Share Button ^ //
   void shrink({Duration delay = const Duration(milliseconds: 600)}) {
     Future.delayed(delay, () {
       if (_timer != null) {
@@ -182,7 +182,7 @@ class ShareController extends GetxController {
     });
   }
 
-  // ^ Toggles Expanded Share Button ^ //
+  /// ^ Toggles Expanded Share Button ^ //
   void toggle() {
     if (status.value == ShareStatus.Default) {
       status(ShareStatus.Queue);

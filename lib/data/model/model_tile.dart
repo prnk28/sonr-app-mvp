@@ -49,7 +49,7 @@ class TileStep {
 
   TileStep(this.next, this.previous, this.save);
 
-  // ^ Adjusted Container Height ^
+  /// ^ Adjusted Container Height ^
   double get height {
     var kBaseModifier = 260.0;
     if (current == 0) {
@@ -64,7 +64,7 @@ class TileStep {
     }
   }
 
-  // ^ Adjusted View Margin ^
+  /// ^ Adjusted View Margin ^
   double get verticalMargin {
     if (current == 0) {
       return 10;
@@ -75,7 +75,7 @@ class TileStep {
     }
   }
 
-  // ^ Presented View by Step ^
+  /// ^ Presented View by Step ^
   Widget get currentView {
     if (current == 2) {
       return SetTypeView();
@@ -86,7 +86,7 @@ class TileStep {
     }
   }
 
-  // ^ Bottom Buttons for View by Step ^
+  /// ^ Bottom Buttons for View by Step ^
   Widget get bottomButtons {
     //  Step Three: Cancel and Confirm
     if (current == 2) {

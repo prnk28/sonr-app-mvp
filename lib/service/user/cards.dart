@@ -76,7 +76,7 @@ class CardService extends GetxService {
     return this;
   }
 
-  // ^ Add New Card to Database ^ //
+  /// @ Add New Card to Database ^ //
   static addCard(TransferCard card) async {
     // Save Media to Device
     if (card.payload == Payload.MEDIA) {
@@ -85,11 +85,49 @@ class CardService extends GetxService {
 
     // Store in Database
     await to._database.addCard(card);
-    await to._database.addActivity(ActivityType.Received, card);
+
     _refreshCount();
   }
 
-  // ^ Returns total Card Count ^ //
+  /// @ Add New Activity for deleted card
+  static addActivityDeleted({
+    required Payload payload,
+    required Profile owner,
+    SonrFile? file,
+  }) async {
+    if (file != null && file.exists) {
+      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
+    } else {
+      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
+    }
+  }
+
+  /// @ Add New Activity for received card
+  static addActivityReceived({
+    required Payload payload,
+    required Profile owner,
+    SonrFile? file,
+  }) async {
+    if (file != null && file.exists) {
+      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
+    } else {
+      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
+    }
+  }
+
+  /// @ Add New Activity for deleted card
+  static addActivityShared({
+    required Payload payload,
+    SonrFile? file,
+  }) async {
+    if (file != null && file.exists) {
+      await to._database.addActivity(ActivityType.Deleted, payload, UserService.profile.value, mime: file.single.mime.type);
+    } else {
+      await to._database.addActivity(ActivityType.Deleted, payload, UserService.profile.value, mime: MIME_Type.OTHER);
+    }
+  }
+
+  /// @ Returns total Card Count ^ //
   static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
     // Get Total Entries
     var cards = await to._database.allCardEntries;
@@ -109,35 +147,42 @@ class CardService extends GetxService {
     return cards.length;
   }
 
-  // ^ Clear Single Activity ^ //
+  /// @ Clear Single Activity ^ //
   static clearActivity(TransferCardActivity activity) async {
     if (hasActivity) {
       await to._database.clearActivity(activity);
     }
   }
 
-  // ^ Clear All Activity ^ //
+  /// @ Clear All Activity ^ //
   static clearAllActivity() async {
     if (hasActivity) {
       await to._database.clearAllActivity();
     }
   }
 
-  // ^ Remove Card and Add Deleted Activity to Database ^ //
+  /// @ Remove Card and Add Deleted Activity to Database ^ //
   static deleteCard(TransferCardItem card) async {
     await to._database.deleteCard(card);
-    await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
+    addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
     _refreshCount();
   }
 
-  // ^ Remove Card and Add Deleted Activity to Database ^ //
+  /// @ Remove Card and Add Deleted Activity to Database ^ //
+  static deleteCardFromID(int id) async {
+    await to._database.deleteCardFromID(id);
+    // await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
+    _refreshCount();
+  }
+
+  /// @ Remove Card and Add Deleted Activity to Database ^ //
   static deleteAllCards() async {
     if (to._all.length > 0) {
       await to._database.deleteAllCards();
     }
   }
 
-  // ^ Load IO File from Metadata ^ //
+  /// @ Load IO File from Metadata ^ //
   static Future<File?> loadFileFromMetadata(SonrFile_Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     if (asset != null) {
@@ -147,17 +192,12 @@ class CardService extends GetxService {
     }
   }
 
-  // ^ Load SonrFile from Metadata ^ //
+  /// @ Load SonrFile from Metadata ^ //
   static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
     return SonrFileUtils.newWithItem(metadata);
   }
 
-  // ^ Add Shared Card to Activity Datavase
-  static sharedCard(TransferCard card) async {
-    await to._database.addActivity(ActivityType.Shared, card);
-  }
-
-  // ^ Handles User Invite Response
+  /// @ Handles User Invite Response
   static handleInviteResponse(bool decision, AuthInvite invite, {bool sendBackContact = false, bool closeOverlay = false}) {
     if (invite.payload == Payload.CONTACT) {
       to._handleAcceptContact(invite, sendBackContact);
@@ -254,30 +294,5 @@ class CardService extends GetxService {
       to._photosCount(to._metadata.count((i) => i.mime == MIME_Type.IMAGE));
       to._videosCount(to._metadata.count((i) => i.mime == MIME_Type.VIDEO));
     }
-  }
-
-  // @ Helper: Converts Transfer Card Item into TransferCard Protobuf
-  static TransferCard _transferCardFromItem(TransferCardItem item) {
-    // Set Initial Data
-    var card = TransferCard(
-      id: item.id,
-      payload: item.payload,
-      received: item.received!.millisecondsSinceEpoch,
-      owner: item.owner,
-    );
-
-    // Check Payload
-    switch (item.payload) {
-      case Payload.CONTACT:
-        card.contact = item.contact!;
-        break;
-      case Payload.URL:
-        card.url = item.url!;
-        break;
-      default:
-        card.file = item.file!;
-        break;
-    }
-    return card;
   }
 }

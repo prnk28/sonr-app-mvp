@@ -224,7 +224,7 @@
 //     searchText(query);
 //   }
 
-//   // ^ Query Text Field ^ //
+//   /// ^ Query Text Field ^ //
 //   SearchCardController() {
 //     // @ Listen to Current Text
 //     // Query for All Rows
@@ -275,13 +275,13 @@
 //     });
 //   }
 
-//   // ^ Method to Push to Selected Card ^ //
+//   /// ^ Method to Push to Selected Card ^ //
 //   navigateToCard(TransferCard card) {
 //     HapticFeedback.mediumImpact();
 //     Get.find<HomeController>().jumpToCard(card);
 //   }
 
-//   // ^ Method Updates View Margin ^ //
+//   /// ^ Method Updates View Margin ^ //
 //   _setMarginForResults() {
 //     if (results.length == 0) {
 //       if (cardList.length > 2) {

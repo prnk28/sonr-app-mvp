@@ -131,7 +131,7 @@ class MobileService extends GetxService {
     super.onClose();
   }
 
-  // ^ Checks for Initial Media/Text to Share ^ //
+  /// ^ Checks for Initial Media/Text to Share ^ //
   static checkInitialShare() async {
     // @ Check for Media
     if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
@@ -155,14 +155,14 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Method Closes Keyboard if Active ^ //
+  /// ^ Method Closes Keyboard if Active ^ //
   static void closeKeyboard({BuildContext? context}) async {
     if (to._keyboardVisible.value) {
       FocusScope.of(context ?? Get.context!).unfocus();
     }
   }
 
-  // ^ Refresh User Location Position ^ //
+  /// ^ Refresh User Location Position ^ //
   static Future<Location?> currentLocation() async {
     if (to._hasLocation.value) {
       var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
@@ -174,12 +174,12 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Method Plays a UI Sound ^
+  /// ^ Method Plays a UI Sound ^
   static void playSound(UISoundType type) async {
     await to._audioPlayer.play(type.file);
   }
 
-  // ^ Saves Photo to Gallery ^ //
+  /// ^ Saves Photo to Gallery ^ //
   static Future<bool> saveCapture(String path, bool isVideo) async {
     // Validate Path
     var file = File(path);
@@ -211,7 +211,7 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Saves Received Media to Gallery ^ //
+  /// ^ Saves Received Media to Gallery ^ //
   static Future<bool> saveTransfer(SonrFile_Metadata meta) async {
     // Initialize
     AssetEntity? asset;
@@ -251,7 +251,7 @@ class MobileService extends GetxService {
     return false;
   }
 
-  // ^ Update Method ^ //
+  /// ^ Update Method ^ //
   void updatePermissionsStatus() async {
     _hasCamera(await Permission.camera.isGranted);
     _hasLocation(await Permission.locationWhenInUse.isGranted);
@@ -261,7 +261,7 @@ class MobileService extends GetxService {
     _hasStorage(await Permission.storage.isGranted);
   }
 
-  // ^ Request Camera optional overlay ^ //
+  /// ^ Request Camera optional overlay ^ //
   Future<bool> requestCamera() async {
     if (DeviceService.isMobile) {
       // Present Overlay
@@ -289,7 +289,7 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Request Gallery optional overlay ^ //
+  /// ^ Request Gallery optional overlay ^ //
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     if (DeviceService.isMobile) {
       // Present Overlay
@@ -329,7 +329,7 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Request Location optional overlay ^ //
+  /// ^ Request Location optional overlay ^ //
   Future<bool> requestLocation() async {
     if (DeviceService.isMobile) {
       // Present Overlay
@@ -359,7 +359,7 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Request Microphone optional overlay ^ //
+  /// ^ Request Microphone optional overlay ^ //
   Future<bool> requestMicrophone() async {
     if (DeviceService.isMobile) {
       // Present Overlay
@@ -389,7 +389,7 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Request Notifications optional overlay ^ //
+  /// ^ Request Notifications optional overlay ^ //
   Future<bool> requestNotifications() async {
     // Present Overlay
     if (DeviceService.isMobile) {
@@ -413,7 +413,7 @@ class MobileService extends GetxService {
     }
   }
 
-  // ^ Trigger iOS Local Network with Alert ^ //
+  /// ^ Trigger iOS Local Network with Alert ^ //
   Future triggerNetwork() async {
     if (!_hasLocalNetwork.value && DeviceService.isIOS) {
       await SonrOverlay.alert(

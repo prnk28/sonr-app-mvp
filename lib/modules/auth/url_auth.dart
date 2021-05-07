@@ -1,10 +1,12 @@
+import 'package:sonr_app/modules/card/url/link_view.dart';
+import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ^ URL Invite from AuthInvite Proftobuf ^ //
+/// ^ URL Invite from AuthInvite Proftobuf ^ //
 class URLAuthView extends StatelessWidget {
-  final AuthInvite? invite;
+  final AuthInvite invite;
   URLAuthView(this.invite);
 
   @override
@@ -20,8 +22,8 @@ class URLAuthView extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(4),
               decoration: Neumorphic.floating(shape: BoxShape.circle),
-              child: invite!.from.profile.hasPicture()
-                  ? Image.memory(Uint8List.fromList(invite!.from.profile.picture))
+              child: invite.from.profile.hasPicture()
+                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
@@ -32,9 +34,7 @@ class URLAuthView extends StatelessWidget {
 
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
-            invite!.from.profile.hasLastName()
-                ? "${invite!.from.profile.firstName} ${invite!.from.profile.lastName}".gradient(value: SonrGradients.SolidStone)
-                : "${invite!.from.profile.firstName}".gradient(value: SonrGradients.SolidStone),
+            ProfileName(profile: invite.from.profile, isHeader: true),
             Center(child: "Website Link".gradient(value: SonrGradients.PlumBath, size: 22)),
           ]),
         ]),
@@ -45,7 +45,7 @@ class URLAuthView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(child: Container(child: _buildURLView(invite!.url))),
+            Expanded(child: Container(child: URLLinkView(data: invite.url))),
           ],
         ),
 
@@ -58,7 +58,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
-              onPressed: () => launchURL(invite!.url.link),
+              onPressed: () => _launchURL(),
               text: "Open",
               icon: SonrIcons.Discover,
             ),
@@ -69,118 +69,9 @@ class URLAuthView extends StatelessWidget {
     );
   }
 
-  // ^ Method to Build View from Data ^ //
-  Widget _buildURLView(URLLink data) {
-    // Check open graph images
-    if (data.images.length > 0) {
-      return Column(children: [
-        // @ Social Image
-        Image.network(data.images.first.url),
-
-        // @ URL Info
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 30),
-          padding: EdgeInsets.symmetric(vertical: 4),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [data.title.h3, data.description.p],
-          ),
-        ),
-
-        // @ Link Preview
-        GestureDetector(
-          onLongPress: () {
-            Clipboard.setData(ClipboardData(text: data.link));
-            SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
-          },
-          child: Container(
-              decoration: Neumorphic.indented(),
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: Row(children: [
-                // URL Icon
-                Padding(
-                  padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcons.Link.gradient(),
-                ),
-
-                // Link Preview
-                Container(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: data.link.url,
-                  ),
-                )
-              ])),
-        )
-      ]);
-    }
-
-    // Check twitter data
-    if (data.hasTwitter()) {
-      return Column(children: [
-        // @ Social Image
-        Image.network(data.twitter.image),
-
-        // @ URL Info
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 30),
-          padding: EdgeInsets.symmetric(vertical: 4),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              data.title.h3,
-              data.description.p,
-            ],
-          ),
-        ),
-
-        // @ Link Preview
-        GestureDetector(
-          onLongPress: () {
-            Clipboard.setData(ClipboardData(text: data.link));
-            SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
-          },
-          child: Container(
-              decoration: Neumorphic.indented(),
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: Row(children: [
-                // URL Icon
-                Padding(padding: const EdgeInsets.only(left: 14.0, right: 8), child: SonrIcons.Link.gradient()),
-
-                // Link Preview
-                Container(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: data.link.url,
-                  ),
-                )
-              ])),
-        )
-      ]);
-    }
-
-    return GestureDetector(
-      onLongPress: () {
-        Clipboard.setData(ClipboardData(text: data.link));
-        SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
-      },
-      child: Container(
-        decoration: Neumorphic.indented(),
-        margin: EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: data.link.url,
-        ),
-      ),
-    );
-  }
-
-  // ^ Launch a URL Event ^ //
-  Future launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> _launchURL() async {
+    if (await canLaunch(invite.url.link)) {
+      await launch(invite.url.link);
     } else {
       SonrSnack.error("Could not launch the URL.");
     }
