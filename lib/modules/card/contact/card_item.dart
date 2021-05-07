@@ -32,7 +32,7 @@ class ContactCardItemView extends StatelessWidget {
               child: Container(
                 decoration: Neumorphic.indented(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
-                child: ProfileAvatar(profile: card.contact!.profile),
+                child: ProfileAvatar.fromContact(card.contact!),
               ),
             ),
 

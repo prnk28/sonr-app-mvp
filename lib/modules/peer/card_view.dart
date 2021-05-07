@@ -3,6 +3,8 @@ import 'peer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
+import 'profile_view.dart';
+
 const double K_CARD_WIDTH = 160;
 const double K_CARD_HEIGHT = 190;
 
@@ -92,13 +94,13 @@ class _PeerMainCard extends StatelessWidget {
           // Avatar
           Obx(() => FadeInDownBig(
                 duration: 125.milliseconds,
-                child: controller.peer.value.profilePicture(size: 68),
+                child: ProfileAvatar.fromPeer(controller.peer.value, size: 68),
               )),
 
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.fullName}".h6,
+          "${controller.peer.value.profile.fullName}".h6,
 
           // Username
           controller.peer.value.profile.username.p_Grey,

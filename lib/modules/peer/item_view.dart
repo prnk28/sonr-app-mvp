@@ -2,6 +2,8 @@ import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
+import 'profile_view.dart';
+
 /// @ PeerListItem for Remote View
 class PeerListItem extends StatefulWidget {
   final Peer peer;
@@ -23,8 +25,8 @@ class _PeerListItemState extends State<PeerListItem> {
           child: ExpansionTile(
             backgroundColor: Colors.transparent,
             collapsedBackgroundColor: Colors.transparent,
-            leading: widget.peer.profilePicture(size: 50),
-            title: "${widget.peer.fullName}".h3,
+            leading: ProfileAvatar.fromPeer(widget.peer, size: 50),
+            title: "${widget.peer.profile.fullName}".h3,
             subtitle: RichText(
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.fade,

@@ -4,22 +4,31 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 /// Builds Avatar Image from [Profile] data
 class ProfileAvatar extends StatelessWidget {
   final Profile profile;
-  const ProfileAvatar({Key? key, required this.profile}) : super(key: key);
+  final double size;
+  const ProfileAvatar({Key? key, required this.profile, this.size = 100}) : super(key: key);
+
+  factory ProfileAvatar.fromContact(Contact contact, {double size = 100}) {
+    return ProfileAvatar(profile: contact.profile, size: size);
+  }
+
+  factory ProfileAvatar.fromPeer(Peer peer, {double size = 100}) {
+    return ProfileAvatar(profile: peer.profile, size: size);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return profile.hasPicture()
-        ? Container(
-            width: 120,
-            height: 120,
-            child: CircleAvatar(
-              backgroundImage: MemoryImage(this.profile.picture as Uint8List),
-            ),
-          )
-        : Icon(
-            Icons.insert_emoticon,
-            size: 120,
-            color: SonrColor.Black.withOpacity(0.5),
-          );
+    return Container(
+        decoration: Neumorphic.indented(shape: BoxShape.circle),
+        padding: EdgeInsets.all(4),
+        child: Container(
+          width: size,
+          height: size,
+          child: profile.hasPicture()
+              ? CircleAvatar(
+                  backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                )
+              : SonrIcons.Avatar.greyWith(size: size),
+        ));
   }
 }
 
