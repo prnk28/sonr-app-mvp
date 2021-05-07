@@ -39,7 +39,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // References
   AnimationController? visibilityController;
-  StreamSubscription<Position?>? _userStream;
+  StreamSubscription<Position>? _userStream;
   FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
   // State Machine
@@ -72,10 +72,10 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     // Set Initial
     peer(data);
     isVisible(true);
-    peerVector(peer.value!.position);
+    peerVector(data.position);
     userVector(LobbyService.userPosition.value);
 
-    if (peer.value!.platform.isDesktop) {
+    if (data.platform.isDesktop) {
       offset(Offset.zero);
     } else {
       offset(peerVector.value!.offsetAgainstVector(userVector.value!));
@@ -229,9 +229,10 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Handle Peer Position ^ //
   void _handleUserUpdate(Position? pos) {
-    if (!isClosed && !status.value.isComplete) {
+    if (!isClosed && !status.value.isComplete && pos != null) {
       // Initialize
       userVector(pos);
+
 
       // Find Offset
       if (Get.find<TransferController>().isShiftingEnabled.value) {

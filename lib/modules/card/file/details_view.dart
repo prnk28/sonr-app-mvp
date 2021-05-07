@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/style/style.dart';
 
 // ^ Widget for Details Media View
@@ -22,7 +21,7 @@ class MetaDetailsView extends StatelessWidget {
             tag: card.path,
             child: Material(
               color: Colors.transparent,
-              child: PhotoView(imageProvider: FileImage(mediaFile!)),
+              child: InteractiveViewer(child: Image.file(mediaFile!)),
             ),
           ),
         ),

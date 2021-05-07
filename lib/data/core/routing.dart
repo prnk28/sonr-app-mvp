@@ -26,7 +26,7 @@ class SonrRouting {
               return HomePage();
             },
             binding: HomeBinding(),
-            transition: Transition.topLevel,
+            transition: Transition.fadeIn,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
@@ -37,21 +37,28 @@ class SonrRouting {
               return DesktopWindow();
             },
             binding: DesktopBinding(),
-            transition: Transition.topLevel,
+            transition: Transition.fadeIn,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
         // ** Register Page ** //
-        GetPage(name: '/register', page: () => RegisterPage(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
+        GetPage(
+          name: '/register',
+          page: () => RegisterPage(),
+          transition: Transition.fadeIn,
+          curve: Curves.easeIn,
+          binding: RegisterBinding(),
+        ),
 
         // ** Transfer Page ** //
         GetPage(
-            name: '/transfer',
-            page: () => TransferScreen(),
-            binding: TransferBinding(),
-            transition: Transition.downToUp,
-            curve: Curves.easeIn,
-            fullscreenDialog: true),
+          name: '/transfer',
+          page: () => TransferScreen(),
+          maintainState: false,
+          binding: TransferBinding(),
+          transition: Transition.fadeIn,
+          curve: Curves.easeIn,
+        ),
       ];
 
   // ^ Application Services ^ //

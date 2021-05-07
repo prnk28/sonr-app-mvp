@@ -125,7 +125,7 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
               decoration: Neumorphic.indented(),
               clipBehavior: Clip.hardEdge,
               child: Image.memory(
-                controller.sonrFile.value!.single.thumbnail as Uint8List,
+                Uint8List.fromList(controller.sonrFile.value!.single.thumbnail),
                 fit: BoxFit.cover,
               )),
         );
@@ -136,7 +136,6 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
-          decoration: Neumorphic.compact(),
           child: controller.sonrFile.value!.single.mime.type.gradient(size: Height.ratio(0.125)),
         );
       }

@@ -14,9 +14,9 @@ class LobbyService extends GetxService {
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
   final _lobbies = RxList<Lobby>();
-  final _local = Rx<Lobby?>(null);
+  final _local = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
-  final _position = Rx<Position?>(null);
+  final _position = Position().obs;
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
@@ -24,7 +24,7 @@ class LobbyService extends GetxService {
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
   static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
   static Rx<Lobby?> get local => Get.find<LobbyService>()._local;
-  static Rx<Position?> get userPosition => to._position;
+  static Rx<Position> get userPosition => to._position;
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
@@ -172,6 +172,7 @@ class LobbyService extends GetxService {
 
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {
+
     // Update Orientation
     if (_flatModeEnabled) {
       var newIsFacingFlat = data.accelerometer.y < 2.75;

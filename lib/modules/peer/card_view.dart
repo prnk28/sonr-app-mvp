@@ -9,7 +9,7 @@ const double K_CARD_HEIGHT = 190;
 // ^ Root Peer Card View ^ //
 class PeerCard extends GetWidget<PeerController> {
   final Peer peer;
-  PeerCard(this.peer);
+  PeerCard(this.peer) : super(key: ValueKey(peer.id.peer));
 
   @override
   Widget build(BuildContext context) {
