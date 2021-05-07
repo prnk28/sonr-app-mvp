@@ -72,9 +72,6 @@ class TransferController extends GetxController {
 
   /// @ Set Transfer Payload
   void setPayload(TransferArguments args) async {
-    // Set Title
-    _setTitle(args.payload);
-
     // Initialize Request
     inviteRequest.init(args);
 
@@ -92,6 +89,9 @@ class TransferController extends GetxController {
         thumbStatus(ThumbnailStatus.None);
       }
     }
+
+    // Set Title
+    _setTitle(args.payload);
   }
 
   /// @ User is Facing or No longer Facing a Peer
@@ -110,8 +110,8 @@ class TransferController extends GetxController {
     // Update String Elements
     if (!isClosed) {
       // Set Titles
-      directionTitle(pos.facing.directionString);
-      cardinalTitle(pos.facing.cardinalString);
+      directionTitle(pos.facing.prettyDirection());
+      cardinalTitle(pos.facing.prettyCardinal());
 
       // Update Properties
       direction(pos.facing.direction);
@@ -124,26 +124,26 @@ class TransferController extends GetxController {
   _handleLobbyUpdate(Lobby? data) {
     if (data != null && !isClosed) {
       isNotEmpty(data.isNotEmpty);
-      subtitle(data.countString);
+      subtitle(data.prettyCount());
     }
   }
 
   // # Updates Title Value by Payload
-  void _setTitle(Payload payload) {
+  void _setTitle(Payload value) {
     // Set Payload
-    this.payload(payload);
+    payload(value);
 
     // Update Title
-    switch (payload) {
+    switch (value) {
       case Payload.CONTACT:
-        this.title("Sharing Contact Card");
+        title("Sharing Contact Card");
         break;
       case Payload.URL:
-        this.title("Sending Link");
+        title("Sending Link");
         break;
       default:
         if (sonrFile.value.exists) {
-          this.title("Sharing " + sonrFile.value.prettyType());
+          title("Sharing " + sonrFile.value.prettyType());
         }
     }
   }

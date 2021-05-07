@@ -38,7 +38,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
             onTap: () {
               if (controller.isTitleVisible.value) {
                 controller.swapTitleText(
-                  "${LobbyService.local.value!.count} Around",
+                  "${LobbyService.local.value.count} Around",
                   timeout: 2500.milliseconds,
                 );
               }

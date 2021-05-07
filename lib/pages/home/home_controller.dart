@@ -150,7 +150,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.local.value!.count} Nearby");
+      titleText("${LobbyService.local.value.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text

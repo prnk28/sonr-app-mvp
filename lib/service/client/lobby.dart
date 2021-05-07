@@ -23,7 +23,7 @@ class LobbyService extends GetxService {
   // @ Routing to Reactive
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
   static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
-  static Rx<Lobby?> get local => Get.find<LobbyService>()._local;
+  static Rx<Lobby> get local => Get.find<LobbyService>()._local;
   static Rx<Position> get userPosition => to._position;
 
   // @ References
@@ -110,7 +110,7 @@ class LobbyService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-    var flatPeer = LobbyService.local.value!.flatFirst()!;
+    var flatPeer = LobbyService.local.value.flatFirst()!;
     SonrSnack.success("Sent Contact to ${flatPeer.profile.firstName}");
     Get.back();
     return true;

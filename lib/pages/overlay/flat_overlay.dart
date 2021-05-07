@@ -156,11 +156,11 @@ class _FlatModeController extends GetxController {
         transition(FlatModeTransition.SlideOut);
         animation(_FlatModeAnimation(transition.value));
         // No Peers
-        if (LobbyService.local.value!.flatCount() == 0) {
+        if (LobbyService.local.value.flatPeerCount() == 0) {
           Get.back();
           SonrSnack.error("No Peers in Flat Mode");
-        } else if (LobbyService.local.value!.flatCount() == 1) {
-          if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value!.flatFirst())) {
+        } else if (LobbyService.local.value.flatPeerCount() == 1) {
+          if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value.flatFirst())) {
             Future.delayed(K_TRANSLATE_DURATION, () {
               status(FlatModeState.Pending);
             });

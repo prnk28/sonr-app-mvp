@@ -52,7 +52,7 @@ class TransferScreen extends GetView<TransferController> {
                       physics: NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       controller: controller.scrollController,
-                      slivers: LobbyService.local.value!.map((i) => Builder(builder: (context) => SliverToBoxAdapter(child: PeerCard(i)))).toList(),
+                      slivers: LobbyService.local.value.mapAll((i) => Builder(builder: (context) => SliverToBoxAdapter(child: PeerCard(i)))).toList(),
                     ),
                   );
                 }

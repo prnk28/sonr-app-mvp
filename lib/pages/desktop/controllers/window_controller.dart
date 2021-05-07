@@ -69,7 +69,7 @@ class WindowController extends GetxController {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.local.value!.count} Nearby");
+      titleText("${LobbyService.local.value.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text

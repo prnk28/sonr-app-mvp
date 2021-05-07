@@ -20,7 +20,7 @@ class DesktopWindow extends GetView<WindowController> {
                   key: ValueKey<String>(controller.titleText.value),
                   onTap: () {
                     if (controller.isTitleVisible.value) {
-                      controller.swapTitleText("${LobbyService.local.value!.size} Around", timeout: 2500.milliseconds);
+                      controller.swapTitleText("${LobbyService.local.value.size} Around", timeout: 2500.milliseconds);
                     }
                   },
                   child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),

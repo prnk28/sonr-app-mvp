@@ -34,8 +34,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // Vector Properties
   final offset = Offset(0, 0).obs;
-  final peerVector = Rx<Position?>(null);
-  final userVector = Rx<Position?>(null);
 
   // References
   AnimationController? visibilityController;
@@ -72,13 +70,11 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     // Set Initial
     peer(data);
     isVisible(true);
-    peerVector(data.position);
-    userVector(LobbyService.userPosition.value);
 
     if (data.platform.isDesktop) {
       offset(Offset.zero);
     } else {
-      offset(peerVector.value!.offsetAgainstVector(userVector.value!));
+      offset(peer.value.offsetFrom(LobbyService.userPosition.value));
     }
 
     // Add Stream Handlers
@@ -206,7 +202,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       // Update Direction
       if (data.id.peer == peer.value.id.peer && !_isPending!.value) {
         peer(data);
-        peerVector(data.position);
 
         // Handle Changes
         if (Get.find<TransferController>().isShiftingEnabled.value) {
@@ -228,22 +223,19 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // @ Handle Peer Position
-  void _handleUserUpdate(Position? pos) {
-    if (!isClosed && !status.value.isComplete && pos != null) {
-      // Initialize
-      userVector(pos);
-
+  void _handleUserUpdate(Position data) {
+    if (!isClosed && !status.value.isComplete) {
       // Find Offset
       if (Get.find<TransferController>().isShiftingEnabled.value) {
         if (peer.value.platform.isDesktop) {
           offset(Offset.zero);
         } else {
-          offset(peerVector.value!.offsetAgainstVector(userVector.value!));
+          offset(peer.value.offsetFrom(LobbyService.userPosition.value));
         }
       }
 
       // Check if Facing
-      var newIsFacing = userVector.value!.isPointingAt(peerVector.value!);
+      var newIsFacing = peer.value.isHitFrom(LobbyService.userPosition.value);
       if (isFacing.value != newIsFacing) {
         // Check if Device Permits PointToShare
         if (UserService.pointShareEnabled) {
@@ -251,7 +243,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
           if (newIsFacing) {
             Get.find<TransferController>().setFacingPeer(true);
             _timer.start(isValid: _checkFacingValid, onComplete: invite);
-            isFacing(userVector.value!.isPointingAt(peerVector.value!));
+            isFacing(peer.value.isHitFrom(LobbyService.userPosition.value));
           } else {
             _timer.stop();
           }
@@ -267,11 +259,11 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       if (peer.value.platform.isDesktop) {
         offset(Offset.zero);
       } else {
-        offset(peerVector.value!.offsetAgainstVector(userVector.value!));
+        offset(peer.value.offsetFrom(LobbyService.userPosition.value));
       }
 
       // Check if Facing
-      var newIsFacing = userVector.value!.isPointingAt(peerVector.value!);
+      var newIsFacing = peer.value.isHitFrom(LobbyService.userPosition.value);
       if (isFacing.value != newIsFacing) {
         // Check if Device Permits PointToShare
         if (UserService.pointShareEnabled) {
@@ -279,7 +271,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
           if (newIsFacing) {
             Get.find<TransferController>().setFacingPeer(true);
             _timer.start(isValid: _checkFacingValid, onComplete: invite);
-            isFacing(userVector.value!.isPointingAt(peerVector.value!));
+            isFacing(peer.value.isHitFrom(LobbyService.userPosition.value));
           } else {
             _timer.stop();
           }
