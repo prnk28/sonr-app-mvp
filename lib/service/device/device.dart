@@ -124,11 +124,14 @@ class DeviceService extends GetxService {
     }
   }
 
-  static void factoryReset() {
+  static void factoryReset({bool redirect = false}) {
     UserService.reset();
     CardService.deleteAllCards();
     CardService.clearAllActivity();
-    Get.offAllNamed("/register");
+
+    if (redirect) {
+      Get.offAllNamed("/register");
+    }
   }
 }
 

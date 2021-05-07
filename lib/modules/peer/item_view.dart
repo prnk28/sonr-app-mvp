@@ -1,7 +1,5 @@
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/data/data.dart';
-
 import 'profile_view.dart';
 
 /// @ PeerListItem for Remote View

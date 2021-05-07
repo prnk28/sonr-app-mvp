@@ -11,7 +11,6 @@ export 'database/cards_db.dart';
 
 // Extensions
 export 'extensions/metadata.dart';
-export 'extensions/peer.dart';
 
 // Models
 export 'model/model_tile.dart';
