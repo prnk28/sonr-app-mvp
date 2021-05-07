@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../style.dart';
 import 'package:lottie/lottie.dart';
 
-/// ^ Lottie Icon Widget ^ //
+/// @ Lottie Icon Widget
 class LottieIcon extends HookWidget {
   final Function? onComplete;
   final String link;
@@ -41,7 +41,7 @@ class LottieIcon extends HookWidget {
   }
 }
 
-/// ^ Lottie Animation Container Widget ^ //
+/// @ Lottie Animation Container Widget
 class LottieContainer extends HookWidget {
   final double width;
   final double height;
@@ -84,7 +84,7 @@ class LottieContainer extends HookWidget {
   }
 }
 
-/// ^ Lottie Animation Container Widget ^ //
+/// @ Lottie Animation Container Widget
 class LottieShareContainer extends HookWidget {
   final SonrAssetLottie type;
   const LottieShareContainer({Key? key, required this.type}) : super(key: key);

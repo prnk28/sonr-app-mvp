@@ -12,7 +12,7 @@ class SonrSnack {
   final int duration;
   final bool shouldIconPulse;
 
-  /// ^ Default Constructer ^ //
+  /// @ Default Constructer
   SonrSnack(this.title, this.message, this.icon, this.color, this.duration, this.shouldIconPulse) {
     if (!Get.isSnackbarOpen!) {
       Get.snackbar(title!, message,
@@ -26,22 +26,22 @@ class SonrSnack {
     }
   }
 
-  /// ^ Custom Alert ^ //
+  /// @ Custom Alert
   factory SonrSnack.remote({required String message, int duration = 45000, Color color = Colors.purple}) {
     return SonrSnack("Remote Code", message, SonrIcons.Remote.white, color, duration, true);
   }
 
-  /// ^ Custom Alert ^ //
+  /// @ Custom Alert
   factory SonrSnack.alert({required String title, required String message, required Icon icon, Color color = Colors.orange}) {
     return SonrSnack(title, message, icon, color, 2600, false);
   }
 
-  /// ^ Cancelled Operation ^ //
+  /// @ Cancelled Operation
   factory SonrSnack.cancelled(String message) {
     return SonrSnack("Cancelled.", message, SonrIcons.Stop.white, Colors.yellow, 2600, false);
   }
 
-  /// ^ Error on Operation ^ //
+  /// @ Error on Operation
   factory SonrSnack.error(String message, {ErrorMessage? error}) {
     // @ Internal Error
     if (error != null) {
@@ -69,19 +69,19 @@ class SonrSnack {
     }
   }
 
-  /// ^ Invalid Operation ^ //
+  /// @ Invalid Operation
   factory SonrSnack.invalid(String message) {
     return SonrSnack("Uh Oh!", message, SonrIcons.Warning.white, Colors.orange[900], 2600, false);
   }
 
-  /// ^ Missing Data ^ //
+  /// @ Missing Data
   factory SonrSnack.missing(String message, {bool isLast = false}) {
     // Get Missing Title
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
     return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcons.Warning.white, SonrColor.Critical, 2600, false);
   }
 
-  /// ^ Succesful Operation ^ //
+  /// @ Succesful Operation
   factory SonrSnack.success(String message) {
     return SonrSnack("Success!!", message, SonrIcons.Success.white, Colors.green, 2600, true);
   }

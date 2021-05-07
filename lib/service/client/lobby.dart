@@ -33,7 +33,7 @@ class LobbyService extends GetxService {
   Map<Lobby?, LobbyCallback> _lobbyCallbacks = <Lobby?, LobbyCallback>{};
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
-  // # Initialize Service Method ^ //
+  // # Initialize Service Method
   Future<LobbyService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = MobileService.position.listen(_handlePosition);
@@ -51,7 +51,7 @@ class LobbyService extends GetxService {
     super.onClose();
   }
 
-  /// ^ Method to Cancel Flat Mode ^ //
+  /// @ Method to Cancel Flat Mode
   void cancelFlatMode() {
     // Reset Timers
     _flatModeCancelled(true);
@@ -62,7 +62,7 @@ class LobbyService extends GetxService {
     });
   }
 
-  /// ^ Registers RemoteInfo to Lobby to Manage Callback
+  /// @ Registers RemoteInfo to Lobby to Manage Callback
   static void registerRemoteCallback(RemoteInfo? info, LobbyCallback callback) {
     // Initialize
     Lobby? remote;
@@ -80,26 +80,26 @@ class LobbyService extends GetxService {
     }
   }
 
-  /// ^ Registers Peer to Callback
+  /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer? peer, PeerCallback callback) {
     to._peerCallbacks[peer] = callback;
   }
 
-  /// ^ Removes Lobby Callback
+  /// @ Removes Lobby Callback
   static void unregisterRemoteCallback(Lobby lobby) {
     if (to._lobbyCallbacks.containsKey(lobby)) {
       to._lobbyCallbacks.remove(lobby);
     }
   }
 
-  /// ^ Removes Peer Callback
+  /// @ Removes Peer Callback
   static void unregisterPeerCallback(Peer? peer) {
     if (to._peerCallbacks.containsKey(peer)) {
       to._peerCallbacks.remove(peer);
     }
   }
 
-  /// ^ Method to Cancel Flat Mode ^ //
+  /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
     SonrService.sendFlat(peer);
@@ -158,7 +158,7 @@ class LobbyService extends GetxService {
     }
   }
 
-  // # Handle Lobby Flat Peers ^ //
+  // # Handle Lobby Flat Peers
   void _handleFlatPeers(Lobby data) {
     var flatPeers = <String, Peer>{};
     data.peers.forEach((id, peer) {

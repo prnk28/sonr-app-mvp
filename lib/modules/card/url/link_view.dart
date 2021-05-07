@@ -73,7 +73,7 @@ class URLLinkView extends StatelessWidget {
   }
 }
 
-/// ^ Builds Image from URLLink Data
+/// @ Builds Image from URLLink Data
 class _URLLinkImage extends StatelessWidget {
   final URLLink data;
   const _URLLinkImage({Key? key, required this.data}) : super(key: key);
@@ -90,7 +90,7 @@ class _URLLinkImage extends StatelessWidget {
   }
 }
 
-/// ^ Builds Info from URLLink Data
+/// @ Builds Info from URLLink Data
 class _URLLinkInfo extends StatelessWidget {
   final URLLink data;
   const _URLLinkInfo({Key? key, required this.data}) : super(key: key);

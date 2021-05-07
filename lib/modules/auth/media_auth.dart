@@ -5,7 +5,7 @@ import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-/// ^ File Invite Builds from Invite Protobuf ^ //
+/// @ File Invite Builds from Invite Protobuf
 class MediaAuthView extends StatelessWidget {
   final AuthInvite invite;
   MediaAuthView(this.invite);

@@ -1,6 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 
-/// ^ Activity View ^ //
+/// @ Activity View
 class ActivityView extends StatelessWidget {
   ActivityView({Key? key}) : super(key: key);
   @override
@@ -23,7 +23,7 @@ class ActivityView extends StatelessWidget {
   }
 }
 
-/// ^ Activity List Item ^ //
+/// @ Activity List Item
 class _ActivityListItem extends StatelessWidget {
   final TransferCardActivity item;
 

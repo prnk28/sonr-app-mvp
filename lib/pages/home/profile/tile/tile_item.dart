@@ -2,7 +2,7 @@ import 'package:sonr_app/style/style.dart';
 import 'social_view.dart';
 import 'tile_controller.dart';
 
-// ** Builds Social Tile ** //
+/// ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {
   final Contact_Social item;
   final int index;
@@ -41,7 +41,7 @@ class SocialTileItem extends GetWidget<TileController> {
     ]);
   }
 
-  /// ^ Builds Neumorohic Item ^ //
+  /// @ Builds Neumorohic Item
   Widget _buildView(bool isEditing, {bool isDragging = false}) {
     // Theming View with Drag
     return GestureDetector(

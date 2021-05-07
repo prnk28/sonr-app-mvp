@@ -47,7 +47,7 @@ class SocialView extends StatelessWidget {
     });
   }
 
-  // ** Builds Expanded Tile View - List/Grid ** //
+  /// ** Builds Expanded Tile View - List/Grid ** //
   _buildExpanded(Contact_Social_Provider provider) {
     return ListView.separated(
       shrinkWrap: true,
@@ -66,7 +66,7 @@ class SocialView extends StatelessWidget {
   }
 }
 
-/// ^ Medium Item ^ //
+/// @ Medium Item
 class _MediumItem extends StatelessWidget {
   final MediumModel? medium;
   final int index;
@@ -106,7 +106,7 @@ class _MediumItem extends StatelessWidget {
   }
 }
 
-/// ^ Twitter Item ^ //
+/// @ Twitter Item
 class _TweetItem extends StatelessWidget {
   final TileController controller;
   final TwitterModel? twitter;
@@ -168,7 +168,7 @@ class _TweetItem extends StatelessWidget {
   }
 }
 
-/// ^ Youtube Item ^ //
+/// @ Youtube Item
 class _YoutubeItem extends StatelessWidget {
   final YoutubeModel? youtube;
   final int index;

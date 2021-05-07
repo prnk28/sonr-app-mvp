@@ -43,12 +43,12 @@ class RemoteController extends GetxController {
     super.onClose();
   }
 
-  /// ^ Handle Initial Join Tap
+  /// @ Handle Initial Join Tap
   void handleJoinTap() {
     isJoinFieldTapped(true);
   }
 
-  /// ^ Method to Create Remote Lobby ^ //
+  /// @ Method to Create Remote Lobby
   void create() async {
     // Start Remote
     remoteInfo(await SonrService.createRemote());
@@ -56,7 +56,7 @@ class RemoteController extends GetxController {
     LobbyService.registerRemoteCallback(remoteInfo.value, _handleRemoteLobby);
   }
 
-  /// ^ Method to End Created Remote Lobby ^ //
+  /// @ Method to End Created Remote Lobby
   void stop() async {
     if (remoteInfo.value != null) {
       // Start Remote
@@ -70,14 +70,14 @@ class RemoteController extends GetxController {
     }
   }
 
-  /// ^ Method to Join New Remote Lobby ^ //
+  /// @ Method to Join New Remote Lobby
   void join() async {
     isJoinFieldTapped(false);
     remoteInfo(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
     status(RemoteViewStatus.Joined);
   }
 
-  /// ^ Method to Leave Current Remote Lobby ^ //
+  /// @ Method to Leave Current Remote Lobby
   void leave() async {
     if (remoteInfo.value != null) {
       SonrService.leaveRemote(remoteInfo.value!);
@@ -91,7 +91,7 @@ class RemoteController extends GetxController {
     }
   }
 
-  /// ^ Method to Respond to Invite ^ //
+  /// @ Method to Respond to Invite
   void respond(bool decision) {
     if (remoteInfo.value != null && currentInvite.value != null) {
       // Respond Decision

@@ -15,7 +15,7 @@ class ExplorerController extends GetxController {
   late StreamSubscription<Lobby?> _lobbySizeStream;
   ScrollController scrollController = ScrollController();
 
-  /// ^ Controller Constructer ^
+  /// @ Controller Constructer
   void onInit() async {
     // Set Initial Value
     _handleLobbySizeUpdate(LobbyService.local.value);
@@ -31,14 +31,14 @@ class ExplorerController extends GetxController {
     super.onInit();
   }
 
-  /// ^ On Dispose ^ //
+  /// @ On Dispose
   @override
   void onClose() {
     _lobbySizeStream.cancel();
     super.onClose();
   }
 
-  // # Handle Lobby Size Update ^ //
+  // # Handle Lobby Size Update
   _handleLobbySizeUpdate(Lobby? lobby) {
     if (lobby != null) {
       isNotEmpty(lobby.isNotEmpty);

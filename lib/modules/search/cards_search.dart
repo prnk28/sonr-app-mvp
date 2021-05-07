@@ -73,7 +73,7 @@
 //   }
 // }
 
-// // ** Class For TransferCard Searched Suggestion Widget ** //
+// /// ** Class For TransferCard Searched Suggestion Widget ** //
 // class _SonrSearchCardSuggestion extends StatelessWidget {
 //   final SearchCardController controller;
 //   _SonrSearchCardSuggestion(this.controller, {Key key}) : super(key: key);
@@ -124,7 +124,7 @@
 //   }
 // }
 
-// // ** Class For TransferCard Results ListView Widget ** //
+// /// ** Class For TransferCard Results ListView Widget ** //
 // class _SonrSearchCardListView extends StatelessWidget {
 //   final SearchCardController controller;
 //   _SonrSearchCardListView(this.controller, {Key key}) : super(key: key);
@@ -154,7 +154,7 @@
 //   }
 // }
 
-// // ** Class For TransferCard Searched ListItem Widget ** //
+// /// ** Class For TransferCard Searched ListItem Widget ** //
 // class _SonrSearchCardListItem extends GetView<SearchCardController> {
 //   final TransferCard card;
 //   _SonrSearchCardListItem(this.card, {Key key}) : super(key: key);
@@ -204,7 +204,7 @@
 //   }
 // }
 
-// // ** Class For Search Controller ** //
+// /// ** Class For Search Controller ** //
 // class SearchCardController extends GetxController {
 //   // Properties
 //   final searchText = "".obs;
@@ -224,7 +224,7 @@
 //     searchText(query);
 //   }
 
-//   /// ^ Query Text Field ^ //
+//   /// @ Query Text Field
 //   SearchCardController() {
 //     // @ Listen to Current Text
 //     // Query for All Rows
@@ -275,13 +275,13 @@
 //     });
 //   }
 
-//   /// ^ Method to Push to Selected Card ^ //
+//   /// @ Method to Push to Selected Card
 //   navigateToCard(TransferCard card) {
 //     HapticFeedback.mediumImpact();
 //     Get.find<HomeController>().jumpToCard(card);
 //   }
 
-//   /// ^ Method Updates View Margin ^ //
+//   /// @ Method Updates View Margin
 //   _setMarginForResults() {
 //     if (results.length == 0) {
 //       if (cardList.length > 2) {

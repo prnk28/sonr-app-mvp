@@ -8,7 +8,7 @@ class LinkController extends GetxController {
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final lastNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
-  /// ^ Validates Fields ^ //
+  /// @ Validates Fields
   bool validate() {
     // Check Valid
     bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
@@ -22,7 +22,7 @@ class LinkController extends GetxController {
     return firstNameValid && lastNameValid;
   }
 
-  /// ^ Submits Contact ^ //
+  /// @ Submits Contact
   setContact() async {
     if (validate()) {
       // Get Contact from Values

@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:get/get.dart';
 
-/// ^ Contact Invite from AuthInvite Proftobuf ^ //
+/// @ Contact Invite from AuthInvite Proftobuf
 class ContactAuthView extends StatelessWidget {
   final AuthInvite? invite;
   final AuthReply? reply;
@@ -89,7 +89,7 @@ class ContactAuthView extends StatelessWidget {
   }
 }
 
-/// ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
+/// @ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf
 class ContactFlatCard extends StatelessWidget {
   final double? scale;
   final Contact? contact;

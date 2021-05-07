@@ -3,7 +3,7 @@ import 'dart:isolate';
 import 'package:sonr_app/style/style.dart';
 import 'package:file_picker/file_picker.dart';
 
-/// ^ Class for Managing Files ^ //
+/// @ Class for Managing Files
 class FileService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<FileService>();
@@ -12,7 +12,7 @@ class FileService extends GetxService {
   // References
   Isolate? isolate;
 
-  /// ^ Initialize Service ^ //
+  /// @ Initialize Service
   Future<FileService> init() async {
     return this;
   }

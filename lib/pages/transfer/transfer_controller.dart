@@ -38,7 +38,7 @@ class TransferController extends GetxController {
   late StreamSubscription<Position> _positionStream;
   ScrollController scrollController = ScrollController();
 
-  /// ^ Controller Constructer ^
+  /// @ Controller Constructer
   void onInit() {
     // Set Initial Value
     _handlePositionUpdate(MobileService.position.value);
@@ -50,7 +50,7 @@ class TransferController extends GetxController {
     super.onInit();
   }
 
-  /// ^ On Dispose ^ //
+  /// @ On Dispose
   @override
   void onClose() {
     _positionStream.cancel();
@@ -58,7 +58,7 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
-  /// ^ Send Invite with Peer ^ //
+  /// @ Send Invite with Peer
   void invitePeer(Peer peer) {
     setFacingPeer(false);
     isShiftingEnabled(false);
@@ -70,7 +70,7 @@ class TransferController extends GetxController {
     SonrService.invite(inviteRequest.value);
   }
 
-  /// ^ Set Transfer Payload ^ //
+  /// @ Set Transfer Payload
   void setPayload(TransferArguments args) async {
     // Set Title
     _setTitle(args.payload);
@@ -94,18 +94,18 @@ class TransferController extends GetxController {
     }
   }
 
-  /// ^ User is Facing or No longer Facing a Peer ^ //
+  /// @ User is Facing or No longer Facing a Peer
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
   }
 
-  /// ^ Toggles Peer Shifting ^ //
+  /// @ Toggles Peer Shifting
   void toggleShifting() {
     isShiftingEnabled(!isShiftingEnabled.value);
   }
 
-  // # Handle Compass Update ^ //
+  // # Handle Compass Update
   _handlePositionUpdate(Position pos) {
     // Update String Elements
     if (!isClosed) {
@@ -120,7 +120,7 @@ class TransferController extends GetxController {
     }
   }
 
-  // # Handle Lobby Size Update ^ //
+  // # Handle Lobby Size Update
   _handleLobbyUpdate(Lobby? data) {
     if (data != null && !isClosed) {
       isNotEmpty(data.isNotEmpty);

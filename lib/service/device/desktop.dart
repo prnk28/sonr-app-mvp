@@ -39,7 +39,7 @@ class DesktopService extends GetxService {
     return this;
   }
 
-  /// ^ Method Plays a UI Sound ^
+  /// @ Method Plays a UI Sound
   static void playSound(UISoundType type) async {
     WarbleStream stream = (await (Warble.wrapAsset(rootBundle, "assets/${type.file}", buffered: true) as FutureOr<WarbleStream>));
     await stream.play();

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../style.dart';
 
-/// ^ Builds Overlay Based Positional Dropdown Menu ^ //
+/// @ Builds Overlay Based Positional Dropdown Menu
 class SonrDropdown extends StatelessWidget {
   // Properties
   final int? selectedFlex;
@@ -119,7 +119,7 @@ class SonrDropdown extends StatelessWidget {
   }
 }
 
-/// ^ Builds Dropdown Menu Item Widget ^ //
+/// @ Builds Dropdown Menu Item Widget
 class SonrDropdownItem extends StatelessWidget {
   final Widget? icon;
   final String text;

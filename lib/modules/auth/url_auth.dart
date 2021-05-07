@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// ^ URL Invite from AuthInvite Proftobuf ^ //
+/// @ URL Invite from AuthInvite Proftobuf
 class URLAuthView extends StatelessWidget {
   final AuthInvite invite;
   URLAuthView(this.invite);

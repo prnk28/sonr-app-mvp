@@ -1,7 +1,7 @@
 import 'dart:ui';
 import '../style.dart';
 
-/// ^ Home Screen Header ^ //
+/// @ Home Screen Header
 class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const draggableChannel = MethodChannel('io.sonr.desktop/window');
   final Widget title;
@@ -61,7 +61,7 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  /// ^ Closes Desktop Window
+  /// @ Closes Desktop Window
   static void closeWindow() async {}
 
   Widget _buildTrailing() {

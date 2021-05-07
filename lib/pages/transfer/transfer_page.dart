@@ -7,7 +7,7 @@ import 'payload_view.dart';
 import 'transfer_controller.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
 
-/// ^ Transfer Screen Entry with Arguments ^ //
+/// @ Transfer Screen Entry with Arguments
 class Transfer {
   static void transferWithContact() {
     Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, contact: UserService.contact.value));
@@ -22,7 +22,7 @@ class Transfer {
   }
 }
 
-/// ^ Transfer Screen Entry Point ^ //
+/// @ Transfer Screen Entry Point
 class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {

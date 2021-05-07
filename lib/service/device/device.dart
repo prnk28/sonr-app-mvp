@@ -48,14 +48,14 @@ class DeviceService extends GetxService {
     return this;
   }
 
-  /// ^ Provide Device Feedback ^ //
+  /// @ Provide Device Feedback
   static void feedback() async {
     if (DeviceService.isMobile) {
       await HapticFeedback.heavyImpact();
     }
   }
 
-  /// ^ Retreive Location by IP Address ^ //
+  /// @ Retreive Location by IP Address
   static Future<Location> findIPLocation() async {
     var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${EnvConfig.ip_key}");
 
@@ -75,7 +75,7 @@ class DeviceService extends GetxService {
     }
   }
 
-  /// ^ Method Determines LaunchPage and Changes Screen ^
+  /// @ Method Determines LaunchPage and Changes Screen
   static void initialPage({required Duration delay}) async {
     Future.delayed(delay, () {
       // @ Mobile Page
@@ -106,7 +106,7 @@ class DeviceService extends GetxService {
     });
   }
 
-  /// ^ Method Plays a UI Sound ^
+  /// @ Method Plays a UI Sound
   static void playSound({required UISoundType type}) async {
     if (isMobile) {
       MobileService.playSound(type);
@@ -115,7 +115,7 @@ class DeviceService extends GetxService {
     }
   }
 
-  /// ^ Saves Received Media to Gallery by Platform ^ //
+  /// @ Saves Received Media to Gallery by Platform
   static Future<void> saveTransfer(SonrFile file) async {
     if (isMobile) {
       await MobileService.saveTransfer(file.single);
@@ -132,10 +132,10 @@ class DeviceService extends GetxService {
   }
 }
 
-/// ^ Asset Sound Types ^ //
+/// @ Asset Sound Types
 enum UISoundType { Confirmed, Connected, Critical, Deleted, Fatal, Joined, Linked, Received, Swipe, Transmitted, Warning }
 
-// @ Asset Sound Type Utility ^ //
+// @ Asset Sound Type Utility
 extension UISoundTypeUtil on UISoundType {
   String get file {
     return '${this.value.toLowerCase()}.wav';

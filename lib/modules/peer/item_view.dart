@@ -2,7 +2,7 @@ import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
-/// ^ PeerListItem for Remote View ^ //
+/// @ PeerListItem for Remote View
 class PeerListItem extends StatefulWidget {
   final Peer peer;
   final int index;

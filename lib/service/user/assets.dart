@@ -148,7 +148,7 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
     }
   }
 
-  /// ^ Get Illustration ^ //
+  /// @ Get Illustration
   Image get widget {
     switch (this) {
       case SonrAssetIllustration.NoFiles1:
@@ -232,7 +232,7 @@ extension LogoNetworkUtils on SonrAssetLogo {
     }
   }
 
-  /// ^ Get Logo ^ //
+  /// @ Get Logo
   Widget get widget {
     if (this == SonrAssetLogo.Top || this == SonrAssetLogo.TopWhite || this == SonrAssetLogo.TopBlack) {
       return AssetController.to._logoTop;
@@ -343,7 +343,7 @@ class AssetController extends GetxController {
     super.onReady();
   }
 
-  /// ^ Static Get Icon for Home Tab Bar ^ //
+  /// @ Static Get Icon for Home Tab Bar
   static Widget getHomeTabBarIcon({required HomeView view, required bool isSelected}) {
     switch (view) {
       case HomeView.Main:
@@ -357,7 +357,7 @@ class AssetController extends GetxController {
     }
   }
 
-  //  ^ Get Random No Files Image ^ //
+  //  ^ Get Random No Files Image
   static Widget getNoFiles(int val) {
     if (val == 1) {
       return to._noFiles1;

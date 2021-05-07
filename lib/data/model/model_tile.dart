@@ -4,14 +4,14 @@ import 'package:sonr_app/pages/home/profile/profile.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-// ** Focused Tile ** //
+/// ** Focused Tile ** //
 class FocusedTile {
   final int index;
   final bool isActive;
   FocusedTile(this.index, this.isActive);
 }
 
-// ** Tile Create Step Class ** //
+/// ** Tile Create Step Class ** //
 class TileStep {
   // @ References
   int _step = 0;
@@ -49,7 +49,7 @@ class TileStep {
 
   TileStep(this.next, this.previous, this.save);
 
-  /// ^ Adjusted Container Height ^
+  /// @ Adjusted Container Height
   double get height {
     var kBaseModifier = 260.0;
     if (current == 0) {
@@ -64,7 +64,7 @@ class TileStep {
     }
   }
 
-  /// ^ Adjusted View Margin ^
+  /// @ Adjusted View Margin
   double get verticalMargin {
     if (current == 0) {
       return 10;
@@ -75,7 +75,7 @@ class TileStep {
     }
   }
 
-  /// ^ Presented View by Step ^
+  /// @ Presented View by Step
   Widget get currentView {
     if (current == 2) {
       return SetTypeView();
@@ -86,7 +86,7 @@ class TileStep {
     }
   }
 
-  /// ^ Bottom Buttons for View by Step ^
+  /// @ Bottom Buttons for View by Step
   Widget get bottomButtons {
     //  Step Three: Cancel and Confirm
     if (current == 2) {

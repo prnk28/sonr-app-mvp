@@ -76,7 +76,7 @@ class CardService extends GetxService {
     return this;
   }
 
-  /// @ Add New Card to Database ^ //
+  /// @ Add New Card to Database
   static addCard(TransferCard card) async {
     // Save Media to Device
     if (card.payload == Payload.MEDIA) {
@@ -127,7 +127,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Returns total Card Count ^ //
+  /// @ Returns total Card Count
   static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
     // Get Total Entries
     var cards = await to._database.allCardEntries;
@@ -147,42 +147,42 @@ class CardService extends GetxService {
     return cards.length;
   }
 
-  /// @ Clear Single Activity ^ //
+  /// @ Clear Single Activity
   static clearActivity(TransferCardActivity activity) async {
     if (hasActivity) {
       await to._database.clearActivity(activity);
     }
   }
 
-  /// @ Clear All Activity ^ //
+  /// @ Clear All Activity
   static clearAllActivity() async {
     if (hasActivity) {
       await to._database.clearAllActivity();
     }
   }
 
-  /// @ Remove Card and Add Deleted Activity to Database ^ //
+  /// @ Remove Card and Add Deleted Activity to Database
   static deleteCard(TransferCardItem card) async {
     await to._database.deleteCard(card);
     addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
     _refreshCount();
   }
 
-  /// @ Remove Card and Add Deleted Activity to Database ^ //
+  /// @ Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
     await to._database.deleteCardFromID(id);
     // await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
     _refreshCount();
   }
 
-  /// @ Remove Card and Add Deleted Activity to Database ^ //
+  /// @ Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
     if (to._all.length > 0) {
       await to._database.deleteAllCards();
     }
   }
 
-  /// @ Load IO File from Metadata ^ //
+  /// @ Load IO File from Metadata
   static Future<File?> loadFileFromMetadata(SonrFile_Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     if (asset != null) {
@@ -192,7 +192,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Load SonrFile from Metadata ^ //
+  /// @ Load SonrFile from Metadata
   static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
     return SonrFileUtils.newWithItem(metadata);
   }

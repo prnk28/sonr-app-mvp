@@ -275,7 +275,7 @@ class CameraController extends GetxController {
     hasCaptured(false);
   }
 
-  /// ^ Captures Photo ^ //
+  /// @ Captures Photo
   capturePhoto() async {
     // Set Path
     var temp = await getApplicationDocumentsDirectory();
@@ -288,12 +288,12 @@ class CameraController extends GetxController {
     hasCaptured(true);
   }
 
-  /// ^ Returns Captured Media File ^ //
+  /// @ Returns Captured Media File
   SonrFile getFile() {
     return SonrFileUtils.newWith(path: _isVideo ? _videoCapturePath : _photoCapturePath, duration: videoDuration.value);
   }
 
-  /// ^ Captures Video ^ //
+  /// @ Captures Video
   startCaptureVideo() async {
     // Set Path
     var temp = await getApplicationDocumentsDirectory();
@@ -312,7 +312,7 @@ class CameraController extends GetxController {
     });
   }
 
-  /// ^ Stops Video Capture ^ //
+  /// @ Stops Video Capture
   stopCaptureVideo() async {
     // Save Video
     await videoController.stopRecordingVideo();
@@ -326,7 +326,7 @@ class CameraController extends GetxController {
     hasCaptured(true);
   }
 
-  /// ^ Flip Camera ^ //
+  /// @ Flip Camera
   toggleCameraSensor() async {
     // Toggle
     isFlipped(!isFlipped.value);

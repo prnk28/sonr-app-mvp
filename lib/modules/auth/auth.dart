@@ -4,7 +4,7 @@ import 'file_auth.dart';
 import 'media_auth.dart';
 import 'url_auth.dart';
 
-//// ^ TransferCardView: Builds Invite View based on AuthInvite Payload Type ^
+//// @ TransferCardView: Builds Invite View based on AuthInvite Payload Type
 class InviteOverlayView extends StatelessWidget {
   final AuthInvite invite;
 
@@ -34,7 +34,7 @@ class InviteOverlayView extends StatelessWidget {
   }
 }
 
-//// ^ TransferCardView: Builds Invite View based on AuthInvite Payload Type - Contact Only ^
+//// @ TransferCardView: Builds Invite View based on AuthInvite Payload Type - Contact Only
 class ReplyOverlayView extends StatelessWidget {
   final AuthReply? reply;
 

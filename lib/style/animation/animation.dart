@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../style.dart';
 
-/// ^ Animated Scale  ^ //
+/// @ Animated Scale
 class AnimatedScale extends StatefulWidget {
   final Widget? child;
   final double scale;
@@ -61,7 +61,7 @@ class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateM
   }
 }
 
-/// ^ Sonr Animated Wave Icon for Screen Transitions ^ //
+/// @ Sonr Animated Wave Icon for Screen Transitions
 class AnimatedWaveIcon extends HookWidget {
   // Properties
   final IconData iconData;
@@ -132,7 +132,7 @@ class AnimatedWaveIcon extends HookWidget {
   }
 }
 
-/// ^ Sonr Ripples ^ //
+/// @ Sonr Ripples
 class AnimatedRipples extends HookWidget {
   const AnimatedRipples({
     Key? key,
@@ -167,7 +167,7 @@ class AnimatedRipples extends HookWidget {
   }
 }
 
-/// ^ Animated Slide Switch ^ //
+/// @ Animated Slide Switch
 
 enum SwitchType { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
 
@@ -204,7 +204,7 @@ class AnimatedSlideSwitcher extends StatelessWidget {
     return AnimatedSlideSwitcher(SwitchType.SlideRight, child, duration);
   }
 
-  /// ^ Build View Method ^ //
+  /// @ Build View Method
   @override
   Widget build(BuildContext context) {
     // Initialize Transition Map
@@ -228,7 +228,7 @@ class AnimatedSlideSwitcher extends StatelessWidget {
         child: child);
   }
 
-  /// ^ Method Builds Slide Transition ^ //
+  /// @ Method Builds Slide Transition
   Widget Function(Widget, Animation<double>) _slideTransition(double x, double y) {
     return (Widget child, Animation<double> animation) {
       final offsetAnimation = TweenSequence([

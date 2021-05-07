@@ -6,7 +6,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'views.dart';
 
-/// ^ TransferCard Media Item Details ^ //
+/// @ TransferCard Media Item Details
 class MetaCardItemView extends StatelessWidget {
   final TransferCardItem card;
 
@@ -73,7 +73,7 @@ class MetaCardItemView extends StatelessWidget {
   }
 }
 
-/// ^ Overlay View for Media Info
+/// @ Overlay View for Media Info
 class _MediaInfoView extends StatelessWidget {
   final SonrFile file;
   final Profile owner;

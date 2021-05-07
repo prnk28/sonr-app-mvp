@@ -35,7 +35,7 @@ class WindowController extends GetxController {
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
-  /// ^ On Dispose ^ //
+  /// @ On Dispose
   @override
   void onClose() {
     _lobbySizeStream.cancel();
@@ -48,7 +48,7 @@ class WindowController extends GetxController {
     view.refresh();
   }
 
-  // @ Handle Size Update ^ //
+  // @ Handle Size Update
   _handleLobbySizeStream(Lobby? onData) {
     // Peer Joined
     if (onData!.size > _lobbySizeRef) {
@@ -64,7 +64,7 @@ class WindowController extends GetxController {
     _lobbySizeRef = onData.size;
   }
 
-  // @ Handle Status Update ^ //
+  // @ Handle Status Update
   _handleStatus(Status val) {
     sonrStatus(val);
     if (val.isConnected) {
@@ -82,7 +82,7 @@ class WindowController extends GetxController {
     }
   }
 
-  // @ Swaps Title when Lobby Size Changes ^ //
+  // @ Swaps Title when Lobby Size Changes
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
     // Check Valid
     if (!_timeoutActive && !isClosed && isTitleVisible.value) {

@@ -6,7 +6,7 @@ import '../../style/style.dart';
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
 enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }
 
-// ** Flat Mode Handler ** //
+/// ** Flat Mode Handler ** //
 class FlatMode {
   static outgoing() {
     if (!Get.isDialogOpen!) {
@@ -26,7 +26,7 @@ class FlatMode {
 const K_TRANSLATE_DELAY = Duration(milliseconds: 150);
 const K_TRANSLATE_DURATION = Duration(milliseconds: 600);
 
-// ** Flat Mode View ** //
+/// ** Flat Mode View ** //
 class _FlatModeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class _FlatModeView extends StatelessWidget {
   }
 }
 
-// ** Reactive Flat Mode Controller ** //
+/// ** Reactive Flat Mode Controller ** //
 class _FlatModeController extends GetxController {
   // Properties
   final received = Rx<Contact?>(null);
@@ -96,7 +96,7 @@ class _FlatModeController extends GetxController {
   // References
   late StreamSubscription<bool> _isFlatStream;
 
-  // # Initialize Service Method ^ //
+  // # Initialize Service Method
   @override
   void onInit() {
     _isFlatStream = LobbyService.isFlatMode.listen(_handleFlatMode);
@@ -110,7 +110,7 @@ class _FlatModeController extends GetxController {
     super.onClose();
   }
 
-  /// ^ Method to Animate in Responded Card ^ //
+  /// @ Method to Animate in Responded Card
   animateIn(Contact card, {double delayModifier = 1.0}) {
     received(card);
     Future.delayed(K_TRANSLATE_DURATION * delayModifier, () {
@@ -120,7 +120,7 @@ class _FlatModeController extends GetxController {
     });
   }
 
-  /// ^ Method to Animate in Invited Card ^ //
+  /// @ Method to Animate in Invited Card
   animateSwap(Contact card) {
     // Set Received Card
     received(card);
@@ -141,7 +141,7 @@ class _FlatModeController extends GetxController {
     });
   }
 
-  /// ^ Method to Animate out Sent Card  and Update Drage Position ^ //
+  /// @ Method to Animate out Sent Card  and Update Drage Position
   setDrag(double y) {
     // @ Check for Valid State
     if (status.value == FlatModeState.Dragging || status.value == FlatModeState.Standby) {
@@ -180,7 +180,7 @@ class _FlatModeController extends GetxController {
   }
 }
 
-/// ^ Method Builds Slide Transition ^ //
+/// @ Method Builds Slide Transition
 class _FlatModeAnimation {
   final FlatModeTransition type;
   _FlatModeAnimation(this.type);

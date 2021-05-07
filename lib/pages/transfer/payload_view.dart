@@ -99,7 +99,7 @@ class _PayloadListItem extends GetView<TransferController> {
   }
 }
 
-/// ^ Builds Thumbnail from Future
+/// @ Builds Thumbnail from Future
 class _PayloadItemThumbnail extends GetView<TransferController> {
   const _PayloadItemThumbnail({Key? key}) : super(key: key);
   @override

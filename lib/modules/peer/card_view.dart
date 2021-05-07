@@ -6,7 +6,7 @@ import 'package:sonr_app/data/data.dart';
 const double K_CARD_WIDTH = 160;
 const double K_CARD_HEIGHT = 190;
 
-/// ^ Root Peer Card View ^ //
+/// @ Root Peer Card View
 class PeerCard extends GetWidget<PeerController> {
   final Peer peer;
   PeerCard(this.peer) : super(key: ValueKey(peer.id.peer));
@@ -66,7 +66,7 @@ class PeerCard extends GetWidget<PeerController> {
   }
 }
 
-/// ^ Main Peer Card View ^ //
+/// @ Main Peer Card View
 class _PeerMainCard extends StatelessWidget {
   final PeerController controller;
   const _PeerMainCard({Key? key, required this.controller}) : super(key: key);
@@ -106,7 +106,7 @@ class _PeerMainCard extends StatelessWidget {
   }
 }
 
-/// ^ Details Peer Card View ^ //
+/// @ Details Peer Card View
 class _PeerDetailsCard extends StatelessWidget {
   final PeerController controller;
   const _PeerDetailsCard({Key? key, required this.controller}) : super(key: key);

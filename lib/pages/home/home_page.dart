@@ -26,7 +26,7 @@ class HomePage extends GetView<HomeController> {
   }
 }
 
-/// ^ Home Tab Bar Navigation ^ //
+/// @ Home Tab Bar Navigation
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
   }
 }
 
-/// ^ Bottom Bar Button Widget ^ //
+/// @ Bottom Bar Button Widget
 class HomeBottomTabButton extends StatelessWidget {
   final HomeView view;
   final void Function(int) onPressed;

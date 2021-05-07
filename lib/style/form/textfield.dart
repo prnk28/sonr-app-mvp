@@ -25,7 +25,7 @@ extension TextInputValidStatusUtils on TextInputValidStatus {
   }
 }
 
-/// ^ Builds Neumorphic Text Field ^ //
+/// @ Builds Neumorphic Text Field
 class SonrTextField extends StatelessWidget {
   final String? label;
   final String hint;
@@ -41,7 +41,7 @@ class SonrTextField extends StatelessWidget {
   final void Function()? onEditingComplete;
   final Iterable<String>? autofillHints;
 
-  /// ^ Returns Random Hint Name ^
+  /// @ Returns Random Hint Name
   static Tuple<String, String> hintName() {
     return <Tuple<String, String>>[
       !DeviceService.isIOS && !DeviceService.isMacOS ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
@@ -155,7 +155,7 @@ class SonrTextField extends StatelessWidget {
     );
   }
 
-  /// ^ Get Animated Offset for Shake Method ^ //
+  /// @ Get Animated Offset for Shake Method
   Offset shakeOffset(double animation) {
     var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
     return Offset(18 * shake, 0);
@@ -164,7 +164,7 @@ class SonrTextField extends StatelessWidget {
 
 enum SearchFieldType { Username, Cards }
 
-/// ^ Builds Neumorphic Text Field for Search ^ //
+/// @ Builds Neumorphic Text Field for Search
 class SonrSearchField extends StatelessWidget {
   final String value;
   final ValueChanged<String>? onChanged;

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
 import 'overlay.dart';
 
-/// ^ Class Controls Active Overlays ** //
+/// @ Class Controls Active Overlays ** //
 class SonrPositionedOverlay extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<SonrPositionedOverlay>();
@@ -24,7 +24,7 @@ class SonrPositionedOverlay extends GetxService {
     return this;
   }
 
-  /// ^ Opens View at Position with Size ^ //
+  /// @ Opens View at Position with Size
   static void open(
     Widget view,
     Size size,
@@ -61,7 +61,7 @@ class SonrPositionedOverlay extends GetxService {
     _controller.overlays.add(overlay);
   }
 
-  /// ^ Method Pops Current Overlay ^ //
+  /// @ Method Pops Current Overlay
   static void back() {
     if (isOpen) {
       // Pop Current Overlay
@@ -76,7 +76,7 @@ class SonrPositionedOverlay extends GetxService {
   }
 }
 
-/// ^ Class Presents Positioned Overlay Widget Entry on Context ** //
+/// @ Class Presents Positioned Overlay Widget Entry on Context ** //
 class _SonrPositionedOverlayEntry {
   // Properties
   final Widget widget;
@@ -88,7 +88,7 @@ class _SonrPositionedOverlayEntry {
   late Function dismiss;
   OverlayEntry? overlay, overlayBackground;
 
-  /// ^ Constructer ** //
+  /// @ Constructer ** //
   _SonrPositionedOverlayEntry(this.size, this.position, this.widget, this.barrierDismissible) {
     dismiss = () {
       overlayBackground!.remove();

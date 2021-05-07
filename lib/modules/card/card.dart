@@ -9,11 +9,11 @@ import 'file/list_item.dart';
 import 'url/card_item.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// ^ Card Element/View type Enums ^ //
+/// @ Card Element/View type Enums
 enum TransferItemsType { All, Metadata, Contacts, Links }
 enum TransferItemView { CardItem, GridItem, ListItem }
 
-//// ^ TransferCardView: Builds View based on TransferCardItem Payload Type ^
+//// @ TransferCardView: Builds View based on TransferCardItem Payload Type
 class TransferItem extends StatelessWidget {
   /// TransferCardItem: SQL Reference to Protobuf
   final TransferCardItem item;
@@ -33,8 +33,6 @@ class TransferItem extends StatelessWidget {
           return ContactGridItemView(item);
         case TransferItemView.ListItem:
           return ContactListItemView(item);
-        default:
-          return Container();
       }
     }
 
@@ -47,8 +45,6 @@ class TransferItem extends StatelessWidget {
           return URLGridItemView(item);
         case TransferItemView.ListItem:
           return URLListItemView(item);
-        default:
-          return Container();
       }
     }
 
@@ -61,54 +57,46 @@ class TransferItem extends StatelessWidget {
           return MetaGridItemView(item);
         case TransferItemView.ListItem:
           return MetaListItemView(item);
-        default:
-          return Container();
       }
     }
   }
 }
 
 extension CardsViewElementTypeUtils on TransferItemsType {
-  // @ Return Empty Image Index by Type
+  /// Return Empty Image Index by Type
   String get emptyLabel => "No ${this.toString().substring(this.toString().indexOf('.') + 1)} yet";
 
-  // @ Return Item Count
+  /// Return Item Count by View Type
   int get itemCount {
     switch (this) {
       case TransferItemsType.Metadata:
         return CardService.metadata.length;
-
       case TransferItemsType.Contacts:
         return CardService.contacts.length;
-
       case TransferItemsType.Links:
         return CardService.links.length;
-
       default:
         return CardService.all.length;
     }
   }
 
-  // @ Return TransferCardItem
+  /// Return TransferCardItem from Index Value
   TransferCardItem transferCardItemAtIndex(int index) {
     switch (this) {
       case TransferItemsType.Metadata:
         return CardService.metadata[index];
-
       case TransferItemsType.Contacts:
         return CardService.contacts[index];
-
       case TransferItemsType.Links:
         return CardService.links[index];
-
       default:
         return CardService.all[index];
     }
   }
 }
 
-/// ^ Card Grid View - By Elements Type ^ //
-/// Displays Cards in a Grid Based on Element Type
+/// @ Displays Cards in a Grid Based on Element Type
+
 class CardsGridView extends StatelessWidget {
   final TransferItemsType type;
   CardsGridView({required this.type, Key? key}) : super(key: key);
@@ -132,7 +120,7 @@ class CardsGridView extends StatelessWidget {
   }
 }
 
-/// ^ Card List View - By Elements Type ^ //
+/// @ Card List View - By Elements Type
 class CardsListView extends StatelessWidget {
   final TransferItemsType type;
   CardsListView({required this.type, Key? key}) : super(key: key);
@@ -155,7 +143,7 @@ class CardsListView extends StatelessWidget {
   }
 }
 
-// @ Helper Method to Build Empty List Value
+/// @ Helper Method to Build Empty List Value
 class _CardsViewEmpty extends StatelessWidget {
   final TransferItemsType type;
   const _CardsViewEmpty(this.type, {Key? key}) : super(key: key);

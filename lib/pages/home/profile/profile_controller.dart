@@ -30,37 +30,37 @@ class ProfileController extends GetxController {
   final pageController = PageController();
   final cardSelection = ValueNotifier<int>(0);
 
-  // ** Initialize Method ** //
+  /// ** Initialize Method ** //
   onInit() async {
     super.onInit();
   }
 
-  /// ^ Start Editing Picture ^ //
+  /// @ Start Editing Picture
   void setAddPicture() {
     HapticFeedback.heavyImpact();
     status(ProfileViewStatus.AddPicture);
   }
 
-  /// ^ Start Editing for Social Tile ^ //
+  /// @ Start Editing for Social Tile
   void setAddTile() {
     HapticFeedback.heavyImpact();
     step(TileStep(nextStep, previousStep, saveTile));
     status(ProfileViewStatus.AddSocial);
   }
 
-  /// ^ Start Editing for Details ^ //
+  /// @ Start Editing for Details
   void setEditingMode() {
     HapticFeedback.heavyImpact();
     status(ProfileViewStatus.EditDetails);
   }
 
-  /// ^ End Add/Edit State ^ //
+  /// @ End Add/Edit State
   void exitToViewing() {
     HapticFeedback.mediumImpact();
     status(ProfileViewStatus.Viewing);
   }
 
-  /// ^ Completed Editing Details ^ //
+  /// @ Completed Editing Details
   void saveEditedDetails() {
     // Update Values in Profile Controller
     UserService.contact.setFirstName(editedFirstName.value);
@@ -101,7 +101,7 @@ class ProfileController extends GetxController {
     step.refresh();
   }
 
-  /// ^ Add Social Tile Move to Next Step ^ //
+  /// @ Add Social Tile Move to Next Step
   nextStep() async {
     // @ Step 2
     if (step.value!.current == 0) {
@@ -138,7 +138,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  /// ^ Add Social Tile Move to Next Step ^ //
+  /// @ Add Social Tile Move to Next Step
   previousStep() {
     // Step 2
     if (step.value!.current == 1) {
@@ -158,7 +158,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  /// ^ Finish and Save new Tile ^ //
+  /// @ Finish and Save new Tile
   saveTile() {
     // Validate
     if (step.value!.hasType && step.value!.current == 2) {
@@ -182,13 +182,13 @@ class ProfileController extends GetxController {
     }
   }
 
-  /// ^ Resets current info ^
+  /// @ Resets current info
   reset() {
     step(TileStep(nextStep, previousStep, saveTile));
     step.refresh();
   }
 
-  /// ^ Expand a Tile  ^ //
+  /// @ Expand a Tile
   toggleExpand(int index, bool isExpanded) {
     focused(FocusedTile(index, isExpanded));
     update(['social-grid']);
