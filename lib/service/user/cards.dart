@@ -78,15 +78,17 @@ class CardService extends GetxService {
 
   /// @ Add New Card to Database
   static addCard(TransferCard card) async {
-    // Save Media to Device
-    if (card.payload == Payload.MEDIA) {
+    if (card.payload.isTransfer) {
       await DeviceService.saveTransfer(card.file);
+
+      // Store in Database
+      await to._database.addFileCard(card);
+      _refreshCount();
+    } else {
+      // Store in Database
+      await to._database.addCard(card);
+      _refreshCount();
     }
-
-    // Store in Database
-    await to._database.addCard(card);
-
-    _refreshCount();
   }
 
   /// @ Add New Activity for deleted card

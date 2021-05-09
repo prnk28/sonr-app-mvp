@@ -35,43 +35,14 @@ class TransferCardItems extends Table {
   DateTimeColumn? get received => dateTime()();
 }
 
-// this annotation tells moor to prepare a database class that uses both of the
-// tables we just defined. We'll see how to use that database class in a moment.
 @UseMoor(tables: [TransferCardItems, TransferCardActivities])
 class CardsDatabase extends _$CardsDatabase {
-  // we tell the database where to store the data with this constructor
   CardsDatabase() : super(_openConnection());
 
-  // you should bump this number whenever you change or add a table definition. Migrations
-  // are covered later in this readme.
   @override
   int get schemaVersion => 2;
 
-  // loads all todo entries
-  Future<List<TransferCardItem>> get allCardEntries => select(transferCardItems).get();
-  Stream<List<TransferCardItem>> watchAll() {
-    return (select(transferCardItems).watch());
-  }
-
-  Stream<List<TransferCardActivity>> watchActivity() {
-    return (select(transferCardActivities).watch());
-  }
-
-  Stream<List<TransferCardItem>> watchContacts() {
-    return (select(transferCardItems)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
-  }
-
-  Stream<List<TransferCardItem>> watchMetadata() {
-    return (select(transferCardItems)
-          ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.MULTI_FILES.value)))
-        .watch();
-  }
-
-  Stream<List<TransferCardItem>> watchUrls() {
-    return (select(transferCardItems)..where((t) => t.payload.equals(Payload.URL.value))).watch();
-  }
-
-  // returns the generated id
+  /// Adds Share/Receive/Delete activity to Database
   Future<int> addActivity(ActivityType type, Payload payload, Profile owner, {MIME_Type mime = MIME_Type.OTHER}) {
     return into(transferCardActivities).insert(TransferCardActivitiesCompanion(
       payload: Value(payload),
@@ -81,44 +52,60 @@ class CardsDatabase extends _$CardsDatabase {
     ));
   }
 
-  Future<int> addCard(TransferCard card) async {
-    Value<MIME_Type> mime = Value.absent();
+  /// Adds Contact/URL card to Database
+  Future<int> addCard(TransferCard card) async => into(transferCardItems).insert(TransferCardItemsCompanion(
+      owner: Value(card.owner),
+      mime: Value.absent(),
+      payload: Value(card.payload),
+      contact: card.hasContact() ? Value(card.contact) : Value.absent(),
+      file: card.hasFile() ? Value(card.file) : Value.absent(),
+      url: card.hasUrl() ? Value(card.url) : Value.absent(),
+      received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
-    if (card.hasFile()) {
-      if (!card.file.isMultiple) {
-        mime = Value(card.file.single.mime.type);
-      }
-    }
+  /// Add File card to Database
+  Future<int> addFileCard(TransferCard card) async => into(transferCardItems).insert(TransferCardItemsCompanion(
+      owner: Value(card.owner),
+      mime: Value(card.file.single.mime.type),
+      payload: Value(card.payload),
+      contact: card.hasContact() ? Value(card.contact) : Value.absent(),
+      file: card.hasFile() ? Value(card.file) : Value.absent(),
+      url: card.hasUrl() ? Value(card.url) : Value.absent(),
+      received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
-    return into(transferCardItems).insert(TransferCardItemsCompanion(
-        owner: Value(card.owner),
-        mime: mime,
-        payload: Value(card.payload),
-        contact: card.hasContact() ? Value(card.contact) : Value.absent(),
-        file: card.hasFile() ? Value(card.file) : Value.absent(),
-        url: card.hasUrl() ? Value(card.url) : Value.absent(),
-        received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
-  }
+  /// Returns all Transfer Card Items
+  Future<List<TransferCardItem>> get allCardEntries => select(transferCardItems).get();
 
-  Future<void> clearActivity(TransferCardActivity activity) {
-    return (delete(transferCardActivities)..where((t) => t.id.equals(activity.id))).go();
-  }
+  /// Delete Single Activity from Database
+  Future<void> clearActivity(TransferCardActivity activity) => (delete(transferCardActivities)..where((t) => t.id.equals(activity.id))).go();
 
-  Future<void> clearAllActivity() {
-    return delete(transferCardActivities).go();
-  }
+  /// Deletes All Activity from Database
+  Future<void> clearAllActivity() => delete(transferCardActivities).go();
 
-  Future<void> deleteCard(TransferCardItem item) {
-    return (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
-  }
+  /// Deletes Card Item from Database with `TransferCardItem`
+  Future<void> deleteCard(TransferCardItem item) => (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
 
-  Future<void> deleteCardFromID(int id) {
-    return (delete(transferCardItems)..where((t) => t.id.equals(id))).go();
-  }
+  /// Deletes Card Item from Database with id
+  Future<void> deleteCardFromID(int id) => (delete(transferCardItems)..where((t) => t.id.equals(id))).go();
 
-  Future<void> deleteAllCards() {
-    return delete(transferCardItems).go();
-  }
+  /// Deletes ALL Card Items from Database
+  Future<void> deleteAllCards() => delete(transferCardItems).go();
+
+  /// Streams Activity Items from Database
+  Stream<List<TransferCardActivity>> watchActivity() => (select(transferCardActivities).watch());
+
+  /// Streams Card Items from Database
+  Stream<List<TransferCardItem>> watchAll() => (select(transferCardItems).watch());
+
+  /// Streams Contact Card Items from Database
+  Stream<List<TransferCardItem>> watchContacts() => (select(transferCardItems)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
+
+  /// Streams Metadata Card Items from Database
+  Stream<List<TransferCardItem>> watchMetadata() => (select(transferCardItems)
+        ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.MULTI_FILES.value)))
+      .watch();
+
+  /// Streams URL Card Items from Database
+  Stream<List<TransferCardItem>> watchUrls() => (select(transferCardItems)..where((t) => t.payload.equals(Payload.URL.value))).watch();
 }
 
 LazyDatabase _openConnection() {
