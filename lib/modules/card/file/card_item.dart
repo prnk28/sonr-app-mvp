@@ -33,7 +33,7 @@ class MetaCardItemView extends StatelessWidget {
                 child: Container(
                     padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-                    child: card.dateTimeText),
+                    child: ReceivedText.dateTime(received: card.received)),
               ),
 
               // Info Button

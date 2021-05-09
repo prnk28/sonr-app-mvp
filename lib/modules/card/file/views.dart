@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/video/video_view.dart';
 import 'package:sonr_app/style/style.dart';
@@ -153,5 +154,42 @@ class MetaVideo extends StatelessWidget {
             width: width ?? orientation.defaultWidth,
             height: height ?? orientation.defaultHeight,
           );
+  }
+}
+
+/// Received DateTime Text Widget
+class ReceivedText extends StatelessWidget {
+  final bool isDateTime;
+  final DateTime received;
+
+  /// Create Received Date Time Text with only Date
+  factory ReceivedText.date({required DateTime received}) {
+    return ReceivedText(isDateTime: false, received: received);
+  }
+
+  /// Create Received Date Time Text with Date AND Time
+  factory ReceivedText.dateTime({required DateTime received}) {
+    return ReceivedText(isDateTime: true, received: received);
+  }
+
+  const ReceivedText({Key? key, required this.isDateTime, required this.received}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    if (isDateTime) {
+      // Formatters
+      final dateFormat = DateFormat.yMd();
+      final timeFormat = DateFormat.jm();
+
+      // Get String
+      String dateText = dateFormat.format(this.received);
+      String timeText = timeFormat.format(this.received);
+      return Row(children: [dateText.h6_White, timeText.p_White]);
+    } else {
+      // Formatters
+      final dateFormat = DateFormat.yMd();
+
+      // Get String
+      return dateFormat.format(this.received).h6_White;
+    }
   }
 }

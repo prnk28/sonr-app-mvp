@@ -112,7 +112,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-                child: SizedBox(height: 30, child: item!.dateText),
+                child: SizedBox(height: 30, child: ReceivedText.date(received: item!.received)),
               ),
             )
           ],

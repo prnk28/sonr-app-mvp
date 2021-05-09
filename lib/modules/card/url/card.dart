@@ -1,12 +1,12 @@
 import 'package:sonr_app/modules/card/url/grid_item.dart';
 import 'package:sonr_app/modules/card/url/list_item.dart';
-import 'contact/card_item.dart';
-import 'contact/grid_item.dart';
-import 'contact/list_item.dart';
-import 'file/card_item.dart';
-import 'file/grid_item.dart';
-import 'file/list_item.dart';
-import 'url/card_item.dart';
+import '../contact/card_item.dart';
+import '../contact/grid_item.dart';
+import '../contact/list_item.dart';
+import '../file/card_item.dart';
+import '../file/grid_item.dart';
+import '../file/list_item.dart';
+import 'card_item.dart';
 import 'package:sonr_app/style/style.dart';
 
 /// @ Card Element/View type Enums
