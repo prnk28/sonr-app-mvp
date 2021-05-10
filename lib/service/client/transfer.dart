@@ -29,14 +29,18 @@ class TransferService extends GetxService {
   // @ Use Camera for Media File //
   static Future<void> chooseCamera() async {
     // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (SonrFile file) {
-      _handlePayload(Payload.MEDIA, file: file);
-      Get.offNamed("/transfer", arguments: TransferArguments(TransferService.payload.value, file: TransferService.file.value));
+    Get.to(CameraView.withPreview(onMediaSelected: (SonrFile file) async {
+      await _handlePayload(Payload.MEDIA, file: file);
+      // Shift Pages
+      Get.offNamed("/transfer");
     }), transition: Transition.downToUp);
   }
 
   static void chooseContact() async {
-    _handlePayload(Payload.CONTACT);
+    await _handlePayload(Payload.CONTACT);
+
+    // Shift Pages
+    Get.offNamed("/transfer");
   }
 
   // @ Select Media File //
@@ -47,13 +51,19 @@ class TransferService extends GetxService {
     // Check File
     if (result != null) {
       var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
-      _handlePayload(Payload.MEDIA, file: file);
+      await _handlePayload(Payload.MEDIA, file: file);
+
+      // Shift Pages
+      Get.offNamed("/transfer");
     }
   }
 
   // @ Select Media File //
   static Future<void> chooseMediaExternal(SonrFile file) async {
-    _handlePayload(Payload.MEDIA, file: file);
+    await _handlePayload(Payload.MEDIA, file: file);
+
+    // Shift Pages
+    Get.offNamed("/transfer");
   }
 
   // @ Select Other File //
@@ -66,7 +76,7 @@ class TransferService extends GetxService {
       // Check If Single
       if (result.isSinglePick) {
         var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
-        _handlePayload(Payload.FILE, file: file);
+        await _handlePayload(Payload.FILE, file: file);
       }
       // Multiple: Iterate Items
       else {
@@ -78,16 +88,19 @@ class TransferService extends GetxService {
           file.addItem(path: e.path!);
         });
 
-        _handlePayload(Payload.MULTI_FILES, file: file);
+        await _handlePayload(Payload.MULTI_FILES, file: file);
       }
-
-      Get.offNamed("/transfer", arguments: TransferArguments(TransferService.payload.value, file: TransferService.file.value));
+      // Shift Pages
+      Get.offNamed("/transfer");
     }
   }
 
   // @ Select Media File //
   static Future<void> chooseURLExternal(String url) async {
-    _handlePayload(Payload.URL, url: url);
+    await _handlePayload(Payload.URL, url: url);
+
+    // Shift Pages
+    Get.offNamed("/transfer");
   }
 
   /// @ Send Invite with Peer
@@ -100,13 +113,13 @@ class TransferService extends GetxService {
   }
 
   /// Set Transfer Payload for File
-  static void _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
+  static Future<void> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
     // Initialize Request
     to._payload(payload);
 
     // Check for File
     if (to._payload.value.isTransfer) {
-      to._inviteRequest.initValues(payload, file: file);
+      to._inviteRequest.init(payload, file: file);
       to._sonrFile(file!);
 
       // Check for Media
@@ -125,15 +138,12 @@ class TransferService extends GetxService {
     }
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
-      to._inviteRequest.initValues(payload, contact: UserService.contact.value);
+      to._inviteRequest.init(payload, contact: UserService.contact.value);
     }
     // Check for URL
     else if (to._payload.value == Payload.URL) {
-      to._inviteRequest.initValues(payload, url: url!);
+      to._inviteRequest.init(payload, url: url!);
     }
-
-    // Shift Pages
-    Get.offNamed("/transfer");
   }
 
   // # Generic Method for Different File Types

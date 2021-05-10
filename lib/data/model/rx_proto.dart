@@ -104,27 +104,7 @@ extension RxInviteRequest on Rx<InviteRequest> {
   bool get isTransfer => this.value.payload == Payload.MEDIA || this.value.payload == Payload.FILE || this.value.payload == Payload.MULTI_FILES;
 
   /// `Init()` sets Invite Request Parameters with TransferArguments
-  void init(TransferArguments args) {
-    switch (args.payload) {
-      case Payload.CONTACT:
-        if (args.contact != null) {
-          addContact(args.contact!);
-        }
-        break;
-      case Payload.URL:
-        if (args.url != null) {
-          addUrl(args.url!);
-        }
-        break;
-      default:
-        if (args.file != null) {
-          addFile(args.file!);
-        }
-    }
-  }
-
-  /// `Init()` sets Invite Request Parameters with TransferArguments
-  void initValues(Payload payload, {String? url, Contact? contact, SonrFile? file}) {
+  void init(Payload payload, {String? url, Contact? contact, SonrFile? file}) {
     switch (payload) {
       case Payload.CONTACT:
         if (contact != null) {

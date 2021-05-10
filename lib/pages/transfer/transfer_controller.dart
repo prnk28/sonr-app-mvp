@@ -51,6 +51,17 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
+  String get shareTitle {
+    switch (TransferService.payload.value) {
+      case Payload.CONTACT:
+        return "Sharing Contact Card";
+      case Payload.URL:
+        return "Sending Link";
+      default:
+        return "Sharing " + TransferService.file.value.prettyType();
+    }
+  }
+
   /// @ User is Facing or No longer Facing a Peer
   void setFacingPeer(bool value) {
     isFacingPeer(value);
@@ -96,7 +107,7 @@ class TransferController extends GetxController {
         title("Sending Link");
         break;
       default:
-        if (TransferService.file.value.exists) {
+        if (TransferService.file.value.payload != Payload.NONE) {
           title("Sharing " + TransferService.file.value.prettyType());
         }
     }

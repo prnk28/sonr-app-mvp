@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
+import 'lobby_view.dart';
 import 'payload_view.dart';
 import 'transfer_controller.dart';
-import 'package:sonr_app/modules/peer/card_view.dart';
 
 /// @ Transfer Screen Entry Point
 class TransferScreen extends GetView<TransferController> {
@@ -26,15 +26,7 @@ class TransferScreen extends GetView<TransferController> {
               Obx(() {
                 // Carousel View
                 if (controller.isNotEmpty.value) {
-                  return Container(
-                    height: 260,
-                    child: CustomScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      controller: controller.scrollController,
-                      slivers: LobbyService.local.value.mapAll((i) => Builder(builder: (context) => SliverToBoxAdapter(child: PeerCard(i)))).toList(),
-                    ),
-                  );
+                  return LobbyView();
                 }
 
                 // Default Empty View
