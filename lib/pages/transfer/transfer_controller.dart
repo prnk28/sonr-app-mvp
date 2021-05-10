@@ -4,10 +4,10 @@ import 'package:sonr_app/style/style.dart';
 
 class TransferController extends GetxController {
   // @ Properties
-  final title = "Sharing".obs;
   final subtitle = "Nobody Here".obs;
   final isFacingPeer = false.obs;
   final isNotEmpty = false.obs;
+  final centerKey = ValueKey("").obs;
 
   // @ Remote Properties
   final counter = 0.obs;
@@ -38,7 +38,6 @@ class TransferController extends GetxController {
     // Add Stream Handlers
     _positionStream = MobileService.position.listen(_handlePositionUpdate);
     _lobbySizeStream = LobbyService.local.listen(_handleLobbyUpdate);
-    _payloadStream = TransferService.payload.listen(_handlePayload);
     super.onInit();
   }
 
@@ -49,17 +48,6 @@ class TransferController extends GetxController {
     _lobbySizeStream.cancel();
     _payloadStream.cancel();
     super.onClose();
-  }
-
-  String get shareTitle {
-    switch (TransferService.payload.value) {
-      case Payload.CONTACT:
-        return "Sharing Contact Card";
-      case Payload.URL:
-        return "Sending Link";
-      default:
-        return "Sharing " + TransferService.file.value.prettyType();
-    }
   }
 
   /// @ User is Facing or No longer Facing a Peer
@@ -89,27 +77,11 @@ class TransferController extends GetxController {
   }
 
   // # Handle Lobby Size Update
-  _handleLobbyUpdate(Lobby? data) {
-    if (data != null && !isClosed) {
+  _handleLobbyUpdate(Lobby data) {
+    if (!isClosed) {
+      // Set Strings
       isNotEmpty(data.isNotEmpty);
       subtitle(data.prettyCount());
-    }
-  }
-
-  // # Updates Title Value by Payload
-  void _handlePayload(Payload payload) {
-    // Update Title
-    switch (payload) {
-      case Payload.CONTACT:
-        title("Sharing Contact Card");
-        break;
-      case Payload.URL:
-        title("Sending Link");
-        break;
-      default:
-        if (TransferService.file.value.payload != Payload.NONE) {
-          title("Sharing " + TransferService.file.value.prettyType());
-        }
     }
   }
 }

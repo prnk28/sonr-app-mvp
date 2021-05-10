@@ -10,6 +10,7 @@ class TransferService extends GetxService {
   static TransferService get to => Get.find<TransferService>();
 
   // Properties
+  final _shareTitle = "Sharing".obs;
   final _payload = Payload.NONE.obs;
   final _inviteRequest = InviteRequest().obs;
   final _sonrFile = SonrFile().obs;
@@ -20,6 +21,7 @@ class TransferService extends GetxService {
   static Rx<InviteRequest> get inviteRequest => to._inviteRequest;
   static Rx<SonrFile> get file => to._sonrFile;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
+  static RxString get shareTitle => to._shareTitle;
 
   /// @ Initialize Service
   Future<TransferService> init() async {
@@ -121,6 +123,7 @@ class TransferService extends GetxService {
     if (to._payload.value.isTransfer) {
       to._inviteRequest.init(payload, file: file);
       to._sonrFile(file!);
+      to._shareTitle("Sharing " + to._sonrFile.value.prettyType());
 
       // Check for Media
       if (to._inviteRequest.isMedia) {
@@ -139,10 +142,12 @@ class TransferService extends GetxService {
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
       to._inviteRequest.init(payload, contact: UserService.contact.value);
+      to._shareTitle("Sharing Contact Card");
     }
     // Check for URL
     else if (to._payload.value == Payload.URL) {
       to._inviteRequest.init(payload, url: url!);
+      to._shareTitle("Sending Link");
     }
   }
 

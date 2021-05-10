@@ -4,9 +4,7 @@ class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(8),
-        decoration: Neumorphic.floating(),
-        child: Container(decoration: Neumorphic.floating(), height: Height.ratio(0.15), child: _PayloadListItem()));
+        padding: EdgeInsets.all(8), decoration: Neumorphic.floating(), child: Container(height: Height.ratio(0.15), child: _PayloadListItem()));
   }
 }
 
