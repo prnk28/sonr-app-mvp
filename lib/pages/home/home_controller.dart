@@ -15,6 +15,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // Elements
   final titleText = "Home".obs;
+  final subtitleText = "".obs;
   final pageIndex = 0.obs;
   final bottomIndex = 0.obs;
   final view = HomeView.Main.obs;

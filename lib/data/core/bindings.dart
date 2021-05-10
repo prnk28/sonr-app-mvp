@@ -5,7 +5,7 @@ import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/window_controller.dart';
-import 'package:sonr_app/pages/home/recents/recents_controller.dart';
+import 'package:sonr_app/pages/home/main/main_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/pages/home/profile/profile.dart';
