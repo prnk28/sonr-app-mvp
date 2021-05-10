@@ -1,7 +1,6 @@
 import 'package:sonr_app/style/style.dart';
-import 'transfer_controller.dart';
 
-class PayloadSheetView extends GetView<TransferController> {
+class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,7 +10,7 @@ class PayloadSheetView extends GetView<TransferController> {
   }
 }
 
-class _PayloadListItem extends GetView<TransferController> {
+class _PayloadListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -100,7 +99,7 @@ class _PayloadListItem extends GetView<TransferController> {
 }
 
 /// @ Builds Thumbnail from Future
-class _PayloadItemThumbnail extends GetView<TransferController> {
+class _PayloadItemThumbnail extends StatelessWidget {
   const _PayloadItemThumbnail({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

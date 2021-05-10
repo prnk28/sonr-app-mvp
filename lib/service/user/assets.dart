@@ -346,14 +346,14 @@ class AssetController extends GetxController {
   /// @ Static Get Icon for Home Tab Bar
   static Widget getHomeTabBarIcon({required HomeView view, required bool isSelected}) {
     switch (view) {
-      case HomeView.Main:
-        return isSelected ? to._homeSelectIcon : to._homeDefaultIcon;
       case HomeView.Profile:
         return isSelected ? to._profileSelectIcon : to._profileDefaultIcon;
       case HomeView.Activity:
         return isSelected ? to._activitySelectIcon : to._activityDefaultIcon;
       case HomeView.Remote:
         return isSelected ? to._remoteSelectIcon : to._remoteDefaultIcon;
+      default:
+        return isSelected ? to._homeSelectIcon : to._homeDefaultIcon;
     }
   }
 
