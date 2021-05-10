@@ -31,23 +31,23 @@ class _PayloadListItem extends GetView<TransferController> {
 
   Widget _buildLeading() {
     // # Undefined Type
-    if (controller.inviteRequest.value.payload == Payload.NONE) {
+    if (TransferService.payload.value == Payload.NONE) {
       return CircularProgressIndicator();
     }
 
     // # Check for Media File Type
-    else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
+    else if (TransferService.payload.value == Payload.MEDIA) {
       return _PayloadItemThumbnail();
     }
 
     // # Other Types
     else {
-      return controller.inviteRequest.value.payload.gradient(size: Height.ratio(0.125));
+      return TransferService.payload.value.gradient(size: Height.ratio(0.125));
     }
   }
 
   Widget _buildTitle() {
-    if (controller.inviteRequest.value.payload == Payload.CONTACT) {
+    if (TransferService.payload.value == Payload.CONTACT) {
       // Build Text View
       return Container(
           width: Width.ratio(0.5),
@@ -63,7 +63,7 @@ class _PayloadListItem extends GetView<TransferController> {
               child: "Contact Card".p_Grey,
             )
           ]));
-    } else if (controller.inviteRequest.value.payload == Payload.URL) {
+    } else if (TransferService.payload.value == Payload.URL) {
       // Build Text View
       return Container(
           width: Width.ratio(0.5),
@@ -72,11 +72,11 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: controller.sonrFile.value.prettyName().h6,
+              child: TransferService.file.value.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: controller.sonrFile.value.prettySize().p_Grey,
+              child: TransferService.file.value.prettySize().p_Grey,
             )
           ]));
     } else {
@@ -88,11 +88,11 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: controller.sonrFile.value.prettyName().h6,
+              child: TransferService.file.value.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: controller.sonrFile.value.prettySize().p_Grey,
+              child: TransferService.file.value.prettySize().p_Grey,
             )
           ]));
     }
@@ -106,7 +106,7 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // Thumbnail Loading
-      if (controller.thumbStatus.value == ThumbnailStatus.Loading) {
+      if (TransferService.thumbStatus.value == ThumbnailStatus.Loading) {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
@@ -116,16 +116,16 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
       }
 
       // Media with Thumbnail
-      else if (controller.thumbStatus.value == ThumbnailStatus.Complete) {
+      else if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
         return GestureDetector(
-          onTap: () => OpenFile.open(controller.sonrFile.value.single.path),
+          onTap: () => OpenFile.open(TransferService.file.value.single.path),
           child: Container(
               height: Height.ratio(0.125),
               width: Height.ratio(0.125),
               decoration: Neumorphic.indented(),
               clipBehavior: Clip.hardEdge,
               child: Image.memory(
-                Uint8List.fromList(controller.sonrFile.value.single.thumbnail),
+                Uint8List.fromList(TransferService.file.value.single.thumbnail),
                 fit: BoxFit.cover,
               )),
         );
@@ -136,7 +136,7 @@ class _PayloadItemThumbnail extends GetView<TransferController> {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
-          child: controller.sonrFile.value.single.mime.type.gradient(size: Height.ratio(0.125)),
+          child: TransferService.file.value.single.mime.type.gradient(size: Height.ratio(0.125)),
         );
       }
     });

@@ -1,34 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/data.dart';
-
 import 'package:sonr_app/style/style.dart';
 import 'payload_view.dart';
 import 'transfer_controller.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
 
-/// @ Transfer Screen Entry with Arguments
-class Transfer {
-  static void transferWithContact() {
-    Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, contact: UserService.contact.value));
-  }
-
-  static void transferWithFile(SonrFile file) {
-    Get.offNamed("/transfer", arguments: TransferArguments(file.payload, file: file));
-  }
-
-  static void transferWithUrl(String url) {
-    Get.offNamed("/transfer", arguments: TransferArguments(Payload.URL, url: url));
-  }
-}
-
 /// @ Transfer Screen Entry Point
 class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    // Set Payload from Args
-    controller.setPayload(Get.arguments);
-
     // Build View
     return Obx(() => SonrScaffold(
           gradient: SonrGradients.PlumBath,

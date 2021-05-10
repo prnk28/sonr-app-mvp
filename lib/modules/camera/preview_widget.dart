@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/video/video_view.dart';
+import 'package:sonr_app/modules/card/file/views.dart';
 import 'package:sonr_app/style/style.dart';
 
 class MediaPreviewView extends StatelessWidget {
