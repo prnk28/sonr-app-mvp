@@ -73,6 +73,7 @@ class MobileService extends GetxService {
 
     // @ 3. Bind Sensors for Mobile
     // Bind Direction and Set Intervals
+    motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
     motionSensors.orientationUpdateInterval = K_SENSOR_INTERVAL;
 
     // Bind Sensor Streams

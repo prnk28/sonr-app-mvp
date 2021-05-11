@@ -86,12 +86,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     peer(data);
     isVisible(true);
 
-    if (data.platform.isMobile) {
-      isHitting(data.isHitFrom(MobileService.position.value));
-      relative(data.relativeFrom(MobileService.position.value));
-      relativePosition(data.relativePositionFrom(MobileService.position.value));
-    }
-
     // Add Stream Handlers
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
 
@@ -241,9 +235,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         isHitting(data.hasHitSphere(peer.value.position));
         relative(data.difference(peer.value.position));
         relativePosition(data.differenceRelative(peer.value.position));
-        print("Hit Peer: ${isHitting.value}");
-        print("Pos Diff: ${relative.value}");
-        print("Rel Pos: ${relativePosition.value.toString()}");
       }
 
       if (isHitting.value) {
@@ -259,7 +250,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  Future<void> _handleHitting({int milliseconds = 2500}) async {
+  Future<void> _handleHitting({int milliseconds = 3000}) async {
     _handlingHit = true;
     if (isHitting.value) {
       await Future.delayed(Duration(milliseconds: milliseconds));
