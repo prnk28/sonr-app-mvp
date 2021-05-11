@@ -337,6 +337,7 @@ class SonrService extends GetxService {
 
   /// @ Transfer Has Updated Progress
   void _handleProgress(double data) async {
+    print(data);
     _progress(data);
   }
 
