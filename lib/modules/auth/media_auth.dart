@@ -25,7 +25,7 @@ class MediaAuthView extends StatelessWidget {
             Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               ProfileName(profile: invite.from.profile, isHeader: true),
               Row(children: [
-                invite.payload.toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
+                invite.file.single.prettyType().toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
                 "   ${invite.file.prettySize()}".h5
               ]),
             ]),

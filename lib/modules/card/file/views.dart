@@ -17,35 +17,36 @@ class MetaBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return metadata.mime.isImage
-        ? FutureBuilder<File?>(
-            initialData: null,
-            future: CardService.loadFileFromMetadata(metadata),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                return GestureDetector(
-                  onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
-                      fit: BoxFit.fitWidth,
-                      image: FileImage(snapshot.data!),
-                    )),
-                    child: child ?? Container(),
-                  ),
-                );
-              } else {
-                return Container(
-                  alignment: Alignment.center,
-                  child: SonrAssetIllustration.NoFiles2.widget,
-                );
-              }
-            })
-        : Container(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          );
+    if (metadata.mime.isImage) {
+      return FutureBuilder<File?>(
+          initialData: null,
+          future: CardService.loadFileFromMetadata(metadata),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return GestureDetector(
+                onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
+                    fit: BoxFit.fitWidth,
+                    image: FileImage(snapshot.data!),
+                  )),
+                  child: child ?? Container(),
+                ),
+              );
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                child: SonrAssetIllustration.NoFiles2.widget,
+              );
+            }
+          });
+    } else if (metadata.mime.isVideo) {
+      return MetaVideo(metadata: metadata);
+    } else {
+      return MetaIcon(metadata: metadata);
+    }
   }
 }
 
@@ -138,9 +139,7 @@ class MetaVideo extends StatelessWidget {
                 return Container(
                   width: width ?? orientation.defaultWidth,
                   height: height ?? orientation.defaultHeight,
-                  child: VideoPlayerView.file(
-                    snapshot.data,
-                  ),
+                  child: VideoPlayerView.file(snapshot.data!),
                 );
               } else {
                 return Container(
@@ -194,7 +193,6 @@ class ReceivedText extends StatelessWidget {
   }
 }
 
-
 enum VideoPlayerViewType {
   Asset,
   Network,
@@ -203,13 +201,9 @@ enum VideoPlayerViewType {
 
 class VideoPlayerView extends StatefulWidget {
   final VideoPlayerViewType type;
-  final String? source;
-  final File? sourceFile;
-  const VideoPlayerView(this.type, {Key? key, this.source, this.sourceFile}) : super(key: key);
-
-  factory VideoPlayerView.asset(String source) => VideoPlayerView(VideoPlayerViewType.Asset, source: source);
-  factory VideoPlayerView.file(File? source) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source);
-  factory VideoPlayerView.network(String source) => VideoPlayerView(VideoPlayerViewType.File, source: source);
+  final File sourceFile;
+  const VideoPlayerView(this.type, {Key? key, required this.sourceFile}) : super(key: key);
+  factory VideoPlayerView.file(File source) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source);
 
   @override
   _VideoPlayerViewState createState() => _VideoPlayerViewState();
@@ -221,29 +215,13 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   @override
   void initState() {
     super.initState();
-    // Check Type
-    if (widget.type == VideoPlayerViewType.Asset) {
-      _controller = VideoPlayerController.asset(widget.source!)
-        ..initialize().then((_) {
-          setState(() {
-            _controller.play();
-          });
+    _controller = VideoPlayerController.file(widget.sourceFile)
+      ..initialize().then((_) {
+        setState(() {
+          _controller.setVolume(0);
+          _controller.play();
         });
-    } else if (widget.type == VideoPlayerViewType.File) {
-      _controller = VideoPlayerController.file(widget.sourceFile!)
-        ..initialize().then((_) {
-          setState(() {
-            _controller.play();
-          });
-        });
-    } else {
-      _controller = VideoPlayerController.network(widget.source!)
-        ..initialize().then((_) {
-          setState(() {
-            _controller.play();
-          });
-        });
-    }
+      });
   }
 
   @override

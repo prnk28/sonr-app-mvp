@@ -38,7 +38,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   late final AnimationController visibilityController;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
-  bool get isFacingValid => isHitting.value && !status.value.isComplete && !status.value.isPending;
+  bool get isHittingValid => peer.value.isHitFrom(MobileService.position.value) && status.value.isIdle;
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -137,7 +137,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
         // Check for File
         if (TransferService.payload.value.isTransfer) {
-          _isPending!.value = true;
+          updateStatus(PeerStatus.Pending);
         }
         // Contact/URL
         else {
@@ -219,7 +219,17 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         isHitting(data.hasHitSphere(peer.value.position));
         relative(data.difference(peer.value.position));
         relativePosition(data.differenceRelative(peer.value.position));
-        borderWidth(relative.value.clamp(0.25, 5));
+      }
+
+      // Feedback
+      if (status.value.isIdle) {
+        // Vibration
+        if (isHitting.value) {
+          HapticFeedback.lightImpact();
+        }
+
+        // Border
+        borderWidth(relative.value.clamp(0, 5));
       }
 
       // Check if Facing
@@ -229,13 +239,12 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  Future<void> _handleHitting({int milliseconds = 2500}) async {
+  Future<void> _handleHitting({int milliseconds = 2750}) async {
     _handlingHit = true;
     if (isHitting.value) {
       await Future.delayed(Duration(milliseconds: milliseconds));
-      isHitting(peer.value.isHitFrom(MobileService.position.value));
 
-      if (isFacingValid) {
+      if (isHittingValid) {
         invite();
       }
     }

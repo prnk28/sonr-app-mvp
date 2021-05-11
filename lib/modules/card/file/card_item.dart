@@ -65,7 +65,7 @@ class MetaCardItemView extends StatelessWidget {
   Widget _buildChildView() {
     if (card.file!.single.mime.type == MIME_Type.VIDEO) {
       return MetaVideo(metadata: card.file!.single);
-    } else if (card.file!.single.mime.type != MIME_Type.IMAGE) {
+    } else if (card.file!.single.mime.type == MIME_Type.IMAGE) {
       return MetaIcon(metadata: card.file!.single, width: Get.width - 200, height: Get.height / 5);
     } else {
       return Container();

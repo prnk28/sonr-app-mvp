@@ -31,7 +31,7 @@ class PeerCard extends GetWidget<PeerController> {
           // Rive Board
           Center(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 38),
+              padding: EdgeInsets.only(bottom: 34),
               child: Container(
                 alignment: Alignment.center,
                 height: 96,
@@ -93,7 +93,10 @@ class _PeerMainCard extends StatelessWidget {
           // Avatar
           Obx(() => FadeInDownBig(
                 duration: 125.milliseconds,
-                child: ProfileAvatar.fromPeer(controller.peer.value, size: 68),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ProfileAvatar.fromPeer(controller.peer.value, size: 72),
+                ),
               )),
 
           Spacer(),
