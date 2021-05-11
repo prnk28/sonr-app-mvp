@@ -128,7 +128,7 @@ class Badge extends StatelessWidget {
       duration: PieChart.defaultDuration,
       width: size,
       height: size,
-      decoration: Neumorphic.compact(theme: Get.theme, shape: BoxShape.circle),
+      decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
       child: Center(child: child),
     );
   }

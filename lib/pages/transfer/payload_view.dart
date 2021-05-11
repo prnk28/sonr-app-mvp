@@ -111,7 +111,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
-          decoration: Neumorphic.compact(theme: Get.theme),
+          decoration: Neumorphic.floating(theme: Get.theme),
           child: CircularProgressIndicator(),
         );
       }

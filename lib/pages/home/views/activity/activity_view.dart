@@ -16,7 +16,7 @@ class ActivityView extends StatelessWidget {
                 })
             : Center(
                 child: Container(
-                  child: [SonrAssetIllustration.NoAlerts.widget, "No Alerts".headFour(color: SonrColor.Grey.withOpacity(0.6))].column(),
+                  child: [SonrAssetIllustration.NoAlerts.widget, "No Alerts".headFour(color: Get.theme.hintColor)].column(),
                   padding: EdgeInsets.all(64),
                 ),
               )));
@@ -59,13 +59,13 @@ class _ActivityListItem extends StatelessWidget {
   Widget _buildMessage() {
     switch (item.activity) {
       case ActivityType.Deleted:
-        return [item.payload.black, " You ".h6, item.activity.value.h6_Red, _description(item).h6].row();
+        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Red, _description(item).h6].row();
       case ActivityType.Shared:
-        return [item.payload.black, " You ".h6, item.activity.value.h6_Blue, _description(item).h6].row();
+        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Blue, _description(item).h6].row();
       case ActivityType.Received:
-        return [item.payload.black, " You ".h6, item.activity.value.h6_Purple, _description(item).h6].row();
+        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Purple, _description(item).h6].row();
       default:
-        return [item.payload.black, " You ".h6, item.activity.value.h6_Grey, _description(item).h6]
+        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Grey, _description(item).h6]
             .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }
   }

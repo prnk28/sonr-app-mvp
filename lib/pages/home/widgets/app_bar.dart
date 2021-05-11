@@ -43,6 +43,9 @@ class _HomeAppBarTitle extends GetView<HomeController> {
                 );
               }
             },
+            onLongPress: () {
+              UserService.toggleDarkMode();
+            },
             child: controller.title.value.headThree(
               color: Get.theme.focusColor,
               weight: FontWeight.w800,

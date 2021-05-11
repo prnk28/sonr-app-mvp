@@ -59,22 +59,37 @@ class ConfirmButton extends StatelessWidget {
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
-    BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrGradient.Neutral,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    BoxDecoration defaultDecoration =
+        BoxDecoration(gradient: SonrGradient.Neutral, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 4),
+        color: SonrColor.Primary.withOpacity(0.4),
+        blurRadius: Get.theme.blurRadius,
+        spreadRadius: Get.theme.spreadRadius,
+      )
+    ]);
 
     // Confirm Decoration
-    BoxDecoration confirmDecoration = BoxDecoration(
-        gradient: SonrGradient.Primary,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    BoxDecoration confirmDecoration =
+        BoxDecoration(gradient: SonrGradient.Primary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 4),
+        color: SonrColor.Primary.withOpacity(0.4),
+        blurRadius: Get.theme.blurRadius,
+        spreadRadius: Get.theme.spreadRadius,
+      )
+    ]);
 
     // Complete Decoration
-    BoxDecoration completeDecoration = BoxDecoration(
-        gradient: SonrGradient.Tertiary,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    BoxDecoration completeDecoration =
+        BoxDecoration(gradient: SonrGradient.Tertiary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 4),
+        color: SonrColor.Primary.withOpacity(0.4),
+        blurRadius: Get.theme.blurRadius,
+        spreadRadius: Get.theme.spreadRadius,
+      )
+    ]);
 
     // Build Child
     return ConfirmButton(
@@ -118,22 +133,37 @@ class ConfirmButton extends StatelessWidget {
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
-    BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrGradient.Neutral,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    BoxDecoration defaultDecoration =
+        BoxDecoration(gradient: SonrGradient.Neutral, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 4),
+        color: SonrColor.Primary.withOpacity(0.4),
+        blurRadius: Get.theme.blurRadius,
+        spreadRadius: Get.theme.spreadRadius,
+      )
+    ]);
 
     // Confirm Decoration
-    BoxDecoration confirmDecoration = BoxDecoration(
-        gradient: SonrGradient.Primary,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    BoxDecoration confirmDecoration =
+        BoxDecoration(gradient: SonrGradient.Primary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 4),
+        color: SonrColor.Primary.withOpacity(0.4),
+        blurRadius: Get.theme.blurRadius,
+        spreadRadius: Get.theme.spreadRadius,
+      )
+    ]);
 
     // Complete Decoration
-    BoxDecoration completeDecoration = BoxDecoration(
-        gradient: SonrGradient.Critical,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    BoxDecoration completeDecoration =
+        BoxDecoration(gradient: SonrGradient.Critical, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
+      BoxShadow(
+        offset: Offset(0, 4),
+        color: SonrColor.Primary.withOpacity(0.4),
+        blurRadius: Get.theme.blurRadius,
+        spreadRadius: Get.theme.spreadRadius,
+      )
+    ]);
 
     // Build Child
     return ConfirmButton(

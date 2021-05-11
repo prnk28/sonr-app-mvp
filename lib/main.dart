@@ -33,7 +33,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     DeviceService.initialPage(delay: 3500.milliseconds);
     return GetMaterialApp(
-      theme: SonrDesign.DarkTheme,
+      themeMode: ThemeMode.system,
+      theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
       getPages: SonrRouting.pages,
       initialBinding: InitialBinding(),

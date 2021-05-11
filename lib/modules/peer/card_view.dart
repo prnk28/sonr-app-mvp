@@ -144,7 +144,7 @@ class _PeerDetailsCard extends StatelessWidget {
           Spacer(),
 
           // Device Information
-          controller.peer.value.platform.grey(size: 92),
+          controller.peer.value.platform.icon(size: 92, color: Get.theme.hintColor),
           Spacer(),
 
           // Device Icon and Full Name

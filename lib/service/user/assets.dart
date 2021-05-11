@@ -80,14 +80,6 @@ extension IconNetworkUtils on SonrAssetIcon {
 
   Widget get widget {
     switch (this) {
-      case SonrAssetIcon.ProfileDefault:
-        return AssetController.to._profileDefaultIcon;
-      case SonrAssetIcon.RemoteDefault:
-        return AssetController.to._remoteDefaultIcon;
-      case SonrAssetIcon.ActivityDefault:
-        return AssetController.to._activityDefaultIcon;
-      case SonrAssetIcon.HomeDefault:
-        return AssetController.to._homeDefaultIcon;
       case SonrAssetIcon.ProfileSelected:
         return AssetController.to._profileSelectIcon;
       case SonrAssetIcon.RemoteSelected:
@@ -96,6 +88,8 @@ extension IconNetworkUtils on SonrAssetIcon {
         return AssetController.to._activitySelectIcon;
       case SonrAssetIcon.HomeSelected:
         return AssetController.to._homeSelectIcon;
+      default:
+        return Container();
     }
   }
 }
@@ -305,13 +299,6 @@ class AssetController extends GetxController {
   Image _logoSide = Image.network(SonrAssetLogo.Top.link, height: 128, fit: BoxFit.contain);
 
   // @ Icons: Tab Bar
-  ImageIcon _homeDefaultIcon = ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon _profileDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.ProfileDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon _activityDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.ActivityDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon _remoteDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.RemoteDefault.link), size: 38, color: Colors.grey[400], key: ValueKey<bool>(false));
   LottieIcon _homeSelectIcon = LottieIcon(link: SonrAssetIcon.HomeSelected.link, size: 32, key: ValueKey<bool>(true));
   LottieIcon _profileSelectIcon = LottieIcon(link: SonrAssetIcon.ProfileSelected.link, size: 32, key: ValueKey<bool>(true));
   LottieIcon _activitySelectIcon = LottieIcon(link: SonrAssetIcon.ActivitySelected.link, size: 32, key: ValueKey<bool>(true));
@@ -319,12 +306,6 @@ class AssetController extends GetxController {
 
   // * Constructer * //
   onReady() async {
-    // Load Icons
-    precacheImage(_homeDefaultIcon.image!, Get.context!);
-    precacheImage(_profileDefaultIcon.image!, Get.context!);
-    precacheImage(_activityDefaultIcon.image!, Get.context!);
-    precacheImage(_remoteDefaultIcon.image!, Get.context!);
-
     // Load Logos
     precacheImage(_logoTop.image, Get.context!);
     precacheImage(_logoSide.image, Get.context!);
@@ -347,13 +328,21 @@ class AssetController extends GetxController {
   static Widget getHomeTabBarIcon({required HomeView view, required bool isSelected}) {
     switch (view) {
       case HomeView.Profile:
-        return isSelected ? to._profileSelectIcon : to._profileDefaultIcon;
+        return isSelected
+            ? to._profileSelectIcon
+            : ImageIcon(NetworkImage(SonrAssetIcon.ProfileDefault.link), size: 32, color: Get.theme.hintColor, key: ValueKey<bool>(false));
       case HomeView.Activity:
-        return isSelected ? to._activitySelectIcon : to._activityDefaultIcon;
+        return isSelected
+            ? to._activitySelectIcon
+            : ImageIcon(NetworkImage(SonrAssetIcon.ActivityDefault.link), size: 32, color: Get.theme.hintColor, key: ValueKey<bool>(false));
       case HomeView.Remote:
-        return isSelected ? to._remoteSelectIcon : to._remoteDefaultIcon;
+        return isSelected
+            ? to._remoteSelectIcon
+            : ImageIcon(NetworkImage(SonrAssetIcon.RemoteDefault.link), size: 38, color: Get.theme.hintColor, key: ValueKey<bool>(false));
       default:
-        return isSelected ? to._homeSelectIcon : to._homeDefaultIcon;
+        return isSelected
+            ? to._homeSelectIcon
+            : ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Get.theme.hintColor, key: ValueKey<bool>(false));
     }
   }
 
