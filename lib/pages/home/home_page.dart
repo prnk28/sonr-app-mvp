@@ -1,12 +1,12 @@
 import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/remote/remote_view.dart';
+import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'main/main_view.dart';
+import 'views/main/main_view.dart';
 import 'home_controller.dart';
-import 'activity/activity_view.dart';
-import 'profile/profile_view.dart';
-import 'search_bar.dart';
+import 'views/activity/activity_view.dart';
+import 'views/profile/profile_view.dart';
+import 'widgets/app_bar.dart';
 
 class HomePage extends GetView<HomeController> {
   @override

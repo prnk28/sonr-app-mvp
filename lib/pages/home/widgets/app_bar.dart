@@ -1,7 +1,7 @@
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/style/style.dart';
 import 'action_button.dart';
-import 'home_controller.dart';
+import '../home_controller.dart';
 
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override
