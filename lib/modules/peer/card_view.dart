@@ -17,18 +17,21 @@ class PeerCard extends GetWidget<PeerController> {
     controller.initalize(peer);
 
     // Build View
-    return Obx(
-      () => Container(
+    return Obx(() => Container(
         width: K_CARD_WIDTH,
         height: K_CARD_HEIGHT,
         clipBehavior: Clip.antiAlias,
-        decoration: Neumorphic.floating(),
-        margin: EdgeInsets.all(32),
+        decoration: Neumorphic.floating(
+          border: controller.isHitting.value
+              ? Border.all(color: SonrColor.Secondary.withOpacity(0.75), width: controller.borderWidth.value)
+              : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
+        ),
+        margin: EdgeInsets.all(24),
         child: Stack(children: [
           // Rive Board
           Center(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 38),
+              padding: EdgeInsets.only(bottom: 34),
               child: Container(
                 alignment: Alignment.center,
                 height: 96,
@@ -60,9 +63,7 @@ class PeerCard extends GetWidget<PeerController> {
               ),
             ),
           ),
-        ]),
-      ),
-    );
+        ])));
   }
 }
 
@@ -92,7 +93,10 @@ class _PeerMainCard extends StatelessWidget {
           // Avatar
           Obx(() => FadeInDownBig(
                 duration: 125.milliseconds,
-                child: ProfileAvatar.fromPeer(controller.peer.value, size: 68),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ProfileAvatar.fromPeer(controller.peer.value, size: 72),
+                ),
               )),
 
           Spacer(),

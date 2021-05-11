@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/video/video_view.dart';
+import 'package:video_player/video_player.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'details_view.dart';
@@ -17,35 +17,36 @@ class MetaBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return metadata.mime.isImage
-        ? FutureBuilder<File?>(
-            initialData: null,
-            future: CardService.loadFileFromMetadata(metadata),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                return GestureDetector(
-                  onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
-                      fit: BoxFit.fitWidth,
-                      image: FileImage(snapshot.data!),
-                    )),
-                    child: child ?? Container(),
-                  ),
-                );
-              } else {
-                return Container(
-                  alignment: Alignment.center,
-                  child: SonrAssetIllustration.NoFiles2.widget,
-                );
-              }
-            })
-        : Container(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          );
+    if (metadata.mime.isImage) {
+      return FutureBuilder<File?>(
+          initialData: null,
+          future: CardService.loadFileFromMetadata(metadata),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return GestureDetector(
+                onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
+                    fit: BoxFit.fitWidth,
+                    image: FileImage(snapshot.data!),
+                  )),
+                  child: child ?? Container(),
+                ),
+              );
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                child: SonrAssetIllustration.NoFiles2.widget,
+              );
+            }
+          });
+    } else if (metadata.mime.isVideo) {
+      return MetaVideo(metadata: metadata);
+    } else {
+      return MetaIcon(metadata: metadata);
+    }
   }
 }
 
@@ -138,9 +139,7 @@ class MetaVideo extends StatelessWidget {
                 return Container(
                   width: width ?? orientation.defaultWidth,
                   height: height ?? orientation.defaultHeight,
-                  child: VideoPlayerView.file(
-                    snapshot.data,
-                  ),
+                  child: VideoPlayerView.file(snapshot.data!, false),
                 );
               } else {
                 return Container(
@@ -191,5 +190,51 @@ class ReceivedText extends StatelessWidget {
       // Get String
       return dateFormat.format(this.received).h6_White;
     }
+  }
+}
+
+enum VideoPlayerViewType {
+  Asset,
+  Network,
+  File,
+}
+
+class VideoPlayerView extends StatefulWidget {
+  final VideoPlayerViewType type;
+  final File sourceFile;
+  final bool autoplay;
+  const VideoPlayerView(this.type, {Key? key, required this.sourceFile, required this.autoplay}) : super(key: key);
+  factory VideoPlayerView.file(File source, bool autoplay) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source, autoplay: autoplay);
+
+  @override
+  _VideoPlayerViewState createState() => _VideoPlayerViewState();
+}
+
+class _VideoPlayerViewState extends State<VideoPlayerView> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(widget.sourceFile)
+      ..initialize().then((_) {
+        setState(() {
+          _controller.setVolume(0);
+          if (widget.autoplay) {
+            _controller.play();
+          }
+        });
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: _controller.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              )
+            : Container());
   }
 }

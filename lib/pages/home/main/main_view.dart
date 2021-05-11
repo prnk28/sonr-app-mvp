@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'package:sonr_app/modules/card/url/card.dart';
+import 'package:sonr_app/modules/card/card.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
-import 'recents_controller.dart';
+import 'main_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

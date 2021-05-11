@@ -1,12 +1,12 @@
 import 'package:sonr_app/modules/card/url/grid_item.dart';
 import 'package:sonr_app/modules/card/url/list_item.dart';
-import '../contact/card_item.dart';
-import '../contact/grid_item.dart';
-import '../contact/list_item.dart';
-import '../file/card_item.dart';
-import '../file/grid_item.dart';
-import '../file/list_item.dart';
-import 'card_item.dart';
+import 'contact/card_item.dart';
+import 'contact/grid_item.dart';
+import 'contact/list_item.dart';
+import 'file/card_item.dart';
+import 'file/grid_item.dart';
+import 'file/list_item.dart';
+import 'url/card_item.dart';
 import 'package:sonr_app/style/style.dart';
 
 /// @ Card Element/View type Enums
@@ -84,13 +84,13 @@ extension CardsViewElementTypeUtils on TransferItemsType {
   TransferCardItem transferCardItemAtIndex(int index) {
     switch (this) {
       case TransferItemsType.Metadata:
-        return CardService.metadata[index];
+        return CardService.metadata.reversed.toList()[index];
       case TransferItemsType.Contacts:
-        return CardService.contacts[index];
+        return CardService.contacts.reversed.toList()[index];
       case TransferItemsType.Links:
-        return CardService.links[index];
+        return CardService.links.reversed.toList()[index];
       default:
-        return CardService.all[index];
+        return CardService.all.reversed.toList()[index];
     }
   }
 }
@@ -111,7 +111,7 @@ class CardsGridView extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return TransferItem(type.transferCardItemAtIndex(index), type: TransferItemView.GridItem);
           },
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
         );
       } else {
         return _CardsViewEmpty(type);

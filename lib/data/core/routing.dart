@@ -75,7 +75,7 @@ class SonrRouting {
     }
 
     // Initialize Data/Networking Services
-    await Get.putAsync(() => FileService().init(), permanent: true);
+    await Get.putAsync(() => TransferService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);

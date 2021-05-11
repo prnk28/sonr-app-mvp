@@ -21,7 +21,7 @@ class UserService extends GetxService {
   // Preferences
   final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
   final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
-  final _hasPointToShare = false.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
+  final _hasPointToShare = true.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
 
   /// **  Getter Methods for Contact Properties **
   static RxBool get hasUser => to._hasUser;

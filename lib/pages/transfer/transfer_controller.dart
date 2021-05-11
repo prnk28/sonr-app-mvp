@@ -1,23 +1,13 @@
 import 'dart:async';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum ThumbnailStatus { None, Loading, Complete }
-
 class TransferController extends GetxController {
-  // @ Accessors
-  Payload get currentPayload => inviteRequest.value.payload;
-
   // @ Properties
-  final title = "Sharing".obs;
   final subtitle = "Nobody Here".obs;
-  final payload = Payload.NONE.obs;
   final isFacingPeer = false.obs;
   final isNotEmpty = false.obs;
-  final inviteRequest = InviteRequest().obs;
-  final sonrFile = SonrFile().obs;
-  final thumbStatus = ThumbnailStatus.None.obs;
+  final centerKey = ValueKey("").obs;
 
   // @ Remote Properties
   final counter = 0.obs;
@@ -27,7 +17,6 @@ class TransferController extends GetxController {
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
   final direction = 0.0.obs;
-  final isShiftingEnabled = true.obs;
 
   // @ View Properties
   final directionTitle = "".obs;
@@ -36,6 +25,7 @@ class TransferController extends GetxController {
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
+  late StreamSubscription<Payload> _payloadStream;
   ScrollController scrollController = ScrollController();
 
   /// @ Controller Constructer
@@ -55,54 +45,14 @@ class TransferController extends GetxController {
   void onClose() {
     _positionStream.cancel();
     _lobbySizeStream.cancel();
+    _payloadStream.cancel();
     super.onClose();
-  }
-
-  /// @ Send Invite with Peer
-  void invitePeer(Peer peer) {
-    setFacingPeer(false);
-    isShiftingEnabled(false);
-
-    // Update Request
-    inviteRequest.setPeer(peer);
-
-    // Send Invite
-    SonrService.invite(inviteRequest.value);
-  }
-
-  /// @ Set Transfer Payload
-  void setPayload(TransferArguments args) async {
-    // Initialize Request
-    inviteRequest.init(args);
-
-    // Check for Media
-    if (inviteRequest.isMedia) {
-      // Set File Item
-      sonrFile(args.file!);
-      thumbStatus(ThumbnailStatus.Loading);
-      await sonrFile.value.setThumbnail();
-
-      // Check Result
-      if (sonrFile.value.single.hasThumbnail()) {
-        thumbStatus(ThumbnailStatus.Complete);
-      } else {
-        thumbStatus(ThumbnailStatus.None);
-      }
-    }
-
-    // Set Title
-    _setTitle(args.payload);
   }
 
   /// @ User is Facing or No longer Facing a Peer
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
-  }
-
-  /// @ Toggles Peer Shifting
-  void toggleShifting() {
-    isShiftingEnabled(!isShiftingEnabled.value);
   }
 
   // # Handle Compass Update
@@ -121,30 +71,11 @@ class TransferController extends GetxController {
   }
 
   // # Handle Lobby Size Update
-  _handleLobbyUpdate(Lobby? data) {
-    if (data != null && !isClosed) {
+  _handleLobbyUpdate(Lobby data) {
+    if (!isClosed) {
+      // Set Strings
       isNotEmpty(data.isNotEmpty);
       subtitle(data.prettyCount());
-    }
-  }
-
-  // # Updates Title Value by Payload
-  void _setTitle(Payload value) {
-    // Set Payload
-    payload(value);
-
-    // Update Title
-    switch (value) {
-      case Payload.CONTACT:
-        title("Sharing Contact Card");
-        break;
-      case Payload.URL:
-        title("Sending Link");
-        break;
-      default:
-        if (sonrFile.value.exists) {
-          title("Sharing " + sonrFile.value.prettyType());
-        }
     }
   }
 }

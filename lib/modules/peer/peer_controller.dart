@@ -1,9 +1,6 @@
 import 'package:rive/rive.dart';
 import 'dart:async';
-import 'dart:ui';
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/data/data.dart';
 
 /// @ Peer Controller Status
 enum PeerStatus { Default, Pending, Accepted, Declined, Complete }
@@ -26,19 +23,22 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final counter = 0.0.obs;
   final isFlipped = false.obs;
   final isReady = false.obs;
-  final isFacing = false.obs;
   final isVisible = true.obs;
-  final isWithin = false.obs;
+
   final peer = Rx<Peer>(Peer());
   final status = PeerStatus.Default.obs;
 
   // Vector Properties
-  final offset = Offset(0, 0).obs;
+  final isHitting = false.obs;
+  final relative = 0.0.obs;
+  final relativePosition = RelativePosition.Center.obs;
+  final borderWidth = 0.0.obs;
 
   // References
-  AnimationController? visibilityController;
+  late final AnimationController visibilityController;
   StreamSubscription<Position>? _userStream;
-  FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
+  bool _handlingHit = false;
+  bool get isHittingValid => peer.value.isHitFrom(MobileService.position.value) && status.value.isIdle;
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -71,18 +71,12 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     peer(data);
     isVisible(true);
 
-    if (data.platform.isDesktop) {
-      offset(Offset.zero);
-    } else {
-      offset(peer.value.offsetFrom(LobbyService.userPosition.value));
-    }
-
     // Add Stream Handlers
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
 
     // Check for Mobile
     if (DeviceService.isMobile) {
-      _userStream = LobbyService.userPosition.listen(_handleUserUpdate);
+      _userStream = MobileService.position.listen(_handlePosition);
     }
 
     // Set If Animated
@@ -139,11 +133,11 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
 
         // Perform Invite
-        Get.find<TransferController>().invitePeer(this.peer.value);
+        TransferService.sendPeer(this.peer.value);
 
         // Check for File
-        if (Get.find<TransferController>().currentPayload.isTransfer) {
-          _isPending!.value = true;
+        if (TransferService.payload.value.isTransfer) {
+          updateStatus(PeerStatus.Pending);
         }
         // Contact/URL
         else {
@@ -202,11 +196,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       // Update Direction
       if (data.id.peer == peer.value.id.peer && !_isPending!.value) {
         peer(data);
-
-        // Handle Changes
-        if (Get.find<TransferController>().isShiftingEnabled.value) {
-          _handleFacingUpdate();
-        }
       }
     }
   }
@@ -222,65 +211,43 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // @ Handle Peer Position
-  void _handleUserUpdate(Position data) {
+  // @ Handle User Position
+  void _handlePosition(Position data) async {
     if (!isClosed && !status.value.isComplete) {
       // Find Offset
-      if (Get.find<TransferController>().isShiftingEnabled.value) {
-        if (peer.value.platform.isDesktop) {
-          offset(Offset.zero);
-        } else {
-          offset(peer.value.offsetFrom(LobbyService.userPosition.value));
+      if (peer.value.platform.isMobile) {
+        isHitting(data.hasHitSphere(peer.value.position));
+        relative(data.difference(peer.value.position));
+        relativePosition(data.differenceRelative(peer.value.position));
+      }
+
+      // Feedback
+      if (status.value.isIdle) {
+        // Vibration
+        if (isHitting.value) {
+          HapticFeedback.lightImpact();
         }
+
+        // Border
+        borderWidth(relative.value.clamp(0, 5));
       }
 
       // Check if Facing
-      var newIsFacing = peer.value.isHitFrom(LobbyService.userPosition.value);
-      if (isFacing.value != newIsFacing) {
-        // Check if Device Permits PointToShare
-        if (UserService.pointShareEnabled) {
-          // Check New Result
-          if (newIsFacing) {
-            Get.find<TransferController>().setFacingPeer(true);
-            _timer.start(isValid: _checkFacingValid, onComplete: invite);
-            isFacing(peer.value.isHitFrom(LobbyService.userPosition.value));
-          } else {
-            _timer.stop();
-          }
-        }
+      if (!_handlingHit) {
+        await _handleHitting();
       }
     }
   }
 
-  // @ Handle Facing Check
-  void _handleFacingUpdate() {
-    if (!isClosed && !status.value.isComplete) {
-      // Find Offset
-      if (peer.value.platform.isDesktop) {
-        offset(Offset.zero);
-      } else {
-        offset(peer.value.offsetFrom(LobbyService.userPosition.value));
-      }
+  Future<void> _handleHitting({int milliseconds = 2750}) async {
+    _handlingHit = true;
+    if (isHitting.value) {
+      await Future.delayed(Duration(milliseconds: milliseconds));
 
-      // Check if Facing
-      var newIsFacing = peer.value.isHitFrom(LobbyService.userPosition.value);
-      if (isFacing.value != newIsFacing) {
-        // Check if Device Permits PointToShare
-        if (UserService.pointShareEnabled) {
-          // Check New Result
-          if (newIsFacing) {
-            Get.find<TransferController>().setFacingPeer(true);
-            _timer.start(isValid: _checkFacingValid, onComplete: invite);
-            isFacing(peer.value.isHitFrom(LobbyService.userPosition.value));
-          } else {
-            _timer.stop();
-          }
-        }
+      if (isHittingValid) {
+        invite();
       }
     }
-  }
-
-  bool _checkFacingValid() {
-    return isFacing.value && !status.value.isComplete && !status.value.isPending;
+    _handlingHit = false;
   }
 }

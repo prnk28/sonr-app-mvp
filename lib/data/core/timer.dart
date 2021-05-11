@@ -22,7 +22,15 @@ class FunctionTimer {
   }
 
   Future<bool> start({required BoolFunction isValid, required Function onComplete}) {
+    if (!isRunning) {
+      _setTimer(isValid, onComplete);
+    }
+    return completer.future;
+  }
+
+  void _setTimer(BoolFunction isValid, Function onComplete) {
     _isRunning = true;
+
     _timer = Timer.periodic(interval, (_) {
       // Add MS to Counter
       _counter += _intervalValue;
@@ -38,7 +46,6 @@ class FunctionTimer {
         }
       }
     });
-    return completer.future;
   }
 
   // # Stop Timer for Facing Check

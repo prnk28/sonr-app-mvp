@@ -64,8 +64,6 @@ class MobileService extends GetxService {
   late StreamSubscription _externalTextStream;
   late StreamSubscription<AccelerometerEvent> _accelStream;
   late StreamSubscription<CompassEvent> _compassStream;
-  late StreamSubscription<GyroscopeEvent> _gyroStream;
-  late StreamSubscription<MagnetometerEvent> _magnoStream;
   late StreamSubscription<OrientationEvent> _orienStream;
 
   // * Device Service Initialization * //
@@ -76,16 +74,11 @@ class MobileService extends GetxService {
     // @ 3. Bind Sensors for Mobile
     // Bind Direction and Set Intervals
     motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
-    motionSensors.magnetometerUpdateInterval = K_SENSOR_INTERVAL;
     motionSensors.orientationUpdateInterval = K_SENSOR_INTERVAL;
-    motionSensors.gyroscopeUpdateInterval = K_SENSOR_INTERVAL;
-    motionSensors.userAccelerometerUpdateInterval = K_SENSOR_INTERVAL;
 
     // Bind Sensor Streams
     _accelStream = motionSensors.accelerometer.listen(_handleAccelerometer);
     _compassStream = FlutterCompass.events!.listen(_handleCompass);
-    _gyroStream = motionSensors.gyroscope.listen(_handleGyroscope);
-    _magnoStream = motionSensors.magnetometer.listen(_handleMagnometer);
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
 
     // Audio Player
@@ -122,8 +115,6 @@ class MobileService extends GetxService {
   void onClose() {
     _accelStream.cancel();
     _compassStream.cancel();
-    _gyroStream.cancel();
-    _magnoStream.cancel();
     _orienStream.cancel();
     _audioPlayer.clearCache();
     _externalMediaStream.cancel();
@@ -441,20 +432,6 @@ class MobileService extends GetxService {
     _position.update((val) {
       val!.heading = Position_Compass(direction: event.heading);
       val.facing = Position_Compass(direction: event.headingForCameraMode);
-    });
-  }
-
-  // # Handle Gyroscope
-  void _handleGyroscope(GyroscopeEvent event) {
-    _position.update((val) {
-      val!.gyroscope = Position_Gyroscope(x: event.x, y: event.y, z: event.z);
-    });
-  }
-
-  // # Handle Magnometer
-  void _handleMagnometer(MagnetometerEvent event) {
-    _position.update((val) {
-      val!.magnometer = Position_Magnometer(x: event.x, y: event.y, z: event.z);
     });
   }
 

@@ -1,4 +1,3 @@
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'profile_view.dart';
 
@@ -46,9 +45,9 @@ class _PeerListItemState extends State<PeerListItem> {
                   ColorButton.primary(
                     onPressed: () {
                       if (widget.remote != null) {
-                        Get.find<TransferController>().invitePeer(widget.peer);
+                        TransferService.sendPeer(widget.peer);
                       } else {
-                        Get.find<TransferController>().invitePeer(widget.peer);
+                        TransferService.sendPeer(widget.peer);
                       }
                     },
                     text: "Invite",

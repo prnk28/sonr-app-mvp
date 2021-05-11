@@ -20,53 +20,75 @@ Future<void> main() async {
       });
     },
     // Init your App.
-    appRunner: () => runApp(MobileApp()),
+    appRunner: () => runApp(App(isDesktop: false)),
   );
 }
 
 /// @ Root App Widget
-class MobileApp extends StatefulWidget {
-  @override
-  _MobileAppState createState() => _MobileAppState();
-}
+class App extends StatelessWidget {
+  final bool isDesktop;
 
-class _MobileAppState extends State<MobileApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    // Shift Page
-    DeviceService.initialPage(delay: 3500.milliseconds);
-  }
-
+  const App({Key? key, required this.isDesktop}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    DeviceService.initialPage(delay: 3500.milliseconds);
     return GetMaterialApp(
       getPages: SonrRouting.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
+      title: _title(),
       themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: Scaffold(
-          backgroundColor: Colors.black,
+      home: _buildScaffold(),
+    );
+  }
+
+  String _title() {
+    if (isDesktop) {
+      return "Sonr Desktop";
+    }
+    return "";
+  }
+
+  Widget _buildScaffold() {
+    if (isDesktop) {
+      return Scaffold(
+          backgroundColor: SonrColor.White,
           body: Stack(
             alignment: Alignment.topCenter,
             children: [
               // @ Rive Animation
-              RiveContainer(
-                type: RiveBoard.SplashPortrait,
-                width: Get.width,
-                height: Get.height,
-                placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+              Center(
+                child: CircularProgressIndicator(),
               ),
 
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero),
+                child: FadeInUp(child: "Sonr".hero),
               ),
             ],
-          )),
-    );
+          ));
+    }
+    return Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            // @ Rive Animation
+            RiveContainer(
+              type: RiveBoard.SplashPortrait,
+              width: Get.width,
+              height: Get.height,
+              placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+            ),
+
+            // @ Fade Animation of Text
+            Positioned(
+              bottom: 100,
+              child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero),
+            ),
+          ],
+        ));
   }
 }

@@ -34,7 +34,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
     return Obx(() => AnimatedSlideSwitcher.fade(
           duration: 2.seconds,
           child: GestureDetector(
-            key: ValueKey<String>(controller.titleText.value),
+            key: ValueKey<String>(controller.title.value),
             onTap: () {
               if (controller.isTitleVisible.value) {
                 controller.swapTitleText(
@@ -43,7 +43,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
                 );
               }
             },
-            child: controller.titleText.value.headThree(
+            child: controller.title.value.headThree(
               color: SonrColor.Black,
               weight: FontWeight.w800,
               align: TextAlign.start,

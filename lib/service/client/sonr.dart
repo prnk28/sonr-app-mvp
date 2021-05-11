@@ -342,7 +342,6 @@ class SonrService extends GetxService {
 
   /// @ Completes Transmission Sequence
   void _handleTransmitted(TransferCard data) async {
-    print(data.toString());
     // Check for Callback
     if (_transferCallback != null) {
       _transferCallback!(TransferStatus.Completed);

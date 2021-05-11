@@ -1,34 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/data.dart';
-
 import 'package:sonr_app/style/style.dart';
+import 'lobby_view.dart';
 import 'payload_view.dart';
 import 'transfer_controller.dart';
-import 'package:sonr_app/modules/peer/card_view.dart';
-
-/// @ Transfer Screen Entry with Arguments
-class Transfer {
-  static void transferWithContact() {
-    Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, contact: UserService.contact.value));
-  }
-
-  static void transferWithFile(SonrFile file) {
-    Get.offNamed("/transfer", arguments: TransferArguments(file.payload, file: file));
-  }
-
-  static void transferWithUrl(String url) {
-    Get.offNamed("/transfer", arguments: TransferArguments(Payload.URL, url: url));
-  }
-}
 
 /// @ Transfer Screen Entry Point
 class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    // Set Payload from Args
-    controller.setPayload(Get.arguments);
-
     // Build View
     return Obx(() => SonrScaffold(
           gradient: SonrGradients.PlumBath,
@@ -36,7 +16,7 @@ class TransferScreen extends GetView<TransferController> {
             centerTitle: true,
             leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.offNamed("/home")),
             subtitle: Container(child: controller.subtitle.value.headFive(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
-            title: controller.title.value.h3,
+            title: TransferService.shareTitle.value.h3,
           ),
           bottomSheet: PayloadSheetView(),
           body: Column(
@@ -46,15 +26,7 @@ class TransferScreen extends GetView<TransferController> {
               Obx(() {
                 // Carousel View
                 if (controller.isNotEmpty.value) {
-                  return Container(
-                    height: 260,
-                    child: CustomScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      controller: controller.scrollController,
-                      slivers: LobbyService.local.value.mapAll((i) => Builder(builder: (context) => SliverToBoxAdapter(child: PeerCard(i)))).toList(),
-                    ),
-                  );
+                  return LobbyView();
                 }
 
                 // Default Empty View

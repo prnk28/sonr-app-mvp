@@ -4,7 +4,6 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:path_provider/path_provider.dart';
 import 'preview_widget.dart';
@@ -154,12 +153,7 @@ class _CameraToolsView extends GetView<CameraController> {
               onTap: () async {
                 await HapticFeedback.heavyImpact();
                 // Check for Permssions
-                var result = await FileService.selectMedia();
-
-                // Selected Item
-                if (result.item1) {
-                  Transfer.transferWithFile(result.item2!);
-                }
+                await TransferService.chooseMedia();
               }),
         ]),
       ),

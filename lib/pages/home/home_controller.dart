@@ -5,24 +5,26 @@ import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum ToggleFilter { All, Media, Contact, Links }
-enum HomeView { Main, Profile, Activity, Remote }
+enum HomeView { Main, Profile, Activity, Remote, Transfer }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final isTitleVisible = true.obs;
   final isSearchVisible = false.obs;
+  final isTransferVisible = false.obs;
 
   // Elements
-  final titleText = "Home".obs;
+  final title = "Home".obs;
+  final subtitle = "".obs;
   final pageIndex = 0.obs;
   final bottomIndex = 0.obs;
   final view = HomeView.Main.obs;
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // Controllers
-  TabController? tabController;
-  FloatingSearchBarController? searchBarController;
+  late final TabController tabController;
+  late final FloatingSearchBarController searchBarController;
+  late final ScrollController scrollController;
 
   // References
   late StreamSubscription<Lobby?> _lobbyStream;
@@ -36,17 +38,18 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
     searchBarController = FloatingSearchBarController();
+    scrollController = ScrollController();
 
     // Listen for Updates
-    tabController!.addListener(() {
+    tabController.addListener(() {
       // Set Index
-      bottomIndex(tabController!.index);
+      bottomIndex(tabController.index);
 
       // Set Page
-      view(HomeView.values[tabController!.index]);
+      view(HomeView.values[tabController.index]);
 
       // Update Title
-      titleText(view.value.title);
+      title(view.value.title);
     });
 
     // Initialize
@@ -81,13 +84,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Change Index
       bottomIndex(newIndex);
-      tabController!.animateTo(newIndex);
+      tabController.animateTo(newIndex);
 
       // Set Page
       view(HomeView.values[newIndex]);
 
       // Update Title
-      titleText(view.value.title);
+      title(view.value.title);
 
       // Close Sharebutton if open
       if (Get.find<ShareController>().status.value.isExpanded) {
@@ -104,14 +107,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Check Valid
     if (!_timeoutActive && !isClosed && isTitleVisible.value) {
       // Swap Text
-      titleText(val);
+      title(val);
       HapticFeedback.mediumImpact();
       _timeoutActive = true;
 
       // Revert Text
       Future.delayed(timeout, () {
         if (!isClosed) {
-          titleText(view.value.title);
+          title(view.value.title);
           _timeoutActive = false;
         }
       });
@@ -125,7 +128,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Present View
     if (isSearchVisible.value) {
-      searchBarController!.open();
+      searchBarController.open();
     }
   }
 
@@ -150,13 +153,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.local.value.count} Nearby");
+      title("${LobbyService.local.value.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text
       Future.delayed(const Duration(milliseconds: 3500), () {
         if (!isClosed) {
-          titleText(view.value.title);
+          title(view.value.title);
           _timeoutActive = false;
         }
       });

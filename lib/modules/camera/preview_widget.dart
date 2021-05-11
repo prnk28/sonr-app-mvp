@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/video/video_view.dart';
+import 'package:sonr_app/modules/card/file/views.dart';
 import 'package:sonr_app/style/style.dart';
 
 class MediaPreviewView extends StatelessWidget {
@@ -19,11 +19,7 @@ class MediaPreviewView extends StatelessWidget {
                 ? Expanded(
                     child: Container(
                         margin: EdgeInsets.only(left: 10, right: 10),
-                        child: AspectRatio(
-                            aspectRatio: 9 / 16,
-                            child: VideoPlayerView.file(
-                              file.itemAtIndex().file,
-                            ))),
+                        child: AspectRatio(aspectRatio: 9 / 16, child: VideoPlayerView.file(file.itemAtIndex().file, true))),
                   )
 
                 // Photo View
