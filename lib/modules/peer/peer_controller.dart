@@ -34,7 +34,8 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final relativePosition = RelativePosition.Center.obs;
 
   // References
-  AnimationController? visibilityController;
+  late final AnimationController borderController;
+  late final AnimationController visibilityController;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
   bool get isFacingValid => isHitting.value && !status.value.isComplete && !status.value.isPending;
@@ -51,6 +52,21 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onInit() {
     visibilityController = AnimationController(vsync: this);
+    borderController = AnimationController(vsync: this, duration: 1000.milliseconds);
+    borderController.addStatusListener((animationStatus) {
+      switch (animationStatus) {
+        case AnimationStatus.completed:
+          borderController.reverse();
+          break;
+        case AnimationStatus.dismissed:
+          borderController.forward();
+          break;
+        case AnimationStatus.forward:
+          break;
+        case AnimationStatus.reverse:
+          break;
+      }
+    });
     super.onInit();
   }
 
@@ -81,7 +97,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
     // Check for Mobile
     if (DeviceService.isMobile) {
-      _userStream = MobileService.position.listen(_handleUserUpdate);
+      _userStream = MobileService.position.listen(_handlePosition);
     }
 
     // Set If Animated
@@ -173,6 +189,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
             break;
           case PeerStatus.Pending:
             isVisible(true);
+            borderController.stop();
             _isPending!.value = true;
             break;
           case PeerStatus.Accepted:
@@ -216,14 +233,23 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // @ Handle Peer Position
-  void _handleUserUpdate(Position data) async {
+  // @ Handle User Position
+  void _handlePosition(Position data) async {
     if (!isClosed && !status.value.isComplete) {
       // Find Offset
       if (peer.value.platform.isMobile) {
         isHitting(data.hasHitSphere(peer.value.position));
         relative(data.difference(peer.value.position));
         relativePosition(data.differenceRelative(peer.value.position));
+        print("Hit Peer: ${isHitting.value}");
+        print("Pos Diff: ${relative.value}");
+        print("Rel Pos: ${relativePosition.value.toString()}");
+      }
+
+      if (isHitting.value) {
+        borderController.forward();
+      } else {
+        borderController.stop();
       }
 
       // Check if Facing
