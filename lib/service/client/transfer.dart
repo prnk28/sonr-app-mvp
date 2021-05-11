@@ -160,6 +160,8 @@ class TransferService extends GetxService {
         type: FileType.custom,
         allowedExtensions: K_ALLOWED_FILE_TYPES,
         withData: true,
+        allowMultiple: true,
+        allowCompression: true,
       );
     }
 
