@@ -17,60 +17,53 @@ class PeerCard extends GetWidget<PeerController> {
     controller.initalize(peer);
 
     // Build View
-    return Obx(
-      () => AnimatedBuilder(
-        animation: controller.borderController,
-        builder: (context, child) {
-          return Container(
-              width: K_CARD_WIDTH,
-              height: K_CARD_HEIGHT,
-              clipBehavior: Clip.antiAlias,
-              decoration: Neumorphic.floating(
-                border: controller.isHitting.value
-                    ? Border.all(color: Colors.blue, width: controller.borderController.value * 10)
-                    : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
+    return Obx(() => Container(
+        width: K_CARD_WIDTH,
+        height: K_CARD_HEIGHT,
+        clipBehavior: Clip.antiAlias,
+        decoration: Neumorphic.floating(
+          border: controller.isHitting.value
+              ? Border.all(color: SonrColor.Primary.withOpacity(0.75), width: controller.borderWidth.value)
+              : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
+        ),
+        margin: EdgeInsets.all(32),
+        child: Stack(children: [
+          // Rive Board
+          Center(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 38),
+              child: Container(
+                alignment: Alignment.center,
+                height: 96,
+                width: 96,
+                child: controller.board.value == null || controller.isFlipped.value
+                    ? Container()
+                    : Rive(
+                        artboard: controller.board.value!,
+                      ),
               ),
-              margin: EdgeInsets.all(32),
-              child: Stack(children: [
-                // Rive Board
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 38),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 96,
-                      width: 96,
-                      child: controller.board.value == null || controller.isFlipped.value
-                          ? Container()
-                          : Rive(
-                              artboard: controller.board.value!,
-                            ),
-                    ),
-                  ),
-                ),
+            ),
+          ),
 
-                // Content
-                Container(
-                  padding: EdgeInsets.all(8),
-                  child: GestureDetector(
-                    onTap: controller.invite,
-                    child: AnimatedSlideSwitcher.fade(
-                      child: controller.isFlipped.value
-                          ? _PeerDetailsCard(
-                              controller: controller,
-                              key: ValueKey<bool>(true),
-                            )
-                          : _PeerMainCard(
-                              controller: controller,
-                              key: ValueKey<bool>(false),
-                            ),
-                    ),
-                  ),
-                ),
-              ]));
-        },
-      ),
-    );
+          // Content
+          Container(
+            padding: EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: controller.invite,
+              child: AnimatedSlideSwitcher.fade(
+                child: controller.isFlipped.value
+                    ? _PeerDetailsCard(
+                        controller: controller,
+                        key: ValueKey<bool>(true),
+                      )
+                    : _PeerMainCard(
+                        controller: controller,
+                        key: ValueKey<bool>(false),
+                      ),
+              ),
+            ),
+          ),
+        ])));
   }
 }
 

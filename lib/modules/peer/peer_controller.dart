@@ -32,9 +32,9 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final isHitting = false.obs;
   final relative = 0.0.obs;
   final relativePosition = RelativePosition.Center.obs;
+  final borderWidth = 0.0.obs;
 
   // References
-  late final AnimationController borderController;
   late final AnimationController visibilityController;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
@@ -52,21 +52,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onInit() {
     visibilityController = AnimationController(vsync: this);
-    borderController = AnimationController(vsync: this, duration: 1000.milliseconds);
-    borderController.addStatusListener((animationStatus) {
-      switch (animationStatus) {
-        case AnimationStatus.completed:
-          borderController.reverse();
-          break;
-        case AnimationStatus.dismissed:
-          borderController.forward();
-          break;
-        case AnimationStatus.forward:
-          break;
-        case AnimationStatus.reverse:
-          break;
-      }
-    });
     super.onInit();
   }
 
@@ -183,7 +168,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
             break;
           case PeerStatus.Pending:
             isVisible(true);
-            borderController.stop();
             _isPending!.value = true;
             break;
           case PeerStatus.Accepted:
@@ -235,12 +219,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         isHitting(data.hasHitSphere(peer.value.position));
         relative(data.difference(peer.value.position));
         relativePosition(data.differenceRelative(peer.value.position));
-      }
-
-      if (isHitting.value) {
-        borderController.forward();
-      } else {
-        borderController.stop();
+        borderWidth(relative.value.clamp(0.25, 5));
       }
 
       // Check if Facing
@@ -250,7 +229,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  Future<void> _handleHitting({int milliseconds = 3000}) async {
+  Future<void> _handleHitting({int milliseconds = 2500}) async {
     _handlingHit = true;
     if (isHitting.value) {
       await Future.delayed(Duration(milliseconds: milliseconds));

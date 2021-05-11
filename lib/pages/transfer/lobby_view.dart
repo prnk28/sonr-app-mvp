@@ -9,14 +9,16 @@ class LobbyView extends GetView<TransferController> {
           width: Get.width,
           height: 260,
           child: CustomScrollView(
-            // physics: NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
             controller: controller.scrollController,
             anchor: 0.225,
             slivers: LobbyService.local.value
-                .mapMobile((i) => Builder(builder: (context) {
-                      return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
-                    }))
+                .mapMobileSorted(
+                    userPosition: MobileService.position.value,
+                    f: (i) => Builder(builder: (context) {
+                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                        }))
                 .toList(),
           ),
         ));
