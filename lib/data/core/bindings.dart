@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
@@ -20,9 +19,6 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<AssetController>(AssetController(), permanent: true);
-    if (DeviceService.isMobile) {
-      Get.lazyPut<CameraController>(() => CameraController());
-    }
   }
 }
 
@@ -50,9 +46,8 @@ class HomeBinding implements Bindings {
     Get.put<HomeController>(HomeController(), permanent: true);
     Get.put<ShareController>(ShareController(), permanent: true);
     Get.put<RecentsController>(RecentsController(), permanent: true);
-    Get.lazyPut<RemoteController>(() => RemoteController());
-    Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<ProfilePictureController>(() => ProfilePictureController());
+    Get.put<RemoteController>(RemoteController());
+    Get.put<ProfileController>(ProfileController());
     Get.create<TileController>(() => TileController());
   }
 }

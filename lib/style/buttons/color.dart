@@ -1,8 +1,7 @@
-import 'package:flutter/services.dart';
 import '../style.dart';
 import 'utility.dart';
 
-class ColorButton extends StatefulWidget {
+class ColorButton extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final Widget child;
@@ -14,7 +13,7 @@ class ColorButton extends StatefulWidget {
   final double? width;
   final double pressedScale;
 
-  const ColorButton({
+  ColorButton({
     Key? key,
     required this.onPressed,
     required this.child,
@@ -92,7 +91,6 @@ class ColorButton extends StatefulWidget {
   factory ColorButton.neutral({
     required Function onPressed,
     Function? onLongPressed,
-    String? tooltip,
     EdgeInsets? padding,
     EdgeInsets? margin,
     double? width,
@@ -108,7 +106,6 @@ class ColorButton extends StatefulWidget {
         onPressed: onPressed,
         width: width,
         child: ButtonUtility.buildText(text),
-        tooltip: tooltip,
         padding: padding,
         margin: margin,
         onLongPressed: onLongPressed,
@@ -116,129 +113,39 @@ class ColorButton extends StatefulWidget {
   }
 
   @override
-  _ColorButtonState createState() => _ColorButtonState();
-}
-
-class _ColorButtonState extends State<ColorButton> {
-  bool hasFinishedAnimationDown = false;
-  bool hasFinishedLongAnimationDown = false;
-  bool hasTapUp = false;
-  bool hasLongTapUp = false;
-  bool pressed = false;
-  bool longPressed = false;
-  bool hasDisposed = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-    hasDisposed = true;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final result = _build(context);
-    if (widget.tooltip != null) {
-      return Tooltip(
-        message: widget.tooltip!,
-        child: result,
-      );
-    } else {
-      return result;
-    }
-  }
-
-  Widget _build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (detail) {
-        hasTapUp = false;
-        if (!pressed && !longPressed) {
-          _handlePress();
-        }
-      },
-      onTapUp: (details) {
-        widget.onPressed();
-        hasTapUp = true;
-        _resetIfTapUp();
-      },
-      onLongPressStart: (details) {
-        hasLongTapUp = false;
-        if (!longPressed) {
-          _handleLongPress();
-        }
-      },
-      onLongPressUp: () {
-        if (widget.onLongPressed != null) {
-          widget.onLongPressed!();
-        }
-        hasLongTapUp = true;
-        _resetIfLongTapUp();
-      },
-      onTapCancel: () {
-        hasTapUp = true;
-        _resetIfTapUp();
-      },
-      child: AnimatedScale(
-        scale: this.pressed ? widget.pressedScale : 1.0,
-        child: AnimatedContainer(
-          decoration: widget.decoration,
-          margin: widget.margin ?? const EdgeInsets.all(0),
-          duration: ButtonUtility.K_BUTTON_DURATION,
-          curve: Curves.ease,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: widget.child,
-        ),
-      ),
-    );
-  }
-
-  Future<void> _handlePress() async {
-    hasFinishedAnimationDown = false;
-    setState(() {
-      pressed = true;
-    });
-
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
-    hasFinishedAnimationDown = true;
-
-    //haptic vibration
-    await HapticFeedback.mediumImpact();
-    _resetIfTapUp();
-  }
-
-  //used to stay pressed if no tap up
-  void _resetIfTapUp() {
-    if (hasFinishedAnimationDown == true && hasTapUp == true && !hasDisposed) {
-      setState(() {
-        pressed = false;
-
-        hasFinishedAnimationDown = false;
-        hasTapUp = false;
-      });
-    }
-  }
-
-  Future<void> _handleLongPress() async {
-    hasFinishedLongAnimationDown = false;
-    setState(() {
-      longPressed = true;
-    });
-
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
-    hasFinishedLongAnimationDown = true;
-
-    //haptic vibration
-    await HapticFeedback.heavyImpact();
-    _resetIfLongTapUp();
-  }
-
-  void _resetIfLongTapUp() {
-    if (hasFinishedLongAnimationDown == true && hasLongTapUp == true && !hasDisposed) {
-      setState(() {
-        longPressed = false;
-
-        hasFinishedLongAnimationDown = false;
-        hasLongTapUp = false;
-      });
-    }
+    final RxBool isPressed = false.obs;
+    return Container(
+        child: ObxValue<RxBool>(
+            (pressed) => GestureDetector(
+                onTapCancel: () => pressed(false),
+                onLongPressStart: (details) => pressed(true),
+                onLongPressUp: () async {
+                  pressed(false);
+                  await HapticFeedback.heavyImpact();
+                  Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                    if (onLongPressed != null) {
+                      onLongPressed!();
+                    }
+                  });
+                },
+                onTapDown: (detail) => pressed(true),
+                onTapUp: (details) async {
+                  pressed(false);
+                  await HapticFeedback.mediumImpact();
+                  Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                    onPressed();
+                  });
+                },
+                child: AnimatedScale(
+                    scale: pressed.value ? pressedScale : 1.0,
+                    child: AnimatedContainer(
+                        decoration: decoration,
+                        margin: margin ?? const EdgeInsets.symmetric(horizontal: 24),
+                        duration: ButtonUtility.K_BUTTON_DURATION,
+                        curve: Curves.ease,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        child: child))),
+            isPressed));
   }
 }

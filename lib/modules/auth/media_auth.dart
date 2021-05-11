@@ -55,7 +55,7 @@ class MediaAuthView extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 54),
               ),
               Padding(padding: EdgeInsets.all(8)),
-              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline"),
+              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline".h6_Grey),
             ],
           ),
         ],

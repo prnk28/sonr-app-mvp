@@ -1,9 +1,20 @@
 import '../style.dart';
 
 class ButtonUtility {
-  static const K_BUTTON_DURATION = Duration(milliseconds: 100);
+  static const K_BUTTON_DURATION = Duration(milliseconds: 150);
+  static const K_CONFIRM_DURATION = Duration(milliseconds: 325);
   static const double K_BORDER_RADIUS = 8;
   static const K_BUTTON_PADDING = EdgeInsets.symmetric(horizontal: 24, vertical: 8);
+
+  // @ Helper to Build Complete View
+  static Widget buildCompleteChild(IconData icon, String text) {
+    return Container(
+        padding: EdgeInsets.all(8),
+        child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildText(text)]));
+  }
 
   // @ Helper Method to Build Icon View //
   static Widget buildChild(WidgetPosition iconPosition, IconData? icon, String? text, Widget? child) {

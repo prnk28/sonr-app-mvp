@@ -5,20 +5,18 @@ import 'utility.dart';
 
 enum ConfirmButtonType { Save, Delete }
 
-class ConfirmButton extends StatefulWidget {
+class ConfirmButton extends StatelessWidget {
   final ConfirmButtonType type;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final Widget defaultChild;
   final Widget confirmChild;
   final Widget completeChild;
-  final Decoration defaultDecoration;
-  final Decoration confirmDecoration;
-  final Decoration completeDecoration;
+  final BoxDecoration defaultDecoration;
+  final BoxDecoration confirmDecoration;
+  final BoxDecoration completeDecoration;
   final Function onConfirmed;
-  final String? tooltip;
-  final double? width;
-  final double pressedScale;
+  final double width;
 
   const ConfirmButton({
     Key? key,
@@ -29,12 +27,10 @@ class ConfirmButton extends StatefulWidget {
     required this.defaultDecoration,
     required this.confirmDecoration,
     required this.completeDecoration,
-    required this.pressedScale,
     required this.type,
     this.margin,
     this.padding,
-    this.tooltip,
-    this.width,
+    this.width = 200,
   }) : super(key: key);
 
   // @ Save Button //
@@ -59,7 +55,7 @@ class ConfirmButton extends StatefulWidget {
     String? tooltip,
     EdgeInsets? padding,
     EdgeInsets? margin,
-    double? width,
+    double width = 200,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
@@ -89,12 +85,10 @@ class ConfirmButton extends StatefulWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.CheckShield, "Saved!", null),
-      tooltip: tooltip,
+      completeChild: ButtonUtility.buildCompleteChild(SonrIcons.CheckShield, "Saved!"),
       width: width,
       padding: padding,
       margin: margin,
-      pressedScale: 0.95,
     );
   }
 
@@ -120,7 +114,7 @@ class ConfirmButton extends StatefulWidget {
     String? tooltip,
     EdgeInsets? padding,
     EdgeInsets? margin,
-    double? width,
+    double width = 200,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
@@ -150,154 +144,127 @@ class ConfirmButton extends StatefulWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.Trash, "Deleted.", null),
-      tooltip: tooltip,
+      completeChild: ButtonUtility.buildCompleteChild(SonrIcons.Trash, "Deleted."),
       width: width,
       padding: padding,
       margin: margin,
-      pressedScale: 0.95,
     );
-  }
-
-  @override
-  _ConfirmButtonState createState() => _ConfirmButtonState();
-}
-
-enum ConfirmStatus { Default, Pressed, Pending, Confirmed, Done }
-
-extension ConfirmStatusUtil on ConfirmStatus {
-  bool get isDefault => this == ConfirmStatus.Default;
-  bool get isPressed => this == ConfirmStatus.Pressed;
-  bool get isPending => this == ConfirmStatus.Pending;
-  bool get isConfirmed => this == ConfirmStatus.Confirmed;
-  bool get isDone => this == ConfirmStatus.Done;
-}
-
-class _ConfirmButtonState extends State<ConfirmButton> {
-  bool hasFinishedAnimationDown = false;
-  bool hasFinishedLongAnimationDown = false;
-  bool hasTapUp = false;
-  ConfirmStatus status = ConfirmStatus.Default;
-  bool hasDisposed = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-    hasDisposed = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    final result = _build(context);
-    if (widget.tooltip != null) {
-      return Tooltip(
-        message: widget.tooltip!,
-        child: result,
-      );
-    } else {
-      return result;
-    }
-  }
-
-  Widget _build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (detail) {
-        hasTapUp = false;
-        if (status.isDefault || status.isPressed) {
-          _handlePress();
-        } else {
-          _handleConfirm();
-        }
+    return GetX<_ConfirmButtonController>(
+      init: _ConfirmButtonController(onConfirmed, type),
+      global: false,
+      autoRemove: false,
+      builder: (controller) {
+        return GestureDetector(
+          onTapDown: controller.onTapDown,
+          onTapCancel: controller.onTapCancel,
+          child: AnimatedScale(
+            scale: controller.status.value.scale,
+            child: Container(
+              decoration: _buildDecoration(controller.status.value),
+              margin: margin ?? const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: AnimatedSlideSwitcher.slideUp(child: _buildChild(controller.status.value)),
+            ),
+          ),
+        );
       },
-      onTapUp: (details) {
-        hasTapUp = true;
-        _resetIfTapUp(status);
-      },
-      onTapCancel: () {
-        hasTapUp = true;
-        _resetIfTapUp(status);
-      },
-      child: AnimatedScale(
-        scale: status.isPressed ? widget.pressedScale : 1.0,
-        child: AnimatedContainer(
-          decoration: _buildDecoration(),
-          margin: widget.margin ?? const EdgeInsets.all(0),
-          duration: ButtonUtility.K_BUTTON_DURATION,
-          curve: Curves.ease,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: AnimatedSlideSwitcher.slideUp(child: _buildChild()),
-        ),
-      ),
     );
   }
 
-  Widget _buildChild() {
-    if (status.isDefault || status.isPressed) {
-      return Container(child: widget.defaultChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Default));
-    } else if (status.isPending || status.isConfirmed) {
-      return Container(child: widget.confirmChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Confirmed));
+  Widget _buildChild(ConfirmStatus status) {
+    if (status.isInitial) {
+      return Container(child: defaultChild, key: ValueKey<int>(0));
+    } else if (status.isPending) {
+      return Container(child: confirmChild, key: ValueKey<int>(1));
     } else {
-      return widget.completeChild;
+      return Container(child: completeChild, key: ValueKey<int>(2));
     }
   }
 
-  BoxDecoration _buildDecoration() {
-    if (status.isDefault || status.isPressed) {
-      return widget.defaultDecoration as BoxDecoration;
-    } else if (status.isPending || status.isConfirmed) {
-      return widget.confirmDecoration as BoxDecoration;
+  BoxDecoration _buildDecoration(ConfirmStatus status) {
+    if (status.isInitial) {
+      return defaultDecoration;
+    } else if (status.isPending) {
+      return confirmDecoration;
     } else {
-      return widget.completeDecoration as BoxDecoration;
+      return completeDecoration;
+    }
+  }
+}
+
+enum ConfirmStatus { Default, PressDown, PressUp, ConfirmDown, ConfirmUp }
+
+extension ConfirmStatusUtil on ConfirmStatus {
+  bool get isInitial => this == ConfirmStatus.Default || this == ConfirmStatus.PressDown;
+  bool get isPending => this == ConfirmStatus.PressUp || this == ConfirmStatus.ConfirmDown;
+  bool get isComplete => this == ConfirmStatus.ConfirmUp;
+
+  bool get isPressed => this == ConfirmStatus.PressDown || this == ConfirmStatus.ConfirmDown;
+  bool get isUp => this == ConfirmStatus.PressUp || this == ConfirmStatus.ConfirmUp;
+  double get scale => this.isPressed ? 0.95 : 1.0;
+}
+
+class _ConfirmButtonController extends GetxController {
+  final ConfirmButtonType type;
+  final Function onConfirmed;
+  final status = ConfirmStatus.Default.obs;
+
+  _ConfirmButtonController(this.onConfirmed, this.type);
+
+  void onTapDown(TapDownDetails details) {
+    if (status.value.isInitial) {
+      _handlePress();
+    } else {
+      _handleConfirm();
+    }
+  }
+
+  void onTapCancel() {
+    if (!isClosed) {
+      if (status.value.isPending) {
+        status(ConfirmStatus.PressUp);
+      } else {
+        status(ConfirmStatus.Default);
+      }
     }
   }
 
   Future<void> _handlePress() async {
-    hasFinishedAnimationDown = false;
-    setState(() {
-      status = ConfirmStatus.Pressed;
-    });
-
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
-    hasFinishedAnimationDown = true;
-
-    // Haptic Feedback
-    await HapticFeedback.mediumImpact();
-    _resetIfTapUp(ConfirmStatus.Pending);
+    await _updateStatus(
+        downStatus: ConfirmStatus.PressDown,
+        upStatus: ConfirmStatus.PressUp,
+        onTapUp: () async {
+          await HapticFeedback.mediumImpact();
+        });
   }
 
   Future<void> _handleConfirm() async {
-    hasFinishedAnimationDown = false;
-    setState(() {
-      status = ConfirmStatus.Confirmed;
-    });
-
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
-    hasFinishedAnimationDown = true;
-
-    // Haptic Feedback
-    await HapticFeedback.heavyImpact();
-    _resetIfTapUp(ConfirmStatus.Done);
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION * 2); //wait until animation finished
-
-    // Play Sound
-    if (widget.type == ConfirmButtonType.Save) {
-      DeviceService.playSound(type: UISoundType.Confirmed);
-    } else if (widget.type == ConfirmButtonType.Delete) {
-      DeviceService.playSound(type: UISoundType.Deleted);
-    }
-
-    widget.onConfirmed();
+    await _updateStatus(
+        downStatus: ConfirmStatus.ConfirmDown,
+        upStatus: ConfirmStatus.ConfirmUp,
+        onTapUp: () async {
+          await HapticFeedback.heavyImpact();
+          // Play Sound
+          if (type == ConfirmButtonType.Save) {
+            DeviceService.playSound(type: UISoundType.Confirmed);
+          } else if (type == ConfirmButtonType.Delete) {
+            DeviceService.playSound(type: UISoundType.Deleted);
+          }
+          await Future.delayed(ButtonUtility.K_CONFIRM_DURATION); //wait until animation finished
+          onConfirmed();
+        });
   }
 
-  //used to stay pressed if no tap up
-  void _resetIfTapUp(ConfirmStatus newStatus) {
-    if (hasFinishedAnimationDown == true && hasTapUp == true && !hasDisposed) {
-      setState(() {
-        status = newStatus;
-
-        hasFinishedAnimationDown = false;
-        hasTapUp = false;
-      });
+  Future<void> _updateStatus({required ConfirmStatus downStatus, required ConfirmStatus upStatus, required Function onTapUp}) async {
+    if (!isClosed) {
+      status(downStatus);
+      await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
+      status(upStatus);
+      onTapUp();
     }
   }
 }

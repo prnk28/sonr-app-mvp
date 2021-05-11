@@ -118,7 +118,9 @@ class DeviceService extends GetxService {
   /// @ Saves Received Media to Gallery by Platform
   static Future<void> saveTransfer(SonrFile file) async {
     if (isMobile) {
-      await MobileService.saveTransfer(file.single);
+      for (SonrFile_Metadata meta in file.files) {
+        await MobileService.saveTransfer(meta);
+      }
     } else {
       await OpenFile.open(file.single.path);
     }

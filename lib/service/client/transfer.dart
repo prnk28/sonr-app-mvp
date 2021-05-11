@@ -31,11 +31,11 @@ class TransferService extends GetxService {
   // @ Use Camera for Media File //
   static Future<void> chooseCamera() async {
     // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (SonrFile file) async {
+    CameraView.open(onMediaSelected: (SonrFile file) async {
       await _handlePayload(Payload.MEDIA, file: file);
       // Shift Pages
       Get.offNamed("/transfer");
-    }), transition: Transition.downToUp);
+    });
   }
 
   static void chooseContact() async {
@@ -158,7 +158,6 @@ class TransferService extends GetxService {
     if (type == FileType.custom) {
       return await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: K_ALLOWED_FILE_TYPES,
         withData: true,
         allowMultiple: true,
         allowCompression: true,
