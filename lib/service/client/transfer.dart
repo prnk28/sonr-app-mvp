@@ -77,7 +77,7 @@ class TransferService extends GetxService {
     if (result != null) {
       // Check If Single
       if (result.isSinglePick) {
-        var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
+        var file = await SonrFileUtils.newWith(payload: Payload.FILE, path: result.files.first.path!);
         await _handlePayload(Payload.FILE, file: file);
       }
       // Multiple: Iterate Items
@@ -170,6 +170,8 @@ class TransferService extends GetxService {
       return await FilePicker.platform.pickFiles(
         type: FileType.media,
         withData: true,
+        allowMultiple: true,
+        allowCompression: true,
       );
     }
   }
