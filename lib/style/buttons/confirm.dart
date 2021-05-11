@@ -232,7 +232,6 @@ extension ConfirmStatusUtil on ConfirmStatus {
   bool get isInitial => this == ConfirmStatus.Default || this == ConfirmStatus.PressDown;
   bool get isPending => this == ConfirmStatus.PressUp || this == ConfirmStatus.ConfirmDown;
   bool get isComplete => this == ConfirmStatus.ConfirmUp;
-
   bool get isPressed => this == ConfirmStatus.PressDown || this == ConfirmStatus.ConfirmDown;
   bool get isUp => this == ConfirmStatus.PressUp || this == ConfirmStatus.ConfirmUp;
   double get scale => this.isPressed ? 0.95 : 1.0;
