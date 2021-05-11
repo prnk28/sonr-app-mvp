@@ -47,7 +47,6 @@ class LobbyService extends GetxService {
     if (_positionStream != null) {
       _positionStream!.cancel();
     }
-
     super.onClose();
   }
 

@@ -17,7 +17,6 @@ class TransferController extends GetxController {
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
   final direction = 0.0.obs;
-  final isShiftingEnabled = true.obs;
 
   // @ View Properties
   final directionTitle = "".obs;
@@ -54,11 +53,6 @@ class TransferController extends GetxController {
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
-  }
-
-  /// @ Toggles Peer Shifting
-  void toggleShifting() {
-    isShiftingEnabled(!isShiftingEnabled.value);
   }
 
   // # Handle Compass Update
