@@ -55,7 +55,7 @@ class App extends StatelessWidget {
   Widget _buildScaffold() {
     if (isDesktop) {
       return Scaffold(
-          backgroundColor: SonrColor.White,
+          backgroundColor: Get.theme.backgroundColor,
           body: Stack(
             alignment: Alignment.topCenter,
             children: [

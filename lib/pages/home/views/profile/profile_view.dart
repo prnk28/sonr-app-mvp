@@ -17,7 +17,7 @@ class ProfileView extends GetView<ProfileController> {
     }
 
     // Edit Profile Picture
-    else if (status == ProfileViewStatus.AddPicture) {
+    else if (status == ProfileViewStatus.AddPicture || status == ProfileViewStatus.ViewPicture) {
       return EditPictureView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddPicture));
     }
 

@@ -52,8 +52,22 @@ class TransferService extends GetxService {
 
     // Check File
     if (result != null) {
-      var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
-      await _handlePayload(Payload.MEDIA, file: file);
+      if (result.isSinglePick) {
+        var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
+        await _handlePayload(Payload.MEDIA, file: file);
+      }
+      // Multiple: Iterate Items
+      else {
+        // Initialize
+        var file = SonrFile(direction: SonrFile_Direction.Outgoing, payload: Payload.MULTI_FILES);
+
+        // Add Items
+        result.files.forEach((e) {
+          file.addItem(path: e.path!);
+        });
+
+        await _handlePayload(Payload.MULTI_FILES, file: file);
+      }
 
       // Shift Pages
       Get.offNamed("/transfer");
