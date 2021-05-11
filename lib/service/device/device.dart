@@ -56,14 +56,14 @@ class DeviceService extends GetxService {
   }
 
   /// @ Retreive Location by IP Address
-  static Future<Location> findIPLocation() async {
+  static Future<Location_IP> findIPLocation() async {
     var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${EnvConfig.ip_key}");
 
     final response = await http.get(url, headers: {'x-rapidapi-key': EnvConfig.rapid_key, 'x-rapidapi-host': EnvConfig.rapid_host});
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
-      return Location(
+      return Location_IP(
         state: json["state"],
         continent: json["continent"],
         country: json["country"],

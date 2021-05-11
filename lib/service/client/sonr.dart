@@ -68,7 +68,7 @@ class SonrService extends GetxService {
   /// @ Initialize Service Method
   Future<SonrService> init() async {
     // Initialize
-    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+    _properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled));
 
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
@@ -222,7 +222,7 @@ class SonrService extends GetxService {
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
-      to._properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
+      to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
 
       if (to._node != null) {
         to._node!.update(properties: to._properties.value);
