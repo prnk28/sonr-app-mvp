@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/modules/card/tile/tile_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
@@ -7,8 +8,7 @@ import 'package:sonr_app/pages/desktop/controllers/window_controller.dart';
 import 'package:sonr_app/pages/home/main/main_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/pages/home/profile/profile.dart';
-import 'package:sonr_app/pages/home/profile/tile/tile_controller.dart';
+import 'package:sonr_app/pages/home/profile/profile_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
