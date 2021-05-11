@@ -13,7 +13,9 @@ class ContactCardItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 420,
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       child: Hero(
         tag: card.id,
         child: Container(
@@ -30,7 +32,7 @@ class ContactCardItemView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: Container(
-                decoration: Neumorphic.indented(shape: BoxShape.circle),
+                decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
                 child: ProfileAvatar.fromContact(card.contact!),
               ),

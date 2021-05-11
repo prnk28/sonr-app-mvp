@@ -54,7 +54,7 @@ class SonrDropdown extends StatelessWidget {
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 3),
-            decoration: Neumorphic.floating(radius: 0),
+            decoration: Neumorphic.floating(theme: Get.theme, radius: 0),
             child: AnimatedSlideSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
           ),
         ),
@@ -132,7 +132,7 @@ class SonrDropdownItem extends StatelessWidget {
       return Row(children: [
         Container(
           child: icon,
-          decoration: Neumorphic.indented(),
+          decoration: Neumorphic.indented(theme: Get.theme),
           padding: EdgeInsets.all(10),
         ),
         Padding(

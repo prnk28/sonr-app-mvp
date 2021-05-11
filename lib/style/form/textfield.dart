@@ -110,7 +110,9 @@ class SonrTextField extends StatelessWidget {
                 ]))
             : Container(),
         Container(
-          decoration: Neumorphic.floating(),
+          decoration: Neumorphic.floating(
+            theme: Get.theme,
+          ),
           margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
@@ -220,7 +222,9 @@ class SonrSearchField extends StatelessWidget {
           children: <Widget>[
             Container(
                 margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                decoration: Neumorphic.floating(),
+                decoration: Neumorphic.floating(
+                  theme: Get.theme,
+                ),
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                 child: Stack(children: [
                   Padding(

@@ -6,7 +6,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => NeumorphicCard(child: _buildView(controller.status.value)));
+    return Obx(() => NeumorphicCard(themeData: Get.theme, child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item

@@ -45,7 +45,9 @@ class _ActivityListItem extends StatelessWidget {
           ),
         ),
         child: Container(
-          decoration: Neumorphic.floating(),
+          decoration: Neumorphic.floating(
+            theme: Get.theme,
+          ),
           child: ListTile(
             title: _buildMessage(),
           ),

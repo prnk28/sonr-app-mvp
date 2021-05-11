@@ -9,12 +9,13 @@ class RemoteView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicCard(
+        themeData: Get.theme,
         child: Obx(
-      () => AnimatedSlideSwitcher.fade(
-        child: _buildView(controller.status.value),
-        duration: const Duration(milliseconds: 2500),
-      ),
-    ));
+          () => AnimatedSlideSwitcher.fade(
+            child: _buildView(controller.status.value),
+            duration: const Duration(milliseconds: 2500),
+          ),
+        ));
   }
 
   // @ Build Page View by Navigation Item
@@ -105,7 +106,9 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       padding: EdgeInsets.only(bottom: 8),
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: FadeInDownBig(

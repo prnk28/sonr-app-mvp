@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
+import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -17,7 +18,9 @@ class MetaCardItemView extends StatelessWidget {
     return Container(
       height: 420,
       width: Get.width - 64,
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       child: Hero(
         tag: card.file!.single.path,
         child: MetaBox(
@@ -85,17 +88,15 @@ class _MediaInfoView extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(24.0),
         child: Container(
-          decoration: Neumorphic.floating(),
+          decoration: Neumorphic.floating(
+            theme: Get.theme,
+          ),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
             "${file.prettySize()} From".h3,
 
             // Owner
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [owner.platform.gradient(), owner.nameText]),
-
+            ProfileName(profile: owner, isHeader: true),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 

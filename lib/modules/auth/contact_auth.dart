@@ -22,7 +22,9 @@ class ContactAuthView extends StatelessWidget {
     return Container(
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -30,7 +32,9 @@ class ContactAuthView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8),
               child: Container(
-                decoration: Neumorphic.floating(),
+                decoration: Neumorphic.floating(
+                  theme: Get.theme,
+                ),
                 padding: EdgeInsets.all(4),
                 child: ProfileAvatar(profile: card.profile),
               ),
@@ -99,7 +103,9 @@ class ContactFlatCard extends StatelessWidget {
     return Container(
       height: 420 * scale!,
       width: (Get.width - 64) * scale!,
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       child: Container(
         height: 75,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -109,7 +115,7 @@ class ContactFlatCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(10),
-                decoration: Neumorphic.floating(shape: BoxShape.circle),
+                decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
                 child: ProfileAvatar(
                   profile: contact!.profile,
                 )),

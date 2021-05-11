@@ -18,7 +18,7 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: Neumorphic.indented(shape: BoxShape.circle),
+        decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
         padding: EdgeInsets.all(4),
         child: Container(
           width: size,

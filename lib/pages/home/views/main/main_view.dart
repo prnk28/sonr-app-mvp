@@ -19,7 +19,7 @@ class CardMainView extends GetView<RecentsController> {
         child: CustomScrollView(primary: true, slivers: [
           _CardStatsView(),
           SliverPadding(padding: EdgeInsets.only(top: 8)),
-          SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start)),
+          SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start, color: Get.theme.focusColor)),
           SliverToBoxAdapter(
             child: TagsView(
               tags: _buildTags(),
@@ -75,7 +75,7 @@ class _CardStatsView extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           clipBehavior: Clip.antiAlias,
-          decoration: Neumorphic.floating(color: SonrColor.Primary),
+          decoration: Neumorphic.floating(theme: Get.theme),
           padding: EdgeInsets.all(8),
           margin: EdgeInsets.all(16),
           height: 100,
@@ -128,7 +128,7 @@ class Badge extends StatelessWidget {
       duration: PieChart.defaultDuration,
       width: size,
       height: size,
-      decoration: Neumorphic.compact(shape: BoxShape.circle),
+      decoration: Neumorphic.compact(theme: Get.theme, shape: BoxShape.circle),
       child: Center(child: child),
     );
   }

@@ -4,7 +4,11 @@ class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(8), decoration: Neumorphic.floating(), child: Container(height: Height.ratio(0.15), child: _PayloadListItem()));
+        padding: EdgeInsets.all(8),
+        decoration: Neumorphic.floating(
+          theme: Get.theme,
+        ),
+        child: Container(height: Height.ratio(0.15), child: _PayloadListItem()));
   }
 }
 
@@ -107,7 +111,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
-          decoration: Neumorphic.compact(),
+          decoration: Neumorphic.compact(theme: Get.theme),
           child: CircularProgressIndicator(),
         );
       }
@@ -119,7 +123,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
           child: Container(
               height: Height.ratio(0.125),
               width: Height.ratio(0.125),
-              decoration: Neumorphic.indented(),
+              decoration: Neumorphic.indented(theme: Get.theme),
               clipBehavior: Clip.hardEdge,
               child: Image.memory(
                 Uint8List.fromList(TransferService.file.value.single.thumbnail),

@@ -13,7 +13,9 @@ class CameraToolsView extends StatelessWidget {
     return Container(
         alignment: Alignment.bottomCenter,
         child: Container(
-            decoration: Neumorphic.floating(),
+            decoration: Neumorphic.floating(
+              theme: Get.theme,
+            ),
             padding: EdgeInsets.only(top: 20, bottom: 40),
             child: AnimatedSlideSwitcher.slideUp(child: _buildToolsView(controller.status.value))));
   }
@@ -116,9 +118,9 @@ class _CaptureButton extends StatelessWidget {
           aspectRatio: 1,
           child: Container(
             margin: EdgeInsets.all(14),
-            decoration: Neumorphic.floating(shape: BoxShape.circle),
+            decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
             child: Container(
-              decoration: Neumorphic.floating(shape: BoxShape.circle),
+              decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
               margin: EdgeInsets.all(14),
               child: GestureDetector(
                 onTap: () {
@@ -142,6 +144,7 @@ class _CaptureButton extends StatelessWidget {
                       size: 40,
                     )),
                     decoration: Neumorphic.floating(
+                        theme: Get.theme,
                         shape: BoxShape.circle,
                         border: controller.videoInProgress.value
                             ? Border.all(color: SonrColor.Critical, width: 4)

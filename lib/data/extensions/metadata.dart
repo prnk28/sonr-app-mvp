@@ -1,12 +1,3 @@
-import 'package:sonr_app/style/style.dart';
-import 'package:sonr_plugin/sonr_plugin.dart';
-
-extension ProfileFileUtils on Profile {
-  Widget get nameText {
-    return " ${this.firstName} ${this.lastName}".h6;
-  }
-}
-
 // @ Helper Enum for Video/Image Orientation
 enum MediaOrientation { Portrait, Landscape }
 

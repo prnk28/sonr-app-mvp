@@ -46,8 +46,8 @@ class HomeBinding implements Bindings {
     Get.put<HomeController>(HomeController(), permanent: true);
     Get.put<ShareController>(ShareController(), permanent: true);
     Get.put<RecentsController>(RecentsController(), permanent: true);
-    Get.put<RemoteController>(RemoteController());
-    Get.put<ProfileController>(ProfileController());
+    Get.put<RemoteController>(RemoteController(), permanent: true);
+    Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.create<TileController>(() => TileController());
   }
 }
