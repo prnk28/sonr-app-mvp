@@ -15,7 +15,8 @@ class TransferScreen extends GetView<TransferController> {
           appBar: DesignAppBar(
             centerTitle: true,
             leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.offNamed("/home")),
-            subtitle: Container(child: controller.subtitle.value.headFive(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
+            subtitle:
+                Container(child: controller.subtitle.value.headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start)),
             title: TransferService.shareTitle.value.h3,
           ),
           bottomSheet: PayloadSheetView(),
