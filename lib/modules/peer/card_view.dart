@@ -23,10 +23,10 @@ class PeerCard extends GetWidget<PeerController> {
         clipBehavior: Clip.antiAlias,
         decoration: Neumorphic.floating(
           border: controller.isHitting.value
-              ? Border.all(color: SonrColor.Primary.withOpacity(0.75), width: controller.borderWidth.value)
+              ? Border.all(color: SonrColor.Secondary.withOpacity(0.75), width: controller.borderWidth.value)
               : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
         ),
-        margin: EdgeInsets.all(32),
+        margin: EdgeInsets.all(24),
         child: Stack(children: [
           // Rive Board
           Center(
