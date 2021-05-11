@@ -139,7 +139,7 @@ class MetaVideo extends StatelessWidget {
                 return Container(
                   width: width ?? orientation.defaultWidth,
                   height: height ?? orientation.defaultHeight,
-                  child: VideoPlayerView.file(snapshot.data!),
+                  child: VideoPlayerView.file(snapshot.data!, false),
                 );
               } else {
                 return Container(
@@ -202,8 +202,9 @@ enum VideoPlayerViewType {
 class VideoPlayerView extends StatefulWidget {
   final VideoPlayerViewType type;
   final File sourceFile;
-  const VideoPlayerView(this.type, {Key? key, required this.sourceFile}) : super(key: key);
-  factory VideoPlayerView.file(File source) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source);
+  final bool autoplay;
+  const VideoPlayerView(this.type, {Key? key, required this.sourceFile, required this.autoplay}) : super(key: key);
+  factory VideoPlayerView.file(File source, bool autoplay) => VideoPlayerView(VideoPlayerViewType.Network, sourceFile: source, autoplay: autoplay);
 
   @override
   _VideoPlayerViewState createState() => _VideoPlayerViewState();
@@ -219,7 +220,9 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
       ..initialize().then((_) {
         setState(() {
           _controller.setVolume(0);
-          _controller.play();
+          if (widget.autoplay) {
+            _controller.play();
+          }
         });
       });
   }

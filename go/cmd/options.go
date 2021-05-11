@@ -1,7 +1,6 @@
 package main
 
 import (
-	platform_device_id "github.com/BestBurning/platform_device_id/go"
 	flutter_systray "github.com/JanezStupar/flutter_systray/go"
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
@@ -27,7 +26,6 @@ var options = []flutter.Option{
 	flutter.AddPlugin(&open_file.OpenFilePlugin{}),
 	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 	flutter.AddPlugin(&AppBarDraggable{}),
-	flutter.AddPlugin(&platform_device_id.PlatformDeviceIdPlugin{}),
 }
 
 // AppBarDraggable is a plugin that makes moving the bordreless window possible
@@ -46,7 +44,6 @@ func (p *AppBarDraggable) InitPlugin(messenger plugin.BinaryMessenger) error {
 	channel := plugin.NewMethodChannel(messenger, "io.sonr.desktop/window", plugin.StandardMethodCodec{})
 	channel.HandleFunc("onPanStart", p.onPanStart)
 	channel.HandleFuncSync("onPanUpdate", p.onPanUpdate)
-	channel.HandleFunc("onOpen", p.onOpen)
 	channel.HandleFunc("onClose", p.onClose)
 	return nil
 }
@@ -77,12 +74,6 @@ func (p *AppBarDraggable) onPanUpdate(arguments interface{}) (reply interface{},
 	x, y := p.window.GetPos()           // This function must only be called from the main thread.
 	p.window.SetPos(x+deltaX, y+deltaY) // This function must only be called from the main thread.
 
-	return nil, nil
-}
-
-func (p *AppBarDraggable) onOpen(arguments interface{}) (reply interface{}, err error) {
-	// This function may be called from any thread. Access is not synchronized.
-	p.window.Focus()
 	return nil, nil
 }
 

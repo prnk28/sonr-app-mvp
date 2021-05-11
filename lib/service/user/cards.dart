@@ -111,9 +111,9 @@ class CardService extends GetxService {
     SonrFile? file,
   }) async {
     if (file != null && file.exists) {
-      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
+      await to._database.addActivity(ActivityType.Received, payload, owner, mime: file.single.mime.type);
     } else {
-      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
+      await to._database.addActivity(ActivityType.Received, payload, owner, mime: MIME_Type.OTHER);
     }
   }
 
@@ -123,9 +123,9 @@ class CardService extends GetxService {
     SonrFile? file,
   }) async {
     if (file != null && file.exists) {
-      await to._database.addActivity(ActivityType.Deleted, payload, UserService.profile.value, mime: file.single.mime.type);
+      await to._database.addActivity(ActivityType.Shared, payload, UserService.profile.value, mime: file.single.mime.type);
     } else {
-      await to._database.addActivity(ActivityType.Deleted, payload, UserService.profile.value, mime: MIME_Type.OTHER);
+      await to._database.addActivity(ActivityType.Shared, payload, UserService.profile.value, mime: MIME_Type.OTHER);
     }
   }
 
