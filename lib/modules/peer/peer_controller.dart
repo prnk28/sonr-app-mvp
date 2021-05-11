@@ -1,8 +1,6 @@
 import 'package:rive/rive.dart';
 import 'dart:async';
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/data/data.dart';
 
 /// @ Peer Controller Status
 enum PeerStatus { Default, Pending, Accepted, Declined, Complete }
@@ -39,6 +37,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   AnimationController? visibilityController;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
+  bool get isFacingValid => isHitting.value && !status.value.isComplete && !status.value.isPending;
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -225,21 +224,13 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         isHitting(data.hasHitSphere(peer.value.position));
         relative(data.difference(peer.value.position));
         relativePosition(data.differenceRelative(peer.value.position));
-        print("Hit Peer: ${isHitting.value}");
-        print("Pos Diff: ${relative.value}");
-        print("Rel Pos: ${relativePosition.value.toString()}");
       }
 
       // Check if Facing
-
       if (!_handlingHit) {
         await _handleHitting();
       }
     }
-  }
-
-  bool _checkFacingValid() {
-    return isHitting.value && !status.value.isComplete && !status.value.isPending;
   }
 
   Future<void> _handleHitting({int milliseconds = 2500}) async {
@@ -248,7 +239,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       await Future.delayed(Duration(milliseconds: milliseconds));
       isHitting(peer.value.isHitFrom(MobileService.position.value));
 
-      if (_checkFacingValid()) {
+      if (isFacingValid) {
         invite();
       }
     }

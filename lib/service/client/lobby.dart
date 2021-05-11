@@ -24,7 +24,6 @@ class LobbyService extends GetxService {
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
   static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
   static Rx<Lobby> get local => Get.find<LobbyService>()._local;
-  static Rx<Position> get userPosition => to._position;
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
@@ -80,7 +79,7 @@ class LobbyService extends GetxService {
   }
 
   /// @ Registers Peer to Callback
-  static void registerPeerCallback(Peer? peer, PeerCallback callback) {
+  static void registerPeerCallback(Peer peer, PeerCallback callback) {
     to._peerCallbacks[peer] = callback;
   }
 
