@@ -71,7 +71,8 @@ dependencies:
 
   # -- Plugins --
   sonr_plugin:
-    path: ../plugin/
+    git: git@github.com:sonr-io/plugin.git
+    # path: ../plugin/ -- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0
@@ -80,7 +81,6 @@ dependencies:
   material_floating_search_bar: ^0.3.4
   responsive_framework: ^0.1.0
   rive: ^0.7.7
-
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
