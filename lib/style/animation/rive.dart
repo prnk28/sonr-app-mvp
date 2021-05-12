@@ -18,7 +18,7 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _documentsPath = 'assets/rive/documents.riv';
+  final String _documentsPath = 'assets/animations/documents.riv';
 
   // Properties
   Artboard? _riveArtboard;
@@ -28,7 +28,7 @@ class _RiveContainer extends State<RiveContainer> {
   void initState() {
     // Load the RiveFile from the binary data.
     if (widget.type == RiveBoard.SplashPortrait) {
-      rootBundle.load('assets/rive/splash_portrait.riv').then(
+      rootBundle.load('assets/animations/splash_portrait.riv').then(
         (data) async {
           // Load the RiveFile from the binary data.
           final file = RiveFile.import(data);
@@ -44,7 +44,7 @@ class _RiveContainer extends State<RiveContainer> {
         },
       );
     } else if (widget.type == RiveBoard.SplashLandscape) {
-      rootBundle.load('assets/rive/splash_landscape.riv').then(
+      rootBundle.load('assets/animations/splash_landscape.riv').then(
         (data) async {
           // Load the RiveFile from the binary data.
           final file = RiveFile.import(data);
