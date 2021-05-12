@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.io.sonr.ios</string>
+		<string>group.io.sonr.apple</string>
 	</array>
 </dict>
 </plist>
