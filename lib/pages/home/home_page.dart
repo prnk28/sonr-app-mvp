@@ -30,52 +30,56 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ClipPath(
-          clipper: BottomBarClip(),
-          child: Container(
-            decoration: Neumorphic.floating(
-              theme: Get.theme,
-            ),
-            width: Get.width,
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Bounce(
-                    from: 12,
-                    duration: 1000.milliseconds,
-                    animate: controller.bottomIndex.value == HomeView.Main.index,
-                    child: HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex)),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: SpinPerfect(
-                    animate: controller.bottomIndex.value == HomeView.Profile.index,
+    return ClipPath(
+      clipper: BottomBarClip(),
+      child: Container(
+        decoration: Neumorphic.floating(
+          theme: Get.theme,
+        ),
+        width: Get.width,
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Obx(() => Bounce(
+                from: 12,
+                duration: 1000.milliseconds,
+                animate: controller.view.value == HomeView.Main,
+                key: ValueKey(controller.view.value == HomeView.Main),
+                child: HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex))),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Obx(() => Roulette(
+                    spins: 1,
+                    key: ValueKey(controller.view.value == HomeView.Profile),
+                    animate: controller.view.value == HomeView.Profile,
                     child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
                       if (controller.view.value == HomeView.Profile) {
                         if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
                           DeviceService.factoryReset();
                         }
-                        ;
                       }
                     }),
-                  ),
-                ),
-                Container(
-                  width: Get.width * 0.20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Swing(
-                      animate: controller.bottomIndex.value == HomeView.Activity.index,
-                      child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex)),
-                ),
-                Pulse(
-                    animate: controller.bottomIndex.value == HomeView.Remote.index,
-                    child: HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex)),
-              ],
+                  )),
             ),
-          ),
-        ));
+            Container(
+              width: Get.width * 0.20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Obx(() => Swing(
+                  key: ValueKey(controller.view.value == HomeView.Activity),
+                  animate: controller.view.value == HomeView.Activity,
+                  child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex))),
+            ),
+            Obx(() => Flash(
+                key: ValueKey(controller.view.value == HomeView.Remote),
+                animate: controller.view.value == HomeView.Remote,
+                child: HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex))),
+          ],
+        ),
+      ),
+    );
   }
 }
 
