@@ -30,46 +30,57 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: BottomBarClip(),
-      child: Container(
-        decoration: Neumorphic.floating(
-          theme: Get.theme,
-        ),
-        width: Get.width,
-        height: 80,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
-                if (controller.view.value == HomeView.Profile) {
-                  if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
-                    DeviceService.factoryReset();
-                  }
-                  ;
-                }
-              }),
+    return Obx(() => ClipPath(
+          clipper: BottomBarClip(),
+          child: Container(
+            decoration: Neumorphic.floating(
+              theme: Get.theme,
             ),
-            Container(
-              width: Get.width * 0.20,
+            width: Get.width,
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Bounce(
+                    from: 12,
+                    duration: 1000.milliseconds,
+                    animate: controller.bottomIndex.value == HomeView.Main.index,
+                    child: HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: SpinPerfect(
+                    animate: controller.bottomIndex.value == HomeView.Profile.index,
+                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
+                      if (controller.view.value == HomeView.Profile) {
+                        if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
+                          DeviceService.factoryReset();
+                        }
+                        ;
+                      }
+                    }),
+                  ),
+                ),
+                Container(
+                  width: Get.width * 0.20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Swing(
+                      animate: controller.bottomIndex.value == HomeView.Activity.index,
+                      child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex)),
+                ),
+                Pulse(
+                    animate: controller.bottomIndex.value == HomeView.Remote.index,
+                    child: HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex)),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
-            ),
-            HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
 /// @ Bottom Bar Button Widget
-class HomeBottomTabButton extends StatelessWidget {
+class HomeBottomTabButton extends GetView<HomeController> {
   final HomeView view;
   final void Function(int) onPressed;
   final void Function(int)? onLongPressed;
@@ -92,8 +103,10 @@ class HomeBottomTabButton extends StatelessWidget {
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
-                    child: AnimatedSlideSwitcher.fade(child: AssetController.getHomeTabBarIcon(view: view, isSelected: idx.value == view.index)),
-                    scale: idx.value == view.index ? 1.25 : 1.0,
+                    child: Container(
+                        key: ValueKey(idx.value == view.index),
+                        child: Icon(view.iconData, size: 34, color: idx.value == view.index ? Get.theme.primaryColor : Get.theme.hintColor)),
+                    scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),
         ));

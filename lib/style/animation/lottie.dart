@@ -3,44 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../style.dart';
 import 'package:lottie/lottie.dart';
 
-/// @ Lottie Icon Widget
-class LottieIcon extends HookWidget {
-  final Function? onComplete;
-  final String link;
-  final double size;
-
-  LottieIcon({required this.link, this.onComplete, this.size = 24, Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    assert(link.isURL);
-    final controller = useAnimationController();
-    return Lottie.network(
-      link,
-      controller: controller,
-      repeat: false,
-      animate: true,
-      width: size,
-      height: size,
-      fit: BoxFit.contain,
-      onLoaded: (composition) {
-        var duration = composition.seconds.seconds;
-        controller..duration = duration;
-        controller.forward();
-        _callbackComplete(duration);
-      },
-    );
-  }
-
-  // # Handles Animation Complete
-  _callbackComplete(Duration time) {
-    Future.delayed(time, () {
-      if (onComplete != null) {
-        onComplete!();
-      }
-    });
-  }
-}
-
 /// @ Lottie Animation Container Widget
 class LottieContainer extends HookWidget {
   final double width;

@@ -44,12 +44,10 @@ dependencies:
   sentry_flutter: ^5.0.0
 
   # -- Device --
-  camera: ^0.8.1
   camerawesome: ^0.3.0-nullsafety
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3
-  location: ^4.1.1
   motion_sensors: ^0.1.0
   permission_handler: ^7.1.0
   url_launcher: ^6.0.3
@@ -79,7 +77,6 @@ dependencies:
   fl_chart: ^0.36.0
   lottie: ^1.0.1
   material_floating_search_bar: ^0.3.4
-  responsive_framework: ^0.1.0
   rive: ^0.7.7
 
 
@@ -129,7 +126,7 @@ flutter:
     - assets/cards/
     - assets/fonts/
     - assets/images/
-    - assets/rive/
+    - assets/animations/
     - assets/sounds/
 
 

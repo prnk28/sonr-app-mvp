@@ -193,28 +193,27 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
           Padding(padding: EdgeInsets.all(4)),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Decline Button
-            TextButton(
-                onPressed: () {
-                  onDecision(false);
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                child: declineTitle.h6_Red),
-            // Accept Button
             Container(
-              width: Get.width / 2.5,
-              height: 50,
-              child: ColorButton.primary(
-                onPressed: () {
-                  onDecision(true);
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                icon: SonrIcons.Check,
-                text: acceptTitle,
-              ),
+              padding: EdgeInsets.only(left: 32),
+              child: TextButton(
+                  onPressed: () {
+                    onDecision(false);
+                    if (closeOnResponse) {
+                      SonrOverlay.back();
+                    }
+                  },
+                  child: declineTitle.h6_Red),
+            ),
+            // Accept Button
+            ColorButton.primary(
+              onPressed: () {
+                onDecision(true);
+                if (closeOnResponse) {
+                  SonrOverlay.back();
+                }
+              },
+              icon: SonrIcons.Check,
+              text: acceptTitle,
             ),
           ]),
         ]),
