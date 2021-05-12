@@ -1,6 +1,5 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
-import '../../env.dart';
 import 'desktop.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
@@ -57,12 +56,15 @@ class DeviceService extends GetxService {
 
   /// @ Retreive Location by IP Address
   static Future<Location_IP> findIPLocation() async {
-    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${EnvConfig.ip_key}");
+    var url =
+        Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${String.fromEnvironment("ip_key")}");
 
-    final response = await http.get(url, headers: {'x-rapidapi-key': EnvConfig.rapid_key, 'x-rapidapi-host': EnvConfig.rapid_host});
+    final response = await http
+        .get(url, headers: {'x-rapidapi-key': String.fromEnvironment("rapid_key"), 'x-rapidapi-host': String.fromEnvironment("rapid_host")});
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
+      print(json.toString());
       return Location_IP(
         state: json["state"],
         continent: json["continent"],
