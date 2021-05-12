@@ -13,16 +13,13 @@ environment:
 
 environment_config:
   path: env.dart # optional, result file path against `lib/` folder
-  dotenv_path: .env # optional, result file path for .env file against project root folder
-  class: EnvConfig # optional, class name
-
   fields: # set of fields for command
     ip_key:
-      type: 'String'
+      env_var: ip_key
     rapid_host:
-      type: 'String'
+      env_var: rapid_host
     rapid_key:
-      type: 'String'
+      env_var: rapid_key
 
 # ** ================== **
 # **    DEPENDENCIES    **

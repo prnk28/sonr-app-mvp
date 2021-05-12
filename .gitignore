@@ -16,7 +16,7 @@ fastlane/
 Runner.app.*
 Runner.ipa
 Gemfile
-
+.env
 # IntelliJ related
 *.iml
 *.ipr
