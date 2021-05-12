@@ -60,7 +60,7 @@ class _ActionIconButton extends StatelessWidget {
                   width: size,
                   height: size,
                   alignment: Alignment.center,
-                  decoration: Neumorphic.floating(shape: BoxShape.circle),
+                  decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
                   child: icon,
                 ),
               ),

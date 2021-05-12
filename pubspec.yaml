@@ -13,16 +13,13 @@ environment:
 
 environment_config:
   path: env.dart # optional, result file path against `lib/` folder
-  dotenv_path: .env # optional, result file path for .env file against project root folder
-  class: EnvConfig # optional, class name
-
   fields: # set of fields for command
     ip_key:
-      type: 'String'
+      env_var: ip_key
     rapid_host:
-      type: 'String'
+      env_var: rapid_host
     rapid_key:
-      type: 'String'
+      env_var: rapid_key
 
 # ** ================== **
 # **    DEPENDENCIES    **
@@ -48,7 +45,6 @@ dependencies:
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3
-  location: ^4.1.1
   motion_sensors: ^0.1.0
   permission_handler: ^7.1.0
   url_launcher: ^6.0.3
@@ -79,7 +75,6 @@ dependencies:
   fl_chart: ^0.36.0
   lottie: ^1.0.1
   material_floating_search_bar: ^0.3.4
-  responsive_framework: ^0.1.0
   rive: ^0.7.7
 
 # ** -- DEV Dependencies -- **
@@ -128,7 +123,7 @@ flutter:
     - assets/cards/
     - assets/fonts/
     - assets/images/
-    - assets/rive/
+    - assets/animations/
     - assets/sounds/
 
 

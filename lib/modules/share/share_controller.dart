@@ -84,7 +84,7 @@ class ShareController extends GetxController {
     if (MobileService.hasGallery.value) {
       // Shrink Button after Delay
       shrink(delay: 150.milliseconds);
-      await TransferService.chooseMedia();
+      await TransferService.chooseFile();
     } else {
       // Request Permissions
       var status = await Get.find<MobileService>().requestGallery();

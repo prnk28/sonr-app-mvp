@@ -22,9 +22,10 @@ class PeerCard extends GetWidget<PeerController> {
         height: K_CARD_HEIGHT,
         clipBehavior: Clip.antiAlias,
         decoration: Neumorphic.floating(
+          theme: Get.theme,
           border: controller.isHitting.value
-              ? Border.all(color: SonrColor.Secondary.withOpacity(0.75), width: controller.borderWidth.value)
-              : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
+              ? Border.all(color: Get.theme.dividerColor.withOpacity(0.75), width: controller.borderWidth.value)
+              : Border.all(color: Get.theme.dividerColor, width: 1),
         ),
         margin: EdgeInsets.all(24),
         child: Stack(children: [
@@ -143,7 +144,7 @@ class _PeerDetailsCard extends StatelessWidget {
           Spacer(),
 
           // Device Information
-          controller.peer.value.platform.grey(size: 92),
+          controller.peer.value.platform.icon(size: 92, color: Get.theme.hintColor),
           Spacer(),
 
           // Device Icon and Full Name

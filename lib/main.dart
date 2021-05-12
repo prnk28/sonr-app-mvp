@@ -33,12 +33,14 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     DeviceService.initialPage(delay: 3500.milliseconds);
     return GetMaterialApp(
+      themeMode: ThemeMode.system,
+      theme: SonrDesign.LightTheme,
+      darkTheme: SonrDesign.DarkTheme,
       getPages: SonrRouting.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
       title: _title(),
-      themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: _buildScaffold(),
     );
   }
@@ -53,7 +55,7 @@ class App extends StatelessWidget {
   Widget _buildScaffold() {
     if (isDesktop) {
       return Scaffold(
-          backgroundColor: SonrColor.White,
+          backgroundColor: Get.theme.backgroundColor,
           body: Stack(
             alignment: Alignment.topCenter,
             children: [

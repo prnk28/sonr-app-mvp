@@ -56,14 +56,14 @@ class DeviceService extends GetxService {
   }
 
   /// @ Retreive Location by IP Address
-  static Future<Location> findIPLocation() async {
-    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${EnvConfig.ip_key}");
+  static Future<Location_IP> findIPLocation() async {
+    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${Env.ip_key}");
 
-    final response = await http.get(url, headers: {'x-rapidapi-key': EnvConfig.rapid_key, 'x-rapidapi-host': EnvConfig.rapid_host});
+    final response = await http.get(url, headers: {'x-rapidapi-key': Env.rapid_key, 'x-rapidapi-host': Env.rapid_host});
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
-      return Location(
+      return Location_IP(
         state: json["state"],
         continent: json["continent"],
         country: json["country"],
@@ -118,7 +118,9 @@ class DeviceService extends GetxService {
   /// @ Saves Received Media to Gallery by Platform
   static Future<void> saveTransfer(SonrFile file) async {
     if (isMobile) {
-      await MobileService.saveTransfer(file.single);
+      for (SonrFile_Metadata meta in file.files) {
+        await MobileService.saveTransfer(meta);
+      }
     } else {
       await OpenFile.open(file.single.path);
     }

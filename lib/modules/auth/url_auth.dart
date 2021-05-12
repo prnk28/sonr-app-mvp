@@ -12,7 +12,9 @@ class URLAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -21,7 +23,7 @@ class URLAuthView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
             child: Container(
               padding: EdgeInsets.all(4),
-              decoration: Neumorphic.floating(shape: BoxShape.circle),
+              decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(

@@ -1,12 +1,12 @@
+import 'package:sonr_app/modules/card/tile/tile_item.dart';
 import 'package:sonr_app/style/style.dart';
-import 'profile.dart';
-import 'tile/tile_item.dart';
+import 'profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => NeumorphicCard(child: _buildView(controller.status.value)));
+    return Obx(() => NeumorphicCard(themeData: Get.theme, child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -17,7 +17,7 @@ class ProfileView extends GetView<ProfileController> {
     }
 
     // Edit Profile Picture
-    else if (status == ProfileViewStatus.AddPicture) {
+    else if (status == ProfileViewStatus.AddPicture || status == ProfileViewStatus.ViewPicture) {
       return EditPictureView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddPicture));
     }
 
@@ -89,7 +89,7 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // @ Avatar
-                _ProfileAvatarField(),
+                ProfileAvatarField(),
                 Padding(padding: EdgeInsets.all(8)),
                 GestureDetector(
                     onLongPress: controller.setEditingMode,
@@ -100,55 +100,5 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
         ),
       ),
     );
-  }
-}
-
-class _ProfileAvatarField extends GetView<ProfileController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (UserService.contact.value.hasPicture()) {
-        return GestureDetector(
-          onLongPress: () async {
-            controller.setAddPicture();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: Neumorphic.indented(shape: BoxShape.circle),
-              child: Obx(() => Container(
-                    width: 120,
-                    height: 120,
-                    child: UserService.contact.value.hasPicture()
-                        ? CircleAvatar(
-                            backgroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
-                          )
-                        : SonrIcons.Avatar.greyWith(size: 120),
-                  )),
-            ),
-          ),
-        );
-      } else {
-        return GestureDetector(
-          onTap: () async {
-            controller.setAddPicture();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: Neumorphic.indented(shape: BoxShape.circle),
-                child: Container(
-                    width: 120,
-                    height: 120,
-                    child: CircleAvatar(
-                      child: SonrAssetIllustration.AddPicture.widget,
-                      backgroundColor: Color(0xfff0f6fa).withOpacity(0.8),
-                    ))),
-          ),
-        );
-      }
-    });
   }
 }

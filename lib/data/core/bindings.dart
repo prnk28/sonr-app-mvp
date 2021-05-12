@@ -1,16 +1,15 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/modules/camera/camera.dart';
+import 'package:sonr_app/modules/card/tile/tile_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/window_controller.dart';
-import 'package:sonr_app/pages/home/main/main_controller.dart';
+import 'package:sonr_app/pages/home/views/main/main_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/pages/home/profile/profile.dart';
-import 'package:sonr_app/pages/home/profile/tile/tile_controller.dart';
-import 'package:sonr_app/pages/home/remote/remote_controller.dart';
+import 'package:sonr_app/pages/home/views/profile/profile_controller.dart';
+import 'package:sonr_app/pages/home/views/remote/remote_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
@@ -20,9 +19,6 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<AssetController>(AssetController(), permanent: true);
-    if (DeviceService.isMobile) {
-      Get.lazyPut<CameraController>(() => CameraController());
-    }
   }
 }
 
@@ -38,7 +34,7 @@ class DesktopBinding implements Bindings {
 
   // Get Rive File for Peer Bubble
   Future<RiveFile> _getRiveDataFile() async {
-    var data = await rootBundle.load('assets/rive/peer_border.riv');
+    var data = await rootBundle.load('assets/animations/peer_border.riv');
     return RiveFile.import(data);
   }
 }
@@ -50,9 +46,8 @@ class HomeBinding implements Bindings {
     Get.put<HomeController>(HomeController(), permanent: true);
     Get.put<ShareController>(ShareController(), permanent: true);
     Get.put<RecentsController>(RecentsController(), permanent: true);
-    Get.lazyPut<RemoteController>(() => RemoteController());
-    Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<ProfilePictureController>(() => ProfilePictureController());
+    Get.put<RemoteController>(RemoteController(), permanent: true);
+    Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.create<TileController>(() => TileController());
   }
 }
@@ -75,7 +70,7 @@ class TransferBinding implements Bindings {
 
   // Get Rive File for Peer Bubble
   Future<RiveFile> _getRiveDataFile() async {
-    var data = await rootBundle.load('assets/rive/peer_border.riv');
+    var data = await rootBundle.load('assets/animations/peer_border.riv');
     return RiveFile.import(data);
   }
 }

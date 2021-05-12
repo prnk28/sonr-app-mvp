@@ -13,6 +13,7 @@ class MediaAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NeumorphicAvatarCard(
+      themeData: Get.theme,
       profile: invite.from.profile,
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -55,7 +56,7 @@ class MediaAuthView extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 54),
               ),
               Padding(padding: EdgeInsets.all(8)),
-              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline"),
+              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline".h6_Grey),
             ],
           ),
         ],

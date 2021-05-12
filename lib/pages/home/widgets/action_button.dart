@@ -1,7 +1,7 @@
 import 'package:sonr_app/style/style.dart';
-import 'home_controller.dart';
-import 'profile/profile_controller.dart';
-import 'remote/remote_controller.dart';
+import '../home_controller.dart';
+import '../views/profile/profile_controller.dart';
+import '../views/remote/remote_controller.dart';
 
 class HomeActionButton extends GetView<HomeController> {
   HomeActionButton();

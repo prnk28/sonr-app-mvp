@@ -35,7 +35,7 @@ class MobileService extends GetxService {
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
-  final _location = Rx<Location>(Location());
+  final _location = Rx<Location_Geo>(Location_Geo());
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -154,10 +154,10 @@ class MobileService extends GetxService {
   }
 
   /// @ Refresh User Location Position
-  static Future<Location?> currentLocation() async {
+  static Future<Location_Geo?> currentLocation() async {
     if (to._hasLocation.value) {
       var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
-      to._location(Location(latitude: result.latitude, longitude: result.longitude));
+      to._location(Location_Geo(latitude: result.latitude, longitude: result.longitude));
       return to._location.value;
     } else {
       print("No Location Permissions");

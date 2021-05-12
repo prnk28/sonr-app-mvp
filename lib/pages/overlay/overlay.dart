@@ -61,7 +61,9 @@ class AlertOverlayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       // backendColor: Colors.transparent,
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
@@ -131,7 +133,7 @@ class DropdownOverlayView extends StatelessWidget {
           width: size.width + width!,
           child: Container(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            decoration: Neumorphic.floating(radius: 0),
+            decoration: Neumorphic.floating(theme: Get.theme, radius: 0),
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,
@@ -174,7 +176,9 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
       margin: EdgeInsets.symmetric(horizontal: 16),
       height: Get.height / 3 + 50,
       child: Container(
@@ -189,28 +193,27 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
           Padding(padding: EdgeInsets.all(4)),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Decline Button
-            TextButton(
-                onPressed: () {
-                  onDecision(false);
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                child: declineTitle.h6_Red),
-            // Accept Button
             Container(
-              width: Get.width / 2.5,
-              height: 50,
-              child: ColorButton.primary(
-                onPressed: () {
-                  onDecision(true);
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                icon: SonrIcons.Check,
-                text: acceptTitle,
-              ),
+              padding: EdgeInsets.only(left: 32),
+              child: TextButton(
+                  onPressed: () {
+                    onDecision(false);
+                    if (closeOnResponse) {
+                      SonrOverlay.back();
+                    }
+                  },
+                  child: declineTitle.h6_Red),
+            ),
+            // Accept Button
+            ColorButton.primary(
+              onPressed: () {
+                onDecision(true);
+                if (closeOnResponse) {
+                  SonrOverlay.back();
+                }
+              },
+              icon: SonrIcons.Check,
+              text: acceptTitle,
             ),
           ]),
         ]),

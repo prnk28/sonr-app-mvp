@@ -1,5 +1,5 @@
 import 'package:sonr_app/style/style.dart';
-import 'profile.dart';
+import 'profile_controller.dart';
 
 /// @ Edit Profile Details View
 class EditDetailsView extends GetView<ProfileController> {

@@ -175,13 +175,13 @@ extension HomeViewUtils on HomeView {
   IconData get iconData {
     switch (this) {
       case HomeView.Main:
-        return Icons.home;
+        return SonrIcons.Home;
       case HomeView.Profile:
-        return Icons.person;
+        return SonrIcons.Profile;
       case HomeView.Activity:
-        return Icons.notifications;
+        return SonrIcons.Alerts;
       case HomeView.Remote:
-        return SonrIcons.Remote;
+        return SonrIcons.Compass;
       default:
         return Icons.deck;
     }

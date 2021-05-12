@@ -1,12 +1,12 @@
 import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/remote/remote_view.dart';
+import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'main/main_view.dart';
+import 'views/main/main_view.dart';
 import 'home_controller.dart';
-import 'activity/activity_view.dart';
-import 'profile/profile_view.dart';
-import 'search_bar.dart';
+import 'views/activity/activity_view.dart';
+import 'views/profile/profile_view.dart';
+import 'widgets/app_bar.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -33,32 +33,49 @@ class HomeBottomNavBar extends GetView<HomeController> {
     return ClipPath(
       clipper: BottomBarClip(),
       child: Container(
-        decoration: Neumorphic.floating(),
+        decoration: Neumorphic.floating(
+          theme: Get.theme,
+        ),
         width: Get.width,
         height: 80,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
+            Obx(() => Bounce(
+                from: 12,
+                duration: 1000.milliseconds,
+                animate: controller.view.value == HomeView.Main,
+                key: ValueKey(controller.view.value == HomeView.Main),
+                child: HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex))),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
-                if (controller.view.value == HomeView.Profile) {
-                  if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
-                    DeviceService.factoryReset();
-                  }
-                  ;
-                }
-              }),
+              child: Obx(() => Roulette(
+                    spins: 1,
+                    key: ValueKey(controller.view.value == HomeView.Profile),
+                    animate: controller.view.value == HomeView.Profile,
+                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
+                      if (controller.view.value == HomeView.Profile) {
+                        if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
+                          DeviceService.factoryReset();
+                        }
+                      }
+                    }),
+                  )),
             ),
             Container(
               width: Get.width * 0.20,
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
+              child: Obx(() => Swing(
+                  key: ValueKey(controller.view.value == HomeView.Activity),
+                  animate: controller.view.value == HomeView.Activity,
+                  child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex))),
             ),
-            HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
+            Obx(() => Flash(
+                key: ValueKey(controller.view.value == HomeView.Remote),
+                animate: controller.view.value == HomeView.Remote,
+                child: HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex))),
           ],
         ),
       ),
@@ -67,7 +84,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
 }
 
 /// @ Bottom Bar Button Widget
-class HomeBottomTabButton extends StatelessWidget {
+class HomeBottomTabButton extends GetView<HomeController> {
   final HomeView view;
   final void Function(int) onPressed;
   final void Function(int)? onLongPressed;
@@ -90,8 +107,10 @@ class HomeBottomTabButton extends StatelessWidget {
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
-                    child: AnimatedSlideSwitcher.fade(child: AssetController.getHomeTabBarIcon(view: view, isSelected: idx.value == view.index)),
-                    scale: idx.value == view.index ? 1.25 : 1.0,
+                    child: Container(
+                        key: ValueKey(idx.value == view.index),
+                        child: Icon(view.iconData, size: 34, color: idx.value == view.index ? Get.theme.primaryColor : Get.theme.hintColor)),
+                    scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),
         ));

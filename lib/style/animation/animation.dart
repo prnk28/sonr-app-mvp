@@ -61,77 +61,6 @@ class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateM
   }
 }
 
-/// @ Sonr Animated Wave Icon for Screen Transitions
-class AnimatedWaveIcon extends HookWidget {
-  // Properties
-  final IconData iconData;
-  final double size;
-  final Duration duration;
-  final Function? onCompleted;
-  final Gradient? gradient;
-
-  // Constructer
-  AnimatedWaveIcon(this.iconData, {this.gradient, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
-      : super(key: GlobalKey());
-
-  @override
-  Widget build(BuildContext context) {
-    // Hook Controller
-    final controller = useAnimationController(duration: Duration(seconds: 1));
-    final iconKey = GlobalKey();
-    controller.forward();
-
-    // Reactive to Progress
-    return Stack(
-      alignment: Alignment.center,
-      key: UniqueKey(),
-      children: <Widget>[
-        SizedBox(
-          height: size,
-          width: size,
-          child: AnimatedBuilder(
-            animation: controller,
-            builder: (BuildContext context, Widget? child) {
-              return CustomPaint(
-                painter: IconWavePainter(
-                  iconKey: iconKey,
-                  waveAnimation: controller,
-                  percent: controller.value,
-                  gradient: gradient != null ? gradient : SonrGradient.Progress,
-                  boxHeight: size,
-                ),
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: size,
-          width: size,
-          child: ShaderMask(
-            blendMode: BlendMode.srcOut,
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [SonrColor.White],
-              stops: [0.0],
-            ).createShader(bounds),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-              ),
-              child: Center(
-                child: Icon(
-                  iconData,
-                  size: size * 0.8,
-                  key: iconKey,
-                ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
 /// @ Sonr Ripples
 class AnimatedRipples extends HookWidget {
   const AnimatedRipples({
@@ -168,11 +97,9 @@ class AnimatedRipples extends HookWidget {
 }
 
 /// @ Animated Slide Switch
-
-enum SwitchType { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-
+enum _SwitchType { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
 class AnimatedSlideSwitcher extends StatelessWidget {
-  final SwitchType _animation;
+  final _SwitchType _animation;
   final Widget child;
   final Duration duration;
 
@@ -181,39 +108,39 @@ class AnimatedSlideSwitcher extends StatelessWidget {
 
   // * Factory Fade * //
   factory AnimatedSlideSwitcher.fade({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(SwitchType.Fade, child, duration);
+    return AnimatedSlideSwitcher(_SwitchType.Fade, child, duration);
   }
 
   // * Factory Slide Up * //
   factory AnimatedSlideSwitcher.slideUp({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(SwitchType.SlideUp, child, duration);
+    return AnimatedSlideSwitcher(_SwitchType.SlideUp, child, duration);
   }
 
   // * Factory Slide Down * //
   factory AnimatedSlideSwitcher.slideDown({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(SwitchType.SlideDown, child, duration);
+    return AnimatedSlideSwitcher(_SwitchType.SlideDown, child, duration);
   }
 
   // * Factory Slide Left * //
   factory AnimatedSlideSwitcher.slideLeft({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(SwitchType.SlideLeft, child, duration);
+    return AnimatedSlideSwitcher(_SwitchType.SlideLeft, child, duration);
   }
 
   // * Factory Slide Right * //
   factory AnimatedSlideSwitcher.slideRight({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(SwitchType.SlideRight, child, duration);
+    return AnimatedSlideSwitcher(_SwitchType.SlideRight, child, duration);
   }
 
   /// @ Build View Method
   @override
   Widget build(BuildContext context) {
     // Initialize Transition Map
-    Map<SwitchType, Widget Function(Widget, Animation<double>)> transitionMap = {
-      SwitchType.Fade: AnimatedSwitcher.defaultTransitionBuilder,
-      SwitchType.SlideDown: _slideTransition(0, -1),
-      SwitchType.SlideUp: _slideTransition(0, 1),
-      SwitchType.SlideLeft: _slideTransition(-1, 0),
-      SwitchType.SlideRight: _slideTransition(1, 0),
+    Map<_SwitchType, Widget Function(Widget, Animation<double>)> transitionMap = {
+      _SwitchType.Fade: AnimatedSwitcher.defaultTransitionBuilder,
+      _SwitchType.SlideDown: _slideTransition(0, -1),
+      _SwitchType.SlideUp: _slideTransition(0, 1),
+      _SwitchType.SlideLeft: _slideTransition(-1, 0),
+      _SwitchType.SlideRight: _slideTransition(1, 0),
     };
 
     // Return Switcher

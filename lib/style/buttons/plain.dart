@@ -41,10 +41,10 @@ class PlainButton extends StatelessWidget {
 }
 
 class PlainIconButton extends StatelessWidget {
-  final Function? onPressed;
-  final Widget? icon;
+  final Function onPressed;
+  final Widget icon;
 
-  const PlainIconButton({Key? key, this.onPressed, this.icon}) : super(key: key);
+  const PlainIconButton({Key? key, required this.onPressed, required this.icon}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     RxBool isPressed = false.obs;
@@ -57,7 +57,7 @@ class PlainIconButton extends StatelessWidget {
             onTapUp: (details) {
               pressed(false);
               Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
-                onPressed!();
+                onPressed();
               });
             },
             child: AnimatedScale(
@@ -78,10 +78,8 @@ class PlainIconButton extends StatelessWidget {
 
 class PlainTextButton extends StatelessWidget {
   final Function onPressed;
-  final String? text;
-  final Widget? child;
-  final WidgetPosition iconPosition;
-  const PlainTextButton({Key? key, required this.onPressed, this.text, this.child, this.iconPosition = WidgetPosition.Left}) : super(key: key);
+  final Widget text;
+  const PlainTextButton({Key? key, required this.onPressed, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +104,7 @@ class PlainTextButton extends StatelessWidget {
                   curve: Curves.ease,
                   child: Container(
                     padding: EdgeInsets.all(8),
-                    child: text!.h6_Grey,
+                    child: text,
                   )),
             ));
       }, isPressed),

@@ -28,7 +28,7 @@ class SonrScaffold extends StatelessWidget {
       extendBody: true,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      backgroundColor: UserService.isDarkMode ? SonrColor.Black.withOpacity(0.75) : SonrColor.White.withOpacity(0.75),
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
       body: Stack(
         children: [
@@ -36,17 +36,11 @@ class SonrScaffold extends StatelessWidget {
           _BackgroundGradient(gradient: gradient ?? SonrGradients.NorthMiracle),
 
           // Overlay Color
-          UserService.isDarkMode
-              ? Container(
-                  height: Get.height,
-                  width: Get.width,
-                  color: SonrColor.Black.withOpacity(0.85),
-                )
-              : Container(
-                  height: Get.height,
-                  width: Get.width,
-                  color: SonrColor.White.withOpacity(0.85),
-                ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Get.theme.scaffoldBackgroundColor,
+          ),
 
           // Blue
           BackdropFilter(
@@ -106,7 +100,7 @@ class _BackgroundGradient extends StatelessWidget {
         child: Container(
           height: Get.height,
           width: Get.width,
-          decoration: BoxDecoration(color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White, gradient: SonrGradients.NorthMiracle),
+          decoration: BoxDecoration(color: Get.theme.backgroundColor, gradient: SonrGradients.NorthMiracle),
         ),
       );
     } else {
@@ -115,7 +109,7 @@ class _BackgroundGradient extends StatelessWidget {
         child: Container(
           height: Get.height,
           width: Get.width,
-          decoration: BoxDecoration(color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White, gradient: SonrGradients.NorthMiracle),
+          decoration: BoxDecoration(color: Get.theme.backgroundColor, gradient: SonrGradients.NorthMiracle),
         ),
       );
     }

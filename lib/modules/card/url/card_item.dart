@@ -10,7 +10,9 @@ class URLCardItemView extends StatelessWidget {
     return GestureDetector(
       onTap: () => launchURL(item.url!.link),
       child: Container(
-        decoration: Neumorphic.floating(),
+        decoration: Neumorphic.floating(
+          theme: Get.theme,
+        ),
         child: Hero(
           tag: item.id,
           child: Container(

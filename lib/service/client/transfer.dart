@@ -31,11 +31,11 @@ class TransferService extends GetxService {
   // @ Use Camera for Media File //
   static Future<void> chooseCamera() async {
     // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (SonrFile file) async {
+    CameraView.open(onMediaSelected: (SonrFile file) async {
       await _handlePayload(Payload.MEDIA, file: file);
       // Shift Pages
       Get.offNamed("/transfer");
-    }), transition: Transition.downToUp);
+    });
   }
 
   static void chooseContact() async {
@@ -52,8 +52,22 @@ class TransferService extends GetxService {
 
     // Check File
     if (result != null) {
-      var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
-      await _handlePayload(Payload.MEDIA, file: file);
+      if (result.isSinglePick) {
+        var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
+        await _handlePayload(Payload.MEDIA, file: file);
+      }
+      // Multiple: Iterate Items
+      else {
+        // Initialize
+        var file = SonrFile(direction: SonrFile_Direction.Outgoing, payload: Payload.MULTI_FILES);
+
+        // Add Items
+        result.files.forEach((e) {
+          file.addItem(path: e.path!);
+        });
+
+        await _handlePayload(Payload.MULTI_FILES, file: file);
+      }
 
       // Shift Pages
       Get.offNamed("/transfer");
@@ -77,7 +91,7 @@ class TransferService extends GetxService {
     if (result != null) {
       // Check If Single
       if (result.isSinglePick) {
-        var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
+        var file = await SonrFileUtils.newWith(payload: Payload.FILE, path: result.files.first.path!);
         await _handlePayload(Payload.FILE, file: file);
       }
       // Multiple: Iterate Items
@@ -158,8 +172,9 @@ class TransferService extends GetxService {
     if (type == FileType.custom) {
       return await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: K_ALLOWED_FILE_TYPES,
         withData: true,
+        allowMultiple: true,
+        allowCompression: true,
       );
     }
 
@@ -168,6 +183,8 @@ class TransferService extends GetxService {
       return await FilePicker.platform.pickFiles(
         type: FileType.media,
         withData: true,
+        allowMultiple: true,
+        allowCompression: true,
       );
     }
   }

@@ -1,7 +1,7 @@
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/style/style.dart';
 import 'action_button.dart';
-import 'home_controller.dart';
+import '../home_controller.dart';
 
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override
@@ -43,8 +43,11 @@ class _HomeAppBarTitle extends GetView<HomeController> {
                 );
               }
             },
+            onLongPress: () {
+              UserService.toggleDarkMode();
+            },
             child: controller.title.value.headThree(
-              color: SonrColor.Black,
+              color: Get.theme.focusColor,
               weight: FontWeight.w800,
               align: TextAlign.start,
             ),
@@ -58,7 +61,7 @@ class _HomeAppBarSubtitle extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() => controller.view.value == HomeView.Main
         ? "Hi ${UserService.contact.value.firstName},".headThree(
-            color: SonrColor.Black,
+            color: Get.theme.focusColor,
             weight: FontWeight.w400,
             align: TextAlign.start,
           )
@@ -75,7 +78,7 @@ class _HomeSearchAppBar extends GetView<HomeController> implements PreferredSize
   @override
   Widget build(BuildContext context) {
     return FloatingSearchAppBar(
-      color: Color(0xfff0f6fa).withOpacity(0.85),
+      color: Get.theme.cardColor,
       controller: controller.searchBarController,
       height: kToolbarHeight + 64,
       padding: const EdgeInsets.only(left: 14.0, right: 14, top: 24.0, bottom: 8),

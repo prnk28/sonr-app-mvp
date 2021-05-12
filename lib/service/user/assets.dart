@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
 // # Lottie
@@ -36,66 +34,6 @@ extension LottieNetworkUtils on SonrAssetLottie {
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/60834598e3a2bf18b09c6f8a_37265-success-animation.json";
       case SonrAssetLottie.Denied:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6083451f8a710f4661f235b2_denied.json";
-    }
-  }
-}
-
-// # Icons
-enum SonrAssetIcon {
-  ProfileDefault,
-  RemoteDefault,
-  ActivityDefault,
-  HomeDefault,
-  ProfileSelected,
-  RemoteSelected,
-  ActivitySelected,
-  HomeSelected,
-}
-
-// @ Helper method to retreive asset
-extension IconNetworkUtils on SonrAssetIcon {
-  // Asset Link
-  String get link {
-    switch (this) {
-      case SonrAssetIcon.ProfileDefault:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c62ba9cc6da19b2e1c_profile_disabled.png";
-      case SonrAssetIcon.RemoteDefault:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c6c79f133f6cb48803_remote_disabled.png";
-      case SonrAssetIcon.ActivityDefault:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c60b61161eadad7829_alerts_disabled.png";
-      case SonrAssetIcon.HomeDefault:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c65649e1636c59765f_home_disabled.png";
-      case SonrAssetIcon.ProfileSelected:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c628657f5ab972ca26_profile.json";
-      case SonrAssetIcon.RemoteSelected:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c6dbeafa06b6229ba2_remote.json";
-      case SonrAssetIcon.ActivitySelected:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c69edbce00efbb6358_alerts.json";
-      case SonrAssetIcon.HomeSelected:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607877c614412d091631ce7a_home.json";
-      default:
-        return "";
-    }
-  }
-
-  Widget get widget {
-    switch (this) {
-      case SonrAssetIcon.ProfileDefault:
-        return AssetController.to._profileDefaultIcon;
-      case SonrAssetIcon.RemoteDefault:
-        return AssetController.to._remoteDefaultIcon;
-      case SonrAssetIcon.ActivityDefault:
-        return AssetController.to._activityDefaultIcon;
-      case SonrAssetIcon.HomeDefault:
-        return AssetController.to._homeDefaultIcon;
-      case SonrAssetIcon.ProfileSelected:
-        return AssetController.to._profileSelectIcon;
-      case SonrAssetIcon.RemoteSelected:
-        return AssetController.to._remoteSelectIcon;
-      case SonrAssetIcon.ActivitySelected:
-        return AssetController.to._activitySelectIcon;
-      case SonrAssetIcon.HomeSelected:
-        return AssetController.to._homeSelectIcon;
     }
   }
 }
@@ -304,27 +242,8 @@ class AssetController extends GetxController {
   Image _logoTop = Image.network(SonrAssetLogo.Top.link, width: 128, height: 128, fit: BoxFit.contain);
   Image _logoSide = Image.network(SonrAssetLogo.Top.link, height: 128, fit: BoxFit.contain);
 
-  // @ Icons: Tab Bar
-  ImageIcon _homeDefaultIcon = ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon _profileDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.ProfileDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon _activityDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.ActivityDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon _remoteDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.RemoteDefault.link), size: 38, color: Colors.grey[400], key: ValueKey<bool>(false));
-  LottieIcon _homeSelectIcon = LottieIcon(link: SonrAssetIcon.HomeSelected.link, size: 32, key: ValueKey<bool>(true));
-  LottieIcon _profileSelectIcon = LottieIcon(link: SonrAssetIcon.ProfileSelected.link, size: 32, key: ValueKey<bool>(true));
-  LottieIcon _activitySelectIcon = LottieIcon(link: SonrAssetIcon.ActivitySelected.link, size: 32, key: ValueKey<bool>(true));
-  LottieIcon _remoteSelectIcon = LottieIcon(link: SonrAssetIcon.RemoteSelected.link, size: 38, key: ValueKey<bool>(true));
-
   // * Constructer * //
   onReady() async {
-    // Load Icons
-    precacheImage(_homeDefaultIcon.image!, Get.context!);
-    precacheImage(_profileDefaultIcon.image!, Get.context!);
-    precacheImage(_activityDefaultIcon.image!, Get.context!);
-    precacheImage(_remoteDefaultIcon.image!, Get.context!);
-
     // Load Logos
     precacheImage(_logoTop.image, Get.context!);
     precacheImage(_logoSide.image, Get.context!);
@@ -341,20 +260,6 @@ class AssetController extends GetxController {
     precacheImage(_noAlerts.image, Get.context!);
     precacheImage(_noPeers.image, Get.context!);
     super.onReady();
-  }
-
-  /// @ Static Get Icon for Home Tab Bar
-  static Widget getHomeTabBarIcon({required HomeView view, required bool isSelected}) {
-    switch (view) {
-      case HomeView.Profile:
-        return isSelected ? to._profileSelectIcon : to._profileDefaultIcon;
-      case HomeView.Activity:
-        return isSelected ? to._activitySelectIcon : to._activityDefaultIcon;
-      case HomeView.Remote:
-        return isSelected ? to._remoteSelectIcon : to._remoteDefaultIcon;
-      default:
-        return isSelected ? to._homeSelectIcon : to._homeDefaultIcon;
-    }
   }
 
   //  ^ Get Random No Files Image

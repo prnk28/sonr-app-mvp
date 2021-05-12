@@ -1,16 +1,31 @@
+export 'add_social.dart';
+export 'edit_details.dart';
+export 'profile_controller.dart';
+export 'profile_view.dart';
+export 'avatar_field.dart';
+
+import 'dart:io';
+import 'package:camerawesome/camerawesome_plugin.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 // @ PeerStatus Enum
-enum ProfileViewStatus { Viewing, EditDetails, AddSocial, AddPicture }
+enum ProfileViewStatus { Viewing, EditDetails, AddSocial, AddPicture, ViewPicture, NeedCameraPermissions }
 
 extension ProfileViewStatusUtils on ProfileViewStatus {
   bool get isEditing => this == ProfileViewStatus.EditDetails;
   bool get isViewing => this == ProfileViewStatus.Viewing;
   bool get isAddingPicture => this == ProfileViewStatus.AddPicture;
   bool get isAddingSocial => this == ProfileViewStatus.AddSocial;
+  bool get hasPermissions => this != ProfileViewStatus.NeedCameraPermissions;
+  bool get hasCaptured => this == ProfileViewStatus.ViewPicture;
+
+  static ProfileViewStatus statusFromPermissions(bool val) {
+    return val ? ProfileViewStatus.AddPicture : ProfileViewStatus.NeedCameraPermissions;
+  }
 }
 
 class ProfileController extends GetxController {
@@ -25,14 +40,47 @@ class ProfileController extends GetxController {
   final editedLastName = RxString(UserService.contact.value.lastName);
   final editedPhone = RxString("");
 
-  // References
+  // Tile Management
   final step = Rx<TileStep?>(null);
   final pageController = PageController();
   final cardSelection = ValueNotifier<int>(0);
 
-  /// ** Initialize Method ** //
+  // Notifiers
+  ValueNotifier<CaptureModes> captureMode = ValueNotifier(CaptureModes.PHOTO);
+  ValueNotifier<Size> photoSize = ValueNotifier(Size(142, 142));
+  ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.FRONT);
+
+  // Properties
+  final result = Rx<File?>(null);
+
+  // References
+  late final PictureController _pictureController;
+
+  // ** Initialize Method ** //
   onInit() async {
+    _pictureController = PictureController();
     super.onInit();
+  }
+
+  /// @ Method to Capture Picture
+  captureAvatar() async {
+    // Set Path
+    var temp = await getApplicationDocumentsDirectory();
+    var photoDir = await Directory('${temp.path}/photos').create(recursive: true);
+    var path = '${photoDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    // Capture Photo
+    await _pictureController.takePicture(path);
+    result(File(path));
+    status(ProfileViewStatus.ViewPicture);
+  }
+
+  /// @ Method to Confirm New Picture
+  confirmAvatar() async {
+    if (result.value != null) {
+      UserService.contact.setPicture(result.value!.readAsBytesSync());
+    }
+    exitToViewing();
   }
 
   /// @ Start Editing Picture
@@ -192,5 +240,14 @@ class ProfileController extends GetxController {
   toggleExpand(int index, bool isExpanded) {
     focused(FocusedTile(index, isExpanded));
     update(['social-grid']);
+  }
+
+  // @ Method to Request Camera Permissions
+  requestCamera() async {
+    if (DeviceService.isMobile) {
+      var granted = await Permission.camera.request().isGranted;
+      Get.find<MobileService>().updatePermissionsStatus();
+      status(ProfileViewStatusUtils.statusFromPermissions(granted));
+    }
   }
 }
