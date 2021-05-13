@@ -138,7 +138,7 @@ class _SocialUserSearchSuggestion extends StatelessWidget {
               print(user!.toString());
             },
             child: Container(
-              child: Image.network(user!.pictureLink),
+              child: Image.network(user!.picture.url),
             )),
       ),
     );

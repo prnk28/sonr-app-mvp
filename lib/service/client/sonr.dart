@@ -256,7 +256,7 @@ class SonrService extends GetxService {
   static void sendFlat(Peer? peer) async {
     // Send Invite
     if (to._node != null) {
-      to._node!.invite(InviteRequestUtils.newContact(contact: UserService.contact.value, to: peer!, isFlat: true));
+      to._node!.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
   }
 
