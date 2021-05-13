@@ -24,9 +24,9 @@ class TileStep {
   bool get hasProvider => _provider != null;
 
   // @ Form -> User Data
-  SocialUser? _user;
-  SocialUser? get user => _user;
-  set user(SocialUser? s) => _user;
+  Contact_Social_User? _user;
+  Contact_Social_User? get user => _user;
+  set user(Contact_Social_User? s) => _user;
   bool get hasUser => _user != null;
 
   // @ Form -> Privacy

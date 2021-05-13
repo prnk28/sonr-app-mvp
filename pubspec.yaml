@@ -31,6 +31,7 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
+  biometric_storage: ^2.0.2
   environment_config: ^3.0.0
   file_picker: ^3.0.1
   flutter_hooks: ^0.16.0

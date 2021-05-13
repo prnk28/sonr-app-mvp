@@ -6,14 +6,14 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 class SocialUserSearchField extends StatefulWidget {
   final String? value;
   final ValueChanged<String>? onChanged;
-  final Function(SocialUser?)? onEditingComplete;
+  final Function(Contact_Social_User?)? onEditingComplete;
   final Iterable<String>? autofillHints;
   final Contact_Social_Provider? provider;
 
   factory SocialUserSearchField.medium({
     String? value,
     ValueChanged<String>? onChanged,
-    Function(SocialUser)? onEditingComplete,
+    Function(Contact_Social_User)? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
@@ -23,7 +23,7 @@ class SocialUserSearchField extends StatefulWidget {
   factory SocialUserSearchField.twitter({
     required String value,
     ValueChanged<String>? onChanged,
-    Function(SocialUser)? onEditingComplete,
+    Function(Contact_Social_User)? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
@@ -33,7 +33,7 @@ class SocialUserSearchField extends StatefulWidget {
   factory SocialUserSearchField.youtube({
     required String value,
     ValueChanged<String>? onChanged,
-    Function(SocialUser)? onEditingComplete,
+    Function(Contact_Social_User)? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
@@ -54,7 +54,7 @@ class SocialUserSearchField extends StatefulWidget {
 
 class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
   SocialUserSearchResult? result;
-  SocialUser? selectedUser;
+  Contact_Social_User? selectedUser;
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +122,8 @@ class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
 }
 
 class _SocialUserSearchSuggestion extends StatelessWidget {
-  final SocialUser? user;
-  final Function(SocialUser) onSelected;
+  final Contact_Social_User? user;
+  final Function(Contact_Social_User) onSelected;
 
   const _SocialUserSearchSuggestion(this.user, {Key? key, required this.onSelected}) : super(key: key);
   @override
@@ -135,10 +135,10 @@ class _SocialUserSearchSuggestion extends StatelessWidget {
         height: 100,
         child: PlainButton(
             onPressed: () {
-              user!.read();
+              print(user!.toString());
             },
             child: Container(
-              child: Image.network(user!.pictureLink!),
+              child: Image.network(user!.pictureLink),
             )),
       ),
     );
