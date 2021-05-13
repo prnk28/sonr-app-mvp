@@ -42,7 +42,7 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          _node!.update(position: MobileService.position.value);
+          _node!.update(Request.newUpdatePosition(MobileService.position.value));
         }
       }
     });
@@ -66,7 +66,7 @@ class SonrService extends GetxService {
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
       // Create Request
-      var connReq = await RequestUtility.newRequest(
+      var connReq = await Request.newConnection(
         geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
         contact: UserService.contact.value,
@@ -92,7 +92,7 @@ class SonrService extends GetxService {
   Future<void> connect() async {
     if (_node == null) {
       // Create Request
-      var connReq = await RequestUtility.newRequest(
+      var connReq = await Request.newConnection(
         geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
         contact: UserService.contact.value,
@@ -114,7 +114,7 @@ class SonrService extends GetxService {
 
       // Update for Mobile
       if (DeviceService.isMobile) {
-        _node!.update(position: MobileService.position.value);
+        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     } else {
       if (_status.value == Status.IDLE) {
@@ -123,7 +123,7 @@ class SonrService extends GetxService {
 
         // Update for Mobile
         if (DeviceService.isMobile) {
-          _node!.update(position: MobileService.position.value);
+          _node!.update(Request.newUpdatePosition(MobileService.position.value));
         }
       }
     }
@@ -132,7 +132,7 @@ class SonrService extends GetxService {
   /// @ Connect to Service Method
   Future<void> connectNewUser(Contact? contact) async {
     // Create Request
-    var connReq = await RequestUtility.newRequest(
+    var connReq = await Request.newConnection(
       geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
       ipLocation: await DeviceService.findIPLocation(),
       contact: UserService.contact.value,
@@ -156,7 +156,7 @@ class SonrService extends GetxService {
 
       // Update for Mobile
       if (DeviceService.isMobile) {
-        _node!.update(position: MobileService.position.value);
+        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
   }
@@ -218,7 +218,7 @@ class SonrService extends GetxService {
       to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
 
       if (to._node != null) {
-        to._node!.update(properties: to._properties.value);
+        to._node!.update(Request.newUpdateProperties(to._properties.value));
       }
     }
   }
@@ -226,7 +226,7 @@ class SonrService extends GetxService {
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (to._node != null) {
-      to._node!.update(contact: contact);
+      to._node!.update(Request.newUpdateContact(contact));
     }
   }
 
@@ -280,7 +280,7 @@ class SonrService extends GetxService {
 
       // Handle Available
       if (DeviceService.isMobile) {
-        _node!.update(position: MobileService.position.value);
+        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
   }
