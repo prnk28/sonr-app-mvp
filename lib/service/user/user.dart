@@ -49,24 +49,34 @@ class UserService extends GetxService {
 
     // Check if Exists
     if (_hasUser.value) {
-      // Get Json Value
-      var profileJson = _userBox.read("user");
-      var user = User.fromJson(profileJson);
+      try {
+        var profileJson = _userBox.read("user");
+        var user = User.fromJson(profileJson);
 
-      // Set Contact Values
-      _user(user);
-      _contact(user.contact);
-      _isNewUser(false);
+        // Set Contact Values
+        _user(user);
+        _contact(user.contact);
+        _isNewUser(false);
 
-      // Configure Sentry
-      Sentry.configureScope((scope) => scope.user = SentryUser(
-            id: '1234',
-            username: _contact.value.username,
-            extras: {
-              "firstName": _contact.value.firstName,
-              "lastName": _contact.value.lastName,
-            },
-          ));
+        // Configure Sentry
+        Sentry.configureScope((scope) => scope.user = SentryUser(
+              id: '1234',
+              username: _contact.value.username,
+              extras: {
+                "firstName": _contact.value.firstName,
+                "lastName": _contact.value.lastName,
+              },
+            ));
+      } catch (e) {
+        // Delete User
+        _userBox.remove('user');
+        _hasUser(false);
+        _isNewUser(true);
+
+        // Clear Database
+        CardService.deleteAllCards();
+        CardService.clearAllActivity();
+      }
     } else {
       _isNewUser(true);
     }
@@ -106,11 +116,6 @@ class UserService extends GetxService {
     await to._userBox.write("user", permUser.writeToJson());
     to._hasUser(true);
     return to._user.value;
-  }
-
-  // # Resets User Data
-  static void reset() async {
-    to._userBox.remove('user');
   }
 
   /// @ Trigger iOS Local Network with Alert

@@ -125,16 +125,6 @@ class DeviceService extends GetxService {
       await OpenFile.open(file.single.path);
     }
   }
-
-  static void factoryReset({bool redirect = false}) {
-    UserService.reset();
-    CardService.deleteAllCards();
-    CardService.clearAllActivity();
-
-    if (redirect) {
-      Get.offAllNamed("/register");
-    }
-  }
 }
 
 /// @ Asset Sound Types

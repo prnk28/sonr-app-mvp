@@ -53,13 +53,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
                     spins: 1,
                     key: ValueKey(controller.view.value == HomeView.Profile),
                     animate: controller.view.value == HomeView.Profile,
-                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex, onLongPressed: (index) async {
-                      if (controller.view.value == HomeView.Profile) {
-                        if (await SonrOverlay.question(title: "Factory Reset", description: "Would you like to erase all data?")) {
-                          DeviceService.factoryReset();
-                        }
-                      }
-                    }),
+                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
                   )),
             ),
             Container(
