@@ -246,9 +246,9 @@ class SonrService extends GetxService {
   }
 
   /// @ Respond-Peer Event
-  static void respond(bool decision, {RemoteInfo? info}) async {
+  static void respond(bool decision, Peer peer, {RemoteInfo? info}) async {
     if (to._node != null) {
-      to._node!.respond(decision, info: info);
+      to._node!.respond(decision, peer, info: info);
     }
   }
 
