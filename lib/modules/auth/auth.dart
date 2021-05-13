@@ -11,10 +11,12 @@ class InviteOverlayView extends StatelessWidget {
   const InviteOverlayView({required this.invite, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      color: Colors.transparent,
-      child: _buildView(),
+    return BounceInDown(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        color: Colors.transparent,
+        child: _buildView(),
+      ),
     );
   }
 
