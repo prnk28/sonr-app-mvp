@@ -29,7 +29,7 @@ class TileController extends GetxController {
     }
     // Youtube Data
     else if (tile.provider == Contact_Social_Provider.YouTube) {
-      youtube(await YoutubeController.searchVideo(tile.links.postLink.link));
+      youtube(await YoutubeController.searchVideo(tile.links.postLink.url));
       isFetched(true);
     }
   }

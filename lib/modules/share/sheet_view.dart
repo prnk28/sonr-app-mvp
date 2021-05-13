@@ -184,7 +184,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.url));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
@@ -232,7 +232,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.url));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
@@ -260,7 +260,7 @@ class _ShareItemURL extends StatelessWidget {
 
     return GestureDetector(
       onLongPress: () {
-        Clipboard.setData(ClipboardData(text: data.link));
+        Clipboard.setData(ClipboardData(text: data.url));
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(

@@ -13,15 +13,15 @@ class TransferService extends GetxService {
   final _shareTitle = "Sharing".obs;
   final _payload = Payload.NONE.obs;
   final _inviteRequest = InviteRequest().obs;
-  final _sonrFile = SonrFile().obs;
+  final _file = SonrFile().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
+  static RxString get shareTitle => to._shareTitle;
   static Rx<Payload> get payload => to._payload;
   static Rx<InviteRequest> get inviteRequest => to._inviteRequest;
-  static Rx<SonrFile> get file => to._sonrFile;
+  static Rx<SonrFile> get file => to._file;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
-  static RxString get shareTitle => to._shareTitle;
 
   /// @ Initialize Service
   Future<TransferService> init() async {
@@ -59,14 +59,14 @@ class TransferService extends GetxService {
       // Multiple: Iterate Items
       else {
         // Initialize
-        var file = SonrFile(direction: SonrFile_Direction.Outgoing, payload: Payload.MULTI_FILES);
+        var file = SonrFile(payload: Payload.FILES);
 
         // Add Items
         result.files.forEach((e) {
           file.addItem(path: e.path!);
         });
 
-        await _handlePayload(Payload.MULTI_FILES, file: file);
+        await _handlePayload(Payload.FILES, file: file);
       }
 
       // Shift Pages
@@ -97,14 +97,14 @@ class TransferService extends GetxService {
       // Multiple: Iterate Items
       else {
         // Initialize
-        var file = SonrFile(direction: SonrFile_Direction.Outgoing, payload: Payload.MULTI_FILES);
+        var file = SonrFile(payload: Payload.FILES);
 
         // Add Items
         result.files.forEach((e) {
           file.addItem(path: e.path!);
         });
 
-        await _handlePayload(Payload.MULTI_FILES, file: file);
+        await _handlePayload(Payload.FILES, file: file);
       }
       // Shift Pages
       Get.offNamed("/transfer");
@@ -136,17 +136,17 @@ class TransferService extends GetxService {
     // Check for File
     if (to._payload.value.isTransfer) {
       to._inviteRequest.init(payload, file: file);
-      to._sonrFile(file!);
-      to._shareTitle("Sharing " + to._sonrFile.value.prettyType());
+      to._file(file!);
+      to._shareTitle("Sharing " + to._file.value.prettyType());
 
       // Check for Media
       if (to._inviteRequest.isMedia) {
         // Set File Item
         to._thumbStatus(ThumbnailStatus.Loading);
-        await to._sonrFile.value.setThumbnail();
+        await to._file.value.setThumbnail();
 
         // Check Result
-        if (to._sonrFile.value.single.hasThumbnail()) {
+        if (to._file.value.single.hasThumbnail()) {
           to._thumbStatus(ThumbnailStatus.Complete);
         } else {
           to._thumbStatus(ThumbnailStatus.None);

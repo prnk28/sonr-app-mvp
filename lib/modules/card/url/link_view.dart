@@ -45,7 +45,7 @@ class URLLinkView extends StatelessWidget {
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: data.link.url,
+                  child: data.url.url,
                 ),
               )
             ])),
@@ -55,17 +55,17 @@ class URLLinkView extends StatelessWidget {
 
   /// Launch URL from URLLink
   void _copyURL() async {
-    if (enableCopy && data.link.isURL) {
-      Clipboard.setData(ClipboardData(text: data.link));
+    if (enableCopy && data.url.isURL) {
+      Clipboard.setData(ClipboardData(text: data.url));
       SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
     }
   }
 
   /// Launch URL from URLLink
   Future<void> _launchURL() async {
-    if (enableLaunch && data.link.isURL) {
-      if (await canLaunch(data.link)) {
-        await launch(data.link);
+    if (enableLaunch && data.url.isURL) {
+      if (await canLaunch(data.url)) {
+        await launch(data.url);
       } else {
         SonrSnack.error("Could not launch the URL.");
       }

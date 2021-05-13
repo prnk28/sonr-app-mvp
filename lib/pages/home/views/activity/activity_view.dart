@@ -71,7 +71,7 @@ class _ActivityListItem extends StatelessWidget {
   }
 
   String _description(TransferCardActivity activity) {
-    if (activity.payload == Payload.MULTI_FILES) {
+    if (activity.payload == Payload.FILES) {
       return " some Files"; //+ " from ${card.owner.firstName}";
     } else if (activity.payload == Payload.FILE || activity.payload == Payload.MEDIA) {
       return " a " + activity.mime.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";

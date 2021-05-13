@@ -11,13 +11,6 @@ import 'lobby.dart';
 import '../user/user.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-extension StatusUtils on Status {
-  bool get isNotConnected => this == Status.IDLE;
-  bool get isConnecting => this == Status.IDLE || this == Status.CONNECTED;
-  bool get isConnected => this != Status.IDLE;
-  bool get isReady => this == Status.BOOTSTRAPPED;
-}
-
 class SonrService extends GetxService {
   // Accessors
   static bool get isInitialized => to._node != null;
@@ -179,9 +172,9 @@ class SonrService extends GetxService {
   static Future<URLLink> getURL(String url) async {
     if (to._node != null) {
       var link = await to._node!.getURL(url);
-      return link ?? URLLink(link: url);
+      return link ?? URLLink(url: url);
     }
-    return URLLink(link: url);
+    return URLLink(url: url);
   }
 
   /// @ Request Local Network Access on iOS
@@ -262,10 +255,8 @@ class SonrService extends GetxService {
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     // Send Invite
-    InviteRequest request = InviteRequest(payload: Payload.FLAT_CONTACT, to: peer, isRemote: false, contact: UserService.contact.value);
-
     if (to._node != null) {
-      to._node!.invite(request);
+      to._node!.invite(InviteRequestUtils.newContact(contact: UserService.contact.value, to: peer!, isFlat: true));
     }
   }
 
