@@ -219,9 +219,9 @@ class CardService extends GetxService {
   _handleAcceptTransfer(AuthInvite invite) {
     // Check for Remote
     if (invite.hasRemote()) {
-      SonrService.respond(true, invite.from, info: invite.remote);
+      SonrService.respond(invite.newAcceptReply());
     } else {
-      SonrService.respond(true, invite.from);
+      SonrService.respond(invite.newAcceptReply());
     }
 
     // Switch View
@@ -248,9 +248,9 @@ class CardService extends GetxService {
 // @ Handle Decline Transfer Response
   _handleDeclineTransfer(AuthInvite invite) {
     if (invite.hasRemote()) {
-      SonrService.respond(false, invite.from, info: invite.remote);
+      SonrService.respond(invite.newDeclineReply());
     } else {
-      SonrService.respond(false, invite.from);
+      SonrService.respond(invite.newDeclineReply());
     }
     SonrOverlay.back();
   }
@@ -264,9 +264,9 @@ class CardService extends GetxService {
     if (sendBackContact) {
       // Check for Remote
       if (invite.hasRemote()) {
-        SonrService.respond(true, invite.from, info: invite.remote);
+        SonrService.respond(invite.newAcceptReply());
       } else {
-        SonrService.respond(true, invite.from);
+        SonrService.respond(invite.newAcceptReply());
       }
     }
 
