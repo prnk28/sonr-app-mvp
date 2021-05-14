@@ -126,7 +126,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
               decoration: Neumorphic.indented(theme: Get.theme),
               clipBehavior: Clip.hardEdge,
               child: Image.memory(
-                Uint8List.fromList(TransferService.file.value.single.thumbnail),
+                TransferService.file.value.single.thumbnail!,
                 fit: BoxFit.cover,
               )),
         );

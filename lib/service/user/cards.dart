@@ -198,7 +198,7 @@ class CardService extends GetxService {
 
   /// @ Load SonrFile from Metadata
   static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
-    return SonrFileUtils.newWithItem(metadata);
+    return metadata.toSonrFile();
   }
 
   /// @ Handles User Invite Response

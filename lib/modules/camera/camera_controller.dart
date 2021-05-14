@@ -59,7 +59,7 @@ class CameraController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(photoCapturePath);
-    result(SonrFileUtils.newWith(path: photoCapturePath));
+    result(MetadataUtils.newItem(path: photoCapturePath).toSonrFile());
     hasCaptured(true);
     status(CameraViewStatus.Preview);
   }
@@ -86,7 +86,7 @@ class CameraController extends GetxController {
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
     await videoController.recordVideo(videoCapturePath);
-    result(SonrFileUtils.newWith(path: videoCapturePath));
+    result(MetadataUtils.newItem(path: videoCapturePath).toSonrFile());
     videoInProgress(true);
 
     _stopwatch.start();

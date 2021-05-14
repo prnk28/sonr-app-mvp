@@ -52,22 +52,8 @@ class TransferService extends GetxService {
 
     // Check File
     if (result != null) {
-      if (result.isSinglePick) {
-        var file = await SonrFileUtils.newWith(payload: Payload.MEDIA, path: result.files.first.path!);
-        await _handlePayload(Payload.MEDIA, file: file);
-      }
-      // Multiple: Iterate Items
-      else {
-        // Initialize
-        var file = SonrFile(payload: Payload.FILES);
-
-        // Add Items
-        result.files.forEach((e) {
-          file.addItem(path: e.path!);
-        });
-
-        await _handlePayload(Payload.FILES, file: file);
-      }
+      var file = result.toSonrFile(payload: Payload.MEDIA);
+      await _handlePayload(Payload.MEDIA, file: file);
 
       // Shift Pages
       Get.offNamed("/transfer");
@@ -89,24 +75,8 @@ class TransferService extends GetxService {
 
     // Check File
     if (result != null) {
-      // Check If Single
-      if (result.isSinglePick) {
-        var file = await SonrFileUtils.newWith(payload: Payload.FILE, path: result.files.first.path!);
-        await _handlePayload(Payload.FILE, file: file);
-      }
-      // Multiple: Iterate Items
-      else {
-        // Initialize
-        var file = SonrFile(payload: Payload.FILES);
-
-        // Add Items
-        result.files.forEach((e) {
-          file.addItem(path: e.path!);
-        });
-
-        await _handlePayload(Payload.FILES, file: file);
-      }
-      // Shift Pages
+      var file = result.toSonrFile(payload: Payload.MEDIA);
+      await _handlePayload(Payload.MEDIA, file: file);
       Get.offNamed("/transfer");
     }
   }
@@ -134,9 +104,10 @@ class TransferService extends GetxService {
     to._payload(payload);
 
     // Check for File
-    if (to._payload.value.isTransfer) {
+    if (to._payload.value.isTransfer && file != null) {
+      file.update();
       to._inviteRequest.init(payload, file: file);
-      to._file(file!);
+      to._file(file);
       to._shareTitle("Sharing " + to._file.value.prettyType());
 
       // Check for Media
