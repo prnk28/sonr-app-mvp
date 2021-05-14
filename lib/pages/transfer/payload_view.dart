@@ -3,16 +3,80 @@ import 'package:sonr_app/style/style.dart';
 class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(8),
-        decoration: Neumorphic.floating(
-          theme: Get.theme,
-        ),
-        child: Container(height: Height.ratio(0.15), child: _PayloadListItem()));
+    return TransferService.payload.value.isMultipleFiles
+        // Build List View
+        ? DraggableScrollableSheet(
+            expand: false,
+            initialChildSize: 0.15,
+            maxChildSize: 0.5,
+            minChildSize: 0.15,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Container(
+                child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: TransferService.file.value.files.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _SonrFileListItem(item: TransferService.file.value.files[index]);
+                    }),
+              );
+            })
+        :
+        // Build Single Item
+        Container(
+            padding: EdgeInsets.all(8),
+            decoration: Neumorphic.floating(
+              theme: Get.theme,
+            ),
+            child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
   }
 }
 
-class _PayloadListItem extends StatelessWidget {
+class _SonrFileListItem extends StatelessWidget {
+  final SonrFile_Metadata item;
+
+  const _SonrFileListItem({Key? key, required this.item}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
+      child: Row(children: [
+        item.mime.type.gradient(size: Height.ratio(0.125)),
+        _buildTitle(),
+        Container(
+          padding: EdgeInsets.only(left: 8),
+          alignment: Alignment.topRight,
+          child: PlainIconButton(
+            onPressed: () {},
+            icon: SonrIcons.MoreVertical.gradient(value: SonrGradient.Primary),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _buildTitle() {
+    // Build Text View
+    return Container(
+        width: Width.ratio(0.5),
+        height: Height.ratio(0.15),
+        padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: item.prettyName().h6,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: item.prettySize().p_Grey,
+          )
+        ]));
+  }
+}
+
+class _PayloadSingleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -53,7 +53,7 @@ class TransferService extends GetxService {
     // Check File
     if (result != null) {
       var file = result.toSonrFile(payload: Payload.MEDIA);
-      await _handlePayload(Payload.MEDIA, file: file);
+      await _handlePayload(file.payload, file: file);
 
       // Shift Pages
       Get.offNamed("/transfer");
@@ -62,7 +62,7 @@ class TransferService extends GetxService {
 
   // @ Select Media File //
   static Future<void> chooseMediaExternal(SonrFile file) async {
-    await _handlePayload(Payload.MEDIA, file: file);
+    await _handlePayload(file.payload, file: file);
 
     // Shift Pages
     Get.offNamed("/transfer");
@@ -76,7 +76,7 @@ class TransferService extends GetxService {
     // Check File
     if (result != null) {
       var file = result.toSonrFile(payload: Payload.MEDIA);
-      await _handlePayload(Payload.MEDIA, file: file);
+      await _handlePayload(file.payload, file: file);
       Get.offNamed("/transfer");
     }
   }
