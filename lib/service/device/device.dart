@@ -117,11 +117,34 @@ class DeviceService extends GetxService {
 
   /// @ Saves Received Media to Gallery by Platform
   static Future<void> saveTransfer(SonrFile file) async {
+    // Save to Gallery for Mobile
     if (isMobile) {
-      for (SonrFile_Metadata meta in file.files) {
-        await MobileService.saveTransfer(meta);
+      // Save All Files
+      bool result = true;
+      int mediaCount = 0;
+      file.files.forEach((meta) async {
+        if (meta.mime.isPhotoVideo) {
+          mediaCount += 1;
+          result = await MobileService.saveTransfer(meta);
+        }
+      });
+
+      // Get Title
+      var title = mediaCount == file.count ? "Media" : "Transfer";
+      if (file.isSingle) {
+        title = file.single.mime.isImage ? "Photo" : "Video";
       }
-    } else {
+
+      // Check Result
+      if (result) {
+        SonrSnack.success("Succesfully Received $title!");
+      } else {
+        SonrSnack.error("Unable to save $title to your Gallery");
+      }
+    }
+
+    // Open First File for Desktop
+    else {
       await OpenFile.open(file.single.path);
     }
   }

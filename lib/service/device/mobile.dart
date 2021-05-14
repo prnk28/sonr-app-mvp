@@ -214,10 +214,8 @@ class MobileService extends GetxService {
       // Visualize Result
       if (asset != null) {
         meta.id = asset.id;
-        SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
         return await asset.exists;
       } else {
-        SonrSnack.error("Unable to save Photo to your Gallery");
         return false;
       }
     }
@@ -230,10 +228,8 @@ class MobileService extends GetxService {
       // Visualize Result
       if (asset != null) {
         meta.id = asset.id;
-        SonrSnack.success("Saved Transferred Video to your Device's Gallery");
         return await asset.exists;
       } else {
-        SonrSnack.error("Unable to save Video to your Gallery");
         return false;
       }
     }
