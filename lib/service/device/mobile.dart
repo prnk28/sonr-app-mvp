@@ -203,7 +203,7 @@ class MobileService extends GetxService {
   }
 
   /// @ Saves Received Media to Gallery
-  static Future<bool> saveTransfer(SonrFile_Metadata meta) async {
+  static Future<bool> saveTransfer(SonrFile_Item meta) async {
     // Initialize
     AssetEntity? asset;
 

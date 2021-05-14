@@ -14,9 +14,9 @@ class PayloadSheetView extends StatelessWidget {
               return Container(
                 child: ListView.builder(
                     controller: scrollController,
-                    itemCount: TransferService.file.value.files.length,
+                    itemCount: TransferService.file.value.items.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return _SonrFileListItem(item: TransferService.file.value.files[index]);
+                      return _SonrFileListItem(item: TransferService.file.value.items[index]);
                     }),
               );
             })
@@ -32,7 +32,7 @@ class PayloadSheetView extends StatelessWidget {
 }
 
 class _SonrFileListItem extends StatelessWidget {
-  final SonrFile_Metadata item;
+  final SonrFile_Item item;
 
   const _SonrFileListItem({Key? key, required this.item}) : super(key: key);
   @override

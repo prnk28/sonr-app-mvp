@@ -185,7 +185,7 @@ class CardService extends GetxService {
   }
 
   /// @ Load IO File from Metadata
-  static Future<File> loadFileFromMetadata(SonrFile_Metadata metadata) async {
+  static Future<File> loadFileFromMetadata(SonrFile_Item metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     if (asset != null) {
       var file = await asset.file;
@@ -197,7 +197,7 @@ class CardService extends GetxService {
   }
 
   /// @ Load SonrFile from Metadata
-  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
+  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Item metadata) async {
     return metadata.toSonrFile();
   }
 

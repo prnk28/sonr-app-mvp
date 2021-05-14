@@ -122,7 +122,7 @@ class DeviceService extends GetxService {
       // Save All Files
       bool result = true;
       int mediaCount = 0;
-      file.files.forEach((meta) async {
+      file.items.forEach((meta) async {
         if (meta.mime.isPhotoVideo) {
           mediaCount += 1;
           result = await MobileService.saveTransfer(meta);

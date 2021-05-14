@@ -37,16 +37,18 @@ extension MediaOrientationUtils on MediaOrientation {
 extension FilePickerResultUtils on FilePickerResult {
   /// Converts Picker Result into SonrFile
   SonrFile toSonrFile({required Payload payload}) {
-    var file = SonrFile(payload: this.isSinglePick ? payload : Payload.FILES, files: this._toSonrFileItems());
+    var file = SonrFile(payload: this.isSinglePick ? payload : Payload.FILES, items: this._toSonrFileItems());
     file.update();
     return file;
   }
 
-  /// Converts Picker Items into SonrFile_Metadata Items
-  List<SonrFile_Metadata> _toSonrFileItems() {
-    var items = <SonrFile_Metadata>[];
-    this.files.forEach((f) {
-      items.add(MetadataUtils.newItem(path: f.path!));
+  /// Converts Picker Items into SonrFile_Item Items
+  List<SonrFile_Item> _toSonrFileItems() {
+    var items = <SonrFile_Item>[];
+    this.paths.forEach((p) {
+      if (p != null) {
+        items.add(MetadataUtils.newItem(path: p));
+      }
     });
     return items;
   }
@@ -58,12 +60,12 @@ extension SharedMediaFileUtils on List<SharedMediaFile> {
 
   /// Returns List of SharedMediaFile as SonrFile
   SonrFile toSonrFile() {
-    return SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, files: this._toSonrFileItems());
+    return SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: this._toSonrFileItems());
   }
 
-  /// Converts Picker Items into SonrFile_Metadata Items
-  List<SonrFile_Metadata> _toSonrFileItems() {
-    var items = <SonrFile_Metadata>[];
+  /// Converts Picker Items into SonrFile_Item Items
+  List<SonrFile_Item> _toSonrFileItems() {
+    var items = <SonrFile_Item>[];
     this.forEach((f) {
       items.add(MetadataUtils.newItem(
         path: f.path,
