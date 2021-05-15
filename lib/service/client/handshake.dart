@@ -10,7 +10,7 @@ class HandshakeService extends GetxService {
 
   /// Initializes Handshake Service
   Future<HandshakeService> init() async {
-    var resp = await client.getNameserverSettings();
+    var resp = await client.initialize();
     if (resp.success) {
       records(resp.records);
     }
@@ -32,8 +32,13 @@ class _NamebaseClient extends GetConnect {
       {'Authorization': 'Basic $_AUTHORIZATION', 'Accept': 'application/json', 'Content-Type': 'application/json'};
 
   // Returns Auth Headers
-  Future<HSResponse> getNameserverSettings() async {
+  Future<HSResponse> initialize() async {
     var resp = await get(_BASE_URL + _NAME_DNS_POINT, headers: _AUTH_HEADERS);
     return HSResponse.fromJson(resp.body);
+  }
+
+  Future<bool> register() async {
+
+    return true;
   }
 }

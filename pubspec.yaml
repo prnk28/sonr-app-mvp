@@ -51,6 +51,7 @@ dependencies:
   geolocator: ^7.0.3
   motion_sensors: ^0.1.0
   permission_handler: ^7.1.0
+  platform_device_id: ^1.0.1
   url_launcher: ^6.0.3
   warble: ^0.0.2
 
