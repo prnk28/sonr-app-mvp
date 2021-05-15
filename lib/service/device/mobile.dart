@@ -35,7 +35,6 @@ class MobileService extends GetxService {
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
-  final _location = Rx<Location_Geo>(Location_Geo());
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -85,8 +84,9 @@ class MobileService extends GetxService {
     _audioPlayer.disableLog();
     await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
 
-    // Set Permissions Status
-    updatePermissionsStatus();
+    // Update Device Values
+    await updatePermissionsStatus();
+    await updateLocation();
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {
@@ -154,11 +154,10 @@ class MobileService extends GetxService {
   }
 
   /// @ Refresh User Location Position
-  static Future<Location_Geo?> currentLocation() async {
+  static Future<void> updateLocation() async {
     if (to._hasLocation.value) {
       var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
-      to._location(Location_Geo(latitude: result.latitude, longitude: result.longitude));
-      return to._location.value;
+      DeviceService.setGeoLocation(Location_Geo(latitude: result.latitude, longitude: result.longitude));
     } else {
       print("No Location Permissions");
       return null;
@@ -239,7 +238,7 @@ class MobileService extends GetxService {
   }
 
   /// @ Update Method
-  void updatePermissionsStatus() async {
+  Future<void> updatePermissionsStatus() async {
     _hasCamera(await Permission.camera.isGranted);
     _hasLocation(await Permission.locationWhenInUse.isGranted);
     _hasMicrophone(await Permission.microphone.isGranted);

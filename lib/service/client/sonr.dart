@@ -66,10 +66,10 @@ class SonrService extends GetxService {
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
       // Create Request
-      var connReq = await Request.newConnection(
-        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
-        ipLocation: await DeviceService.findIPLocation(),
+      var connReq = ConnectionRequest(
         contact: UserService.contact.value,
+        device: DeviceService.device,
+        location: DeviceService.location,
       );
 
       // Create Node
@@ -92,10 +92,10 @@ class SonrService extends GetxService {
   Future<void> connect() async {
     if (_node == null) {
       // Create Request
-      var connReq = await Request.newConnection(
-        geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
-        ipLocation: await DeviceService.findIPLocation(),
+      var connReq = ConnectionRequest(
         contact: UserService.contact.value,
+        device: DeviceService.device,
+        location: DeviceService.location,
       );
 
       // Create Node
@@ -132,10 +132,10 @@ class SonrService extends GetxService {
   /// @ Connect to Service Method
   Future<void> connectNewUser(Contact? contact) async {
     // Create Request
-    var connReq = await Request.newConnection(
-      geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
-      ipLocation: await DeviceService.findIPLocation(),
+    var connReq = ConnectionRequest(
       contact: UserService.contact.value,
+      device: DeviceService.device,
+      location: DeviceService.location,
     );
 
     // Create Node

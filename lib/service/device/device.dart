@@ -5,6 +5,7 @@ import 'desktop.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:platform_device_id/platform_device_id.dart';
 
 class DeviceService extends GetxService {
   // Initializers
@@ -14,17 +15,24 @@ class DeviceService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-  final _platform = Rx<Platform>(Platform.Undefined);
+
+  // Properties
+  final _device = Device().obs;
+  final _location = Location().obs;
 
   // Platform Checkers
   static bool get isDesktop => to._isDesktop;
   static bool get isMobile => to._isMobile;
-  static bool get isAndroid => to._platform.value.isAndroid;
-  static bool get isIOS => to._platform.value.isIOS;
-  static bool get isLinux => to._platform.value.isLinux;
-  static bool get isMacOS => to._platform.value.isMacOS;
-  static bool get isWindows => to._platform.value.isWindows;
-  static Platform get platform => to._platform.value;
+  static bool get isAndroid => to._device.value.platform.isAndroid;
+  static bool get isIOS => to._device.value.platform.isIOS;
+  static bool get isLinux => to._device.value.platform.isLinux;
+  static bool get isMacOS => to._device.value.platform.isMacOS;
+  static bool get isWindows => to._device.value.platform.isWindows;
+
+  // Property Accessors
+  static Platform get platform => to._device.value.platform;
+  static Device get device => to._device.value;
+  static Location get location => to._location.value;
 
   // Connection Requirements
   static bool get isReadyToConnect {
@@ -41,10 +49,31 @@ class DeviceService extends GetxService {
     _isDesktop = isDesktop;
     _isMobile = !isDesktop;
 
-    // Set Platform
-    _platform(PlatformUtils.find());
+    // Get Info
+    var platform = PlatformUtils.find();
+    var deviceId = await PlatformDeviceId.getDeviceId;
+    var directories = await Request.getDirectories(platform);
 
-    // Audio Player
+    // Initialize Device
+    _device.update((val) {
+      if (val != null) {
+        // Set Platform
+        val.platform = platform;
+        val.fileSystem = directories;
+
+        // Set ID
+        if (deviceId != null) {
+          val.id = deviceId;
+        }
+      }
+    });
+
+    // Set Location
+    _location.update((val) async {
+      if (val != null) {
+        val.ip = await findIPLocation();
+      }
+    });
     return this;
   }
 
@@ -147,6 +176,15 @@ class DeviceService extends GetxService {
     else {
       await OpenFile.open(file.single.path);
     }
+  }
+
+  /// Sets Geolocation for Device
+  static void setGeoLocation(Location_Geo geo) {
+    to._location.update((val) {
+      if (val != null) {
+        val.geo = geo;
+      }
+    });
   }
 }
 
