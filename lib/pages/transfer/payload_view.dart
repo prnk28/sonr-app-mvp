@@ -14,9 +14,9 @@ class PayloadSheetView extends StatelessWidget {
               return Container(
                 child: ListView.builder(
                     controller: scrollController,
-                    itemCount: TransferService.file.value.items.length,
+                    itemCount: TransferService.file.value.items.length + 1,
                     itemBuilder: (BuildContext context, int index) {
-                      return _SonrFileListItem(item: TransferService.file.value.items[index]);
+                      return index == 0 ? _SonrFileListHeader() : _SonrFileListItem(item: TransferService.file.value.items[index - 1]);
                     }),
               );
             })
@@ -28,6 +28,18 @@ class PayloadSheetView extends StatelessWidget {
               theme: Get.theme,
             ),
             child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
+  }
+}
+
+class _SonrFileListHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: SonrColor.AccentBlue.withOpacity(0.10),
+      width: Get.width,
+      height: Height.ratio(0.05),
+      child: Row(),
+    );
   }
 }
 
@@ -44,7 +56,22 @@ class _SonrFileListItem extends StatelessWidget {
       ),
       child: Row(children: [
         item.mime.type.gradient(size: Height.ratio(0.125)),
-        _buildTitle(),
+        // Title
+        Container(
+            width: Width.ratio(0.5),
+            height: Height.ratio(0.15),
+            padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: item.prettyName().h6,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: item.prettySize().p_Grey,
+              )
+            ])),
+        // Button
         Container(
           padding: EdgeInsets.only(left: 8),
           alignment: Alignment.topRight,
@@ -55,24 +82,6 @@ class _SonrFileListItem extends StatelessWidget {
         ),
       ]),
     );
-  }
-
-  Widget _buildTitle() {
-    // Build Text View
-    return Container(
-        width: Width.ratio(0.5),
-        height: Height.ratio(0.15),
-        padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: item.prettyName().h6,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: item.prettySize().p_Grey,
-          )
-        ]));
   }
 }
 
