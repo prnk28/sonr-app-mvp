@@ -22,7 +22,7 @@ class HSResponse {
 
   String toJson() => jsonEncode({
         "success": success,
-        "records": List<dynamic>.from(records.map((x) => x.toJson())),
+        "records": List<dynamic>.from(records.map((x) => x.toMap())),
       });
 }
 
@@ -40,7 +40,7 @@ class HSRecord {
   String value;
 
   bool get isAuth => this.host.contains(PREFIX_DIVIDER);
-  String get fingerprint => isAuth ? extractFingerprint(host) : "";
+  String get fingerprint => isAuth ? extractFingerprint(value) : "";
   String get name => isAuth ? extractName(host) : "";
   String get prefix => isAuth ? extractPrefix(host) : "";
 
@@ -62,7 +62,7 @@ class HSRecord {
     var prefix = "$digest".substring(0, 16);
 
     // Return Record
-    return HSRecord(ttl: 0, type: "TXT", host: "$prefix._auth.$name.snr", value: FINGERPRINT_DIVIDER + fingerprint);
+    return HSRecord(ttl: 5, type: "TXT", host: "$prefix._auth.$name", value: FINGERPRINT_DIVIDER + fingerprint);
   }
 
   factory HSRecord.fromJson(dynamic json) => HSRecord(
@@ -71,13 +71,6 @@ class HSRecord {
         host: json["host"],
         value: json["value"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "ttl": ttl,
-        "type": type,
-        "host": host,
-        "value": value,
-      };
 
   // Extracts FingerPrint from Record Value
   static extractFingerprint(String value) {
@@ -96,6 +89,13 @@ class HSRecord {
     return host.substring(idx + PREFIX_DIVIDER.length);
   }
 
+  Map<String, dynamic> toMap() => {
+        "ttl": ttl,
+        "type": type,
+        "host": host,
+        "value": value,
+      };
+
   @override
   String toString() {
     if (this.isAuth) {
@@ -106,7 +106,7 @@ class HSRecord {
             "Name": this.name,
           }.toString();
     } else {
-      return "--Default Record-- \n" + this.toJson().toString();
+      return "--Default Record-- \n" + this.toMap().toString();
     }
   }
 }

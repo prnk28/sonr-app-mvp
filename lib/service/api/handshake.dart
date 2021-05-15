@@ -23,10 +23,14 @@ class NamebaseClient extends GetConnect {
   }
 
   Future<bool> addRecord(HSRecord newRecord) async {
-    dynamic body;
-    body["records"] = [newRecord.toJson()];
+    var map = {
+      'records': [newRecord.toMap()],
+      'deleteRecords': []
+    };
+
+    var body = jsonEncode(map);
     var resp = await put(_BASE_URL + _NAME_DNS_POINT, body, headers: _AUTH_HEADERS);
-    return resp.body;
+    return resp.body["success"];
   }
 
   Future<bool> removeRecord(List<HSRecord> allRecords, HSRecord removedRecord) async {
