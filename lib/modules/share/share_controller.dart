@@ -128,7 +128,7 @@ class ShareController extends GetxController {
   /// @ Select a URL
   selectExternal(Payload payload, URLLink? url, SonrFile? mediaFile) {
     if (payload == Payload.URL) {
-      TransferService.chooseURLExternal(url!.link);
+      TransferService.chooseURLExternal(url!.url);
     } else {
       TransferService.chooseMediaExternal(mediaFile!);
     }

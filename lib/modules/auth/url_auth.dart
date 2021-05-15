@@ -72,8 +72,8 @@ class URLAuthView extends StatelessWidget {
   }
 
   Future<void> _launchURL() async {
-    if (await canLaunch(invite.url.link)) {
-      await launch(invite.url.link);
+    if (await canLaunch(invite.url.url)) {
+      await launch(invite.url.url);
     } else {
       SonrSnack.error("Could not launch the URL.");
     }

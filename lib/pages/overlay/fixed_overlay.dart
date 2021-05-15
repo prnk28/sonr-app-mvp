@@ -130,7 +130,7 @@ class SonrOverlay extends GetxService {
         entryDuration,
         barrierDismissible,
         InviteOverlayView(invite: invite),
-        backgroundColor: Colors.black54,
+        backgroundColor: Colors.black87,
       );
 
       // Add Overlay to List
@@ -151,6 +151,7 @@ class SonrOverlay extends GetxService {
         entryDuration,
         barrierDismissible,
         ReplyOverlayView(reply: reply),
+        backgroundColor: Colors.black87,
       );
 
       // Add Overlay to List

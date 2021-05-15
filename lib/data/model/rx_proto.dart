@@ -101,7 +101,7 @@ extension RxInviteRequest on Rx<InviteRequest> {
   bool get isURL => this.value.payload == Payload.URL;
 
   /// Checks if InviteRequest is Transfer
-  bool get isTransfer => this.value.payload == Payload.MEDIA || this.value.payload == Payload.FILE || this.value.payload == Payload.MULTI_FILES;
+  bool get isTransfer => this.value.payload == Payload.MEDIA || this.value.payload == Payload.FILE || this.value.payload == Payload.FILES;
 
   /// `Init()` sets Invite Request Parameters with TransferArguments
   void init(Payload payload, {String? url, Contact? contact, SonrFile? file}) {
@@ -127,8 +127,7 @@ extension RxInviteRequest on Rx<InviteRequest> {
   void addContact(Contact data) {
     this.update((val) {
       if (val != null) {
-        val.contact = data;
-        val.payload = Payload.CONTACT;
+        val.setContact(data);
       }
     });
   }
@@ -137,8 +136,7 @@ extension RxInviteRequest on Rx<InviteRequest> {
   void addFile(SonrFile data) {
     this.update((val) {
       if (val != null) {
-        val.file = data;
-        val.payload = data.payload;
+        val.setFile(data);
       }
     });
   }
@@ -147,8 +145,7 @@ extension RxInviteRequest on Rx<InviteRequest> {
   void addUrl(String data) {
     this.update((val) {
       if (val != null) {
-        val.url = data;
-        val.payload = Payload.URL;
+        val.setUrl(data);
       }
     });
   }
@@ -157,7 +154,7 @@ extension RxInviteRequest on Rx<InviteRequest> {
   void setPeer(Peer peer) {
     this.update((val) {
       if (val != null) {
-        val.to = peer;
+        val.setPeer(peer);
       }
     });
   }

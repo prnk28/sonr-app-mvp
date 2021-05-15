@@ -31,23 +31,12 @@ class ShareSheet extends GetView<ShareController> {
     final Size window = Size(Get.width - 20, Get.height / 3 + 150);
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
-    // Get Shared File
-    SharedMediaFile mediaShared = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
-
-    // Initialize
-    Uint8List thumbdata = File(mediaShared.thumbnail!).readAsBytesSync();
-    List<int> thumbnail = thumbdata.toList();
-
     // Build View
     return ShareSheet(
       child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
       size: window,
-      payload: Payload.FILE,
-      mediaFile: SonrFileUtils.newWith(
-        path: mediaShared.path,
-        duration: mediaShared.duration ?? 0,
-        thumbnail: thumbnail,
-      ),
+      payload: Payload.MEDIA,
+      mediaFile: sharedFiles.toSonrFile(),
     );
   }
 
@@ -184,7 +173,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.url));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
@@ -232,7 +221,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.url));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
@@ -260,7 +249,7 @@ class _ShareItemURL extends StatelessWidget {
 
     return GestureDetector(
       onLongPress: () {
-        Clipboard.setData(ClipboardData(text: data.link));
+        Clipboard.setData(ClipboardData(text: data.url));
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(

@@ -101,7 +101,7 @@ class CardsDatabase extends _$CardsDatabase {
 
   /// Streams Metadata Card Items from Database
   Stream<List<TransferCardItem>> watchMetadata() => (select(transferCardItems)
-        ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.MULTI_FILES.value)))
+        ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.FILES.value)))
       .watch();
 
   /// Streams URL Card Items from Database
@@ -114,7 +114,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db_cards_2.sqlite'));
+    final file = File(p.join(dbFolder.path, 'db_cards.sqlite'));
     return VmDatabase(file);
   });
 }

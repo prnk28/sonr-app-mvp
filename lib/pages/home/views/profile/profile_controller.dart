@@ -142,7 +142,7 @@ class ProfileController extends GetxController {
   }
 
   // -- Set Social User -- //
-  user(SocialUser user) {
+  user(Contact_Social_User user) {
     step.update((val) {
       val!.user = user;
     });
@@ -212,7 +212,7 @@ class ProfileController extends GetxController {
     if (step.value!.hasType && step.value!.current == 2) {
       // Create Tile from Values
       var tile = Contact_Social(
-        username: step.value!.user!.username,
+        user: step.value!.user!,
         provider: step.value!.provider,
         links: step.value!.links,
         tile: Contact_Social_Tile(index: UserService.contact.value.socialsCount, type: step.value!.type),

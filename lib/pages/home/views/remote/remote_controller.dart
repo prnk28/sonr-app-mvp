@@ -92,10 +92,10 @@ class RemoteController extends GetxController {
   }
 
   /// @ Method to Respond to Invite
-  void respond(bool decision) {
+  void respond(bool decision, Peer peer) {
     if (remoteInfo.value != null && currentInvite.value != null) {
       // Respond Decision
-      SonrService.respond(decision, info: remoteInfo.value);
+      SonrService.respond(Request.newReplyRemote(info: remoteInfo.value!, to: peer, decision: decision));
 
       // Wait for Complete if Accepted
       if (decision) {

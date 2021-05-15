@@ -11,13 +11,6 @@ import 'lobby.dart';
 import '../user/user.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-extension StatusUtils on Status {
-  bool get isNotConnected => this == Status.IDLE;
-  bool get isConnecting => this == Status.IDLE || this == Status.CONNECTED;
-  bool get isConnected => this != Status.IDLE;
-  bool get isReady => this == Status.BOOTSTRAPPED;
-}
-
 class SonrService extends GetxService {
   // Accessors
   static bool get isInitialized => to._node != null;
@@ -49,7 +42,7 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          _node!.update(position: MobileService.position.value);
+          _node!.update(Request.newUpdatePosition(MobileService.position.value));
         }
       }
     });
@@ -73,7 +66,7 @@ class SonrService extends GetxService {
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
       // Create Request
-      var connReq = await RequestUtility.newRequest(
+      var connReq = await Request.newConnection(
         geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
         contact: UserService.contact.value,
@@ -99,7 +92,7 @@ class SonrService extends GetxService {
   Future<void> connect() async {
     if (_node == null) {
       // Create Request
-      var connReq = await RequestUtility.newRequest(
+      var connReq = await Request.newConnection(
         geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
         ipLocation: await DeviceService.findIPLocation(),
         contact: UserService.contact.value,
@@ -121,7 +114,7 @@ class SonrService extends GetxService {
 
       // Update for Mobile
       if (DeviceService.isMobile) {
-        _node!.update(position: MobileService.position.value);
+        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     } else {
       if (_status.value == Status.IDLE) {
@@ -130,7 +123,7 @@ class SonrService extends GetxService {
 
         // Update for Mobile
         if (DeviceService.isMobile) {
-          _node!.update(position: MobileService.position.value);
+          _node!.update(Request.newUpdatePosition(MobileService.position.value));
         }
       }
     }
@@ -139,7 +132,7 @@ class SonrService extends GetxService {
   /// @ Connect to Service Method
   Future<void> connectNewUser(Contact? contact) async {
     // Create Request
-    var connReq = await RequestUtility.newRequest(
+    var connReq = await Request.newConnection(
       geoLocation: DeviceService.isMobile ? await MobileService.currentLocation() : null,
       ipLocation: await DeviceService.findIPLocation(),
       contact: UserService.contact.value,
@@ -163,7 +156,7 @@ class SonrService extends GetxService {
 
       // Update for Mobile
       if (DeviceService.isMobile) {
-        _node!.update(position: MobileService.position.value);
+        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
   }
@@ -179,9 +172,9 @@ class SonrService extends GetxService {
   static Future<URLLink> getURL(String url) async {
     if (to._node != null) {
       var link = await to._node!.getURL(url);
-      return link ?? URLLink(link: url);
+      return link ?? URLLink(url: url);
     }
-    return URLLink(link: url);
+    return URLLink(url: url);
   }
 
   /// @ Request Local Network Access on iOS
@@ -225,7 +218,7 @@ class SonrService extends GetxService {
       to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
 
       if (to._node != null) {
-        to._node!.update(properties: to._properties.value);
+        to._node!.update(Request.newUpdateProperties(to._properties.value));
       }
     }
   }
@@ -233,7 +226,7 @@ class SonrService extends GetxService {
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (to._node != null) {
-      to._node!.update(contact: contact);
+      to._node!.update(Request.newUpdateContact(contact));
     }
   }
 
@@ -253,19 +246,17 @@ class SonrService extends GetxService {
   }
 
   /// @ Respond-Peer Event
-  static void respond(bool decision, {RemoteInfo? info}) async {
+  static void respond(RespondRequest request) async {
     if (to._node != null) {
-      to._node!.respond(decision, info: info);
+      to._node!.respond(request);
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     // Send Invite
-    InviteRequest request = InviteRequest(payload: Payload.FLAT_CONTACT, to: peer, isRemote: false, contact: UserService.contact.value);
-
     if (to._node != null) {
-      to._node!.invite(request);
+      to._node!.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
   }
 
@@ -289,7 +280,7 @@ class SonrService extends GetxService {
 
       // Handle Available
       if (DeviceService.isMobile) {
-        _node!.update(position: MobileService.position.value);
+        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
   }

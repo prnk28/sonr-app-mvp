@@ -185,7 +185,7 @@ class CardService extends GetxService {
   }
 
   /// @ Load IO File from Metadata
-  static Future<File> loadFileFromMetadata(SonrFile_Metadata metadata) async {
+  static Future<File> loadFileFromMetadata(SonrFile_Item metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     if (asset != null) {
       var file = await asset.file;
@@ -197,8 +197,8 @@ class CardService extends GetxService {
   }
 
   /// @ Load SonrFile from Metadata
-  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
-    return SonrFileUtils.newWithItem(metadata);
+  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Item metadata) async {
+    return metadata.toSonrFile();
   }
 
   /// @ Handles User Invite Response
@@ -219,9 +219,9 @@ class CardService extends GetxService {
   _handleAcceptTransfer(AuthInvite invite) {
     // Check for Remote
     if (invite.hasRemote()) {
-      SonrService.respond(true, info: invite.remote);
+      SonrService.respond(invite.newAcceptReply());
     } else {
-      SonrService.respond(true);
+      SonrService.respond(invite.newAcceptReply());
     }
 
     // Switch View
@@ -248,9 +248,9 @@ class CardService extends GetxService {
 // @ Handle Decline Transfer Response
   _handleDeclineTransfer(AuthInvite invite) {
     if (invite.hasRemote()) {
-      SonrService.respond(false, info: invite.remote);
+      SonrService.respond(invite.newDeclineReply());
     } else {
-      SonrService.respond(false);
+      SonrService.respond(invite.newDeclineReply());
     }
     SonrOverlay.back();
   }
@@ -264,9 +264,9 @@ class CardService extends GetxService {
     if (sendBackContact) {
       // Check for Remote
       if (invite.hasRemote()) {
-        SonrService.respond(true, info: invite.remote);
+        SonrService.respond(invite.newAcceptReply());
       } else {
-        SonrService.respond(true);
+        SonrService.respond(invite.newAcceptReply());
       }
     }
 
