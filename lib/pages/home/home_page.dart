@@ -16,13 +16,17 @@ class HomePage extends GetView<HomeController> {
         floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
         appBar: HomeAppBar(),
-        body: Container(
-            child: TabBarView(controller: controller.tabController, children: [
-          CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-          ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
-          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-        ])));
+        body: Obx(() => AnimatedOpacity(
+              duration: 750.milliseconds,
+              opacity: controller.isSearchVisible.value ? 0 : 1,
+              child: Container(
+                  child: TabBarView(controller: controller.tabController, children: [
+                CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+                ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+                ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+                RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+              ])),
+            )));
   }
 }
 
