@@ -19,8 +19,8 @@ class UserService extends GetxService {
   final _profile = Profile().obs;
 
   // Preferences
-  final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
-  final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
+  final _isDarkMode = true.val('isDarkMode', getBox: () => GetStorage('Preferences'));
+  final _hasFlatMode = true.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
   final _hasPointToShare = true.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
 
   /// **  Getter Methods for Contact Properties **

@@ -12,6 +12,7 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
+        gradient: SonrGradients.PlumBath,
         resizeToAvoidBottomInset: false,
         floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
