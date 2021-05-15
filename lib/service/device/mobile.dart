@@ -86,7 +86,12 @@ class MobileService extends GetxService {
 
     // Update Device Values
     await updatePermissionsStatus();
-    await updateLocation();
+
+    // Set Location
+    if (_hasLocation.value) {
+      var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
+      DeviceService.setGeoLocation(Location_Geo(latitude: result.latitude, longitude: result.longitude));
+    }
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {

@@ -1,25 +1,10 @@
 import 'dart:convert';
 import 'package:sonr_app/data/model/model_hs.dart';
-
 import '../../env.dart';
 import 'package:get/get.dart';
 
-class HandshakeService extends GetxService {
-  final client = _NamebaseClient();
-  final records = RxList<HSRecord>();
-
-  /// Initializes Handshake Service
-  Future<HandshakeService> init() async {
-    var resp = await client.initialize();
-    if (resp.success) {
-      records(resp.records);
-    }
-    return this;
-  }
-}
-
 /// ### Namebase API Client
-class _NamebaseClient extends GetConnect {
+class NamebaseClient extends GetConnect {
   // Base Client Properties
   final _BASE_URL = "https://www.namebase.io";
   final _AUTHORIZATION = base64Encode(utf8.encode("${Env.hs_key}:${Env.hs_secret}"));
@@ -37,8 +22,14 @@ class _NamebaseClient extends GetConnect {
     return HSResponse.fromJson(resp.body);
   }
 
-  Future<bool> register() async {
+  Future<bool> addRecord(HSRecord newRecord) async {
+    dynamic body;
+    body["records"] = [newRecord.toJson()];
+    var resp = await put(_BASE_URL + _NAME_DNS_POINT, body, headers: _AUTH_HEADERS);
+    return resp.body;
+  }
 
+  Future<bool> removeRecord(List<HSRecord> allRecords, HSRecord removedRecord) async {
     return true;
   }
 }

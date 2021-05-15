@@ -3,7 +3,7 @@ import 'package:sonr_app/pages/desktop/window.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
-import 'package:sonr_app/service/client/handshake.dart';
+import 'package:sonr_app/service/client/auth.dart';
 import 'package:sonr_app/service/device/desktop.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/service/user/cards.dart';
@@ -79,8 +79,8 @@ class SonrRouting {
     await Get.putAsync(() => TransferService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
+    await Get.putAsync(() => AuthService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
-    await Get.putAsync(() => HandshakeService().init(), permanent: true);
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
   }

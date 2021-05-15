@@ -46,6 +46,7 @@ dependencies:
 
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
+  cryptography: ^2.0.0
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3

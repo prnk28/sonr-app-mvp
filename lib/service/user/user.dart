@@ -89,14 +89,6 @@ class UserService extends GetxService {
     return this;
   }
 
-  /// @ Update Social in List
-  static bool swapSocials(Contact_Social first, Contact_Social second) {
-    // int idxOne = to._socials.keys.toList().indexOf(first.username);
-    //int idxTwo = to._socials.keys.toList().indexOf(second.username);
-    // controller._socials.swap(idxOne, idxTwo);
-    return true;
-  }
-
   /// @ Method to Create New User from Contact
   static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
     // Set Valuse
