@@ -39,15 +39,17 @@ dependencies:
   environment_config: ^3.0.0
   file_picker: ^3.0.1
   flutter_hooks: ^0.16.0
+  flutter_secure_storage: ^4.2.0
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
+  jwk: ^0.1.0
   supercharged: ^2.0.0
   sentry_flutter: ^5.0.0
 
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
-  cryptography: ^2.0.0
+  flutter_biometrics: ^0.3.0
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3

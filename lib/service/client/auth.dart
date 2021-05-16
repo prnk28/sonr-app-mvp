@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:cryptography/cryptography.dart';
-// import 'package:jwk/jwk.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
 import 'package:sonr_app/service/api/handshake.dart';
 import 'package:sonr_app/service/device/device.dart';
@@ -49,6 +48,8 @@ class AuthService extends GetxService {
     // Generate a keypair.
     final algorithm = Ed25519();
     final keyPair = await algorithm.newKeyPair();
+    var keyData = await keyPair.extract();
+    keyData.bytes;
     // final jwk = Jwk.fromKeyPair(keyPair);
     // final json = jwk.toJson();
 

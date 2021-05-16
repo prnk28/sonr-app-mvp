@@ -89,6 +89,10 @@ class UserService extends GetxService {
     return this;
   }
 
+  fetchKeyData() async {
+   final docsDir = await getApplicationDocumentsDirectory();
+  }
+
   /// @ Method to Create New User from Contact
   static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
     // Set Valuse
