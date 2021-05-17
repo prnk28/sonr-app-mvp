@@ -1,4 +1,5 @@
 import 'package:sonr_app/style/style.dart';
+import 'backup_view.dart';
 import 'permissions_view.dart';
 import 'contact_view.dart';
 import 'name_view.dart';
@@ -26,6 +27,8 @@ class RegisterPage extends GetView<RegisterController> {
       return BoardingGalleryView(key: ValueKey<RegisterStatus>(RegisterStatus.Gallery));
     } else if (status == RegisterStatus.Contact) {
       return FormPage(key: ValueKey<RegisterStatus>(RegisterStatus.Contact));
+    } else if (status == RegisterStatus.Backup) {
+      return BackupCodeView(key: ValueKey<RegisterStatus>(RegisterStatus.Backup));
     } else {
       return NamePage(key: ValueKey<RegisterStatus>(RegisterStatus.Name));
     }

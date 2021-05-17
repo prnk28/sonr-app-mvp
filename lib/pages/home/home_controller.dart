@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/service/client/auth.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -206,6 +205,9 @@ extension HomeViewUtils on HomeView {
 
   String get title {
     if (this == HomeView.Main) {
+      if (UserService.isNewUser.value) {
+        return "Nice to meet you.";
+      }
       return "Welcome Back";
     } else {
       return this.toString().substring(this.toString().indexOf('.') + 1);

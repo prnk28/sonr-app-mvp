@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/client/auth.dart';
@@ -18,7 +20,7 @@ extension RegisterNameStatusUtil on RegisterNameStatus {
   }
 }
 
-enum RegisterStatus { Name, Contact, Location, Gallery }
+enum RegisterStatus { Name, Backup, Contact, Location, Gallery }
 
 class RegisterController extends GetxController {
   // Properties
@@ -44,6 +46,16 @@ class RegisterController extends GetxController {
     validateName();
   }
 
+  void exportCode() async {
+    if (mnemonic.value != "") {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/sonr_backup_code.txt';
+      final File file = File(path);
+      await file.writeAsString(mnemonic.value);
+      Share.shareFiles([path], text: 'Sonr Backup Code');
+    }
+  }
+
   void setName() async {
     // Refresh Records
     AuthService.to.refresh();
@@ -58,12 +70,16 @@ class RegisterController extends GetxController {
         // Add New User
         var result = await AuthService.to.addUser(sonrName.value);
         if (result) {
-          status(RegisterStatus.Contact);
+          status(RegisterStatus.Backup);
         }
       } else {
-        status(RegisterStatus.Contact);
+        status(RegisterStatus.Backup);
       }
     }
+  }
+
+  void nextFromBackup() async {
+    status(RegisterStatus.Contact);
   }
 
   /// @ Submits Contact
