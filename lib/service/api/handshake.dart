@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:sonr_app/data/model/model_hs.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import '../../env.dart';
 import 'package:get/get.dart';
 
@@ -16,10 +17,11 @@ class NamebaseClient extends GetConnect {
   Map<String, String> get _AUTH_HEADERS =>
       {'Authorization': 'Basic $_AUTHORIZATION', 'Accept': 'application/json', 'Content-Type': 'application/json'};
 
-  // Returns Auth Headers
-  Future<HSResponse> initialize() async {
+  /// Returns All Records List
+  Future<Tuple<bool, List<HSRecord>>> refresh() async {
     var resp = await get(_BASE_URL + _NAME_DNS_POINT, headers: _AUTH_HEADERS);
-    return HSResponse.fromJson(resp.body);
+    var data = HSResponse.fromJson(resp.body);
+    return Tuple(data.success, data.records);
   }
 
   Future<bool> addRecord(HSRecord newRecord) async {

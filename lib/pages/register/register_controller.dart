@@ -1,16 +1,33 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/service/client/auth.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum RegisterStatus { Form, Location, Gallery }
+enum RegisterNameStatus { Default, Returning, TooShort, Available, Unavailable, Blocked, Restricted, DeviceRegistered }
+
+extension RegisterNameStatusUtil on RegisterNameStatus {
+  bool get isValid {
+    switch (this) {
+      case RegisterNameStatus.Available:
+        return true;
+      default:
+        return false;
+    }
+  }
+}
+
+enum RegisterStatus { Name, Contact, Location, Gallery }
 
 class RegisterController extends GetxController {
   // Properties
+  final nameStatus = RegisterNameStatus.Default.obs;
+  final mnemonic = "".obs;
+  final sonrName = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
-  final status = Rx<RegisterStatus>(RegisterStatus.Form);
+  final status = Rx<RegisterStatus>(RegisterStatus.Name);
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -22,15 +39,42 @@ class RegisterController extends GetxController {
     super.onInit();
   }
 
+  void checkName(String name) {
+    sonrName(name);
+    validateName();
+  }
+
+  void setName() async {
+    // Refresh Records
+    AuthService.to.refresh();
+
+    // Validate
+    if (validateName()) {
+      if (nameStatus.value != RegisterNameStatus.Returning) {
+        // Create User Data
+        var data = await AuthService.to.createUser(sonrName.value);
+        mnemonic(data);
+
+        // Add New User
+        var result = await AuthService.to.addUser(sonrName.value);
+        if (result) {
+          status(RegisterStatus.Contact);
+        }
+      } else {
+        status(RegisterStatus.Contact);
+      }
+    }
+  }
+
   /// @ Submits Contact
   setContact() async {
-    if (validate()) {
+    if (validateContact()) {
       // Get Contact from Values
       var contact = Contact(
           profile: Profile(
         firstName: firstName.value,
         lastName: lastName.value,
-        username: "@TempUsername",
+        username: sonrName.value,
       ));
 
       // Remove Textfield Focus
@@ -46,7 +90,7 @@ class RegisterController extends GetxController {
   }
 
   /// @ Validates Fields
-  bool validate() {
+  bool validateContact() {
     // Check Valid
     bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
     bool lastNameValid = GetUtils.isAlphabetOnly(lastName.value);
@@ -57,6 +101,46 @@ class RegisterController extends GetxController {
 
     // Return Result
     return firstNameValid && lastNameValid;
+  }
+
+  bool validateName() {
+    // Update Status
+    if (sonrName.value.length > 3) {
+      // Check Available
+      if (!AuthService.to.isNameAvailable(sonrName.value)) {
+        if (AuthService.to.checkUser(sonrName.value)) {
+          nameStatus(RegisterNameStatus.Returning);
+          return true;
+        } else {
+          nameStatus(RegisterNameStatus.Unavailable);
+          return false;
+        }
+      }
+      // Check Unblocked
+      else if (!AuthService.to.isNameUnblocked(sonrName.value)) {
+        nameStatus(RegisterNameStatus.Blocked);
+        return false;
+      }
+      // Check Unrestricted
+      else if (!AuthService.to.isNameUnrestricted(sonrName.value)) {
+        nameStatus(RegisterNameStatus.Restricted);
+        return false;
+      }
+      // Check Unregisted Device
+      else if (!AuthService.to.isPrefixAvailable(sonrName.value)) {
+        nameStatus(RegisterNameStatus.DeviceRegistered);
+        return false;
+      }
+      // Check Valid
+      else {
+        // Update Values
+        nameStatus(RegisterNameStatus.Available);
+        return true;
+      }
+    } else {
+      nameStatus(RegisterNameStatus.TooShort);
+      return false;
+    }
   }
 
   /// @ Request Location Permissions

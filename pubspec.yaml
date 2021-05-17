@@ -36,6 +36,7 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   bip39: ^1.0.6
+  crypton: ^2.0.1
   environment_config: ^3.0.0
   file_picker: ^3.0.1
   flutter_hooks: ^0.16.0

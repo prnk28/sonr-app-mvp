@@ -43,7 +43,7 @@ class SonrTextField extends StatelessWidget {
 
   /// @ Returns Random Hint Name
   static Tuple<String, String> hintName() {
-    return <Tuple<String, String>>[
+    final list = <Tuple<String, String>>[
       !DeviceService.isIOS && !DeviceService.isMacOS ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
       Tuple("Michelangelo", "Buonarroti"),
       Tuple("Albert", "Einstein"),
@@ -56,7 +56,8 @@ class SonrTextField extends StatelessWidget {
       Tuple("Oprah", "Winfrey"),
       Tuple("Maya", "Angelou"),
       Tuple("Frida", "Kahlo"),
-    ].random();
+    ];
+    return list.random();
   }
 
   SonrTextField(
@@ -116,7 +117,7 @@ class SonrTextField extends StatelessWidget {
           margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
-            style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+            style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
             controller: controller,
             autofocus: autoFocus,
             textInputAction: textInputAction,
@@ -131,7 +132,7 @@ class SonrTextField extends StatelessWidget {
                 : InputDecoration.collapsed(
                     hintText: hint,
                     hintStyle: TextStyle(
-                        fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                        fontFamily: 'Manrope', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
           ),
         )
       ],

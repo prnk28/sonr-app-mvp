@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'dart:typed_data';
 
 const FINGERPRINT_DIVIDER = "v=0;fingerprint=";
 const PREFIX_DIVIDER = "._auth.";
@@ -40,31 +40,30 @@ class HSRecord {
   String value;
 
   bool get isAuth => this.host.contains(PREFIX_DIVIDER);
-  String get fingerprint => isAuth ? extractFingerprint(value) : "";
+  bool get isBlank => this.ttl == -1 && this.type == "-" && this.host == "-" && this.value == "-";
+  Uint8List get fingerprint => isAuth ? extractFingerprint(value) : Uint8List(0);
   String get name => isAuth ? extractName(host) : "";
   String get prefix => isAuth ? extractPrefix(host) : "";
 
-  // @ Method Checks if Prefix Values are the same
-  Future<bool> checkPrefix(String username, String deviceID) async {
-    if (this.name == username) {
-      var hmacSha256 = Hmac(sha256, utf8.encode(username + deviceID)); // HMAC-SHA256
-      var digest = hmacSha256.convert(utf8.encode(username + deviceID));
-      return this.prefix == "$digest".substring(0, 16);
-    } else {
-      return false;
-    }
+  // Method Checks if Prefix Values are the same
+  bool equals(String n, String p) => this.equalsName(n) && this.equalsPrefix(p);
+  bool equalsName(String n) => this.name.toLowerCase() == n.toLowerCase();
+  bool equalsPrefix(String p) => this.prefix == p;
+  bool notEquals(String n, String p) => this.notEqualsName(n) && this.notEqualsPrefix(p);
+  bool notEqualsName(String n) => this.name.toLowerCase() != n.toLowerCase();
+  bool notEqualsPrefix(String p) => this.prefix != p;
+
+  /// Returns Blank Record
+  factory HSRecord.blank() {
+    return HSRecord(ttl: -1, type: "-", host: "-", value: "-");
   }
 
-  factory HSRecord.newAuth(String deviceID, String name, String fingerprint) {
-    // Build Prefix
-    var hmacSha256 = Hmac(sha256, utf8.encode(name + deviceID)); // HMAC-SHA256
-    var digest = hmacSha256.convert(utf8.encode(name + deviceID));
-    var prefix = "$digest".substring(0, 16);
-
-    // Return Record
+  /// Returns Auth Based Record
+  factory HSRecord.newAuth(String prefix, String name, String fingerprint) {
     return HSRecord(ttl: 5, type: "TXT", host: "$prefix._auth.$name", value: FINGERPRINT_DIVIDER + fingerprint);
   }
 
+  /// Creates Record From JSON
   factory HSRecord.fromJson(dynamic json) => HSRecord(
         ttl: json["ttl"],
         type: json["type"],
@@ -73,12 +72,13 @@ class HSRecord {
       );
 
   // Extracts FingerPrint from Record Value
-  static extractFingerprint(String value) {
-    return value.substring(FINGERPRINT_DIVIDER.length);
+  static Uint8List extractFingerprint(String value) {
+    var data = value.substring(FINGERPRINT_DIVIDER.length);
+    return Uint8List.fromList(data.codeUnits);
   }
 
   // Extracts Prefix from Record Host
-  static extractPrefix(String host) {
+  static String extractPrefix(String host) {
     var idx = host.indexOf(PREFIX_DIVIDER);
     return host.substring(0, idx);
   }

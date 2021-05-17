@@ -67,6 +67,7 @@ class SonrRouting {
     // First Services
     await Get.putAsync(() => DeviceService().init(isDesktop), permanent: true);
     await Get.putAsync(() => UserService().init(), permanent: true);
+    await Get.putAsync(() => AuthService().init(), permanent: true);
 
     // Initialize Platform Services
     if (isDesktop) {
@@ -79,7 +80,6 @@ class SonrRouting {
     await Get.putAsync(() => TransferService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
-    await Get.putAsync(() => AuthService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);

@@ -60,7 +60,7 @@ class UserService extends GetxService {
 
         // Configure Sentry
         Sentry.configureScope((scope) => scope.user = SentryUser(
-              id: '1234',
+              id: DeviceService.device.id,
               username: _contact.value.username,
               extras: {
                 "firstName": _contact.value.firstName,
@@ -87,10 +87,6 @@ class UserService extends GetxService {
     // Set Theme
     SonrTheme.setDarkMode(isDark: _isDarkMode.val);
     return this;
-  }
-
-  fetchKeyData() async {
-   final docsDir = await getApplicationDocumentsDirectory();
   }
 
   /// @ Method to Create New User from Contact
