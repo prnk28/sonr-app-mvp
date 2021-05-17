@@ -1,6 +1,6 @@
+import 'package:sonr_app/modules/settings/sheet_view.dart';
 import 'package:sonr_app/style/style.dart';
 import '../home_controller.dart';
-import '../views/profile/profile_controller.dart';
 import '../views/remote/remote_controller.dart';
 
 class HomeActionButton extends GetView<HomeController> {
@@ -18,7 +18,13 @@ class HomeActionButton extends GetView<HomeController> {
   Widget _buildView(HomeView page) {
     // Return View
     if (page == HomeView.Profile) {
-      return _ProfileActionButton();
+      return ActionButton(
+        key: ValueKey<HomeView>(HomeView.Profile),
+        icon: SonrIcons.Settings.gradient(size: 28),
+        onPressed: () {
+          Get.bottomSheet(SettingsSheet());
+        },
+      );
     } else if (page == HomeView.Activity) {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Activity),
@@ -36,26 +42,6 @@ class HomeActionButton extends GetView<HomeController> {
         onPressed: () => controller.toggleSearch(),
       );
     }
-  }
-}
-
-/// @ Profile Action Button Widget
-class _ProfileActionButton extends GetView<ProfileController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => ActionButton(
-          key: ValueKey<HomeView>(HomeView.Main),
-          icon: controller.status.value.isViewing
-              ? SonrIcons.Edit.gradient(size: 28)
-              : SonrIcons.Close.gradient(value: SonrGradient.Critical, size: 28),
-          onPressed: () {
-            if (controller.status.value.isViewing) {
-              controller.setEditingMode();
-            } else {
-              controller.exitToViewing();
-            }
-          },
-        ));
   }
 }
 

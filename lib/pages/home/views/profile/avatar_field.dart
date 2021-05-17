@@ -42,7 +42,7 @@ class ProfileAvatarField extends GetView<ProfileController> {
                     width: 120,
                     height: 120,
                     child: CircleAvatar(
-                      child: SonrAssetIllustration.AddPicture.widget,
+                      child: SonrIcons.Avatar.greyWith(size: 120),
                       backgroundColor: Color(0xfff0f6fa).withOpacity(0.8),
                     ))),
           ),

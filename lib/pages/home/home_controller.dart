@@ -132,6 +132,15 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
+  void handleSearchFocus(bool isFocused) {
+    if (isFocused) {
+      searchBarController.close();
+      isSearchVisible(false);
+    } else {
+      isSearchVisible(true);
+    }
+  }
+
   // @ Handle Size Update
   _handleLobbyStream(Lobby? onData) {
     // Peer Joined

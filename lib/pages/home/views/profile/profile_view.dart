@@ -42,7 +42,7 @@ class _DefaultProfileView extends GetView<ProfileController> {
       slivers: [
         // @ Builds Profile Header
         _ProfileHeaderBar(),
-
+        SliverToBoxAdapter(child: _ProfileInfoView()),
         SliverPadding(padding: EdgeInsets.all(14)),
 
         // @ Builds List of Social Tile
@@ -79,26 +79,65 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      expandedHeight: Get.height / 5 + 36,
+      leading: PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Secondary), onPressed: controller.setAddTile),
+      actions: [PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode)],
+      expandedHeight: Get.height / 6 + 16,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         background: GestureDetector(
           child: Container(
-            height: Get.height / 5, // Same Header Color
+            height: Get.height / 6 + 16, // Same Header Color
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // @ Avatar
-                ProfileAvatarField(),
-                Padding(padding: EdgeInsets.all(8)),
-                GestureDetector(
-                    onLongPress: controller.setEditingMode,
-                    child: Obx(() => "${UserService.contact.value.firstName} ${UserService.contact.value.lastName}".h4)),
+                Center(child: ProfileAvatarField()),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class _ProfileInfoView extends GetView<ProfileController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 14),
+      width: Get.width,
+      height: 175,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Username
+          ["${UserService.contact.value.username}".h3, ".snr/".h3_Grey].row(),
+
+          // First/Last Name
+          GestureDetector(
+              onLongPress: controller.setEditingMode,
+              child: Obx(() => "${UserService.contact.value.firstName} ${UserService.contact.value.lastName}".h5)),
+          Padding(padding: EdgeInsets.all(8)),
+          // Bio/ LastTweet
+          _buildBio(),
+          _buildLastTweet(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBio() {
+    if (UserService.contact.value.hasAbout()) {
+      return '"${UserService.contact.value.about}"'.p;
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildLastTweet() {
+    return Container(width: Get.width, height: 72, decoration: Neumorphic.indented(theme: Get.theme));
   }
 }
