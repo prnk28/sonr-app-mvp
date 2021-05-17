@@ -6,7 +6,6 @@ import (
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
 	"github.com/go-flutter-desktop/plugins/path_provider"
-	"github.com/go-flutter-desktop/plugins/video_player"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	open_file "github.com/jld3103/go-flutter-open_file"
 	warble "github.com/jslater89/warble/go"
@@ -19,7 +18,6 @@ var options = []flutter.Option{
 	flutter.PopBehavior(flutter.PopBehaviorHide),
 	flutter.AddPlugin(&flutter_systray.FlutterSystrayPlugin{}),
 	flutter.AddPlugin(warble.New()),
-	flutter.AddPlugin(&video_player.VideoPlayerPlugin{}),
 	flutter.AddPlugin(&path_provider.PathProviderPlugin{
 		VendorName:      "https://sonr.io",
 		ApplicationName: "Sonr",
