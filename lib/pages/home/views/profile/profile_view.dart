@@ -1,4 +1,5 @@
 import 'package:sonr_app/modules/card/tile/tile_item.dart';
+import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/style/style.dart';
 import 'profile_controller.dart';
 
@@ -42,7 +43,7 @@ class _DefaultProfileView extends GetView<ProfileController> {
       slivers: [
         // @ Builds Profile Header
         _ProfileHeaderBar(),
-
+        SliverToBoxAdapter(child: _ProfileInfoView()),
         SliverPadding(padding: EdgeInsets.all(14)),
 
         // @ Builds List of Social Tile
@@ -79,26 +80,108 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      expandedHeight: Get.height / 5 + 36,
+      leading: PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Primary), onPressed: controller.setAddTile),
+      actions: [PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode)],
+      expandedHeight: Get.height / 6 + 16,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         background: GestureDetector(
           child: Container(
-            height: Get.height / 5, // Same Header Color
+            height: Get.height / 6 + 16, // Same Header Color
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // @ Avatar
-                ProfileAvatarField(),
-                Padding(padding: EdgeInsets.all(8)),
-                GestureDetector(
-                    onLongPress: controller.setEditingMode,
-                    child: Obx(() => "${UserService.contact.value.firstName} ${UserService.contact.value.lastName}".h4)),
+                Center(child: ProfileAvatarField()),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ProfileInfoView extends GetView<ProfileController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 14),
+      width: Get.width,
+      height: 200,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Username
+          ["${UserService.contact.value.username}".h3, ".snr/".h3_Grey].row(),
+
+          // First/Last Name
+          _buildName(),
+          Padding(padding: EdgeInsets.all(12)),
+          // Bio/ LastTweet
+          _buildBio(),
+          _buildLastTweet(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildName() {
+    return GestureDetector(
+        onLongPress: controller.setEditingMode,
+        child: Obx(() => [UserService.contact.value.fullName.h5, _ProfileContactButtons()].row(mainAxisAlignment: MainAxisAlignment.spaceBetween)));
+  }
+
+  Widget _buildBio() {
+    if (UserService.contact.value.hasAbout()) {
+      return '"${UserService.contact.value.about}"'.p;
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildLastTweet() {
+    return ObxValue<RxBool>((isLinkingTwitter) {
+      if (isLinkingTwitter.value) {
+        return SocialUserSearchField.twitter(value: "");
+      } else {
+        return Container(
+          width: Get.width,
+          height: 72,
+          decoration: Neumorphic.indented(theme: Get.theme),
+          child: UserService.contact.value.hasSocial(Contact_Social_Provider.Twitter)
+              ? Text("Last Tweet")
+              : GestureDetector(
+                  onTap: () => isLinkingTwitter(true),
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [SonrIcons.Twitter.gradient(size: 32), Padding(padding: EdgeInsets.all(8)), "Tap to Link Twitter".h6],
+                    ),
+                  ),
+                ),
+        );
+      }
+    }, false.obs);
+  }
+}
+
+class _ProfileContactButtons extends GetView<ProfileController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(children: [
+        PlainIconButton(onPressed: () {}, icon: SonrIcons.Call.gradient(value: SonrGradient.Secondary, size: 22)),
+        Padding(padding: EdgeInsets.only(right: 4)),
+        PlainIconButton(onPressed: () {}, icon: SonrIcons.Message.gradient(value: SonrGradient.Secondary, size: 22)),
+        Padding(padding: EdgeInsets.only(right: 4)),
+        PlainIconButton(onPressed: () {}, icon: SonrIcons.Video.gradient(value: SonrGradient.Secondary, size: 22)),
+        Padding(padding: EdgeInsets.only(right: 4)),
+        PlainIconButton(onPressed: () {}, icon: SonrIcons.ATSign.gradient(value: SonrGradient.Secondary, size: 22)),
+      ]),
     );
   }
 }

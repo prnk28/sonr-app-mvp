@@ -97,17 +97,9 @@ class _HomeSearchAppBar extends GetView<HomeController> implements PreferredSize
       hint: 'Search...',
       transitionDuration: const Duration(milliseconds: 100),
       transitionCurve: Curves.easeInOut,
+      onFocusChanged: (isFocused) => controller.handleSearchFocus(isFocused),
       onQueryChanged: (query) {},
-      body: ListView.separated(
-        padding: EdgeInsets.zero,
-        itemCount: 100,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text('Item $index'),
-          );
-        },
-      ),
+      body: Container(),
     );
   }
 

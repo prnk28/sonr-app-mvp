@@ -35,7 +35,7 @@ class SocialTileItem extends GetWidget<TileController> {
         },
         // Switch Index Positions with animation
         onAccept: (data) {
-          UserService.swapSocials(item, data);
+          // TODO: UserService.swapSocials(item, data);
         },
       ),
     ]);

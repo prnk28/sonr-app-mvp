@@ -35,17 +35,22 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
+  bip39: ^1.0.6
+  crypton: ^2.0.1
   environment_config: ^3.0.0
   file_picker: ^3.0.1
   flutter_hooks: ^0.16.0
+  flutter_secure_storage: ^4.2.0
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
+  jwk: ^0.1.0
   supercharged: ^2.0.0
   sentry_flutter: ^5.0.0
 
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
+  flutter_biometrics: ^0.3.0
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3
@@ -61,6 +66,7 @@ dependencies:
   photo_manager: ^1.1.5
   path: ^1.8.0
   path_provider: ^2.0.1
+  share: ^2.0.1
   vector_math: ^2.1.0
   video_player: ^2.0.0-nullsafety.9
 

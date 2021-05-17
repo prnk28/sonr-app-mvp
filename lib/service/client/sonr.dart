@@ -68,6 +68,7 @@ class SonrService extends GetxService {
       // Create Request
       var connReq = ConnectionRequest(
         contact: UserService.contact.value,
+        crypto: UserService.user.value.crypto,
         device: DeviceService.device,
         location: DeviceService.location,
       );
@@ -94,6 +95,7 @@ class SonrService extends GetxService {
       // Create Request
       var connReq = ConnectionRequest(
         contact: UserService.contact.value,
+        crypto: UserService.user.value.crypto,
         device: DeviceService.device,
         location: DeviceService.location,
       );
@@ -134,6 +136,7 @@ class SonrService extends GetxService {
     // Create Request
     var connReq = ConnectionRequest(
       contact: UserService.contact.value,
+      crypto: UserService.user.value.crypto,
       device: DeviceService.device,
       location: DeviceService.location,
     );

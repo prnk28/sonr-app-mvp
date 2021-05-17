@@ -12,22 +12,23 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-        gradient: SonrGradients.PlumBath,
-        resizeToAvoidBottomInset: false,
-        floatingAction: ShareView(),
-        bottomNavigationBar: HomeBottomNavBar(),
-        appBar: HomeAppBar(),
-        body: Obx(() => AnimatedOpacity(
-              duration: 750.milliseconds,
-              opacity: controller.isSearchVisible.value ? 0 : 1,
-              child: Container(
-                  child: TabBarView(controller: controller.tabController, children: [
-                CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-                ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-                ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
-                RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-              ])),
-            )));
+          gradient: SonrGradients.PlumBath,
+          resizeToAvoidBottomInset: false,
+          floatingAction: ShareView(),
+          bottomNavigationBar: HomeBottomNavBar(),
+          appBar: HomeAppBar(),
+          body: Obx(() => AnimatedOpacity(
+                duration: 750.milliseconds,
+                opacity: controller.isSearchVisible.value ? 0 : 1,
+                child: Container(
+                    child: TabBarView(controller: controller.tabController, children: [
+                  CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+                  ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+                  ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+                  RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+                ])),
+              )),
+    );
   }
 }
 
