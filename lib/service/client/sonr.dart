@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
@@ -65,16 +66,8 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
-      // Create Request
-      var connReq = ConnectionRequest(
-        contact: UserService.contact.value,
-        crypto: UserService.user.value.crypto,
-        device: DeviceService.device,
-        location: DeviceService.location,
-      );
-
       // Create Node
-      _node = await SonrCore.initialize(connReq);
+      _node = await SonrCore.initialize(_buildRequest());
       _node!.onStatus = _handleStatus;
       _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node!.onInvited = _handleInvited;
@@ -92,16 +85,8 @@ class SonrService extends GetxService {
   /// @ Connect to Service Method
   Future<void> connect() async {
     if (_node == null) {
-      // Create Request
-      var connReq = ConnectionRequest(
-        contact: UserService.contact.value,
-        crypto: UserService.user.value.crypto,
-        device: DeviceService.device,
-        location: DeviceService.location,
-      );
-
       // Create Node
-      _node = await SonrCore.initialize(connReq);
+      _node = await SonrCore.initialize(_buildRequest());
       _node!.onStatus = _handleStatus;
       _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node!.onInvited = _handleInvited;
@@ -127,39 +112,6 @@ class SonrService extends GetxService {
         if (DeviceService.isMobile) {
           _node!.update(Request.newUpdatePosition(MobileService.position.value));
         }
-      }
-    }
-  }
-
-  /// @ Connect to Service Method
-  Future<void> connectNewUser(Contact? contact) async {
-    // Create Request
-    var connReq = ConnectionRequest(
-      contact: UserService.contact.value,
-      crypto: UserService.user.value.crypto,
-      device: DeviceService.device,
-      location: DeviceService.location,
-    );
-
-    // Create Node
-    _node = await SonrCore.initialize(connReq);
-    _node!.onStatus = _handleStatus;
-    _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
-    _node!.onInvited = _handleInvited;
-    _node!.onReplied = _handleResponded;
-    _node!.onProgressed = _handleProgress;
-    _node!.onReceived = _handleReceived;
-    _node!.onTransmitted = _handleTransmitted;
-    _node!.onError = _handleError;
-
-    // Connect Node
-    if (_status.value == Status.IDLE) {
-      // Connect Node
-      _node!.connect();
-
-      // Update for Mobile
-      if (DeviceService.isMobile) {
-        _node!.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
   }
@@ -374,6 +326,24 @@ class SonrService extends GetxService {
     if (data.severity != ErrorMessage_Severity.LOG) {
       SonrSnack.error("", error: data);
     }
+  }
+
+  // ************************
+  // ******* Helpers ********
+  // ************************
+  ConnectionRequest _buildRequest() {
+    return ConnectionRequest(
+        contact: UserService.contact.value,
+        crypto: UserService.user.value.crypto,
+        device: DeviceService.device,
+        location: DeviceService.location,
+        clientKeys: ConnectionRequest_ClientKeys(
+          hsKey: Env.hs_key,
+          hsSecret: Env.hs_secret,
+          ipKey: Env.ip_key,
+          rapidApiHost: Env.rapid_host,
+          rapidApiKey: Env.rapid_key,
+        ));
   }
 }
 

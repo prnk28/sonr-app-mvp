@@ -17,12 +17,7 @@ class SonrRouting {
         GetPage(
             name: '/home',
             page: () {
-              // Update Contact for New User
-              if (UserService.isNewUser.value) {
-                Get.find<SonrService>().connectNewUser(UserService.contact.value);
-              } else {
-                Get.find<SonrService>().connect();
-              }
+              Get.find<SonrService>().connect();
               return HomePage();
             },
             binding: HomeBinding(),
