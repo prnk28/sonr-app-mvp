@@ -17,4 +17,5 @@ require (
 )
 
 replace github.com/sonr-io/plugin/go => /Users/prad/Sonr/plugin/go
+
 replace github.com/sonr-io/core => /Users/prad/Sonr/core
