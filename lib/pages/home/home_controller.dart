@@ -114,7 +114,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Revert Text
       Future.delayed(timeout, () {
         if (!isClosed) {
-          title(view.value.title);
+          title("${LobbyService.local.value.count} Around");
           _timeoutActive = false;
         }
       });
