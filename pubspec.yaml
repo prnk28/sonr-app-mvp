@@ -24,6 +24,10 @@ environment_config:
       env_var: hs_key
     hs_secret:
       env_var: hs_secret
+    storj_key:
+      env_var: storj_key
+    storj_root_passowrd:
+      env_var: storj_root_password
 
 # ** ================== **
 # **    DEPENDENCIES    **
