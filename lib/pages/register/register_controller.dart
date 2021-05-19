@@ -29,6 +29,7 @@ class RegisterController extends GetxController {
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterStatus>(RegisterStatus.Name);
+  final returningUser = User().obs;
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -64,15 +65,16 @@ class RegisterController extends GetxController {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Create User Data
         var data = await UserService.to.createUser(sonrName.value);
-        mnemonic(data);
+        mnemonic(data.item1);
 
         // Add New User
         var result = await UserService.to.addUserRecord(sonrName.value);
+
         if (result) {
           status(RegisterStatus.Backup);
         }
       } else {
-        status(RegisterStatus.Backup);
+        status(RegisterStatus.Location);
       }
     }
   }
@@ -99,7 +101,7 @@ class RegisterController extends GetxController {
       }
 
       // Process data.
-      await UserService.newUser(contact);
+      await UserService.saveUser(contact);
       status(RegisterStatus.Location);
     }
   }
@@ -124,6 +126,7 @@ class RegisterController extends GetxController {
       // Check Available
       if (!UserService.to.isNameAvailable(sonrName.value)) {
         if (UserService.to.checkUser(sonrName.value)) {
+          setReturningUser();
           nameStatus(RegisterNameStatus.Returning);
           return true;
         } else {
@@ -156,6 +159,12 @@ class RegisterController extends GetxController {
       nameStatus(RegisterNameStatus.TooShort);
       return false;
     }
+  }
+
+  /// @ Sets for Returning User
+  void setReturningUser() async {
+    var user = await UserService.to.returningUser(sonrName.value);
+    returningUser(user);
   }
 
   /// @ Request Location Permissions

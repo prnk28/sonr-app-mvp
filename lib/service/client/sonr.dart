@@ -6,7 +6,7 @@ import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_plugin/sonr_plugin.dart';
+import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
 import '../user/cards.dart';
 import 'lobby.dart';
 import '../user/user.dart';
@@ -66,7 +66,7 @@ class SonrService extends GetxService {
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
       // Create Node
-      _node = await SonrCore.initialize(_buildRequest());
+      _node = await SonrCore.initialize(_buildConnRequest());
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -84,7 +84,7 @@ class SonrService extends GetxService {
   /// @ Connect to Service Method
   Future<void> connect() async {
     // Create Node
-    _node = await SonrCore.initialize(_buildRequest());
+    _node = await SonrCore.initialize(_buildConnRequest());
     _node.onStatus = _handleStatus;
     _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
     _node.onInvited = _handleInvited;
@@ -101,13 +101,15 @@ class SonrService extends GetxService {
     if (DeviceService.isMobile) {
       _node.update(Request.newUpdatePosition(MobileService.position.value));
     }
+
+    await putUser();
   }
 
   /// @ Get User from Storage
   static Future<User?> getUser({String? id}) async {
     // Provided
     if (id != null) {
-      var data = await to._node.getUser(id);
+      var data = await SonrCore.getUser(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: id));
       if (data != null) {
         print(data.toString());
         return data;
@@ -118,7 +120,8 @@ class SonrService extends GetxService {
     }
 
     // Reference
-    var data = await to._node.getUser(UserService.user.value.id);
+    var data = await SonrCore.getUser(
+        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: UserService.user.value.id));
     if (data != null) {
       print(data.toString());
       return data;
@@ -132,13 +135,14 @@ class SonrService extends GetxService {
   static Future<bool> putUser({User? user}) async {
     // Provided
     if (user != null) {
-      var resp = await to._node.putUser(user);
+      var resp = await SonrCore.putUser(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: user));
       print("User Put Status: $resp");
       return resp;
     }
 
     // Reference
-    var resp = await to._node.putUser(UserService.user.value);
+    var resp =
+        await SonrCore.putUser(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user.value));
     print("User Put Status: $resp");
     return resp;
   }
@@ -333,7 +337,8 @@ class SonrService extends GetxService {
   // ************************
   // ******* Helpers ********
   // ************************
-  ConnectionRequest _buildRequest() {
+  // Builds Connection Request
+  ConnectionRequest _buildConnRequest() {
     return ConnectionRequest(
         contact: UserService.contact.value,
         crypto: UserService.user.value.crypto,
@@ -345,8 +350,6 @@ class SonrService extends GetxService {
           ipKey: Env.ip_key,
           rapidApiHost: Env.rapid_host,
           rapidApiKey: Env.rapid_key,
-          storjApiKey: Env.storj_key,
-          storjRootAccessPhrase: Env.storj_root_password,
         ));
   }
 }

@@ -56,10 +56,20 @@ class NamePage extends GetView<RegisterController> {
                           ),
                         ),
                       ])),
+                  _ReturningUserView()
                 ],
               ),
             )
           ]),
+        ));
+  }
+}
+
+class _ReturningUserView extends GetView<RegisterController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Row(
+          children: [controller.returningUser.value.contact.fullName.h6],
         ));
   }
 }

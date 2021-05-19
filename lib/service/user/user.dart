@@ -187,7 +187,7 @@ class UserService extends GetxService {
   }
 
   /// @ Creates Crypto User Data, Returns Mnemonic Text
-  Future<String> createUser(String name) async {
+  Future<Tuple<String, String>> createUser(String name) async {
     // No Key Data
     if (!_hasKey.value) {
       _ecKeypair = ECKeypair.fromRandom();
@@ -211,7 +211,39 @@ class UserService extends GetxService {
 
     // Set Crypto and Return Mnemonic
     setCrypto(User_Crypto(prefix: _prefix, signature: signatureHex));
-    return to._mnemonic;
+    return Tuple(to._mnemonic, _prefix);
+  }
+
+  Future<User?> returningUser(String name) async {
+    // No Key Data
+    if (!_hasKey.value) {
+      _ecKeypair = ECKeypair.fromRandom();
+      await _secure.write(key: K_PRIVKEY_TAG, value: _ecKeypair.privateKey.toString());
+      _hasKey(true);
+    }
+
+    // No Prefix Data
+    if (!_hasPrefix.value) {
+      _prefix = _newPrefix(name);
+      await _secure.write(key: K_PREFIX_TAG, value: _prefix);
+      _hasPrefix(true);
+    }
+
+    // Fetch User Data
+    var user = await SonrService.getUser(id: _prefix);
+
+    // Set Contact for User
+    to._contact(user!.contact);
+    to._contact.refresh();
+
+    // Set Valuse
+    to._isNewUser(true);
+
+    // Save User/Contact to Disk
+    var permUser = User(contact: to._contact.value);
+    await to._userBox.write("user", permUser.writeToJson());
+    to._hasUser(true);
+    return to._user.value;
   }
 
   /// @ Refreshes Record Table from Namebase Client
@@ -230,7 +262,7 @@ class UserService extends GetxService {
   }
 
   /// @ Method to Create New User from Contact
-  static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
+  static Future<User> saveUser(Contact providedContact, {bool withSonrConnect = false}) async {
     // Set Contact for User
     to._contact(providedContact);
     to._contact.refresh();
