@@ -114,6 +114,13 @@ class SonrService extends GetxService {
         }
       }
     }
+
+    var data = await _node!.getUser(UserService.to.prefix);
+    if (data != null) {
+      print(data.toString());
+    } else {
+      print("User data doesnt exist");
+    }
   }
 
   /// @ Retreive Node Location Info
@@ -343,6 +350,8 @@ class SonrService extends GetxService {
           ipKey: Env.ip_key,
           rapidApiHost: Env.rapid_host,
           rapidApiKey: Env.rapid_key,
+          storjApiKey: Env.storj_key,
+          storjRootAccessPhrase: Env.storj_root_password,
         ));
   }
 }

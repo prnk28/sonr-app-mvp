@@ -64,6 +64,7 @@ class UserService extends GetxService {
   String get deviceID => DeviceService.device.id;
   String get mnemonic => _mnemonic;
   Uint8List get mnemonicUTF => Uint8List.fromList(utf8.encode(_mnemonic));
+  String get prefix => this._prefix;
   String get privateKey => _ecKeypair.privateKey.toString();
   String get publicKey => _ecKeypair.publicKey.toString();
   Uint8List get signature => _ecKeypair.privateKey.createSHA512Signature(mnemonicUTF);

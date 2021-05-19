@@ -26,7 +26,7 @@ environment_config:
       env_var: hs_secret
     storj_key:
       env_var: storj_key
-    storj_root_passowrd:
+    storj_root_password:
       env_var: storj_root_password
 
 # ** ================== **
