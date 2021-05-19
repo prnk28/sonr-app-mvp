@@ -264,6 +264,7 @@ class UserService extends GetxService {
   void setCrypto(User_Crypto data) {
     _user.update((val) {
       if (val != null) {
+        val.id = data.prefix;
         val.crypto = data;
       }
     });

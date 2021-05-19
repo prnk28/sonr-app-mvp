@@ -14,7 +14,6 @@ export 'package:sonr_plugin/sonr_plugin.dart';
 
 class SonrService extends GetxService {
   // Accessors
-  static bool get isInitialized => to._node != null;
   static bool get isRegistered => Get.isRegistered<SonrService>();
   static SonrService get to => Get.find<SonrService>();
 
@@ -29,7 +28,7 @@ class SonrService extends GetxService {
   static Rx<Status> get status => to._status;
 
   // @ Set References
-  Node? _node;
+  late Node _node;
   var _received = Completer<TransferCard>();
   Completer<TransferCard> get received => _received;
 
@@ -43,7 +42,7 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          _node!.update(Request.newUpdatePosition(MobileService.position.value));
+          _node.update(Request.newUpdatePosition(MobileService.position.value));
         }
       }
     });
@@ -68,14 +67,14 @@ class SonrService extends GetxService {
     if (DeviceService.isReadyToConnect) {
       // Create Node
       _node = await SonrCore.initialize(_buildRequest());
-      _node!.onStatus = _handleStatus;
-      _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node!.onInvited = _handleInvited;
-      _node!.onReplied = _handleResponded;
-      _node!.onProgressed = _handleProgress;
-      _node!.onReceived = _handleReceived;
-      _node!.onTransmitted = _handleTransmitted;
-      _node!.onError = _handleError;
+      _node.onStatus = _handleStatus;
+      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node.onInvited = _handleInvited;
+      _node.onReplied = _handleResponded;
+      _node.onProgressed = _handleProgress;
+      _node.onReceived = _handleReceived;
+      _node.onTransmitted = _handleTransmitted;
+      _node.onError = _handleError;
       return this;
     } else {
       return this;
@@ -84,71 +83,85 @@ class SonrService extends GetxService {
 
   /// @ Connect to Service Method
   Future<void> connect() async {
-    if (_node == null) {
-      // Create Node
-      _node = await SonrCore.initialize(_buildRequest());
-      _node!.onStatus = _handleStatus;
-      _node!.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node!.onInvited = _handleInvited;
-      _node!.onReplied = _handleResponded;
-      _node!.onProgressed = _handleProgress;
-      _node!.onReceived = _handleReceived;
-      _node!.onTransmitted = _handleTransmitted;
-      _node!.onError = _handleError;
+    // Create Node
+    _node = await SonrCore.initialize(_buildRequest());
+    _node.onStatus = _handleStatus;
+    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+    _node.onInvited = _handleInvited;
+    _node.onReplied = _handleResponded;
+    _node.onProgressed = _handleProgress;
+    _node.onReceived = _handleReceived;
+    _node.onTransmitted = _handleTransmitted;
+    _node.onError = _handleError;
 
-      // Connect Node
-      _node!.connect();
+    // Connect Node
+    _node.connect();
 
-      // Update for Mobile
-      if (DeviceService.isMobile) {
-        _node!.update(Request.newUpdatePosition(MobileService.position.value));
-      }
-    } else {
-      if (_status.value == Status.IDLE) {
-        // Connect Node
-        _node!.connect();
+    // Update for Mobile
+    if (DeviceService.isMobile) {
+      _node.update(Request.newUpdatePosition(MobileService.position.value));
+    }
+  }
 
-        // Update for Mobile
-        if (DeviceService.isMobile) {
-          _node!.update(Request.newUpdatePosition(MobileService.position.value));
-        }
+  /// @ Get User from Storage
+  static Future<User?> getUser({String? id}) async {
+    // Provided
+    if (id != null) {
+      var data = await to._node.getUser(id);
+      if (data != null) {
+        print(data.toString());
+        return data;
+      } else {
+        print("User data doesnt exist");
+        return null;
       }
     }
 
-    var data = await _node!.getUser(UserService.to.prefix);
+    // Reference
+    var data = await to._node.getUser(UserService.user.value.id);
     if (data != null) {
       print(data.toString());
+      return data;
     } else {
       print("User data doesnt exist");
+      return null;
     }
+  }
+
+  /// @ Place User into Storage
+  static Future<bool> putUser({User? user}) async {
+    // Provided
+    if (user != null) {
+      var resp = await to._node.putUser(user);
+      print("User Put Status: $resp");
+      return resp;
+    }
+
+    // Reference
+    var resp = await to._node.putUser(UserService.user.value);
+    print("User Put Status: $resp");
+    return resp;
   }
 
   /// @ Retreive Node Location Info
   static Future<Location?> locationInfo() async {
-    if (to._node != null) {
-      return await to._node!.location();
-    }
+    return await to._node.location();
   }
 
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
-    if (to._node != null) {
-      var link = await to._node!.getURL(url);
-      return link ?? URLLink(url: url);
-    }
-    return URLLink(url: url);
+    var link = await to._node.getURL(url);
+    return link ?? URLLink(url: url);
   }
 
   /// @ Request Local Network Access on iOS
   static void requestLocalNetwork() async {
-    to._node!.requestLocalNetwork();
+    to._node.requestLocalNetwork();
   }
 
   /// @ Create a New Remote
   static Future<RemoteInfo?> createRemote() async {
-    if (to._node != null) {
-      return await to._node!.createRemote();
-    }
+    return await to._node.createRemote();
   }
 
   /// @ Join an Existing Remote
@@ -159,67 +172,49 @@ class SonrService extends GetxService {
 
     // Perform Routine
     var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
-
-    if (to._node != null) {
-      to._node!.joinRemote(remote);
-    }
+    to._node.joinRemote(remote);
     return remote;
   }
 
   /// @ Leave a Remote Group
   static void leaveRemote(RemoteInfo info) async {
     // Perform Routine
-    if (to._node != null) {
-      to._node!.leaveRemote(info);
-    }
+    to._node.leaveRemote(info);
   }
 
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
       to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
-
-      if (to._node != null) {
-        to._node!.update(Request.newUpdateProperties(to._properties.value));
-      }
+      to._node.update(Request.newUpdateProperties(to._properties.value));
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
-    if (to._node != null) {
-      to._node!.update(Request.newUpdateContact(contact));
-    }
+    to._node.update(Request.newUpdateContact(contact));
   }
 
   /// @ Direct Message a Peer
   static void message(Peer peer, String content) {
-    if (to._node != null) {
-      to._node!.message(peer, content);
-    }
+    to._node.message(peer, content);
   }
 
   /// @ Invite Peer with Built Request
   static void invite(InviteRequest request) async {
     // Send Invite
-    if (to._node != null) {
-      to._node!.invite(request);
-    }
+    to._node.invite(request);
   }
 
   /// @ Respond-Peer Event
   static void respond(RespondRequest request) async {
-    if (to._node != null) {
-      to._node!.respond(request);
-    }
+    to._node.respond(request);
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     // Send Invite
-    if (to._node != null) {
-      to._node!.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
-    }
+    to._node.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
   }
 
   /// @ Async Function notifies transfer complete
@@ -242,7 +237,7 @@ class SonrService extends GetxService {
 
       // Handle Available
       if (DeviceService.isMobile) {
-        _node!.update(Request.newUpdatePosition(MobileService.position.value));
+        _node.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
   }
