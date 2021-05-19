@@ -99,6 +99,10 @@ class UserService extends GetxService {
     if (_hasKey.value) {
       final privKeyData = await _secure.read(key: K_PRIVKEY_TAG);
       _ecKeypair = ECKeypair(ECPrivateKey.fromString(privKeyData!));
+    } else {
+      _ecKeypair = ECKeypair.fromRandom();
+      await _secure.write(key: K_PRIVKEY_TAG, value: _ecKeypair.privateKey.toString());
+      _hasKey(true);
     }
 
     // ii. Set Mnemonic
@@ -188,13 +192,6 @@ class UserService extends GetxService {
 
   /// @ Creates Crypto User Data, Returns Mnemonic Text
   Future<Tuple<String, String>> createUser(String name) async {
-    // No Key Data
-    if (!_hasKey.value) {
-      _ecKeypair = ECKeypair.fromRandom();
-      await _secure.write(key: K_PRIVKEY_TAG, value: _ecKeypair.privateKey.toString());
-      _hasKey(true);
-    }
-
     // No Prefix Data
     if (!_hasPrefix.value) {
       _prefix = _newPrefix(name);
@@ -215,13 +212,6 @@ class UserService extends GetxService {
   }
 
   Future<User?> returningUser(String name) async {
-    // No Key Data
-    if (!_hasKey.value) {
-      _ecKeypair = ECKeypair.fromRandom();
-      await _secure.write(key: K_PRIVKEY_TAG, value: _ecKeypair.privateKey.toString());
-      _hasKey(true);
-    }
-
     // No Prefix Data
     if (!_hasPrefix.value) {
       _prefix = _newPrefix(name);
