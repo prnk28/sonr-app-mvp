@@ -15,7 +15,7 @@ class HSResponse {
 
   factory HSResponse.fromJson(dynamic json) {
     return HSResponse(
-      success: json["success"],
+      success: json["success"] ?? false,
       records: List<HSRecord>.from(json["records"].map((x) => HSRecord.fromJson(x))),
     );
   }
