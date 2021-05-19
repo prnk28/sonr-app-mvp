@@ -13,5 +13,4 @@ export 'database/cards_db.dart';
 export 'extensions/metadata.dart';
 
 // Models
-export 'model/model_tile.dart';
 export 'model/rx_proto.dart';

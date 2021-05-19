@@ -135,8 +135,8 @@ class _ProfileInfoView extends GetView<ProfileController> {
   }
 
   Widget _buildBio() {
-    if (UserService.contact.value.hasAbout()) {
-      return '"${UserService.contact.value.about}"'.p;
+    if (UserService.contact.value.hasBio()) {
+      return '"${UserService.contact.value.bio}"'.p;
     } else {
       return Container();
     }
@@ -151,7 +151,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
           width: Get.width,
           height: 72,
           decoration: Neumorphic.indented(theme: Get.theme),
-          child: UserService.contact.value.hasSocial(Contact_Social_Provider.Twitter)
+          child: UserService.contact.value.hasSocialMedia(Contact_Social_Media.Twitter)
               ? Text("Last Tweet")
               : GestureDetector(
                   onTap: () => isLinkingTwitter(true),

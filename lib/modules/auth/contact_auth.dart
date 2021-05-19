@@ -63,7 +63,7 @@ class ContactAuthView extends StatelessWidget {
         // Social Media
         Container(
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
-          child: Row(children: card.mapSocials((social) => social.provider.gradient(size: 32)) as List<Widget>),
+          child: Row(children: card.mapSocials((social) => social.media.gradient(size: 32)) as List<Widget>),
         ),
         Divider(),
         Padding(padding: EdgeInsets.all(4)),
@@ -165,7 +165,7 @@ class ContactFlatCard extends StatelessWidget {
           // Brief Contact Card Info
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
+              children: contact!.mapSocials((social) => social.media.gradient(size: 35)) as List<Widget>)
         ]),
       ),
     );

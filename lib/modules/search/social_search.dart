@@ -6,38 +6,35 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 class SocialUserSearchField extends StatefulWidget {
   final String? value;
   final ValueChanged<String>? onChanged;
-  final Function(Contact_Social_User?)? onEditingComplete;
+  final Function(Contact_Social)? onEditingComplete;
   final Iterable<String>? autofillHints;
-  final Contact_Social_Provider? provider;
+  final Contact_Social_Media? provider;
 
   factory SocialUserSearchField.medium({
     String? value,
     ValueChanged<String>? onChanged,
-    Function(Contact_Social_User)? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
-    return SocialUserSearchField(Contact_Social_Provider.Medium, value: value);
+    return SocialUserSearchField(Contact_Social_Media.Medium, value: value);
   }
 
   factory SocialUserSearchField.twitter({
     required String value,
     ValueChanged<String>? onChanged,
-    Function(Contact_Social_User)? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
-    return SocialUserSearchField(Contact_Social_Provider.Twitter, value: value);
+    return SocialUserSearchField(Contact_Social_Media.Twitter, value: value);
   }
 
   factory SocialUserSearchField.youtube({
     required String value,
     ValueChanged<String>? onChanged,
-    Function(Contact_Social_User)? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
-    return SocialUserSearchField(Contact_Social_Provider.YouTube, value: value);
+    return SocialUserSearchField(Contact_Social_Media.YouTube, value: value);
   }
 
   SocialUserSearchField(
@@ -53,9 +50,6 @@ class SocialUserSearchField extends StatefulWidget {
 }
 
 class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
-  SocialUserSearchResult? result;
-  Contact_Social_User? selectedUser;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,56 +81,37 @@ class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
                       child: TextField(
                         showCursor: false,
                         autofocus: true,
-                        onEditingComplete: () => widget.onEditingComplete!(selectedUser),
-                        onChanged: (val) async {
-                          if (val.isNotEmpty) {
-                            var data = await widget.provider!.searchUser(val, false);
-                            setState(() {
-                              selectedUser = data!.first;
-                              result = data;
-                            });
-                          }
-                        },
+                        onChanged: (val) async {},
                         decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
                       ),
                     ),
                   ])),
             ])),
-        Align(
-            alignment: Alignment.centerRight,
-            child: result != null && result!.hasData
-                ? _SocialUserSearchSuggestion(
-                    result!.first,
-                    onSelected: (data) {
-                      selectedUser = data;
-                    },
-                  )
-                : Container())
+        Align(alignment: Alignment.centerRight, child: Container())
       ]),
     );
   }
 }
 
-class _SocialUserSearchSuggestion extends StatelessWidget {
-  final Contact_Social_User? user;
-  final Function(Contact_Social_User) onSelected;
+// class _SocialUserSearchSuggestion extends StatelessWidget {
+//   final Function(Contact_Social) onSelected;
 
-  const _SocialUserSearchSuggestion(this.user, {Key? key, required this.onSelected}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Container(
-        width: 100,
-        height: 100,
-        child: PlainButton(
-            onPressed: () {
-              print(user!.toString());
-            },
-            child: Container(
-              child: Image.network(user!.picture.url),
-            )),
-      ),
-    );
-  }
-}
+//   const _SocialUserSearchSuggestion(this.user, {Key? key, required this.onSelected}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(right: 8.0),
+//       child: Container(
+//         width: 100,
+//         height: 100,
+//         child: PlainButton(
+//             onPressed: () {
+//               print(user!.toString());
+//             },
+//             child: Container(
+//               child: Image.network(user!.picture.url),
+//             )),
+//       ),
+//     );
+//   }
+// }

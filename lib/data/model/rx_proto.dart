@@ -38,11 +38,6 @@ extension RxContact on Rx<Contact> {
         val?.addEmail(data);
       });
 
-  /// Add Name for Rx<Contact>
-  void addName(String data, String label) => this.update((val) {
-        val?.addName(data, label);
-      });
-
   /// Add Phone for Rx<Contact>
   void addPhone(String data, {String label = ContactUtils.K_DEFAULT_PHONE_LABEL}) => this.update((val) {
         val?.addPhone(data, label: label);

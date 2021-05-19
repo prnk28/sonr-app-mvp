@@ -82,7 +82,7 @@ class ContactCardItemView extends StatelessWidget {
             // Brief Contact Card Info
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: card.contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
+                children: card.contact!.mapSocials((social) => social.media.gradient(size: 35)) as List<Widget>)
           ]),
         ),
       ),

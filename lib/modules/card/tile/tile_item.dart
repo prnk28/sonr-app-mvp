@@ -50,7 +50,7 @@ class SocialTileItem extends GetWidget<TileController> {
         HapticFeedback.lightImpact();
       },
       onDoubleTap: () {
-        controller.launchURL(item.links.postLink.url);
+        controller.launchURL(item.post.link.url);
         HapticFeedback.mediumImpact();
       },
       child: Container(
