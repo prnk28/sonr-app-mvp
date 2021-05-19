@@ -33,7 +33,6 @@ class RemoteController extends GetxController {
 
   // ** Initializer ** //
   void onInit() {
-    Get.find<SonrService>().registerRemoteInvite(_handleRemoteInvite);
     super.onInit();
     _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
   }
@@ -123,12 +122,6 @@ class RemoteController extends GetxController {
     if (!visible && status.value == RemoteViewStatus.NotJoined) {
       isJoinFieldTapped(false);
     }
-  }
-
-  // @ Handle A remote Invite
-  void _handleRemoteInvite(AuthInvite invite) {
-    currentInvite(invite);
-    status(RemoteViewStatus.Invited);
   }
 
   void _handleRemoteLobby(Lobby lobby) {

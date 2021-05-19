@@ -33,7 +33,6 @@ class SonrService extends GetxService {
   Completer<Transfer> get received => _received;
 
   // Registered Callbacks
-  Function(AuthInvite)? _remoteCallback;
   Function(TransferStatus)? _transferCallback;
 
   /// @ Updates Node^ //
@@ -46,11 +45,6 @@ class SonrService extends GetxService {
         }
       }
     });
-  }
-
-  // @ Register Handler for Remote Invite
-  void registerRemoteInvite(Function(AuthInvite) invite) {
-    _remoteCallback = invite;
   }
 
   // @ Register Handler for Transfer Updates
