@@ -1,4 +1,3 @@
-import 'package:sonr_app/modules/search/social_search.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
