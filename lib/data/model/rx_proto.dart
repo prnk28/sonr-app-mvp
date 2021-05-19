@@ -85,7 +85,7 @@ extension RxContact on Rx<Contact> {
 
 /// @ InviteRequest Protobuf
 /// Extension Manages InviteRequest Protobuf as Rx Type
-extension RxInviteRequest on Rx<InviteRequest> {
+extension RxInviteRequest on Rx<AuthInvite> {
   /// Checks if InviteRequest Payload is Media
   bool get isMedia => this.value.payload == Payload.MEDIA;
 

@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// @ Widget for Expanded Media View
 class URLCardItemView extends StatelessWidget {
-  final TransferCardItem item;
+  final TransferCard item;
   const URLCardItemView(this.item);
   @override
   Widget build(BuildContext context) {

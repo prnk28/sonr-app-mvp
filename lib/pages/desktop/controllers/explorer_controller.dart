@@ -7,7 +7,7 @@ class ExplorerController extends GetxController {
 
   // @ Properties
   final isNotEmpty = false.obs;
-  final inviteRequest = InviteRequest().obs;
+  final inviteRequest = AuthInvite().obs;
   final fileItem = Rx<SonrFile?>(null);
   final location = Rx<Location>(Location());
 

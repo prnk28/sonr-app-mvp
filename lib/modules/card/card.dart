@@ -13,12 +13,12 @@ import 'package:sonr_app/style/style.dart';
 enum TransferItemsType { All, Metadata, Contacts, Links }
 enum TransferItemView { CardItem, GridItem, ListItem }
 
-//// @ TransferCardView: Builds View based on TransferCardItem Payload Type
+//// @ TransferView: Builds View based on TransferItem Payload Type
 class TransferItem extends StatelessWidget {
-  /// TransferCardItem: SQL Reference to Protobuf
-  final TransferCardItem item;
+  /// TransferItem: SQL Reference to Protobuf
+  final TransferCard item;
 
-  /// Size/Shape of TransferCard View
+  /// Size/Shape of Transfer View
   final TransferItemView type;
   const TransferItem(this.item, {Key? key, this.type = TransferItemView.CardItem}) : super(key: key);
 
@@ -80,8 +80,8 @@ extension CardsViewElementTypeUtils on TransferItemsType {
     }
   }
 
-  /// Return TransferCardItem from Index Value
-  TransferCardItem transferCardItemAtIndex(int index) {
+  /// Return TransferItem from Index Value
+  TransferCard transferItemAtIndex(int index) {
     switch (this) {
       case TransferItemsType.Metadata:
         return CardService.metadata.reversed.toList()[index];
@@ -109,7 +109,7 @@ class CardsGridView extends StatelessWidget {
         return GridView.builder(
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(type.transferCardItemAtIndex(index), type: TransferItemView.GridItem);
+            return TransferItem(type.transferItemAtIndex(index), type: TransferItemView.GridItem);
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
         );
@@ -133,7 +133,7 @@ class CardsListView extends StatelessWidget {
         return ListView.builder(
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(type.transferCardItemAtIndex(index), type: TransferItemView.ListItem);
+            return TransferItem(type.transferItemAtIndex(index), type: TransferItemView.ListItem);
           },
         );
       } else {

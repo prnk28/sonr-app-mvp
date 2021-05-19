@@ -25,7 +25,7 @@
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AC4AC67225F58C1E00CC7056;
-			remoteInfo = sharing;
+			RemoteResponse = sharing;
 		};
 /* End PBXContainerItemProxy section */
 

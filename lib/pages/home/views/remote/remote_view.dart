@@ -83,7 +83,7 @@ class RemoteLobbyView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "${controller.remoteInfo.value!.display}".h2,
+      "${controller.remoteResponse.value!.display}".h2,
       Expanded(
           child: ListView.builder(
         itemCount: controller.remoteLobby.value!.count,
@@ -92,7 +92,7 @@ class RemoteLobbyView extends GetView<RemoteController> {
           return PeerListItem(
             peer,
             index - 1,
-            remote: controller.remoteInfo.value,
+            remote: controller.remoteResponse.value,
           );
         },
       )),

@@ -29,8 +29,8 @@ class SonrService extends GetxService {
 
   // @ Set References
   late Node _node;
-  var _received = Completer<TransferCard>();
-  Completer<TransferCard> get received => _received;
+  var _received = Completer<Transfer>();
+  Completer<Transfer> get received => _received;
 
   // Registered Callbacks
   Function(AuthInvite)? _remoteCallback;
@@ -109,10 +109,9 @@ class SonrService extends GetxService {
   static Future<User?> getUser({String? id}) async {
     // Provided
     if (id != null) {
-      var data = await SonrCore.getUser(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: id));
+      var data = await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: id));
       if (data != null) {
-        print(data.toString());
-        return data;
+        return data.user;
       } else {
         print("User data doesnt exist");
         return null;
@@ -120,11 +119,11 @@ class SonrService extends GetxService {
     }
 
     // Reference
-    var data = await SonrCore.getUser(
+    var data = await SonrCore.userStorjRequest(
         StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: UserService.user.value.id));
     if (data != null) {
       print(data.toString());
-      return data;
+      return data.user;
     } else {
       print("User data doesnt exist");
       return null;
@@ -135,16 +134,16 @@ class SonrService extends GetxService {
   static Future<bool> putUser({User? user}) async {
     // Provided
     if (user != null) {
-      var resp = await SonrCore.putUser(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: user));
+      var resp = await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: user));
       print("User Put Status: $resp");
-      return resp;
+      return resp!.success;
     }
 
     // Reference
-    var resp =
-        await SonrCore.putUser(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user.value));
+    var resp = await SonrCore.userStorjRequest(
+        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user.value));
     print("User Put Status: $resp");
-    return resp;
+    return resp!.success;
   }
 
   /// @ Retreive Node Location Info
@@ -164,26 +163,25 @@ class SonrService extends GetxService {
   }
 
   /// @ Create a New Remote
-  static Future<RemoteInfo?> createRemote() async {
-    return await to._node.createRemote();
+  static Future<RemoteResponse?> createRemote() async {
+    return await to._node.remoteRequest(RemoteRequest(create_1: RemoteRequest_CreateAction()));
   }
 
   /// @ Join an Existing Remote
-  static Future<RemoteInfo> joinRemote(List<String> words) async {
+  static Future<RemoteResponse> joinRemote(List<String> words) async {
     // Extract Data
     var display = "${words[0]} ${words[1]} ${words[2]}";
     var topic = "${words[0]}-${words[1]}-${words[2]}";
 
     // Perform Routine
-    var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
-    to._node.joinRemote(remote);
+    var remote = RemoteResponse(isJoin: true, topic: topic, display: display, words: words);
+    await to._node.remoteRequest(RemoteRequest(join: RemoteRequest_JoinAction(words: words)));
     return remote;
   }
 
   /// @ Leave a Remote Group
-  static void leaveRemote(RemoteInfo info) async {
-    // Perform Routine
-    to._node.leaveRemote(info);
+  static void leaveRemote(RemoteResponse info) async {
+    await to._node.remoteRequest(RemoteRequest(leave: RemoteRequest_LeaveAction(isJoin: info.isJoin, topic: info.topic)));
   }
 
   /// @ Sets Properties for Node
@@ -199,30 +197,25 @@ class SonrService extends GetxService {
     to._node.update(Request.newUpdateContact(contact));
   }
 
-  /// @ Direct Message a Peer
-  static void message(Peer peer, String content) {
-    to._node.message(peer, content);
-  }
-
   /// @ Invite Peer with Built Request
-  static void invite(InviteRequest request) async {
+  static void invite(AuthInvite request) async {
     // Send Invite
     to._node.invite(request);
   }
 
   /// @ Respond-Peer Event
-  static void respond(RespondRequest request) async {
+  static void respond(AuthReply request) async {
     to._node.respond(request);
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     // Send Invite
-    to._node.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
+    to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
   }
 
   /// @ Async Function notifies transfer complete
-  static Future<TransferCard> completed() async {
+  static Future<Transfer> completed() async {
     return to.received.future;
   }
 
@@ -248,11 +241,6 @@ class SonrService extends GetxService {
 
   /// @ Node Has Been Invited
   void _handleInvited(AuthInvite data) async {
-    // Check for Overlay
-    if (data.hasRemote() && _remoteCallback != null) {
-      _remoteCallback!(data);
-    }
-
     // Handle Feedback
     DeviceService.playSound(type: UISoundType.Swipe);
     DeviceService.feedback();
@@ -266,23 +254,23 @@ class SonrService extends GetxService {
   }
 
   /// @ Node Has Been Accepted
-  void _handleResponded(AuthReply data) async {
+  void _handleResponded(AuthReply reply) async {
     // Handle Contact Response
-    if (data.type == AuthReply_Type.FlatContact) {
+    if (reply.type == AuthReply_Type.FlatContact) {
       await HapticFeedback.heavyImpact();
-      FlatMode.response(data.card.contact);
-    } else if (data.type == AuthReply_Type.Contact) {
+      FlatMode.response(reply.data.contact);
+    } else if (reply.type == AuthReply_Type.Contact) {
       await HapticFeedback.vibrate();
-      SonrOverlay.reply(data);
+      SonrOverlay.reply(reply);
     }
 
     // For Cancel
-    else if (data.type == AuthReply_Type.Cancel) {
+    else if (reply.type == AuthReply_Type.Cancel) {
       await HapticFeedback.vibrate();
     } else {
       // Check for Callback
       if (_transferCallback != null) {
-        _transferCallback!(TransferStatusUtil.statusFromReply(data));
+        _transferCallback!(TransferStatusUtil.statusFromReply(reply));
       }
     }
   }
@@ -294,7 +282,7 @@ class SonrService extends GetxService {
   }
 
   /// @ Completes Transmission Sequence
-  void _handleTransmitted(TransferCard data) async {
+  void _handleTransmitted(Transfer data) async {
     // Check for Callback
     if (_transferCallback != null) {
       _transferCallback!(TransferStatus.Completed);
@@ -310,7 +298,7 @@ class SonrService extends GetxService {
   }
 
   /// @ Mark as Received File
-  Future<void> _handleReceived(TransferCard data) async {
+  Future<void> _handleReceived(Transfer data) async {
     print(data.toString());
     // Save Card to Gallery
     await CardService.addCard(data);

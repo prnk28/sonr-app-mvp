@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 class ContactDetailsView extends StatelessWidget {
-  final TransferCardItem item;
+  final TransferCard item;
 
   const ContactDetailsView(this.item, {Key? key}) : super(key: key);
   @override

@@ -11,7 +11,7 @@ class TransferController extends GetxController {
 
   // @ Remote Properties
   final counter = 0.obs;
-  final remote = Rx<RemoteInfo?>(null);
+  final remote = Rx<RemoteResponse?>(null);
 
   // @ Direction Properties
   final angle = 0.0.obs;

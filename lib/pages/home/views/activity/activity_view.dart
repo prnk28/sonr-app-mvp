@@ -25,7 +25,7 @@ class ActivityView extends StatelessWidget {
 
 /// @ Activity List Item
 class _ActivityListItem extends StatelessWidget {
-  final TransferCardActivity item;
+  final TransferActivity item;
 
   const _ActivityListItem({Key? key, required this.item}) : super(key: key);
   @override
@@ -70,7 +70,7 @@ class _ActivityListItem extends StatelessWidget {
     }
   }
 
-  String _description(TransferCardActivity activity) {
+  String _description(TransferActivity activity) {
     if (activity.payload == Payload.FILES) {
       return " some Files"; //+ " from ${card.owner.firstName}";
     } else if (activity.payload == Payload.FILE || activity.payload == Payload.MEDIA) {

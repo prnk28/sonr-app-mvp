@@ -7,9 +7,9 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'views.dart';
 
-/// @ TransferCard Media Item Details
+/// @ Transfer Media Item Details
 class MetaCardItemView extends StatelessWidget {
-  final TransferCardItem card;
+  final TransferCard card;
 
   MetaCardItemView(this.card);
 

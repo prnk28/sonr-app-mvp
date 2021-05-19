@@ -60,17 +60,10 @@ class LobbyService extends GetxService {
     });
   }
 
-  /// @ Registers RemoteInfo to Lobby to Manage Callback
-  static void registerRemoteCallback(RemoteInfo? info, LobbyCallback callback) {
+  /// @ Registers RemoteResponse to Lobby to Manage Callback
+  static void registerRemoteCallback(RemoteResponse? info, LobbyCallback callback) {
     // Initialize
     Lobby? remote;
-
-    // Find Remote Lobby
-    to._lobbies.forEach((e) {
-      if (e.isRemoteLobby(info!)) {
-        remote = e;
-      }
-    });
 
     // Check if Found
     if (remote != null) {
@@ -132,28 +125,20 @@ class LobbyService extends GetxService {
     });
 
     // @ Update Local Topics
-    if (data.isLocal) {
-      // Update Local
-      _handleFlatPeers(data);
-      _local(data);
+    // Update Local
+    _handleFlatPeers(data);
+    _local(data);
 
-      // Refresh Values
-      _local.refresh();
-    }
-
-    // @ Update Other Topics
-    else {
-      _lobbies.add(data);
-      _lobbies.refresh();
-    }
+    // Refresh Values
+    _local.refresh();
   }
 
   // # Handle Lobby Event //
   void handleEvent(LobbyEvent data) {
-    // @ Update Local Topics
-    if (data.event == LobbyEvent_Event.MESSAGE) {
-      print(data.message);
-    }
+    // // @ Update Local Topics
+    // if (data.event == LobbyEvent_Event.MESSAGE) {
+    //   print(data.message);
+    // }
   }
 
   // # Handle Lobby Flat Peers

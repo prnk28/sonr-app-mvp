@@ -1,7 +1,7 @@
 import 'package:sonr_app/style/style.dart';
 
 class URLGridItemView extends StatelessWidget {
-  final TransferCardItem item;
+  final TransferCard item;
   const URLGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class URLGridItemView extends StatelessWidget {
 
 /// @ Main URL Grid Item View
 class _URLGridItemMainView extends StatelessWidget {
-  final TransferCardItem? item;
+  final TransferCard? item;
   final RxBool? isFlipped;
   const _URLGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
@@ -74,7 +74,7 @@ class _URLGridItemMainView extends StatelessWidget {
 
 /// @ Details URL Grid Item View
 class _URLGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem? item;
+  final TransferCard? item;
   final RxBool? isFlipped;
   const _URLGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
