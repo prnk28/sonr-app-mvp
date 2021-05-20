@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/service/api/handshake.dart';
+import 'package:sonr_app/data/api/handshake.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:convert';
