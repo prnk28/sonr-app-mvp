@@ -20,7 +20,6 @@ class DesktopService extends GetxService {
 
   // * Initialize * //
   Future<DesktopService> init() async {
-    //DeviceService.factoryReset();
     // // @ 1. Root Main Entry
     // _main = MainEntry(
     //   title: "Sonr",

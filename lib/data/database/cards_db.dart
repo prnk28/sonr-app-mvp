@@ -109,12 +109,23 @@ class CardsDatabase extends _$CardsDatabase {
 }
 
 LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
-  return LazyDatabase(() async {
-    // put the database file, called db.sqlite here, into the documents folder
-    // for your app.
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db_cards2.sqlite'));
-    return VmDatabase(file);
-  });
+  try {
+    // the LazyDatabase util lets us find the right location for the file async.
+    return LazyDatabase(() async {
+      // put the database file, called db.sqlite here, into the documents folder
+      // for your app.
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, 'db_cards.sqlite'));
+      return VmDatabase(file);
+    });
+  } catch (e) {
+    // the LazyDatabase util lets us find the right location for the file async.
+    return LazyDatabase(() async {
+      // put the database file, called db.sqlite here, into the documents folder
+      // for your app.
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, 'db_cards2.sqlite'));
+      return VmDatabase(file);
+    });
+  }
 }
