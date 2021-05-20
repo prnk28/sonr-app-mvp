@@ -138,6 +138,7 @@ flutter:
     - assets/cards/
     - assets/fonts/
     - assets/images/
+    - assets/illustrations/
     - assets/animations/
     - assets/sounds/
 

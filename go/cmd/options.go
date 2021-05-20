@@ -10,6 +10,7 @@ import (
 	open_file "github.com/jld3103/go-flutter-open_file"
 	warble "github.com/jslater89/warble/go"
 	file_picker "github.com/miguelpruivo/flutter_file_picker/go"
+	sonr_plugin "github.com/sonr-io/plugin/go"
 )
 
 var options = []flutter.Option{
@@ -24,7 +25,7 @@ var options = []flutter.Option{
 	}),
 	flutter.AddPlugin(&open_file.OpenFilePlugin{}),
 	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
-	flutter.AddPlugin(&AppBarDraggable{}),
+	flutter.AddPlugin(&sonr_plugin.SonrCorePlugin{}),
 	flutter.AddPlugin(&platform_device_id.PlatformDeviceIdPlugin{}),
 }
 
