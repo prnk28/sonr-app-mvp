@@ -140,11 +140,6 @@ class SonrService extends GetxService {
     return resp!.success;
   }
 
-  /// @ Retreive Node Location Info
-  static Future<Location?> locationInfo() async {
-    return await to._node.location();
-  }
-
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
     var link = await to._node.getURL(url);

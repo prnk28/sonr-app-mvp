@@ -1,21 +1,32 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:crypton/crypton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/data/model/model_hs.dart';
 import 'package:sonr_app/modules/share/sheet_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device/device.dart';
+import 'package:crypto/crypto.dart' as crypto;
+import 'package:bip39/bip39.dart' as bip39;
 
 // @ Enum defines Type of Permission
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
+
+// Storage Constants
+const K_PRIVKEY_TAG = 'sonr-private-key';
+const K_PREFIX_TAG = 'sonr-prefix';
+const K_MNEMONIC_TAG = 'sonr-mnemonic';
 
 class MobileService extends GetxService {
   // Accessors
@@ -58,7 +69,34 @@ class MobileService extends GetxService {
     }
   }
 
+  // Auth Properties
+  final _hasKey = false.obs;
+  final _hasMnemonic = false.obs;
+  final _hasPrefix = false.obs;
+
+  // Authentication
+  late ECKeypair _ecKeypair;
+  late String _mnemonic;
+  late String _prefix;
+
+  // Shortcuts
+  String get deviceID => DeviceService.device.id;
+  String get mnemonic => _mnemonic;
+  Uint8List get mnemonicUTF => Uint8List.fromList(utf8.encode(_mnemonic));
+
+  String get privateKey => _ecKeypair.privateKey.toString();
+  String get publicKey => _ecKeypair.publicKey.toString();
+  Uint8List get signature => _ecKeypair.privateKey.createSHA512Signature(mnemonicUTF);
+  String get signatureHex => String.fromCharCodes(signature);
+  bool get hasAuth => _hasKey.value && _hasMnemonic.value && _hasPrefix.value;
+
+  /// Auth Accessors
+  static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
+  static Tuple<String, String> get mnemonicPrefix => Tuple(to._mnemonic, to._prefix);
+  static String get prefix => to._prefix;
+
   // References
+  final _secure = FlutterSecureStorage();
   late StreamSubscription _externalMediaStream;
   late StreamSubscription _externalTextStream;
   late StreamSubscription<AccelerometerEvent> _accelStream;
@@ -67,6 +105,34 @@ class MobileService extends GetxService {
 
   // * Device Service Initialization * //
   Future<MobileService> init() async {
+    // @ 1. Set Authentication
+    // Set Auth Data
+    _hasKey(await _secure.containsKey(key: K_PRIVKEY_TAG));
+    _hasMnemonic(await _secure.containsKey(key: K_MNEMONIC_TAG));
+    _hasPrefix(await _secure.containsKey(key: K_PREFIX_TAG));
+
+    // i. Set Key
+    if (_hasKey.value) {
+      final privKeyData = await _secure.read(key: K_PRIVKEY_TAG);
+      _ecKeypair = ECKeypair(ECPrivateKey.fromString(privKeyData!));
+    } else {
+      _ecKeypair = ECKeypair.fromRandom();
+      await _secure.write(key: K_PRIVKEY_TAG, value: _ecKeypair.privateKey.toString());
+      _hasKey(true);
+    }
+
+    // ii. Set Mnemonic
+    if (_hasMnemonic.value) {
+      final data = await _secure.read(key: K_MNEMONIC_TAG);
+      _mnemonic = data!;
+    }
+
+    // iii. Set Prefix
+    if (_hasPrefix.value) {
+      final prefixData = await _secure.read(key: K_PREFIX_TAG);
+      _prefix = prefixData!;
+    }
+
     // Handle Keyboard Visibility
     _keyboardVisible.bindStream(_keyboardVisibleController.onChange);
 
@@ -158,6 +224,44 @@ class MobileService extends GetxService {
     }
   }
 
+  static HSRecord getAuthRecord(String n) {
+    return HSRecord.newAuth(newPrefix(n), n, to.signatureHex);
+  }
+
+  static Future<User_Crypto> newCrypto(String name) async {
+    // No Prefix Data
+    if (!to._hasPrefix.value) {
+      to._prefix = newPrefix(name);
+      await to._secure.write(key: K_PREFIX_TAG, value: to._prefix);
+      to._hasPrefix(true);
+    }
+
+    // No Mnemonic Found
+    if (!to._hasMnemonic.value) {
+      to._mnemonic = bip39.generateMnemonic();
+      await to._secure.write(key: K_MNEMONIC_TAG, value: to._mnemonic);
+      to._hasMnemonic(true);
+    }
+    return User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
+  }
+
+  // Helper Method to Generate Prefix
+  static String newPrefix(String username) {
+    // Create New Prefix
+    var hmacSha256 = crypto.Hmac(crypto.sha256, utf8.encode(username + to.deviceID));
+    var digest = hmacSha256.convert(utf8.encode(username + to.deviceID));
+    return "$digest".substring(0, 16);
+  }
+
+  static Future<void> updatePrefix(String name) async {
+    // No Prefix Data
+    if (!to._hasPrefix.value) {
+      to._prefix = newPrefix(name);
+      await to._secure.write(key: K_PREFIX_TAG, value: to._prefix);
+      to._hasPrefix(true);
+    }
+  }
+
   /// @ Refresh User Location Position
   static Future<void> updateLocation() async {
     if (to._hasLocation.value) {
@@ -239,6 +343,17 @@ class MobileService extends GetxService {
     }
 
     // Return Status
+    return false;
+  }
+
+  /// @ Verifys Given Signature with Mnemonic
+  static bool verifyFingerprint(HSRecord record) {
+    if (record.isAuth) {
+      return to._ecKeypair.publicKey.verifySHA512Signature(
+        to.mnemonicUTF,
+        record.fingerprint,
+      );
+    }
     return false;
   }
 

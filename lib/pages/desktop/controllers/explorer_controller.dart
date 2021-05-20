@@ -9,7 +9,6 @@ class ExplorerController extends GetxController {
   final isNotEmpty = false.obs;
   final inviteRequest = AuthInvite().obs;
   final fileItem = Rx<SonrFile?>(null);
-  final location = Rx<Location>(Location());
 
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
@@ -19,12 +18,6 @@ class ExplorerController extends GetxController {
   void onInit() async {
     // Set Initial Value
     _handleLobbySizeUpdate(LobbyService.local.value);
-    var info = await SonrService.locationInfo();
-    if (info != null) {
-      location(info);
-    }
-
-    location.refresh();
 
     // Add Stream Handlers
     _lobbySizeStream = LobbyService.local.listen(_handleLobbySizeUpdate);

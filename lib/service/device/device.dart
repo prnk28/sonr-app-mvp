@@ -51,19 +51,22 @@ class DeviceService extends GetxService {
 
     // Get Info
     var platform = PlatformUtils.find();
-    var deviceId = await PlatformDeviceId.getDeviceId;
+
     var directories = await Request.getDirectories(platform);
 
     // Initialize Device
-    _device.update((val) {
+    _device.update((val) async {
       if (val != null) {
         // Set Platform
         val.platform = platform;
         val.fileSystem = directories;
 
         // Set ID
-        if (deviceId != null) {
-          val.id = deviceId;
+        if (!isDesktop) {
+          var deviceId = await PlatformDeviceId.getDeviceId;
+          if (deviceId != null) {
+            val.id = deviceId;
+          }
         }
       }
     });

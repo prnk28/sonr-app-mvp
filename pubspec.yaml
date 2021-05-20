@@ -54,7 +54,6 @@ dependencies:
 
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
-  flutter_biometrics: ^0.3.0
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3
@@ -62,7 +61,6 @@ dependencies:
   permission_handler: ^7.1.0
   platform_device_id: ^1.0.1
   url_launcher: ^6.0.3
-  warble: ^0.0.2
 
   # -- Data --
   audioplayers: ^0.18.3
