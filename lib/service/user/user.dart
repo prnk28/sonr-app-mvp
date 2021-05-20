@@ -108,9 +108,6 @@ class UserService extends GetxService {
       _isNewUser(true);
     }
 
-    // Handle Contact Updates
-    _contact.listen(_handleContact);
-
     // Set Theme
     SonrTheme.setDarkMode(isDark: _isDarkMode.val);
     return this;
@@ -150,21 +147,20 @@ class UserService extends GetxService {
 
   Future<User?> returningUser(String name) async {
     if (DeviceService.isMobile) {
-      MobileService.updatePrefix(name);
+      var prefix = await MobileService.updatePrefix(name);
       // Fetch User Data
-      var user = await SonrService.getUser(id: MobileService.prefix);
-
-      // Set Contact for User
-      to._contact(user!.contact);
-      to._contact.refresh();
+      _user(await SonrService.getUser(id: prefix));
 
       // Set Valuse
-      to._isNewUser(false);
+      _isNewUser(false);
 
       // Save User/Contact to Disk
-      var permUser = User(contact: to._contact.value);
-      await to._userBox.write("user", permUser.writeToJson());
+      await to._userBox.write("user", _user.value.writeToJson());
       to._hasUser(true);
+
+      // Set Contact for User
+      _contact(_user.value.contact);
+      _contact.refresh();
       return to._user.value;
     }
     return null;
@@ -203,6 +199,9 @@ class UserService extends GetxService {
     var permUser = User(contact: to._contact.value);
     await to._userBox.write("user", permUser.writeToJson());
     to._hasUser(true);
+
+    // Save User to Backup Storage
+    await SonrService.putUser(user: to._user.value);
     return to._user.value;
   }
 
@@ -241,28 +240,5 @@ class UserService extends GetxService {
   /// @ Trigger iOS Local Network with Alert
   static void togglePointToShare() async {
     to._hasPointToShare.val = !to._hasPointToShare.val;
-  }
-
-  // * --------------------------------------------------------------------------
-  // * ---- Helper Methods ------------------------------------------------------
-  // * --------------------------------------------------------------------------
-  // Helper Method to Handle Contact Updates
-  void _handleContact(Contact data) async {
-    // Check if User Exists
-    if (_userBox.hasData("user")) {
-      // Retreive User from Disk
-      var permJson = _userBox.read("user");
-      User permUser = User.fromJson(permJson)..contact = data;
-
-      // Refresh Reactive Vars
-      _user(permUser);
-      _user.refresh();
-
-      // Save Updated User to Disk
-      await to._userBox.write("user", permUser.writeToJson());
-    }
-
-    // Send Update to Node
-    SonrService.setProfile(data);
   }
 }

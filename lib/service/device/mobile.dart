@@ -253,13 +253,15 @@ class MobileService extends GetxService {
     return "$digest".substring(0, 16);
   }
 
-  static Future<void> updatePrefix(String name) async {
+  static Future<String> updatePrefix(String name) async {
     // No Prefix Data
     if (!to._hasPrefix.value) {
       to._prefix = newPrefix(name);
       await to._secure.write(key: K_PREFIX_TAG, value: to._prefix);
       to._hasPrefix(true);
+      return to._prefix;
     }
+    return to._prefix;
   }
 
   /// @ Refresh User Location Position
