@@ -29,7 +29,6 @@ class RegisterController extends GetxController {
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterStatus>(RegisterStatus.Name);
-  final returningUser = User().obs;
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -163,8 +162,7 @@ class RegisterController extends GetxController {
 
   /// @ Sets for Returning User
   void setReturningUser() async {
-    var user = await UserService.to.returningUser(sonrName.value);
-    returningUser(user);
+    await UserService.to.returningUser(sonrName.value);
   }
 
   /// @ Request Location Permissions
