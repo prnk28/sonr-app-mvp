@@ -139,7 +139,7 @@ class UserService extends GetxService {
         _isNewUser(false);
 
         // Configure Crypto
-        setCrypto(User_Crypto(prefix: _prefix, signature: signatureHex));
+        setCrypto(User_Crypto(prefix: _prefix, signature: signatureHex, privateKey: _ecKeypair.privateKey.toString()));
 
         // Configure Sentry
         Sentry.configureScope((scope) => scope.user = SentryUser(
@@ -207,7 +207,7 @@ class UserService extends GetxService {
     }
 
     // Set Crypto and Return Mnemonic
-    setCrypto(User_Crypto(prefix: _prefix, signature: signatureHex));
+    setCrypto(User_Crypto(prefix: _prefix, signature: signatureHex, privateKey: _ecKeypair.privateKey.toString()));
     return Tuple(to._mnemonic, _prefix);
   }
 

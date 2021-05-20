@@ -158,7 +158,7 @@ class SonrService extends GetxService {
 
   /// @ Create a New Remote
   static Future<RemoteResponse?> createRemote() async {
-    return await to._node.remoteRequest(RemoteRequest(create_1: RemoteRequest_CreateAction()));
+    return await to._node.remoteRequest(RemoteRequest(createData: RemoteRequest_Create()));
   }
 
   /// @ Join an Existing Remote
@@ -169,13 +169,13 @@ class SonrService extends GetxService {
 
     // Perform Routine
     var remote = RemoteResponse(isJoin: true, topic: topic, display: display, words: words);
-    await to._node.remoteRequest(RemoteRequest(join: RemoteRequest_JoinAction(words: words)));
+    await to._node.remoteRequest(RemoteRequest(joinData: RemoteRequest_Join(words: words)));
     return remote;
   }
 
   /// @ Leave a Remote Group
   static void leaveRemote(RemoteResponse info) async {
-    await to._node.remoteRequest(RemoteRequest(leave: RemoteRequest_LeaveAction(isJoin: info.isJoin, topic: info.topic)));
+    await to._node.remoteRequest(RemoteRequest(leaveData: RemoteRequest_Leave(isJoin: info.isJoin, topic: info.topic)));
   }
 
   /// @ Sets Properties for Node
