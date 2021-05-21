@@ -99,7 +99,6 @@ class UserService extends GetxService {
         _userBox.remove('user');
 
         // Fetch User Data from Remote
-        _userBox.read("key")
         _hasUser(false);
         _isNewUser(true);
 
