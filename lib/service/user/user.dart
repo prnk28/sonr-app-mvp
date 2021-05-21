@@ -155,13 +155,14 @@ class UserService extends GetxService {
       _isNewUser(false);
 
       // Save User/Contact to Disk
-      await to._userBox.write("user", _user.value.writeToJson());
-      to._hasUser(true);
+      await _userBox.write("user", _user.value.writeToJson());
+      await _userBox.write("username", name);
+      _hasUser(true);
 
       // Set Contact for User
       _contact(_user.value.contact);
       _contact.refresh();
-      return to._user.value;
+      return _user.value;
     }
     return null;
   }
