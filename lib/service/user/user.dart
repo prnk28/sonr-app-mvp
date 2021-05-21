@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/data/api/handshake.dart';
+import 'package:sonr_app/data/core/handshake.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sentry/sentry.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
@@ -67,7 +67,7 @@ class UserService extends GetxService {
     await GetStorage.init('Preferences');
 
     // Check User Status
-    _hasUser(_userBox.hasData("user"));
+    _hasUser(_userBox.hasData("user") || _userBox.hasData("username"));
 
     // Check if Exists
     if (_hasUser.value) {
@@ -97,12 +97,22 @@ class UserService extends GetxService {
       } catch (e) {
         // Delete User
         _userBox.remove('user');
-        _hasUser(false);
-        _isNewUser(true);
 
-        // Clear Database
-        CardService.deleteAllCards();
-        CardService.clearAllActivity();
+        // Fetch User Data from Remote
+        var data = await returningUser(_userBox.read("username"));
+
+        // Check Data
+        if (data != null) {
+          _hasUser(true);
+          _isNewUser(false);
+        } else {
+          _hasUser(false);
+          _isNewUser(true);
+
+          // Clear Database
+          CardService.deleteAllCards();
+          CardService.clearAllActivity();
+        }
       }
     } else {
       _isNewUser(true);
@@ -140,6 +150,7 @@ class UserService extends GetxService {
     if (DeviceService.isMobile) {
       // Set Crypto and Return Mnemonic
       setCrypto(await MobileService.newCrypto(name));
+      await to._userBox.write("username", name);
       return MobileService.mnemonicPrefix;
     }
     return Tuple("", "");
@@ -154,15 +165,16 @@ class UserService extends GetxService {
       // Set Valuse
       _isNewUser(false);
 
-      // Save User/Contact to Disk
-      await _userBox.write("user", _user.value.writeToJson());
-      await _userBox.write("username", name);
-      _hasUser(true);
-
       // Set Contact for User
-      _contact(_user.value.contact);
-      _contact.refresh();
-      return _user.value;
+      to._contact(_user.value.contact);
+      to._contact.refresh();
+
+      // Save User/Contact to Disk
+      var permUser = _user.value;
+      await to._userBox.write("user", permUser.writeToJson());
+      await to._userBox.write("username", name);
+      to._hasUser(true);
+      return to._user.value;
     }
     return null;
   }
