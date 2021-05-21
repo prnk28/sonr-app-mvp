@@ -99,20 +99,13 @@ class UserService extends GetxService {
         _userBox.remove('user');
 
         // Fetch User Data from Remote
-        var data = await returningUser(_userBox.read("username"));
+        _userBox.read("key")
+        _hasUser(false);
+        _isNewUser(true);
 
-        // Check Data
-        if (data != null) {
-          _hasUser(true);
-          _isNewUser(false);
-        } else {
-          _hasUser(false);
-          _isNewUser(true);
-
-          // Clear Database
-          CardService.deleteAllCards();
-          CardService.clearAllActivity();
-        }
+        // Clear Database
+        CardService.deleteAllCards();
+        CardService.clearAllActivity();
       }
     } else {
       _isNewUser(true);
