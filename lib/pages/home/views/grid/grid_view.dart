@@ -16,7 +16,7 @@ class CardMainView extends GetView<RecentsController> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24),
         child: CustomScrollView(primary: true, slivers: [
-          _CardSearchView(),
+          SliverToBoxAdapter(child: _CardSearchView()),
           SliverPadding(padding: EdgeInsets.only(top: 8)),
           SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start, color: Get.theme.focusColor)),
           SliverToBoxAdapter(
@@ -29,7 +29,6 @@ class CardMainView extends GetView<RecentsController> {
             child: Container(
                 height: K_LIST_HEIGHT,
                 child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
                   controller: controller.tabController,
                   children: [
                     CardsGridView(type: TransferItemsType.All),
@@ -69,33 +68,17 @@ class CardMainView extends GetView<RecentsController> {
 class _CardSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: false,
-      floating: false,
-      snap: false,
-      backgroundColor: Colors.transparent,
-      foregroundColor: Colors.transparent,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: Neumorphic.floating(theme: Get.theme),
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.all(16),
-            height: 100,
-            width: Width.ratio(0.4),
-            alignment: Alignment.center,
-            child: Container(
-              decoration: Neumorphic.floating(theme: Get.theme, radius: 40),
-              child: Row(
-                children: [
-                  SonrIcons.Search.white,
-                  TextField(),
-                ],
-              ),
-            )),
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: Neumorphic.floating(theme: Get.theme),
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.all(16),
+      height: 80,
+      width: Width.ratio(0.4),
+      alignment: Alignment.center,
+      child: Row(
+        children: [SonrIcons.Search.white, Container(width: 200, child: SonrTextField(hint: "Search...", value: ""))],
       ),
-      expandedHeight: 150,
-      // bottom:
     );
   }
 }

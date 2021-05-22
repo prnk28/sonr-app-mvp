@@ -156,7 +156,7 @@ class LobbyService extends GetxService {
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {
     // Update Orientation
-    if (_flatModeEnabled) {
+    if (_flatModeEnabled && _localFlatPeers.length > 0) {
       var newIsFacingFlat = data.accelerometer.y < 2.75;
       if (newIsFacingFlat != _lastIsFacingFlat.value) {
         if (newIsFacingFlat) {

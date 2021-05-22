@@ -152,7 +152,10 @@ class _CardsViewEmpty extends StatelessWidget {
     return Container(
       height: 225,
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Image.asset('assets/illustrations/NoFiles.png'),
+        Image.asset(
+          'assets/illustrations/NoFiles.png',
+          width: 170,
+        ),
         type.emptyLabel.p_Grey,
         Padding(padding: EdgeInsets.all(16)),
       ]),

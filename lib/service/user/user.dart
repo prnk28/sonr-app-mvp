@@ -67,7 +67,7 @@ class UserService extends GetxService {
     await GetStorage.init('Preferences');
 
     // Check User Status
-    _hasUser(_userBox.hasData("user") || _userBox.hasData("username"));
+    _hasUser(_userBox.hasData("user"));
 
     // Check if Exists
     if (_hasUser.value) {
