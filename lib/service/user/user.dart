@@ -59,32 +59,23 @@ class UserService extends GetxService {
 
   /// @ Open Storage on Init
   Future<UserService> init() async {
-    // Dummy Data for Test Mode
-    if (TEST_MODE) {
-      _user(User(contact: Contact(profile: Profile(firstName: "Douglas", lastName: "Engelbart"))));
-      _contact(_user.value.contact);
-      _hasUser(true);
-      _isNewUser(false);
+    // Get Records
+    refreshRecords();
+
+    // Init Storage
+    await GetStorage.init('User');
+    await GetStorage.init('Preferences');
+
+    // Check User Status
+    _hasUser(_userBox.hasData("user") || _userBox.hasData("username"));
+
+    // Check if Exists
+    if (_hasUser.value) {
+      await _initExisting();
+    } else {
+      _isNewUser(true);
     }
-    // Initiate for Non Test Mode
-    else {
-      // Get Records
-      refreshRecords();
 
-      // Init Storage
-      await GetStorage.init('User');
-      await GetStorage.init('Preferences');
-
-      // Check User Status
-      _hasUser(_userBox.hasData("user") || _userBox.hasData("username"));
-
-      // Check if Exists
-      if (_hasUser.value) {
-        await _initExisting();
-      } else {
-        _isNewUser(true);
-      }
-    }
     // Set Theme
     SonrTheme.setDarkMode(isDark: _isDarkMode.val);
     return this;

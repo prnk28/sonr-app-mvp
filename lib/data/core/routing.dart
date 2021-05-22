@@ -10,8 +10,6 @@ import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
-const TEST_MODE = true;
-
 /// @ Constant Routing Information
 class SonrRouting {
   static get pages => [

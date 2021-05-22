@@ -103,6 +103,10 @@ flutter:
   uses-material-design: true
 
   fonts:
+  - family: AlongSans
+    fonts:
+    - asset: assets/fonts/AlongSans.otf
+
   - family:  Manrope
     fonts:
       - asset: assets/fonts/Manrope-200.ttf
