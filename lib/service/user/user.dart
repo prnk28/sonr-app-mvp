@@ -59,17 +59,39 @@ class UserService extends GetxService {
 
   /// @ Open Storage on Init
   Future<UserService> init() async {
-    // Get Records
-    refreshRecords();
+    // Dummy Data for Test Mode
+    if (TEST_MODE) {
+      _user(User(contact: Contact(profile: Profile(firstName: "Douglas", lastName: "Engelbart"))));
+      _contact(_user.value.contact);
+      _hasUser(true);
+      _isNewUser(false);
+    }
+    // Initiate for Non Test Mode
+    else {
+      // Get Records
+      refreshRecords();
 
-    // Init Storage
-    await GetStorage.init('User');
-    await GetStorage.init('Preferences');
+      // Init Storage
+      await GetStorage.init('User');
+      await GetStorage.init('Preferences');
 
-    // Check User Status
-    _hasUser(_userBox.hasData("user") || _userBox.hasData("username"));
+      // Check User Status
+      _hasUser(_userBox.hasData("user") || _userBox.hasData("username"));
 
-    // Check if Exists
+      // Check if Exists
+      if (_hasUser.value) {
+        await _initExisting();
+      } else {
+        _isNewUser(true);
+      }
+    }
+    // Set Theme
+    SonrTheme.setDarkMode(isDark: _isDarkMode.val);
+    return this;
+  }
+
+  // * Initialize Existing User * //
+  Future<void> _initExisting() async {
     if (_hasUser.value) {
       try {
         var profileJson = _userBox.read("user");
@@ -106,13 +128,7 @@ class UserService extends GetxService {
         CardService.deleteAllCards();
         CardService.clearAllActivity();
       }
-    } else {
-      _isNewUser(true);
     }
-
-    // Set Theme
-    SonrTheme.setDarkMode(isDark: _isDarkMode.val);
-    return this;
   }
 
   /// @ Adds User to Record if Provided Name is Allowed
@@ -122,17 +138,17 @@ class UserService extends GetxService {
         return to._nbClient.addRecord(MobileService.getAuthRecord(n));
       }
     }
-
     return false;
   }
 
   /// @ Checks if User is the Same
   bool checkUser(String n) {
-    if (DeviceService.isMobile) {}
-    var prefix = MobileService.newPrefix(n);
-    var record = findMatchingRecord(n, prefix);
-    if (record != null) {
-      return MobileService.verifyFingerprint(record) && record.equals(n, prefix);
+    if (DeviceService.isMobile) {
+      var prefix = MobileService.newPrefix(n);
+      var record = findMatchingRecord(n, prefix);
+      if (record != null) {
+        return MobileService.verifyFingerprint(record) && record.equals(n, prefix);
+      }
     }
     return false;
   }

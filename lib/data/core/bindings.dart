@@ -18,7 +18,7 @@ import 'package:sonr_app/style/style.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<AssetController>(AssetController(), permanent: true);
+    // Get.put<AssetController>(AssetController(), permanent: true);
   }
 }
 

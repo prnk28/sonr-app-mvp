@@ -38,7 +38,7 @@ class MetaBox extends StatelessWidget {
             } else {
               return Container(
                 alignment: Alignment.center,
-                child: SonrAssetIllustration.NoFiles2.widget,
+                child: Image.asset('assets/illustrations/NoFiles.png'),
               );
             }
           });

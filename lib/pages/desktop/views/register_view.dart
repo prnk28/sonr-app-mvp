@@ -14,7 +14,7 @@ class RegisterDesktopView extends GetView<LinkController> {
       () => Container(
         child: Column(children: <Widget>[
           Container(
-            child: SonrAssetLogo.Side.widget,
+            // child: SonrAssetLogo.Side.widget,
             height: 128,
           ),
           VerticalDivider(),

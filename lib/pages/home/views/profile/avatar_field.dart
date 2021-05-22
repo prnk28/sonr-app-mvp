@@ -140,7 +140,8 @@ class _CameraPermissionsView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(image: SonrAssetIllustration.CameraAccess.image, fit: BoxFit.fitWidth), borderRadius: BorderRadius.circular(12)),
+          image: DecorationImage(image: AssetImage('assets/illustrations/Camera.png'), fit: BoxFit.fitWidth),
+          borderRadius: BorderRadius.circular(12)),
       padding: EdgeInsets.only(bottom: 24),
       child: Align(
         alignment: Alignment.bottomCenter,

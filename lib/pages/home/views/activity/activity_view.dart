@@ -16,7 +16,7 @@ class ActivityView extends StatelessWidget {
                 })
             : Center(
                 child: Container(
-                  child: [SonrAssetIllustration.NoAlerts.widget, "No Alerts".headFour(color: Get.theme.hintColor)].column(),
+                  child: [Image.asset('assets/illustrations/Alerts.png'), "No Alerts".headFour(color: Get.theme.hintColor)].column(),
                   padding: EdgeInsets.all(64),
                 ),
               )));

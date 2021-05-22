@@ -53,7 +53,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
                     controller.isJoinFieldTapped.value
                         ? "Enter lobby code below.".p_Grey
                         : Container(
-                            child: SonrAssetIllustration.CreateGroup.widget,
+                            // child: SonrAssetIllustration.CreateGroup.widget,
                             height: 275,
                           ),
 
