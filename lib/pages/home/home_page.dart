@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/share/share_view.dart';
+import 'share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';

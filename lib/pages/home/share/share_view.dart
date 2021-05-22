@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
+import 'share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
