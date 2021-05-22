@@ -7,8 +7,23 @@ import '../data.dart';
 enum MediaOrientation { Portrait, Landscape }
 
 extension TransferCardUtils on TransferCard {
-  bool matches(String q) {
-    return this.owner.firstName == q || this.owner.lastName == q || this.owner.username == q;
+  /// Checks if Provided Query Matches Date of Transfer
+  bool matchesDate(String q) {
+    // Retreive DateTime Data
+    var receivedDay = this.received.day.toString();
+
+    // Check Query
+    return receivedDay.contains(q);
+  }
+
+  /// Checks if Provided Query Matches Owner Name
+  bool matchesName(String q) {
+    return this.owner.firstName.contains(q) || this.owner.lastName.contains(q) || this.owner.username.contains(q);
+  }
+
+  /// Checks if Provided Query Matches Payload
+  bool matchesPayload(String q) {
+    return this.payload.toString().contains(q);
   }
 }
 

@@ -28,12 +28,16 @@ class CardMainView extends GetView<RecentsController> {
           SliverToBoxAdapter(
             child: Container(
                 height: K_LIST_HEIGHT,
-                child: TabBarView(controller: controller.tabController, children: [
-                  CardsGridView(type: TransferItemsType.All),
-                  CardsListView(type: TransferItemsType.Metadata),
-                  CardsListView(type: TransferItemsType.Contacts),
-                  CardsListView(type: TransferItemsType.Links)
-                ])),
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: controller.tabController,
+                  children: [
+                    CardsGridView(type: TransferItemsType.All),
+                    CardsListView(type: TransferItemsType.Metadata),
+                    CardsListView(type: TransferItemsType.Contacts),
+                    CardsListView(type: TransferItemsType.Links)
+                  ],
+                )),
           ),
           SliverPadding(padding: EdgeInsets.all(8)),
         ]));
@@ -80,10 +84,14 @@ class _CardSearchView extends StatelessWidget {
             height: 100,
             width: Width.ratio(0.4),
             alignment: Alignment.center,
-            child: Stack(
-              children: [
-                Container(decoration: Neumorphic.floating(theme: Get.theme, radius: 40)),
-              ],
+            child: Container(
+              decoration: Neumorphic.floating(theme: Get.theme, radius: 40),
+              child: Row(
+                children: [
+                  SonrIcons.Search.white,
+                  TextField(),
+                ],
+              ),
             )),
       ),
       expandedHeight: 150,
