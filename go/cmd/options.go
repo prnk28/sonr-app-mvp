@@ -18,6 +18,7 @@ var options = []flutter.Option{
 		ApplicationName: "Sonr",
 	}),
 	flutter.AddPlugin(&open_file.OpenFilePlugin{}),
+	flutter.AddPlugin(&AppBarDraggable{}),
 	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 }
 
