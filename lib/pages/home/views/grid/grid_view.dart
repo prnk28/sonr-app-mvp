@@ -2,8 +2,7 @@ import 'dart:ui';
 import 'package:sonr_app/modules/card/card.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
-import 'main_controller.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'grid_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,7 @@ class CardMainView extends GetView<RecentsController> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24),
         child: CustomScrollView(primary: true, slivers: [
-          _CardStatsView(),
+          _CardSearchView(),
           SliverPadding(padding: EdgeInsets.only(top: 8)),
           SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start, color: Get.theme.focusColor)),
           SliverToBoxAdapter(
@@ -62,8 +61,8 @@ class CardMainView extends GetView<RecentsController> {
   }
 }
 
-/// @ Card Stats View - Displays Pie Chart
-class _CardStatsView extends StatelessWidget {
+/// @ Card Search View - Displays Search View
+class _CardSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -74,62 +73,21 @@ class _CardStatsView extends StatelessWidget {
       foregroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: Neumorphic.floating(theme: Get.theme),
-          padding: EdgeInsets.all(8),
-          margin: EdgeInsets.all(16),
-          height: 100,
-          width: Width.ratio(0.4),
-          alignment: Alignment.center,
-          child: StorageChart(),
-        ),
+            clipBehavior: Clip.antiAlias,
+            decoration: Neumorphic.floating(theme: Get.theme),
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.all(16),
+            height: 100,
+            width: Width.ratio(0.4),
+            alignment: Alignment.center,
+            child: Stack(
+              children: [
+                Container(decoration: Neumorphic.floating(theme: Get.theme, radius: 40)),
+              ],
+            )),
       ),
-      expandedHeight: 200,
+      expandedHeight: 150,
       // bottom:
-    );
-  }
-}
-
-/// @ Card Storage Chart Widget
-class StorageChart extends GetView<RecentsController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => Container(
-          child: PieChart(
-            PieChartData(
-                pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) => controller.tapChart(pieTouchResponse)),
-                borderData: FlBorderData(
-                  show: false,
-                ),
-                sectionsSpace: 0,
-                centerSpaceRadius: 0,
-                sections: controller.chartData),
-          ),
-        ));
-  }
-}
-
-/// @ Graph Element Badge Widget
-class Badge extends StatelessWidget {
-  final double size;
-  final Color borderColor;
-  final Widget child;
-
-  const Badge({
-    Key? key,
-    required this.size,
-    required this.borderColor,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: PieChart.defaultDuration,
-      width: size,
-      height: size,
-      decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
-      child: Center(child: child),
     );
   }
 }

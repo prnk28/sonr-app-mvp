@@ -2,8 +2,15 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+import '../data.dart';
 
 enum MediaOrientation { Portrait, Landscape }
+
+extension TransferCardUtils on TransferCard {
+  bool matches(String q) {
+    return this.owner.firstName == q || this.owner.lastName == q || this.owner.username == q;
+  }
+}
 
 extension MediaOrientationUtils on MediaOrientation {
   double get aspectRatio {

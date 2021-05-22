@@ -48,8 +48,6 @@ dependencies:
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
-  jwk: ^0.1.0
-  supercharged: ^2.0.0
   sentry_flutter: ^5.0.0
 
   # -- Device --
@@ -85,10 +83,9 @@ dependencies:
 
   # -- UI/UX --
   animate_do: ^2.0.0
-  fl_chart: ^0.36.0
   lottie: ^1.0.1
-  material_floating_search_bar: ^0.3.4
   rive: ^0.7.7
+  supercharged: ^2.0.0
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
