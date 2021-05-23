@@ -5,6 +5,7 @@ import 'package:sonr_app/style/style.dart';
 import 'grid_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'search_view.dart';
 
 const K_LIST_HEIGHT = 225.0;
 
@@ -25,19 +26,12 @@ class CardMainView extends GetView<RecentsController> {
             ),
           ),
           SliverPadding(padding: EdgeInsets.only(top: 24)),
-          SliverToBoxAdapter(
-            child: Container(
-                height: K_LIST_HEIGHT,
-                child: TabBarView(
-                  controller: controller.tabController,
-                  children: [
-                    CardsGridView(type: TransferItemsType.All),
-                    CardsListView(type: TransferItemsType.Metadata),
-                    CardsListView(type: TransferItemsType.Contacts),
-                    CardsListView(type: TransferItemsType.Links)
-                  ],
-                )),
-          ),
+          Obx(() => SliverToBoxAdapter(
+              child: Container(
+                  height: K_LIST_HEIGHT,
+                  child: AnimatedSlideSwitcher.fade(
+                    child: _buildView(controller.view.value),
+                  )))),
           SliverPadding(padding: EdgeInsets.all(8)),
         ]));
   }
@@ -62,22 +56,59 @@ class CardMainView extends GetView<RecentsController> {
     }
     return list;
   }
+
+  // # Builds Subview from Controller Status
+  Widget _buildView(RecentsViewStatus status) {
+    if (status == RecentsViewStatus.Default) {
+      return Container(
+          key: ValueKey(RecentsViewStatus.Default),
+          height: K_LIST_HEIGHT,
+          child: TabBarView(
+            controller: controller.tabController,
+            children: [
+              CardsGridView(type: TransferItemsType.All),
+              CardsListView(type: TransferItemsType.Metadata),
+              CardsListView(type: TransferItemsType.Contacts),
+              CardsListView(type: TransferItemsType.Links)
+            ],
+          ));
+    } else {
+      return SearchResultsView(key: ValueKey(RecentsViewStatus.Search));
+    }
+  }
 }
 
 /// @ Card Search View - Displays Search View
-class _CardSearchView extends StatelessWidget {
+class _CardSearchView extends GetView<RecentsController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: Neumorphic.floating(theme: Get.theme),
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(16),
-      height: 80,
-      width: Width.ratio(0.4),
-      alignment: Alignment.center,
-      child: Row(
-        children: [SonrIcons.Search.white, Container(width: 200, child: SonrTextField(hint: "Search...", value: ""))],
+    return GestureDetector(
+      onTap: () => controller.goToSearch(),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: Neumorphic.floating(theme: Get.theme),
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.all(16),
+        height: 80,
+        width: Width.ratio(0.4),
+        alignment: Alignment.center,
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Container(
+                height: 80,
+                width: Width.ratio(0.4),
+                child: SonrTextField(
+                  hint: "Search...",
+                  value: "",
+                  onChanged: (val) => controller.search(val),
+                )),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SonrIcons.Search.white,
+            ),
+          ],
+        ),
       ),
     );
   }
