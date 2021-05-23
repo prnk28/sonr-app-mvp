@@ -1,6 +1,8 @@
 import 'package:sonr_app/style/style.dart';
 
 class EditOptionsView extends StatelessWidget {
+  EditOptionsView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // Build Data
@@ -27,9 +29,11 @@ class _EditOptionsButton extends StatelessWidget {
   const _EditOptionsButton({Key? key, required this.data}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
-      child: Column(children: [data.item1.whiteWith(size: 32), data.item2.h6_White]),
+    return GestureDetector(
+      child: Container(
+        decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
+        child: Column(children: [data.item1.whiteWith(size: 32), data.item2.h6_White]),
+      ),
     );
   }
 }
