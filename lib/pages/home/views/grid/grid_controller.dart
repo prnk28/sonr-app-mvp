@@ -34,6 +34,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     tabController.addListener(() {
       tagIndex(tabController.index);
     });
+    query.listen(_handleQuery);
 
     // Initialize
     super.onInit();
@@ -51,25 +52,6 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     view.refresh();
   }
 
-  /// ### SearchName:
-  /// Enables Searching Local TransferCard DB with a given name.
-  void search(String query) {
-    // Set Query
-    this.query(query);
-
-    // Fetch Results
-    var dateResults = CardService.all.where((e) => e.matchesDate(query)).toList();
-    var nameResults = CardService.all.where((e) => e.matchesName(query)).toList();
-    var payloadResults = CardService.all.where((e) => e.matchesPayload(query)).toList();
-
-    // Update Results
-    results.addAll(dateResults);
-    results.addAll(nameResults);
-    results.addAll(payloadResults);
-    results.toSet();
-    results.refresh();
-  }
-
   /// @ Method for Setting Category Filter
   setTag(int index) {
     tagIndex(index);
@@ -78,5 +60,32 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();
+  }
+
+  // # Handles Query Update
+  _handleQuery(String newVal) {
+    if (newVal.length > 0) {
+      // Swap View to Searching if not Set
+      if (view.value.isDefault) {
+        view(RecentsViewStatus.Search);
+      }
+
+      // Fetch Results
+      var dateResults = CardService.all.where((e) => e.matchesDate(newVal)).toList();
+      var nameResults = CardService.all.where((e) => e.matchesName(newVal)).toList();
+      var payloadResults = CardService.all.where((e) => e.matchesPayload(newVal)).toList();
+
+      // Update Results
+      results.addAll(dateResults);
+      results.addAll(nameResults);
+      results.addAll(payloadResults);
+      results.toSet();
+      results.refresh();
+    } else {
+      // Swap View to Searching if not Set
+      if (view.value.isSearching) {
+        view(RecentsViewStatus.Default);
+      }
+    }
   }
 }

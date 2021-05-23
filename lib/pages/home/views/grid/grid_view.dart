@@ -101,7 +101,10 @@ class _CardSearchView extends GetView<RecentsController> {
                 child: SonrTextField(
                   hint: "Search...",
                   value: "",
-                  onChanged: (val) => controller.search(val),
+                  onChanged: (val) {
+                    controller.query(val);
+                    controller.query.refresh();
+                  },
                 )),
             Padding(
               padding: const EdgeInsets.all(8.0),
