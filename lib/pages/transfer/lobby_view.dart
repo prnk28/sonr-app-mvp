@@ -8,16 +8,21 @@ class LobbyView extends GetView<TransferController> {
     return Obx(() => Container(
           width: Get.width,
           height: 260,
-          child: CustomScrollView(
-            // physics: NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            controller: controller.scrollController,
-            anchor: 0.225,
-            slivers: LobbyService.local.value
-                .mapAll((i) => Builder(builder: (context) {
-                      return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
-                    }))
-                .toList(),
+          child: Stack(
+            children: [
+
+              // Scroll View of Card Peers
+              CustomScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: controller.scrollController,
+                anchor: 0.225,
+                slivers: LobbyService.local.value
+                    .mapAll((i) => Builder(builder: (context) {
+                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                        }))
+                    .toList(),
+              ),
+            ],
           ),
         ));
   }
