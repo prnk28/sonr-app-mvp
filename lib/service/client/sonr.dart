@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
+import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
@@ -95,49 +96,6 @@ class SonrService extends GetxService {
     if (DeviceService.isMobile) {
       _node.update(Request.newUpdatePosition(MobileService.position.value));
     }
-
-    await putUser();
-  }
-
-  /// @ Get User from Storage
-  static Future<User?> getUser({String? id}) async {
-    // Provided
-    if (id != null) {
-      var data = await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: id));
-      if (data != null) {
-        return data.user;
-      } else {
-        print("User data doesnt exist");
-        return null;
-      }
-    }
-
-    // Reference
-    var data = await SonrCore.userStorjRequest(
-        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: UserService.user.id));
-    if (data != null) {
-      print(data.toString());
-      return data.user;
-    } else {
-      print("User data doesnt exist");
-      return null;
-    }
-  }
-
-  /// @ Place User into Storage
-  static Future<bool> putUser({User? user}) async {
-    // Provided
-    if (user != null) {
-      var resp = await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: user));
-      print("User Put Status: $resp");
-      return resp!.success;
-    }
-
-    // Reference
-    var resp =
-        await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user));
-    print("User Put Status: $resp");
-    return resp!.success;
   }
 
   /// @ Retreive URLLink Metadata
@@ -317,7 +275,7 @@ class SonrService extends GetxService {
   ConnectionRequest _buildConnRequest() {
     return ConnectionRequest(
         contact: UserService.contact.value,
-        crypto: UserService.user.crypto,
+        crypto: AuthService.isRegistered ? AuthService.userCrypto : null,
         device: DeviceService.device,
         location: DeviceService.location,
         clientKeys: ConnectionRequest_ClientKeys(

@@ -35,7 +35,8 @@ class LinkController extends GetxController {
       }
 
       // Process data.
-      await UserService.newUser(contact, withSonrConnect: true);
+      await UserService.newUser(contact);
+      SonrService.to.connect();
       Get.find<WindowController>().changeView(DesktopView.Explorer);
     }
   }

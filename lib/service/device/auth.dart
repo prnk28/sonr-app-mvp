@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/client/sonr.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypton/crypton.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:sonr_app/service/user/user.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 // Storage Constants
@@ -51,9 +53,8 @@ class AuthService extends GetxService {
   Uint8List get signature => _ecKeypair.privateKey.createSHA512Signature(mnemonicUTF);
   String get signatureHex => String.fromCharCodes(signature);
 
-  // Retreivers
+  // Retreives User_Crypto Data
   static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
-
   static String get mnemonic => to._mnemonic;
   static String get prefix => to._prefix;
 
@@ -144,9 +145,25 @@ class AuthService extends GetxService {
   /// ^ Returns User Data from Remote Backup
   static Future<User?> getUser() async {
     if (to.hasPrefix.value) {
-      return await SonrService.getUser(id: to._prefix);
+      var data = await SonrCore.userStorjRequest(
+        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: to._prefix),
+      );
+      if (data != null) {
+        return data.user;
+      }
     }
     return null;
+  }
+
+  /// ^ Place User into Remote Backup Storage
+  static Future<bool> putUser() async {
+    // Reference
+    var resp =
+        await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user));
+    if (resp != null) {
+      return resp.success;
+    }
+    return false;
   }
 
   /// ^ Refreshes Record Table from Namebase Client

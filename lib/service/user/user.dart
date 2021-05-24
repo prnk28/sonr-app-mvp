@@ -92,61 +92,49 @@ class UserService extends GetxService {
   }
 
   /// @ Method to Create New User from Contact
-  static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
+  static Future<User> newUser(Contact newContact) async {
     // Set Valuse
     to._isNewUser(true);
 
     // Set Contact for User
-    to._contact(providedContact);
+    to._contact(newContact);
     to._contact.refresh();
-
-    // Connect Sonr Node
-    if (withSonrConnect) {
-      Get.find<SonrService>().connect();
-    }
 
     // Save User/Contact to Disk
     await to._userBox.write("user", user.writeToJson());
+    await AuthService.putUser();
     to._hasUser(true);
     return user;
   }
 
   /// @ Method to Create New User from Contact
   static Future<User> returnUser() async {
-    if (DeviceService.isMobile) {
-      // Fetch User Data
-      var data = await AuthService.getUser();
+    // Fetch User Data
+    var data = await AuthService.getUser();
 
-      // Check Data
-      if (data != null) {
-        // Set Valuse
-        to._isNewUser(false);
+    // Check Data
+    if (data != null) {
+      // Set Values
+      to._contact(data.contact);
+      to._devices(data.devices);
+      to._settings(data.settings);
+      to._isNewUser(false);
 
-        // Rewrite Data
-        await to._userBox.write("user", user.writeToJson());
-        to._hasUser(true);
-      }
+      // Rewrite Data
+      await to._userBox.write("user", user.writeToJson());
+      to._hasUser(true);
     }
     return user;
   }
 
   /// @ Trigger iOS Local Network with Alert
-  static toggleDarkMode() async {
-    // Update Value
-    to._isDarkMode.val = !to._isDarkMode.val;
-    SonrTheme.setDarkMode(isDark: to._isDarkMode.val);
-    return true;
-  }
+  static toggleDarkMode() => SonrTheme.setDarkMode(isDark: to._isDarkMode.val = !to._isDarkMode.val);
 
   /// @ Trigger iOS Local Network with Alert
-  static toggleFlatMode() async {
-    to._hasFlatMode.val = !to._hasFlatMode.val;
-  }
+  static toggleFlatMode() => to._hasFlatMode.val = !to._hasFlatMode.val;
 
   /// @ Trigger iOS Local Network with Alert
-  static togglePointToShare() async {
-    to._hasPointToShare.val = !to._hasPointToShare.val;
-  }
+  static togglePointToShare() => to._hasPointToShare.val = !to._hasPointToShare.val;
 
   // # Helper Method to Handle Contact Updates
   void _handleContact(Contact data) async {
@@ -161,7 +149,6 @@ class UserService extends GetxService {
   static User get user => User(
       id: AuthService.prefix,
       contact: to._contact.value,
-      crypto: AuthService.userCrypto,
       device: DeviceService.device,
       devices: to._devices,
       location: DeviceService.location,
