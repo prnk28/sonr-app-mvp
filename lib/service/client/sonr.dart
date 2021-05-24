@@ -277,6 +277,8 @@ class SonrService extends GetxService {
         contact: UserService.contact.value,
         crypto: AuthService.isRegistered ? AuthService.userCrypto : null,
         device: DeviceService.device,
+        devices: UserService.user.devices,
+        settings: UserService.user.settings,
         location: DeviceService.location,
         clientKeys: ConnectionRequest_ClientKeys(
           hsKey: Env.hs_key,

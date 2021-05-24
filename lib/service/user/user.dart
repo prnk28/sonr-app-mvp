@@ -17,7 +17,7 @@ class UserService extends GetxService {
   /// ** User Reactive Properties **
   final _contact = Contact().obs;
   final _devices = RxMap<String, Device>();
-  final _settings = RxMap<String, User_Settings>();
+  final _settings = RxMap<String, Settings>();
 
   // Preferences
   final _isDarkMode = true.val('isDarkMode', getBox: () => GetStorage('Preferences'));
@@ -29,7 +29,7 @@ class UserService extends GetxService {
   static RxBool get isNewUser => to._isNewUser;
   static Rx<Contact> get contact => to._contact;
   static RxMap<String, Device> get devices => to._devices;
-  static RxMap<String, User_Settings> get settings => to._settings;
+  static RxMap<String, Settings> get settings => to._settings;
 
   // Getters for Preferences
   static bool get isDarkMode => to._isDarkMode.val;
