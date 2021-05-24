@@ -18,7 +18,7 @@ extension TransferCardUtils on TransferCard {
 
   /// Checks if Provided Query Matches Owner Name
   bool matchesName(String q) {
-    return this.owner.firstName.contains(q) || this.owner.lastName.contains(q) || this.owner.username.contains(q);
+    return this.owner.firstName.contains(q) || this.owner.lastName.contains(q) || this.owner.sname.contains(q);
   }
 
   /// Checks if Provided Query Matches Payload

@@ -89,7 +89,7 @@ class RegisterController extends GetxController {
           profile: Profile(
         firstName: firstName.value,
         lastName: lastName.value,
-        username: sname.value,
+        sname: sname.value,
       ));
 
       // Remove Textfield Focus

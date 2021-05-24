@@ -115,7 +115,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Username
-          ["${UserService.contact.value.username}".h3, ".snr/".h3_Grey].row(),
+          ["${UserService.contact.value.sName}".h3, ".snr/".h3_Grey].row(),
 
           // First/Last Name
           _buildName(),

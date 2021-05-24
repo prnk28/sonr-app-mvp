@@ -63,7 +63,7 @@ class UserService extends GetxService {
         // Configure Sentry
         Sentry.configureScope((scope) => scope.user = SentryUser(
               id: DeviceService.device.id,
-              username: _contact.value.username,
+              username: _contact.value.sName,
               extras: {
                 "firstName": _contact.value.firstName,
                 "lastName": _contact.value.lastName,

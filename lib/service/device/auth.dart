@@ -146,7 +146,7 @@ class AuthService extends GetxService {
   static Future<User?> getUser() async {
     if (to.hasPrefix.value) {
       var data = await SonrCore.userStorjRequest(
-        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: to._prefix),
+        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, prefix: to._prefix),
       );
       if (data != null) {
         return data.user;

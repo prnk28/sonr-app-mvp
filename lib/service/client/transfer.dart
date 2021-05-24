@@ -142,7 +142,6 @@ class TransferService extends GetxService {
     // Check Type for Custom Files
     if (type == FileType.custom) {
       return await FilePicker.platform.pickFiles(
-        type: FileType.custom,
         withData: true,
         allowMultiple: true,
         allowCompression: true,
