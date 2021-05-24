@@ -561,14 +561,14 @@ class MobileService extends GetxService {
 
   // # Saves Received Media to Gallery
   _handleSharedFiles(List<SharedMediaFile> data) async {
-    if (!Get.isBottomSheetOpen! && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen!) {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
     }
   }
 
   // # Saves Received Media to Gallery
   _handleSharedText(String text) async {
-    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text) && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text)) {
       // Get Data
       var data = await SonrService.getURL(text);
 

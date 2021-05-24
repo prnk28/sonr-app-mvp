@@ -23,11 +23,19 @@ class UserService extends GetxService {
   // User Reactive Properties
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-  final _user = User().obs;
 
-  // Contact Reactive Properties
+  // User Data Properties
+  final _id = "".obs;
   final _contact = Contact().obs;
-  final _profile = Profile().obs;
+  final _crypto = User_Crypto().obs;
+  final _devices = <String, Device>{}.val(
+    'devices',
+    getBox: () => GetStorage('User'),
+  );
+  final _settings = <String, User_Settings>{}.val(
+    'settings',
+    getBox: () => GetStorage('User'),
+  );
 
   // Preferences
   final _isDarkMode = true.val('isDarkMode', getBox: () => GetStorage('Preferences'));
@@ -37,9 +45,7 @@ class UserService extends GetxService {
   // Getter Methods for Contact Properties
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
-  static Rx<User> get user => to._user;
   static Rx<Contact> get contact => to._contact;
-  static Rx<Profile> get profile => to._profile;
 
   // Getters for Preferences
   static bool get isDarkMode => to._isDarkMode.val;
@@ -59,19 +65,30 @@ class UserService extends GetxService {
 
   /// @ Open Storage on Init
   Future<UserService> init() async {
-    // Get Records
-    refreshRecords();
-
     // Init Storage
     await GetStorage.init('User');
     await GetStorage.init('Preferences');
 
+    // Get Records
+    refreshRecords();
+
     // Check User Status
-    _hasUser(_userBox.hasData("user"));
+    _hasUser(await readData());
 
     // Check if Exists
     if (_hasUser.value) {
-      await _initExisting();
+      // Set Contact Values
+      _isNewUser(false);
+
+      // Configure Sentry
+      Sentry.configureScope((scope) => scope.user = SentryUser(
+            id: DeviceService.device.id,
+            username: _contact.value.username,
+            extras: {
+              "firstName": _contact.value.firstName,
+              "lastName": _contact.value.lastName,
+            },
+          ));
     } else {
       _isNewUser(true);
     }
@@ -81,63 +98,12 @@ class UserService extends GetxService {
     return this;
   }
 
-  // * Initialize Existing User * //
-  Future<void> _initExisting() async {
-    if (_hasUser.value) {
-      try {
-        var profileJson = _userBox.read("user");
-        var user = User.fromJson(profileJson);
-
-        // Set Contact Values
-        _user(user);
-        _contact(user.contact);
-        _isNewUser(false);
-
-        // Configure Crypto
-        if (DeviceService.isMobile) {
-          setCrypto(MobileService.userCrypto);
-        }
-
-        // Configure Sentry
-        Sentry.configureScope((scope) => scope.user = SentryUser(
-              id: DeviceService.device.id,
-              username: _contact.value.username,
-              extras: {
-                "firstName": _contact.value.firstName,
-                "lastName": _contact.value.lastName,
-              },
-            ));
-      } catch (e) {
-        // Delete User
-        _userBox.remove('user');
-
-        // Fetch User Data from Remote
-        _hasUser(false);
-        _isNewUser(true);
-
-        // Clear Database
-        CardService.deleteAllCards();
-        CardService.clearAllActivity();
-      }
-    }
-  }
-
-  /// @ Adds User to Record if Provided Name is Allowed
-  Future<bool> addUserRecord(String n) async {
-    if (DeviceService.isMobile) {
-      if (isValidName(n) && MobileService.to.hasAuth) {
-        return to._nbClient.addRecord(MobileService.getAuthRecord(n));
-      }
-    }
-    return false;
-  }
-
   /// @ Checks if User is the Same
   bool checkUser(String n) {
     if (DeviceService.isMobile) {
       var prefix = MobileService.newPrefix(n);
-      var record = findMatchingRecord(n, prefix);
-      if (record != null) {
+      var record = _records.singleWhere((r) => r.equals(n, prefix), orElse: () => HSRecord.blank());
+      if (record.isNotBlank) {
         return MobileService.verifyFingerprint(record) && record.equals(n, prefix);
       }
     }
@@ -145,59 +111,53 @@ class UserService extends GetxService {
   }
 
   /// @ Creates Crypto User Data, Returns Mnemonic Text
-  Future<Tuple<String, String>> createUser(String name) async {
+  Future<Tuple<String, String>> newUsername(String name) async {
     if (DeviceService.isMobile) {
-      // Set Crypto and Return Mnemonic
-      setCrypto(await MobileService.newCrypto(name));
+      // Set Crypto
+      var data = await MobileService.newCrypto(name);
+      _id(data.prefix);
+      _crypto(data);
       await to._userBox.write("username", name);
+
+      // Add UserRecord Domain
+      if (isValidName(name) && MobileService.to.hasAuth) {
+        await _nbClient.addRecord(MobileService.getAuthRecord(name));
+      }
+
+      // Return Mnemonic and Prefix
       return MobileService.mnemonicPrefix;
     }
     return Tuple("", "");
   }
 
-  Future<User?> returningUser(String name) async {
+  // @ Set For Returning User
+  static Future<User?> returningUser(String name) async {
     if (DeviceService.isMobile) {
       var prefix = await MobileService.updatePrefix(name);
+
       // Fetch User Data
-      _user(await SonrService.getUser(id: prefix));
+      var data = await SonrService.getUser(id: prefix);
 
-      // Set Valuse
-      _isNewUser(false);
+      // Check Data
+      if (data != null) {
+        // Set Valuse
+        to._isNewUser(false);
 
-      // Set Contact for User
-      to._contact(_user.value.contact);
-      to._contact.refresh();
-
-      // Save User/Contact to Disk
-      var permUser = _user.value;
-      await to._userBox.write("user", permUser.writeToJson());
-      await to._userBox.write("username", name);
-      to._hasUser(true);
-      return to._user.value;
+        // Rewrite Data
+        await to.writeData(
+          contact: data.contact,
+          devices: data.devices,
+          settings: data.settings,
+        );
+      }
     }
     return null;
   }
 
-  /// @ Refreshes Record Table from Namebase Client
-  HSRecord? findMatchingRecord(String n, String p) {
-    // Add Auth Records from All Records
-    var data = _records.singleWhere(
-      (r) => r.equals(n, p),
-      orElse: () => HSRecord.blank(),
-    );
-
-    // Check Data
-    if (data.isBlank) {
-      return null;
-    }
-    return data;
-  }
-
   /// @ Method to Create New User from Contact
   static Future<User> saveUser(Contact providedContact, {bool withSonrConnect = false}) async {
-    // Set Contact for User
-    to._contact(providedContact);
-    to._contact.refresh();
+    // Write Data
+    await to.writeData(contact: providedContact);
 
     // Set Valuse
     to._isNewUser(true);
@@ -206,35 +166,83 @@ class UserService extends GetxService {
     if (withSonrConnect) {
       Get.find<SonrService>().connect();
     }
+    // Write Data
+    return user;
+  }
 
-    // Save User/Contact to Disk
-    var permUser = User(contact: to._contact.value);
-    await to._userBox.write("user", permUser.writeToJson());
-    to._hasUser(true);
+  /// @ Reads User Data from Persistent Storage/ Returns if Exists
+  Future<bool> readData() async {
+    // Validate Mobile
+    if (DeviceService.isMobile) {
+      // Check Storage
+      bool hasContact = _userBox.hasData('contact');
+      bool hasDevices = _userBox.hasData('devices');
+      bool hasSettings = _userBox.hasData('settings');
+
+      // Data Exists
+      if (hasContact && hasDevices && hasSettings && MobileService.to.hasAuth) {
+        _id(MobileService.userCrypto.prefix);
+        _crypto(MobileService.userCrypto);
+        _contact(Contact.fromJson(_userBox.read("contact")));
+        return true;
+      }
+    }
+
+    // No Data
+    return false;
+  }
+
+  /// @ Writes User Data to Persistent Storage/ Puts in Backup
+  Future<void> writeData({
+    Contact? contact,
+    Tuple<String, Device>? device,
+    Tuple<String, User_Settings>? setting,
+    Map<String, Device>? devices,
+    Map<String, User_Settings>? settings,
+  }) async {
+    // # Write Contact
+    if (contact != null) {
+      _contact(contact);
+      _contact.refresh();
+    }
+    await _userBox.write('contact', _contact.value.writeToJson());
+
+    // # Write ALL Devices
+    if (devices != null) {
+      _devices.val.addAll(devices);
+    }
+    // Single Entry
+    else {
+      // Write Device Entry
+      if (device != null) {
+        _devices.val[device.item1] = device.item2;
+      }
+    }
+
+    // # Write ALL Settings
+    if (settings != null) {
+      _settings.val.addAll(settings);
+    }
+    // Single Entry
+    else {
+      // Write Setting Entry
+      if (setting != null) {
+        _settings.val[setting.item1] = setting.item2;
+      }
+    }
 
     // Save User to Backup Storage
-    await SonrService.putUser(user: to._user.value);
-    return to._user.value;
+    await SonrService.putUser(user: user);
   }
 
   /// @ Refreshes Record Table from Namebase Client
-  Future<void> refreshRecords() async {
+  static Future<void> refreshRecords() async {
     // Set Data From Response
-    var data = await _nbClient.refresh();
+    var data = await to._nbClient.refresh();
     if (data.item1) {
-      _records(data.item2);
-      _records.refresh();
+      to._records(data.item2);
+      to._records.refresh();
     }
-  }
-
-  /// @ Sets User Crypto Data
-  void setCrypto(User_Crypto data) {
-    _user.update((val) {
-      if (val != null) {
-        val.id = data.prefix;
-        val.crypto = data;
-      }
-    });
   }
 
   /// @ Trigger iOS Local Network with Alert
@@ -253,4 +261,13 @@ class UserService extends GetxService {
   static void togglePointToShare() async {
     to._hasPointToShare.val = !to._hasPointToShare.val;
   }
+
+  /// @ Returns User Based on Service Values
+  static User get user => User(
+        id: to._id.value,
+        contact: to._contact.value,
+        crypto: to._crypto.value,
+        devices: to._devices.val,
+        settings: to._settings.val,
+      );
 }

@@ -41,6 +41,7 @@ class HSRecord {
 
   bool get isAuth => this.host.contains(PREFIX_DIVIDER);
   bool get isBlank => this.ttl == -1 && this.type == "-" && this.host == "-" && this.value == "-";
+  bool get isNotBlank => this.ttl != -1 && this.type != "-" && this.host != "-" && this.value != "-";
   Uint8List get fingerprint => isAuth ? extractFingerprint(value) : Uint8List(0);
   String get name => isAuth ? extractName(host) : "";
   String get prefix => isAuth ? extractPrefix(host) : "";

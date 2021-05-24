@@ -114,7 +114,7 @@ class SonrService extends GetxService {
 
     // Reference
     var data = await SonrCore.userStorjRequest(
-        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: UserService.user.value.id));
+        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, userID: UserService.user.id));
     if (data != null) {
       print(data.toString());
       return data.user;
@@ -134,8 +134,8 @@ class SonrService extends GetxService {
     }
 
     // Reference
-    var resp = await SonrCore.userStorjRequest(
-        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user.value));
+    var resp =
+        await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user));
     print("User Put Status: $resp");
     return resp!.success;
   }
@@ -317,7 +317,7 @@ class SonrService extends GetxService {
   ConnectionRequest _buildConnRequest() {
     return ConnectionRequest(
         contact: UserService.contact.value,
-        crypto: UserService.user.value.crypto,
+        crypto: UserService.user.crypto,
         device: DeviceService.device,
         location: DeviceService.location,
         clientKeys: ConnectionRequest_ClientKeys(

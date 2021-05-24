@@ -57,21 +57,15 @@ class RegisterController extends GetxController {
 
   void setName() async {
     // Refresh Records
-    UserService.to.refreshRecords();
+    UserService.refreshRecords();
 
     // Validate
     if (validateName()) {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Create User Data
-        var data = await UserService.to.createUser(sonrName.value);
+        var data = await UserService.to.newUsername(sonrName.value);
         mnemonic(data.item1);
-
-        // Add New User
-        var result = await UserService.to.addUserRecord(sonrName.value);
-
-        if (result) {
-          status(RegisterStatus.Backup);
-        }
+        status(RegisterStatus.Backup);
       } else {
         status(RegisterStatus.Location);
       }
@@ -162,7 +156,7 @@ class RegisterController extends GetxController {
 
   /// @ Sets for Returning User
   void setReturningUser() async {
-    await UserService.to.returningUser(sonrName.value);
+    await UserService.returningUser(sonrName.value);
   }
 
   /// @ Request Location Permissions
