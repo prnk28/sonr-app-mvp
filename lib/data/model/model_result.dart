@@ -1,6 +1,6 @@
 import 'package:get/get_connect/connect.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/service/device/auth.dart';
 
 enum NameCheckType {
   All,
@@ -31,7 +31,7 @@ class UsernameResult {
 
   /// Creates Valid Username Result and Fetch's Prefix and Mnemonic from `MobileService`
   factory UsernameResult.isValidFetch(String username) =>
-      UsernameResult(username: username, isValid: true, prefix: MobileService.prefix, mnemonic: MobileService.mnemonic);
+      UsernameResult(username: username, isValid: true, prefix: AuthService.prefix, mnemonic: AuthService.mnemonic);
 
   /// Creates Invalid Username Result
   factory UsernameResult.isInvalid() => UsernameResult(username: "-", isValid: false, prefix: "-", mnemonic: "-");
@@ -54,7 +54,7 @@ class NamebaseResult {
   bool isNameUnrestricted(String n) => !K_RESTRICTED_NAMES.any((v) => v == n.toLowerCase());
 
   /// Checks if Name Provided with Prefix is Available
-  bool isPrefixAvailable(String n) => !records.any((r) => r.equalsPrefix(MobileService.newPrefix(n)));
+  bool isPrefixAvailable(String n) => !records.any((r) => r.equalsPrefix(AuthService.buildPrefix(n)));
 
   /// Checks if Name Provided is Valid with ALL Checks
   bool isValidName(String n) => isNameAvailable(n) && isNameUnblocked(n) && isNameUnrestricted(n) && isPrefixAvailable(n);

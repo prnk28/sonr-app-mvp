@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style/style.dart';
 
 enum RegisterNameStatus { Default, Returning, TooShort, Available, Unavailable, Blocked, Restricted, DeviceRegistered }
@@ -57,13 +58,13 @@ class RegisterController extends GetxController {
 
   void setName() async {
     // Refresh Records
-    UserService.refreshRecords();
+    AuthService.to.refresh();
 
     // Validate
     if (validateName()) {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Create User Data
-        var data = await UserService.newUsername(sname.value);
+        var data = await AuthService.createUsername(sname.value);
 
         if (data.isValid) {
           mnemonic(data.mnemonic);
@@ -120,11 +121,11 @@ class RegisterController extends GetxController {
     // Update Status
     if (sname.value.length > 3) {
       // Check Available
-      if (UserService.nbResult.value.checkName(
+      if (AuthService.to.result.value.checkName(
         NameCheckType.Unavailable,
         sname.value,
       )) {
-        if (UserService.checkUser(sname.value)) {
+        if (AuthService.validateUser(sname.value)) {
           setReturningUser();
           nameStatus(RegisterNameStatus.Returning);
           return true;
@@ -134,7 +135,7 @@ class RegisterController extends GetxController {
         }
       }
       // Check Unblocked
-      else if (UserService.nbResult.value.checkName(
+      else if (AuthService.to.result.value.checkName(
         NameCheckType.Blocked,
         sname.value,
       )) {
@@ -142,7 +143,7 @@ class RegisterController extends GetxController {
         return false;
       }
       // Check Unrestricted
-      else if (UserService.nbResult.value.checkName(
+      else if (AuthService.to.result.value.checkName(
         NameCheckType.Restricted,
         sname.value,
       )) {
@@ -150,7 +151,7 @@ class RegisterController extends GetxController {
         return false;
       }
       // Check Unregisted Device
-      else if (UserService.nbResult.value.checkName(
+      else if (AuthService.to.result.value.checkName(
         NameCheckType.InvalidPrefix,
         sname.value,
       )) {
@@ -171,7 +172,7 @@ class RegisterController extends GetxController {
 
   /// @ Sets for Returning User
   void setReturningUser() async {
-    await UserService.returningUser(sname.value);
+    await UserService.returnUser();
   }
 
   /// @ Request Location Permissions

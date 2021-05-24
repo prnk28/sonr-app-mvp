@@ -5,6 +5,7 @@ import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/device/desktop.dart';
 import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/style/style.dart';
@@ -63,6 +64,7 @@ class SonrRouting {
     if (isDesktop) {
       await Get.putAsync(() => DesktopService().init(), permanent: true);
     } else {
+      await Get.putAsync(() => AuthService().init(), permanent: true);
       await Get.putAsync(() => MobileService().init(), permanent: true);
     }
 
