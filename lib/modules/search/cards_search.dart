@@ -73,7 +73,7 @@
 //   }
 // }
 
-// /// ** Class For TransferCard Searched Suggestion Widget ** //
+// /// ** Class For Transfer Searched Suggestion Widget ** //
 // class _SonrSearchCardSuggestion extends StatelessWidget {
 //   final SearchCardController controller;
 //   _SonrSearchCardSuggestion(this.controller, {Key key}) : super(key: key);
@@ -109,7 +109,7 @@
 //     });
 //   }
 
-//   _buildPhotoSuggestedView(TransferCard suggestedCard) {
+//   _buildPhotoSuggestedView(Transfer suggestedCard) {
 //     return Container(
 //         decoration: BoxDecoration(
 //             image: DecorationImage(
@@ -119,12 +119,12 @@
 //                 ))));
 //   }
 
-//   _buildOtherSuggestedView(TransferCard suggestedCard) {
+//   _buildOtherSuggestedView(Transfer suggestedCard) {
 //     return SonrText.medium(suggestedCard.payload.toString().capitalizeFirst);
 //   }
 // }
 
-// /// ** Class For TransferCard Results ListView Widget ** //
+// /// ** Class For Transfer Results ListView Widget ** //
 // class _SonrSearchCardListView extends StatelessWidget {
 //   final SearchCardController controller;
 //   _SonrSearchCardListView(this.controller, {Key key}) : super(key: key);
@@ -154,9 +154,9 @@
 //   }
 // }
 
-// /// ** Class For TransferCard Searched ListItem Widget ** //
+// /// ** Class For Transfer Searched ListItem Widget ** //
 // class _SonrSearchCardListItem extends GetView<SearchCardController> {
-//   final TransferCard card;
+//   final Transfer card;
 //   _SonrSearchCardListItem(this.card, {Key key}) : super(key: key);
 //   @override
 //   Widget build(BuildContext context) {
@@ -210,11 +210,11 @@
 //   final searchText = "".obs;
 //   final hasResults = false.obs;
 //   final hasList = false.obs;
-//   final suggestion = Rx<TransferCard>();
-//   //final results = Map<QueryCategory, List<TransferCard>>().obs;
+//   final suggestion = Rx<Transfer>();
+//   //final results = Map<QueryCategory, List<Transfer>>().obs;
 //   final viewMargin = EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572).obs;
 //   final listHeight = 0.0.obs;
-//   final cardList = <TransferCard>[].obs;
+//   final cardList = <Transfer>[].obs;
 
 //   // References
 //   int _lowestQueryCount = 9223372036854775807;
@@ -276,7 +276,7 @@
 //   }
 
 //   /// @ Method to Push to Selected Card
-//   navigateToCard(TransferCard card) {
+//   navigateToCard(Transfer card) {
 //     HapticFeedback.mediumImpact();
 //     Get.find<HomeController>().jumpToCard(card);
 //   }

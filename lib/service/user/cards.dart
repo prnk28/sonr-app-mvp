@@ -14,11 +14,11 @@ class CardService extends GetxService {
   static CardService get to => Get.find<CardService>();
 
   // File Objects
-  final _activity = RxList<TransferCardActivity>();
-  final _all = RxList<TransferCardItem>();
-  final _contacts = RxList<TransferCardItem>();
-  final _links = RxList<TransferCardItem>();
-  final _metadata = RxList<TransferCardItem>();
+  final _activity = RxList<TransferActivity>();
+  final _all = RxList<TransferCard>();
+  final _contacts = RxList<TransferCard>();
+  final _links = RxList<TransferCard>();
+  final _metadata = RxList<TransferCard>();
   final _categoryCount = RxInt(1);
 
   // File Count
@@ -31,11 +31,11 @@ class CardService extends GetxService {
   final _videosCount = 0.obs;
 
   // Property Accessors
-  static RxList<TransferCardActivity> get activity => to._activity;
-  static RxList<TransferCardItem> get all => to._all;
-  static RxList<TransferCardItem> get contacts => to._contacts;
-  static RxList<TransferCardItem> get links => to._links;
-  static RxList<TransferCardItem> get metadata => to._metadata;
+  static RxList<TransferActivity> get activity => to._activity;
+  static RxList<TransferCard> get all => to._all;
+  static RxList<TransferCard> get contacts => to._contacts;
+  static RxList<TransferCard> get links => to._links;
+  static RxList<TransferCard> get metadata => to._metadata;
 
   // Count Accessors
   static RxInt get documentCount => to._documentCount;
@@ -77,7 +77,7 @@ class CardService extends GetxService {
   }
 
   /// @ Add New Card to Database
-  static addCard(TransferCard card) async {
+  static addCard(Transfer card) async {
     if (card.payload.isTransfer) {
       await DeviceService.saveTransfer(card.file);
 
@@ -123,9 +123,9 @@ class CardService extends GetxService {
     SonrFile? file,
   }) async {
     if (file != null && file.exists) {
-      await to._database.addActivity(ActivityType.Shared, payload, UserService.profile.value, mime: file.single.mime.type);
+      await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: file.single.mime.type);
     } else {
-      await to._database.addActivity(ActivityType.Shared, payload, UserService.profile.value, mime: MIME_Type.OTHER);
+      await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
     }
   }
 
@@ -150,7 +150,7 @@ class CardService extends GetxService {
   }
 
   /// @ Clear Single Activity
-  static clearActivity(TransferCardActivity activity) async {
+  static clearActivity(TransferActivity activity) async {
     if (hasActivity) {
       await to._database.clearActivity(activity);
     }
@@ -164,7 +164,7 @@ class CardService extends GetxService {
   }
 
   /// @ Remove Card and Add Deleted Activity to Database
-  static deleteCard(TransferCardItem card) async {
+  static deleteCard(TransferCard card) async {
     await to._database.deleteCard(card);
     addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
     _refreshCount();
@@ -173,7 +173,7 @@ class CardService extends GetxService {
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
     await to._database.deleteCardFromID(id);
-    // await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
+    // await to._database.addActivity(ActivityType.Deleted, _TransferFromItem(card));
     _refreshCount();
   }
 
@@ -218,11 +218,7 @@ class CardService extends GetxService {
   // @ Handle Accept Transfer Response
   _handleAcceptTransfer(AuthInvite invite) {
     // Check for Remote
-    if (invite.hasRemote()) {
-      SonrService.respond(invite.newAcceptReply());
-    } else {
-      SonrService.respond(invite.newAcceptReply());
-    }
+    SonrService.respond(invite.newAcceptReply());
 
     // Switch View
     SonrOverlay.back();
@@ -247,27 +243,19 @@ class CardService extends GetxService {
 
 // @ Handle Decline Transfer Response
   _handleDeclineTransfer(AuthInvite invite) {
-    if (invite.hasRemote()) {
-      SonrService.respond(invite.newDeclineReply());
-    } else {
-      SonrService.respond(invite.newDeclineReply());
-    }
+    SonrService.respond(invite.newDeclineReply());
+
     SonrOverlay.back();
   }
 
 // @ Handle Accept Contact Response
   _handleAcceptContact(AuthInvite invite, bool sendBackContact) {
     // Save Card
-    // _database.addCard(card);
+    _database.addCard(invite.data);
 
     // Check if Send Back
     if (sendBackContact) {
-      // Check for Remote
-      if (invite.hasRemote()) {
-        SonrService.respond(invite.newAcceptReply());
-      } else {
-        SonrService.respond(invite.newAcceptReply());
-      }
+      SonrService.respond(invite.newAcceptReply());
     }
 
     // Return to HomeScreen

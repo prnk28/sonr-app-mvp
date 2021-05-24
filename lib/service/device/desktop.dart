@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:warble/warble.dart';
 
 class DesktopService extends GetxService {
   // Accessors
@@ -21,7 +20,6 @@ class DesktopService extends GetxService {
 
   // * Initialize * //
   Future<DesktopService> init() async {
-    //DeviceService.factoryReset();
     // // @ 1. Root Main Entry
     // _main = MainEntry(
     //   title: "Sonr",
@@ -41,11 +39,7 @@ class DesktopService extends GetxService {
   }
 
   /// @ Method Plays a UI Sound
-  static void playSound(UISoundType type) async {
-    WarbleStream stream = (await (Warble.wrapAsset(rootBundle, "assets/${type.file}", buffered: true) as FutureOr<WarbleStream>));
-    await stream.play();
-    await stream.close();
-  }
+  static void playSound(UISoundType type) async {}
 
   // /// @ Add Event Handler to Tray Action
   // void registerEventHandler(String handlerKey, Function handler) {

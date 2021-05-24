@@ -4,7 +4,7 @@ class HomeArguments {
   final bool isFirstLoad;
   final bool hasNewCard;
   final bool firstNewCard;
-  final TransferCard? newCard;
+  final Transfer? newCard;
 
   HomeArguments({this.isFirstLoad = false, this.hasNewCard = false, this.firstNewCard = false, this.newCard});
 }

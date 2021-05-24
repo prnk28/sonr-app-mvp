@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 class ContactGridItemView extends StatelessWidget {
-  final TransferCardItem item;
+  final TransferCard item;
   const ContactGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class ContactGridItemView extends StatelessWidget {
 
 /// @ Main Contact Grid Item View
 class _ContactGridItemMainView extends StatelessWidget {
-  final TransferCardItem? item;
+  final TransferCard? item;
   final RxBool? isFlipped;
   const _ContactGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
@@ -74,7 +74,7 @@ class _ContactGridItemMainView extends StatelessWidget {
 
 /// @ Details Contact Grid Item View
 class _ContactGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem? item;
+  final TransferCard? item;
   final RxBool? isFlipped;
   const _ContactGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 

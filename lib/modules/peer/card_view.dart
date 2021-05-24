@@ -106,7 +106,7 @@ class _PeerMainCard extends StatelessWidget {
           "${controller.peer.value.profile.fullName}".h6,
 
           // Username
-          controller.peer.value.profile.username.p_Grey,
+          "${controller.peer.value.profile.sname}.snr/".p_Grey,
         ].column());
   }
 }

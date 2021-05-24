@@ -24,6 +24,10 @@ environment_config:
       env_var: hs_key
     hs_secret:
       env_var: hs_secret
+    storj_key:
+      env_var: storj_key
+    storj_root_password:
+      env_var: storj_root_password
 
 # ** ================== **
 # **    DEPENDENCIES    **
@@ -35,13 +39,15 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
+  bip39: ^1.0.6
+  crypton: ^2.0.1
   environment_config: ^3.0.0
   file_picker: ^3.0.1
   flutter_hooks: ^0.16.0
+  flutter_secure_storage: ^4.2.0
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
-  supercharged: ^2.0.0
   sentry_flutter: ^5.0.0
 
   # -- Device --
@@ -51,8 +57,8 @@ dependencies:
   geolocator: ^7.0.3
   motion_sensors: ^0.1.0
   permission_handler: ^7.1.0
+  platform_device_id: ^1.0.1
   url_launcher: ^6.0.3
-  warble: ^0.0.2
 
   # -- Data --
   audioplayers: ^0.18.3
@@ -60,6 +66,7 @@ dependencies:
   photo_manager: ^1.1.5
   path: ^1.8.0
   path_provider: ^2.0.1
+  share: ^2.0.1
   vector_math: ^2.1.0
   video_player: ^2.0.0-nullsafety.9
 
@@ -76,10 +83,9 @@ dependencies:
 
   # -- UI/UX --
   animate_do: ^2.0.0
-  fl_chart: ^0.36.0
   lottie: ^1.0.1
-  material_floating_search_bar: ^0.3.4
   rive: ^0.7.7
+  supercharged: ^2.0.0
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
@@ -97,6 +103,10 @@ flutter:
   uses-material-design: true
 
   fonts:
+  - family: AlongSans
+    fonts:
+    - asset: assets/fonts/AlongSans.otf
+
   - family:  Manrope
     fonts:
       - asset: assets/fonts/Manrope-200.ttf
@@ -127,6 +137,7 @@ flutter:
     - assets/cards/
     - assets/fonts/
     - assets/images/
+    - assets/illustrations/
     - assets/animations/
     - assets/sounds/
 

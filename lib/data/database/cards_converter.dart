@@ -22,18 +22,18 @@ class ActivityConverter extends TypeConverter<ActivityType, int> {
   }
 }
 
-class CardConverter extends TypeConverter<TransferCard, String> {
+class CardConverter extends TypeConverter<Transfer, String> {
   const CardConverter();
   @override
-  TransferCard? mapToDart(String? fromDb) {
+  Transfer? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
-    return TransferCard.fromJson(fromDb);
+    return Transfer.fromJson(fromDb);
   }
 
   @override
-  String? mapToSql(TransferCard? value) {
+  String? mapToSql(Transfer? value) {
     if (value == null) {
       return null;
     }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sentry/sentry.dart';
 
@@ -9,14 +10,14 @@ class UserService extends GetxService {
   static bool get isRegistered => Get.isRegistered<UserService>();
   static UserService get to => Get.find<UserService>();
 
-  /// ** User Reactive Properties **
+  /// ** User Status Properties **
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-  final _user = User().obs;
 
-  /// ** Contact Reactive Properties **
+  /// ** User Reactive Properties **
   final _contact = Contact().obs;
-  final _profile = Profile().obs;
+  final _devices = RxMap<String, Device>();
+  final _settings = RxMap<String, Settings>();
 
   // Preferences
   final _isDarkMode = true.val('isDarkMode', getBox: () => GetStorage('Preferences'));
@@ -26,9 +27,9 @@ class UserService extends GetxService {
   /// **  Getter Methods for Contact Properties **
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
-  static Rx<User> get user => to._user;
   static Rx<Contact> get contact => to._contact;
-  static Rx<Profile> get profile => to._profile;
+  static RxMap<String, Device> get devices => to._devices;
+  static RxMap<String, Settings> get settings => to._settings;
 
   // Getters for Preferences
   static bool get isDarkMode => to._isDarkMode.val;
@@ -54,14 +55,15 @@ class UserService extends GetxService {
         var user = User.fromJson(profileJson);
 
         // Set Contact Values
-        _user(user);
         _contact(user.contact);
+        _devices(user.devices);
+        _settings(user.settings);
         _isNewUser(false);
 
         // Configure Sentry
         Sentry.configureScope((scope) => scope.user = SentryUser(
-              id: '1234',
-              username: _contact.value.username,
+              id: DeviceService.device.id,
+              username: _contact.value.sName,
               extras: {
                 "firstName": _contact.value.firstName,
                 "lastName": _contact.value.lastName,
@@ -89,70 +91,68 @@ class UserService extends GetxService {
     return this;
   }
 
-  /// @ Update Social in List
-  static bool swapSocials(Contact_Social first, Contact_Social second) {
-    // int idxOne = to._socials.keys.toList().indexOf(first.username);
-    //int idxTwo = to._socials.keys.toList().indexOf(second.username);
-    // controller._socials.swap(idxOne, idxTwo);
-    return true;
-  }
-
   /// @ Method to Create New User from Contact
-  static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
+  static Future<User> newUser(Contact newContact) async {
     // Set Valuse
     to._isNewUser(true);
 
-    // Connect Sonr Node
-    if (withSonrConnect) {
-      Get.find<SonrService>().connectNewUser(UserService.contact.value);
-    }
-
     // Set Contact for User
-    to._contact(providedContact);
+    to._contact(newContact);
     to._contact.refresh();
 
     // Save User/Contact to Disk
-    var permUser = User(contact: to._contact.value);
-    await to._userBox.write("user", permUser.writeToJson());
+    await to._userBox.write("user", user.writeToJson());
+    await AuthService.putUser();
     to._hasUser(true);
-    return to._user.value;
+    return user;
+  }
+
+  /// @ Method to Create New User from Contact
+  static Future<User> returnUser() async {
+    // Fetch User Data
+    var data = await AuthService.getUser();
+
+    // Check Data
+    if (data != null) {
+      // Set Values
+      to._contact(data.contact);
+      to._devices(data.devices);
+      to._settings(data.settings);
+      to._isNewUser(false);
+
+      // Rewrite Data
+      await to._userBox.write("user", user.writeToJson());
+      to._hasUser(true);
+    }
+    return user;
   }
 
   /// @ Trigger iOS Local Network with Alert
-  static toggleDarkMode() async {
-    // Update Value
-    to._isDarkMode.val = !to._isDarkMode.val;
-    SonrTheme.setDarkMode(isDark: to._isDarkMode.val);
-    return true;
-  }
+  static toggleDarkMode() => SonrTheme.setDarkMode(isDark: to._isDarkMode.val = !to._isDarkMode.val);
 
   /// @ Trigger iOS Local Network with Alert
-  static toggleFlatMode() async {
-    to._hasFlatMode.val = !to._hasFlatMode.val;
-  }
+  static toggleFlatMode() => to._hasFlatMode.val = !to._hasFlatMode.val;
 
   /// @ Trigger iOS Local Network with Alert
-  static togglePointToShare() async {
-    to._hasPointToShare.val = !to._hasPointToShare.val;
-  }
+  static togglePointToShare() => to._hasPointToShare.val = !to._hasPointToShare.val;
 
   // # Helper Method to Handle Contact Updates
   void _handleContact(Contact data) async {
-    // Check if User Exists
-    if (_userBox.hasData("user")) {
-      // Retreive User from Disk
-      var permJson = _userBox.read("user");
-      User permUser = User.fromJson(permJson)..contact = data;
-
-      // Refresh Reactive Vars
-      _user(permUser);
-      _user.refresh();
-
-      // Save Updated User to Disk
-      await to._userBox.write("user", permUser.writeToJson());
-    }
+    // Save Updated User to Disk
+    await to._userBox.write("user", user.writeToJson());
 
     // Send Update to Node
-    SonrService.setProfile(data);
+    if (SonrService.status.value.isConnected) {
+      SonrService.setProfile(data);
+    }
   }
+
+  /// @ Returns User Based on Service Values
+  static User get user => User(
+      id: AuthService.prefix,
+      contact: to._contact.value,
+      device: DeviceService.device,
+      devices: to._devices,
+      location: DeviceService.location,
+      settings: to._settings);
 }

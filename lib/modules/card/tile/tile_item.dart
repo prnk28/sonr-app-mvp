@@ -35,7 +35,7 @@ class SocialTileItem extends GetWidget<TileController> {
         },
         // Switch Index Positions with animation
         onAccept: (data) {
-          UserService.swapSocials(item, data);
+          // TODO: UserService.swapSocials(item, data);
         },
       ),
     ]);
@@ -50,7 +50,7 @@ class SocialTileItem extends GetWidget<TileController> {
         HapticFeedback.lightImpact();
       },
       onDoubleTap: () {
-        controller.launchURL(item.links.postLink.url);
+        controller.launchURL(item.post.link.url);
         HapticFeedback.mediumImpact();
       },
       child: Container(

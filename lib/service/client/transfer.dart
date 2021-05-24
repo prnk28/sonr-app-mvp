@@ -12,14 +12,14 @@ class TransferService extends GetxService {
   // Properties
   final _shareTitle = "Sharing".obs;
   final _payload = Payload.NONE.obs;
-  final _inviteRequest = InviteRequest().obs;
+  final _inviteRequest = AuthInvite().obs;
   final _file = SonrFile().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
   static RxString get shareTitle => to._shareTitle;
   static Rx<Payload> get payload => to._payload;
-  static Rx<InviteRequest> get inviteRequest => to._inviteRequest;
+  static Rx<AuthInvite> get inviteRequest => to._inviteRequest;
   static Rx<SonrFile> get file => to._file;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
 
@@ -142,7 +142,6 @@ class TransferService extends GetxService {
     // Check Type for Custom Files
     if (type == FileType.custom) {
       return await FilePicker.platform.pickFiles(
-        type: FileType.custom,
         withData: true,
         allowMultiple: true,
         allowCompression: true,

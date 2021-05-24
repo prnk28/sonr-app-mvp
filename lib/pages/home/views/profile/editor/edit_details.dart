@@ -1,5 +1,5 @@
 import 'package:sonr_app/style/style.dart';
-import 'profile_controller.dart';
+import '../profile_controller.dart';
 
 /// @ Edit Profile Details View
 class EditDetailsView extends GetView<ProfileController> {
@@ -24,7 +24,7 @@ class EditDetailsView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Secondary), onPressed: controller.setAddTile),
+                  PlainIconButton(icon: SonrIcons.Close.gradient(value: SonrGradient.Critical), onPressed: controller.exitToViewing),
                   Expanded(child: Center(child: "Edit Details".h4)),
                   PlainIconButton(icon: SonrIcons.Check.gradient(value: SonrGradient.Tertiary), onPressed: controller.saveEditedDetails)
                 ]),
@@ -67,7 +67,7 @@ class EditDetailsView extends GetView<ProfileController> {
                     label: "Phone",
                     textInputAction: TextInputAction.done,
                     controller:
-                        TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary!.value : ""),
+                        TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary : ""),
                     value: controller.editedLastName.value,
                     focusNode: _phoneNumberFocus,
                     onEditingComplete: () {

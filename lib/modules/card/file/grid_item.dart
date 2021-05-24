@@ -6,7 +6,7 @@ import 'package:sonr_app/style/style.dart';
 import 'views.dart';
 
 class MetaGridItemView extends StatelessWidget {
-  final TransferCardItem item;
+  final TransferCard item;
   const MetaGridItemView(this.item, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class MetaGridItemView extends StatelessWidget {
 
 /// @ Main Media Grid Item View
 class _MediaGridItemMainView extends StatelessWidget {
-  final TransferCardItem? item;
+  final TransferCard? item;
   final RxBool? isFlipped;
   const _MediaGridItemMainView({Key? key, this.item, this.isFlipped}) : super(key: key);
 
@@ -74,7 +74,7 @@ class _MediaGridItemMainView extends StatelessWidget {
 
 /// @ Details Media Grid Item View
 class _MediaGridItemDetailsView extends StatelessWidget {
-  final TransferCardItem? item;
+  final TransferCard? item;
   final RxBool? isFlipped;
   const _MediaGridItemDetailsView({Key? key, this.item, this.isFlipped}) : super(key: key);
 

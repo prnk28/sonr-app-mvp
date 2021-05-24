@@ -1,4 +1,5 @@
 // Core
+export 'core/api.dart';
 export 'core/arguments.dart';
 export 'core/bindings.dart';
 export 'core/extensions.dart';
@@ -13,5 +14,7 @@ export 'database/cards_db.dart';
 export 'extensions/metadata.dart';
 
 // Models
-export 'model/model_tile.dart';
+export 'model/model_hs.dart';
+export 'model/model_result.dart';
+export 'model/model_search.dart';
 export 'model/rx_proto.dart';

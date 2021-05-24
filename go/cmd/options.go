@@ -1,14 +1,11 @@
 package main
 
 import (
-	flutter_systray "github.com/JanezStupar/flutter_systray/go"
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
 	"github.com/go-flutter-desktop/plugins/path_provider"
-	"github.com/go-flutter-desktop/plugins/video_player"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	open_file "github.com/jld3103/go-flutter-open_file"
-	warble "github.com/jslater89/warble/go"
 	file_picker "github.com/miguelpruivo/flutter_file_picker/go"
 )
 
@@ -16,16 +13,13 @@ var options = []flutter.Option{
 	flutter.WindowInitialDimensions(1280, 800),
 	flutter.WindowMode(flutter.WindowModeBorderless),
 	flutter.PopBehavior(flutter.PopBehaviorHide),
-	flutter.AddPlugin(&flutter_systray.FlutterSystrayPlugin{}),
-	flutter.AddPlugin(warble.New()),
-	flutter.AddPlugin(&video_player.VideoPlayerPlugin{}),
 	flutter.AddPlugin(&path_provider.PathProviderPlugin{
 		VendorName:      "https://sonr.io",
 		ApplicationName: "Sonr",
 	}),
 	flutter.AddPlugin(&open_file.OpenFilePlugin{}),
-	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 	flutter.AddPlugin(&AppBarDraggable{}),
+	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 }
 
 // AppBarDraggable is a plugin that makes moving the bordreless window possible

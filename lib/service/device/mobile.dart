@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart' as geo;
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/modules/share/sheet_view.dart';
+import 'package:sonr_app/pages/home/share/sheet_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -35,7 +35,6 @@ class MobileService extends GetxService {
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
-  final _location = Rx<Location_Geo>(Location_Geo());
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -71,7 +70,7 @@ class MobileService extends GetxService {
     // Handle Keyboard Visibility
     _keyboardVisible.bindStream(_keyboardVisibleController.onChange);
 
-    // @ 3. Bind Sensors for Mobile
+    // @ Bind Sensors for Mobile
     // Bind Direction and Set Intervals
     motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
     motionSensors.orientationUpdateInterval = K_SENSOR_INTERVAL;
@@ -85,8 +84,14 @@ class MobileService extends GetxService {
     _audioPlayer.disableLog();
     await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
 
-    // Set Permissions Status
-    updatePermissionsStatus();
+    // Update Device Values
+    await updatePermissionsStatus();
+
+    // Set Location
+    if (_hasLocation.value) {
+      var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
+      DeviceService.setGeoLocation(Location_Geo(latitude: result.latitude, longitude: result.longitude));
+    }
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {
@@ -150,18 +155,6 @@ class MobileService extends GetxService {
   static void closeKeyboard({BuildContext? context}) async {
     if (to._keyboardVisible.value) {
       FocusScope.of(context ?? Get.context!).unfocus();
-    }
-  }
-
-  /// @ Refresh User Location Position
-  static Future<Location_Geo?> currentLocation() async {
-    if (to._hasLocation.value) {
-      var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
-      to._location(Location_Geo(latitude: result.latitude, longitude: result.longitude));
-      return to._location.value;
-    } else {
-      print("No Location Permissions");
-      return null;
     }
   }
 
@@ -239,7 +232,7 @@ class MobileService extends GetxService {
   }
 
   /// @ Update Method
-  void updatePermissionsStatus() async {
+  Future<void> updatePermissionsStatus() async {
     _hasCamera(await Permission.camera.isGranted);
     _hasLocation(await Permission.locationWhenInUse.isGranted);
     _hasMicrophone(await Permission.microphone.isGranted);
@@ -440,14 +433,14 @@ class MobileService extends GetxService {
 
   // # Saves Received Media to Gallery
   _handleSharedFiles(List<SharedMediaFile> data) async {
-    if (!Get.isBottomSheetOpen! && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen!) {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
     }
   }
 
   // # Saves Received Media to Gallery
   _handleSharedText(String text) async {
-    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text) && UserService.hasUser.value) {
+    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text)) {
       // Get Data
       var data = await SonrService.getURL(text);
 

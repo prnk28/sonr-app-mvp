@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/data/core/arguments.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
+import 'share/share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -23,7 +22,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // Controllers
   late final TabController tabController;
-  late final FloatingSearchBarController searchBarController;
   late final ScrollController scrollController;
 
   // References
@@ -37,7 +35,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   onInit() {
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
-    searchBarController = FloatingSearchBarController();
     scrollController = ScrollController();
 
     // Listen for Updates
@@ -114,7 +111,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Revert Text
       Future.delayed(timeout, () {
         if (!isClosed) {
-          title(view.value.title);
+          title("${LobbyService.local.value.count} Around");
           _timeoutActive = false;
         }
       });
@@ -128,7 +125,16 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Present View
     if (isSearchVisible.value) {
-      searchBarController.open();
+      // searchBarController.open();
+    }
+  }
+
+  void handleSearchFocus(bool isFocused) {
+    if (isFocused) {
+      // searchBarController.close();
+      isSearchVisible(false);
+    } else {
+      isSearchVisible(true);
     }
   }
 
@@ -205,6 +211,9 @@ extension HomeViewUtils on HomeView {
 
   String get title {
     if (this == HomeView.Main) {
+      if (UserService.isNewUser.value) {
+        return "Nice to meet you.";
+      }
       return "Welcome Back";
     } else {
       return this.toString().substring(this.toString().indexOf('.') + 1);

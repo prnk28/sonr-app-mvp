@@ -17,9 +17,9 @@ class RemoteController extends GetxController {
   final thirdWord = "".obs;
 
   // Information Properties
-  final remoteInfo = Rx<RemoteInfo?>(null);
+  final remoteResponse = Rx<RemoteResponse?>(null);
   final currentInvite = Rx<AuthInvite?>(null);
-  final receivedCard = Rx<TransferCard?>(null);
+  final receivedCard = Rx<Transfer?>(null);
 
   // Status Properties
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
@@ -33,7 +33,6 @@ class RemoteController extends GetxController {
 
   // ** Initializer ** //
   void onInit() {
-    Get.find<SonrService>().registerRemoteInvite(_handleRemoteInvite);
     super.onInit();
     _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
   }
@@ -51,17 +50,17 @@ class RemoteController extends GetxController {
   /// @ Method to Create Remote Lobby
   void create() async {
     // Start Remote
-    remoteInfo(await SonrService.createRemote());
+    remoteResponse(await SonrService.createRemote());
     isRemoteActive(true);
-    LobbyService.registerRemoteCallback(remoteInfo.value, _handleRemoteLobby);
+    LobbyService.registerRemoteCallback(remoteResponse.value, _handleRemoteLobby);
   }
 
   /// @ Method to End Created Remote Lobby
   void stop() async {
-    if (remoteInfo.value != null) {
+    if (remoteResponse.value != null) {
       // Start Remote
-      SonrService.leaveRemote(remoteInfo.value!);
-      remoteInfo(RemoteInfo());
+      SonrService.leaveRemote(remoteResponse.value!);
+      remoteResponse(RemoteResponse());
       isRemoteActive(false);
     }
 
@@ -73,15 +72,15 @@ class RemoteController extends GetxController {
   /// @ Method to Join New Remote Lobby
   void join() async {
     isJoinFieldTapped(false);
-    remoteInfo(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
+    remoteResponse(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
     status(RemoteViewStatus.Joined);
   }
 
   /// @ Method to Leave Current Remote Lobby
   void leave() async {
-    if (remoteInfo.value != null) {
-      SonrService.leaveRemote(remoteInfo.value!);
-      remoteInfo(null);
+    if (remoteResponse.value != null) {
+      SonrService.leaveRemote(remoteResponse.value!);
+      remoteResponse(null);
       currentInvite(null);
       status(RemoteViewStatus.NotJoined);
     }
@@ -93,9 +92,9 @@ class RemoteController extends GetxController {
 
   /// @ Method to Respond to Invite
   void respond(bool decision, Peer peer) {
-    if (remoteInfo.value != null && currentInvite.value != null) {
+    if (remoteResponse.value != null && currentInvite.value != null) {
       // Respond Decision
-      SonrService.respond(Request.newReplyRemote(info: remoteInfo.value!, to: peer, decision: decision));
+      SonrService.respond(Request.newReplyRemote(to: peer, decision: decision));
 
       // Wait for Complete if Accepted
       if (decision) {
@@ -123,12 +122,6 @@ class RemoteController extends GetxController {
     if (!visible && status.value == RemoteViewStatus.NotJoined) {
       isJoinFieldTapped(false);
     }
-  }
-
-  // @ Handle A remote Invite
-  void _handleRemoteInvite(AuthInvite invite) {
-    currentInvite(invite);
-    status(RemoteViewStatus.Invited);
   }
 
   void _handleRemoteLobby(Lobby lobby) {

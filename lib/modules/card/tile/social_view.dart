@@ -15,24 +15,24 @@ class SocialView extends StatelessWidget {
       if (controller.isFetched.value) {
         // Build Expanded
         if (controller.isExpanded.value) {
-          return _buildExpanded(item.provider);
+          return _buildExpanded(item.media);
         }
 
-        switch (item.provider) {
+        switch (item.media) {
           // Medium
-          case Contact_Social_Provider.Medium:
+          case Contact_Social_Media.Medium:
             var posts = controller.medium.value;
-            return Stack(children: [_MediumItem(posts, 0, true), item.provider.black]);
+            return Stack(children: [_MediumItem(posts, 0, true), item.media.black]);
 
           // Twitter
-          case Contact_Social_Provider.Twitter:
+          case Contact_Social_Media.Twitter:
             var twitter = controller.twitter.value;
-            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.black]);
+            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.media.black]);
 
           // Youtube
-          case Contact_Social_Provider.YouTube:
+          case Contact_Social_Media.YouTube:
             var youtube = controller.youtube.value;
-            return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.black]);
+            return Stack(children: [_YoutubeItem(youtube, 0, true), item.media.black]);
 
           // Other
           default:
@@ -42,17 +42,17 @@ class SocialView extends StatelessWidget {
 
       // @ Build Loading View
       else {
-        return item.provider.gradient();
+        return item.media.gradient();
       }
     });
   }
 
   /// ** Builds Expanded Tile View - List/Grid ** //
-  _buildExpanded(Contact_Social_Provider provider) {
+  _buildExpanded(Contact_Social_Media provider) {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: controller.twitter.value!.count,
-      scrollDirection: provider == Contact_Social_Provider.Twitter ? Axis.vertical : Axis.horizontal,
+      scrollDirection: provider == Contact_Social_Media.Twitter ? Axis.vertical : Axis.horizontal,
       itemBuilder: (BuildContext context, int index) {
         return _TweetItem(controller.twitter.value, index, false, controller);
       },

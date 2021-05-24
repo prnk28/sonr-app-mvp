@@ -15,8 +15,8 @@ extension ActivityTypeUtils on ActivityType? {
   }
 }
 
-@DataClassName("TransferCardActivity")
-class TransferCardActivities extends Table {
+@DataClassName("TransferActivity")
+class TransferActivities extends Table {
   IntColumn? get id => integer().autoIncrement()();
   TextColumn? get owner => text().map(const ProfileConverter())();
   IntColumn? get mime => integer().map(const MimeConverter())();
@@ -24,7 +24,7 @@ class TransferCardActivities extends Table {
   IntColumn? get activity => integer().map(const ActivityConverter())();
 }
 
-class TransferCardItems extends Table {
+class TransferCards extends Table {
   IntColumn? get id => integer().autoIncrement()();
   TextColumn? get owner => text().map(const ProfileConverter())();
   IntColumn? get mime => integer().map(const MimeConverter())();
@@ -35,16 +35,16 @@ class TransferCardItems extends Table {
   DateTimeColumn? get received => dateTime()();
 }
 
-@UseMoor(tables: [TransferCardItems, TransferCardActivities])
+@UseMoor(tables: [TransferCards, TransferActivities])
 class CardsDatabase extends _$CardsDatabase {
   CardsDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   /// Adds Share/Receive/Delete activity to Database
   Future<int> addActivity(ActivityType type, Payload payload, Profile owner, {MIME_Type mime = MIME_Type.OTHER}) {
-    return into(transferCardActivities).insert(TransferCardActivitiesCompanion(
+    return into(transferActivities).insert(TransferActivitiesCompanion(
       payload: Value(payload),
       owner: Value(owner),
       mime: Value(mime),
@@ -53,7 +53,7 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   /// Adds Contact/URL card to Database
-  Future<int> addCard(TransferCard card) async => into(transferCardItems).insert(TransferCardItemsCompanion(
+  Future<int> addCard(Transfer card) async => into(transferCards).insert(TransferCardsCompanion(
       owner: Value(card.owner),
       mime: Value.absent(),
       payload: Value(card.payload),
@@ -63,7 +63,7 @@ class CardsDatabase extends _$CardsDatabase {
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
   /// Add File card to Database
-  Future<int> addFileCard(TransferCard card) async => into(transferCardItems).insert(TransferCardItemsCompanion(
+  Future<int> addFileCard(Transfer card) async => into(transferCards).insert(TransferCardsCompanion(
       owner: Value(card.owner),
       mime: Value(card.file.single.mime.type),
       payload: Value(card.payload),
@@ -73,48 +73,59 @@ class CardsDatabase extends _$CardsDatabase {
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
   /// Returns all Transfer Card Items
-  Future<List<TransferCardItem>> get allCardEntries => select(transferCardItems).get();
+  Future<List<TransferCard>> get allCardEntries => select(transferCards).get();
 
   /// Delete Single Activity from Database
-  Future<void> clearActivity(TransferCardActivity activity) => (delete(transferCardActivities)..where((t) => t.id.equals(activity.id))).go();
+  Future<void> clearActivity(TransferActivity activity) => (delete(transferActivities)..where((t) => t.id.equals(activity.id))).go();
 
   /// Deletes All Activity from Database
-  Future<void> clearAllActivity() => delete(transferCardActivities).go();
+  Future<void> clearAllActivity() => delete(transferActivities).go();
 
-  /// Deletes Card Item from Database with `TransferCardItem`
-  Future<void> deleteCard(TransferCardItem item) => (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
+  /// Deletes Card Item from Database with `TransferItem`
+  Future<void> deleteCard(TransferCard item) => (delete(transferCards)..where((t) => t.id.equals(item.id))).go();
 
   /// Deletes Card Item from Database with id
-  Future<void> deleteCardFromID(int id) => (delete(transferCardItems)..where((t) => t.id.equals(id))).go();
+  Future<void> deleteCardFromID(int id) => (delete(transferCards)..where((t) => t.id.equals(id))).go();
 
   /// Deletes ALL Card Items from Database
-  Future<void> deleteAllCards() => delete(transferCardItems).go();
+  Future<void> deleteAllCards() => delete(transferCards).go();
 
   /// Streams Activity Items from Database
-  Stream<List<TransferCardActivity>> watchActivity() => (select(transferCardActivities).watch());
+  Stream<List<TransferActivity>> watchActivity() => (select(transferActivities).watch());
 
   /// Streams Card Items from Database
-  Stream<List<TransferCardItem>> watchAll() => (select(transferCardItems).watch());
+  Stream<List<TransferCard>> watchAll() => (select(transferCards).watch());
 
   /// Streams Contact Card Items from Database
-  Stream<List<TransferCardItem>> watchContacts() => (select(transferCardItems)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
+  Stream<List<TransferCard>> watchContacts() => (select(transferCards)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
 
   /// Streams Metadata Card Items from Database
-  Stream<List<TransferCardItem>> watchMetadata() => (select(transferCardItems)
+  Stream<List<TransferCard>> watchMetadata() => (select(transferCards)
         ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.FILES.value)))
       .watch();
 
   /// Streams URL Card Items from Database
-  Stream<List<TransferCardItem>> watchUrls() => (select(transferCardItems)..where((t) => t.payload.equals(Payload.URL.value))).watch();
+  Stream<List<TransferCard>> watchUrls() => (select(transferCards)..where((t) => t.payload.equals(Payload.URL.value))).watch();
 }
 
 LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
-  return LazyDatabase(() async {
-    // put the database file, called db.sqlite here, into the documents folder
-    // for your app.
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db_cards.sqlite'));
-    return VmDatabase(file);
-  });
+  try {
+    // the LazyDatabase util lets us find the right location for the file async.
+    return LazyDatabase(() async {
+      // put the database file, called db.sqlite here, into the documents folder
+      // for your app.
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, 'db_cards.sqlite'));
+      return VmDatabase(file);
+    });
+  } catch (e) {
+    // the LazyDatabase util lets us find the right location for the file async.
+    return LazyDatabase(() async {
+      // put the database file, called db.sqlite here, into the documents folder
+      // for your app.
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, 'db_cards2.sqlite'));
+      return VmDatabase(file);
+    });
+  }
 }

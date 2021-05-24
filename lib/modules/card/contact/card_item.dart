@@ -5,9 +5,9 @@ import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
-/// @ TransferCard Contact Item Details
+/// @ Transfer Contact Item Details
 class ContactCardItemView extends StatelessWidget {
-  final TransferCardItem card;
+  final TransferCard card;
   ContactCardItemView(this.card, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class ContactCardItemView extends StatelessWidget {
             // Brief Contact Card Info
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: card.contact!.mapSocials((social) => social.provider.gradient(size: 35)) as List<Widget>)
+                children: card.contact!.mapSocials((social) => social.media.gradient(size: 35)) as List<Widget>)
           ]),
         ),
       ),

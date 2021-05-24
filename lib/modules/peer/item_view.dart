@@ -5,7 +5,7 @@ import 'profile_view.dart';
 class PeerListItem extends StatefulWidget {
   final Peer peer;
   final int index;
-  final RemoteInfo? remote;
+  final RemoteResponse? remote;
   PeerListItem(this.peer, this.index, {this.remote});
   @override
   _PeerListItemState createState() => _PeerListItemState();

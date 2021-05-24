@@ -11,9 +11,7 @@ class LinkDesktopView extends StatelessWidget {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-          SonrService.locationInfo().toString(),
-        ),
+        Text(""),
       ],
     ));
   }

@@ -1,7 +1,5 @@
-import 'package:sonr_app/pages/home/views/profile/profile_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class TileController extends GetxController {
   // Properties
@@ -18,18 +16,18 @@ class TileController extends GetxController {
   /// @ Create New Tile
   initialize(Contact_Social tile, int i) async {
     // Medium Data
-    if (tile.provider == Contact_Social_Provider.Medium) {
+    if (tile.media == Contact_Social_Media.Medium) {
       medium(await MediumController.getUser(tile.username));
       isFetched(true);
     }
     // Twitter Data
-    else if (tile.provider == Contact_Social_Provider.Twitter) {
+    else if (tile.media == Contact_Social_Media.Twitter) {
       twitter(await TwitterController.getUser(tile.username));
       isFetched(true);
     }
     // Youtube Data
-    else if (tile.provider == Contact_Social_Provider.YouTube) {
-      youtube(await YoutubeController.searchVideo(tile.links.postLink.url));
+    else if (tile.media == Contact_Social_Media.YouTube) {
+      youtube(await YoutubeController.searchVideo(tile.icon.link.url));
       isFetched(true);
     }
   }
@@ -51,6 +49,6 @@ class TileController extends GetxController {
   /// @ Toggles Between Expanded and Normal
   toggleExpand(int index) {
     isExpanded(!isExpanded.value);
-    Get.find<ProfileController>().toggleExpand(index, isExpanded.value);
+    // Get.find<ProfileController>().toggleExpand(index, isExpanded.value);
   }
 }

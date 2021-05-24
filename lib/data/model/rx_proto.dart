@@ -38,11 +38,6 @@ extension RxContact on Rx<Contact> {
         val?.addEmail(data);
       });
 
-  /// Add Name for Rx<Contact>
-  void addName(String data, String label) => this.update((val) {
-        val?.addName(data, label);
-      });
-
   /// Add Phone for Rx<Contact>
   void addPhone(String data, {String label = ContactUtils.K_DEFAULT_PHONE_LABEL}) => this.update((val) {
         val?.addPhone(data, label: label);
@@ -69,28 +64,36 @@ extension RxContact on Rx<Contact> {
 
   /// Set FirstName for Rx<Contact>
   void setFirstName(String data) => this.update((val) {
-        val?.setFirstName(data);
+        if (val != null) {
+          val.setFirstName(data);
+        }
       });
 
   /// Set LastName for Rx<Contact>
   void setLastName(String data) => this.update((val) {
-        val?.setLastName(data);
+        if (val != null) {
+          val.setLastName(data);
+        }
       });
 
   /// Set Picture for Rx<Contact>
   void setPicture(Uint8List data) => this.update((val) {
-        val?.setPicture(data);
+        if (val != null) {
+          val.setPicture(data);
+        }
       });
 
   /// Delete a Social Media Provider
   void updateSocial(Contact_Social data) => this.update((val) {
-        val?.updateSocial(data);
+        if (val != null) {
+          val.updateSocial(data);
+        }
       });
 }
 
 /// @ InviteRequest Protobuf
 /// Extension Manages InviteRequest Protobuf as Rx Type
-extension RxInviteRequest on Rx<InviteRequest> {
+extension RxInviteRequest on Rx<AuthInvite> {
   /// Checks if InviteRequest Payload is Media
   bool get isMedia => this.value.payload == Payload.MEDIA;
 

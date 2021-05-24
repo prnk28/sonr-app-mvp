@@ -1,8 +1,8 @@
-import 'package:sonr_app/modules/share/share_view.dart';
+import 'share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'views/main/main_view.dart';
+import 'views/grid/grid_view.dart';
 import 'home_controller.dart';
 import 'views/activity/activity_view.dart';
 import 'views/profile/profile_view.dart';
@@ -12,22 +12,23 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-        gradient: SonrGradients.PlumBath,
-        resizeToAvoidBottomInset: false,
-        floatingAction: ShareView(),
-        bottomNavigationBar: HomeBottomNavBar(),
-        appBar: HomeAppBar(),
-        body: Obx(() => AnimatedOpacity(
-              duration: 750.milliseconds,
-              opacity: controller.isSearchVisible.value ? 0 : 1,
-              child: Container(
-                  child: TabBarView(controller: controller.tabController, children: [
-                CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-                ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-                ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
-                RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-              ])),
-            )));
+      gradient: SonrGradients.PlumBath,
+      resizeToAvoidBottomInset: false,
+      floatingAction: ShareView(),
+      bottomNavigationBar: HomeBottomNavBar(),
+      appBar: HomeAppBar(),
+      body: Obx(() => AnimatedOpacity(
+            duration: 750.milliseconds,
+            opacity: controller.isSearchVisible.value ? 0 : 1,
+            child: Container(
+                child: TabBarView(controller: controller.tabController, children: [
+              CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+              ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+              ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+              RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+            ])),
+          )),
+    );
   }
 }
 

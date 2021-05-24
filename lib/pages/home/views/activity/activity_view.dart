@@ -16,7 +16,7 @@ class ActivityView extends StatelessWidget {
                 })
             : Center(
                 child: Container(
-                  child: [SonrAssetIllustration.NoAlerts.widget, "No Alerts".headFour(color: Get.theme.hintColor)].column(),
+                  child: [Image.asset('assets/illustrations/Alerts.png'), "No Alerts".headFour(color: Get.theme.hintColor)].column(),
                   padding: EdgeInsets.all(64),
                 ),
               )));
@@ -25,7 +25,7 @@ class ActivityView extends StatelessWidget {
 
 /// @ Activity List Item
 class _ActivityListItem extends StatelessWidget {
-  final TransferCardActivity item;
+  final TransferActivity item;
 
   const _ActivityListItem({Key? key, required this.item}) : super(key: key);
   @override
@@ -70,7 +70,7 @@ class _ActivityListItem extends StatelessWidget {
     }
   }
 
-  String _description(TransferCardActivity activity) {
+  String _description(TransferActivity activity) {
     if (activity.payload == Payload.FILES) {
       return " some Files"; //+ " from ${card.owner.firstName}";
     } else if (activity.payload == Payload.FILE || activity.payload == Payload.MEDIA) {

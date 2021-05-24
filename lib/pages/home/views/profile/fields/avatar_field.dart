@@ -1,6 +1,6 @@
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:sonr_app/style/style.dart';
-import 'profile_controller.dart';
+import '../profile_controller.dart';
 
 class ProfileAvatarField extends GetView<ProfileController> {
   @override
@@ -42,7 +42,7 @@ class ProfileAvatarField extends GetView<ProfileController> {
                     width: 120,
                     height: 120,
                     child: CircleAvatar(
-                      child: SonrAssetIllustration.AddPicture.widget,
+                      child: SonrIcons.Avatar.greyWith(size: 120),
                       backgroundColor: Color(0xfff0f6fa).withOpacity(0.8),
                     ))),
           ),
@@ -140,7 +140,8 @@ class _CameraPermissionsView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(image: SonrAssetIllustration.CameraAccess.image, fit: BoxFit.fitWidth), borderRadius: BorderRadius.circular(12)),
+          image: DecorationImage(image: AssetImage('assets/illustrations/Camera.png'), fit: BoxFit.fitWidth),
+          borderRadius: BorderRadius.circular(12)),
       padding: EdgeInsets.only(bottom: 24),
       child: Align(
         alignment: Alignment.bottomCenter,

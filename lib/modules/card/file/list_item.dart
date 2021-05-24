@@ -5,7 +5,7 @@ import 'package:sonr_app/style/style.dart';
 import 'views.dart';
 
 class MetaListItemView extends StatelessWidget {
-  final TransferCardItem item;
+  final TransferCard item;
   const MetaListItemView(this.item, {Key? key}) : super(key: key);
 
   @override

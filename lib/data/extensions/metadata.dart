@@ -2,8 +2,30 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+import '../data.dart';
 
 enum MediaOrientation { Portrait, Landscape }
+
+extension TransferCardUtils on TransferCard {
+  /// Checks if Provided Query Matches Date of Transfer
+  bool matchesDate(String q) {
+    // Retreive DateTime Data
+    var receivedDay = this.received.day.toString();
+
+    // Check Query
+    return receivedDay.contains(q);
+  }
+
+  /// Checks if Provided Query Matches Owner Name
+  bool matchesName(String q) {
+    return this.owner.firstName.contains(q) || this.owner.lastName.contains(q) || this.owner.sname.contains(q);
+  }
+
+  /// Checks if Provided Query Matches Payload
+  bool matchesPayload(String q) {
+    return this.payload.toString().contains(q);
+  }
+}
 
 extension MediaOrientationUtils on MediaOrientation {
   double get aspectRatio {

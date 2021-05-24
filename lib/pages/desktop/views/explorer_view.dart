@@ -26,8 +26,14 @@ class ExplorerDesktopView extends GetView<ExplorerController> {
         // Default Empty View
         else {
           return Center(
-            child: [Container(padding: EdgeInsets.all(54), width: 500, child: SonrAssetIllustration.NoPeers.widget), "Nobody Around".h5_Grey]
-                .column(mainAxisAlignment: MainAxisAlignment.center),
+            child: [
+              Container(
+                padding: EdgeInsets.all(54),
+                width: 500,
+                child: Image.asset('assets/illustrations/EmptyLobby.png'),
+              ),
+              "Nobody Around".h5_Grey
+            ].column(mainAxisAlignment: MainAxisAlignment.center),
           );
         }
       }),
