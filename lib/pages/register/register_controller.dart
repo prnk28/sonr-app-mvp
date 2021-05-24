@@ -98,7 +98,7 @@ class RegisterController extends GetxController {
       }
 
       // Process data.
-      await UserService.saveUser(contact);
+      await UserService.newUser(contact);
       status(RegisterStatus.Location);
     }
   }
