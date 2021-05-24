@@ -192,14 +192,16 @@ class AuthService extends GetxService {
   }
 
   /// ^ Checks if Username matches device id and prefix from records
-  static bool validateUser(String n) {
-    var data = to.result.value.hasName(n, buildPrefix(n));
-    if (data.exists) {
-      to.saveValidatedUser(n);
-      return to._ecKeypair.publicKey.verifySHA512Signature(
-        to.mnemonicUTF,
-        data.record.fingerprint,
-      );
+  static Future<bool> validateUser(String n) async {
+    if (to.hasMnemonic.value) {
+      var data = to.result.value.hasName(n, buildPrefix(n));
+      if (data.exists) {
+        await to.saveValidatedUser(n);
+        return to._ecKeypair.publicKey.verifySHA512Signature(
+          to.mnemonicUTF,
+          data.record.fingerprint,
+        );
+      }
     }
     return false;
   }

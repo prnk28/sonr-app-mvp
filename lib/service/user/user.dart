@@ -142,7 +142,9 @@ class UserService extends GetxService {
     await to._userBox.write("user", user.writeToJson());
 
     // Send Update to Node
-    SonrService.setProfile(data);
+    if (SonrService.status.value.isConnected) {
+      SonrService.setProfile(data);
+    }
   }
 
   /// @ Returns User Based on Service Values

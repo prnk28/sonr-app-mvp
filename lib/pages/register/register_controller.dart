@@ -56,12 +56,12 @@ class RegisterController extends GetxController {
     }
   }
 
-  void setName() async {
+  Future<void> setName() async {
     // Refresh Records
     AuthService.to.refresh();
 
     // Validate
-    if (validateName()) {
+    if (await validateName()) {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Create User Data
         var data = await AuthService.createUsername(sname.value);
@@ -71,6 +71,7 @@ class RegisterController extends GetxController {
           status(RegisterStatus.Backup);
         }
       } else {
+        await UserService.returnUser();
         status(RegisterStatus.Location);
       }
     }
@@ -117,7 +118,7 @@ class RegisterController extends GetxController {
     return firstNameValid && lastNameValid;
   }
 
-  bool validateName() {
+  Future<bool> validateName() async {
     // Update Status
     if (sname.value.length > 3) {
       // Check Available
@@ -125,8 +126,7 @@ class RegisterController extends GetxController {
         NameCheckType.Unavailable,
         sname.value,
       )) {
-        if (AuthService.validateUser(sname.value)) {
-          setReturningUser();
+        if (await AuthService.validateUser(sname.value)) {
           nameStatus(RegisterNameStatus.Returning);
           return true;
         } else {
@@ -168,11 +168,6 @@ class RegisterController extends GetxController {
       nameStatus(RegisterNameStatus.TooShort);
       return false;
     }
-  }
-
-  /// @ Sets for Returning User
-  void setReturningUser() async {
-    await UserService.returnUser();
   }
 
   /// @ Request Location Permissions
