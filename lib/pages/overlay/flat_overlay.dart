@@ -10,7 +10,11 @@ enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }
 class FlatMode {
   static outgoing() {
     if (!Get.isDialogOpen!) {
-      Get.dialog(_FlatModeView(), barrierColor: Colors.transparent, useSafeArea: false);
+      Get.dialog(
+        _FlatModeView(),
+        barrierColor: Colors.transparent,
+        useSafeArea: false,
+      );
     }
   }
 

@@ -1,8 +1,14 @@
 import 'dart:convert';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
-import 'package:sonr_plugin/sonr_plugin.dart';
 import '../../env.dart';
 import 'package:get/get.dart';
+
+// Restricted Username Values
+const K_RESTRICTED_NAMES = ['elon', 'vitalik', 'prad', 'rishi', 'brax', 'vt', 'isa'];
+
+/// Blocked Username Values
+const K_BLOCKED_NAMES = ['root', 'admin', 'mail', 'auth', 'crypto', 'id', 'app', 'beta', 'alpha', 'code', 'ios', 'android', 'test', 'node', 'sonr'];
 
 /// ### Namebase API Client
 class NamebaseClient extends GetConnect {
@@ -18,10 +24,9 @@ class NamebaseClient extends GetConnect {
       {'Authorization': 'Basic $_AUTHORIZATION', 'Accept': 'application/json', 'Content-Type': 'application/json'};
 
   /// Returns All Records List
-  Future<Tuple<bool, List<HSRecord>>> refresh() async {
+  Future<NamebaseResult> refresh() async {
     var resp = await get(_BASE_URL + _NAME_DNS_POINT, headers: _AUTH_HEADERS);
-    var data = HSResponse.fromJson(resp.body);
-    return Tuple(data.success, data.records);
+    return NamebaseResult.fromResponse(resp);
   }
 
   Future<bool> addRecord(HSRecord newRecord) async {

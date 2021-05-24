@@ -81,7 +81,6 @@ class MobileService extends GetxService {
 
   // Shortcuts
   String get deviceID => DeviceService.device.id;
-  String get mnemonic => _mnemonic;
   Uint8List get mnemonicUTF => Uint8List.fromList(utf8.encode(_mnemonic));
 
   String get privateKey => _ecKeypair.privateKey.toString();
@@ -91,8 +90,8 @@ class MobileService extends GetxService {
   bool get hasAuth => _hasKey.value && _hasMnemonic.value && _hasPrefix.value;
 
   /// Auth Accessors
-  static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
-  static Tuple<String, String> get mnemonicPrefix => Tuple(to._mnemonic, to._prefix);
+  static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to.privateKey);
+  static String get mnemonic => to._mnemonic;
   static String get prefix => to._prefix;
 
   // References

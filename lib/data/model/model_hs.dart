@@ -1,30 +1,7 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 const FINGERPRINT_DIVIDER = "v=0;fingerprint=";
 const PREFIX_DIVIDER = "._auth.";
-
-class HSResponse {
-  HSResponse({
-    required this.success,
-    required this.records,
-  });
-
-  bool success;
-  List<HSRecord> records;
-
-  factory HSResponse.fromJson(dynamic json) {
-    return HSResponse(
-      success: json["success"] ?? false,
-      records: List<HSRecord>.from(json["records"].map((x) => HSRecord.fromJson(x))),
-    );
-  }
-
-  String toJson() => jsonEncode({
-        "success": success,
-        "records": List<dynamic>.from(records.map((x) => x.toMap())),
-      });
-}
 
 class HSRecord {
   HSRecord({
@@ -41,7 +18,6 @@ class HSRecord {
 
   bool get isAuth => this.host.contains(PREFIX_DIVIDER);
   bool get isBlank => this.ttl == -1 && this.type == "-" && this.host == "-" && this.value == "-";
-  bool get isNotBlank => this.ttl != -1 && this.type != "-" && this.host != "-" && this.value != "-";
   Uint8List get fingerprint => isAuth ? extractFingerprint(value) : Uint8List(0);
   String get name => isAuth ? extractName(host) : "";
   String get prefix => isAuth ? extractPrefix(host) : "";

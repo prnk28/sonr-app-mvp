@@ -25,7 +25,7 @@ class RegisterController extends GetxController {
   // Properties
   final nameStatus = RegisterNameStatus.Default.obs;
   final mnemonic = "".obs;
-  final sonrName = "".obs;
+  final sname = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterStatus>(RegisterStatus.Name);
@@ -41,7 +41,7 @@ class RegisterController extends GetxController {
   }
 
   void checkName(String name) {
-    sonrName(name);
+    sname(name);
     validateName();
   }
 
@@ -63,9 +63,12 @@ class RegisterController extends GetxController {
     if (validateName()) {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Create User Data
-        var data = await UserService.to.newUsername(sonrName.value);
-        mnemonic(data.item1);
-        status(RegisterStatus.Backup);
+        var data = await UserService.newUsername(sname.value);
+
+        if (data.isValid) {
+          mnemonic(data.mnemonic);
+          status(RegisterStatus.Backup);
+        }
       } else {
         status(RegisterStatus.Location);
       }
@@ -84,7 +87,7 @@ class RegisterController extends GetxController {
           profile: Profile(
         firstName: firstName.value,
         lastName: lastName.value,
-        username: sonrName.value,
+        username: sname.value,
       ));
 
       // Remove Textfield Focus
@@ -115,10 +118,13 @@ class RegisterController extends GetxController {
 
   bool validateName() {
     // Update Status
-    if (sonrName.value.length > 3) {
+    if (sname.value.length > 3) {
       // Check Available
-      if (!UserService.to.isNameAvailable(sonrName.value)) {
-        if (UserService.to.checkUser(sonrName.value)) {
+      if (UserService.nbResult.value.checkName(
+        NameCheckType.Unavailable,
+        sname.value,
+      )) {
+        if (UserService.checkUser(sname.value)) {
           setReturningUser();
           nameStatus(RegisterNameStatus.Returning);
           return true;
@@ -128,17 +134,26 @@ class RegisterController extends GetxController {
         }
       }
       // Check Unblocked
-      else if (!UserService.to.isNameUnblocked(sonrName.value)) {
+      else if (UserService.nbResult.value.checkName(
+        NameCheckType.Blocked,
+        sname.value,
+      )) {
         nameStatus(RegisterNameStatus.Blocked);
         return false;
       }
       // Check Unrestricted
-      else if (!UserService.to.isNameUnrestricted(sonrName.value)) {
+      else if (UserService.nbResult.value.checkName(
+        NameCheckType.Restricted,
+        sname.value,
+      )) {
         nameStatus(RegisterNameStatus.Restricted);
         return false;
       }
       // Check Unregisted Device
-      else if (!UserService.to.isPrefixAvailable(sonrName.value)) {
+      else if (UserService.nbResult.value.checkName(
+        NameCheckType.InvalidPrefix,
+        sname.value,
+      )) {
         nameStatus(RegisterNameStatus.DeviceRegistered);
         return false;
       }
@@ -156,7 +171,7 @@ class RegisterController extends GetxController {
 
   /// @ Sets for Returning User
   void setReturningUser() async {
-    await UserService.returningUser(sonrName.value);
+    await UserService.returningUser(sname.value);
   }
 
   /// @ Request Location Permissions

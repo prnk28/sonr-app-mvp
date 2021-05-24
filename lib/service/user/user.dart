@@ -1,16 +1,10 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/data/core/handshake.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sentry/sentry.dart';
-import 'package:sonr_app/data/model/model_hs.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-
-// Username List Constants
-const K_RESTRICTED_NAMES = ['elon', 'vitalik', 'prad', 'rishi', 'brax', 'vt', 'isa'];
-const K_BLOCKED_NAMES = ['root', 'admin', 'mail', 'auth', 'crypto', 'id', 'app', 'beta', 'alpha', 'code', 'ios', 'android', 'test', 'node', 'sonr'];
 
 class UserService extends GetxService {
   // Accessors
@@ -18,7 +12,7 @@ class UserService extends GetxService {
   static UserService get to => Get.find<UserService>();
 
   // Auth Properties
-  final _records = RxList<HSRecord>();
+  final _nbResult = Rx<NamebaseResult>(NamebaseResult.blank());
 
   // User Reactive Properties
   final _hasUser = false.obs;
@@ -28,49 +22,43 @@ class UserService extends GetxService {
   final _id = "".obs;
   final _contact = Contact().obs;
   final _crypto = User_Crypto().obs;
-  final _devices = <String, Device>{}.val(
-    'devices',
-    getBox: () => GetStorage('User'),
-  );
-  final _settings = <String, User_Settings>{}.val(
-    'settings',
-    getBox: () => GetStorage('User'),
-  );
+  final _devices = <String, Device>{}.val('devices', getBox: _getUserBox);
+  final _settings = <String, User_Settings>{}.val('settings', getBox: _getUserBox);
 
   // Preferences
-  final _isDarkMode = true.val('isDarkMode', getBox: () => GetStorage('Preferences'));
-  final _hasFlatMode = true.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
-  final _hasPointToShare = true.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
+  final _isDarkMode = true.val('isDarkMode', getBox: _getPrefsBox);
+  final _hasFlatMode = true.val('flatModeEnabled', getBox: _getPrefsBox);
+  final _hasPointToShare = true.val('pointToShareEnabled', getBox: _getPrefsBox);
 
   // Getter Methods for Contact Properties
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
   static Rx<Contact> get contact => to._contact;
+  static Rx<NamebaseResult> get nbResult => to._nbResult;
 
   // Getters for Preferences
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
 
-  // Auth Checkers
-  bool isNameAvailable(String n) => !_records.any((r) => r.equalsName(n));
-  bool isNameUnblocked(String n) => !K_BLOCKED_NAMES.any((v) => v == n.toLowerCase());
-  bool isNameUnrestricted(String n) => !K_RESTRICTED_NAMES.any((v) => v == n.toLowerCase());
-  bool isPrefixAvailable(String n) => !_records.any((r) => r.equalsPrefix(MobileService.newPrefix(n)));
-  bool isValidName(String n) => isNameAvailable(n) && isNameUnblocked(n) && isNameUnrestricted(n) && isPrefixAvailable(n);
-
   // References
   final _nbClient = NamebaseClient();
   final _userBox = GetStorage('User');
+  static GetStorage _getUserBox() => GetStorage('User');
+  static GetStorage _getPrefsBox() => GetStorage('Preferences');
 
   /// @ Open Storage on Init
   Future<UserService> init() async {
+    // Get Records
+    var data = await _nbClient.refresh();
+    if (data.success) {
+      _nbResult(data);
+      _nbResult.refresh();
+    }
+
     // Init Storage
     await GetStorage.init('User');
     await GetStorage.init('Preferences');
-
-    // Get Records
-    refreshRecords();
 
     // Check User Status
     _hasUser(await readData());
@@ -99,35 +87,35 @@ class UserService extends GetxService {
   }
 
   /// @ Checks if User is the Same
-  bool checkUser(String n) {
+  static bool checkUser(String n) {
     if (DeviceService.isMobile) {
       var prefix = MobileService.newPrefix(n);
-      var record = _records.singleWhere((r) => r.equals(n, prefix), orElse: () => HSRecord.blank());
-      if (record.isNotBlank) {
-        return MobileService.verifyFingerprint(record) && record.equals(n, prefix);
+      var result = to._nbResult.value.hasName(n, prefix);
+
+      if (result.exists) {
+        return MobileService.verifyFingerprint(result.record);
       }
     }
     return false;
   }
 
   /// @ Creates Crypto User Data, Returns Mnemonic Text
-  Future<Tuple<String, String>> newUsername(String name) async {
+  static Future<UsernameResult> newUsername(String name) async {
     if (DeviceService.isMobile) {
       // Set Crypto
       var data = await MobileService.newCrypto(name);
-      _id(data.prefix);
-      _crypto(data);
-      await to._userBox.write("username", name);
+      to._id(data.prefix);
+      to._crypto(data);
 
       // Add UserRecord Domain
-      if (isValidName(name) && MobileService.to.hasAuth) {
-        await _nbClient.addRecord(MobileService.getAuthRecord(name));
+      if (to._nbResult.value.isValidName(name) && MobileService.to.hasAuth) {
+        await to._nbClient.addRecord(MobileService.getAuthRecord(name));
       }
 
       // Return Mnemonic and Prefix
-      return MobileService.mnemonicPrefix;
+      return UsernameResult.isValidFetch(name);
     }
-    return Tuple("", "");
+    return UsernameResult.isInvalid();
   }
 
   // @ Set For Returning User
@@ -155,9 +143,9 @@ class UserService extends GetxService {
   }
 
   /// @ Method to Create New User from Contact
-  static Future<User> saveUser(Contact providedContact, {bool withSonrConnect = false}) async {
+  static Future<User> saveUser(Contact data, {bool withSonrConnect = false}) async {
     // Write Data
-    await to.writeData(contact: providedContact);
+    await to.writeData(contact: data);
 
     // Set Valuse
     to._isNewUser(true);
@@ -239,9 +227,9 @@ class UserService extends GetxService {
   static Future<void> refreshRecords() async {
     // Set Data From Response
     var data = await to._nbClient.refresh();
-    if (data.item1) {
-      to._records(data.item2);
-      to._records.refresh();
+    if (data.success) {
+      to._nbResult(data);
+      to._nbResult.refresh();
     }
   }
 
