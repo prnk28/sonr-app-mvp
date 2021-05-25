@@ -80,8 +80,8 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      leading: PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Primary), onPressed: controller.setAddTile),
-      actions: [PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode)],
+      // TODO:  leading: PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Primary), onPressed: controller.setAddTile),
+      leading: PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode),
       expandedHeight: Get.height / 6 + 16,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
@@ -122,7 +122,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
           Padding(padding: EdgeInsets.all(12)),
           // Bio/ LastTweet
           _buildBio(),
-          _buildLastTweet(),
+          // TODO: _buildLastTweet(),
         ],
       ),
     );
@@ -137,11 +137,11 @@ class _ProfileInfoView extends GetView<ProfileController> {
   Widget _buildBio() {
     if (UserService.contact.value.hasBio()) {
       return '"${UserService.contact.value.bio}"'.p;
-    } else {
-      return Container();
     }
+    return Container();
   }
 
+  // ignore: unused_element
   Widget _buildLastTweet() {
     return ObxValue<RxBool>((isLinkingTwitter) {
       if (isLinkingTwitter.value) {

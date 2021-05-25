@@ -40,7 +40,9 @@ extension RxContact on Rx<Contact> {
 
   /// Add Phone for Rx<Contact>
   void addPhone(String data, {String label = ContactUtils.K_DEFAULT_PHONE_LABEL}) => this.update((val) {
-        val?.addPhone(data, label: label);
+        if (val != null) {
+          val.addPhone(data, label: label);
+        }
       });
 
   /// Add a Social Media Provider

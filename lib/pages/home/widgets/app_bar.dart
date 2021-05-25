@@ -8,6 +8,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
     return Obx(() => AnimatedSlideSwitcher.fade(
           duration: 2.seconds,
           child: DesignAppBar(
+            centerTitle: controller.view.value.isMain,
             key: ValueKey(false),
             subtitle: _HomeAppBarSubtitle(),
             action: HomeActionButton(),
@@ -17,7 +18,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 82);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
 }
 
 class _HomeAppBarTitle extends GetView<HomeController> {

@@ -27,20 +27,23 @@ class HomeActionButton extends GetView<HomeController> {
       );
     } else if (page == HomeView.Activity) {
       return ActionButton(
-        key: ValueKey<HomeView>(HomeView.Activity),
-        icon: SonrIcons.CheckAll.gradient(size: 28),
-        onPressed: () => CardService.clearAllActivity(),
-      );
+          key: ValueKey<HomeView>(HomeView.Activity),
+          icon: SonrIcons.CheckAll.gradient(size: 28),
+          onPressed: () async {
+            if (CardService.activity.length > 0) {
+              var decision = await SonrOverlay.question(
+                  title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
+              if (decision) {
+                CardService.clearAllActivity();
+              }
+            }
+          });
     } else if (page == HomeView.Remote) {
       return _RemoteActionButton();
     } else if (page == HomeView.Transfer) {
       return Container(width: 56, height: 56);
     } else {
-      return ActionButton(
-        key: ValueKey<HomeView>(HomeView.Main),
-        icon: SonrIcons.Search.gradient(size: 28),
-        onPressed: () => controller.toggleSearch(),
-      );
+      return Container(width: 56, height: 56);
     }
   }
 }

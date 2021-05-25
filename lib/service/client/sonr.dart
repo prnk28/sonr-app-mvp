@@ -19,7 +19,7 @@ class SonrService extends GetxService {
   static SonrService get to => Get.find<SonrService>();
 
   // @ Set Properties
-  final _isReady = false.obs;
+  // final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
@@ -32,6 +32,7 @@ class SonrService extends GetxService {
   late Node _node;
   var _received = Completer<Transfer>();
   Completer<Transfer> get received => _received;
+  bool _initialized = false;
 
   // Registered Callbacks
   Function(TransferStatus)? _transferCallback;
@@ -41,7 +42,7 @@ class SonrService extends GetxService {
     Timer.periodic(250.milliseconds, (timer) {
       if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
-        if (to._isReady.value) {
+        if (to._status.value.isBootstrapped) {
           _node.update(Request.newUpdatePosition(MobileService.position.value));
         }
       }
@@ -70,6 +71,7 @@ class SonrService extends GetxService {
       _node.onReceived = _handleReceived;
       _node.onTransmitted = _handleTransmitted;
       _node.onError = _handleError;
+      _initialized = true;
       return this;
     } else {
       return this;
@@ -78,23 +80,29 @@ class SonrService extends GetxService {
 
   /// @ Connect to Service Method
   Future<void> connect() async {
-    // Create Node
-    _node = await SonrCore.initialize(_buildConnRequest());
-    _node.onStatus = _handleStatus;
-    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-    _node.onInvited = _handleInvited;
-    _node.onReplied = _handleResponded;
-    _node.onProgressed = _handleProgress;
-    _node.onReceived = _handleReceived;
-    _node.onTransmitted = _handleTransmitted;
-    _node.onError = _handleError;
+    // Check Initialized
+    if (!_initialized) {
+      // Create Node
+      _node = await SonrCore.initialize(_buildConnRequest());
+      _node.onStatus = _handleStatus;
+      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node.onInvited = _handleInvited;
+      _node.onReplied = _handleResponded;
+      _node.onProgressed = _handleProgress;
+      _node.onReceived = _handleReceived;
+      _node.onTransmitted = _handleTransmitted;
+      _node.onError = _handleError;
+    }
 
-    // Connect Node
-    _node.connect();
+    // Check not Connected
+    if (_status.value.isNotConnected) {
+      // Connect Node
+      _node.connect();
 
-    // Update for Mobile
-    if (DeviceService.isMobile) {
-      _node.update(Request.newUpdatePosition(MobileService.position.value));
+      // Update for Mobile
+      if (DeviceService.isMobile) {
+        _node.update(Request.newUpdatePosition(MobileService.position.value));
+      }
     }
   }
 
@@ -175,7 +183,6 @@ class SonrService extends GetxService {
     // Check for Homescreen Controller
     if (data.value == Status.BOOTSTRAPPED) {
       // Update Status
-      _isReady(true);
       _status(data.value);
       DeviceService.playSound(type: UISoundType.Connected);
 

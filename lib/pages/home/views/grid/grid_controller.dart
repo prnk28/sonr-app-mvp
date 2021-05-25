@@ -47,8 +47,12 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
   }
 
   /// Sets View for Searching
-  void goToSearch() {
-    view(RecentsViewStatus.Search);
+  void closeSearch(BuildContext context) {
+    if (DeviceService.isMobile) {
+      MobileService.closeKeyboard(context: context);
+    }
+    query("");
+    view(RecentsViewStatus.Default);
     view.refresh();
   }
 
