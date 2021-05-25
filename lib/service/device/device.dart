@@ -8,10 +8,6 @@ import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
 
 class DeviceService extends GetxService {
-  // Initializers
-  late final bool _isDesktop;
-  late bool _isMobile;
-
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
@@ -21,8 +17,8 @@ class DeviceService extends GetxService {
   final _location = Location().obs;
 
   // Platform Checkers
-  static bool get isDesktop => to._isDesktop;
-  static bool get isMobile => to._isMobile;
+  static bool get isDesktop => to._device.value.platform.isDesktop;
+  static bool get isMobile => to._device.value.platform.isMobile;
   static bool get isAndroid => to._device.value.platform.isAndroid;
   static bool get isIOS => to._device.value.platform.isIOS;
   static bool get isLinux => to._device.value.platform.isLinux;
@@ -44,14 +40,9 @@ class DeviceService extends GetxService {
   }
 
   // * Device Service Initialization * //
-  Future<DeviceService> init(isDesktop) async {
-    // Set Initializers
-    _isDesktop = isDesktop;
-    _isMobile = !isDesktop;
-
+  Future<DeviceService> init() async {
     // Get Info
     var platform = PlatformUtils.find();
-
     var directories = await Request.getDirectories(platform);
 
     // Initialize Device
@@ -62,7 +53,7 @@ class DeviceService extends GetxService {
         val.fileSystem = directories;
 
         // Set ID
-        if (!isDesktop) {
+        if (platform.isDesktop) {
           var deviceId = await PlatformDeviceId.getDeviceId;
           if (deviceId != null) {
             val.id = deviceId;

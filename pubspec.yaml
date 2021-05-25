@@ -61,7 +61,7 @@ dependencies:
   url_launcher: ^6.0.3
 
   # -- Data --
-  audioplayers: ^0.18.3
+  just_audio: ^0.7.4+1
   open_file: ^3.2.0
   photo_manager: ^1.1.5
   path: ^1.8.0
@@ -78,8 +78,8 @@ dependencies:
 
   # -- Plugins --
   sonr_plugin:
-    git: git@github.com:sonr-io/plugin.git
-    #path: ../plugin/ #-- Uncomment for Local Development
+    # git: git@github.com:sonr-io/plugin.git
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0

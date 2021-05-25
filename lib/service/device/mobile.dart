@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:audioplayers/audio_cache.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as geo;
@@ -32,7 +32,7 @@ class MobileService extends GetxService {
   final _hasStorage = false.obs;
 
   // Mobile Platform Controllers/Properties
-  final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
+  final _audioPlayer = AudioPlayer();
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
   final _position = Rx<Position>(Position());
@@ -80,10 +80,6 @@ class MobileService extends GetxService {
     _compassStream = FlutterCompass.events!.listen(_handleCompass);
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
 
-    // Audio Player
-    _audioPlayer.disableLog();
-    await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
-
     // Update Device Values
     await updatePermissionsStatus();
 
@@ -121,7 +117,7 @@ class MobileService extends GetxService {
     _accelStream.cancel();
     _compassStream.cancel();
     _orienStream.cancel();
-    _audioPlayer.clearCache();
+    _audioPlayer.dispose();
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
     super.onClose();
@@ -160,7 +156,8 @@ class MobileService extends GetxService {
 
   /// @ Method Plays a UI Sound
   static void playSound(UISoundType type) async {
-    await to._audioPlayer.play(type.file);
+    await to._audioPlayer.setAsset(type.file);
+    await to._audioPlayer.play();
   }
 
   /// @ Saves Photo to Gallery
