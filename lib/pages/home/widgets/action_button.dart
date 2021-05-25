@@ -36,11 +36,7 @@ class HomeActionButton extends GetView<HomeController> {
     } else if (page == HomeView.Transfer) {
       return Container(width: 56, height: 56);
     } else {
-      return ActionButton(
-        key: ValueKey<HomeView>(HomeView.Main),
-        icon: SonrIcons.Search.gradient(size: 28),
-        onPressed: () => controller.toggleSearch(),
-      );
+      return Container(width: 56, height: 56);
     }
   }
 }

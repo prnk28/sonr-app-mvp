@@ -99,7 +99,8 @@ extension CardsViewElementTypeUtils on TransferItemsType {
 
 class CardsGridView extends StatelessWidget {
   final TransferItemsType type;
-  CardsGridView({required this.type, Key? key}) : super(key: key);
+  final ScrollController? controller;
+  CardsGridView({required this.type, this.controller, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +108,7 @@ class CardsGridView extends StatelessWidget {
       // @ 2. Build View
       if (type.itemCount > 0) {
         return GridView.builder(
+          controller: controller,
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
             return TransferItem(type.transferItemAtIndex(index), type: TransferItemView.GridItem);
@@ -123,7 +125,8 @@ class CardsGridView extends StatelessWidget {
 /// @ Card List View - By Elements Type
 class CardsListView extends StatelessWidget {
   final TransferItemsType type;
-  CardsListView({required this.type, Key? key}) : super(key: key);
+  final ScrollController? controller;
+  CardsListView({required this.type, this.controller, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +134,7 @@ class CardsListView extends StatelessWidget {
       // @ 2. Build View
       if (type.itemCount > 0) {
         return ListView.builder(
+          controller: controller,
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
             return TransferItem(type.transferItemAtIndex(index), type: TransferItemView.ListItem);

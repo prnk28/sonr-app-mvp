@@ -81,7 +81,7 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
       // TODO:  leading: PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Primary), onPressed: controller.setAddTile),
-      actions: [PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode)],
+      leading: PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode),
       expandedHeight: Get.height / 6 + 16,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,

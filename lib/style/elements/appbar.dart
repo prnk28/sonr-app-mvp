@@ -31,7 +31,7 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
           middle: AnimatedSlideSwitcher.fade(
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 subtitle != null ? subtitle! : Container(),

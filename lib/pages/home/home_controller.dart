@@ -9,7 +9,6 @@ enum HomeView { Main, Profile, Activity, Remote, Transfer }
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final isTitleVisible = true.obs;
-  final isSearchVisible = false.obs;
   final isTransferVisible = false.obs;
 
   // Elements
@@ -115,26 +114,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
           _timeoutActive = false;
         }
       });
-    }
-  }
-
-  // @ Toggle Search View
-  void toggleSearch() {
-    // Update Value
-    isSearchVisible(!isSearchVisible.value);
-
-    // Present View
-    if (isSearchVisible.value) {
-      // searchBarController.open();
-    }
-  }
-
-  void handleSearchFocus(bool isFocused) {
-    if (isFocused) {
-      // searchBarController.close();
-      isSearchVisible(false);
-    } else {
-      isSearchVisible(true);
     }
   }
 

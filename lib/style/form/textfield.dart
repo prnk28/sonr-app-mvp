@@ -171,16 +171,14 @@ enum SearchFieldType { Username, Cards }
 class SonrSearchField extends StatelessWidget {
   final String value;
   final ValueChanged<String>? onChanged;
-  final Function? onEditingComplete;
+  final void Function()? onEditingComplete;
   final Iterable<String>? autofillHints;
   final SearchFieldType type;
-  final Widget? suggestion;
 
   factory SonrSearchField.forUsername({
     required Widget suggestion,
     required String value,
     ValueChanged<String>? onChanged,
-    Function? onEditingComplete,
     Iterable<String>? autofillHints,
     Function? onSuggestionTap,
   }) {
@@ -188,16 +186,14 @@ class SonrSearchField extends StatelessWidget {
   }
 
   factory SonrSearchField.forCards({
-    required Widget suggestion,
     required String value,
     ValueChanged<String>? onChanged,
-    Function? onEditingComplete,
+    void Function()? onEditingComplete,
     Iterable<String>? autofillHints,
   }) {
     return SonrSearchField(
       SearchFieldType.Cards,
       value: value,
-      suggestion: suggestion,
       onChanged: onChanged,
       onEditingComplete: onEditingComplete,
       autofillHints: autofillHints,
@@ -210,48 +206,50 @@ class SonrSearchField extends StatelessWidget {
     this.onChanged,
     this.onEditingComplete,
     this.autofillHints,
-    this.suggestion,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ValueBuilder<String>(
-      initialValue: value,
-      builder: (value, updateFn) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                decoration: Neumorphic.floating(
-                  theme: Get.theme,
-                ),
-                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                child: Stack(children: [
-                  Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        SonrIcons.Search.gradient(value: SonrGradients.AmourAmour, size: 30),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: TextField(
-                              autofillHints: autofillHints,
-                              showCursor: false,
-                              autofocus: true,
-                              onEditingComplete: onEditingComplete as void Function()?,
-                              onChanged: updateFn,
-                              decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
-                            ),
-                          ),
-                        ),
-                      ])),
-                  Align(alignment: Alignment.centerRight, child: suggestion)
-                ]))
-          ],
-        );
-      },
-      onUpdate: onChanged,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+            margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+            decoration: Neumorphic.floating(
+              theme: Get.theme,
+            ),
+            padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+            child: Stack(children: [
+              Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    UserService.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: TextField(
+                            style: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                            autofillHints: autofillHints,
+                            showCursor: false,
+                            autofocus: false,
+                            onEditingComplete: onEditingComplete,
+                            onChanged: onChanged,
+                            decoration: InputDecoration.collapsed(
+                                hintText: "Search...",
+                                hintStyle: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
+                      ),
+                    ),
+                  ])),
+            ]))
+      ],
     );
   }
 }
