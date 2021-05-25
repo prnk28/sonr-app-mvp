@@ -5,7 +5,7 @@ import '../home_controller.dart';
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlideSwitcher.fade(
+    return AnimatedSlideSwitcher.fade(
           duration: 2.seconds,
           child: DesignAppBar(
             key: ValueKey(false),
@@ -13,7 +13,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
             action: HomeActionButton(),
             title: _HomeAppBarTitle(),
           ),
-        ));
+        );
   }
 
   @override
