@@ -85,8 +85,6 @@ class _CardSearchView extends GetView<RecentsController> {
     return GestureDetector(
       onTap: () => controller.goToSearch(),
       child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: Neumorphic.floating(theme: Get.theme),
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.all(16),
         height: 80,
@@ -96,16 +94,14 @@ class _CardSearchView extends GetView<RecentsController> {
           alignment: Alignment.centerLeft,
           children: [
             Container(
-                height: 80,
-                width: Width.ratio(0.4),
                 child: SonrTextField(
-                  hint: "Search...",
-                  value: "",
-                  onChanged: (val) {
-                    controller.query(val);
-                    controller.query.refresh();
-                  },
-                )),
+              hint: "Search...",
+              value: "",
+              onChanged: (val) {
+                controller.query(val);
+                controller.query.refresh();
+              },
+            )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SonrIcons.Search.white,
