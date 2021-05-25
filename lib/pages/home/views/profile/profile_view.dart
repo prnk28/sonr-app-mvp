@@ -136,9 +136,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
 
   Widget _buildBio() {
     if (UserService.contact.value.hasBio()) {
-      if (UserService.contact.value.bio.isNotEmpty) {
-        return '"${UserService.contact.value.bio}"'.p;
-      }
+      return '"${UserService.contact.value.bio}"'.p;
     }
     return Container();
   }
