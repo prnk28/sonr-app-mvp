@@ -1,7 +1,6 @@
 export 'add/add_social.dart';
 export 'profile_controller.dart';
 export 'profile_view.dart';
-export 'fields/avatar_field.dart';
 
 import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
@@ -12,6 +11,7 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 import 'add/add_social.dart';
+import 'editor/editor_controller.dart';
 
 // @ PeerStatus Enum
 enum ProfileViewStatus {
@@ -100,23 +100,6 @@ class ProfileController extends GetxController {
     status(ProfileViewStatus.AddPicture);
   }
 
-  void shiftScreen(ContactOptions option) {
-    switch (option) {
-      case ContactOptions.Names:
-        HapticFeedback.heavyImpact();
-        status(ProfileViewStatus.FieldName);
-        break;
-      case ContactOptions.Addresses:
-        HapticFeedback.heavyImpact();
-        status(ProfileViewStatus.FieldAddresses);
-        break;
-      case ContactOptions.Gender:
-        HapticFeedback.heavyImpact();
-        status(ProfileViewStatus.FieldGender);
-        break;
-    }
-  }
-
   /// @ Start Editing for Social Tile
   void setAddTile() {
     HapticFeedback.heavyImpact();
@@ -127,7 +110,7 @@ class ProfileController extends GetxController {
   /// @ Start Editing for Details
   void setEditingMode() {
     HapticFeedback.heavyImpact();
-    status(ProfileViewStatus.EditView);
+    EditorController.open();
   }
 
   /// @ End Add/Edit State

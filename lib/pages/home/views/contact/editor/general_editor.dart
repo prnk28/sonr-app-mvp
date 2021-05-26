@@ -1,21 +1,19 @@
-import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
+
 import 'package:sonr_app/style/style.dart';
 
-class EditOptionsView extends GetView<ProfileController> {
-  EditOptionsView({Key? key}) : super(key: key);
+import 'editor_controller.dart';
+
+class GeneralEditorView extends GetView<EditorController> {
+  GeneralEditorView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Build GridView
-    return Container(
-      height: Height.ratio(0.7),
-      padding: EdgeInsets.all(8),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          PlainIconButton(icon: SonrIcons.Backward.whiteWith(size: 32), onPressed: () => controller.exitToViewing()),
-          "Edit Contact".headFour(align: TextAlign.center, color: Get.theme.focusColor),
-          Spacer()
-        ]),
+    return SingleChildScrollView(
+      child: Column(children: [
+        Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 24),
+            child: "General".headFour(align: TextAlign.start, color: Get.theme.focusColor)),
         Padding(padding: EdgeInsets.only(top: 4)),
         Container(
           height: Height.ratio(0.45),
@@ -36,7 +34,7 @@ class EditOptionsView extends GetView<ProfileController> {
   }
 }
 
-class _EditOptionsButton extends GetView<ProfileController> {
+class _EditOptionsButton extends GetView<EditorController> {
   final ContactOptions option;
 
   const _EditOptionsButton({Key? key, required this.option}) : super(key: key);

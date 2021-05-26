@@ -1,7 +1,9 @@
+import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
 enum ContactOptions {
   Names,
+  Phone,
   Addresses,
   Gender,
   // Music
@@ -16,6 +18,8 @@ extension ContactOptionUtils on ContactOptions {
     switch (this) {
       case ContactOptions.Names:
         return SonrIcons.Pen;
+      case ContactOptions.Phone:
+        return SonrIcons.Call;
       case ContactOptions.Addresses:
         return SonrIcons.Location;
       case ContactOptions.Gender:
@@ -25,5 +29,18 @@ extension ContactOptionUtils on ContactOptions {
 
   String get name {
     return this.toString().substring(this.toString().indexOf('.') + 1);
+  }
+
+  EditorFieldStatus get editorStatus {
+    switch (this) {
+      case ContactOptions.Names:
+        return EditorFieldStatus.FieldName;
+      case ContactOptions.Phone:
+        return EditorFieldStatus.FieldPhone;
+      case ContactOptions.Addresses:
+        return EditorFieldStatus.FieldAddresses;
+      case ContactOptions.Gender:
+        return EditorFieldStatus.FieldGender;
+    }
   }
 }
