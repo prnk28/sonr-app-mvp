@@ -10,7 +10,10 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
           child: DesignAppBar(
             centerTitle: controller.view.value.isMain,
             key: ValueKey(false),
-            subtitle: _HomeAppBarSubtitle(),
+            subtitle: Padding(
+              padding: controller.view.value.isMain ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
+              child: _HomeAppBarSubtitle(),
+            ),
             action: HomeActionButton(),
             title: _HomeAppBarTitle(),
           ),

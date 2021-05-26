@@ -84,7 +84,7 @@ class _RemoteActionButton extends GetView<RemoteController> {
         return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
 
       default:
-        return SonrIcons.Plus.gradient(size: 28);
+        return SonrIcons.Compass.gradient(size: 28);
     }
   }
 }

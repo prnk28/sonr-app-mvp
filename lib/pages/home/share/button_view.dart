@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'share_controller.dart';
+import 'package:sonr_app/pages/home/share/share_view.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-class ShareView extends GetView<ShareController> {
-  ShareView() : super(key: GlobalKey());
+class ShareButton extends StatelessWidget {
+  ShareButton() : super(key: GlobalKey());
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,10 +12,12 @@ class ShareView extends GetView<ShareController> {
       child: AnimatedContainer(
           curve: Curves.bounceOut,
           duration: Duration(milliseconds: 600),
-          width: 80,
-          height: 80,
+          width: 90,
+          height: 90,
           child: GestureDetector(
-            onTap: controller.toggle,
+            onTap: () {
+              Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
+            },
             child: ClipPolygon(
               borderRadius: 10,
               rotate: 30,
@@ -23,7 +25,7 @@ class ShareView extends GetView<ShareController> {
               child: Container(
                 decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
                 alignment: Alignment.center,
-                child: SonrIcons.Share.white,
+                child: SonrIcons.Share.gradient(size: 32, value: SonrGradients.PremiumWhite),
               ),
             ),
           )),
@@ -31,28 +33,26 @@ class ShareView extends GetView<ShareController> {
   }
 }
 
-class ButtonsAltOptionView extends GetView<ShareController> {
+class ButtonsAltOptionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       height: Height.ratio(0.15),
       width: Get.width,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        Padding(padding: EdgeInsets.all(4)),
-        const _ShareCameraButtonItem(),
-        VerticalDivider(color: SonrColor.Grey),
         const _ShareFileButtonItem(),
         VerticalDivider(color: SonrColor.Grey),
         const _ShareContactButtonItem(),
-        Padding(padding: EdgeInsets.all(4)),
+        VerticalDivider(color: SonrColor.Grey),
+        const _ShareCameraButtonItem(),
       ]),
     );
   }
 }
 
 /// @ Camera Share Button
-class _ShareCameraButtonItem extends GetView<ShareController> {
+class _ShareCameraButtonItem extends StatelessWidget {
   const _ShareCameraButtonItem();
   @override
   Widget build(BuildContext context) {
@@ -62,17 +62,17 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
       child: GestureDetector(
         onTap: () async {
           // Check for Permissions
-          if (controller.cameraPermitted.value) {
-            controller.presentCameraView();
+          if (MobileService.hasCamera.value) {
+            TransferService.chooseCamera();
           }
           // Request Permissions
           else {
             var result = await Get.find<MobileService>().requestCamera();
-            result ? controller.presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+            result ? TransferService.chooseCamera() : SonrSnack.error("Sonr cannot open Camera without Permissions");
           }
         },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Camera.gradient(value: SonrGradients.CrystalRiver, size: 42))),
+          SizedBox(height: 65, width: 55, child: Center(child: SonrIcons.Camera.gradient(value: SonrGradients.CrystalRiver, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
           'Camera'.p_White,
         ]),
@@ -82,7 +82,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
 }
 
 /// @ File Share Button
-class _ShareFileButtonItem extends GetView<ShareController> {
+class _ShareFileButtonItem extends StatelessWidget {
   const _ShareFileButtonItem();
   @override
   Widget build(BuildContext context) {
@@ -90,9 +90,25 @@ class _ShareFileButtonItem extends GetView<ShareController> {
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: GestureDetector(
-        onTap: controller.selectFile,
+        onTap: () async {
+          // Check Permissions
+          if (MobileService.hasGallery.value) {
+            await TransferService.chooseFile();
+          } else {
+            // Request Permissions
+            var status = await Get.find<MobileService>().requestGallery();
+            SonrOverlay.back();
+
+            // Check Status
+            if (status) {
+              await TransferService.chooseFile();
+            } else {
+              SonrSnack.error("Cannot pick Media without Permissions");
+            }
+          }
+        },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.ItmeoBranding, size: 42))),
+          SizedBox(height: 65, width: 65, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.ItmeoBranding, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
           'File'.p_White,
         ]),
@@ -102,7 +118,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
 }
 
 /// @ Contact Share Button
-class _ShareContactButtonItem extends GetView<ShareController> {
+class _ShareContactButtonItem extends StatelessWidget {
   const _ShareContactButtonItem();
   @override
   Widget build(BuildContext context) {
@@ -110,9 +126,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: GestureDetector(
-        onTap: controller.selectContact,
+        onTap: () => TransferService.chooseContact(),
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.LoveKiss, size: 42))),
+          SizedBox(height: 65, width: 65, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.LoveKiss, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
           'Contact'.p_White,
         ]),

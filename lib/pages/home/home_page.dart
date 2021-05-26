@@ -12,7 +12,7 @@ class HomePage extends GetView<HomeController> {
     return SonrScaffold(
       gradient: SonrGradients.PlumBath,
       resizeToAvoidBottomInset: false,
-      floatingAction: ShareView(),
+      floatingAction: ShareButton(),
       bottomNavigationBar: HomeBottomNavBar(),
       appBar: HomeAppBar(),
       body: Container(
@@ -75,14 +75,14 @@ class HomeBottomTabButton extends GetView<HomeController> {
           }
         },
         child: Container(
-          constraints: BoxConstraints(maxHeight: 80, maxWidth: Get.width / 6),
           padding: const EdgeInsets.all(8.0),
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
                     child: Container(
                         key: ValueKey(idx.value == view.index),
-                        child: Icon(view.iconData, size: 34, color: idx.value == view.index ? Get.theme.primaryColor : Get.theme.hintColor)),
+                        child:
+                            idx.value == view.index ? view.iconData.gradient(size: 38) : Icon(view.iconData, size: 38, color: Get.theme.hintColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),

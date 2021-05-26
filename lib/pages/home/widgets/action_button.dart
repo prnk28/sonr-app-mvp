@@ -26,12 +26,15 @@ class HomeActionButton extends GetView<HomeController> {
         },
       );
     } else {
-      return ActionButton(
-        key: ValueKey<HomeView>(HomeView.Dashboard),
-        icon: SonrIcons.Alerts.gradient(size: 28),
-        onPressed: () {
-          Get.to(ActivityPopup(), transition: Transition.downToUp);
-        },
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 42.0),
+        child: ActionButton(
+          key: ValueKey<HomeView>(HomeView.Dashboard),
+          icon: SonrIcons.Alerts.gradient(size: 28),
+          onPressed: () {
+            Get.to(ActivityPopup(), transition: Transition.downToUp);
+          },
+        ),
       );
     }
   }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
-import 'share/share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -75,9 +74,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
     if (newIndex != bottomIndex.value) {
-      // Shrink Share Button
-      Get.find<ShareController>().shrink(delay: 100.milliseconds);
-
       // Change Index
       bottomIndex(newIndex);
       tabController.animateTo(newIndex);
@@ -87,11 +83,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Update Title
       title(view.value.title);
-
-      // Close Sharebutton if open
-      if (Get.find<ShareController>().status.value.isExpanded) {
-        Get.find<ShareController>().shrink();
-      }
     }
   }
 
