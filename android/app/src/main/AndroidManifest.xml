@@ -40,5 +40,9 @@
       android:name="io.sentry.dsn"
       android:value="https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326" />
         <meta-data android:name="flutterEmbedding" android:value="2" />
+        <meta-data android:name="com.posthog.posthog.API_KEY" android:value="uZ7JYERY7rqx44QIQOQge_avgwS0kgs5sJqsmcow1VY" />
+	<meta-data android:name="com.posthog.posthog.POSTHOG_HOST" android:value="https://app.posthog.com" />
+	<meta-data android:name="com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
+	<meta-data android:name="com.posthog.posthog.DEBUG" android:value="false" />
     </application>
 </manifest>

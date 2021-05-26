@@ -93,16 +93,18 @@ class CardsDatabase extends _$CardsDatabase {
   /// Streams Activity Items from Database
   Stream<List<TransferActivity>> watchActivity() => (select(transferActivities).watch());
 
-  /// Streams Card Items from Database
-  Stream<List<TransferCard>> watchAll() => (select(transferCards).watch());
+  /// Streams Activity Items from Database
+  Stream<List<TransferCard>> watchAllCards() => (select(transferCards).watch());
 
   /// Streams Contact Card Items from Database
   Stream<List<TransferCard>> watchContacts() => (select(transferCards)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
 
   /// Streams Metadata Card Items from Database
-  Stream<List<TransferCard>> watchMetadata() => (select(transferCards)
-        ..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MEDIA.value) | t.payload.equals(Payload.FILES.value)))
-      .watch();
+  Stream<List<TransferCard>> watchFiles() =>
+      (select(transferCards)..where((t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.FILES.value))).watch();
+
+  /// Streams Media Card Items from Database
+  Stream<List<TransferCard>> watchMedia() => (select(transferCards)..where((t) => t.payload.equals(Payload.MEDIA.value))).watch();
 
   /// Streams URL Card Items from Database
   Stream<List<TransferCard>> watchUrls() => (select(transferCards)..where((t) => t.payload.equals(Payload.URL.value))).watch();

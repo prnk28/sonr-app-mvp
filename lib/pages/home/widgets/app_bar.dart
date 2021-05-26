@@ -52,7 +52,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
 class _HomeAppBarSubtitle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.view.value == HomeView.Main
+    return Obx(() => controller.view.value == HomeView.Dashboard
         ? "Hi ${UserService.contact.value.firstName},".headThree(
             color: Get.theme.focusColor,
             weight: FontWeight.w400,

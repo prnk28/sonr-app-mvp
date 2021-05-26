@@ -48,6 +48,7 @@ dependencies:
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
+  posthog_flutter: ^1.11.2
   sentry_flutter: ^5.0.0
 
   # -- Device --
@@ -61,7 +62,7 @@ dependencies:
   url_launcher: ^6.0.3
 
   # -- Data --
-  just_audio: ^0.7.4+1
+  audioplayers: ^0.18.3
   open_file: ^3.2.0
   photo_manager: ^1.1.5
   path: ^1.8.0

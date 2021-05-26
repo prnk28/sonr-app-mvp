@@ -2,10 +2,9 @@ import 'share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'views/grid/grid_view.dart';
+import 'views/dashboard/grid_view.dart';
 import 'home_controller.dart';
-import 'views/activity/activity_view.dart';
-import 'views/profile/profile_view.dart';
+import 'views/contact/profile_view.dart';
 import 'widgets/app_bar.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -19,9 +18,8 @@ class HomePage extends GetView<HomeController> {
       appBar: HomeAppBar(),
       body: Container(
           child: TabBarView(controller: controller.tabController, children: [
-        CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-        ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-        ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+        CardMainView(key: ValueKey<HomeView>(HomeView.Dashboard)),
+        ProfileView(key: ValueKey<HomeView>(HomeView.Contact)),
         RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
       ])),
     );
@@ -46,27 +44,20 @@ class HomeBottomNavBar extends GetView<HomeController> {
             Obx(() => Bounce(
                 from: 12,
                 duration: 1000.milliseconds,
-                animate: controller.view.value == HomeView.Main,
-                key: ValueKey(controller.view.value == HomeView.Main),
-                child: HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex))),
+                animate: controller.view.value == HomeView.Dashboard,
+                key: ValueKey(controller.view.value == HomeView.Dashboard),
+                child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Obx(() => Roulette(
                     spins: 1,
-                    key: ValueKey(controller.view.value == HomeView.Profile),
-                    animate: controller.view.value == HomeView.Profile,
-                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
+                    key: ValueKey(controller.view.value == HomeView.Contact),
+                    animate: controller.view.value == HomeView.Contact,
+                    child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
                   )),
             ),
             Container(
               width: Get.width * 0.20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Obx(() => Swing(
-                  key: ValueKey(controller.view.value == HomeView.Activity),
-                  animate: controller.view.value == HomeView.Activity,
-                  child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex))),
             ),
             Obx(() => Flash(
                 key: ValueKey(controller.view.value == HomeView.Remote),

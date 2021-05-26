@@ -15,6 +15,7 @@ export 'extensions/metadata.dart';
 
 // Models
 export 'model/model_hs.dart';
+export 'model/model_items.dart';
 export 'model/model_result.dart';
 export 'model/model_search.dart';
 export 'model/rx_proto.dart';

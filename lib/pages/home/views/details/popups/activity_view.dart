@@ -1,25 +1,56 @@
 import 'package:sonr_app/style/style.dart';
 
 /// @ Activity View
-class ActivityView extends StatelessWidget {
-  ActivityView({Key? key}) : super(key: key);
+class ActivityPopup extends StatelessWidget {
+  ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
         width: Width.reduced(0.1),
-        height: Height.ratio(0.7),
-        child: Obx(() => CardService.activity.length > 0
-            ? ListView.builder(
-                itemCount: CardService.activity.length,
-                itemBuilder: (context, index) {
-                  return _ActivityListItem(item: CardService.activity[index]);
-                })
-            : Center(
-                child: Container(
-                  child: [Image.asset('assets/illustrations/Alerts.png'), "No Alerts".headFour(color: Get.theme.hintColor)].column(),
-                  padding: EdgeInsets.all(64),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 56),
+        decoration: Neumorphic.floating(theme: Get.theme),
+        child: Column(children: [
+          Container(
+            padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
+                "Activity".headFour(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
                 ),
-              )));
+                ActionButton(
+                    icon: SonrIcons.Clear.gradient(size: 28),
+                    onPressed: () async {
+                      if (CardService.activity.length > 0) {
+                        var decision = await SonrOverlay.question(
+                            title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
+                        if (decision) {
+                          CardService.clearAllActivity();
+                        }
+                      }
+                    })
+              ],
+            ),
+          ),
+          Container(
+              width: Width.reduced(0.1),
+              height: Height.ratio(0.65),
+              child: Obx(() => CardService.activity.length > 0
+                  ? ListView.builder(
+                      itemCount: CardService.activity.length,
+                      itemBuilder: (context, index) {
+                        return _ActivityListItem(item: CardService.activity[index]);
+                      })
+                  : Center(
+                      child: Container(
+                        child: [Image.asset('assets/illustrations/Alerts.png'), "No Activity".headFive(color: Get.theme.hintColor)].column(),
+                        padding: EdgeInsets.all(64),
+                      ),
+                    ))),
+        ]));
   }
 }
 
