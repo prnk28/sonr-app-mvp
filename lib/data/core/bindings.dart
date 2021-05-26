@@ -10,6 +10,7 @@ import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
+import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -63,6 +64,7 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
+    Get.put<RemoteController>(RemoteController(), permanent: true);
     Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
 

@@ -2,7 +2,6 @@ import 'package:sonr_app/modules/settings/sheet_view.dart';
 import 'package:sonr_app/pages/home/views/dashboard/activity_view.dart';
 import 'package:sonr_app/style/style.dart';
 import '../home_controller.dart';
-import '../views/remote/remote_controller.dart';
 
 class HomeActionButton extends GetView<HomeController> {
   HomeActionButton();
@@ -34,47 +33,6 @@ class HomeActionButton extends GetView<HomeController> {
           Get.to(ActivityPopup(), transition: Transition.downToUp);
         },
       );
-    }
-  }
-}
-
-/// @ Profile Action Button Widget
-class _RemoteActionButton extends GetView<RemoteController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => ActionButton(
-          key: ValueKey<HomeView>(HomeView.Dashboard),
-          icon: _buildIcon(controller.status.value),
-          onPressed: () {
-            // Creates New Lobby
-            if (controller.status.value.isDefault) {
-              controller.create();
-            }
-
-            // Destroys Created Lobby
-            else if (controller.status.value.isCreated) {
-              controller.stop();
-            }
-
-            // Exits Lobby
-            else if (controller.status.value.isJoined) {
-              controller.leave();
-            }
-          },
-        ));
-  }
-
-  // @ Builds Icon by Status
-  Widget _buildIcon(RemoteViewStatus status) {
-    switch (status) {
-      case RemoteViewStatus.Created:
-        return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
-
-      case RemoteViewStatus.Joined:
-        return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
-
-      default:
-        return SonrIcons.Plus.gradient(size: 28);
     }
   }
 }
