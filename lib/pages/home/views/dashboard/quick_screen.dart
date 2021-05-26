@@ -10,7 +10,6 @@ class QuickAccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-        gradient: SonrGradients.NightCall,
         appBar: DesignAppBar(
           centerTitle: true,
           leading: ActionButton(icon: SonrIcons.Backward.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),

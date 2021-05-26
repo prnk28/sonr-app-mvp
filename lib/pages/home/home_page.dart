@@ -1,6 +1,5 @@
-import 'share/share_view.dart';
+import 'share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'views/dashboard/dashboard_view.dart';
 import 'home_controller.dart';
@@ -20,7 +19,6 @@ class HomePage extends GetView<HomeController> {
           child: TabBarView(controller: controller.tabController, children: [
         DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
         ProfileView(key: ValueKey<HomeView>(HomeView.Contact)),
-        RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
       ])),
     );
   }
@@ -30,41 +28,29 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: BottomBarClip(),
-      child: Container(
-        decoration: Neumorphic.floating(
-          theme: Get.theme,
-        ),
-        width: Get.width,
-        height: 80,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Obx(() => Bounce(
-                from: 12,
-                duration: 1000.milliseconds,
-                animate: controller.view.value == HomeView.Dashboard,
-                key: ValueKey(controller.view.value == HomeView.Dashboard),
-                child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Obx(() => Roulette(
-                    spins: 1,
-                    key: ValueKey(controller.view.value == HomeView.Contact),
-                    animate: controller.view.value == HomeView.Contact,
-                    child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
-                  )),
-            ),
-            Container(
-              width: Get.width * 0.20,
-            ),
-            Obx(() => Flash(
-                key: ValueKey(controller.view.value == HomeView.Remote),
-                animate: controller.view.value == HomeView.Remote,
-                child: HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex))),
-          ],
-        ),
+    return Container(
+      decoration: Neumorphic.floating(theme: Get.theme, radius: 20),
+      margin: EdgeInsets.symmetric(horizontal: 42),
+      height: 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Obx(() => Bounce(
+              from: 12,
+              duration: 1000.milliseconds,
+              animate: controller.view.value == HomeView.Dashboard,
+              key: ValueKey(controller.view.value == HomeView.Dashboard),
+              child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
+          Container(
+            width: Get.width * 0.20,
+          ),
+          Obx(() => Roulette(
+                spins: 1,
+                key: ValueKey(controller.view.value == HomeView.Contact),
+                animate: controller.view.value == HomeView.Contact,
+                child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
+              )),
+        ],
       ),
     );
   }

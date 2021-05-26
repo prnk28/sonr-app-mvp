@@ -64,7 +64,7 @@ dependencies:
   # -- Data --
   audioplayers: ^0.18.3
   open_file: ^3.2.0
-  photo_manager: ^1.1.5
+  photo_manager: ^1.2.0
   path: ^1.8.0
   path_provider: ^2.0.1
   share: ^2.0.1

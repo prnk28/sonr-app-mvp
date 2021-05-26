@@ -1,5 +1,6 @@
 // @ Helper Enum for Video/Image Orientation
 import 'package:file_picker/file_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../data.dart';
@@ -94,6 +95,38 @@ extension SharedMediaFileUtils on List<SharedMediaFile> {
         duration: f.duration,
         thumbPath: f.thumbnail,
       ));
+    });
+    return items;
+  }
+}
+
+extension AssetEntityUtils on List<AssetEntity> {
+  /// Checks if only one AssetEntity is present
+  bool get isSingleItem => this.length == 1;
+
+  /// Returns List of AssetEntity as SonrFile
+  Future<SonrFile> toSonrFile() async {
+    return SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: await this._toSonrFileItems());
+  }
+
+  /// Converts Asset Entity Items into SonrFile_Item Items
+  Future<List<SonrFile_Item>> _toSonrFileItems() async {
+    var items = <SonrFile_Item>[];
+    this.forEach((f) async {
+      // Get Data
+      var file = await f.file;
+      var thumb = await f.thumbDataWithSize(320, 320);
+
+      // Add File Item
+      if (file != null) {
+        items.add(MetadataUtils.newItem(
+          path: file.path,
+          width: f.width,
+          height: f.height,
+          duration: f.duration,
+          thumbBuffer: thumb,
+        ));
+      }
     });
     return items;
   }

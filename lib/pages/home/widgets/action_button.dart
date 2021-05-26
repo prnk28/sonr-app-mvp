@@ -26,14 +26,12 @@ class HomeActionButton extends GetView<HomeController> {
           Get.bottomSheet(SettingsSheet());
         },
       );
-    } else if (page == HomeView.Remote) {
-      return _RemoteActionButton();
     } else {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Dashboard),
         icon: SonrIcons.Alerts.gradient(size: 28),
         onPressed: () {
-          Get.dialog(ActivityPopup());
+          Get.to(ActivityPopup(), transition: Transition.downToUp);
         },
       );
     }

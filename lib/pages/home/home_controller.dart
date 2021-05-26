@@ -4,7 +4,7 @@ import 'share/share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum HomeView { Dashboard, Contact, Remote }
+enum HomeView { Dashboard, Contact }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -33,7 +33,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   @override
   onInit() {
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 3);
+    tabController = TabController(vsync: this, length: 2);
     scrollController = ScrollController();
 
     // Listen for Updates
@@ -163,8 +163,6 @@ extension HomeViewUtils on HomeView {
         return SonrIcons.Home;
       case HomeView.Contact:
         return SonrIcons.Profile;
-      case HomeView.Remote:
-        return SonrIcons.Compass;
       default:
         return Icons.deck;
     }
@@ -177,8 +175,6 @@ extension HomeViewUtils on HomeView {
         return 32;
       case HomeView.Contact:
         return 32;
-      case HomeView.Remote:
-        return 38;
       default:
         return 32;
     }

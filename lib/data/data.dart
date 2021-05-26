@@ -14,8 +14,9 @@ export 'database/cards_db.dart';
 export 'extensions/metadata.dart';
 
 // Models
+export 'model/model_album.dart';
+export 'model/model_cards.dart';
 export 'model/model_hs.dart';
-export 'model/model_items.dart';
 export 'model/model_result.dart';
 export 'model/model_search.dart';
 export 'model/rx_proto.dart';

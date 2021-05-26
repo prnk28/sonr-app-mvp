@@ -98,6 +98,15 @@ class TransferService extends GetxService {
     SonrService.invite(to._inviteRequest.value);
   }
 
+  /// @ Sets File from Other Source
+  static Future<void> setFile(SonrFile file) async {
+    // Handle File Payload
+    await _handlePayload(file.payload, file: file);
+
+    // Shift Pages
+    Get.offNamed("/transfer");
+  }
+
   /// Set Transfer Payload for File
   static Future<void> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
     // Initialize Request

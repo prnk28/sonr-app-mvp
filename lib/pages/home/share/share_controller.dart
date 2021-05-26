@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
-export 'share_view.dart';
+
+import 'share_view.dart';
+export 'button_view.dart';
 export 'share_controller.dart';
 export 'sheet_view.dart';
 
@@ -18,7 +20,7 @@ extension ShareStatusUtils on ShareStatus {
       case ShareStatus.Queue:
         return Size(Width.ratio(0.95), 110);
       default:
-        return Size(60, 60);
+        return Size(80, 80);
     }
   }
 }
@@ -149,12 +151,13 @@ class ShareController extends GetxController {
 
   /// @ Toggles Expanded Share Button
   void toggle() {
-    if (status.value == ShareStatus.Default) {
-      status(ShareStatus.Queue);
-      expand(6000, status.value);
-    } else {
-      shrink();
-    }
+    Get.to(SharePopupView(), transition: Transition.topLevel);
+    // if (status.value == ShareStatus.Default) {
+    //   status(ShareStatus.Queue);
+    //   expand(6000, status.value);
+    // } else {
+    //   shrink();
+    // }
   }
 
   // # Present Camera View
