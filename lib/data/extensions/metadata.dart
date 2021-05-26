@@ -101,34 +101,33 @@ extension SharedMediaFileUtils on List<SharedMediaFile> {
   }
 }
 
-extension AssetEntityListUtils on List<AssetEntity> {
+extension AssetEntityListUtils on List<Tuple<AssetEntity, Uint8List>> {
   /// Checks if only one AssetEntity is present
   bool get isSingleItem => this.length == 1;
 
   /// Returns List of AssetEntity as SonrFile
   Future<SonrFile> toSonrFile() async {
-    return SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: await this._toSonrFileItems());
+    var items = await this._toSonrFileItems();
+    var file = SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: items);
+    file.update();
+    return file;
   }
 
   /// Converts Asset Entity Items into SonrFile_Item Items
   Future<List<SonrFile_Item>> _toSonrFileItems() async {
     var items = <SonrFile_Item>[];
-    this.forEach((f) async {
+    for (var t in this) {
+      AssetEntity f = t.item1;
+      Uint8List thumb = t.item2;
       // Get Data
-      var file = await f.file;
-      var thumb = await f.thumbDataWithSize(320, 320);
+      var file = await f.loadFile();
 
       // Add File Item
       if (file != null) {
-        items.add(MetadataUtils.newItem(
-          path: file.path,
-          width: f.width,
-          height: f.height,
-          duration: f.duration,
-          thumbBuffer: thumb,
-        ));
+        items.add(MetadataUtils.newItem(path: file.path, thumbBuffer: thumb.toList()));
       }
-    });
+    }
+
     return items;
   }
 }

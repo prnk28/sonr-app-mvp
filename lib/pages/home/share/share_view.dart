@@ -16,14 +16,12 @@ class SharePopupView extends GetView<MediaController> {
             align: TextAlign.start,
           ),
           leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
-          action: Obx(() => AnimatedContainer(
-              duration: 100.seconds,
-              width: controller.selectedItems.length > 0 ? 56 : 0,
-              height: controller.selectedItems.length > 0 ? 56 : 0,
-              child: ActionButton(
-                onPressed: () => controller.confirmSelection(),
-                icon: SonrIcons.Check.gradient(value: SonrGradients.ItmeoBranding),
-              ))),
+          action: Obx(() => controller.hasSelected.value
+              ? ActionButton(
+                  onPressed: () => controller.confirmSelection(),
+                  icon: SonrIcons.Check.gradient(value: SonrGradients.ItmeoBranding),
+                )
+              : Container()),
         ),
         body: Stack(children: [
           CustomScrollView(
@@ -130,9 +128,9 @@ class _MediaItemState extends State<_MediaItem> {
   void _toggleImage() {
     isSelected = !isSelected;
     if (isSelected) {
-      Get.find<MediaController>().addItem(widget.item);
+      Get.find<MediaController>().addItem(widget.item, thumbnail!);
     } else {
-      Get.find<MediaController>().removeItem(widget.item);
+      Get.find<MediaController>().removeItem(widget.item, thumbnail!);
     }
     setState(() {});
   }

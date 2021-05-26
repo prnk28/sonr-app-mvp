@@ -6,7 +6,8 @@ class MediaController extends GetxController {
   // Properties
   final gallery = RxList<AssetPathEntity>();
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
-  final selectedItems = RxList<AssetEntity>();
+  final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
+  final hasSelected = false.obs;
 
   final ScrollController tagsScrollController = ScrollController();
 
@@ -18,6 +19,8 @@ class MediaController extends GetxController {
 
   @override
   onClose() {
+    selectedItems.clear();
+    hasSelected(false);
     super.onClose();
   }
 
@@ -68,20 +71,26 @@ class MediaController extends GetxController {
   }
 
   /// Adds Item to Selected Items List
-  void addItem(AssetEntity item) {
-    selectedItems.add(item);
+  void addItem(AssetEntity item, Uint8List thumb) {
+    selectedItems.add(Tuple(item, thumb));
     selectedItems.refresh();
+    hasSelected(selectedItems.length > 0);
   }
 
   /// Removes Item from Selected Items List
-  void removeItem(AssetEntity item) {
-    selectedItems.remove(item);
+  void removeItem(AssetEntity item, Uint8List thumb) {
+    selectedItems.remove(Tuple(item, thumb));
     selectedItems.refresh();
+    hasSelected(selectedItems.length > 0);
   }
 
   /// Confirms Selection
   Future<void> confirmSelection() async {
-    var sonrFile = await selectedItems.toSonrFile();
-    TransferService.setFile(sonrFile);
+    if (hasSelected.value) {
+      var sonrFile = await selectedItems.toSonrFile();
+      TransferService.setFile(sonrFile);
+    } else {
+      SonrSnack.missing("No Files Selected");
+    }
   }
 }
