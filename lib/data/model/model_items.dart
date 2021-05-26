@@ -5,28 +5,40 @@ enum TransferItemsType { Media, Files, Contacts, Links }
 extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns List Length as H5 Text
   Widget subtitle() {
+    return Container(child: "${this.countString()} Items".headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start));
+  }
+
+  /// Gets Count of Items for Type
+  int count() {
     switch (this) {
       case TransferItemsType.Media:
-        return Container(
-            child: CardService.media.length.toString().headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start));
-
+        return CardService.media.length;
       case TransferItemsType.Files:
-        return Container(
-            child: CardService.files.length.toString().headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start));
-
+        return CardService.files.length;
       case TransferItemsType.Contacts:
-        return Container(
-            child: CardService.contacts.length.toString().headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start));
-
+        return CardService.contacts.length;
       case TransferItemsType.Links:
-        return Container(
-            child: CardService.links.length.toString().headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start));
+        return CardService.links.length;
     }
+  }
+
+  /// Returns Count of Items for Type as String
+  String countString() {
+    return this.count().toString();
   }
 
   /// Returns `name()` as H3 Text
   Widget title() {
-    return this.toString().substring(this.toString().indexOf('.') + 1).h3;
+    return name().h3;
+  }
+
+  /// Returns `name()` for Button Label
+  Widget label() {
+    if (UserService.isDarkMode) {
+      return this.name().h6_White;
+    } else {
+      return this.name().h6;
+    }
   }
 
   /// Returns Enum Value as String

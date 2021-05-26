@@ -6,7 +6,7 @@ import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/window_controller.dart';
 import 'package:sonr_app/pages/home/share/share_controller.dart';
-import 'package:sonr_app/pages/home/views/dashboard/grid_controller.dart';
+import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
 import 'package:sonr_app/pages/home/views/remote/remote_controller.dart';
@@ -45,7 +45,7 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<HomeController>(HomeController(), permanent: true);
     Get.put<ShareController>(ShareController(), permanent: true);
-    Get.put<RecentsController>(RecentsController(), permanent: true);
+    Get.put<DashboardController>(DashboardController(), permanent: true);
     Get.put<RemoteController>(RemoteController(), permanent: true);
     Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.create<TileController>(() => TileController());

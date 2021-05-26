@@ -2,7 +2,7 @@ import 'share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'views/remote/remote_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'views/dashboard/grid_view.dart';
+import 'views/dashboard/dashboard_view.dart';
 import 'home_controller.dart';
 import 'views/contact/profile_view.dart';
 import 'widgets/app_bar.dart';
@@ -18,7 +18,7 @@ class HomePage extends GetView<HomeController> {
       appBar: HomeAppBar(),
       body: Container(
           child: TabBarView(controller: controller.tabController, children: [
-        CardMainView(key: ValueKey<HomeView>(HomeView.Dashboard)),
+        DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
         ProfileView(key: ValueKey<HomeView>(HomeView.Contact)),
         RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
       ])),

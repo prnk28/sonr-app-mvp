@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/settings/sheet_view.dart';
-import 'package:sonr_app/pages/home/views/details/popups/activity_view.dart';
+import 'package:sonr_app/pages/home/views/dashboard/activity_view.dart';
 import 'package:sonr_app/style/style.dart';
 import '../home_controller.dart';
 import '../views/remote/remote_controller.dart';

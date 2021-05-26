@@ -1,7 +1,5 @@
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/modules/card/card.dart';
 
-enum ToggleFilter { All, Media, Contact, Links }
 enum RecentsViewStatus { Default, Search }
 
 extension RecentsViewStatusUtil on RecentsViewStatus {
@@ -12,19 +10,11 @@ extension RecentsViewStatusUtil on RecentsViewStatus {
   bool get isDefault => this == RecentsViewStatus.Default;
 }
 
-class RecentsController extends GetxController with SingleGetTickerProviderMixin {
+class DashboardController extends GetxController with SingleGetTickerProviderMixin {
   // Propeties
   final query = "".obs;
   final results = RxList<TransferCard>();
   final view = RecentsViewStatus.Default.obs;
-
-  // References
-  final List<Tuple<IconData, TransferItemsType>> quickOptions = [
-    Tuple(SonrIcons.ContactCard, TransferItemsType.Contacts),
-    Tuple(SonrIcons.Album, TransferItemsType.Media),
-    Tuple(SonrIcons.Folder, TransferItemsType.Files),
-    Tuple(SonrIcons.Clip, TransferItemsType.Links),
-  ];
 
   // References
   late ScrollController scrollController;
