@@ -20,7 +20,7 @@ extension ShareStatusUtils on ShareStatus {
       case ShareStatus.Queue:
         return Size(Width.ratio(0.95), 110);
       default:
-        return Size(80, 80);
+        return Size(90, 90);
     }
   }
 }
@@ -151,7 +151,7 @@ class ShareController extends GetxController {
 
   /// @ Toggles Expanded Share Button
   void toggle() {
-    Get.to(SharePopupView(), transition: Transition.downToUp, duration: 1200.milliseconds);
+    Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
     // if (status.value == ShareStatus.Default) {
     //   status(ShareStatus.Queue);
     //   expand(6000, status.value);

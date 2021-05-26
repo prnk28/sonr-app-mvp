@@ -9,26 +9,24 @@ class ShareView extends GetView<ShareController> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 36.0),
-      child: Obx(
-        () => AnimatedContainer(
-            curve: Curves.bounceOut,
-            duration: Duration(milliseconds: 600),
-            width: controller.size.value.width,
-            height: controller.size.value.height,
-            child: GestureDetector(
-              onTap: controller.toggle,
-              child: ClipPolygon(
-                borderRadius: 10,
-                rotate: 30,
-                sides: 6,
-                child: Container(
-                  decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
-                  alignment: Alignment.center,
-                  child: SonrIcons.Share.white,
-                ),
+      child: AnimatedContainer(
+          curve: Curves.bounceOut,
+          duration: Duration(milliseconds: 600),
+          width: 80,
+          height: 80,
+          child: GestureDetector(
+            onTap: controller.toggle,
+            child: ClipPolygon(
+              borderRadius: 10,
+              rotate: 30,
+              sides: 6,
+              child: Container(
+                decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
+                alignment: Alignment.center,
+                child: SonrIcons.Share.white,
               ),
-            )),
-      ),
+            ),
+          )),
     );
   }
 }
