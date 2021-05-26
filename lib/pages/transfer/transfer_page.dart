@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'lobby_view.dart';
-import 'payload_view.dart';
+import 'local/local_view.dart';
+import 'payload_sheet.dart';
 import 'transfer_controller.dart';
 
 /// @ Transfer Screen Entry Point
@@ -29,7 +29,7 @@ class TransferScreen extends GetView<TransferController> {
               Obx(() {
                 // Carousel View
                 if (controller.isNotEmpty.value) {
-                  return LobbyView();
+                  return LocalView();
                 }
 
                 // Default Empty View

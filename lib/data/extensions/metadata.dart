@@ -2,6 +2,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../data.dart';
 
@@ -100,7 +101,7 @@ extension SharedMediaFileUtils on List<SharedMediaFile> {
   }
 }
 
-extension AssetEntityUtils on List<AssetEntity> {
+extension AssetEntityListUtils on List<AssetEntity> {
   /// Checks if only one AssetEntity is present
   bool get isSingleItem => this.length == 1;
 
@@ -129,5 +130,20 @@ extension AssetEntityUtils on List<AssetEntity> {
       }
     });
     return items;
+  }
+}
+
+extension AssetEntityUtils on AssetEntity {
+  Widget icon() {
+    switch (this.type) {
+      case AssetType.other:
+        return SonrIcons.Unknown.gradient(size: 46);
+      case AssetType.image:
+        return SonrIcons.Image.gradient(size: 46);
+      case AssetType.video:
+        return SonrIcons.Video.gradient(size: 46);
+      case AssetType.audio:
+        return SonrIcons.Audio.gradient(size: 46);
+    }
   }
 }

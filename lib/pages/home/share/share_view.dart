@@ -32,38 +32,57 @@ class SharePopupView extends GetView<ShareController> {
 class _MediaView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
-    return SliverGrid(
+    return Obx(() => SliverGrid(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            return _MediaItem(
-              item: controller.currentAlbum.value.entityAtIndex(index),
-            );
+            return Obx(() => _MediaItem(
+                  item: controller.currentAlbum.value.entityAtIndex(index),
+                ));
           },
           childCount: controller.currentAlbum.value.length,
         ),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12.0, crossAxisSpacing: 6.0));
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0)));
   }
 }
 
-class _MediaItem extends StatelessWidget {
+class _MediaItem extends StatefulWidget {
   final AssetEntity item;
 
   const _MediaItem({Key? key, required this.item}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return ObxValue<Rx<Uint8List>>((thumbnail) {
-      _setThumbnail(thumbnail);
-      if (thumbnail.value.length > 0) {
-        return Image.memory(thumbnail.value);
-      } else {
-        return CircularProgressIndicator();
-      }
-    }, Uint8List(0).obs);
+  _MediaItemState createState() => _MediaItemState();
+}
+
+class _MediaItemState extends State<_MediaItem> {
+  bool hasLoaded = false;
+  Uint8List? thumbnail;
+  @override
+  void initState() {
+    _setThumbnail();
+    super.initState();
   }
 
-  Future<void> _setThumbnail(Rx<Uint8List> thumb) async {
-    var data = await item.thumbDataWithSize(320, 320);
-    thumb(data);
+  @override
+  Widget build(BuildContext context) {
+    if (hasLoaded) {
+      if (thumbnail != null) {
+        return Image.memory(thumbnail!);
+      } else {
+        return widget.item.icon();
+      }
+    } else {
+      return CircularProgressIndicator();
+    }
+  }
+
+  Future<void> _setThumbnail() async {
+    var data = await widget.item.thumbData;
+    if (data != null) {
+      thumbnail = data;
+    }
+    hasLoaded = true;
+    setState(() {});
   }
 }
 

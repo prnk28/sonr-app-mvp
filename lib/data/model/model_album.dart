@@ -57,12 +57,6 @@ class AssetPathAlbum {
 
   Future<void> _initItems() async {
     this.assets = await this.entity.assetList;
-    if (isNotAll) {
-      await PhotoCachingManager().requestCacheAssets(
-        assets: this.assets,
-        option: ThumbOption(width: 320, height: 320),
-      );
-    }
     hasLoaded = true;
   }
 

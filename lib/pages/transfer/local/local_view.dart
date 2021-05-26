@@ -1,8 +1,8 @@
 import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'transfer_controller.dart';
+import '../transfer_controller.dart';
 
-class LobbyView extends GetView<TransferController> {
+class LocalView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(

@@ -9,10 +9,6 @@ class TransferController extends GetxController {
   final isNotEmpty = false.obs;
   final centerKey = ValueKey("").obs;
 
-  // @ Remote Properties
-  final counter = 0.obs;
-  final remote = Rx<RemoteResponse?>(null);
-
   // @ Direction Properties
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
