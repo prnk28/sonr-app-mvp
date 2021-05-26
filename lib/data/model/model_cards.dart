@@ -48,10 +48,20 @@ extension TransferItemsTypeUtils on TransferItemsType {
 
   /// Returns Icon Widget for Type
   Widget icon() {
-    if (UserService.isDarkMode) {
-      return this.iconData().whiteWith(size: 40);
-    } else {
-      return this.iconData().blackWith(size: 40);
+    return this.iconData().gradient(value: this.gradient(), size: 52);
+  }
+
+  /// Returns Gradient Icon for Type
+  Gradient gradient() {
+    switch (this) {
+      case TransferItemsType.Media:
+        return SonrGradients.PerfectBlue;
+      case TransferItemsType.Files:
+        return SonrGradients.ItmeoBranding;
+      case TransferItemsType.Contacts:
+        return SonrGradients.AmourAmour;
+      case TransferItemsType.Links:
+        return SonrGradients.FrozenHeat;
     }
   }
 

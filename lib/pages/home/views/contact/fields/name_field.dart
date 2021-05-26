@@ -2,11 +2,14 @@ import 'package:sonr_app/style/style.dart';
 import '../profile_controller.dart';
 
 /// @ Edit Profile Details View
-class EditDetailsView extends GetView<ProfileController> {
-  EditDetailsView({Key? key}) : super(key: key);
+class EditNameView extends GetView<ProfileController> {
+  EditNameView({Key? key}) : super(key: key);
+  final FocusNode _prefixNameFocus = FocusNode();
   final FocusNode _firstNameFocus = FocusNode();
+  final FocusNode _middleNameFocus = FocusNode();
   final FocusNode _lastNameFocus = FocusNode();
-  final FocusNode _phoneNumberFocus = FocusNode();
+  final FocusNode _suffixNameFocus = FocusNode();
+  final FocusNode _nickNameFocus = FocusNode();
   final scrollController = ScrollController();
   final hintName = SonrTextField.hintName();
 
@@ -25,7 +28,7 @@ class EditDetailsView extends GetView<ProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   PlainIconButton(icon: SonrIcons.Close.gradient(value: SonrGradient.Critical), onPressed: controller.exitToViewing),
-                  Expanded(child: Center(child: "Edit Details".h4)),
+                  Expanded(child: Center(child: "Edit Name".h4)),
                   PlainIconButton(icon: SonrIcons.Check.gradient(value: SonrGradient.Tertiary), onPressed: controller.saveEditedDetails)
                 ]),
           ),
@@ -38,10 +41,34 @@ class EditDetailsView extends GetView<ProfileController> {
             child: Form(
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
                 SonrTextField(
+                    hint: "Dr.",
+                    label: "Prefix",
+                    autoFocus: true,
+                    focusNode: _prefixNameFocus,
+                    textInputAction: TextInputAction.next,
+                    controller: TextEditingController(text: UserService.contact.value.firstName),
+                    onEditingComplete: () {
+                      _firstNameFocus.requestFocus();
+                      scrollController.animateTo(40, duration: 250.milliseconds, curve: Curves.easeOut);
+                    },
+                    value: controller.editedFirstName.value,
+                    onChanged: (val) => controller.editedFirstName(val)),
+                SonrTextField(
                     hint: hintName.item1,
                     label: "First Name",
-                    autoFocus: true,
                     focusNode: _firstNameFocus,
+                    textInputAction: TextInputAction.next,
+                    controller: TextEditingController(text: UserService.contact.value.firstName),
+                    onEditingComplete: () {
+                      _middleNameFocus.requestFocus();
+                      scrollController.animateTo(40, duration: 250.milliseconds, curve: Curves.easeOut);
+                    },
+                    value: controller.editedFirstName.value,
+                    onChanged: (val) => controller.editedFirstName(val)),
+                SonrTextField(
+                    hint: "A.",
+                    label: "Middle Name",
+                    focusNode: _middleNameFocus,
                     textInputAction: TextInputAction.next,
                     controller: TextEditingController(text: UserService.contact.value.firstName),
                     onEditingComplete: () {
@@ -58,23 +85,35 @@ class EditDetailsView extends GetView<ProfileController> {
                     focusNode: _lastNameFocus,
                     value: controller.editedLastName.value,
                     onEditingComplete: () {
-                      _phoneNumberFocus.requestFocus();
+                      _suffixNameFocus.requestFocus();
                       scrollController.animateTo(80, duration: 250.milliseconds, curve: Curves.easeOut);
                     },
                     onChanged: (val) => controller.editedLastName(val)),
                 SonrTextField(
-                    hint: "+1-555-555-5555",
-                    label: "Phone",
+                    hint: "Jr.",
+                    label: "Suffix",
                     textInputAction: TextInputAction.done,
-                    controller:
-                        TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary : ""),
+                    controller: TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary : ""),
                     value: controller.editedLastName.value,
-                    focusNode: _phoneNumberFocus,
+                    focusNode: _suffixNameFocus,
                     onEditingComplete: () {
                       controller.saveEditedDetails();
-                      _phoneNumberFocus.unfocus();
+                      _nickNameFocus.requestFocus();
+                      scrollController.animateTo(80, duration: 250.milliseconds, curve: Curves.easeOut);
                     },
-                    onChanged: (val) => controller.editedPhone(val))
+                    onChanged: (val) => controller.editedPhone(val)),
+                SonrTextField(
+                    hint: "Rocket",
+                    label: "Nick Name",
+                    textInputAction: TextInputAction.next,
+                    controller: TextEditingController(text: UserService.contact.value.lastName),
+                    focusNode: _nickNameFocus,
+                    value: controller.editedLastName.value,
+                    onEditingComplete: () {
+                      _nickNameFocus.unfocus();
+                      controller.saveEditedDetails();
+                    },
+                    onChanged: (val) => controller.editedLastName(val)),
               ]),
             ),
           ),

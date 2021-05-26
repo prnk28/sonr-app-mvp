@@ -17,11 +17,10 @@ class MediaController extends GetxController {
     super.onInit();
   }
 
-  @override
-  onClose() {
+  close() {
     selectedItems.clear();
     hasSelected(false);
-    super.onClose();
+    Get.back(closeOverlays: true);
   }
 
   /// Checks if Provided Index is Current Album

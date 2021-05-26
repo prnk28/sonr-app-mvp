@@ -1,6 +1,7 @@
 import 'package:sonr_app/modules/card/tile/tile_item.dart';
 import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/style/style.dart';
+import 'editor_view.dart';
 import 'profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -14,7 +15,7 @@ class ProfileView extends GetView<ProfileController> {
   Widget _buildView(ProfileViewStatus status) {
     // Edit Details View
     if (status == ProfileViewStatus.EditDetails) {
-      return EditDetailsView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.EditDetails));
+      return EditOptionsView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.EditDetails));
     }
 
     // Edit Profile Picture

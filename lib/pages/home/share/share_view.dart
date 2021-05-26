@@ -7,7 +7,7 @@ import 'package:sonr_app/style/style.dart';
 class SharePopupView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
+    return Obx(() => SonrScaffold(
         appBar: DesignAppBar(
           centerTitle: true,
           title: "Share".headThree(
@@ -15,13 +15,14 @@ class SharePopupView extends GetView<MediaController> {
             weight: FontWeight.w800,
             align: TextAlign.start,
           ),
-          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
-          action: Obx(() => controller.hasSelected.value
-              ? ActionButton(
-                  onPressed: () => controller.confirmSelection(),
-                  icon: SonrIcons.Check.gradient(value: SonrGradients.ItmeoBranding),
-                )
-              : Container()),
+          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
+          action: AnimatedScale(
+            scale: controller.hasSelected.value ? 1.0 : 0.0,
+            child: ActionButton(
+              onPressed: () => controller.confirmSelection(),
+              icon: SonrIcons.Check.gradient(value: SonrGradients.ItmeoBranding),
+            ),
+          ),
         ),
         body: Stack(children: [
           CustomScrollView(
@@ -46,7 +47,7 @@ class SharePopupView extends GetView<MediaController> {
               }
             },
           )
-        ]));
+        ])));
   }
 }
 

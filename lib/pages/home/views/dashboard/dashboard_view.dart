@@ -35,13 +35,14 @@ class DashboardView extends GetView<DashboardController> {
   Widget _buildView(RecentsViewStatus status) {
     if (status == RecentsViewStatus.Default) {
       return Container(
+        height: Height.ratio(0.46),
         key: ValueKey(RecentsViewStatus.Default),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(padding: EdgeInsets.only(top: 8)),
           "Quick Access".headFour(align: TextAlign.start, color: Get.theme.focusColor),
-          Padding(padding: EdgeInsets.only(top: 16)),
+          Padding(padding: EdgeInsets.only(top: 4)),
           Container(
-            height: Height.ratio(0.4),
+            height: Height.ratio(0.45),
             padding: EdgeInsets.all(8),
             child: GridView.builder(
                 itemCount: TransferItemsType.values.length,
@@ -92,11 +93,10 @@ class _QuickOptionButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.to(QuickAccessScreen(type: data), transition: Transition.rightToLeftWithFade),
       child: Container(
-        margin: EdgeInsets.all(12),
         decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           data.icon(),
-          Padding(padding: EdgeInsets.only(top: 4)),
+          Padding(padding: EdgeInsets.only(top: 8)),
           data.label(),
         ]),
       ),
