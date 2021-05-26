@@ -4,7 +4,7 @@ import 'media_controller.dart';
 import 'share_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-class SharePopupView extends GetView<ShareController> {
+class SharePopupView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
@@ -16,12 +16,20 @@ class SharePopupView extends GetView<ShareController> {
             align: TextAlign.start,
           ),
           leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
+          action: Obx(() => AnimatedContainer(
+              duration: 100.seconds,
+              width: controller.selectedItems.length > 0 ? 56 : 0,
+              height: controller.selectedItems.length > 0 ? 56 : 0,
+              child: ActionButton(
+                onPressed: () => controller.confirmSelection(),
+                icon: SonrIcons.Check.gradient(value: SonrGradients.ItmeoBranding),
+              ))),
         ),
         body: Stack(children: [
           CustomScrollView(
             slivers: [
               // @ Builds Profile Header
-              SliverToBoxAdapter(child: ButtonsView()),
+              SliverToBoxAdapter(child: ButtonsAltOptionView()),
               SliverPadding(padding: EdgeInsets.only(top: 8)),
               SliverToBoxAdapter(
                   child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),

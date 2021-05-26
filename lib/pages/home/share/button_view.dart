@@ -31,11 +31,11 @@ class ShareView extends GetView<ShareController> {
   }
 }
 
-class ButtonsView extends GetView<ShareController> {
+class ButtonsAltOptionView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Height.ratio(0.2),
+      height: Height.ratio(0.15),
       width: Get.width,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
