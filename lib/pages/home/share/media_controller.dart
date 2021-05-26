@@ -8,6 +8,8 @@ class MediaController extends GetxController {
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
   final selectedItems = RxList<AssetEntity>();
 
+  final ScrollController tagsScrollController = ScrollController();
+
   @override
   void onInit() {
     initGallery();
@@ -27,7 +29,7 @@ class MediaController extends GetxController {
   /// Initializes Gallery
   Future<void> initGallery() async {
     var list = await PhotoManager.getAssetPathList();
-    gallery(list.where((e) => e.assetCount > 0).toList());
+    gallery(list.where((e) => e.assetCount > 0 && e.name.isNotEmpty).toList());
     var all = await gallery.allAlbum();
     if (all != null) {
       currentAlbum(all);
@@ -38,6 +40,7 @@ class MediaController extends GetxController {
   Future<void> setAlbum(int index) async {
     currentAlbum(await AssetPathAlbum.init(index, gallery[index]));
     currentAlbum.refresh();
+    tagsScrollController.animateTo(currentAlbum.value.index * 40, duration: 100.milliseconds, curve: Curves.easeIn);
   }
 
   /// Changes Album to Previous Album
@@ -49,6 +52,7 @@ class MediaController extends GetxController {
       currentAlbum(await AssetPathAlbum.init(0, gallery[0]));
     }
     currentAlbum.refresh();
+    tagsScrollController.animateTo(currentAlbum.value.index * currentAlbum.value.nameOffset, duration: 100.milliseconds, curve: Curves.easeIn);
   }
 
   /// Changes Album to Previous Album
@@ -60,6 +64,7 @@ class MediaController extends GetxController {
       currentAlbum(await AssetPathAlbum.init(gallery.length - 1, gallery[gallery.length - 1]));
     }
     currentAlbum.refresh();
+    tagsScrollController.animateTo(currentAlbum.value.index * 40, duration: 100.milliseconds, curve: Curves.easeIn);
   }
 
   /// Adds Item to Selected Items List

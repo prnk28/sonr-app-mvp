@@ -10,48 +10,53 @@ class SharePopupView extends GetView<ShareController> {
     return SonrScaffold(
         appBar: DesignAppBar(
           centerTitle: true,
-          title: "Share".headFour(
+          title: "Share".headThree(
             color: Get.theme.focusColor,
             weight: FontWeight.w800,
             align: TextAlign.start,
           ),
           leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
         ),
-        body: CustomScrollView(
-          slivers: [
-            // @ Builds Profile Header
-            SliverPadding(padding: EdgeInsets.all(14)),
-            SliverToBoxAdapter(child: _TagsView()),
-            // @ Builds List of Social Tile
-            SliverToBoxAdapter(child: _MediaView())
-          ],
-        ));
+        body: Stack(children: [
+          CustomScrollView(
+            slivers: [
+              // @ Builds Profile Header
+              SliverToBoxAdapter(child: ButtonsView()),
+              SliverPadding(padding: EdgeInsets.only(top: 8)),
+              SliverToBoxAdapter(
+                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
+              SliverToBoxAdapter(child: _TagsView()),
+              SliverPadding(padding: EdgeInsets.all(4)),
+              // @ Builds List of Social Tile
+              _MediaView()
+            ],
+          ),
+          GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              if (details.delta.dx > 8) {
+                Get.find<MediaController>().shiftPrevAlbum();
+              } else if (details.delta.dx < -8) {
+                Get.find<MediaController>().shiftNextAlbum();
+              }
+            },
+          )
+        ]));
   }
 }
 
 class _MediaView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          height: Height.ratio(0.7),
-          child: GestureDetector(
-            onHorizontalDragUpdate: (details) {
-              if (details.delta.dx > 0) {
-                controller.shiftPrevAlbum();
-              } else if (details.delta.dx < 0) {
-                controller.shiftNextAlbum();
-              }
-            },
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0),
-              itemBuilder: (BuildContext context, int index) {
-                return _MediaItem(
-                  item: controller.currentAlbum.value.entityAtIndex(index),
-                );
-              },
-            ),
-          ),
-        ));
+    return Obx(() => SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return _MediaItem(
+              item: controller.currentAlbum.value.entityAtIndex(index),
+            );
+          },
+          childCount: controller.currentAlbum.value.length,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0)));
   }
 }
 
@@ -135,18 +140,20 @@ class _TagsView extends GetView<MediaController> {
         width: Get.width,
         height: 60,
         child: SingleChildScrollView(
+          controller: controller.tagsScrollController,
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List<Widget>.generate(
-                controller.gallery.length,
-                (index) => GestureDetector(
-                    onTap: () {
-                      controller.setAlbum(index);
-                    },
-                    child: controller.gallery[index].tag(isSelected: controller.isCurrent(index))),
-              )),
+                  controller.gallery.length,
+                  (index) => Obx(
+                        () => GestureDetector(
+                            onTap: () {
+                              controller.setAlbum(index);
+                            },
+                            child: controller.gallery[index].tag(isSelected: controller.isCurrent(index))),
+                      ))),
         ),
       ),
     );

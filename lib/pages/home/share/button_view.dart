@@ -77,6 +77,26 @@ class _QueueView extends GetView<ShareController> {
   }
 }
 
+class ButtonsView extends GetView<ShareController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: Height.ratio(0.2),
+      width: Get.width,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Padding(padding: EdgeInsets.all(4)),
+        const _ShareCameraButtonItem(),
+        VerticalDivider(color: SonrColor.Grey),
+        const _ShareFileButtonItem(),
+        VerticalDivider(color: SonrColor.Grey),
+        const _ShareContactButtonItem(),
+        Padding(padding: EdgeInsets.all(4)),
+      ]),
+    );
+  }
+}
+
 /// @ Camera Share Button
 class _ShareCameraButtonItem extends GetView<ShareController> {
   const _ShareCameraButtonItem();

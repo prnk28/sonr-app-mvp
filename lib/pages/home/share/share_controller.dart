@@ -151,7 +151,7 @@ class ShareController extends GetxController {
 
   /// @ Toggles Expanded Share Button
   void toggle() {
-    Get.to(SharePopupView(), transition: Transition.topLevel);
+    Get.to(SharePopupView(), transition: Transition.downToUp, duration: 1200.milliseconds);
     // if (status.value == ShareStatus.Default) {
     //   status(ShareStatus.Queue);
     //   expand(6000, status.value);

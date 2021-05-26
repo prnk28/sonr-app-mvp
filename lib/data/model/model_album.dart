@@ -40,6 +40,8 @@ class AssetPathAlbum {
   bool get isAll => entity.isAll;
   bool get isNotAll => !isAll;
   int get length => assets.length;
+  String get name => entity.name;
+  double get nameOffset => entity.name.length * 4;
 
   AssetPathAlbum(this.index, this.entity);
 
