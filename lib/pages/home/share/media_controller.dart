@@ -28,15 +28,38 @@ class MediaController extends GetxController {
   Future<void> initGallery() async {
     var list = await PhotoManager.getAssetPathList();
     gallery(list.where((e) => e.assetCount > 0).toList());
-    var all = gallery.allAlbum();
+    var all = await gallery.allAlbum();
     if (all != null) {
       currentAlbum(all);
     }
   }
 
   /// Changes Album to New Album
-  Future<void> setAlbum(AssetPathEntity entity) async {
-    currentAlbum(gallery.getAlbum(entity));
+  Future<void> setAlbum(int index) async {
+    currentAlbum(await AssetPathAlbum.init(index, gallery[index]));
+    currentAlbum.refresh();
+  }
+
+  /// Changes Album to Previous Album
+  Future<void> shiftPrevAlbum() async {
+    if (currentAlbum.value.index > 0) {
+      var newIndex = currentAlbum.value.index - 1;
+      currentAlbum(await AssetPathAlbum.init(newIndex, gallery[newIndex]));
+    } else {
+      currentAlbum(await AssetPathAlbum.init(0, gallery[0]));
+    }
+    currentAlbum.refresh();
+  }
+
+  /// Changes Album to Previous Album
+  Future<void> shiftNextAlbum() async {
+    if (currentAlbum.value.index < gallery.length - 1) {
+      var newIndex = currentAlbum.value.index + 1;
+      currentAlbum(await AssetPathAlbum.init(newIndex, gallery[newIndex]));
+    } else {
+      currentAlbum(await AssetPathAlbum.init(gallery.length - 1, gallery[gallery.length - 1]));
+    }
+    currentAlbum.refresh();
   }
 
   /// Adds Item to Selected Items List

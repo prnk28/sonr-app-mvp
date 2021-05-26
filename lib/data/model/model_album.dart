@@ -21,19 +21,14 @@ extension AssetPathEntityUtils on AssetPathEntity {
 }
 
 extension AssetPathEntityListUtils on List<AssetPathEntity> {
-  AssetPathAlbum? allAlbum() {
+  Future<AssetPathAlbum?> allAlbum() async {
     if (this.any((e) => e.isAll)) {
       var entity = this.firstWhere((e) => e.isAll);
       var index = this.indexOf(entity);
-      return AssetPathAlbum(index, entity);
+      return await AssetPathAlbum.init(index, entity);
     } else {
       return null;
     }
-  }
-
-  AssetPathAlbum getAlbum(AssetPathEntity entity) {
-    var index = this.indexOf(entity);
-    return AssetPathAlbum(index, entity);
   }
 }
 
@@ -41,23 +36,21 @@ class AssetPathAlbum {
   final int index;
   final AssetPathEntity entity;
   late List<AssetEntity> assets;
-  bool hasLoaded = false;
 
   bool get isAll => entity.isAll;
   bool get isNotAll => !isAll;
-  int get length => hasLoaded ? assets.length : 0;
+  int get length => assets.length;
 
-  AssetPathAlbum(this.index, this.entity) {
-    _initItems();
+  AssetPathAlbum(this.index, this.entity);
+
+  static Future<AssetPathAlbum> init(int index, AssetPathEntity entity) async {
+    var album = AssetPathAlbum(index, entity);
+    album.assets = await entity.assetList;
+    return album;
   }
 
   factory AssetPathAlbum.blank() {
     return AssetPathAlbum(-1, AssetPathEntity());
-  }
-
-  Future<void> _initItems() async {
-    this.assets = await this.entity.assetList;
-    hasLoaded = true;
   }
 
   bool isIndex(int i) {

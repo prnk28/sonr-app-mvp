@@ -23,7 +23,7 @@ class SharePopupView extends GetView<ShareController> {
             SliverPadding(padding: EdgeInsets.all(14)),
             SliverToBoxAdapter(child: _TagsView()),
             // @ Builds List of Social Tile
-            _MediaView()
+            SliverToBoxAdapter(child: _MediaView())
           ],
         ));
   }
@@ -32,16 +32,26 @@ class SharePopupView extends GetView<ShareController> {
 class _MediaView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SliverGrid(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return Obx(() => _MediaItem(
+    return Obx(() => Container(
+          height: Height.ratio(0.7),
+          child: GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              if (details.delta.dx > 0) {
+                controller.shiftPrevAlbum();
+              } else if (details.delta.dx < 0) {
+                controller.shiftNextAlbum();
+              }
+            },
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0),
+              itemBuilder: (BuildContext context, int index) {
+                return _MediaItem(
                   item: controller.currentAlbum.value.entityAtIndex(index),
-                ));
-          },
-          childCount: controller.currentAlbum.value.length,
-        ),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0)));
+                );
+              },
+            ),
+          ),
+        ));
   }
 }
 
@@ -56,6 +66,7 @@ class _MediaItem extends StatefulWidget {
 
 class _MediaItemState extends State<_MediaItem> {
   bool hasLoaded = false;
+  bool isSelected = false;
   Uint8List? thumbnail;
   @override
   void initState() {
@@ -67,7 +78,25 @@ class _MediaItemState extends State<_MediaItem> {
   Widget build(BuildContext context) {
     if (hasLoaded) {
       if (thumbnail != null) {
-        return Image.memory(thumbnail!);
+        return GestureDetector(
+          onTap: _toggleImage,
+          child: Container(
+            alignment: Alignment.center,
+            child: Stack(children: [
+              // Thumbnail
+              Container(
+                  foregroundDecoration: isSelected ? BoxDecoration(color: Colors.black54) : null,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: MemoryImage(thumbnail!),
+                    fit: BoxFit.fitWidth,
+                  ))),
+
+              // Select Icon
+              isSelected ? Center(child: SonrIcons.Check.whiteWith(size: 42)) : Container(),
+            ]),
+          ),
+        );
       } else {
         return widget.item.icon();
       }
@@ -82,6 +111,16 @@ class _MediaItemState extends State<_MediaItem> {
       thumbnail = data;
     }
     hasLoaded = true;
+    setState(() {});
+  }
+
+  void _toggleImage() {
+    isSelected = !isSelected;
+    if (isSelected) {
+      Get.find<MediaController>().addItem(widget.item);
+    } else {
+      Get.find<MediaController>().removeItem(widget.item);
+    }
     setState(() {});
   }
 }
@@ -104,7 +143,7 @@ class _TagsView extends GetView<MediaController> {
                 controller.gallery.length,
                 (index) => GestureDetector(
                     onTap: () {
-                      controller.setAlbum(controller.gallery[index]);
+                      controller.setAlbum(index);
                     },
                     child: controller.gallery[index].tag(isSelected: controller.isCurrent(index))),
               )),
