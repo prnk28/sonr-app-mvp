@@ -10,11 +10,10 @@ export 'core/timer.dart';
 export 'database/cards_converter.dart';
 export 'database/cards_db.dart';
 
-// Extensions
-export 'extensions/metadata.dart';
-
 // Models
+export 'model/model_meta.dart';
+export 'model/model_cards.dart';
 export 'model/model_hs.dart';
-export 'model/model_result.dart';
+export 'model/model_option.dart';
 export 'model/model_search.dart';
 export 'model/rx_proto.dart';

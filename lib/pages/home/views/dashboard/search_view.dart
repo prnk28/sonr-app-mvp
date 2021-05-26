@@ -1,8 +1,8 @@
 import 'package:sonr_app/modules/card/card.dart';
 import 'package:sonr_app/style/style.dart';
-import 'grid_controller.dart';
+import 'dashboard_controller.dart';
 
-class SearchResultsView extends GetView<RecentsController> {
+class SearchResultsView extends GetView<DashboardController> {
   SearchResultsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

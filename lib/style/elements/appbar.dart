@@ -4,7 +4,11 @@ import '../style.dart';
 /// @ Home Screen Header
 class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const draggableChannel = MethodChannel('io.sonr.desktop/window');
+
+  /// Appears below Subtitle with Bold Font
   final Widget title;
+
+  /// Appears above Title with Light Font
   final Widget? subtitle;
   final Widget? leading;
   final Widget? action;

@@ -1,6 +1,5 @@
 import 'package:sonr_app/style/style.dart';
 
-enum ToggleFilter { All, Media, Contact, Links }
 enum RecentsViewStatus { Default, Search }
 
 extension RecentsViewStatusUtil on RecentsViewStatus {
@@ -11,16 +10,13 @@ extension RecentsViewStatusUtil on RecentsViewStatus {
   bool get isDefault => this == RecentsViewStatus.Default;
 }
 
-class RecentsController extends GetxController with SingleGetTickerProviderMixin {
-  // Tag Management
-  final category = ToggleFilter.All.obs;
+class DashboardController extends GetxController with SingleGetTickerProviderMixin {
+  // Propeties
   final query = "".obs;
   final results = RxList<TransferCard>();
-  final tagIndex = 0.obs;
   final view = RecentsViewStatus.Default.obs;
 
   // References
-  late TabController tabController;
   late ScrollController scrollController;
 
   /// @ Controller Constructer
@@ -30,10 +26,6 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     scrollController = ScrollController(keepScrollOffset: false);
 
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 4);
-    tabController.addListener(() {
-      tagIndex(tabController.index);
-    });
     query.listen(_handleQuery);
 
     // Initialize
@@ -54,16 +46,6 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     query("");
     view(RecentsViewStatus.Default);
     view.refresh();
-  }
-
-  /// @ Method for Setting Category Filter
-  setTag(int index) {
-    tagIndex(index);
-    category(ToggleFilter.values[index]);
-    tabController.animateTo(index);
-
-    // Haptic Feedback
-    HapticFeedback.mediumImpact();
   }
 
   // # Handles Query Update

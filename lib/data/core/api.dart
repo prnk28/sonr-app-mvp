@@ -37,7 +37,7 @@ class NamebaseClient extends GetConnect {
 
     var body = jsonEncode(map);
     var resp = await put(_BASE_URL + _NAME_DNS_POINT, body, headers: _AUTH_HEADERS);
-    return resp.body["success"];
+    return resp.body["success"] ?? true;
   }
 
   Future<bool> removeRecord(List<HSRecord> allRecords, HSRecord removedRecord) async {

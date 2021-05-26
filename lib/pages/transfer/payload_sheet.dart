@@ -7,9 +7,9 @@ class PayloadSheetView extends StatelessWidget {
         // Build List View
         ? DraggableScrollableSheet(
             expand: false,
-            initialChildSize: 0.15,
+            initialChildSize: 0.20,
             maxChildSize: 0.5,
-            minChildSize: 0.15,
+            minChildSize: 0.2,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
                 child: ListView.builder(
@@ -37,8 +37,21 @@ class _SonrFileListHeader extends StatelessWidget {
     return Container(
       color: SonrColor.AccentBlue.withOpacity(0.10),
       width: Get.width,
-      height: Height.ratio(0.05),
-      child: Row(),
+      height: Height.ratio(0.125),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: TransferService.file.value.prettyName().h4,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: TransferService.file.value.prettySize().h5,
+          )
+        ],
+      ),
     );
   }
 }
@@ -55,7 +68,17 @@ class _SonrFileListItem extends StatelessWidget {
         theme: Get.theme,
       ),
       child: Row(children: [
-        item.mime.type.gradient(size: Height.ratio(0.125)),
+        item.hasThumbnail()
+            ? Container(
+                height: Height.ratio(0.125),
+                width: Height.ratio(0.125),
+                decoration: Neumorphic.indented(theme: Get.theme),
+                clipBehavior: Clip.hardEdge,
+                child: Image.memory(
+                  Uint8List.fromList(item.thumbBuffer),
+                  fit: BoxFit.cover,
+                ))
+            : item.mime.type.gradient(size: Height.ratio(0.125)),
         // Title
         Container(
             width: Width.ratio(0.5),
@@ -64,7 +87,11 @@ class _SonrFileListItem extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: item.prettyName().h6,
+                child: item.prettyType().h6,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: item.prettyName().p_Grey,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -162,7 +189,11 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyName().h6,
+              child: TransferService.file.value.prettyType().h6,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: TransferService.file.value.prettyName().p_Grey,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),

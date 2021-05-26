@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
-import 'share/share_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum HomeView { Main, Profile, Activity, Remote, Transfer }
+enum HomeView { Dashboard, Contact }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -16,7 +15,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final subtitle = "".obs;
   final pageIndex = 0.obs;
   final bottomIndex = 0.obs;
-  final view = HomeView.Main.obs;
+  final view = HomeView.Dashboard.obs;
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // Controllers
@@ -33,7 +32,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   @override
   onInit() {
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 4);
+    tabController = TabController(vsync: this, length: 2);
     scrollController = ScrollController();
 
     // Listen for Updates
@@ -75,9 +74,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
     if (newIndex != bottomIndex.value) {
-      // Shrink Share Button
-      Get.find<ShareController>().shrink(delay: 100.milliseconds);
-
       // Change Index
       bottomIndex(newIndex);
       tabController.animateTo(newIndex);
@@ -87,11 +83,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Update Title
       title(view.value.title);
-
-      // Close Sharebutton if open
-      if (Get.find<ShareController>().status.value.isExpanded) {
-        Get.find<ShareController>().shrink();
-      }
     }
   }
 
@@ -154,19 +145,15 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
 /// @ Home View Enum Extension
 extension HomeViewUtils on HomeView {
-  bool get isMain => this == HomeView.Main;
+  bool get isMain => this == HomeView.Dashboard;
 
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {
-      case HomeView.Main:
+      case HomeView.Dashboard:
         return SonrIcons.Home;
-      case HomeView.Profile:
+      case HomeView.Contact:
         return SonrIcons.Profile;
-      case HomeView.Activity:
-        return SonrIcons.Alerts;
-      case HomeView.Remote:
-        return SonrIcons.Compass;
       default:
         return Icons.deck;
     }
@@ -175,21 +162,17 @@ extension HomeViewUtils on HomeView {
   // # Returns Icon Size
   double get iconSize {
     switch (this) {
-      case HomeView.Main:
+      case HomeView.Dashboard:
         return 32;
-      case HomeView.Profile:
+      case HomeView.Contact:
         return 32;
-      case HomeView.Activity:
-        return 32;
-      case HomeView.Remote:
-        return 38;
       default:
         return 32;
     }
   }
 
   String get title {
-    if (this == HomeView.Main) {
+    if (this == HomeView.Dashboard) {
       if (UserService.isNewUser.value) {
         return "Nice to meet you.";
       }

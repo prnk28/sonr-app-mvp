@@ -1,163 +1,187 @@
 import 'package:get/get.dart';
-import 'share_controller.dart';
-import 'package:sonr_app/service/device/mobile.dart';
+import 'package:photo_manager/photo_manager.dart';
+import 'button_view.dart';
+import 'media_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-class ShareView extends GetView<ShareController> {
-  ShareView() : super(key: GlobalKey());
+class SharePopupView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24.0),
-      child: Obx(
-        () => AnimatedContainer(
-            curve: Curves.bounceOut,
-            duration: Duration(milliseconds: 600),
-            width: controller.size.value.width,
-            height: controller.size.value.height,
-            child: _buildView()),
-      ),
-    );
+    return Obx(() => SonrScaffold(
+        appBar: DesignAppBar(
+          centerTitle: true,
+          title: controller.hasSelected.value
+              ? "Share (${controller.selectedItems.length})".headThree(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
+                )
+              : "Share".headThree(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
+                ),
+          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
+          action: AnimatedScale(
+            scale: controller.hasSelected.value ? 1.0 : 0.0,
+            child: ActionButton(
+              onPressed: () => controller.confirmSelection(),
+              icon: SonrIcons.Check.gradient(value: SonrGradients.ItmeoBranding),
+            ),
+          ),
+        ),
+        body: Stack(children: [
+          CustomScrollView(
+            slivers: [
+              // @ Builds Profile Header
+              SliverToBoxAdapter(child: ButtonsAltOptionView()),
+              SliverPadding(padding: EdgeInsets.only(top: 8)),
+              SliverToBoxAdapter(
+                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
+              SliverToBoxAdapter(child: _TagsView()),
+              SliverPadding(padding: EdgeInsets.all(4)),
+              // @ Builds List of Social Tile
+              _MediaView()
+            ],
+          ),
+          GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              if (details.delta.dx > 8) {
+                Get.find<MediaController>().shiftPrevAlbum();
+              } else if (details.delta.dx < -8) {
+                Get.find<MediaController>().shiftNextAlbum();
+              }
+            },
+          )
+        ])));
+  }
+}
+
+class _MediaView extends GetView<MediaController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return _MediaItem(
+              item: controller.currentAlbum.value.entityAtIndex(index),
+            );
+          },
+          childCount: controller.currentAlbum.value.length,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0)));
+  }
+}
+
+class _MediaItem extends StatefulWidget {
+  final AssetEntity item;
+
+  const _MediaItem({Key? key, required this.item}) : super(key: key);
+
+  @override
+  _MediaItemState createState() => _MediaItemState();
+}
+
+class _MediaItemState extends State<_MediaItem> {
+  bool hasLoaded = false;
+  bool isSelected = false;
+  Uint8List? thumbnail;
+  @override
+  void initState() {
+    _setThumbnail();
+    super.initState();
   }
 
-  // @ Build Page View by Navigation Item
-  Widget _buildView() {
-    // Return View
-    if (controller.status.value == ShareStatus.Queue) {
-      return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
+  @override
+  Widget build(BuildContext context) {
+    if (hasLoaded) {
+      if (thumbnail != null) {
+        return GestureDetector(
+          onTap: _toggleImage,
+          child: Container(
+            alignment: Alignment.center,
+            child: Stack(children: [
+              // Thumbnail
+              Container(
+                  foregroundDecoration: isSelected ? BoxDecoration(color: Colors.black54) : null,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: MemoryImage(thumbnail!),
+                    fit: BoxFit.fitWidth,
+                  ))),
+
+              // Video Icon
+              widget.item.type == AssetType.video
+                  ? Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
+                            borderRadius: BorderRadius.circular(16)),
+                        padding: EdgeInsets.all(4),
+                        child: SonrIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
+                      ),
+                    )
+                  : Container(),
+
+              // Select Icon
+              isSelected ? Center(child: SonrIcons.Check.whiteWith(size: 42)) : Container(),
+            ]),
+          ),
+        );
+      } else {
+        return widget.item.icon();
+      }
     } else {
-      return _DefaultButtonView(key: ValueKey<ShareStatus>(ShareStatus.Default));
+      return CircularProgressIndicator();
     }
   }
-}
 
-/// ** Close Share Button View ** //
-class _DefaultButtonView extends GetView<ShareController> {
-  _DefaultButtonView({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: controller.toggle,
-      child: Container(
-        decoration: BoxDecoration(color: Color(0xff2f2a2a).withOpacity(0.95), shape: BoxShape.circle),
-        alignment: Alignment.center,
-        child: SonrIcons.Share.white,
-      ),
-    );
+  Future<void> _setThumbnail() async {
+    var data = await widget.item.thumbData;
+    if (data != null) {
+      thumbnail = data;
+    }
+    hasLoaded = true;
+    setState(() {});
+  }
+
+  void _toggleImage() {
+    isSelected = !isSelected;
+    if (isSelected) {
+      Get.find<MediaController>().addItem(widget.item, thumbnail!);
+    } else {
+      Get.find<MediaController>().removeItem(widget.item, thumbnail!);
+    }
+    setState(() {});
   }
 }
 
-/// ** Expanded Share Button View ** //
-class _QueueView extends GetView<ShareController> {
-  _QueueView({Key? key}) : super(key: key);
+/// @ Card Tags View for Album Names
+class _TagsView extends GetView<MediaController> {
+  const _TagsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: controller.toggle,
-      child: Container(
-        decoration: BoxDecoration(color: Color(0xff2f2a2a).withOpacity(0.95), borderRadius: BorderRadius.circular(24)),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Padding(padding: EdgeInsets.all(4)),
-          const _ShareCameraButtonItem(),
-          VerticalDivider(color: SonrColor.Grey),
-          const _ShareGalleryButtonItem(),
-          VerticalDivider(color: SonrColor.Grey),
-          const _ShareFileButtonItem(),
-          VerticalDivider(color: SonrColor.Grey),
-          const _ShareContactButtonItem(),
-          Padding(padding: EdgeInsets.all(4)),
-        ]),
-      ),
-    );
-  }
-}
-
-/// @ Camera Share Button
-class _ShareCameraButtonItem extends GetView<ShareController> {
-  const _ShareCameraButtonItem();
-  @override
-  Widget build(BuildContext context) {
-    return FadeInUpBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: () async {
-          // Check for Permissions
-          if (controller.cameraPermitted.value) {
-            controller.presentCameraView();
-          }
-          // Request Permissions
-          else {
-            var result = await Get.find<MobileService>().requestCamera();
-            result ? controller.presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
-          }
-        },
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Camera.gradient(value: SonrGradients.CrystalRiver, size: 42))),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'Camera'.p_White,
-        ]),
-      ),
-    );
-  }
-}
-
-/// @ Gallery Share Button
-class _ShareGalleryButtonItem extends GetView<ShareController> {
-  const _ShareGalleryButtonItem();
-  @override
-  Widget build(BuildContext context) {
-    // Return View
-    return FadeInUpBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.selectMedia,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Photos.gradient(value: SonrGradients.FrozenHeat, size: 42))),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'Gallery'.p_White,
-        ]),
-      ),
-    );
-  }
-}
-
-/// @ File Share Button
-class _ShareFileButtonItem extends GetView<ShareController> {
-  const _ShareFileButtonItem();
-  @override
-  Widget build(BuildContext context) {
-    return FadeInUpBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.selectFile,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.ItmeoBranding, size: 42))),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'File'.p_White,
-        ]),
-      ),
-    );
-  }
-}
-
-/// @ Contact Share Button
-class _ShareContactButtonItem extends GetView<ShareController> {
-  const _ShareContactButtonItem();
-  @override
-  Widget build(BuildContext context) {
-    return FadeInUpBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.selectContact,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.LoveKiss, size: 42))),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'Contact'.p_White,
-        ]),
+    return Obx(
+      () => Container(
+        width: Get.width,
+        height: 60,
+        child: SingleChildScrollView(
+          controller: controller.tagsScrollController,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List<Widget>.generate(
+                  controller.gallery.length,
+                  (index) => Obx(
+                        () => GestureDetector(
+                            onTap: () {
+                              controller.setAlbum(index);
+                            },
+                            child: controller.gallery[index].tag(isSelected: controller.isCurrent(index))),
+                      ))),
+        ),
       ),
     );
   }

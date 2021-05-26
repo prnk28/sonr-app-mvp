@@ -15,10 +15,11 @@ class CardService extends GetxService {
 
   // File Objects
   final _activity = RxList<TransferActivity>();
-  final _all = RxList<TransferCard>();
+  final _allCards = RxList<TransferCard>();
   final _contacts = RxList<TransferCard>();
   final _links = RxList<TransferCard>();
-  final _metadata = RxList<TransferCard>();
+  final _files = RxList<TransferCard>();
+  final _media = RxList<TransferCard>();
   final _categoryCount = RxInt(1);
 
   // File Count
@@ -32,10 +33,11 @@ class CardService extends GetxService {
 
   // Property Accessors
   static RxList<TransferActivity> get activity => to._activity;
-  static RxList<TransferCard> get all => to._all;
+  static RxList<TransferCard> get all => to._allCards;
   static RxList<TransferCard> get contacts => to._contacts;
   static RxList<TransferCard> get links => to._links;
-  static RxList<TransferCard> get metadata => to._metadata;
+  static RxList<TransferCard> get files => to._files;
+  static RxList<TransferCard> get media => to._media;
 
   // Count Accessors
   static RxInt get documentCount => to._documentCount;
@@ -49,11 +51,12 @@ class CardService extends GetxService {
   // Category Specific Count
   static bool get hasActivity => to._activity.length > 0;
   static bool get hasContacts => to._contacts.length > 0;
-  static bool get hasMetadata => to._metadata.length > 0;
+  static bool get hasFiles => to._files.length > 0;
   static bool get hasLinks => to._links.length > 0;
+  static bool get hasMedia => to._media.length > 0;
 
-  // Total Count
-  static RxInt get categoryCount => to._categoryCount;
+  // Counts
+  static int get totalCount => to._contacts.length + to._files.length + to._links.length + to._media.length;
 
   // References
   final _database = CardsDatabase();
@@ -62,15 +65,16 @@ class CardService extends GetxService {
   Future<CardService> init() async {
     // Bind Streams
     _activity.bindStream(_database.watchActivity());
-    _all.bindStream(_database.watchAll());
+    _allCards.bindStream(_database.watchAllCards());
+    _media.bindStream(_database.watchMedia());
     _contacts.bindStream(_database.watchContacts());
-    _metadata.bindStream(_database.watchMetadata());
+    _files.bindStream(_database.watchFiles());
     _links.bindStream(_database.watchUrls());
 
     // Set Initial Counter
     int counter = 1;
     _contacts.length > 0 ? counter += 1 : counter += 0;
-    _metadata.length > 0 ? counter += 1 : counter += 0;
+    _files.length > 0 ? counter += 1 : counter += 0;
     _links.length > 0 ? counter += 1 : counter += 0;
     _categoryCount(counter);
     return this;
@@ -179,7 +183,7 @@ class CardService extends GetxService {
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
-    if (to._all.length > 0) {
+    if (totalCount > 0) {
       await to._database.deleteAllCards();
     }
   }
@@ -272,19 +276,19 @@ class CardService extends GetxService {
     // Set Category Count
     int counter = 1;
     hasContacts ? counter += 1 : counter += 0;
-    hasMetadata ? counter += 1 : counter += 0;
+    hasFiles ? counter += 1 : counter += 0;
     hasLinks ? counter += 1 : counter += 0;
     to._categoryCount(counter);
 
     // Set Individual File Count
-    if (hasMetadata) {
-      to._documentCount(to._metadata.count((i) => i.mime == MIME_Type.TEXT));
-      to._pdfCount(to._metadata.count((i) => i.mime == MIME_Type.PDF));
-      to._presentationCount(to._metadata.count((i) => i.mime == MIME_Type.PRESENTATION));
-      to._spreadsheetCount(to._metadata.count((i) => i.mime == MIME_Type.SPREADSHEET));
-      to._otherCount(to._metadata.count((i) => i.mime == MIME_Type.OTHER));
-      to._photosCount(to._metadata.count((i) => i.mime == MIME_Type.IMAGE));
-      to._videosCount(to._metadata.count((i) => i.mime == MIME_Type.VIDEO));
+    if (hasFiles) {
+      to._documentCount(to._files.count((i) => i.mime == MIME_Type.TEXT));
+      to._pdfCount(to._files.count((i) => i.mime == MIME_Type.PDF));
+      to._presentationCount(to._files.count((i) => i.mime == MIME_Type.PRESENTATION));
+      to._spreadsheetCount(to._files.count((i) => i.mime == MIME_Type.SPREADSHEET));
+      to._otherCount(to._files.count((i) => i.mime == MIME_Type.OTHER));
+      to._photosCount(to._files.count((i) => i.mime == MIME_Type.IMAGE));
+      to._videosCount(to._files.count((i) => i.mime == MIME_Type.VIDEO));
     }
   }
 }

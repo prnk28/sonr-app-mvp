@@ -10,7 +10,7 @@ import 'url/card_item.dart';
 import 'package:sonr_app/style/style.dart';
 
 /// @ Card Element/View type Enums
-enum TransferItemsType { All, Metadata, Contacts, Links }
+
 enum TransferItemView { CardItem, GridItem, ListItem }
 
 //// @ TransferView: Builds View based on TransferItem Payload Type
@@ -69,28 +69,28 @@ extension CardsViewElementTypeUtils on TransferItemsType {
   /// Return Item Count by View Type
   int get itemCount {
     switch (this) {
-      case TransferItemsType.Metadata:
-        return CardService.metadata.length;
+      case TransferItemsType.Files:
+        return CardService.files.length;
       case TransferItemsType.Contacts:
         return CardService.contacts.length;
       case TransferItemsType.Links:
         return CardService.links.length;
       default:
-        return CardService.all.length;
+        return CardService.media.length;
     }
   }
 
   /// Return TransferItem from Index Value
   TransferCard transferItemAtIndex(int index) {
     switch (this) {
-      case TransferItemsType.Metadata:
-        return CardService.metadata.reversed.toList()[index];
+      case TransferItemsType.Files:
+        return CardService.files.reversed.toList()[index];
       case TransferItemsType.Contacts:
         return CardService.contacts.reversed.toList()[index];
       case TransferItemsType.Links:
         return CardService.links.reversed.toList()[index];
       default:
-        return CardService.all.reversed.toList()[index];
+        return CardService.media.reversed.toList()[index];
     }
   }
 }
@@ -154,15 +154,9 @@ class _CardsViewEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 225,
-      child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Image.asset(
-          'assets/illustrations/NoFiles.png',
-          width: 170,
-        ),
-        type.emptyLabel.p_Grey,
-        Padding(padding: EdgeInsets.all(16)),
-      ]),
+      alignment: Alignment.center,
+      width: Get.width,
+      child: AssetController.getNoFiles(type.index),
     );
   }
 }

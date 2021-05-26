@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
+	<false/>
+	<key>com.posthog.posthog.POSTHOG_HOST</key>
+	<string>https://app.posthog.com</string>
+	<key>com.posthog.posthog.API_KEY</key>
+	<string>uZ7JYERY7rqx44QIQOQge_avgwS0kgs5sJqsmcow1VY</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Saves User Data in Secure Location</string>
 	<key>CFBundleDevelopmentRegion</key>

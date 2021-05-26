@@ -1,6 +1,7 @@
 import 'package:sonr_app/modules/card/tile/tile_item.dart';
 import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/style/style.dart';
+import 'editor/general/fields.dart';
 import 'profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -12,13 +13,8 @@ class ProfileView extends GetView<ProfileController> {
 
   // @ Build Page View by Navigation Item
   Widget _buildView(ProfileViewStatus status) {
-    // Edit Details View
-    if (status == ProfileViewStatus.EditDetails) {
-      return EditDetailsView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.EditDetails));
-    }
-
     // Edit Profile Picture
-    else if (status == ProfileViewStatus.AddPicture || status == ProfileViewStatus.ViewPicture) {
+    if (status == ProfileViewStatus.AddPicture || status == ProfileViewStatus.ViewPicture) {
       return EditPictureView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddPicture));
     }
 
@@ -26,6 +22,16 @@ class ProfileView extends GetView<ProfileController> {
     else if (status == ProfileViewStatus.AddSocial) {
       return AddTileView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddSocial));
     }
+
+    // TODO: Edit Addresses
+    // else if (status == ProfileViewStatus.FieldAddresses) {
+    //   return EditNameView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.FieldName));
+    // }
+
+    // TODO: Edit Gender
+    // else if (status == ProfileViewStatus.FieldGender) {
+    //   return EditNameView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.FieldName));
+    // }
 
     // Default View
     else {

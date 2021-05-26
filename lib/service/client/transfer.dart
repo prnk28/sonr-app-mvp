@@ -10,14 +10,12 @@ class TransferService extends GetxService {
   static TransferService get to => Get.find<TransferService>();
 
   // Properties
-  final _shareTitle = "Sharing".obs;
   final _payload = Payload.NONE.obs;
   final _inviteRequest = AuthInvite().obs;
   final _file = SonrFile().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
-  static RxString get shareTitle => to._shareTitle;
   static Rx<Payload> get payload => to._payload;
   static Rx<AuthInvite> get inviteRequest => to._inviteRequest;
   static Rx<SonrFile> get file => to._file;
@@ -98,6 +96,15 @@ class TransferService extends GetxService {
     SonrService.invite(to._inviteRequest.value);
   }
 
+  /// @ Sets File from Other Source
+  static Future<void> setFile(SonrFile file) async {
+    // Handle File Payload
+    await _handlePayload(file.payload, file: file);
+
+    // Shift Pages
+    Get.offNamed("/transfer");
+  }
+
   /// Set Transfer Payload for File
   static Future<void> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
     // Initialize Request
@@ -108,7 +115,6 @@ class TransferService extends GetxService {
       file.update();
       to._inviteRequest.init(payload, file: file);
       to._file(file);
-      to._shareTitle("Sharing " + to._file.value.prettyType());
 
       // Check for Media
       if (to._inviteRequest.isMedia) {
@@ -127,12 +133,10 @@ class TransferService extends GetxService {
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
       to._inviteRequest.init(payload, contact: UserService.contact.value);
-      to._shareTitle("Sharing Contact Card");
     }
     // Check for URL
     else if (to._payload.value == Payload.URL) {
       to._inviteRequest.init(payload, url: url!);
-      to._shareTitle("Sending Link");
     }
   }
 

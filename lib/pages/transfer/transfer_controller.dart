@@ -4,14 +4,10 @@ import 'package:sonr_app/style/style.dart';
 
 class TransferController extends GetxController {
   // @ Properties
-  final subtitle = "Nobody Here".obs;
+  final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
   final isNotEmpty = false.obs;
   final centerKey = ValueKey("").obs;
-
-  // @ Remote Properties
-  final counter = 0.obs;
-  final remote = Rx<RemoteResponse?>(null);
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -75,7 +71,7 @@ class TransferController extends GetxController {
     if (!isClosed) {
       // Set Strings
       isNotEmpty(data.isNotEmpty);
-      subtitle(data.prettyCount());
+      title(data.prettyCount());
     }
   }
 }
