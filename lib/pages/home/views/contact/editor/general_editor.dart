@@ -1,4 +1,3 @@
-
 import 'package:sonr_app/style/style.dart';
 
 import 'editor_controller.dart';
@@ -8,7 +7,8 @@ class GeneralEditorView extends GetView<EditorController> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Container(
+      height: Get.height,
       child: Column(children: [
         Container(
             alignment: Alignment.centerLeft,
