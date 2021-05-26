@@ -12,20 +12,20 @@ class ShareButton extends StatelessWidget {
       child: AnimatedContainer(
           curve: Curves.bounceOut,
           duration: Duration(milliseconds: 600),
-          width: 90,
-          height: 90,
+          width: 95,
+          height: 95,
           child: GestureDetector(
             onTap: () {
               Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
             },
             child: ClipPolygon(
-              borderRadius: 10,
+              borderRadius: 18,
               rotate: 30,
               sides: 6,
               child: Container(
                 decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
                 alignment: Alignment.center,
-                child: SonrIcons.Share.gradient(size: 32, value: SonrGradients.PremiumWhite),
+                child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
               ),
             ),
           )),

@@ -9,6 +9,7 @@ class MediaController extends GetxController {
   final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
   final hasSelected = false.obs;
 
+  // References
   final ScrollController tagsScrollController = ScrollController();
 
   @override

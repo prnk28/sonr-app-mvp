@@ -1,5 +1,4 @@
 export 'add/add_social.dart';
-export 'editor/edit_details.dart';
 export 'profile_controller.dart';
 export 'profile_view.dart';
 export 'fields/avatar_field.dart';
@@ -15,10 +14,21 @@ import 'package:sonr_app/data/data.dart';
 import 'add/add_social.dart';
 
 // @ PeerStatus Enum
-enum ProfileViewStatus { Viewing, EditDetails, AddSocial, AddPicture, ViewPicture, NeedCameraPermissions }
+enum ProfileViewStatus {
+  Viewing,
+  EditView,
+  FieldName,
+  FieldGender,
+  FieldPhone,
+  FieldAddresses,
+  AddSocial,
+  AddPicture,
+  ViewPicture,
+  NeedCameraPermissions
+}
 
 extension ProfileViewStatusUtils on ProfileViewStatus {
-  bool get isEditing => this == ProfileViewStatus.EditDetails;
+  bool get isEditing => this == ProfileViewStatus.EditView;
   bool get isViewing => this == ProfileViewStatus.Viewing;
   bool get isAddingPicture => this == ProfileViewStatus.AddPicture;
   bool get isAddingSocial => this == ProfileViewStatus.AddSocial;
@@ -90,6 +100,23 @@ class ProfileController extends GetxController {
     status(ProfileViewStatus.AddPicture);
   }
 
+  void shiftScreen(ContactOptions option) {
+    switch (option) {
+      case ContactOptions.Names:
+        HapticFeedback.heavyImpact();
+        status(ProfileViewStatus.FieldName);
+        break;
+      case ContactOptions.Addresses:
+        HapticFeedback.heavyImpact();
+        status(ProfileViewStatus.FieldAddresses);
+        break;
+      case ContactOptions.Gender:
+        HapticFeedback.heavyImpact();
+        status(ProfileViewStatus.FieldGender);
+        break;
+    }
+  }
+
   /// @ Start Editing for Social Tile
   void setAddTile() {
     HapticFeedback.heavyImpact();
@@ -100,7 +127,7 @@ class ProfileController extends GetxController {
   /// @ Start Editing for Details
   void setEditingMode() {
     HapticFeedback.heavyImpact();
-    status(ProfileViewStatus.EditDetails);
+    status(ProfileViewStatus.EditView);
   }
 
   /// @ End Add/Edit State

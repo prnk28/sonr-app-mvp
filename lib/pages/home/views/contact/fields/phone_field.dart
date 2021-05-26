@@ -4,9 +4,7 @@ import '../profile_controller.dart';
 /// @ Edit Profile Details View
 class EditPhoneView extends GetView<ProfileController> {
   EditPhoneView({Key? key}) : super(key: key);
-  final FocusNode _firstNameFocus = FocusNode();
-  final FocusNode _lastNameFocus = FocusNode();
-  final FocusNode _phoneNumberFocus = FocusNode();
+  final FocusNode _primaryNumberFocus = FocusNode();
   final scrollController = ScrollController();
   final hintName = SonrTextField.hintName();
 
@@ -43,10 +41,10 @@ class EditPhoneView extends GetView<ProfileController> {
                     textInputAction: TextInputAction.done,
                     controller: TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary : ""),
                     value: controller.editedLastName.value,
-                    focusNode: _phoneNumberFocus,
+                    focusNode: _primaryNumberFocus,
                     onEditingComplete: () {
                       controller.saveEditedDetails();
-                      _phoneNumberFocus.unfocus();
+                      _primaryNumberFocus.unfocus();
                     },
                     onChanged: (val) => controller.editedPhone(val))
               ]),
