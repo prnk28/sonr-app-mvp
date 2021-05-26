@@ -15,63 +15,19 @@ class ShareView extends GetView<ShareController> {
             duration: Duration(milliseconds: 600),
             width: controller.size.value.width,
             height: controller.size.value.height,
-            child: _buildView()),
-      ),
-    );
-  }
-
-  // @ Build Page View by Navigation Item
-  Widget _buildView() {
-    // Return View
-    if (controller.status.value == ShareStatus.Queue) {
-      return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
-    } else {
-      return _DefaultButtonView(key: ValueKey<ShareStatus>(ShareStatus.Default));
-    }
-  }
-}
-
-/// ** Close Share Button View ** //
-class _DefaultButtonView extends GetView<ShareController> {
-  _DefaultButtonView({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: controller.toggle,
-      child: ClipPolygon(
-        borderRadius: 10,
-        rotate: 30,
-        sides: 6,
-        child: Container(
-          decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
-          alignment: Alignment.center,
-          child: SonrIcons.Share.white,
-        ),
-      ),
-    );
-  }
-}
-
-/// ** Expanded Share Button View ** //
-class _QueueView extends GetView<ShareController> {
-  _QueueView({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: controller.toggle,
-      child: Container(
-        decoration: BoxDecoration(color: Color(0xff2f2a2a).withOpacity(0.95), borderRadius: BorderRadius.circular(24)),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Padding(padding: EdgeInsets.all(4)),
-          const _ShareCameraButtonItem(),
-          VerticalDivider(color: SonrColor.Grey),
-          const _ShareGalleryButtonItem(),
-          VerticalDivider(color: SonrColor.Grey),
-          const _ShareFileButtonItem(),
-          VerticalDivider(color: SonrColor.Grey),
-          const _ShareContactButtonItem(),
-          Padding(padding: EdgeInsets.all(4)),
-        ]),
+            child: GestureDetector(
+              onTap: controller.toggle,
+              child: ClipPolygon(
+                borderRadius: 10,
+                rotate: 30,
+                sides: 6,
+                child: Container(
+                  decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
+                  alignment: Alignment.center,
+                  child: SonrIcons.Share.white,
+                ),
+              ),
+            )),
       ),
     );
   }
@@ -102,7 +58,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
   const _ShareCameraButtonItem();
   @override
   Widget build(BuildContext context) {
-    return FadeInUpBig(
+    return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: GestureDetector(
@@ -127,33 +83,12 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
   }
 }
 
-/// @ Gallery Share Button
-class _ShareGalleryButtonItem extends GetView<ShareController> {
-  const _ShareGalleryButtonItem();
-  @override
-  Widget build(BuildContext context) {
-    // Return View
-    return FadeInUpBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.selectMedia,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Photos.gradient(value: SonrGradients.FrozenHeat, size: 42))),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'Gallery'.p_White,
-        ]),
-      ),
-    );
-  }
-}
-
 /// @ File Share Button
 class _ShareFileButtonItem extends GetView<ShareController> {
   const _ShareFileButtonItem();
   @override
   Widget build(BuildContext context) {
-    return FadeInUpBig(
+    return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: GestureDetector(
@@ -173,7 +108,7 @@ class _ShareContactButtonItem extends GetView<ShareController> {
   const _ShareContactButtonItem();
   @override
   Widget build(BuildContext context) {
-    return FadeInUpBig(
+    return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: GestureDetector(
