@@ -47,9 +47,9 @@ class _PeerListItemState extends State<PeerListItem> {
                   ColorButton.primary(
                     onPressed: () {
                       if (widget.remote != null) {
-                        TransferService.sendPeer(widget.peer);
+                        TransferService.sendInviteToPeer(widget.peer);
                       } else {
-                        TransferService.sendPeer(widget.peer);
+                        TransferService.sendInviteToPeer(widget.peer);
                       }
                     },
                     text: "Invite",

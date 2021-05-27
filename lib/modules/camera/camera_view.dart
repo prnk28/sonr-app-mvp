@@ -11,7 +11,7 @@ class CameraView extends StatelessWidget {
   final Function(SonrFile file) onMediaSelected;
   CameraView({required this.onMediaSelected});
 
-  static open({required Function(SonrFile file) onMediaSelected}) {
+  static void open({required Function(SonrFile file) onMediaSelected}) {
     Get.to(
       CameraView(onMediaSelected: onMediaSelected),
       fullscreenDialog: true,

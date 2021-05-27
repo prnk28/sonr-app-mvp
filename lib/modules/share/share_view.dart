@@ -4,8 +4,6 @@ import 'button_view.dart';
 import 'share_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-
-
 class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {

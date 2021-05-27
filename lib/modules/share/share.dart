@@ -8,9 +8,15 @@ import 'share_controller.dart';
 import 'share_view.dart';
 
 class Share {
-  /// Opens Stand alone share popup with redirect
+  /// Open ShareView without Redirect
+  static void open() {
+    Get.find<ShareController>().reset(close: false, popup: false);
+    Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
+  }
+
+  /// Popup Stand alone share view with redirect
   static void popup() {
-    Get.find<ShareController>().reset(withClose: false);
+    Get.find<ShareController>().reset(close: false);
     Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
   }
 }

@@ -71,9 +71,9 @@ class ShareSheet extends StatelessWidget {
             ActionButton(
                 onPressed: () {
                   if (payload == Payload.URL) {
-                    TransferService.chooseURLExternal(url!.url);
+                    TransferService.setUrl(url!.url);
                   } else {
-                    TransferService.chooseMediaExternal(mediaFile!);
+                    TransferService.setMedia(mediaFile!);
                   }
                 },
                 icon: SonrIcons.Check.gradient(value: SonrGradients.NorthMiracle, size: 42)),

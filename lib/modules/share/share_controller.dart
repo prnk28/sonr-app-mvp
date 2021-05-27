@@ -20,14 +20,14 @@ class ShareController extends GetxController {
   }
 
   /// Close Share View Reset Items/Status
-  reset({bool withClose = true, bool isPopup = true}) {
+  reset({bool close = true, bool popup = true}) {
     selectedItems.clear();
     hasSelected(false);
 
-    if (withClose) {
+    if (close) {
       Get.back(closeOverlays: true);
     } else {
-      this.isPopup(isPopup);
+      this.isPopup(popup);
     }
   }
 
@@ -50,25 +50,51 @@ class ShareController extends GetxController {
   Future<void> chooseCamera() async {
     // Check for Permissions
     if (MobileService.hasCamera.value) {
-      TransferService.chooseCamera(withRedirect: isPopup.value);
+      // Check Done
+      var done = await TransferService.chooseCamera(withRedirect: isPopup.value);
+
+      // Handle for Non-Popup State
+      if (done && !isPopup.value) {
+        Get.back(closeOverlays: true);
+      }
     }
     // Request Permissions
     else {
       var result = await Get.find<MobileService>().requestCamera();
-      result ? TransferService.chooseCamera() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+      if (result) {
+        // Check Done
+        var done = await TransferService.chooseCamera(withRedirect: isPopup.value);
+
+        // Handle for Non-Popup State
+        if (done && !isPopup.value) {
+          Get.back(closeOverlays: true);
+        }
+      } else {
+        SonrSnack.error("Sonr cannot open Camera without Permissions");
+      }
     }
   }
 
   /// Choose Contact Card for Share
   Future<void> chooseContact() async {
-    TransferService.chooseContact(withRedirect: isPopup.value);
+    var done = await TransferService.chooseContact(withRedirect: isPopup.value);
+
+    // Handle for Non-Popup State
+    if (done && !isPopup.value) {
+      Get.back(closeOverlays: true);
+    }
   }
 
   /// Open File Manager and Select File for Share
   Future<void> chooseFile() async {
     // Check Permissions
     if (MobileService.hasGallery.value) {
-      await TransferService.chooseFile(withRedirect: isPopup.value);
+      var done = await TransferService.chooseFile(withRedirect: isPopup.value);
+
+      // Handle for Non-Popup State
+      if (done && !isPopup.value) {
+        Get.back(closeOverlays: true);
+      }
     } else {
       // Request Permissions
       var status = await Get.find<MobileService>().requestGallery();
@@ -76,7 +102,12 @@ class ShareController extends GetxController {
 
       // Check Status
       if (status) {
-        await TransferService.chooseFile(withRedirect: isPopup.value);
+        var done = await TransferService.chooseFile(withRedirect: isPopup.value);
+
+        // Handle for Non-Popup State
+        if (done && !isPopup.value) {
+          Get.back(closeOverlays: true);
+        }
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
       }
@@ -94,7 +125,12 @@ class ShareController extends GetxController {
   Future<void> confirmMediaSelection() async {
     if (hasSelected.value) {
       var sonrFile = await selectedItems.toSonrFile();
-      TransferService.setFile(sonrFile, withRedirect: isPopup.value);
+      var done = await TransferService.setFile(sonrFile, withRedirect: isPopup.value);
+
+      // Handle for Non-Popup State
+      if (done && !isPopup.value) {
+        Get.back(closeOverlays: true);
+      }
     } else {
       SonrSnack.missing("No Files Selected");
     }

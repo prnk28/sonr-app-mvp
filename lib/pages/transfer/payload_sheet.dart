@@ -3,16 +3,9 @@ import 'package:sonr_app/style/style.dart';
 class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (TransferService.sharedItem.value.isSingleItem) {
-        return Container(
-            padding: EdgeInsets.all(8),
-            decoration: Neumorphic.floating(
-              theme: Get.theme,
-            ),
-            child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
-      } else if (TransferService.sharedItem.value.isMultiItems) {
-        return DraggableScrollableSheet(
+    return TransferService.payload.value.isMultipleFiles
+        // Build List View
+        ? DraggableScrollableSheet(
             expand: false,
             initialChildSize: 0.20,
             maxChildSize: 0.5,
@@ -26,10 +19,15 @@ class PayloadSheetView extends StatelessWidget {
                       return index == 0 ? _SonrFileListHeader() : _SonrFileListItem(item: TransferService.file.value.items[index - 1]);
                     }),
               );
-            });
-      }
-      return Container();
-    });
+            })
+        :
+        // Build Single Item
+        Container(
+            padding: EdgeInsets.all(8),
+            decoration: Neumorphic.floating(
+              theme: Get.theme,
+            ),
+            child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
   }
 }
 
@@ -133,8 +131,13 @@ class _PayloadSingleItem extends StatelessWidget {
   }
 
   Widget _buildLeading() {
+    // # Undefined Type
+    if (TransferService.payload.value == Payload.NONE) {
+      return CircularProgressIndicator();
+    }
+
     // # Check for Media File Type
-    if (TransferService.sharedItem.value.isMedia) {
+    else if (TransferService.payload.value == Payload.MEDIA) {
       return _PayloadItemThumbnail();
     }
 
@@ -145,7 +148,7 @@ class _PayloadSingleItem extends StatelessWidget {
   }
 
   Widget _buildTitle() {
-    if (TransferService.sharedItem.value.isContact) {
+    if (TransferService.payload.value == Payload.CONTACT) {
       // Build Text View
       return Container(
           width: Width.ratio(0.5),
@@ -161,7 +164,7 @@ class _PayloadSingleItem extends StatelessWidget {
               child: "Contact Card".p_Grey,
             )
           ]));
-    } else if (TransferService.sharedItem.value.isUrl) {
+    } else if (TransferService.payload.value == Payload.URL) {
       // Build Text View
       return Container(
           width: Width.ratio(0.5),
@@ -208,7 +211,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       // Thumbnail Loading
-      if (TransferService.sharedItem.value.thumbStatus == ThumbnailStatus.Loading) {
+      if (TransferService.thumbStatus.value == ThumbnailStatus.Loading) {
         return Container(
           height: Height.ratio(0.125),
           width: Height.ratio(0.125),
@@ -218,7 +221,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
       }
 
       // Media with Thumbnail
-      else if (TransferService.sharedItem.value.thumbStatus == ThumbnailStatus.Complete) {
+      else if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
         return GestureDetector(
           onTap: () => OpenFile.open(TransferService.file.value.single.path),
           child: Container(

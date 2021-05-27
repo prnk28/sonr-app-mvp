@@ -8,6 +8,7 @@ class TransferService extends GetxService {
   static TransferService get to => Get.find<TransferService>();
 
   // Properties
+  final _hasPayload = false.obs;
   final _payload = Payload.NONE.obs;
   final _inviteRequest = AuthInvite().obs;
   final _file = SonrFile().obs;
@@ -18,6 +19,7 @@ class TransferService extends GetxService {
   static Rx<AuthInvite> get inviteRequest => to._inviteRequest;
   static Rx<SonrFile> get file => to._file;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
+  static RxBool get hasPayload => to._hasPayload;
 
   /// @ Initialize Service
   Future<TransferService> init() async {
@@ -25,24 +27,29 @@ class TransferService extends GetxService {
   }
 
   // @ Use Camera for Media File //
-  static Future<void> chooseCamera() async {
+  static Future<bool> chooseCamera({bool withRedirect = true}) async {
     // Move to View
     CameraView.open(onMediaSelected: (SonrFile file) async {
       await _handlePayload(Payload.MEDIA, file: file);
       // Shift Pages
       Get.offNamed("/transfer");
     });
+    return true;
   }
 
-  static void chooseContact() async {
+  // @ Set User Contact for Transfer //
+  static Future<bool> chooseContact({bool withRedirect = true}) async {
     await _handlePayload(Payload.CONTACT);
 
     // Shift Pages
-    Get.offNamed("/transfer");
+    if (withRedirect) {
+      Get.offNamed("/transfer");
+    }
+    return true;
   }
 
   // @ Select Media File //
-  static Future<void> chooseMedia() async {
+  static Future<bool> chooseMedia({bool withRedirect = true}) async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.media);
 
@@ -52,20 +59,16 @@ class TransferService extends GetxService {
       await _handlePayload(file.payload, file: file);
 
       // Shift Pages
-      Get.offNamed("/transfer");
+      if (withRedirect) {
+        Get.offNamed("/transfer");
+      }
+      return true;
     }
-  }
-
-  // @ Select Media File //
-  static Future<void> chooseMediaExternal(SonrFile file) async {
-    await _handlePayload(file.payload, file: file);
-
-    // Shift Pages
-    Get.offNamed("/transfer");
+    return false;
   }
 
   // @ Select Other File //
-  static Future<void> chooseFile() async {
+  static Future<bool> chooseFile({bool withRedirect = true}) async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.custom);
 
@@ -73,34 +76,55 @@ class TransferService extends GetxService {
     if (result != null) {
       var file = result.toSonrFile(payload: Payload.MEDIA);
       await _handlePayload(file.payload, file: file);
-      Get.offNamed("/transfer");
+
+      // Shift Pages
+      if (withRedirect) {
+        Get.offNamed("/transfer");
+      }
+      return true;
     }
+    return false;
   }
 
   // @ Select Media File //
-  static Future<void> chooseURLExternal(String url) async {
+  static Future<void> setUrl(String url) async {
     await _handlePayload(Payload.URL, url: url);
 
     // Shift Pages
     Get.offNamed("/transfer");
   }
 
+  // @ Select Media File //
+  static Future<void> setMedia(SonrFile file, {bool withRedirect = true}) async {
+    await _handlePayload(file.payload, file: file);
+
+    // Shift Pages
+    if (withRedirect) {
+      Get.offNamed("/transfer");
+    }
+  }
+
   /// @ Send Invite with Peer
-  static void sendPeer(Peer peer) {
+  static void sendInviteToPeer(Peer peer) {
     // Update Request
     to._inviteRequest.setPeer(peer);
 
     // Send Invite
     SonrService.invite(to._inviteRequest.value);
+
+    // Reset Transfer
   }
 
   /// @ Sets File from Other Source
-  static Future<void> setFile(SonrFile file) async {
+  static Future<bool> setFile(SonrFile file, {bool withRedirect = true}) async {
     // Handle File Payload
     await _handlePayload(file.payload, file: file);
 
     // Shift Pages
-    Get.offNamed("/transfer");
+    if (withRedirect) {
+      Get.offNamed("/transfer");
+    }
+    return true;
   }
 
   /// Set Transfer Payload for File
@@ -136,6 +160,9 @@ class TransferService extends GetxService {
     else if (to._payload.value == Payload.URL) {
       to._inviteRequest.init(payload, url: url!);
     }
+
+    // Set Has Payload
+    to._hasPayload(true);
   }
 
   // # Generic Method for Different File Types
