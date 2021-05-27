@@ -140,7 +140,7 @@ class _PayloadSingleItem extends StatelessWidget {
 
     // # Other Types
     else {
-      return TransferService.sharedItem.value.payload.gradient(size: Height.ratio(0.125));
+      return TransferService.payload.value.gradient(size: Height.ratio(0.125));
     }
   }
 
