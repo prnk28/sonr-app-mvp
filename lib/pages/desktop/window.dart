@@ -10,10 +10,10 @@ class DesktopWindow extends GetView<WindowController> {
       resizeToAvoidBottomInset: false,
       appBar: DesignAppBar(
         subtitle: Obx(() => controller.view.value == DesktopView.Register
-            ? "Hello,".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
-            : "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
+            ? "Hello,".headThree(color: SonrColor.White, weight: FontWeight.w400, align: TextAlign.start)
+            : "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.White, weight: FontWeight.w400, align: TextAlign.start)),
         title: Obx(() => controller.view.value == DesktopView.Register
-            ? "Let's Register".headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start)
+            ? "Let's Register".headThree(color: SonrColor.White, weight: FontWeight.w800, align: TextAlign.start)
             : AnimatedSlideSwitcher.fade(
                 duration: 2.seconds,
                 child: GestureDetector(
@@ -23,7 +23,7 @@ class DesktopWindow extends GetView<WindowController> {
                       controller.swapTitleText("${LobbyService.local.value.size} Around", timeout: 2500.milliseconds);
                     }
                   },
-                  child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
+                  child: controller.titleText.value.headThree(color: SonrColor.White, weight: FontWeight.w800, align: TextAlign.start),
                 ),
               )),
       ),

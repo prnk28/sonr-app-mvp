@@ -48,6 +48,17 @@ class UserService extends GetxService {
     // Check User Status
     _hasUser(_userBox.hasData("user"));
 
+    if (DeviceService.isDesktop) {
+      // Delete User
+      _userBox.remove('user');
+      _hasUser(false);
+      _isNewUser(true);
+
+      // Clear Database
+      CardService.deleteAllCards();
+      CardService.clearAllActivity();
+    }
+
     // Check if Exists
     if (_hasUser.value) {
       try {
@@ -149,7 +160,7 @@ class UserService extends GetxService {
 
   /// @ Returns User Based on Service Values
   static User get user => User(
-      id: AuthService.prefix,
+      id: DeviceService.isMobile ? AuthService.prefix : "",
       contact: to._contact.value,
       device: DeviceService.device,
       devices: to._devices,
