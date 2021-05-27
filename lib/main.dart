@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sonr_app/style/style.dart';
 import 'data/data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -13,6 +14,7 @@ Future<void> main() async {
       options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
       options.sampleRate = 0.1;
       options.serverName = "[App] ${DeviceService.platform.toString()}";
+      options.debug = false;
 
       // Add Excludes
       SonrRouting.excludedModules.forEach((ex) {
@@ -39,7 +41,10 @@ class App extends StatelessWidget {
       getPages: SonrRouting.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
-      navigatorObservers: [GetObserver()],
+      navigatorObservers: [
+        GetObserver(),
+        PosthogObserver(),
+      ],
       title: _title(),
       home: _buildScaffold(),
     );

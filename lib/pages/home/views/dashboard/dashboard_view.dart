@@ -13,6 +13,7 @@ class DashboardView extends GetView<DashboardController> {
   DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Dashboard");
     return GestureDetector(
       onTap: () => controller.closeSearch(context),
       child: Container(

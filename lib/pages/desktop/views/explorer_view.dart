@@ -8,6 +8,7 @@ class ExplorerDesktopView extends GetView<ExplorerController> {
 
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Explorer");
     return Center(
       child: Obx(() {
         // Carousel View

@@ -8,6 +8,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Contact");
     return Obx(() => NeumorphicCard(themeData: Get.theme, child: _buildView(controller.status.value)));
   }
 

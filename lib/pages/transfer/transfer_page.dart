@@ -10,6 +10,8 @@ import 'transfer_controller.dart';
 class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Transfer");
+
     // Build View
     return Obx(() => SonrScaffold(
           gradient: SonrGradients.PlumBath,
