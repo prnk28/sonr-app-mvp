@@ -8,6 +8,8 @@ import '../data.dart';
 
 enum MediaOrientation { Portrait, Landscape }
 
+enum ThumbnailStatus { None, Loading, Complete }
+
 extension TransferCardUtils on TransferCard {
   /// Checks if Provided Query Matches Date of Transfer
   bool matchesDate(String q) {

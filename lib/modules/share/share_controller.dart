@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class MediaController extends GetxController {
+class ShareController extends GetxController {
   // Properties
   final gallery = RxList<AssetPathEntity>();
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
@@ -18,6 +18,7 @@ class MediaController extends GetxController {
     super.onInit();
   }
 
+  /// Close Share View Reset Items/Status
   close() {
     selectedItems.clear();
     hasSelected(false);
@@ -37,6 +38,50 @@ class MediaController extends GetxController {
     if (all != null) {
       currentAlbum(all);
     }
+  }
+
+  /// Open Camera and Take Picture for Share
+  Future<void> chooseCamera() async {
+    // Check for Permissions
+    if (MobileService.hasCamera.value) {
+      TransferService.chooseCamera();
+    }
+    // Request Permissions
+    else {
+      var result = await Get.find<MobileService>().requestCamera();
+      result ? TransferService.chooseCamera() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+    }
+  }
+
+  /// Choose Contact Card for Share
+  Future<void> chooseContact() async {
+    TransferService.chooseContact();
+  }
+
+  /// Open File Manager and Select File for Share
+  Future<void> chooseFile() async {
+    // Check Permissions
+    if (MobileService.hasGallery.value) {
+      await TransferService.chooseFile();
+    } else {
+      // Request Permissions
+      var status = await Get.find<MobileService>().requestGallery();
+      SonrOverlay.back();
+
+      // Check Status
+      if (status) {
+        await TransferService.chooseFile();
+      } else {
+        SonrSnack.error("Cannot pick Media without Permissions");
+      }
+    }
+  }
+
+  /// Adds Item to Selected Items List for Share
+  void chooseMediaItem(AssetEntity item, Uint8List thumb) {
+    selectedItems.add(Tuple(item, thumb));
+    selectedItems.refresh();
+    hasSelected(selectedItems.length > 0);
   }
 
   /// Changes Album to New Album
@@ -70,15 +115,8 @@ class MediaController extends GetxController {
     tagsScrollController.animateTo(currentAlbum.value.index * 40, duration: 100.milliseconds, curve: Curves.easeIn);
   }
 
-  /// Adds Item to Selected Items List
-  void addItem(AssetEntity item, Uint8List thumb) {
-    selectedItems.add(Tuple(item, thumb));
-    selectedItems.refresh();
-    hasSelected(selectedItems.length > 0);
-  }
-
   /// Removes Item from Selected Items List
-  void removeItem(AssetEntity item, Uint8List thumb) {
+  void removeMediaItem(AssetEntity item, Uint8List thumb) {
     selectedItems.remove(Tuple(item, thumb));
     selectedItems.refresh();
     hasSelected(selectedItems.length > 0);

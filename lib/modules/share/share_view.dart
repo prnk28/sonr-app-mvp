@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'button_view.dart';
-import 'media_controller.dart';
+import 'share_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-class SharePopupView extends GetView<MediaController> {
+
+
+class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
@@ -34,7 +36,7 @@ class SharePopupView extends GetView<MediaController> {
           CustomScrollView(
             slivers: [
               // @ Builds Profile Header
-              SliverToBoxAdapter(child: ButtonsAltOptionView()),
+              SliverToBoxAdapter(child: ShareOptionsRow()),
               SliverPadding(padding: EdgeInsets.only(top: 8)),
               SliverToBoxAdapter(
                   child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
@@ -47,9 +49,9 @@ class SharePopupView extends GetView<MediaController> {
           GestureDetector(
             onHorizontalDragUpdate: (details) {
               if (details.delta.dx > 8) {
-                Get.find<MediaController>().shiftPrevAlbum();
+                Get.find<ShareController>().shiftPrevAlbum();
               } else if (details.delta.dx < -8) {
-                Get.find<MediaController>().shiftNextAlbum();
+                Get.find<ShareController>().shiftNextAlbum();
               }
             },
           )
@@ -57,7 +59,7 @@ class SharePopupView extends GetView<MediaController> {
   }
 }
 
-class _MediaView extends GetView<MediaController> {
+class _MediaView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SliverGrid(
@@ -149,16 +151,16 @@ class _MediaItemState extends State<_MediaItem> {
   void _toggleImage() {
     isSelected = !isSelected;
     if (isSelected) {
-      Get.find<MediaController>().addItem(widget.item, thumbnail!);
+      Get.find<ShareController>().chooseMediaItem(widget.item, thumbnail!);
     } else {
-      Get.find<MediaController>().removeItem(widget.item, thumbnail!);
+      Get.find<ShareController>().removeMediaItem(widget.item, thumbnail!);
     }
     setState(() {});
   }
 }
 
 /// @ Card Tags View for Album Names
-class _TagsView extends GetView<MediaController> {
+class _TagsView extends GetView<ShareController> {
   const _TagsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

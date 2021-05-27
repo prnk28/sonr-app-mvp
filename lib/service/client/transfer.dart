@@ -1,8 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 import 'package:file_picker/file_picker.dart';
 
-enum ThumbnailStatus { None, Loading, Complete }
-
 /// @ Class for Managing Files
 class TransferService extends GetxService {
   // Status
@@ -10,12 +8,14 @@ class TransferService extends GetxService {
   static TransferService get to => Get.find<TransferService>();
 
   // Properties
+  final _hasTransfer = false.obs;
   final _payload = Payload.NONE.obs;
   final _inviteRequest = AuthInvite().obs;
   final _file = SonrFile().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
+  static RxBool get hasTransfer => to._hasTransfer;
   static Rx<Payload> get payload => to._payload;
   static Rx<AuthInvite> get inviteRequest => to._inviteRequest;
   static Rx<SonrFile> get file => to._file;
@@ -27,24 +27,30 @@ class TransferService extends GetxService {
   }
 
   // @ Use Camera for Media File //
-  static Future<void> chooseCamera() async {
+  static Future<void> chooseCamera({bool withRedirect = true}) async {
     // Move to View
     CameraView.open(onMediaSelected: (SonrFile file) async {
       await _handlePayload(Payload.MEDIA, file: file);
+
       // Shift Pages
-      Get.offNamed("/transfer");
+      if (withRedirect) {
+        Get.offNamed("/transfer");
+      }
     });
   }
 
-  static void chooseContact() async {
+  // @ Set Contact Card as Payload //
+  static void chooseContact({bool withRedirect = true}) async {
     await _handlePayload(Payload.CONTACT);
 
     // Shift Pages
-    Get.offNamed("/transfer");
+    if (withRedirect) {
+      Get.offNamed("/transfer");
+    }
   }
 
   // @ Select Media File //
-  static Future<void> chooseMedia() async {
+  static Future<void> chooseMedia({bool withRedirect = true}) async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.media);
 
@@ -54,7 +60,26 @@ class TransferService extends GetxService {
       await _handlePayload(file.payload, file: file);
 
       // Shift Pages
-      Get.offNamed("/transfer");
+      if (withRedirect) {
+        Get.offNamed("/transfer");
+      }
+    }
+  }
+
+  // @ Select Other File //
+  static Future<void> chooseFile({bool withRedirect = true}) async {
+    // Load Picker
+    var result = await _handleSelectRequest(FileType.custom);
+
+    // Check File
+    if (result != null) {
+      var file = result.toSonrFile(payload: Payload.MEDIA);
+      await _handlePayload(file.payload, file: file);
+
+      // Shift Pages
+      if (withRedirect) {
+        Get.offNamed("/transfer");
+      }
     }
   }
 
@@ -64,19 +89,6 @@ class TransferService extends GetxService {
 
     // Shift Pages
     Get.offNamed("/transfer");
-  }
-
-  // @ Select Other File //
-  static Future<void> chooseFile() async {
-    // Load Picker
-    var result = await _handleSelectRequest(FileType.custom);
-
-    // Check File
-    if (result != null) {
-      var file = result.toSonrFile(payload: Payload.MEDIA);
-      await _handlePayload(file.payload, file: file);
-      Get.offNamed("/transfer");
-    }
   }
 
   // @ Select Media File //
@@ -89,11 +101,16 @@ class TransferService extends GetxService {
 
   /// @ Send Invite with Peer
   static void sendPeer(Peer peer) {
-    // Update Request
-    to._inviteRequest.setPeer(peer);
+    // Check if Has Transfer
+    if (to._hasTransfer.value) {
+      // Update Request
+      to._inviteRequest.setPeer(peer);
 
-    // Send Invite
-    SonrService.invite(to._inviteRequest.value);
+      // Send Invite
+      SonrService.invite(to._inviteRequest.value);
+    } else {
+      SonrSnack.missing("No Transfer Set");
+    }
   }
 
   /// @ Sets File from Other Source
@@ -138,6 +155,9 @@ class TransferService extends GetxService {
     else if (to._payload.value == Payload.URL) {
       to._inviteRequest.init(payload, url: url!);
     }
+
+    // Set Has Transfer
+    to._hasTransfer(true);
   }
 
   // # Generic Method for Different File Types

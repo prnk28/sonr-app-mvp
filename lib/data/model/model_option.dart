@@ -44,3 +44,92 @@ extension ContactOptionUtils on ContactOptions {
     }
   }
 }
+
+/// Class Manages Pre Transfer Share Selection
+class ShareItem {
+  // * Variables
+  // Properties
+  final Payload payload;
+  final Contact? contact;
+  final SonrFile? file;
+  final String? url;
+  ThumbnailStatus thumbStatus = ThumbnailStatus.None;
+
+  // Accessors
+  bool get exists => this.payload != Payload.NONE;
+  bool get isContact => this.exists && this.contact != null;
+  bool get isFile => this.exists && file != null;
+  bool get isURL => this.exists && url != null;
+
+  // References
+  AuthInvite _invite = AuthInvite();
+
+  // * Constructers
+  /// Default Constructer
+  ShareItem(this.payload, {this.file, this.contact, this.url}) {
+    if (this.exists) {
+      _init();
+    }
+  }
+
+  /// Blank Constructer
+  factory ShareItem.blank() {
+    return ShareItem(Payload.NONE);
+  }
+
+  /// Contact Constructer
+  factory ShareItem.contact(Contact contact) {
+    return ShareItem(Payload.CONTACT, contact: contact);
+  }
+
+  /// File Constructer
+  factory ShareItem.file(SonrFile file) {
+    return ShareItem(file.payload, file: file);
+  }
+
+  /// URL Constructer
+  factory ShareItem.url(String url) {
+    return ShareItem(Payload.URL, url: url);
+  }
+
+  // * Methods
+  /// Returns Auth Invite for Share Item
+  AuthInvite invite(Peer peer) => AuthInviteUtils.copyWithPeer(_invite, peer);
+
+  /// Builds Invite from Payload
+  Future<bool> _init() async {
+    // Check for File
+    if (this.payload.isTransfer && this.isFile) {
+      file!.update();
+      this._invite.setFile(file!);
+
+      // Check for Media
+      if (this.payload == Payload.MEDIA) {
+        // Set File Item
+        this.thumbStatus = ThumbnailStatus.Loading;
+        await this.file!.setThumbnail();
+
+        // Check Result
+        if (this.file!.single.hasThumbnail()) {
+          this.thumbStatus = ThumbnailStatus.Complete;
+        } else {
+          this.thumbStatus = ThumbnailStatus.None;
+        }
+      }
+      return true;
+    }
+
+    // Check for Contact
+    else if (this.payload == Payload.CONTACT && this.isContact) {
+      this._invite.setContact(contact!);
+      return true;
+    }
+
+    // Check for URL
+    else if (this.payload == Payload.URL && this.isURL) {
+      this._invite.setUrl(url!);
+      return true;
+    }
+    return false;
+  }
+}

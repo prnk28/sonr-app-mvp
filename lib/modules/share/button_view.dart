@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/home/share/share_view.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
+import 'share.dart';
 
 class ShareButton extends StatelessWidget {
   ShareButton() : super(key: GlobalKey());
@@ -15,9 +15,7 @@ class ShareButton extends StatelessWidget {
           width: 95,
           height: 95,
           child: GestureDetector(
-            onTap: () {
-              Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
-            },
+            onTap: Share.popup,
             child: ClipPolygon(
               borderRadius: 18,
               rotate: 30,
@@ -33,7 +31,7 @@ class ShareButton extends StatelessWidget {
   }
 }
 
-class ButtonsAltOptionView extends StatelessWidget {
+class ShareOptionsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

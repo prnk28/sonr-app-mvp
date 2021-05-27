@@ -1,4 +1,4 @@
-import 'share/button_view.dart';
+import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'views/dashboard/dashboard_view.dart';
