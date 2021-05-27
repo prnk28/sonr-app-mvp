@@ -8,6 +8,7 @@ class ShareController extends GetxController {
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
   final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
   final hasSelected = false.obs;
+  final isPopup = true.obs;
 
   // References
   final ScrollController tagsScrollController = ScrollController();
@@ -19,10 +20,15 @@ class ShareController extends GetxController {
   }
 
   /// Close Share View Reset Items/Status
-  close() {
+  reset({bool withClose = true, bool isPopup = true}) {
     selectedItems.clear();
     hasSelected(false);
-    Get.back(closeOverlays: true);
+
+    if (withClose) {
+      Get.back(closeOverlays: true);
+    } else {
+      this.isPopup(isPopup);
+    }
   }
 
   /// Checks if Provided Index is Current Album
@@ -44,7 +50,7 @@ class ShareController extends GetxController {
   Future<void> chooseCamera() async {
     // Check for Permissions
     if (MobileService.hasCamera.value) {
-      TransferService.chooseCamera();
+      TransferService.chooseCamera(withRedirect: isPopup.value);
     }
     // Request Permissions
     else {
@@ -55,14 +61,14 @@ class ShareController extends GetxController {
 
   /// Choose Contact Card for Share
   Future<void> chooseContact() async {
-    TransferService.chooseContact();
+    TransferService.chooseContact(withRedirect: isPopup.value);
   }
 
   /// Open File Manager and Select File for Share
   Future<void> chooseFile() async {
     // Check Permissions
     if (MobileService.hasGallery.value) {
-      await TransferService.chooseFile();
+      await TransferService.chooseFile(withRedirect: isPopup.value);
     } else {
       // Request Permissions
       var status = await Get.find<MobileService>().requestGallery();
@@ -70,7 +76,7 @@ class ShareController extends GetxController {
 
       // Check Status
       if (status) {
-        await TransferService.chooseFile();
+        await TransferService.chooseFile(withRedirect: isPopup.value);
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
       }
@@ -82,6 +88,16 @@ class ShareController extends GetxController {
     selectedItems.add(Tuple(item, thumb));
     selectedItems.refresh();
     hasSelected(selectedItems.length > 0);
+  }
+
+  /// Confirms Selection for Media Items
+  Future<void> confirmMediaSelection() async {
+    if (hasSelected.value) {
+      var sonrFile = await selectedItems.toSonrFile();
+      TransferService.setFile(sonrFile, withRedirect: isPopup.value);
+    } else {
+      SonrSnack.missing("No Files Selected");
+    }
   }
 
   /// Changes Album to New Album
@@ -120,15 +136,5 @@ class ShareController extends GetxController {
     selectedItems.remove(Tuple(item, thumb));
     selectedItems.refresh();
     hasSelected(selectedItems.length > 0);
-  }
-
-  /// Confirms Selection
-  Future<void> confirmSelection() async {
-    if (hasSelected.value) {
-      var sonrFile = await selectedItems.toSonrFile();
-      TransferService.setFile(sonrFile);
-    } else {
-      SonrSnack.missing("No Files Selected");
-    }
   }
 }

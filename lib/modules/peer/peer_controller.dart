@@ -136,7 +136,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         TransferService.sendPeer(this.peer.value);
 
         // Check for File
-        if (TransferService.payload.value.isTransfer) {
+        if (TransferService.sharedItem.value.payload.isTransfer) {
           updateStatus(PeerStatus.Pending);
         }
         // Contact/URL

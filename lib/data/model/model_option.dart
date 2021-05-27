@@ -45,10 +45,13 @@ extension ContactOptionUtils on ContactOptions {
   }
 }
 
+enum ShareItemCount { None, Single, Multiple }
+
 /// Class Manages Pre Transfer Share Selection
 class ShareItem {
   // * Variables
   // Properties
+  final ShareItemCount count;
   final Payload payload;
   final Contact? contact;
   final SonrFile? file;
@@ -56,40 +59,48 @@ class ShareItem {
   ThumbnailStatus thumbStatus = ThumbnailStatus.None;
 
   // Accessors
-  bool get exists => this.payload != Payload.NONE;
-  bool get isContact => this.exists && this.contact != null;
-  bool get isFile => this.exists && file != null;
-  bool get isURL => this.exists && url != null;
+  bool get exists => this.payload != Payload.NONE && hasData;
+  bool get hasData => this.contact != null || file != null || url != null;
+  bool get isContact => this.exists && this.payload.isContact;
+  bool get isFlatContact => this.exists && this.payload.isFlatContact;
+  bool get isMedia => this.exists && this.payload.isMedia;
+  bool get isTransfer => this.exists && this.payload.isTransfer;
+  bool get isUrl => this.exists && this.payload.isUrl;
+  bool get isEmptyItem => this.count == ShareItemCount.None;
+  bool get isSingleItem => this.count == ShareItemCount.Single;
+  bool get isMultiItems => this.count == ShareItemCount.Multiple;
 
   // References
   AuthInvite _invite = AuthInvite();
 
   // * Constructers
   /// Default Constructer
-  ShareItem(this.payload, {this.file, this.contact, this.url}) {
-    if (this.exists) {
-      _init();
-    }
-  }
+  ShareItem(this.payload, this.count, {this.file, this.contact, this.url});
 
   /// Blank Constructer
   factory ShareItem.blank() {
-    return ShareItem(Payload.NONE);
+    return ShareItem(Payload.NONE, _countfromInt(0));
   }
 
   /// Contact Constructer
-  factory ShareItem.contact(Contact contact) {
-    return ShareItem(Payload.CONTACT, contact: contact);
+  static Future<ShareItem> fromContact(Contact contact) async {
+    var i = ShareItem(Payload.CONTACT, _countfromInt(1), contact: contact);
+    await i._init();
+    return i;
   }
 
   /// File Constructer
-  factory ShareItem.file(SonrFile file) {
-    return ShareItem(file.payload, file: file);
+  static Future<ShareItem> fromFile(SonrFile file) async {
+    var i = ShareItem(file.payload, _countfromInt(file.count), file: file);
+    await i._init();
+    return i;
   }
 
   /// URL Constructer
-  factory ShareItem.url(String url) {
-    return ShareItem(Payload.URL, url: url);
+  static Future<ShareItem> fromUrl(String url) async {
+    var i = ShareItem(Payload.URL, _countfromInt(1), url: url);
+    await i._init();
+    return i;
   }
 
   // * Methods
@@ -99,7 +110,7 @@ class ShareItem {
   /// Builds Invite from Payload
   Future<bool> _init() async {
     // Check for File
-    if (this.payload.isTransfer && this.isFile) {
+    if (this.payload.isTransfer && this.isTransfer) {
       file!.update();
       this._invite.setFile(file!);
 
@@ -126,10 +137,21 @@ class ShareItem {
     }
 
     // Check for URL
-    else if (this.payload == Payload.URL && this.isURL) {
+    else if (this.payload == Payload.URL && this.isUrl) {
       this._invite.setUrl(url!);
       return true;
     }
     return false;
+  }
+
+  // Helper: Returns Enum Value from Item Count
+  static ShareItemCount _countfromInt(int x) {
+    if (x > 1) {
+      return ShareItemCount.Multiple;
+    } else if (x == 1) {
+      return ShareItemCount.Single;
+    } else {
+      return ShareItemCount.None;
+    }
   }
 }
