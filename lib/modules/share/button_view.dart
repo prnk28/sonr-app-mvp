@@ -72,7 +72,7 @@ class _ShareCameraButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(height: 65, width: 55, child: Center(child: SonrIcons.Camera.gradient(value: SonrGradients.CrystalRiver, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
-          'Camera'.p_White,
+          UserService.isDarkMode ? 'Camera'.p_White : 'Camera'.p,
         ]),
       ),
     );
@@ -108,7 +108,7 @@ class _ShareFileButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(height: 65, width: 65, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.ItmeoBranding, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
-          'File'.p_White,
+          UserService.isDarkMode ? 'File'.p_White : 'File'.p,
         ]),
       ),
     );
@@ -128,7 +128,7 @@ class _ShareContactButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(height: 65, width: 65, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.LoveKiss, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
-          'Contact'.p_White,
+          UserService.isDarkMode ? 'Contact'.p_White : 'Contact'.p,
         ]),
       ),
     );

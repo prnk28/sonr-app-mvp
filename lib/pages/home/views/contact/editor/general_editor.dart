@@ -46,9 +46,9 @@ class _EditOptionsButton extends GetView<EditorController> {
         margin: EdgeInsets.all(12),
         decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          option.iconData.whiteWith(size: 40),
+          UserService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),
-          option.name.h6_White,
+          UserService.isDarkMode ? option.name.h6_White : option.name.h6,
         ]),
       ),
     );

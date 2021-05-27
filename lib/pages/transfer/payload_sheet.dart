@@ -12,6 +12,8 @@ class PayloadSheetView extends StatelessWidget {
             minChildSize: 0.2,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                foregroundDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: ListView.builder(
                     controller: scrollController,
                     itemCount: TransferService.file.value.items.length + 1,
@@ -35,7 +37,6 @@ class _SonrFileListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: SonrColor.AccentBlue.withOpacity(0.10),
       width: Get.width,
       height: Height.ratio(0.125),
       child: Column(
