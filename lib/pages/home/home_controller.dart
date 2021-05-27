@@ -74,6 +74,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
+  /// @ Handle Title Tap
+  void onTitleTap() {
+    if (LobbyService.local.value.count > 0) {
+      Get.offNamed("/transfer");
+    }
+  }
+
   /// @ Update Bottom Bar Index
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different

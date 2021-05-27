@@ -31,14 +31,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
           duration: 2.seconds,
           child: GestureDetector(
             key: ValueKey<String>(controller.title.value),
-            onTap: () {
-              if (controller.isTitleVisible.value) {
-                controller.swapTitleText(
-                  "${LobbyService.local.value.count} Around",
-                  timeout: 2500.milliseconds,
-                );
-              }
-            },
+            onTap: controller.onTitleTap,
             onLongPress: () {
               UserService.toggleDarkMode();
             },

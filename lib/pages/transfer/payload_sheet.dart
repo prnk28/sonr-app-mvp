@@ -3,33 +3,39 @@ import 'package:sonr_app/style/style.dart';
 class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TransferService.payload.value.isMultipleFiles
-        // Build List View
-        ? DraggableScrollableSheet(
-            expand: false,
-            initialChildSize: 0.20,
-            maxChildSize: 0.5,
-            minChildSize: 0.2,
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                foregroundDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: TransferService.file.value.items.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      return index == 0 ? _SonrFileListHeader() : _SonrFileListItem(item: TransferService.file.value.items[index - 1]);
-                    }),
-              );
-            })
-        :
-        // Build Single Item
-        Container(
-            padding: EdgeInsets.all(8),
-            decoration: Neumorphic.floating(
-              theme: Get.theme,
-            ),
-            child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
+    return Obx(() {
+      if (TransferService.hasPayload.value) {
+        return TransferService.payload.value.isMultipleFiles
+            // Build List View
+            ? DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.20,
+                maxChildSize: 0.5,
+                minChildSize: 0.2,
+                builder: (BuildContext context, ScrollController scrollController) {
+                  return Container(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    foregroundDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: TransferService.file.value.items.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          return index == 0 ? _SonrFileListHeader() : _SonrFileListItem(item: TransferService.file.value.items[index - 1]);
+                        }),
+                  );
+                })
+            :
+            // Build Single Item
+            Container(
+                padding: EdgeInsets.all(8),
+                decoration: Neumorphic.floating(
+                  theme: Get.theme,
+                ),
+                child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
+      } else {
+        return Container();
+      }
+    });
   }
 }
 
