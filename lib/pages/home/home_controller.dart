@@ -50,15 +50,19 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Initialize
     super.onInit();
 
+    // Handle Streams
+    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
+    _statusStream = SonrService.status.listen(_handleStatus);
+  }
+
+  @override
+  void onReady() {
     // Check Entry Arguments
     HomeArguments args = Get.arguments;
     if (args.isFirstLoad) {
       MobileService.checkInitialShare();
     }
-
-    // Handle Streams
-    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
-    _statusStream = SonrService.status.listen(_handleStatus);
+    super.onReady();
   }
 
   /// @ On Dispose
