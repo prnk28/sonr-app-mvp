@@ -9,24 +9,32 @@ class ShareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 36.0),
-      child: AnimatedContainer(
-          curve: Curves.bounceOut,
-          duration: Duration(milliseconds: 600),
-          width: 95,
-          height: 95,
-          child: GestureDetector(
-            onTap: Share.popup,
-            child: ClipPolygon(
-              borderRadius: 18,
-              rotate: 30,
-              sides: 6,
+      child: ObxValue<RxBool>(
+          (isPressed) => AnimatedScale(
+              duration: Duration(milliseconds: 150),
+              scale: isPressed.value ? 1.1 : 1,
               child: Container(
-                decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
-                alignment: Alignment.center,
-                child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
-              ),
-            ),
-          )),
+                width: 95,
+                height: 95,
+                child: GestureDetector(
+                  onTapDown: (details) => isPressed(true),
+                  onTapUp: (details) {
+                    isPressed(false);
+                    Future.delayed(150.milliseconds, () => Share.open());
+                  },
+                  child: ClipPolygon(
+                    borderRadius: 18,
+                    rotate: 30,
+                    sides: 6,
+                    child: Container(
+                      decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
+                      alignment: Alignment.center,
+                      child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
+                    ),
+                  ),
+                ),
+              )),
+          false.obs),
     );
   }
 }
