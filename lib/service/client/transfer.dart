@@ -99,7 +99,7 @@ class TransferService extends GetxService {
   /// @ Send Invite with Peer
   static void sendPeer(Peer peer) {
     // Check if Has Transfer
-    if (to._sharedItem.value.exists) {
+    if (to._sharedItem.value.isNotEmpty) {
       // Send Invite
       SonrService.invite(to._sharedItem.value.invite(peer));
     } else {

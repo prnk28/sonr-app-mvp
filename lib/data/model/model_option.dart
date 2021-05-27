@@ -59,14 +59,13 @@ class ShareItem {
   ThumbnailStatus thumbStatus = ThumbnailStatus.None;
 
   // Accessors
-  bool get exists => this.payload != Payload.NONE && hasData;
-  bool get hasData => this.contact != null || file != null || url != null;
-  bool get isContact => this.exists && this.payload.isContact;
-  bool get isFlatContact => this.exists && this.payload.isFlatContact;
-  bool get isMedia => this.exists && this.payload.isMedia;
-  bool get isTransfer => this.exists && this.payload.isTransfer;
-  bool get isUrl => this.exists && this.payload.isUrl;
-  bool get isEmptyItem => this.count == ShareItemCount.None;
+  bool get isContact => this.payload.isContact;
+  bool get isFlatContact => this.payload.isFlatContact;
+  bool get isMedia => this.payload.isMedia;
+  bool get isTransfer => this.payload.isTransfer;
+  bool get isUrl => this.payload.isUrl;
+  bool get isEmpty => this.count == ShareItemCount.None;
+  bool get isNotEmpty => this.count != ShareItemCount.None;
   bool get isSingleItem => this.count == ShareItemCount.Single;
   bool get isMultiItems => this.count == ShareItemCount.Multiple;
 

@@ -133,13 +133,8 @@ class _PayloadSingleItem extends StatelessWidget {
   }
 
   Widget _buildLeading() {
-    // # Undefined Type
-    if (!TransferService.sharedItem.value.exists) {
-      return CircularProgressIndicator();
-    }
-
     // # Check for Media File Type
-    else if (TransferService.sharedItem.value.isMedia) {
+    if (TransferService.sharedItem.value.isMedia) {
       return _PayloadItemThumbnail();
     }
 
