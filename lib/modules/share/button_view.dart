@@ -20,7 +20,7 @@ class ShareButton extends StatelessWidget {
                   onTapDown: (details) => isPressed(true),
                   onTapUp: (details) {
                     isPressed(false);
-                    Future.delayed(150.milliseconds, () => Share.open());
+                    Future.delayed(150.milliseconds, () => Share.popup());
                   },
                   child: ClipPolygon(
                     borderRadius: 18,
@@ -80,7 +80,7 @@ class _ShareCameraButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(height: 65, width: 55, child: Center(child: SonrIcons.Camera.gradient(value: SonrGradients.CrystalRiver, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Camera'.p_White : 'Camera'.p,
+          UserService.isDarkMode ? 'Camera'.h6_White : 'Camera'.h6_Grey,
         ]),
       ),
     );
@@ -116,7 +116,7 @@ class _ShareFileButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(height: 65, width: 65, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.ItmeoBranding, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'File'.p_White : 'File'.p,
+          UserService.isDarkMode ? 'File'.h6_White : 'File'.h6_Grey,
         ]),
       ),
     );
@@ -136,7 +136,7 @@ class _ShareContactButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(height: 65, width: 65, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.LoveKiss, size: 52))),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Contact'.p_White : 'Contact'.p,
+          UserService.isDarkMode ? 'Contact'.h6_White : 'Contact'.h6_Grey,
         ]),
       ),
     );

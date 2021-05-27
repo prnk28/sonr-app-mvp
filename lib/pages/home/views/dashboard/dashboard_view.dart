@@ -17,7 +17,8 @@ class DashboardView extends GetView<DashboardController> {
     return GestureDetector(
       onTap: () => controller.closeSearch(context),
       child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.all(8),
+          margin: _getMargin(context),
           child: CustomScrollView(controller: controller.scrollController, slivers: [
             SliverToBoxAdapter(child: _CardSearchView()),
             SliverPadding(padding: EdgeInsets.only(top: 14)),
@@ -62,6 +63,12 @@ class DashboardView extends GetView<DashboardController> {
       return SearchResultsView(key: ValueKey(RecentsViewStatus.Search));
     }
   }
+
+  // # Gets View Margin for Dashboard
+  EdgeInsets _getMargin(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return EdgeInsets.only(left: width * 0.05, right: width * 0.05);
+  }
 }
 
 /// @ Card Search View - Displays Search View
@@ -93,13 +100,16 @@ class _QuickOptionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Get.to(QuickAccessScreen(type: data), transition: Transition.rightToLeftWithFade),
-      child: Container(
-        decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          data.icon(),
-          Padding(padding: EdgeInsets.only(top: 8)),
-          data.label(),
-        ]),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            data.icon(),
+            Padding(padding: EdgeInsets.only(top: 8)),
+            data.label(),
+          ]),
+        ),
       ),
     );
   }

@@ -28,29 +28,32 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: Neumorphic.floating(theme: Get.theme, radius: 20),
-      margin: EdgeInsets.symmetric(horizontal: 42),
-      height: 80,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Obx(() => Bounce(
-              from: 12,
-              duration: 1000.milliseconds,
-              animate: controller.view.value == HomeView.Dashboard,
-              key: ValueKey(controller.view.value == HomeView.Dashboard),
-              child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
-          Container(
-            width: Get.width * 0.20,
-          ),
-          Obx(() => Roulette(
-                spins: 1,
-                key: ValueKey(controller.view.value == HomeView.Contact),
-                animate: controller.view.value == HomeView.Contact,
-                child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
-              )),
-        ],
+    return Padding(
+      padding: DeviceService.isIOS ? const EdgeInsets.only(bottom: 24.0) : EdgeInsets.zero,
+      child: Container(
+        decoration: Neumorphic.floating(theme: Get.theme, radius: 20),
+        margin: EdgeInsets.symmetric(horizontal: 42),
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Obx(() => Bounce(
+                from: 12,
+                duration: 1000.milliseconds,
+                animate: controller.view.value == HomeView.Dashboard,
+                key: ValueKey(controller.view.value == HomeView.Dashboard),
+                child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
+            Container(
+              width: Get.width * 0.20,
+            ),
+            Obx(() => Roulette(
+                  spins: 1,
+                  key: ValueKey(controller.view.value == HomeView.Contact),
+                  animate: controller.view.value == HomeView.Contact,
+                  child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
+                )),
+          ],
+        ),
       ),
     );
   }
