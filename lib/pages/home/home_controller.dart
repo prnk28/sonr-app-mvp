@@ -162,7 +162,7 @@ extension HomeViewUtils on HomeView {
   IconData get iconData {
     switch (this) {
       case HomeView.Dashboard:
-        return SonrIcons.Home;
+        return SonrIcons.Category;
       case HomeView.Contact:
         return SonrIcons.Profile;
       default:
@@ -174,9 +174,9 @@ extension HomeViewUtils on HomeView {
   double get iconSize {
     switch (this) {
       case HomeView.Dashboard:
-        return 32;
+        return 34;
       case HomeView.Contact:
-        return 32;
+        return 38;
       default:
         return 32;
     }

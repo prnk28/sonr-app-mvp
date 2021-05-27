@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
-import 'package:geolocator/geolocator.dart' as geo;
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -89,8 +88,9 @@ class MobileService extends GetxService {
 
     // Set Location
     if (_hasLocation.value) {
-      var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
-      DeviceService.setGeoLocation(Location_Geo(latitude: result.latitude, longitude: result.longitude));
+      // TODO:
+      // var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
+      // DeviceService.setGeoLocation(Location_Geo(latitude: result.latitude, longitude: result.longitude));
     }
 
     // For sharing images coming from outside the app while the app is closed

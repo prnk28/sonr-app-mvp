@@ -81,8 +81,9 @@ class HomeBottomTabButton extends GetView<HomeController> {
                     duration: 250.milliseconds,
                     child: Container(
                         key: ValueKey(idx.value == view.index),
-                        child:
-                            idx.value == view.index ? view.iconData.gradient(size: 38) : Icon(view.iconData, size: 38, color: Get.theme.hintColor)),
+                        child: idx.value == view.index
+                            ? view.iconData.gradient(size: view.iconSize)
+                            : Icon(view.iconData, size: view.iconSize, color: Get.theme.hintColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),
