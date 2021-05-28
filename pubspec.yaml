@@ -73,7 +73,6 @@ dependencies:
   # -- Network --
   mime: ^1.0.0
   moor: ^4.2.1
-  sqlite3_flutter_libs: ^0.4.1
   receive_sharing_intent: ^1.4.5
 
   # -- Plugins --
