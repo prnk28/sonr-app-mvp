@@ -60,16 +60,6 @@ class _RemoteActionButton extends GetView<RemoteController> {
             if (controller.status.value.isDefault) {
               controller.create();
             }
-
-            // Destroys Created Lobby
-            else if (controller.status.value.isCreated) {
-              controller.stop();
-            }
-
-            // Exits Lobby
-            else if (controller.status.value.isJoined) {
-              controller.leave();
-            }
           },
         ));
   }

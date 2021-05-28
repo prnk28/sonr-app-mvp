@@ -35,6 +35,7 @@ class UserService extends GetxService {
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
+  static String get sName => to._hasUser.value ? to._contact.value.sName : "";
 
   /// ** References **
   final _userBox = GetStorage('User');

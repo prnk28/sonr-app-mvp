@@ -61,15 +61,15 @@ class LobbyService extends GetxService {
   }
 
   /// @ Registers RemoteResponse to Lobby to Manage Callback
-  static void registerRemoteCallback(RemoteResponse? info, LobbyCallback callback) {
-    // Initialize
-    Lobby? remote;
+  // static void registerRemoteCallback(RemoteResponse? info, LobbyCallback callback) {
+  //   // Initialize
+  //   Lobby? remote;
 
-    // Check if Found
-    if (remote != null) {
-      to._lobbyCallbacks[remote] = callback;
-    }
-  }
+  //   // Check if Found
+  //   if (remote != null) {
+  //     to._lobbyCallbacks[remote] = callback;
+  //   }
+  // }
 
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
@@ -131,14 +131,6 @@ class LobbyService extends GetxService {
 
     // Refresh Values
     _local.refresh();
-  }
-
-  // # Handle Lobby Event //
-  void handleEvent(LobbyEvent data) {
-    // // @ Update Local Topics
-    // if (data.event == LobbyEvent_Event.MESSAGE) {
-    //   print(data.message);
-    // }
   }
 
   // # Handle Lobby Flat Peers
