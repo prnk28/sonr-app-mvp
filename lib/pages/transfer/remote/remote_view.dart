@@ -83,16 +83,14 @@ class RemoteLobbyView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "${controller.remoteResponse.value!.display}".h2,
       Expanded(
           child: ListView.builder(
-        itemCount: controller.remoteLobby.value!.count,
+        itemCount: controller.remoteLobby.value.count,
         itemBuilder: (BuildContext context, int index) {
-          var peer = controller.remoteLobby.value!.peerAtIndex(index - 1);
+          var peer = controller.remoteLobby.value.peerAtIndex(index - 1);
           return PeerListItem(
             peer,
             index - 1,
-            remote: controller.remoteResponse.value,
           );
         },
       )),
@@ -145,7 +143,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
               child: TextField(
                   showCursor: false,
                   autocorrect: false,
-                  onSubmitted: (val) => controller.join(),
+                  // onSubmitted: (val) => controller.join(),
                   onChanged: (value) => controller.thirdWord(value),
                   textAlign: TextAlign.center,
                   textInputAction: TextInputAction.done,

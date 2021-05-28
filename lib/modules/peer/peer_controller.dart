@@ -133,7 +133,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
 
         // Perform Invite
-        TransferService.sendPeer(this.peer.value);
+        TransferService.sendInviteToPeer(this.peer.value);
 
         // Check for File
         if (TransferService.payload.value.isTransfer) {

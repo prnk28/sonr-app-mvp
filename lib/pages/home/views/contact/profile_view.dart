@@ -8,6 +8,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Contact");
     return Obx(() => NeumorphicCard(themeData: Get.theme, child: _buildView(controller.status.value)));
   }
 
@@ -86,7 +87,6 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      // TODO:  leading: PlainIconButton(icon: SonrIcons.Plus.gradient(value: SonrGradient.Primary), onPressed: controller.setAddTile),
       leading: PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode),
       expandedHeight: Get.height / 6 + 16,
       flexibleSpace: FlexibleSpaceBar(

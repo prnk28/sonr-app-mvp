@@ -48,7 +48,6 @@ dependencies:
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
-  posthog_flutter: ^1.11.2
   sentry_flutter: ^5.0.0
 
   # -- Device --
@@ -78,6 +77,8 @@ dependencies:
   receive_sharing_intent: ^1.4.5
 
   # -- Plugins --
+  posthog_flutter:
+    git: git@github.com:sonr-io/posthog-flutter.git
   sonr_plugin:
     git: git@github.com:sonr-io/plugin.git
     # path: ../plugin/ #-- Uncomment for Local Development

@@ -26,7 +26,7 @@ class RegisterController extends GetxController {
   // Properties
   final nameStatus = RegisterNameStatus.Default.obs;
   final mnemonic = "".obs;
-  final sname = "".obs;
+  final sName = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterStatus>(RegisterStatus.Name);
@@ -42,7 +42,7 @@ class RegisterController extends GetxController {
   }
 
   void checkName(String name) {
-    sname(name);
+    sName(name);
     validateName();
   }
 
@@ -64,7 +64,7 @@ class RegisterController extends GetxController {
     if (await validateName()) {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Create User Data
-        var data = await AuthService.createUsername(sname.value);
+        var data = await AuthService.createUsername(sName.value);
 
         if (data.isValid) {
           mnemonic(data.mnemonic);
@@ -89,7 +89,7 @@ class RegisterController extends GetxController {
           profile: Profile(
         firstName: firstName.value,
         lastName: lastName.value,
-        sname: sname.value,
+        sName: sName.value,
       ));
 
       // Remove Textfield Focus
@@ -120,13 +120,13 @@ class RegisterController extends GetxController {
 
   Future<bool> validateName() async {
     // Update Status
-    if (sname.value.length > 3) {
+    if (sName.value.length > 3) {
       // Check Available
       if (AuthService.to.result.value.checkName(
         NameCheckType.Unavailable,
-        sname.value,
+        sName.value,
       )) {
-        if (await AuthService.validateUser(sname.value)) {
+        if (await AuthService.validateUser(sName.value)) {
           nameStatus(RegisterNameStatus.Returning);
           return true;
         } else {
@@ -137,7 +137,7 @@ class RegisterController extends GetxController {
       // Check Unblocked
       else if (AuthService.to.result.value.checkName(
         NameCheckType.Blocked,
-        sname.value,
+        sName.value,
       )) {
         nameStatus(RegisterNameStatus.Blocked);
         return false;
@@ -145,7 +145,7 @@ class RegisterController extends GetxController {
       // Check Unrestricted
       else if (AuthService.to.result.value.checkName(
         NameCheckType.Restricted,
-        sname.value,
+        sName.value,
       )) {
         nameStatus(RegisterNameStatus.Restricted);
         return false;
@@ -153,7 +153,7 @@ class RegisterController extends GetxController {
       // Check Unregisted Device
       else if (AuthService.to.result.value.checkName(
         NameCheckType.InvalidPrefix,
-        sname.value,
+        sName.value,
       )) {
         nameStatus(RegisterNameStatus.DeviceRegistered);
         return false;

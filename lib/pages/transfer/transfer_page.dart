@@ -10,6 +10,8 @@ import 'transfer_controller.dart';
 class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Transfer");
+
     // Build View
     return Obx(() => SonrScaffold(
           gradient: SonrGradients.PlumBath,
@@ -57,16 +59,6 @@ class _RemoteActionButton extends GetView<RemoteController> {
             // Creates New Lobby
             if (controller.status.value.isDefault) {
               controller.create();
-            }
-
-            // Destroys Created Lobby
-            else if (controller.status.value.isCreated) {
-              controller.stop();
-            }
-
-            // Exits Lobby
-            else if (controller.status.value.isJoined) {
-              controller.leave();
             }
           },
         ));

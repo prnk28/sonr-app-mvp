@@ -4,7 +4,8 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/auth.dart';
 
 const FINGERPRINT_DIVIDER = "v=0;fingerprint=";
-const PREFIX_DIVIDER = "._auth.";
+const AUTH_DIVIDER = "._auth.";
+const TRANSFER_DIVIDER = ".transfer.";
 
 class HSRecord {
   HSRecord({
@@ -19,8 +20,9 @@ class HSRecord {
   String host;
   String value;
 
-  bool get isAuth => this.host.contains(PREFIX_DIVIDER);
+  bool get isAuth => this.host.contains(AUTH_DIVIDER);
   bool get isBlank => this.ttl == -1 && this.type == "-" && this.host == "-" && this.value == "-";
+  bool get isTransfer => this.host.contains(TRANSFER_DIVIDER);
   Uint8List get fingerprint => isAuth ? extractFingerprint(value) : Uint8List(0);
   String get name => isAuth ? extractName(host) : "";
   String get prefix => isAuth ? extractPrefix(host) : "";
@@ -40,7 +42,12 @@ class HSRecord {
 
   /// Returns Auth Based Record
   factory HSRecord.newAuth(String prefix, String name, String fingerprint) {
-    return HSRecord(ttl: 5, type: "TXT", host: "$prefix._auth.$name", value: FINGERPRINT_DIVIDER + fingerprint);
+    return HSRecord(ttl: 5, type: "TXT", host: "$prefix$AUTH_DIVIDER$name", value: FINGERPRINT_DIVIDER + fingerprint);
+  }
+
+  /// Returns Remote Transfer Based Record
+  factory HSRecord.newRemote(String prefix, String name, String fingerprint) {
+    return HSRecord(ttl: 5, type: "TXT", host: "$prefix$TRANSFER_DIVIDER$name", value: FINGERPRINT_DIVIDER + fingerprint);
   }
 
   /// Creates Record From JSON
@@ -59,14 +66,14 @@ class HSRecord {
 
   // Extracts Prefix from Record Host
   static String extractPrefix(String host) {
-    var idx = host.indexOf(PREFIX_DIVIDER);
+    var idx = host.indexOf(AUTH_DIVIDER);
     return host.substring(0, idx);
   }
 
   // Extracts Name from Record Host
   static String extractName(String host) {
-    var idx = host.indexOf(PREFIX_DIVIDER);
-    return host.substring(idx + PREFIX_DIVIDER.length);
+    var idx = host.indexOf(AUTH_DIVIDER);
+    return host.substring(idx + AUTH_DIVIDER.length);
   }
 
   Map<String, dynamic> toMap() => {

@@ -35,6 +35,7 @@ class UserService extends GetxService {
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
+  static String get sName => to._hasUser.value ? to._contact.value.sName : "";
 
   /// ** References **
   final _userBox = GetStorage('User');
@@ -47,6 +48,17 @@ class UserService extends GetxService {
 
     // Check User Status
     _hasUser(_userBox.hasData("user"));
+
+    if (DeviceService.isDesktop) {
+      // Delete User
+      _userBox.remove('user');
+      _hasUser(false);
+      _isNewUser(true);
+
+      // Clear Database
+      CardService.deleteAllCards();
+      CardService.clearAllActivity();
+    }
 
     // Check if Exists
     if (_hasUser.value) {
@@ -149,7 +161,7 @@ class UserService extends GetxService {
 
   /// @ Returns User Based on Service Values
   static User get user => User(
-      id: AuthService.prefix,
+      id: DeviceService.isMobile ? AuthService.prefix : "",
       contact: to._contact.value,
       device: DeviceService.device,
       devices: to._devices,

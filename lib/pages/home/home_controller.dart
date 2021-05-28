@@ -50,15 +50,19 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Initialize
     super.onInit();
 
+    // Handle Streams
+    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
+    _statusStream = SonrService.status.listen(_handleStatus);
+  }
+
+  @override
+  void onReady() {
     // Check Entry Arguments
     HomeArguments args = Get.arguments;
     if (args.isFirstLoad) {
       MobileService.checkInitialShare();
     }
-
-    // Handle Streams
-    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
-    _statusStream = SonrService.status.listen(_handleStatus);
+    super.onReady();
   }
 
   /// @ On Dispose
@@ -68,6 +72,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     _statusStream.cancel();
     pageIndex(0);
     super.onClose();
+  }
+
+  /// @ Handle Title Tap
+  void onTitleTap() {
+    if (LobbyService.local.value.count > 0) {
+      Get.offNamed("/transfer");
+    }
   }
 
   /// @ Update Bottom Bar Index
@@ -151,7 +162,7 @@ extension HomeViewUtils on HomeView {
   IconData get iconData {
     switch (this) {
       case HomeView.Dashboard:
-        return SonrIcons.Home;
+        return SonrIcons.Category;
       case HomeView.Contact:
         return SonrIcons.Profile;
       default:
@@ -163,9 +174,9 @@ extension HomeViewUtils on HomeView {
   double get iconSize {
     switch (this) {
       case HomeView.Dashboard:
-        return 32;
+        return 34;
       case HomeView.Contact:
-        return 32;
+        return 38;
       default:
         return 32;
     }

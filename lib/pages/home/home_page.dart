@@ -1,4 +1,4 @@
-import 'share/button_view.dart';
+import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'views/dashboard/dashboard_view.dart';
@@ -28,29 +28,32 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: Neumorphic.floating(theme: Get.theme, radius: 20),
-      margin: EdgeInsets.symmetric(horizontal: 42),
-      height: 80,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Obx(() => Bounce(
-              from: 12,
-              duration: 1000.milliseconds,
-              animate: controller.view.value == HomeView.Dashboard,
-              key: ValueKey(controller.view.value == HomeView.Dashboard),
-              child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
-          Container(
-            width: Get.width * 0.20,
-          ),
-          Obx(() => Roulette(
-                spins: 1,
-                key: ValueKey(controller.view.value == HomeView.Contact),
-                animate: controller.view.value == HomeView.Contact,
-                child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
-              )),
-        ],
+    return Padding(
+      padding: DeviceService.isIOS ? const EdgeInsets.only(bottom: 24.0) : EdgeInsets.zero,
+      child: Container(
+        decoration: Neumorphic.floating(theme: Get.theme, radius: 20),
+        margin: EdgeInsets.symmetric(horizontal: 42),
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Obx(() => Bounce(
+                from: 12,
+                duration: 1000.milliseconds,
+                animate: controller.view.value == HomeView.Dashboard,
+                key: ValueKey(controller.view.value == HomeView.Dashboard),
+                child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
+            Container(
+              width: Get.width * 0.20,
+            ),
+            Obx(() => Roulette(
+                  spins: 1,
+                  key: ValueKey(controller.view.value == HomeView.Contact),
+                  animate: controller.view.value == HomeView.Contact,
+                  child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -81,8 +84,9 @@ class HomeBottomTabButton extends GetView<HomeController> {
                     duration: 250.milliseconds,
                     child: Container(
                         key: ValueKey(idx.value == view.index),
-                        child:
-                            idx.value == view.index ? view.iconData.gradient(size: 38) : Icon(view.iconData, size: 38, color: Get.theme.hintColor)),
+                        child: idx.value == view.index
+                            ? view.iconData.gradient(size: view.iconSize)
+                            : Icon(view.iconData, size: view.iconSize, color: Get.theme.hintColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),

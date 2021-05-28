@@ -7,6 +7,7 @@ class LinkDesktopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Posthog().screen(screenName: "Linker");
     return Center(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

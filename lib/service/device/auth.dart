@@ -58,7 +58,7 @@ class AuthService extends GetxService {
   static String get mnemonic => to._mnemonic;
   static String get prefix => to._prefix;
 
-  /// ^ Initializes Auth Service ^
+  /// #### Initializes Auth Service ^
   Future<AuthService> init() async {
     // Check if Tags Exist in Storage
     hasKey(await _storage.containsKey(key: K_PRIVKEY_TAG));
@@ -99,7 +99,7 @@ class AuthService extends GetxService {
     return this;
   }
 
-  /// ^ Adds User to Record if Provided Name is Allowed
+  /// #### Adds User to Record if Provided Name is Allowed
   Future<bool> addUser(String n) async {
     if (result.value.isValidName(n) && hasAuth) {
       return to._nbClient.addRecord(HSRecord.newAuth(buildPrefix(n), n, signatureHex));
@@ -107,7 +107,7 @@ class AuthService extends GetxService {
     return false;
   }
 
-  /// ^ Creates Crypto User Data, Returns Mnemonic Text
+  /// #### Creates Crypto User Data, Returns Mnemonic Text
   static Future<UsernameResult> createUsername(
     String name,
   ) async {
@@ -142,7 +142,7 @@ class AuthService extends GetxService {
     return UsernameResult.isInvalid();
   }
 
-  /// ^ Returns User Data from Remote Backup
+  /// #### Returns User Data from Remote Backup
   static Future<User?> getUser() async {
     if (to.hasPrefix.value) {
       var data = await SonrCore.userStorjRequest(
@@ -155,7 +155,7 @@ class AuthService extends GetxService {
     return null;
   }
 
-  /// ^ Place User into Remote Backup Storage
+  /// #### Place User into Remote Backup Storage
   static Future<bool> putUser() async {
     // Reference
     var resp =
@@ -166,7 +166,7 @@ class AuthService extends GetxService {
     return false;
   }
 
-  /// ^ Refreshes Record Table from Namebase Client
+  /// #### Refreshes Record Table from Namebase Client
   Future<void> refresh() async {
     // Set Data From Response
     var data = await _nbClient.refresh();
@@ -176,7 +176,7 @@ class AuthService extends GetxService {
     }
   }
 
-  /// ^ Saves Validated User Data
+  /// #### Saves Validated User Data
   Future<void> saveValidatedUser(String name) async {
     // Set Values
     to._name = name;
@@ -191,7 +191,19 @@ class AuthService extends GetxService {
     to.hasName(true);
   }
 
-  /// ^ Checks if Username matches device id and prefix from records
+  /// ### Sign New Mnemonic Fingerprint
+  /// #### Description:
+  /// *Fingerprint* is signed words from device private key
+  /// Topic will be in URL format of `&Fingerprint>.remote.<SName>.snr/`
+  /// #### Returns: *Fingerprint* `String`, *Words* `String`
+  static Future<Tuple<String, String>> signRemoteFingerprint() async {
+    var words = bip39.generateMnemonic(strength: 32);
+    var wordsUTF = Uint8List.fromList(utf8.encode(words));
+    var signed = to._ecKeypair.privateKey.createSHA512Signature(wordsUTF);
+    return Tuple(String.fromCharCodes(signed), words);
+  }
+
+  /// #### Checks if Username matches device id and prefix from records
   static Future<bool> validateUser(String n) async {
     if (to.hasMnemonic.value) {
       var data = to.result.value.hasName(n, buildPrefix(n));

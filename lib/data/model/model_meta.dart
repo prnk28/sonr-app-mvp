@@ -8,6 +8,8 @@ import '../data.dart';
 
 enum MediaOrientation { Portrait, Landscape }
 
+enum ThumbnailStatus { None, Loading, Complete }
+
 extension TransferCardUtils on TransferCard {
   /// Checks if Provided Query Matches Date of Transfer
   bool matchesDate(String q) {
@@ -20,7 +22,7 @@ extension TransferCardUtils on TransferCard {
 
   /// Checks if Provided Query Matches Owner Name
   bool matchesName(String q) {
-    return this.owner.firstName.contains(q) || this.owner.lastName.contains(q) || this.owner.sname.contains(q);
+    return this.owner.firstName.contains(q) || this.owner.lastName.contains(q) || this.owner.sName.contains(q);
   }
 
   /// Checks if Provided Query Matches Payload

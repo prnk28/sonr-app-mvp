@@ -118,25 +118,19 @@ class SonrService extends GetxService {
   }
 
   /// @ Create a New Remote
-  static Future<RemoteResponse?> createRemote() async {
-    return await to._node.remoteRequest(RemoteRequest(createData: RemoteRequest_Create()));
+  static Future<RemoteCreateResponse?> createRemote({
+    required SonrFile file,
+    required String fingerprint,
+    required String words,
+  }) async {
+    return await to._node.remoteCreateRequest(RemoteCreateRequest(file: file, fingerprint: fingerprint, sName: UserService.sName, words: words));
   }
 
   /// @ Join an Existing Remote
-  static Future<RemoteResponse> joinRemote(List<String> words) async {
-    // Extract Data
-    var display = "${words[0]} ${words[1]} ${words[2]}";
-    var topic = "${words[0]}-${words[1]}-${words[2]}";
-
+  static Future<RemoteJoinResponse?> joinRemote(String link) async {
     // Perform Routine
-    var remote = RemoteResponse(isJoin: true, topic: topic, display: display, words: words);
-    await to._node.remoteRequest(RemoteRequest(joinData: RemoteRequest_Join(words: words)));
-    return remote;
-  }
-
-  /// @ Leave a Remote Group
-  static void leaveRemote(RemoteResponse info) async {
-    await to._node.remoteRequest(RemoteRequest(leaveData: RemoteRequest_Leave(isJoin: info.isJoin, topic: info.topic)));
+    var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
+    return response;
   }
 
   /// @ Sets Properties for Node
