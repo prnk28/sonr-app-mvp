@@ -35,9 +35,9 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns `name()` for Button Label
   Widget label() {
     if (UserService.isDarkMode) {
-      return this.name().h6_White;
+      return this.name().p_White;
     } else {
-      return this.name().h6;
+      return this.name().p;
     }
   }
 
@@ -49,6 +49,15 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns Icon Widget for Type
   Widget icon() {
     return this.iconData().gradient(value: this.gradient(), size: 52);
+  }
+
+  Widget image() {
+    return Image.asset(
+      this.imagePath(),
+      fit: BoxFit.fitHeight,
+      width: 100,
+      height: 100,
+    );
   }
 
   /// Returns Gradient Icon for Type
@@ -76,6 +85,20 @@ extension TransferItemsTypeUtils on TransferItemsType {
         return SonrIcons.ContactCard;
       case TransferItemsType.Links:
         return SonrIcons.Clip;
+    }
+  }
+
+  /// Returns Image Path for type
+  String imagePath() {
+    switch (this) {
+      case TransferItemsType.Media:
+        return "assets/images/Gallery.png";
+      case TransferItemsType.Files:
+        return "assets/images/Files.png";
+      case TransferItemsType.Contacts:
+        return "assets/images/Contacts.png";
+      case TransferItemsType.Links:
+        return "assets/images/Links.png";
     }
   }
 }

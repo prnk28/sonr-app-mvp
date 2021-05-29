@@ -105,7 +105,8 @@ class _QuickOptionButton extends StatelessWidget {
         child: Container(
           decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            data.icon(),
+            Padding(padding: EdgeInsets.only(top: 8)),
+            data.image(),
             Padding(padding: EdgeInsets.only(top: 8)),
             data.label(),
           ]),
