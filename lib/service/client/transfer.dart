@@ -70,11 +70,11 @@ class TransferService extends GetxService {
   // @ Select Other File //
   static Future<bool> chooseFile({bool withRedirect = true}) async {
     // Load Picker
-    var result = await _handleSelectRequest(FileType.custom);
+    var result = await _handleSelectRequest(FileType.any);
 
     // Check File
     if (result != null) {
-      var file = result.toSonrFile(payload: Payload.MEDIA);
+      var file = result.toSonrFile(payload: Payload.FILE);
       await _handlePayload(file.payload, file: file);
 
       // Shift Pages
@@ -88,7 +88,7 @@ class TransferService extends GetxService {
 
   /// @ Resets Transfer Service
   static Future<void> reset() async {
-    // 
+    //
   }
 
   // @ Select Media File //
@@ -111,11 +111,14 @@ class TransferService extends GetxService {
 
   /// @ Send Invite with Peer
   static void sendInviteToPeer(Peer peer) {
-    // Update Request
-    to._inviteRequest.setPeer(peer);
+    // Check if Payload Set
+    if (to._hasPayload.value) {
+      // Update Request
+      to._inviteRequest.setPeer(peer);
 
-    // Send Invite
-    SonrService.invite(to._inviteRequest.value);
+      // Send Invite
+      SonrService.invite(to._inviteRequest.value);
+    }
   }
 
   /// @ Sets File from Other Source
@@ -135,44 +138,58 @@ class TransferService extends GetxService {
     // Initialize Request
     to._payload(payload);
 
-    // Check for File
+    // @ Handle Payload
     if (to._payload.value.isTransfer && file != null) {
-      file.update();
-      to._inviteRequest.init(payload, file: file);
-      to._file(file);
+      // Check valid File Size Payload
+      if (file.size > 0) {
+        file.update();
+        to._inviteRequest.init(payload, file: file);
+        to._file(file);
 
-      // Check for Media
-      if (to._inviteRequest.isMedia) {
-        // Set File Item
-        to._thumbStatus(ThumbnailStatus.Loading);
-        await to._file.value.setThumbnail();
+        // Check for Media
+        if (to._inviteRequest.isMedia) {
+          // Set File Item
+          to._thumbStatus(ThumbnailStatus.Loading);
+          await to._file.value.setThumbnail();
 
-        // Check Result
-        if (to._file.value.single.hasThumbnail()) {
-          to._thumbStatus(ThumbnailStatus.Complete);
-        } else {
-          to._thumbStatus(ThumbnailStatus.None);
+          // Check Result
+          if (to._file.value.single.hasThumbnail()) {
+            to._thumbStatus(ThumbnailStatus.Complete);
+          } else {
+            to._thumbStatus(ThumbnailStatus.None);
+          }
         }
+
+        // Set Has Payload
+        to._hasPayload(true);
       }
     }
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
       to._inviteRequest.init(payload, contact: UserService.contact.value);
+
+      // Set Has Payload
+      to._hasPayload(true);
     }
     // Check for URL
     else if (to._payload.value == Payload.URL) {
       to._inviteRequest.init(payload, url: url!);
+
+      // Set Has Payload
+      to._hasPayload(true);
     }
 
-    // Set Has Payload
-    to._hasPayload(true);
+    // @ Check if Payload Set
+    if (!to._hasPayload.value) {
+      to._payload(Payload.NONE);
+    }
   }
 
   // # Generic Method for Different File Types
   static Future<FilePickerResult?> _handleSelectRequest(FileType type) async {
     // @ Check if File Already Queued
     // Check Type for Custom Files
-    if (type == FileType.custom) {
+    if (type == FileType.any) {
       return await FilePicker.platform.pickFiles(
         withData: true,
         allowMultiple: true,

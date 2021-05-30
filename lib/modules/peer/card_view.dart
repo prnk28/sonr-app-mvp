@@ -92,12 +92,9 @@ class _PeerMainCard extends StatelessWidget {
               )),
 
           // Avatar
-          Obx(() => FadeInDownBig(
-                duration: 125.milliseconds,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: ProfileAvatar.fromPeer(controller.peer.value, size: 72),
-                ),
+          Obx(() => Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ProfileAvatar.fromPeer(controller.peer.value, size: 72),
               )),
 
           Spacer(),

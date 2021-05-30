@@ -114,7 +114,12 @@ class UserService extends GetxService {
 
     // Save User/Contact to Disk
     await to._userBox.write("user", user.writeToJson());
-    await AuthService.putUser();
+
+    // Place Auth Record
+    if (DeviceService.isMobile) {
+      await AuthService.putUser();
+    }
+
     to._hasUser(true);
     return user;
   }

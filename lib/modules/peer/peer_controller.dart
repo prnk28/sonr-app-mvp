@@ -126,7 +126,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Handle User Invitation
   void invite() {
     // Check Animated
-    if (isReady.value) {
+    if (isReady.value && DeviceService.isMobile) {
       // Check not already Pending
       if (!_isPending!.value) {
         // Register Callback

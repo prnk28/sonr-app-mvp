@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style/style.dart';
 
 class DesktopService extends GetxService {
@@ -8,11 +9,8 @@ class DesktopService extends GetxService {
   static bool get isRegistered => Get.isRegistered<DesktopService>();
   static DesktopService get to => Get.find<DesktopService>();
 
-  // Properties
-  final _isWindowOpen = true.obs;
-
-  // Property Accessors
-  static RxBool get isWindowOpen => to._isWindowOpen;
+  final _storageBox = GetStorage();
+  final _hasContact = false.obs;
 
   // // References
   // MainEntry _main;
@@ -20,6 +18,14 @@ class DesktopService extends GetxService {
 
   // * Initialize * //
   Future<DesktopService> init() async {
+    // Load Box
+    await GetStorage.init();
+
+    if (_storageBox.hasData('contact')) {
+      _hasContact(true);
+    } else {
+      _hasContact(false);
+    }
     // // @ 1. Root Main Entry
     // _main = MainEntry(
     //   title: "Sonr",
@@ -38,8 +44,10 @@ class DesktopService extends GetxService {
     return this;
   }
 
-  /// @ Method Plays a UI Sound
-  static void playSound(UISoundType type) async {}
+  /// @ Method Saves this Device Info
+  Future<void> saveContact(Contact contact) async {
+    
+  }
 
   // /// @ Add Event Handler to Tray Action
   // void registerEventHandler(String handlerKey, Function handler) {

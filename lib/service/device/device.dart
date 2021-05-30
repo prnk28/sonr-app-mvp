@@ -1,11 +1,12 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 import '../../env.dart';
-import 'desktop.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DeviceService extends GetxService {
   // Accessors
@@ -63,7 +64,7 @@ class DeviceService extends GetxService {
     });
 
     // Set Location
-    _location(await findIPLocation());
+    _location(await findLocation(platform));
     return this;
   }
 
@@ -75,7 +76,21 @@ class DeviceService extends GetxService {
   }
 
   /// @ Retreive Location by IP Address
-  static Future<Location> findIPLocation() async {
+  static Future<Location> findLocation(Platform platform) async {
+    // # Check Platform
+    if (platform.isMobile) {
+      // Find Connectivity
+      Connectivity _connectivity = Connectivity();
+      var result = await _connectivity.checkConnectivity();
+
+      // Check for Mobile Data
+      if (result == ConnectivityResult.mobile) {
+        var pos = await Geolocator.getCurrentPosition();
+        return Location(longitude: pos.longitude, latitude: pos.latitude);
+      }
+    }
+
+    // # IP Based Location for ALL Devices
     var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${Env.ip_key}");
 
     final response = await http.get(url, headers: {'x-rapidapi-key': Env.rapid_key, 'x-rapidapi-host': Env.rapid_host});
@@ -129,8 +144,6 @@ class DeviceService extends GetxService {
   static void playSound({required UISoundType type}) async {
     if (isMobile) {
       MobileService.playSound(type);
-    } else {
-      DesktopService.playSound(type);
     }
   }
 

@@ -243,14 +243,19 @@ class SonrService extends GetxService {
 
     // Log Activity
     CardService.addActivityShared(payload: data.payload, file: data.file);
-
-    
   }
 
   /// @ Mark as Received File
   Future<void> _handleReceived(Transfer data) async {
     // Save Card to Gallery
-    await CardService.addCard(data);
+    if (DeviceService.isMobile) {
+      await CardService.addCard(data);
+    } else {
+      if (data.payload.isTransfer) {
+        await DeviceService.saveTransfer(data.file);
+      }
+    }
+
     to.received.complete(data);
 
     // Close any Existing Overlays

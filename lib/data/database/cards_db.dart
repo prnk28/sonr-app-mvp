@@ -117,7 +117,7 @@ LazyDatabase _openConnection() {
       // put the database file, called db.sqlite here, into the documents folder
       // for your app.
       final dbFolder = await getApplicationDocumentsDirectory();
-      final file = File(p.join(dbFolder.path, 'db_cards.sqlite'));
+      final file = File(p.join(dbFolder.path, 'db_cards2.sqlite'));
       return VmDatabase(file);
     });
   } catch (e) {
@@ -126,7 +126,7 @@ LazyDatabase _openConnection() {
       // put the database file, called db.sqlite here, into the documents folder
       // for your app.
       final dbFolder = await getApplicationDocumentsDirectory();
-      final file = File(p.join(dbFolder.path, 'db_cards2.sqlite'));
+      final file = File(p.join(dbFolder.path, 'db_cards3.sqlite'));
       return VmDatabase(file);
     });
   }
