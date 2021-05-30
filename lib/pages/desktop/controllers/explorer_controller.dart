@@ -31,7 +31,10 @@ class ExplorerController extends GetxController {
   }
 
   Future<void> chooseFile(Peer peer) async {
-    await TransferService.chooseFileAndSend(peer);
+    bool selected = await TransferService.chooseFile(withRedirect: false);
+    if (selected) {
+      TransferService.sendInviteToPeer(peer);
+    }
   }
 
   // # Handle Lobby Size Update

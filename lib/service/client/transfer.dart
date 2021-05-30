@@ -86,21 +86,6 @@ class TransferService extends GetxService {
     return false;
   }
 
-  // @ Select Other File //
-  static Future<bool> chooseFileAndSend(Peer peer) async {
-    // Load Picker
-    var result = await _handleSelectRequest(FileType.any);
-
-    // Check File
-    if (result != null) {
-      var file = result.toSonrFile(payload: Payload.FILE);
-      await _handlePayload(file.payload, file: file);
-      sendInviteToPeer(peer);
-      return true;
-    }
-    return false;
-  }
-
   /// @ Resets Transfer Service
   static Future<void> reset() async {
     //
