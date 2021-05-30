@@ -45,11 +45,7 @@ class _PeerListItemState extends State<PeerListItem> {
                   Padding(padding: EdgeInsets.all(8)),
                   ColorButton.primary(
                     onPressed: () {
-                      // if (widget.remote != null) {
-                      //   TransferService.sendInviteToPeer(widget.peer);
-                      // } else {
                       TransferService.sendInviteToPeer(widget.peer);
-                      //}
                     },
                     text: "Invite",
                     icon: SonrIcons.Share,

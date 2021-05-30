@@ -2,7 +2,7 @@ import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/style/style.dart';
 import '../transfer_controller.dart';
 
-class LocalView extends GetView<TransferController> {
+class DevicesView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,14 +12,14 @@ class LocalView extends GetView<TransferController> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(left: 24.0),
-            child: "Local".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+            child: "My Devices".headFour(align: TextAlign.start, color: Get.theme.focusColor),
           ),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),
 
         // Scroll View
         Obx(
-          () => LobbyService.local.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
+          () => _DevicesEmptyView(),
         ),
       ],
     );
@@ -27,7 +27,8 @@ class LocalView extends GetView<TransferController> {
 }
 
 /// @ LocalLobbyView:  When Lobby is NOT Empty
-class _LocalLobbyView extends GetView<TransferController> {
+// ignore: unused_element
+class _DevicesLobbyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return
@@ -50,7 +51,7 @@ class _LocalLobbyView extends GetView<TransferController> {
 }
 
 /// @ LobbyEmptyView: When Lobby is Empty
-class _LocalEmptyView extends GetView<TransferController> {
+class _DevicesEmptyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Center(

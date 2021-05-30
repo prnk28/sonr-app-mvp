@@ -17,36 +17,24 @@ class TransferCard extends DataClass implements Insertable<TransferCard> {
   final URLLink? url;
   final DateTime received;
   TransferCard(
-      {required this.id,
-      required this.owner,
-      required this.mime,
-      required this.payload,
-      this.contact,
-      this.file,
-      this.url,
-      required this.received});
-  factory TransferCard.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+      {required this.id, required this.owner, required this.mime, required this.payload, this.contact, this.file, this.url, required this.received});
+  factory TransferCard.fromData(Map<String, dynamic> data, GeneratedDatabase db, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
+    // ignore: deprecated_member_use
     final intType = db.typeSystem.forDartType<int>();
+    // ignore: deprecated_member_use
     final stringType = db.typeSystem.forDartType<String>();
+    // ignore: deprecated_member_use
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return TransferCard(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      owner: $TransferCardsTable.$converter0.mapToDart(
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}owner']))!,
-      mime: $TransferCardsTable.$converter1.mapToDart(
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}mime']))!,
-      payload: $TransferCardsTable.$converter2.mapToDart(
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}payload']))!,
-      contact: $TransferCardsTable.$converter3.mapToDart(stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}contact'])),
-      file: $TransferCardsTable.$converter4.mapToDart(
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}file'])),
-      url: $TransferCardsTable.$converter5.mapToDart(
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}url'])),
-      received: dateTimeType
-          .mapFromDatabaseResponse(data['${effectivePrefix}received'])!,
+      owner: $TransferCardsTable.$converter0.mapToDart(stringType.mapFromDatabaseResponse(data['${effectivePrefix}owner']))!,
+      mime: $TransferCardsTable.$converter1.mapToDart(intType.mapFromDatabaseResponse(data['${effectivePrefix}mime']))!,
+      payload: $TransferCardsTable.$converter2.mapToDart(intType.mapFromDatabaseResponse(data['${effectivePrefix}payload']))!,
+      contact: $TransferCardsTable.$converter3.mapToDart(stringType.mapFromDatabaseResponse(data['${effectivePrefix}contact'])),
+      file: $TransferCardsTable.$converter4.mapToDart(stringType.mapFromDatabaseResponse(data['${effectivePrefix}file'])),
+      url: $TransferCardsTable.$converter5.mapToDart(stringType.mapFromDatabaseResponse(data['${effectivePrefix}url'])),
+      received: dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}received'])!,
     );
   }
   @override
@@ -87,17 +75,14 @@ class TransferCard extends DataClass implements Insertable<TransferCard> {
       owner: Value(owner),
       mime: Value(mime),
       payload: Value(payload),
-      contact: contact == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contact),
+      contact: contact == null && nullToAbsent ? const Value.absent() : Value(contact),
       file: file == null && nullToAbsent ? const Value.absent() : Value(file),
       url: url == null && nullToAbsent ? const Value.absent() : Value(url),
       received: Value(received),
     );
   }
 
-  factory TransferCard.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory TransferCard.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return TransferCard(
       id: serializer.fromJson<int>(json['id']),
@@ -126,14 +111,7 @@ class TransferCard extends DataClass implements Insertable<TransferCard> {
   }
 
   TransferCard copyWith(
-          {int? id,
-          Profile? owner,
-          MIME_Type? mime,
-          Payload? payload,
-          Contact? contact,
-          SonrFile? file,
-          URLLink? url,
-          DateTime? received}) =>
+          {int? id, Profile? owner, MIME_Type? mime, Payload? payload, Contact? contact, SonrFile? file, URLLink? url, DateTime? received}) =>
       TransferCard(
         id: id ?? this.id,
         owner: owner ?? this.owner,
@@ -162,16 +140,8 @@ class TransferCard extends DataClass implements Insertable<TransferCard> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(
-          owner.hashCode,
-          $mrjc(
-              mime.hashCode,
-              $mrjc(
-                  payload.hashCode,
-                  $mrjc(
-                      contact.hashCode,
-                      $mrjc(file.hashCode,
-                          $mrjc(url.hashCode, received.hashCode))))))));
+      $mrjc(owner.hashCode,
+          $mrjc(mime.hashCode, $mrjc(payload.hashCode, $mrjc(contact.hashCode, $mrjc(file.hashCode, $mrjc(url.hashCode, received.hashCode))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -313,8 +283,7 @@ class TransferCardsCompanion extends UpdateCompanion<TransferCard> {
   }
 }
 
-class $TransferCardsTable extends TransferCards
-    with TableInfo<$TransferCardsTable, TransferCard> {
+class $TransferCardsTable extends TransferCards with TableInfo<$TransferCardsTable, TransferCard> {
   final GeneratedDatabase _db;
   final String? _alias;
   $TransferCardsTable(this._db, [this._alias]);
@@ -322,8 +291,7 @@ class $TransferCardsTable extends TransferCards
   @override
   late final GeneratedIntColumn id = _constructId();
   GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+    return GeneratedIntColumn('id', $tableName, false, hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
   final VerificationMeta _ownerMeta = const VerificationMeta('owner');
@@ -404,8 +372,7 @@ class $TransferCardsTable extends TransferCards
   }
 
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, owner, mime, payload, contact, file, url, received];
+  List<GeneratedColumn> get $columns => [id, owner, mime, payload, contact, file, url, received];
   @override
   $TransferCardsTable get asDslTable => this;
   @override
@@ -413,8 +380,7 @@ class $TransferCardsTable extends TransferCards
   @override
   final String actualTableName = 'transfer_cards';
   @override
-  VerificationContext validateIntegrity(Insertable<TransferCard> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(Insertable<TransferCard> instance, {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -427,8 +393,7 @@ class $TransferCardsTable extends TransferCards
     context.handle(_fileMeta, const VerificationResult.success());
     context.handle(_urlMeta, const VerificationResult.success());
     if (data.containsKey('received')) {
-      context.handle(_receivedMeta,
-          received.isAcceptableOrUnknown(data['received']!, _receivedMeta));
+      context.handle(_receivedMeta, received.isAcceptableOrUnknown(data['received']!, _receivedMeta));
     } else if (isInserting) {
       context.missing(_receivedMeta);
     }
@@ -456,35 +421,25 @@ class $TransferCardsTable extends TransferCards
   static TypeConverter<URLLink, String> $converter5 = const URLConverter();
 }
 
-class TransferActivity extends DataClass
-    implements Insertable<TransferActivity> {
+class TransferActivity extends DataClass implements Insertable<TransferActivity> {
   final int id;
   final Profile owner;
   final MIME_Type mime;
   final Payload payload;
   final ActivityType activity;
-  TransferActivity(
-      {required this.id,
-      required this.owner,
-      required this.mime,
-      required this.payload,
-      required this.activity});
-  factory TransferActivity.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  TransferActivity({required this.id, required this.owner, required this.mime, required this.payload, required this.activity});
+  factory TransferActivity.fromData(Map<String, dynamic> data, GeneratedDatabase db, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
+    // ignore: deprecated_member_use
     final intType = db.typeSystem.forDartType<int>();
+    // ignore: deprecated_member_use
     final stringType = db.typeSystem.forDartType<String>();
     return TransferActivity(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      owner: $TransferActivitiesTable.$converter0.mapToDart(
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}owner']))!,
-      mime: $TransferActivitiesTable.$converter1.mapToDart(
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}mime']))!,
-      payload: $TransferActivitiesTable.$converter2.mapToDart(
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}payload']))!,
-      activity: $TransferActivitiesTable.$converter3.mapToDart(
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}activity']))!,
+      owner: $TransferActivitiesTable.$converter0.mapToDart(stringType.mapFromDatabaseResponse(data['${effectivePrefix}owner']))!,
+      mime: $TransferActivitiesTable.$converter1.mapToDart(intType.mapFromDatabaseResponse(data['${effectivePrefix}mime']))!,
+      payload: $TransferActivitiesTable.$converter2.mapToDart(intType.mapFromDatabaseResponse(data['${effectivePrefix}payload']))!,
+      activity: $TransferActivitiesTable.$converter3.mapToDart(intType.mapFromDatabaseResponse(data['${effectivePrefix}activity']))!,
     );
   }
   @override
@@ -520,8 +475,7 @@ class TransferActivity extends DataClass
     );
   }
 
-  factory TransferActivity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory TransferActivity.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return TransferActivity(
       id: serializer.fromJson<int>(json['id']),
@@ -543,13 +497,7 @@ class TransferActivity extends DataClass
     };
   }
 
-  TransferActivity copyWith(
-          {int? id,
-          Profile? owner,
-          MIME_Type? mime,
-          Payload? payload,
-          ActivityType? activity}) =>
-      TransferActivity(
+  TransferActivity copyWith({int? id, Profile? owner, MIME_Type? mime, Payload? payload, ActivityType? activity}) => TransferActivity(
         id: id ?? this.id,
         owner: owner ?? this.owner,
         mime: mime ?? this.mime,
@@ -569,10 +517,7 @@ class TransferActivity extends DataClass
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(owner.hashCode,
-          $mrjc(mime.hashCode, $mrjc(payload.hashCode, activity.hashCode)))));
+  int get hashCode => $mrjf($mrjc(id.hashCode, $mrjc(owner.hashCode, $mrjc(mime.hashCode, $mrjc(payload.hashCode, activity.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -624,11 +569,7 @@ class TransferActivitiesCompanion extends UpdateCompanion<TransferActivity> {
   }
 
   TransferActivitiesCompanion copyWith(
-      {Value<int>? id,
-      Value<Profile>? owner,
-      Value<MIME_Type>? mime,
-      Value<Payload>? payload,
-      Value<ActivityType>? activity}) {
+      {Value<int>? id, Value<Profile>? owner, Value<MIME_Type>? mime, Value<Payload>? payload, Value<ActivityType>? activity}) {
     return TransferActivitiesCompanion(
       id: id ?? this.id,
       owner: owner ?? this.owner,
@@ -676,8 +617,7 @@ class TransferActivitiesCompanion extends UpdateCompanion<TransferActivity> {
   }
 }
 
-class $TransferActivitiesTable extends TransferActivities
-    with TableInfo<$TransferActivitiesTable, TransferActivity> {
+class $TransferActivitiesTable extends TransferActivities with TableInfo<$TransferActivitiesTable, TransferActivity> {
   final GeneratedDatabase _db;
   final String? _alias;
   $TransferActivitiesTable(this._db, [this._alias]);
@@ -685,8 +625,7 @@ class $TransferActivitiesTable extends TransferActivities
   @override
   late final GeneratedIntColumn id = _constructId();
   GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+    return GeneratedIntColumn('id', $tableName, false, hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
   final VerificationMeta _ownerMeta = const VerificationMeta('owner');
@@ -742,8 +681,7 @@ class $TransferActivitiesTable extends TransferActivities
   @override
   final String actualTableName = 'transfer_activities';
   @override
-  VerificationContext validateIntegrity(Insertable<TransferActivity> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(Insertable<TransferActivity> instance, {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -772,18 +710,15 @@ class $TransferActivitiesTable extends TransferActivities
   static TypeConverter<Profile, String> $converter0 = const ProfileConverter();
   static TypeConverter<MIME_Type, int> $converter1 = const MimeConverter();
   static TypeConverter<Payload, int> $converter2 = const PayloadConverter();
-  static TypeConverter<ActivityType, int> $converter3 =
-      const ActivityConverter();
+  static TypeConverter<ActivityType, int> $converter3 = const ActivityConverter();
 }
 
 abstract class _$CardsDatabase extends GeneratedDatabase {
   _$CardsDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TransferCardsTable transferCards = $TransferCardsTable(this);
-  late final $TransferActivitiesTable transferActivities =
-      $TransferActivitiesTable(this);
+  late final $TransferActivitiesTable transferActivities = $TransferActivitiesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [transferCards, transferActivities];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [transferCards, transferActivities];
 }

@@ -39,9 +39,9 @@ class TransferController extends GetxController {
   /// @ On Dispose
   @override
   void onClose() {
-    _positionStream.cancel();
     _lobbySizeStream.cancel();
     _payloadStream.cancel();
+    _positionStream.cancel();
     super.onClose();
   }
 

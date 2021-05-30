@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/style/style.dart';
+import 'linked/devices_view.dart';
 import 'local/local_view.dart';
 import 'payload_sheet.dart';
 import 'transfer_controller.dart';
@@ -22,28 +23,14 @@ class TransferScreen extends GetView<TransferController> {
             title: controller.title.value.headThree(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black),
           ),
           bottomSheet: PayloadSheetView(),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              // @ Lobby View
-              Obx(() {
-                // Carousel View
-                if (controller.isNotEmpty.value) {
-                  return LocalView();
-                }
-
-                // Default Empty View
-                else {
-                  return Center(
-                    child: Container(
-                      padding: EdgeInsets.all(54),
-                      height: 500,
-                      child: SonrAssetIllustration.NoPeers.widget,
-                    ),
-                  );
-                }
-              }),
-            ],
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                LocalView(),
+                DevicesView(),
+              ],
+            ),
           ),
         ));
   }
