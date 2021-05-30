@@ -44,19 +44,27 @@ class DashboardView extends GetView<DashboardController> {
           "Quick Access".headFour(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
-            height: Height.ratio(0.45),
-            padding: EdgeInsets.all(8),
-            child: GridView.builder(
-                itemCount: TransferItemsType.values.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 24,
-                  crossAxisSpacing: 24,
-                ),
-                itemBuilder: (context, index) {
-                  return _QuickOptionButton(data: TransferItemsType.values[index]);
-                }),
-          ),
+              height: Height.ratio(0.45),
+              padding: EdgeInsets.all(8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _QuickOptionButton(data: TransferItemsType.values[0]),
+                      _QuickOptionButton(data: TransferItemsType.values[1]),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _QuickOptionButton(data: TransferItemsType.values[2]),
+                      _QuickOptionButton(data: TransferItemsType.values[3]),
+                    ],
+                  ),
+                ],
+              )),
         ]),
       );
     } else {
@@ -77,8 +85,8 @@ class _CardSearchView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(16),
-      height: 96,
+      margin: EdgeInsets.all(8),
+      height: 108,
       width: Width.ratio(0.4),
       alignment: Alignment.center,
       child: Container(
@@ -100,18 +108,15 @@ class _QuickOptionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Get.to(QuickAccessScreen(type: data), transition: Transition.rightToLeftWithFade),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: Neumorphic.floating(theme: Get.theme, radius: 24),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Padding(padding: EdgeInsets.only(top: 8)),
-            data.image(),
-            Padding(padding: EdgeInsets.only(top: 8)),
-            data.label(),
-          ]),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+          decoration: Neumorphic.floating(theme: Get.theme),
+          child: data.image(),
+          padding: EdgeInsets.all(8),
         ),
-      ),
+        Padding(padding: EdgeInsets.only(top: 8)),
+        data.label(),
+      ]),
     );
   }
 }

@@ -60,7 +60,7 @@ extension TransferItemsTypeUtils on TransferItemsType {
     );
   }
 
-  /// Returns Gradient Icon for Type
+  /// Returns Gradient Icon for Type 
   Gradient gradient() {
     switch (this) {
       case TransferItemsType.Media:
