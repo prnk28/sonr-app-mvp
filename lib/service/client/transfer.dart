@@ -140,26 +140,29 @@ class TransferService extends GetxService {
 
     // @ Handle Payload
     if (to._payload.value.isTransfer && file != null) {
-      file.update();
-      to._inviteRequest.init(payload, file: file);
-      to._file(file);
+      // Check valid File Size Payload
+      if (file.size > 0) {
+        file.update();
+        to._inviteRequest.init(payload, file: file);
+        to._file(file);
 
-      // Check for Media
-      if (to._inviteRequest.isMedia) {
-        // Set File Item
-        to._thumbStatus(ThumbnailStatus.Loading);
-        await to._file.value.setThumbnail();
+        // Check for Media
+        if (to._inviteRequest.isMedia) {
+          // Set File Item
+          to._thumbStatus(ThumbnailStatus.Loading);
+          await to._file.value.setThumbnail();
 
-        // Check Result
-        if (to._file.value.single.hasThumbnail()) {
-          to._thumbStatus(ThumbnailStatus.Complete);
-        } else {
-          to._thumbStatus(ThumbnailStatus.None);
+          // Check Result
+          if (to._file.value.single.hasThumbnail()) {
+            to._thumbStatus(ThumbnailStatus.Complete);
+          } else {
+            to._thumbStatus(ThumbnailStatus.None);
+          }
         }
-      }
 
-      // Set Has Payload
-      to._hasPayload(true);
+        // Set Has Payload
+        to._hasPayload(true);
+      }
     }
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
