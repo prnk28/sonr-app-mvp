@@ -138,7 +138,7 @@ class TransferService extends GetxService {
     // Initialize Request
     to._payload(payload);
 
-    // Check for File
+    // @ Handle Payload
     if (to._payload.value.isTransfer && file != null) {
       file.update();
       to._inviteRequest.init(payload, file: file);
@@ -157,18 +157,29 @@ class TransferService extends GetxService {
           to._thumbStatus(ThumbnailStatus.None);
         }
       }
+
+      // Set Has Payload
+      to._hasPayload(true);
     }
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
       to._inviteRequest.init(payload, contact: UserService.contact.value);
+
+      // Set Has Payload
+      to._hasPayload(true);
     }
     // Check for URL
     else if (to._payload.value == Payload.URL) {
       to._inviteRequest.init(payload, url: url!);
+
+      // Set Has Payload
+      to._hasPayload(true);
     }
 
-    // Set Has Payload
-    to._hasPayload(true);
+    // @ Check if Payload Set
+    if (!to._hasPayload.value) {
+      to._payload(Payload.NONE);
+    }
   }
 
   // # Generic Method for Different File Types
