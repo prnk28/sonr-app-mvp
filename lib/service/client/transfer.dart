@@ -70,11 +70,11 @@ class TransferService extends GetxService {
   // @ Select Other File //
   static Future<bool> chooseFile({bool withRedirect = true}) async {
     // Load Picker
-    var result = await _handleSelectRequest(FileType.custom);
+    var result = await _handleSelectRequest(FileType.any);
 
     // Check File
     if (result != null) {
-      var file = result.toSonrFile(payload: Payload.MEDIA);
+      var file = result.toSonrFile(payload: Payload.FILE);
       await _handlePayload(file.payload, file: file);
 
       // Shift Pages
@@ -86,9 +86,24 @@ class TransferService extends GetxService {
     return false;
   }
 
+  // @ Select Other File //
+  static Future<bool> chooseFileAndSend(Peer peer) async {
+    // Load Picker
+    var result = await _handleSelectRequest(FileType.any);
+
+    // Check File
+    if (result != null) {
+      var file = result.toSonrFile(payload: Payload.FILE);
+      await _handlePayload(file.payload, file: file);
+      sendInviteToPeer(peer);
+      return true;
+    }
+    return false;
+  }
+
   /// @ Resets Transfer Service
   static Future<void> reset() async {
-    // 
+    //
   }
 
   // @ Select Media File //
@@ -172,7 +187,7 @@ class TransferService extends GetxService {
   static Future<FilePickerResult?> _handleSelectRequest(FileType type) async {
     // @ Check if File Already Queued
     // Check Type for Custom Files
-    if (type == FileType.custom) {
+    if (type == FileType.any) {
       return await FilePicker.platform.pickFiles(
         withData: true,
         allowMultiple: true,

@@ -8,7 +8,6 @@ class ExplorerController extends GetxController {
   // @ Properties
   final isNotEmpty = false.obs;
   final inviteRequest = AuthInvite().obs;
-  final fileItem = Rx<SonrFile?>(null);
 
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
@@ -29,6 +28,10 @@ class ExplorerController extends GetxController {
   void onClose() {
     _lobbySizeStream.cancel();
     super.onClose();
+  }
+
+  Future<void> chooseFile(Peer peer) async {
+    await TransferService.chooseFileAndSend(peer);
   }
 
   // # Handle Lobby Size Update

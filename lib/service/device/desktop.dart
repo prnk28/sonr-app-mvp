@@ -38,6 +38,8 @@ class DesktopService extends GetxService {
     return this;
   }
 
+  /// @ Method Saves this Device Info
+
   /// @ Method Plays a UI Sound
   static void playSound(UISoundType type) async {}
 

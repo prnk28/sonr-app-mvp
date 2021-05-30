@@ -12,6 +12,7 @@ class RegisterDesktopView extends GetView<LinkController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
+        padding: EdgeInsets.symmetric(horizontal: 280),
         child: Column(children: <Widget>[
           Container(
             // child: SonrAssetLogo.Side.widget,
@@ -26,8 +27,8 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ** <First Name> ** //
                 // ****************** //
                 SonrTextField(
-                    label: "First Name",
-                    hint: hintName.item1,
+                    label: "Device Name",
+                    hint: "Millenium Falcon",
                     value: controller.firstName.value,
                     status: controller.firstNameStatus,
                     textInputAction: TextInputAction.next,
@@ -48,8 +49,8 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ** <Last Name> ** //
                 // ***************** //
                 SonrTextField(
-                    label: "Last Name",
-                    hint: hintName.item2,
+                    label: "Sonr Username",
+                    hint: "david.snr/",
                     textInputAction: TextInputAction.next,
                     value: controller.lastName.value,
                     textCapitalization: TextCapitalization.words,
@@ -74,12 +75,11 @@ class RegisterDesktopView extends GetView<LinkController> {
                 // ** <Submit Button> ** //
                 // ********************* //
                 Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 16.0),
+                  child: Container(
+                    padding: EdgeInsets.only(top: 48.0, left: 200, right: 200),
                     child: ColorButton.primary(
-                      margin: EdgeWith.horizontal(80),
-                      icon: SonrIcons.Check,
-                      text: "Get Started",
+                      icon: SonrIcons.Link,
+                      text: "Link",
                       onPressed: () {
                         controller.setContact();
                       },

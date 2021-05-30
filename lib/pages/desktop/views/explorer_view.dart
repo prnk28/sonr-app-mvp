@@ -19,7 +19,14 @@ class ExplorerDesktopView extends GetView<ExplorerController> {
               physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.horizontal,
               controller: controller.scrollController,
-              slivers: LobbyService.local.value.mapAll((i) => Builder(builder: (context) => SliverToBoxAdapter(child: PeerCard(i)))).toList(),
+              slivers: LobbyService.local.value
+                  .mapAll((i) => Builder(
+                      builder: (context) => SliverToBoxAdapter(
+                              child: GestureDetector(
+                            onTap: () => controller.chooseFile(i),
+                            child: PeerCard(i),
+                          ))))
+                  .toList(),
             ),
           );
         }

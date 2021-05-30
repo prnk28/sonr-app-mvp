@@ -25,9 +25,6 @@ class LinkController extends GetxController {
   /// @ Submits Contact
   setContact() async {
     if (validate()) {
-      // Get Contact from Values
-      var contact = Contact(profile: Profile(firstName: firstName.value, lastName: lastName.value));
-
       // Remove Textfield Focus
       FocusScopeNode currentFocus = FocusScope.of(Get.context!);
       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
@@ -35,7 +32,6 @@ class LinkController extends GetxController {
       }
 
       // Process data.
-      await UserService.newUser(contact);
       SonrService.to.connect();
       Get.find<WindowController>().changeView(DesktopView.Explorer);
     }
