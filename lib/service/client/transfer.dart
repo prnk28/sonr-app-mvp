@@ -126,11 +126,14 @@ class TransferService extends GetxService {
 
   /// @ Send Invite with Peer
   static void sendInviteToPeer(Peer peer) {
-    // Update Request
-    to._inviteRequest.setPeer(peer);
+    // Check if Payload Set
+    if (to._hasPayload.value) {
+      // Update Request
+      to._inviteRequest.setPeer(peer);
 
-    // Send Invite
-    SonrService.invite(to._inviteRequest.value);
+      // Send Invite
+      SonrService.invite(to._inviteRequest.value);
+    }
   }
 
   /// @ Sets File from Other Source
