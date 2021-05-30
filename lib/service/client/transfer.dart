@@ -86,6 +86,11 @@ class TransferService extends GetxService {
     return false;
   }
 
+  /// @ Resets Transfer Service
+  static Future<void> reset() async {
+    // 
+  }
+
   // @ Select Media File //
   static Future<void> setUrl(String url) async {
     await _handlePayload(Payload.URL, url: url);
@@ -111,8 +116,6 @@ class TransferService extends GetxService {
 
     // Send Invite
     SonrService.invite(to._inviteRequest.value);
-
-    // Reset Transfer
   }
 
   /// @ Sets File from Other Source

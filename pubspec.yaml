@@ -72,7 +72,7 @@ dependencies:
 
   # -- Network --
   mime: ^1.0.0
-  moor: ^4.2.1
+  moor: ^4.3.2
   receive_sharing_intent: ^1.4.5
 
   # -- Plugins --

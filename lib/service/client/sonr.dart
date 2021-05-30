@@ -243,6 +243,8 @@ class SonrService extends GetxService {
 
     // Log Activity
     CardService.addActivityShared(payload: data.payload, file: data.file);
+
+    
   }
 
   /// @ Mark as Received File

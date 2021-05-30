@@ -35,9 +35,9 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns `name()` for Button Label
   Widget label() {
     if (UserService.isDarkMode) {
-      return this.name().p_White;
+      return this.name().h6_White;
     } else {
-      return this.name().p;
+      return this.name().h6;
     }
   }
 
@@ -60,7 +60,7 @@ extension TransferItemsTypeUtils on TransferItemsType {
     );
   }
 
-  /// Returns Gradient Icon for Type 
+  /// Returns Gradient Icon for Type
   Gradient gradient() {
     switch (this) {
       case TransferItemsType.Media:

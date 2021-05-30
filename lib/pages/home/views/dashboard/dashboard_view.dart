@@ -44,7 +44,7 @@ class DashboardView extends GetView<DashboardController> {
           "Quick Access".headFour(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
-              height: Height.ratio(0.45),
+              height: Height.ratio(0.425),
               padding: EdgeInsets.all(8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -108,15 +108,18 @@ class _QuickOptionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Get.to(QuickAccessScreen(type: data), transition: Transition.rightToLeftWithFade),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-          decoration: Neumorphic.floating(theme: Get.theme),
-          child: data.image(),
-          padding: EdgeInsets.all(8),
-        ),
-        Padding(padding: EdgeInsets.only(top: 8)),
-        data.label(),
-      ]),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+            decoration: Neumorphic.floating(theme: Get.theme),
+            child: data.image(),
+            padding: EdgeInsets.all(8),
+          ),
+          Padding(padding: EdgeInsets.only(top: 8)),
+          data.label(),
+        ]),
+      ),
     );
   }
 }
