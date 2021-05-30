@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
-	<false/>
-	<key>com.posthog.posthog.POSTHOG_HOST</key>
-	<string>https://app.posthog.com</string>
-	<key>com.posthog.posthog.API_KEY</key>
-	<string>uZ7JYERY7rqx44QIQOQge_avgwS0kgs5sJqsmcow1VY</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Saves User Data in Secure Location</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -25,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.1</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -41,7 +33,7 @@
 		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>78</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>HERECredentials</key>
 	<dict>
 		<key>AccessKeyId</key>
@@ -67,6 +59,8 @@
 	<string>Requried for the App</string>
 	<key>NSContactsUsageDescription</key>
 	<string>No Clue Ignore</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Saves User Data in Secure Location</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Used for proximity communications</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -101,6 +95,12 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>com.posthog.posthog.API_KEY</key>
+	<string>uZ7JYERY7rqx44QIQOQge_avgwS0kgs5sJqsmcow1VY</string>
+	<key>com.posthog.posthog.POSTHOG_HOST</key>
+	<string>https://app.posthog.com</string>
+	<key>com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
