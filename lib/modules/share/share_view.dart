@@ -98,6 +98,7 @@ class _MediaItemState extends State<_MediaItem> {
       if (thumbnail != null) {
         return GestureDetector(
           onTap: _toggleImage,
+          onLongPress: _openMedia,
           child: Container(
             alignment: Alignment.center,
             child: Stack(children: [
@@ -134,6 +135,13 @@ class _MediaItemState extends State<_MediaItem> {
       }
     } else {
       return CircularProgressIndicator();
+    }
+  }
+
+  Future<void> _openMedia() async {
+    var file = await widget.item.file;
+    if (file != null) {
+      OpenFile.open(file.path);
     }
   }
 

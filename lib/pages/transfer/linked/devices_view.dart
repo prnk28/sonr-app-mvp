@@ -54,11 +54,13 @@ class _DevicesLobbyView extends GetView<TransferController> {
 class _DevicesEmptyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(54),
-        height: 260,
-        child: SonrAssetIllustration.NoPeers.widget,
+    return Container(
+      padding: EdgeInsets.only(top: 24),
+      margin: EdgeInsets.symmetric(horizontal: 48),
+      child: ColorButton.primary(
+        onPressed: () {},
+        text: "Add Device",
+        icon: SonrIcons.Add,
       ),
     );
   }

@@ -43,7 +43,7 @@ class ShareOptionsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Height.ratio(0.15),
+      height: Height.ratio(0.18),
       width: Get.width,
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
@@ -78,7 +78,7 @@ class _ShareCameraButtonItem extends StatelessWidget {
           }
         },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 65),
+          Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 75),
           Padding(padding: EdgeInsets.only(top: 4)),
           UserService.isDarkMode ? 'Camera'.h6_White : 'Camera'.h6_Grey,
         ]),
@@ -114,7 +114,7 @@ class _ShareFileButtonItem extends StatelessWidget {
           }
         },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 65),
+          Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 75),
           Padding(padding: EdgeInsets.only(top: 4)),
           UserService.isDarkMode ? 'File'.h6_White : 'File'.h6_Grey,
         ]),
@@ -134,7 +134,7 @@ class _ShareContactButtonItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => TransferService.chooseContact(),
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 65),
+          Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 75),
           Padding(padding: EdgeInsets.only(top: 4)),
           UserService.isDarkMode ? 'Contact'.h6_White : 'Contact'.h6_Grey,
         ]),
