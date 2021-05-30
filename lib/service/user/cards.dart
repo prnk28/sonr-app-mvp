@@ -59,24 +59,30 @@ class CardService extends GetxService {
   static int get totalCount => to._contacts.length + to._files.length + to._links.length + to._media.length;
 
   // References
-  final _database = CardsDatabase();
+  late CardsDatabase _database;
 
   // * Constructer * //
   Future<CardService> init() async {
-    // Bind Streams
-    _activity.bindStream(_database.watchActivity());
-    _allCards.bindStream(_database.watchAllCards());
-    _media.bindStream(_database.watchMedia());
-    _contacts.bindStream(_database.watchContacts());
-    _files.bindStream(_database.watchFiles());
-    _links.bindStream(_database.watchUrls());
+    // Check Device
+    if (DeviceService.isMobile) {
+      // Set Database
+      _database = CardsDatabase();
 
-    // Set Initial Counter
-    int counter = 1;
-    _contacts.length > 0 ? counter += 1 : counter += 0;
-    _files.length > 0 ? counter += 1 : counter += 0;
-    _links.length > 0 ? counter += 1 : counter += 0;
-    _categoryCount(counter);
+      // Bind Streams
+      _activity.bindStream(_database.watchActivity());
+      _allCards.bindStream(_database.watchAllCards());
+      _media.bindStream(_database.watchMedia());
+      _contacts.bindStream(_database.watchContacts());
+      _files.bindStream(_database.watchFiles());
+      _links.bindStream(_database.watchUrls());
+
+      // Set Initial Counter
+      int counter = 1;
+      _contacts.length > 0 ? counter += 1 : counter += 0;
+      _files.length > 0 ? counter += 1 : counter += 0;
+      _links.length > 0 ? counter += 1 : counter += 0;
+      _categoryCount(counter);
+    }
     return this;
   }
 
@@ -248,7 +254,6 @@ class CardService extends GetxService {
 // @ Handle Decline Transfer Response
   _handleDeclineTransfer(AuthInvite invite) {
     SonrService.respond(invite.newDeclineReply());
-
     SonrOverlay.back();
   }
 

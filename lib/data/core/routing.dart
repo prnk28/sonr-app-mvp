@@ -73,11 +73,7 @@ class SonrRouting {
 
     // Third: Initialize Data/Networking Services
     await Get.putAsync(() => TransferService().init(), permanent: true);
-
-    if (!isDesktop) {
-      await Get.putAsync(() => CardService().init(), permanent: true);
-    }
-
+    await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
 
