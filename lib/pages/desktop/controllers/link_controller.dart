@@ -31,6 +31,9 @@ class LinkController extends GetxController {
         FocusManager.instance.primaryFocus!.unfocus();
       }
 
+      // Save User
+      await UserService.newUser(Contact(profile: Profile(firstName: this.firstName.value, lastName: this.lastName.value)));
+
       // Process data.
       SonrService.to.connect();
       Get.find<WindowController>().changeView(DesktopView.Explorer);

@@ -1,7 +1,6 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 import '../../env.dart';
-import 'desktop.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -129,8 +128,6 @@ class DeviceService extends GetxService {
   static void playSound({required UISoundType type}) async {
     if (isMobile) {
       MobileService.playSound(type);
-    } else {
-      DesktopService.playSound(type);
     }
   }
 
