@@ -48,10 +48,7 @@ class _RemoteLinkText extends GetView<RemoteController> {
       height: Height.ratio(0.2),
       padding: EdgeInsets.all(8),
       decoration: Neumorphic.floating(theme: Get.theme),
-      child: Container(
-          padding: EdgeInsets.all(4),
-          decoration: Neumorphic.indented(theme: Get.theme),
-          child: UserService.isDarkMode ? controller.topicLink.value.h6_White : controller.topicLink.value.h6),
+      child: Container(padding: EdgeInsets.all(4), decoration: Neumorphic.indented(theme: Get.theme), child: controller.topicLink.value.url),
     );
   }
 }

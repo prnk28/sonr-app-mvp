@@ -76,7 +76,7 @@ class TransferController extends GetxController {
   }
 
   // # Handle Compass Update
-  _handlePositionUpdate(Position pos) {
+  void _handlePositionUpdate(Position pos) {
     // Update String Elements
     if (!isClosed) {
       // Set Titles
@@ -91,7 +91,7 @@ class TransferController extends GetxController {
   }
 
   // # Handle Lobby Size Update
-  _handleLobbyUpdate(Lobby data) {
+  void _handleLobbyUpdate(Lobby data) {
     if (!isClosed) {
       // Set Strings
       isNotEmpty(data.isNotEmpty);
