@@ -29,7 +29,7 @@ class LobbyService extends GetxService {
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
   StreamSubscription<Position>? _positionStream;
   Timer? _timer;
-  Map<Lobby?, LobbyCallback> _lobbyCallbacks = <Lobby?, LobbyCallback>{};
+  Map<String, LobbyCallback> _lobbyCallbacks = <String, LobbyCallback>{};
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // # Initialize Service Method
@@ -61,15 +61,10 @@ class LobbyService extends GetxService {
   }
 
   /// @ Registers RemoteResponse to Lobby to Manage Callback
-  // static void registerRemoteCallback(RemoteResponse? info, LobbyCallback callback) {
-  //   // Initialize
-  //   Lobby? remote;
-
-  //   // Check if Found
-  //   if (remote != null) {
-  //     to._lobbyCallbacks[remote] = callback;
-  //   }
-  // }
+  static void registerRemoteCallback(String topic, LobbyCallback callback) {
+    // Check if Found
+    to._lobbyCallbacks[topic] = callback;
+  }
 
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
@@ -125,12 +120,24 @@ class LobbyService extends GetxService {
     });
 
     // @ Update Local Topics
-    // Update Local
-    _handleFlatPeers(data);
-    _local(data);
+    if (data.type == Lobby_Type.LOCAL) {
+      // Update Flat Peers
+      _handleFlatPeers(data);
 
-    // Refresh Values
-    _local.refresh();
+      // Set Lobby
+      _local(data);
+
+      // Refresh Values
+      _local.refresh();
+    }
+
+    // @ Update Remote Topics
+    else if (data.type == Lobby_Type.REMOTE && data.hasRemote()) {
+      // Check for callback
+      if (_lobbyCallbacks.containsKey(data.remote.topic)) {
+        _lobbyCallbacks[data.remote.topic]!(data);
+      }
+    }
   }
 
   // # Handle Lobby Flat Peers

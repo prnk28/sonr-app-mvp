@@ -1,72 +1,42 @@
-import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-enum RemoteViewStatus { NotJoined, Created, Joined, Invited, InProgress, Done }
+class RemoteLobbyController extends GetxController {
+  // Register Checks
+  static bool get isRegistered => Get.isRegistered<RemoteLobbyController>();
+  static bool get isNotRegistered => !isRegistered;
 
-extension RemoteViewStatusUtil on RemoteViewStatus {
-  bool get isDefault => this == RemoteViewStatus.NotJoined;
-  bool get isCreated => this == RemoteViewStatus.Created;
-  bool get isJoined => this == RemoteViewStatus.Joined;
-  bool get isInRemote => this == RemoteViewStatus.Created || this == RemoteViewStatus.Joined;
-}
-
-class RemoteController extends GetxController {
-  // Form Properties
-  final firstWord = "".obs;
-  final secondWord = "".obs;
-  final thirdWord = "".obs;
-
-  // Information Properties
-  final receivedCard = Rx<Transfer?>(null);
-
-  // Status Properties
-  final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
-  final isJoinFieldTapped = false.obs;
-  final isRemoteActive = false.obs;
+  // Remote Properties
   final topicLink = "".obs;
   final remoteLobby = Rx<Lobby>(Lobby());
+  final remotePeerCount = 0.obs;
 
-  // References
-  final _keyboardVisible = KeyboardVisibilityController();
+  // Join Remote Properties
+  final joinStatus = RemoteJoinResponse_Status.None.obs;
 
-  // ** Initializer ** //
-  void onInit() {
-    super.onInit();
-    _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
+  // # Initializes New Remote
+  void initRemote(RemoteCreateResponse resp) {
+    LobbyService.registerRemoteCallback(resp.topic, onRefresh);
+    topicLink(resp.topic);
   }
 
-  // ** Disposer ** //
-  void onClose() {
-    super.onClose();
-  }
+  // @ Joins New Remote
+  Future<bool> joinRemote(String link) async {
+    // Attempt to Join
+    RemoteJoinResponse? result = await SonrService.joinRemote(link);
 
-  /// @ Handle Initial Join Tap
-  void handleJoinTap() {
-    isJoinFieldTapped(true);
-  }
-
-  /// @ Method to Create Remote Lobby
-  void create() async {
-    // Check if Transfer Exists
-    if (TransferService.hasPayload.value) {
-      // Sign Mnemonic
-      var data = await AuthService.signRemoteFingerprint();
-
-      // Start Remote
-      var resp = await SonrService.createRemote(file: TransferService.file.value, fingerprint: data.item1, words: data.item2);
-
-      if (resp != null) {
-        isRemoteActive(resp.success);
-        topicLink(resp.topic);
-      }
+    // Check Result
+    if (result != null) {
+      LobbyService.registerRemoteCallback(result.lobby.remote.topic, onRefresh);
+      joinStatus(result.status);
+      return true;
     }
+    return false;
   }
 
-  // @ Handle Keyboard Visibility
-  void _handleKeyboardVisibility(bool visible) {
-    if (!visible && status.value == RemoteViewStatus.NotJoined) {
-      isJoinFieldTapped(false);
-    }
+  // # Handler for Remote Lobby Updates
+  void onRefresh(Lobby data) {
+    remotePeerCount(data.count);
+    remoteLobby(data);
+    remoteLobby.refresh();
   }
 }

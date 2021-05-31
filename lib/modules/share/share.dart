@@ -7,7 +7,7 @@ import 'package:sonr_app/style/style.dart';
 import 'share_controller.dart';
 import 'share_view.dart';
 
-class Share {
+class ShareView {
   /// Open ShareView without Redirect
   static void open() {
     Get.find<ShareController>().reset(close: false, popup: false);

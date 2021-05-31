@@ -18,9 +18,7 @@ class DevicesView extends GetView<TransferController> {
         Padding(padding: EdgeInsets.only(top: 4)),
 
         // Scroll View
-        Obx(
-          () => _DevicesEmptyView(),
-        ),
+        _DevicesEmptyView(),
       ],
     );
   }

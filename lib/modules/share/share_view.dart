@@ -21,7 +21,7 @@ class SharePopupView extends GetView<ShareController> {
                   weight: FontWeight.w800,
                   align: TextAlign.start,
                 ),
-          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.reset()),
+          leading: ActionButton(icon: SonrIcons.Share.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.reset()),
           action: AnimatedScale(
             scale: controller.hasSelected.value ? 1.0 : 0.0,
             child: ActionButton(

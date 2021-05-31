@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style/style.dart';
 
 class PayloadSheetView extends StatelessWidget {
@@ -33,7 +34,17 @@ class PayloadSheetView extends StatelessWidget {
                 ),
                 child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
-        return Container();
+        return Container(
+          height: Height.ratio(0.15),
+          margin: EdgeInsets.all(24),
+          child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 42, vertical: 24),
+              child: ColorButton.primary(
+                icon: SonrIcons.Add,
+                text: "Add File",
+                onPressed: () => ShareView.open(),
+              )),
+        );
       }
     });
   }
