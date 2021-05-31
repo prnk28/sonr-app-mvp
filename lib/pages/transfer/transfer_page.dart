@@ -42,13 +42,14 @@ class TransferScreen extends GetView<TransferController> {
 class _RemoteActionButton extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ActionButton(
+    return  ActionButton(
         icon: SonrIcons.Compass.gradient(size: 28),
         onPressed: () {
           // Creates New Lobby
           if (!controller.isRemoteActive.value) {
             controller.createRemote();
           }
-        }));
+
+        });
   }
 }

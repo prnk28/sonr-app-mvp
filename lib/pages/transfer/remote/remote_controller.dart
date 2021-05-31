@@ -1,4 +1,3 @@
-import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style/style.dart';
 
 enum RemoteViewStatus { NotJoined, Created, Invited, InProgress, Done }

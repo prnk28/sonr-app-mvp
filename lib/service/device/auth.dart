@@ -197,10 +197,9 @@ class AuthService extends GetxService {
   /// Topic will be in URL format of `&Fingerprint>.remote.<SName>.snr/`
   /// #### Returns: *Fingerprint* `String`, *Words* `String`
   static Future<Tuple<String, String>> signRemoteFingerprint() async {
-    var words = bip39.generateMnemonic(strength: 32);
+    var words = bip39.generateMnemonic();
     var wordsUTF = Uint8List.fromList(utf8.encode(words));
-    var signed = to._ecKeypair.privateKey.createSHA512Signature(wordsUTF);
-    return Tuple(String.fromCharCodes(signed), words);
+    return Tuple(String.fromCharCodes(to._ecKeypair.privateKey.createSHA512Signature(wordsUTF)), words);
   }
 
   /// #### Checks if Username matches device id and prefix from records
