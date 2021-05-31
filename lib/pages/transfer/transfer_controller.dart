@@ -60,7 +60,11 @@ class TransferController extends GetxController {
       var resp = await SonrService.createRemote(file: TransferService.file.value, fingerprint: data.item1, words: data.item2);
 
       if (resp != null) {
+        title("Remote");
         Get.find<RemoteController>().topicLink(resp.topic);
+        isRemoteActive(true);
+      } else {
+        isRemoteActive(false);
       }
     }
   }
@@ -91,7 +95,11 @@ class TransferController extends GetxController {
     if (!isClosed) {
       // Set Strings
       isNotEmpty(data.isNotEmpty);
-      title(data.prettyCount());
+
+      // Check if Remote
+      if (!isRemoteActive.value) {
+        title(data.prettyCount());
+      }
     }
   }
 }

@@ -8,31 +8,34 @@ class RemoteView extends GetView<RemoteController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Label
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24.0),
-            child: "Lobby Link".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+    return Container(
+      height: Get.height,
+      child: Column(
+        children: [
+          // Label
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24.0),
+              child: "Lobby Link".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+            ),
           ),
-        ),
-        Padding(padding: EdgeInsets.only(top: 4)),
-        _RemoteLinkText(),
-        Padding(padding: EdgeInsets.only(top: 8)),
-        Expanded(
-            child: ListView.builder(
-          itemCount: controller.remoteLobby.value.count,
-          itemBuilder: (BuildContext context, int index) {
-            var peer = controller.remoteLobby.value.peerAtIndex(index - 1);
-            return PeerListItem(
-              peer,
-              index - 1,
-            );
-          },
-        )),
-      ],
+          Padding(padding: EdgeInsets.only(top: 4)),
+          _RemoteLinkText(),
+          Padding(padding: EdgeInsets.only(top: 8)),
+          Expanded(
+              child: ListView.builder(
+            itemCount: controller.remoteLobby.value.count,
+            itemBuilder: (BuildContext context, int index) {
+              var peer = controller.remoteLobby.value.peerAtIndex(index - 1);
+              return PeerListItem(
+                peer,
+                index - 1,
+              );
+            },
+          )),
+        ],
+      ),
     );
   }
 }
