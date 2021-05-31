@@ -61,6 +61,7 @@ class MobileService extends GetxService {
   }
 
   // References
+  late StreamSubscription _remoteLinkStream;
   late StreamSubscription _externalMediaStream;
   late StreamSubscription _externalTextStream;
   late StreamSubscription<AccelerometerEvent> _accelStream;
@@ -89,17 +90,6 @@ class MobileService extends GetxService {
     // Update Device Values
     await updatePermissionsStatus();
 
-    // Get Link Data
-    final initialLink = await getInitialLink();
-
-    // Check Initial Link
-    if (initialLink != null) {
-      // Validate Remote Link
-      if (initialLink.contains(".remote.")) {
-        _incomingRemote(initialLink);
-      }
-    }
-
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {
       if (data != null) {
@@ -119,6 +109,7 @@ class MobileService extends GetxService {
     // Listen to Incoming Text/File
     _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
     _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
+    _remoteLinkStream = linkStream.listen(_handleSharedRemote);
     return this;
   }
 
@@ -131,6 +122,7 @@ class MobileService extends GetxService {
     _audioPlayer.clearCache();
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
+    _remoteLinkStream.cancel();
     super.onClose();
   }
 
@@ -447,6 +439,16 @@ class MobileService extends GetxService {
   _handleSharedFiles(List<SharedMediaFile> data) async {
     if (!Get.isBottomSheetOpen!) {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
+    }
+  }
+
+  // # Handle Incoming Remote Link
+  _handleSharedRemote(String? link) async {
+    if (link != null) {
+      print(link);
+      if (link.contains(".remote.")) {
+        _incomingRemote(link);
+      }
     }
   }
 
