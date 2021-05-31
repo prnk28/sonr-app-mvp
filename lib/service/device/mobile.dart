@@ -448,6 +448,7 @@ class MobileService extends GetxService {
       print(link);
       if (link.contains(".remote.")) {
         _incomingRemote(link);
+        RemoteSheet.open(to._incomingRemote.value.substring(7));
       }
     }
   }
