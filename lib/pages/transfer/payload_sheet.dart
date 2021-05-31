@@ -35,8 +35,15 @@ class PayloadSheetView extends StatelessWidget {
                 child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
         return Container(
-          height: Height.ratio(0.20),
-          child: ColorButton.primary(onPressed: () => ShareView.open()),
+          height: Height.ratio(0.15),
+          margin: EdgeInsets.all(24),
+          child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 42, vertical: 24),
+              child: ColorButton.primary(
+                icon: SonrIcons.Add,
+                text: "Add File",
+                onPressed: () => ShareView.open(),
+              )),
         );
       }
     });
