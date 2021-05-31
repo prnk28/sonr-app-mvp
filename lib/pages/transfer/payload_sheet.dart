@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style/style.dart';
 
 class PayloadSheetView extends StatelessWidget {
@@ -33,7 +34,10 @@ class PayloadSheetView extends StatelessWidget {
                 ),
                 child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
-        return Container();
+        return Container(
+          height: Height.ratio(0.20),
+          child: ColorButton.primary(onPressed: () => ShareView.open()),
+        );
       }
     });
   }

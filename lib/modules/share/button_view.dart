@@ -20,7 +20,7 @@ class ShareButton extends StatelessWidget {
                   onTapDown: (details) => isPressed(true),
                   onTapUp: (details) {
                     isPressed(false);
-                    Future.delayed(150.milliseconds, () => Share.popup());
+                    Future.delayed(150.milliseconds, () => ShareView.popup());
                   },
                   child: ClipPolygon(
                     borderRadius: 18,

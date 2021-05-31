@@ -21,7 +21,12 @@ class RemoteView extends GetView<RemoteLobbyController> {
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 4)),
-          _RemoteLinkText(),
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24.0),
+                child: _RemoteLinkText(),
+              )),
           Padding(padding: EdgeInsets.only(top: 8)),
           Expanded(
               child: ListView.builder(
@@ -66,24 +71,11 @@ class _RemoteLinkText extends GetView<RemoteLobbyController> {
               color: Colors.blue[600])),
     ];
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: Get.width,
-        height: Height.ratio(0.2),
-        padding: EdgeInsets.all(8),
-        decoration: Neumorphic.floating(theme: Get.theme),
-        child: Container(
-            padding: EdgeInsets.all(4),
-            decoration: Neumorphic.indented(theme: Get.theme),
-            child: SizedBox(
-              width: Width.ratio(0.6),
-              height: Height.ratio(0.25),
-              child: RichText(
-                overflow: TextOverflow.fade,
-                text: TextSpan(children: spans),
-              ),
-            )),
+    return SizedBox(
+      height: Height.ratio(0.25),
+      child: RichText(
+        overflow: TextOverflow.fade,
+        text: TextSpan(children: spans),
       ),
     );
   }
