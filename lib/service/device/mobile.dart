@@ -7,11 +7,13 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/share/external_sheet.dart';
+import 'package:sonr_app/pages/transfer/remote/sheet_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device/device.dart';
+import 'package:uni_links/uni_links.dart';
 
 // @ Enum defines Type of Permission
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
@@ -36,6 +38,7 @@ class MobileService extends GetxService {
   final _keyboardVisible = false.obs;
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
+  final _incomingRemote = "".obs;
   final _incomingText = "".obs;
 
   // Getters for Device/Location References
@@ -86,11 +89,15 @@ class MobileService extends GetxService {
     // Update Device Values
     await updatePermissionsStatus();
 
-    // Set Location
-    if (_hasLocation.value) {
-      // TODO:
-      // var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
-      // DeviceService.setGeoLocation(Location_Geo(latitude: result.latitude, longitude: result.longitude));
+    // Get Link Data
+    final initialLink = await getInitialLink();
+
+    // Check Initial Link
+    if (initialLink != null) {
+      // Validate Remote Link
+      if (initialLink.contains(".remote.")) {
+        _incomingRemote(initialLink);
+      }
     }
 
     // For sharing images coming from outside the app while the app is closed
@@ -148,6 +155,11 @@ class MobileService extends GetxService {
       // Reset Incoming
       to._incomingText("");
       to._incomingText.refresh();
+    }
+
+    // @ Check for Remote
+    if (to._incomingRemote.value.isNotEmpty) {
+      RemoteSheet.open(to._incomingRemote.value);
     }
   }
 

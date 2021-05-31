@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
-import 'linked/devices_view.dart';
+import 'local/devices_view.dart';
 import 'local/local_view.dart';
 import 'payload_sheet.dart';
 import 'remote/remote_view.dart';
@@ -42,14 +42,13 @@ class TransferScreen extends GetView<TransferController> {
 class _RemoteActionButton extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    return  ActionButton(
+    return ActionButton(
         icon: SonrIcons.Compass.gradient(size: 28),
         onPressed: () {
           // Creates New Lobby
           if (!controller.isRemoteActive.value) {
             controller.createRemote();
           }
-
         });
   }
 }

@@ -59,10 +59,13 @@ class TransferController extends GetxController {
       // Start Remote
       var resp = await SonrService.createRemote(file: TransferService.file.value, fingerprint: data.item1, words: data.item2);
 
+      // Validate Response
       if (resp != null) {
-        title("Remote");
-        Get.find<RemoteController>().topicLink(resp.topic);
-        isRemoteActive(true);
+        if (resp.success) {
+          title("Remote");
+          Get.find<RemoteLobbyController>().initRemote(resp);
+          isRemoteActive(true);
+        }
       } else {
         isRemoteActive(false);
       }

@@ -1,27 +1,42 @@
 import 'package:sonr_app/style/style.dart';
 
-enum RemoteViewStatus { NotJoined, Created, Invited, InProgress, Done }
+class RemoteLobbyController extends GetxController {
+  // Register Checks
+  static bool get isRegistered => Get.isRegistered<RemoteLobbyController>();
+  static bool get isNotRegistered => !isRegistered;
 
-extension RemoteViewStatusUtil on RemoteViewStatus {
-  bool get isDefault => this == RemoteViewStatus.NotJoined;
-  bool get isCreated => this == RemoteViewStatus.Created;
-  bool get isInRemote => this == RemoteViewStatus.Created;
-}
-
-class RemoteController extends GetxController {
-  // Status Properties
-  final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
+  // Remote Properties
   final topicLink = "".obs;
   final remoteLobby = Rx<Lobby>(Lobby());
   final remotePeerCount = 0.obs;
 
-  // ** Initializer ** //
-  void onInit() {
-    super.onInit();
+  // Join Remote Properties
+  final joinStatus = RemoteJoinResponse_Status.None.obs;
+
+  // # Initializes New Remote
+  void initRemote(RemoteCreateResponse resp) {
+    LobbyService.registerRemoteCallback(resp.topic, onRefresh);
+    topicLink(resp.topic);
   }
 
-  // ** Disposer ** //
-  void onClose() {
-    super.onClose();
+  // @ Joins New Remote
+  Future<bool> joinRemote(String link) async {
+    // Attempt to Join
+    RemoteJoinResponse? result = await SonrService.joinRemote(link);
+
+    // Check Result
+    if (result != null) {
+      LobbyService.registerRemoteCallback(result.lobby.remote.topic, onRefresh);
+      joinStatus(result.status);
+      return true;
+    }
+    return false;
+  }
+
+  // # Handler for Remote Lobby Updates
+  void onRefresh(Lobby data) {
+    remotePeerCount(data.count);
+    remoteLobby(data);
+    remoteLobby.refresh();
   }
 }

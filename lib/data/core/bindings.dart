@@ -66,7 +66,7 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
-    Get.put<RemoteController>(RemoteController(), permanent: true);
+    Get.put<RemoteLobbyController>(RemoteLobbyController(), permanent: true);
     Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
 

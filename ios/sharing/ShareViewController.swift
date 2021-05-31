@@ -5,7 +5,7 @@ import UIKit
 
 class ShareViewController: SLComposeServiceViewController {
     // TODO: IMPORTANT: This should be your host app bundle identifier
-    let hostAppBundleIdentifier = "io.sonr.ios"
+    let hostAppBundleIdentifier = "io.sonr.apple"
     let sharedKey = "ShareKey"
     var sharedMedia: [SharedMediaFile] = []
     var sharedText: [String] = []

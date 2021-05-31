@@ -27,6 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>sonr://</string>
 				<string>ShareMedia</string>
 			</array>
 		</dict>

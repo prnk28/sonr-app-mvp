@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:async';
 
 class DeviceService extends GetxService {
   // Accessors
