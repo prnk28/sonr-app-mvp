@@ -9,13 +9,14 @@ import 'share_view.dart';
 
 class ShareView {
   /// Open ShareView without Redirect
-  static void open() {
+  static void dialog() {
     ShareController.initDialog();
     Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
   }
 
   /// Popup Stand alone share view with redirect
   static void popup() {
+    ShareController.initPopup();
     Get.to(SharePopupView(), transition: Transition.downToUp, duration: 350.milliseconds);
   }
 }

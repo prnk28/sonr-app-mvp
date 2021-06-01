@@ -12,14 +12,14 @@ class TransferService extends GetxService {
   // Properties
   final _hasPayload = false.obs;
   final _payload = Payload.NONE.obs;
-  final _inviteRequest = AuthInvite().obs;
-  final _file = SonrFile().obs;
+  final _invite = AuthInvite().obs;
+  final _sonrFile = SonrFile().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
   static Rx<Payload> get payload => to._payload;
-  static Rx<AuthInvite> get inviteRequest => to._inviteRequest;
-  static Rx<SonrFile> get file => to._file;
+  static Rx<AuthInvite> get inviteRequest => to._invite;
+  static Rx<SonrFile> get file => to._sonrFile;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
   static RxBool get hasPayload => to._hasPayload;
 
@@ -139,8 +139,12 @@ class TransferService extends GetxService {
   }
 
   /// @ Resets Transfer Service
-  static Future<void> reset() async {
-    //
+  static Future<void> resetPayload() async {
+    to._hasPayload(false);
+    to._payload(Payload.NONE);
+    to._invite(AuthInvite());
+    to._sonrFile(SonrFile());
+    to._thumbStatus(ThumbnailStatus.None);
   }
 
   // @ Select Media File //
@@ -185,10 +189,10 @@ class TransferService extends GetxService {
     // Check if Payload Set
     if (to._hasPayload.value) {
       // Update Request
-      to._inviteRequest.setPeer(peer);
+      to._invite.setPeer(peer);
 
       // Send Invite
-      SonrService.invite(to._inviteRequest.value);
+      SonrService.invite(to._invite.value);
     }
   }
 
@@ -237,17 +241,17 @@ class TransferService extends GetxService {
       // Check valid File Size Payload
       if (file.size > 0) {
         file.update();
-        to._inviteRequest.init(payload, file: file);
-        to._file(file);
+        to._invite.init(payload, file: file);
+        to._sonrFile(file);
 
         // Check for Media
-        if (to._inviteRequest.isMedia) {
+        if (to._invite.isMedia) {
           // Set File Item
           to._thumbStatus(ThumbnailStatus.Loading);
-          await to._file.value.setThumbnail();
+          await to._sonrFile.value.setThumbnail();
 
           // Check Result
-          if (to._file.value.single.hasThumbnail()) {
+          if (to._sonrFile.value.single.hasThumbnail()) {
             to._thumbStatus(ThumbnailStatus.Complete);
           } else {
             to._thumbStatus(ThumbnailStatus.None);
@@ -271,7 +275,7 @@ class TransferService extends GetxService {
       );
 
       // Initialize Contact
-      to._inviteRequest.init(payload, contact: UserService.contact.value);
+      to._invite.init(payload, contact: UserService.contact.value);
 
       // Set Has Payload
       to._hasPayload(true);
@@ -290,7 +294,7 @@ class TransferService extends GetxService {
       );
 
       // Initialize URL
-      to._inviteRequest.init(payload, url: url!);
+      to._invite.init(payload, url: url!);
 
       // Set Has Payload
       to._hasPayload(true);

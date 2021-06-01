@@ -176,6 +176,7 @@ class ShareController extends GetxController {
   }
 
   void _handleConfirmation(bool result) {
+    print("Result of Share Confirmation: " + result.toString());
     // Check Result Success
     if (result) {
       // Check View Type
