@@ -176,9 +176,12 @@ class ShareController extends GetxController {
   }
 
   void _handleConfirmation(bool result) {
-    print("Result of Share Confirmation: " + result.toString());
     // Check Result Success
     if (result) {
+      // Reset Share Items
+      selectedItems.clear();
+      hasSelected(false);
+
       // Check View Type
       if (this.type.value.isViewPopup) {
         Get.offNamed("/transfer");
