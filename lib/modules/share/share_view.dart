@@ -4,64 +4,56 @@ import 'button_view.dart';
 import 'share_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-class SharePopupView extends StatelessWidget {
-  final bool isPopup;
-
-  const SharePopupView({Key? key, required this.isPopup}) : super(key: key);
+class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
-    return GetX<ShareController>(
-        init: ShareController(isPopup),
-        builder: (controller) {
-          return SonrScaffold(
-              appBar: DesignAppBar(
-                centerTitle: true,
-                title: controller.hasSelected.value
-                    ? "Share (${controller.selectedItems.length})".headThree(
-                        color: Get.theme.focusColor,
-                        weight: FontWeight.w800,
-                        align: TextAlign.start,
-                      )
-                    : "Share".headThree(
-                        color: Get.theme.focusColor,
-                        weight: FontWeight.w800,
-                        align: TextAlign.start,
-                      ),
-                leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
-                action: AnimatedScale(
-                  scale: controller.hasSelected.value ? 1.0 : 0.0,
-                  child: ActionButton(
-                    onPressed: () => controller.confirmMediaSelection(),
-                    icon: SonrIcons.Share.gradient(value: SonrGradients.CrystalRiver),
-                  ),
-                ),
-              ),
-              body: Stack(children: [
-                CustomScrollView(
-                  slivers: [
-                    // @ Builds Profile Header
-                    SliverToBoxAdapter(child: ShareOptionsRow()),
-                    SliverPadding(padding: EdgeInsets.only(top: 8)),
-                    SliverToBoxAdapter(
-                        child: Container(
-                            padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
-                    SliverToBoxAdapter(child: _TagsView()),
-                    SliverPadding(padding: EdgeInsets.all(4)),
-                    // @ Builds List of Social Tile
-                    _MediaView()
-                  ],
-                ),
-                GestureDetector(
-                  onHorizontalDragUpdate: (details) {
-                    if (details.delta.dx > 8) {
-                      Get.find<ShareController>().shiftPrevAlbum();
-                    } else if (details.delta.dx < -8) {
-                      Get.find<ShareController>().shiftNextAlbum();
-                    }
-                  },
+    return Obx(() => SonrScaffold(
+        appBar: DesignAppBar(
+          centerTitle: true,
+          title: controller.hasSelected.value
+              ? "Share (${controller.selectedItems.length})".headThree(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
                 )
-              ]));
-        });
+              : "Share".headThree(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
+                ),
+          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
+          action: AnimatedScale(
+            scale: controller.hasSelected.value ? 1.0 : 0.0,
+            child: ActionButton(
+              onPressed: () => controller.confirmMediaSelection(),
+              icon: SonrIcons.Share.gradient(value: SonrGradients.CrystalRiver),
+            ),
+          ),
+        ),
+        body: Stack(children: [
+          CustomScrollView(
+            slivers: [
+              // @ Builds Profile Header
+              SliverToBoxAdapter(child: ShareOptionsRow()),
+              SliverPadding(padding: EdgeInsets.only(top: 8)),
+              SliverToBoxAdapter(
+                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
+              SliverToBoxAdapter(child: _TagsView()),
+              SliverPadding(padding: EdgeInsets.all(4)),
+              // @ Builds List of Social Tile
+              _MediaView()
+            ],
+          ),
+          GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              if (details.delta.dx > 8) {
+                Get.find<ShareController>().shiftPrevAlbum();
+              } else if (details.delta.dx < -8) {
+                Get.find<ShareController>().shiftNextAlbum();
+              }
+            },
+          )
+        ])));
   }
 }
 
