@@ -8,10 +8,13 @@ class ShareController extends GetxController {
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
   final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
   final hasSelected = false.obs;
-  final isPopup = true.obs;
+
+  final bool isPopup;
 
   // References
   final ScrollController tagsScrollController = ScrollController();
+
+  ShareController(this.isPopup);
 
   @override
   void onInit() {
@@ -19,16 +22,11 @@ class ShareController extends GetxController {
     super.onInit();
   }
 
-  /// Close Share View Reset Items/Status
-  reset({bool close = true, bool popup = true}) {
+  /// Closes Current Window
+  void close() {
     selectedItems.clear();
     hasSelected(false);
-
-    if (close) {
-      Get.back(closeOverlays: true);
-    } else {
-      this.isPopup(popup);
-    }
+    Get.back(closeOverlays: true);
   }
 
   /// Checks if Provided Index is Current Album
@@ -51,10 +49,10 @@ class ShareController extends GetxController {
     // Check for Permissions
     if (MobileService.hasCamera.value) {
       // Check Done
-      var done = await TransferService.chooseCamera(withRedirect: isPopup.value);
+      var done = await TransferService.chooseCamera(withRedirect: isPopup);
 
       // Handle for Non-Popup State
-      if (done && !isPopup.value) {
+      if (done && !isPopup) {
         Get.back(closeOverlays: true);
       }
     }
@@ -63,10 +61,10 @@ class ShareController extends GetxController {
       var result = await Get.find<MobileService>().requestCamera();
       if (result) {
         // Check Done
-        var done = await TransferService.chooseCamera(withRedirect: isPopup.value);
+        var done = await TransferService.chooseCamera(withRedirect: isPopup);
 
         // Handle for Non-Popup State
-        if (done && !isPopup.value) {
+        if (done && !isPopup) {
           Get.back(closeOverlays: true);
         }
       } else {
@@ -77,10 +75,10 @@ class ShareController extends GetxController {
 
   /// Choose Contact Card for Share
   Future<void> chooseContact() async {
-    var done = await TransferService.chooseContact(withRedirect: isPopup.value);
+    var done = await TransferService.chooseContact(withRedirect: isPopup);
 
     // Handle for Non-Popup State
-    if (done && !isPopup.value) {
+    if (done && !isPopup) {
       Get.back(closeOverlays: true);
     }
   }
@@ -89,10 +87,10 @@ class ShareController extends GetxController {
   Future<void> chooseFile() async {
     // Check Permissions
     if (MobileService.hasGallery.value) {
-      var done = await TransferService.chooseFile(withRedirect: isPopup.value);
+      var done = await TransferService.chooseFile(withRedirect: isPopup);
 
       // Handle for Non-Popup State
-      if (done && !isPopup.value) {
+      if (done && !isPopup) {
         Get.back(closeOverlays: true);
       }
     } else {
@@ -102,10 +100,10 @@ class ShareController extends GetxController {
 
       // Check Status
       if (status) {
-        var done = await TransferService.chooseFile(withRedirect: isPopup.value);
+        var done = await TransferService.chooseFile(withRedirect: isPopup);
 
         // Handle for Non-Popup State
-        if (done && !isPopup.value) {
+        if (done && !isPopup) {
           Get.back(closeOverlays: true);
         }
       } else {
@@ -125,10 +123,10 @@ class ShareController extends GetxController {
   Future<void> confirmMediaSelection() async {
     if (hasSelected.value) {
       var sonrFile = await selectedItems.toSonrFile();
-      var done = await TransferService.setFile(sonrFile, withRedirect: isPopup.value);
+      var done = await TransferService.setFile(sonrFile, withRedirect: isPopup);
 
       // Handle for Non-Popup State
-      if (done && !isPopup.value) {
+      if (done && !isPopup) {
         Get.back(closeOverlays: true);
       }
     } else {
