@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
 import 'package:sonr_app/env.dart';
@@ -133,6 +134,16 @@ class AuthService extends GetxService {
 
       // Add UserRecord Domain
       await to._nbClient.addRecord(HSRecord.newAuth(to._prefix, name, to.signatureHex));
+
+      // Analytics
+      Posthog().capture(
+        eventName: '[AuthService]: Create-Username',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.platform.toString(),
+          'new-username': name,
+        },
+      );
 
       // Return Mnemonic and Prefix
       return UsernameResult.isValidFetch(name);

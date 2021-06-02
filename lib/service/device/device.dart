@@ -86,7 +86,21 @@ class DeviceService extends GetxService {
 
       // Check for Mobile Data
       if (result == ConnectivityResult.mobile) {
+        // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
+
+        // Analytics
+        Posthog().capture(
+          eventName: '[DeviceService]: Find-Location',
+          properties: {
+            'createdAt': DateTime.now().toString(),
+            'platform': platform.toString(),
+            'isMobile': platform.isMobile,
+            'type': 'GPS-Location',
+          },
+        );
+
+        // Return Location
         return Location(longitude: pos.longitude, latitude: pos.latitude);
       }
     }
@@ -97,6 +111,13 @@ class DeviceService extends GetxService {
     final response = await http.get(url, headers: {'x-rapidapi-key': Env.rapid_key, 'x-rapidapi-host': Env.rapid_host});
 
     if (response.statusCode == 200) {
+      // Analytics
+      Posthog().capture(
+        eventName: '[DeviceService]: Find-Location',
+        properties: {'createdAt': DateTime.now().toString(), 'platform': platform.toString(), 'isMobile': platform.isMobile, 'type': 'IP-Location'},
+      );
+
+      // Decode Json
       var json = jsonDecode(response.body);
       return Location(
         state: json["state"],

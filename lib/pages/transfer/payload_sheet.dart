@@ -42,7 +42,7 @@ class PayloadSheetView extends StatelessWidget {
               child: ColorButton.primary(
                 icon: SonrIcons.Add,
                 text: "Add File",
-                onPressed: () => ShareView.open(),
+                onPressed: () => ShareView.dialog(),
               )),
         );
       }

@@ -18,7 +18,7 @@ class TransferScreen extends GetView<TransferController> {
           gradient: SonrGradients.PlumBath,
           appBar: DesignAppBar(
             centerTitle: true,
-            leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.offNamed("/home")),
+            leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.closeToHome()),
             action: _RemoteActionButton(),
             title: controller.title.value.headThree(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black),
           ),

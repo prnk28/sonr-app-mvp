@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Need BLE permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Need BLE permission</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -50,10 +54,6 @@
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>No Clue Ignore</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>For Beacons usage</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Usage for discovering nearby devices</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>No Clue Ignore</string>
 	<key>NSCameraUsageDescription</key>

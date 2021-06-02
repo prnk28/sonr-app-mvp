@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sonr_app/style/style.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -10,14 +12,14 @@ class TransferService extends GetxService {
   // Properties
   final _hasPayload = false.obs;
   final _payload = Payload.NONE.obs;
-  final _inviteRequest = AuthInvite().obs;
-  final _file = SonrFile().obs;
+  final _invite = AuthInvite().obs;
+  final _sonrFile = SonrFile().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
   static Rx<Payload> get payload => to._payload;
-  static Rx<AuthInvite> get inviteRequest => to._inviteRequest;
-  static Rx<SonrFile> get file => to._file;
+  static Rx<AuthInvite> get inviteRequest => to._invite;
+  static Rx<SonrFile> get file => to._sonrFile;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
   static RxBool get hasPayload => to._hasPayload;
 
@@ -27,133 +29,229 @@ class TransferService extends GetxService {
   }
 
   // @ Use Camera for Media File //
-  static Future<bool> chooseCamera({bool withRedirect = true}) async {
+  static Future<bool> chooseCamera() async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-Camera',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
+
+    // Initialize
+    Completer<bool> completer = Completer<bool>();
     // Move to View
     CameraView.open(onMediaSelected: (SonrFile file) async {
-      await _handlePayload(Payload.MEDIA, file: file);
-      // Shift Pages
-      Get.offNamed("/transfer");
+      var result = await _handlePayload(Payload.MEDIA, file: file);
+
+      // Analytics
+      Posthog().capture(
+        eventName: '[TransferService]: Confirmed-Camera',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.device.platform.toString(),
+        },
+      );
+
+      // Complete Result
+      completer.complete(result);
     });
-    return true;
+    return completer.future;
   }
 
   // @ Set User Contact for Transfer //
-  static Future<bool> chooseContact({bool withRedirect = true}) async {
-    await _handlePayload(Payload.CONTACT);
+  static Future<bool> chooseContact() async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-Contact',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
 
-    // Shift Pages
-    if (withRedirect) {
-      Get.offNamed("/transfer");
-    }
-    return true;
+    return await _handlePayload(Payload.CONTACT);
   }
 
   // @ Select Media File //
   static Future<bool> chooseMedia({bool withRedirect = true}) async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-Media',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
+
     // Load Picker
     var result = await _handleSelectRequest(FileType.media);
 
     // Check File
     if (result != null) {
-      var file = result.toSonrFile(payload: Payload.MEDIA);
-      await _handlePayload(file.payload, file: file);
+      // Analytics
+      Posthog().capture(
+        eventName: '[TransferService]: Confirm-Media',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.device.platform.toString(),
+        },
+      );
 
-      // Shift Pages
-      if (withRedirect) {
-        Get.offNamed("/transfer");
-      }
-      return true;
+      // Convert To File
+      var file = result.toSonrFile(payload: Payload.MEDIA);
+      return await _handlePayload(file.payload, file: file);
     }
     return false;
   }
 
   // @ Select Other File //
-  static Future<bool> chooseFile({bool withRedirect = true}) async {
+  static Future<bool> chooseFile() async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-File',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
+
     // Load Picker
     var result = await _handleSelectRequest(FileType.any);
 
     // Check File
     if (result != null) {
-      var file = result.toSonrFile(payload: Payload.FILE);
-      await _handlePayload(file.payload, file: file);
+      // Analytics
+      Posthog().capture(
+        eventName: '[TransferService]: Confirm-File',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.device.platform.toString(),
+        },
+      );
 
-      // Shift Pages
-      if (withRedirect) {
-        Get.offNamed("/transfer");
-      }
-      return true;
+      // Confirm File
+      var file = result.toSonrFile(payload: Payload.FILE);
+      return await _handlePayload(file.payload, file: file);
     }
     return false;
   }
 
   /// @ Resets Transfer Service
-  static Future<void> reset() async {
-    //
+  static Future<void> resetPayload() async {
+    to._hasPayload(false);
+    to._payload(Payload.NONE);
+    to._invite(AuthInvite());
+    to._sonrFile(SonrFile());
+    to._thumbStatus(ThumbnailStatus.None);
   }
 
   // @ Select Media File //
-  static Future<void> setUrl(String url) async {
-    await _handlePayload(Payload.URL, url: url);
-
-    // Shift Pages
-    Get.offNamed("/transfer");
+  static Future<bool> setUrl(String url) async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-URL',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
+    return await _handlePayload(Payload.URL, url: url);
   }
 
   // @ Select Media File //
-  static Future<void> setMedia(SonrFile file, {bool withRedirect = true}) async {
-    await _handlePayload(file.payload, file: file);
+  static Future<bool> setMedia(SonrFile file) async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-Media',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
 
-    // Shift Pages
-    if (withRedirect) {
-      Get.offNamed("/transfer");
-    }
+    return await _handlePayload(file.payload, file: file);
   }
 
   /// @ Send Invite with Peer
   static void sendInviteToPeer(Peer peer) {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Selected-Peer',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'peer-platform': peer.platform.toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
+
     // Check if Payload Set
     if (to._hasPayload.value) {
       // Update Request
-      to._inviteRequest.setPeer(peer);
+      to._invite.setPeer(peer);
 
       // Send Invite
-      SonrService.invite(to._inviteRequest.value);
+      SonrService.invite(to._invite.value);
     }
   }
 
   /// @ Sets File from Other Source
-  static Future<bool> setFile(SonrFile file, {bool withRedirect = true}) async {
-    // Handle File Payload
-    await _handlePayload(file.payload, file: file);
+  static Future<bool> setFile(SonrFile file) async {
+    // Analytics
+    Posthog().capture(
+      eventName: '[TransferService]: Choose-File',
+      properties: {
+        'createdAt': DateTime.now().toString(),
+        'payload': file.payload.toString(),
+        'platform': DeviceService.device.platform.toString(),
+      },
+    );
 
-    // Shift Pages
-    if (withRedirect) {
-      Get.offNamed("/transfer");
-    }
-    return true;
+    // Handle File Payload
+    return await _handlePayload(file.payload, file: file);
   }
 
   /// Set Transfer Payload for File
-  static Future<void> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
+  static Future<bool> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
     // Initialize Request
     to._payload(payload);
 
     // @ Handle Payload
     if (to._payload.value.isTransfer && file != null) {
+      // Capture File Analytics
+      Posthog().capture(
+        eventName: '[TransferService]: Shared-File',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.device.platform.toString(),
+          'totalSize': file.size,
+          'count': file.count,
+          'payload': file.payload.toString(),
+          'items': List.generate(
+              file.count,
+              (index) => {
+                    'mimeValue': file.items[index].mime.value,
+                    'mimeSubtype': file.items[index].mime.subtype,
+                    'size': file.items[index].size,
+                  })
+        },
+      );
+
       // Check valid File Size Payload
       if (file.size > 0) {
         file.update();
-        to._inviteRequest.init(payload, file: file);
-        to._file(file);
+        to._invite.init(payload, file: file);
+        to._sonrFile(file);
 
         // Check for Media
-        if (to._inviteRequest.isMedia) {
+        if (to._invite.isMedia) {
           // Set File Item
           to._thumbStatus(ThumbnailStatus.Loading);
-          await to._file.value.setThumbnail();
+          await to._sonrFile.value.setThumbnail();
 
           // Check Result
-          if (to._file.value.single.hasThumbnail()) {
+          if (to._sonrFile.value.single.hasThumbnail()) {
             to._thumbStatus(ThumbnailStatus.Complete);
           } else {
             to._thumbStatus(ThumbnailStatus.None);
@@ -166,14 +264,37 @@ class TransferService extends GetxService {
     }
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
-      to._inviteRequest.init(payload, contact: UserService.contact.value);
+      // Capture Contact Analytics
+      Posthog().capture(
+        eventName: '[TransferService]: Shared-Contact',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.device.platform.toString(),
+          'payload': Payload.CONTACT.toString(),
+        },
+      );
+
+      // Initialize Contact
+      to._invite.init(payload, contact: UserService.contact.value);
 
       // Set Has Payload
       to._hasPayload(true);
     }
     // Check for URL
     else if (to._payload.value == Payload.URL) {
-      to._inviteRequest.init(payload, url: url!);
+      // Capture Contact Analytics
+      Posthog().capture(
+        eventName: '[TransferService]: Shared-Contact',
+        properties: {
+          'createdAt': DateTime.now().toString(),
+          'platform': DeviceService.device.platform.toString(),
+          'link': url,
+          'payload': Payload.URL.toString(),
+        },
+      );
+
+      // Initialize URL
+      to._invite.init(payload, url: url!);
 
       // Set Has Payload
       to._hasPayload(true);
@@ -182,7 +303,9 @@ class TransferService extends GetxService {
     // @ Check if Payload Set
     if (!to._hasPayload.value) {
       to._payload(Payload.NONE);
+      to._hasPayload(false);
     }
+    return to._hasPayload.value;
   }
 
   // # Generic Method for Different File Types

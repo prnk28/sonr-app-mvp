@@ -8,14 +8,14 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <meta-data android:name="com.here.sdk.access_key_id" android:value="WLCvm13SPXK4xSDMYbqWog"/>
-    <meta-data android:name="com.here.sdk.access_key_secret" android:value="qssKHphhuG2khFg_fTfyF0StoJJQzKMWIVRbBLkI7qko9BFTbi8U3ZxuPfndq3o9Ge6e9awG7_pQFcsJDDkikA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application android:name="io.flutter.app.FlutterApplication" android:label="Sonr" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">
         <activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">

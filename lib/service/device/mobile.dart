@@ -164,7 +164,7 @@ class MobileService extends GetxService {
 
   /// @ Method Plays a UI Sound
   static void playSound(UISoundType type) async {
-    await to._audioPlayer.play(type.file);
+    // await to._audioPlayer.play(type.file);
   }
 
   /// @ Saves Photo to Gallery
