@@ -44,6 +44,7 @@ dependencies:
   environment_config: ^3.0.0
   file_picker: ^3.0.1
   flutter_hooks: ^0.16.0
+  flutter_reactive_ble: ^3.1.1+1
   flutter_secure_storage: ^4.2.0
   get: ^4.1.4
   get_storage: ^2.0.2
@@ -81,8 +82,8 @@ dependencies:
   posthog_flutter:
     git: git@github.com:sonr-io/posthog-flutter.git
   sonr_plugin:
-    git: git@github.com:sonr-io/plugin.git
-    #path: ../plugin/ #-- Uncomment for Local Development
+    #git: git@github.com:sonr-io/plugin.git
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0

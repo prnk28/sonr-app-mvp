@@ -20,6 +20,7 @@ class SonrService extends GetxService {
 
   // @ Set Properties
   // final _isReady = false.obs;
+  final _multiAddr = "".obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
@@ -173,11 +174,8 @@ class SonrService extends GetxService {
   // **************************
   /// @ Handle Bootstrap Result
   void _handleStatus(StatusUpdate data) {
-    print(data.value.toString());
     // Check for Homescreen Controller
     if (data.value == Status.BOOTSTRAPPED) {
-      // Update Status
-      _status(data.value);
       DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
@@ -185,6 +183,13 @@ class SonrService extends GetxService {
         _node.update(Request.newUpdatePosition(MobileService.position.value));
       }
     }
+    // Set MultiAddr
+    else if (data.value == Status.CONNECTED) {
+      _multiAddr(data.multiaddr);
+    }
+
+    // Update Status
+    _status(data.value);
   }
 
   /// @ Node Has Been Invited
