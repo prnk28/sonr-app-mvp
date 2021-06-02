@@ -3,7 +3,7 @@ import 'package:sonr_app/pages/desktop/window.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
-import 'package:sonr_app/service/device/ble.dart';
+// import 'package:sonr_app/service/device/ble.dart';
 import 'package:sonr_app/service/device/desktop.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/service/device/auth.dart';

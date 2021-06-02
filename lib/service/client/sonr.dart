@@ -4,7 +4,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/device/auth.dart';
-import 'package:sonr_app/service/device/ble.dart';
+// import 'package:sonr_app/service/device/ble.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
