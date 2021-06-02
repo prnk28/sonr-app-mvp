@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 class BLEService extends GetxService {
   // Static Analyzers
@@ -9,126 +10,95 @@ class BLEService extends GetxService {
   static BLEService get to => Get.find<BLEService>();
 
   // @ Properties
-  final _status = BleStatus.unknown.obs;
-  final _allDevices = RxList<BLEDevice>();
-  final _sonrDevices = RxList<BLEDevice>();
-
-  // @ Accessors
-  /// Checks if BLE Discovery is Ready
-  bool get isReady => _status.value.isReady;
-
-  /// Checks if BLE Discovery is NOT Ready
-  bool get isNotReady => _status.value.isNotReady;
-
-  /// Checks if BLE Discovery CANNOT Start due to Location Services
-  bool get isLocationDisabled => _status.value.isLocationDisabled;
-
-  /// Accessor for Device Service ID
-  String get deviceId => DeviceService.device.id;
+  final _devices = RxList<BLEDevice>();
+  final _selfUdid = BLESonrUdid("").obs;
+  final _status = BLEStatus.None.obs;
 
   // @ References
-  final FlutterReactiveBle _ble = FlutterReactiveBle();
-  late StreamSubscription _allDevicesStream;
-  late StreamSubscription _sonrDevicesStream;
+  final FlutterBlue _reader = FlutterBlue.instance;
+  final FlutterBlePeripheral _writer = FlutterBlePeripheral();
+  late StreamSubscription _deviceStream;
 
-  List<StreamSubscription> _connections = [];
-
-  /// Initializes BLEDiscovery for Mobile
+  /// * Initializes Service for Mobile Devices *
   Future<BLEService> init() async {
+    // Set Status from Availibility
+    _status(BLEStatusUtils.fromData(Tuple(await _reader.isAvailable, await _reader.isOn)));
+
     // Bind Status Stream
-    _status.bindStream(_ble.statusStream);
     return this;
   }
 
+  /// #### Inititalize MultiAddr from Connected SonrService
+  static Future<void> initMultiAddr(String maddr) async {
+    // Check if Platform is Mobile
+    if (DeviceService.isMobile) {
+      // Set Udid
+      to._selfUdid(BLESonrUdid.fromData(DeviceService.platform, maddr));
+
+      // Begin Scanning
+      to._startAdvertise();
+    }
+  }
+
   /// #### Begin Discovery of Peers
-  static void discover(String maddr) {
-    // Write Characteristic
-    to.write(type: BLECharacteristicType.MultiAddr, value: maddr);
-
-    // Scan Devices
-    if (to.isReady) {
-      // Handle Device Streams
-      to._allDevicesStream = to._ble.scanForDevices(withServices: []).listen(to._handleGeneralDevice);
-
-      // Scan for Devices
-      to._sonrDevicesStream = to._ble.scanForDevices(withServices: [BLE_SONR_SERVICE_ID]).listen(to._handleSonrDevice);
-    }
-  }
-
-  /// #### Read
-  /// Method Reads Characteristic for Type
-  Future<String> read({required BLECharacteristicType type}) async {
-    if (isReady) {
-      // Write Value
-      try {
-        // Find Value
-        final result = await _ble.readCharacteristic(type.characteristic(deviceId));
-
-        // Return String Value
-        return String.fromCharCodes(result);
-      } on Exception catch (e, s) {
-        // Print Error
-        print('Error occured when writing ${type.name} : $e');
-        print(s);
-        return "";
+  static Future<void> discover(String maddr) async {
+    if (DeviceService.isMobile) {
+      // Scan Devices
+      if (to._status.value.isReady) {
+        // Start scanning
+        to._status(to._status.value.setIsScanning(true));
+        to._refreshScan();
+        to._status(to._status.value.setIsScanning(false));
       }
-    } else {
-      print('BLE is not Ready: ' + _status.toString());
-      return "";
     }
   }
 
-  /// #### Write
-  /// Method Writes Characteristic With Type and Value
-  Future<void> write({required BLECharacteristicType type, required String value}) async {
-    if (isReady) {
-      // Write Value
-      try {
-        await _ble.writeCharacteristicWithoutResponse(type.characteristic(deviceId), value: value.codeUnits);
-      } on Exception catch (e, s) {
-        print('Error occured when writing ${type.characteristic(deviceId).characteristicId} : $e');
-        print(s);
-        rethrow;
+  // Helper: Refreshes Scan
+  void _refreshScan() async {
+    // Start Scan with 4s Timeout
+    _reader.startScan(timeout: 4.seconds);
+
+    // Listen to scan results
+    _deviceStream = _reader.scanResults.listen(_handleScanResults);
+
+    // Stop scanning
+    _reader.stopScan();
+  }
+
+  // Helper: Starts Advertising
+  void _startAdvertise() async {
+    // Check for Not Advertising
+    if (!await _writer.isAdvertising()) {
+      // Validate Self Udid
+      if (_selfUdid.value.isValid) {
+        // Start Broadcast
+        await _writer.start(_selfUdid.value.toAdvertiseData());
+        to._status(to._status.value.setIsAdvertising(true));
       }
-    } else {
-      print('BLE is not Ready: ' + _status.toString());
     }
   }
 
-  // Helper: Handle General BLE Device
-  void _handleGeneralDevice(DiscoveredDevice device) {
-    // Add Device
-    if (_allDevices.contains(device)) {
-      _allDevices[_allDevices.indexOf(device)] = _ble.newDevice(device);
-    } else {
-      _allDevices.add(_ble.newDevice(device));
+  // Helper: Stops Advertising
+  void _stopAdvertise() async {
+    if (await _writer.isAdvertising()) {
+      await _writer.stop();
+      to._status(to._status.value.setIsAdvertising(false));
     }
-
-    // Refresh List
-    _allDevices.refresh();
   }
 
-  // Helper: Handle Sonr BLE Device
-  void _handleSonrDevice(DiscoveredDevice data) {
-    // New Device
-    var device = _ble.newDevice(data);
-
-    // Connect to Device
-    var sub = device.connect();
-    if (sub != null) {
-      _connections.add(sub);
-    }
-
-    // Refresh List
-    _sonrDevices.refresh();
+  // Helper: Handles Scan Results
+  void _handleScanResults(List<ScanResult> results) {
+    // Add Devices from Results
+    _devices.addAllScanResults(results);
+    _devices.refresh();
+    _devices.printCount();
   }
 
   // * Handle Close for Service * //
   @override
   void onClose() {
-    _allDevicesStream.cancel();
-    _sonrDevicesStream.cancel();
-    _connections.forEach((c) => c.cancel());
+    _stopAdvertise();
+    _deviceStream.cancel();
     super.onClose();
   }
 }

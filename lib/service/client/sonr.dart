@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/device/auth.dart';
+import 'package:sonr_app/service/device/ble.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
@@ -19,8 +20,6 @@ class SonrService extends GetxService {
   static SonrService get to => Get.find<SonrService>();
 
   // @ Set Properties
-  // final _isReady = false.obs;
-  final _multiAddr = "".obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
@@ -28,6 +27,7 @@ class SonrService extends GetxService {
   // @ Static Accessors
   static RxDouble get progress => to._progress;
   static Rx<Status> get status => to._status;
+  static bool get isReady => to._status.value.isReady;
 
   // @ Set References
   late Node _node;
@@ -107,6 +107,14 @@ class SonrService extends GetxService {
     }
   }
 
+  /// @ Method to Pass Discovered BLE Peers
+  static void discover(List<BLEDevice> devices) {
+    if (isReady) {
+      // Call Method
+      to._node.discover(devices.toDiscoverRequest());
+    }
+  }
+
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
     var link = await to._node.getURL(url);
@@ -124,44 +132,58 @@ class SonrService extends GetxService {
     required String fingerprint,
     required String words,
   }) async {
-    return await to._node.remoteCreateRequest(RemoteCreateRequest(file: file, fingerprint: fingerprint, sName: UserService.sName, words: words));
+    if (isReady) {
+      return await to._node.remoteCreateRequest(RemoteCreateRequest(file: file, fingerprint: fingerprint, sName: UserService.sName, words: words));
+    }
   }
 
   /// @ Join an Existing Remote
   static Future<RemoteJoinResponse?> joinRemote(String link) async {
-    // Perform Routine
-    var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
-    return response;
+    if (isReady) {
+      // Perform Routine
+      var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
+      return response;
+    }
   }
 
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
-    if (to._properties.value.isFlatMode != isFlatMode) {
-      to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
-      to._node.update(Request.newUpdateProperties(to._properties.value));
+    if (isReady) {
+      if (to._properties.value.isFlatMode != isFlatMode) {
+        to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
+        to._node.update(Request.newUpdateProperties(to._properties.value));
+      }
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
-    to._node.update(Request.newUpdateContact(contact));
+    if (isReady) {
+      to._node.update(Request.newUpdateContact(contact));
+    }
   }
 
   /// @ Invite Peer with Built Request
   static void invite(AuthInvite request) async {
-    // Send Invite
-    to._node.invite(request);
+    if (isReady) {
+      // Send Invite
+      to._node.invite(request);
+    }
   }
 
   /// @ Respond-Peer Event
   static void respond(AuthReply request) async {
-    to._node.respond(request);
+    if (isReady) {
+      to._node.respond(request);
+    }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
-    // Send Invite
-    to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
+    if (isReady) {
+      // Send Invite
+      to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
+    }
   }
 
   /// @ Async Function notifies transfer complete
@@ -185,7 +207,7 @@ class SonrService extends GetxService {
     }
     // Set MultiAddr
     else if (data.value == Status.CONNECTED) {
-      _multiAddr(data.multiaddr);
+      BLEService.initMultiAddr(data.multiaddr);
     }
 
     // Update Status
