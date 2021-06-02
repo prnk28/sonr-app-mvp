@@ -107,13 +107,13 @@ class SonrService extends GetxService {
     }
   }
 
-  /// @ Method to Pass Discovered BLE Peers
-  static void discover(List<BLEDevice> devices) {
-    if (isReady) {
-      // Call Method
-      to._node.discover(devices.toDiscoverRequest());
-    }
-  }
+  // /// @ Method to Pass Discovered BLE Peers
+  // static void discover(List<BLEDevice> devices) {
+  //   if (isReady) {
+  //     // Call Method
+  //     to._node.discover(devices.toDiscoverRequest());
+  //   }
+  // }
 
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
@@ -207,7 +207,7 @@ class SonrService extends GetxService {
     }
     // Set MultiAddr
     else if (data.value == Status.CONNECTED) {
-      BLEService.initMultiAddr(data.multiaddr);
+      // BLEService.initMultiAddr(data.multiaddr);
     }
 
     // Update Status

@@ -67,7 +67,7 @@ class SonrRouting {
     } else {
       await Get.putAsync(() => AuthService().init(), permanent: true);
       await Get.putAsync(() => MobileService().init(), permanent: true);
-      await Get.putAsync(() => BLEService().init(), permanent: true);
+      //await Get.putAsync(() => BLEService().init(), permanent: true);
     }
 
     // Second: User Services
