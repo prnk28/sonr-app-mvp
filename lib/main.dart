@@ -3,6 +3,7 @@ import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sonr_app/style/style.dart';
 import 'data/data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:feedback/feedback.dart';
 
 /// @ Main Method
 Future<void> main() async {
@@ -22,7 +23,7 @@ Future<void> main() async {
       });
     },
     // Init your App.
-    appRunner: () => runApp(App(isDesktop: false)),
+    appRunner: () => runApp(BetterFeedback(child: App(isDesktop: false))),
   );
 }
 
