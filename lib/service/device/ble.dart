@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
+// import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
@@ -16,7 +16,7 @@ class BLEService extends GetxService {
 
   // @ References
   final FlutterBlue _reader = FlutterBlue.instance;
-  final FlutterBlePeripheral _writer = FlutterBlePeripheral();
+  // final FlutterBlePeripheral _writer = FlutterBlePeripheral();
   late StreamSubscription _deviceStream;
 
   /// * Initializes Service for Mobile Devices *
@@ -35,8 +35,9 @@ class BLEService extends GetxService {
       // Set Udid
       to._selfUdid(BLESonrUdid.fromData(DeviceService.platform, maddr));
 
+      print("MultiAddr: " + maddr);
       // Begin Scanning
-      to._startAdvertise();
+      // to._startAdvertise();
     }
   }
 
@@ -65,26 +66,26 @@ class BLEService extends GetxService {
     _reader.stopScan();
   }
 
-  // Helper: Starts Advertising
-  void _startAdvertise() async {
-    // Check for Not Advertising
-    if (!await _writer.isAdvertising()) {
-      // Validate Self Udid
-      if (_selfUdid.value.isValid) {
-        // Start Broadcast
-        await _writer.start(_selfUdid.value.toAdvertiseData());
-        to._status(to._status.value.setIsAdvertising(true));
-      }
-    }
-  }
+  // // Helper: Starts Advertising
+  // void _startAdvertise() async {
+  //   // Check for Not Advertising
+  //   if (!await _writer.isAdvertising()) {
+  //     // Validate Self Udid
+  //     if (_selfUdid.value.isValid) {
+  //       // Start Broadcast
+  //       await _writer.start(_selfUdid.value.toAdvertiseData());
+  //       to._status(to._status.value.setIsAdvertising(true));
+  //     }
+  //   }
+  // }
 
-  // Helper: Stops Advertising
-  void _stopAdvertise() async {
-    if (await _writer.isAdvertising()) {
-      await _writer.stop();
-      to._status(to._status.value.setIsAdvertising(false));
-    }
-  }
+  // // Helper: Stops Advertising
+  // void _stopAdvertise() async {
+  //   if (await _writer.isAdvertising()) {
+  //     await _writer.stop();
+  //     to._status(to._status.value.setIsAdvertising(false));
+  //   }
+  // }
 
   // Helper: Handles Scan Results
   void _handleScanResults(List<ScanResult> results) {
@@ -97,7 +98,7 @@ class BLEService extends GetxService {
   // * Handle Close for Service * //
   @override
   void onClose() {
-    _stopAdvertise();
+    // _stopAdvertise();
     _deviceStream.cancel();
     super.onClose();
   }

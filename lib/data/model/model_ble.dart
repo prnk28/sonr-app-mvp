@@ -1,4 +1,4 @@
-import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
+// import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -81,14 +81,14 @@ class BLESonrUdid {
 
   // @ Methods //
   /// #### Method to Convert Value into Advertisement Data
-  AdvertiseData toAdvertiseData() {
-    var _data = AdvertiseData();
-    _data.includeDeviceName = false;
-    _data.uuid = this.udid;
-    _data.txPowerLevel = AdvertisePower.ADVERTISE_TX_POWER_ULTRA_LOW;
-    _data.advertiseMode = AdvertiseMode.ADVERTISE_MODE_LOW_LATENCY;
-    return _data;
-  }
+  // AdvertiseData toAdvertiseData() {
+  //   var _data = AdvertiseData();
+  //   _data.includeDeviceName = false;
+  //   _data.uuid = this.udid;
+  //   _data.txPowerLevel = AdvertisePower.ADVERTISE_TX_POWER_ULTRA_LOW;
+  //   _data.advertiseMode = AdvertiseMode.ADVERTISE_MODE_LOW_LATENCY;
+  //   return _data;
+  // }
 
   // @ Static //
   /// #### Construct BLESonrUdid from Given MultiAddr
