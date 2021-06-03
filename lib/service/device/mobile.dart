@@ -445,7 +445,7 @@ class MobileService extends GetxService {
   // # Handle Incoming Remote Link
   _handleSharedRemote(String? link) async {
     if (link != null) {
-      print(link);
+      Logger.info('Shared Remote Link: ' + link);
       if (link.contains(".remote.")) {
         _incomingRemote(link);
         RemoteSheet.open(to._incomingRemote.value.substring(7));

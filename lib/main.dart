@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sonr_app/style/style.dart';
-import 'data/data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:feedback/feedback.dart';
 
@@ -10,18 +9,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices();
   await SentryFlutter.init(
-    (options) {
-      // Properties
-      options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
-      options.sampleRate = 0.1;
-      options.serverName = "[App] ${DeviceService.platform.toString()}";
-      options.debug = false;
-
-      // Add Excludes
-      SonrRouting.excludedModules.forEach((ex) {
-        options.addInAppExclude(ex);
-      });
-    },
+    Logger.sentryOptions,
+    isIOSChecker: () => DeviceService.isIOS,
+    isAndroidChecker: () => DeviceService.isAndroid,
     // Init your App.
     appRunner: () => runApp(BetterFeedback(child: App(isDesktop: false))),
   );

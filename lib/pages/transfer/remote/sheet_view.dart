@@ -4,7 +4,8 @@ import 'package:sonr_app/style/style.dart';
 class RemoteSheet {
   static void open(String link) {
     // Print Link
-    print("Link: " + link);
+    Logger.info("Remote Link: " + link);
+
     // Handle Controllers
     if (RemoteLobbyController.isNotRegistered) {
       Get.put(RemoteLobbyController());

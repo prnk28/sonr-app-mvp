@@ -212,6 +212,9 @@ class SonrService extends GetxService {
 
     // Update Status
     _status(data.value);
+
+    // Log
+    Logger.info("Node(Callback) Status: " + data.value.toString());
   }
 
   /// @ Node Has Been Invited
@@ -226,6 +229,9 @@ class SonrService extends GetxService {
     } else {
       SonrOverlay.invite(data);
     }
+
+    // Log
+    Logger.info("Node(Callback) Invited: " + data.toString());
   }
 
   /// @ Node Has Been Accepted
@@ -248,12 +254,17 @@ class SonrService extends GetxService {
         _transferCallback!(TransferStatusUtil.statusFromReply(reply));
       }
     }
+
+    // Log
+    Logger.info("Node(Callback) Invited: " + reply.toString());
   }
 
   /// @ Transfer Has Updated Progress
   void _handleProgress(double data) async {
-    print(data);
     _progress(data);
+
+    // Log
+    Logger.info("Node(Callback) Progress: " + data.toString());
   }
 
   /// @ Completes Transmission Sequence
@@ -270,6 +281,9 @@ class SonrService extends GetxService {
 
     // Log Activity
     CardService.addActivityShared(payload: data.payload, file: data.file);
+
+    // Log
+    Logger.info("Node(Callback) Transmitted: " + data.toString());
   }
 
   /// @ Mark as Received File
@@ -293,14 +307,19 @@ class SonrService extends GetxService {
     // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: UISoundType.Received);
+
+    // Log
+    Logger.info("Node(Callback) Received: " + data.toString());
   }
 
   /// @ An Error Has Occurred
   void _handleError(ErrorMessage data) async {
-    print(data.toString());
     if (data.severity != ErrorMessage_Severity.LOG) {
       SonrSnack.error("", error: data);
     }
+
+    // Log
+    Logger.sError(data);
   }
 
   // ************************

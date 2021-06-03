@@ -92,26 +92,3 @@ class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
     );
   }
 }
-
-// class _SocialUserSearchSuggestion extends StatelessWidget {
-//   final Function(Contact_Social) onSelected;
-
-//   const _SocialUserSearchSuggestion(this.user, {Key? key, required this.onSelected}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(right: 8.0),
-//       child: Container(
-//         width: 100,
-//         height: 100,
-//         child: PlainButton(
-//             onPressed: () {
-//               print(user!.toString());
-//             },
-//             child: Container(
-//               child: Image.network(user!.picture.url),
-//             )),
-//       ),
-//     );
-//   }
-// }

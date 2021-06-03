@@ -110,7 +110,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
       // Handle Error
       else {
-        print("Failed to find animation controller");
+        Logger.error("Failed to find animation controller");
         isReady(false);
       }
     }

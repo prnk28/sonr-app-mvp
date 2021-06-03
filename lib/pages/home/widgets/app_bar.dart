@@ -32,9 +32,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
           child: GestureDetector(
             key: ValueKey<String>(controller.title.value),
             onTap: controller.onTitleTap,
-            onLongPress: () {
-              UserService.openFeedback(context);
-            },
+            onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
             child: controller.title.value.headThree(
               color: Get.theme.focusColor,
               weight: FontWeight.w800,

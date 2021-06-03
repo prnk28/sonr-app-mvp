@@ -62,6 +62,11 @@ class SonrRouting {
   static initServices({bool isDesktop = false}) async {
     // First: Device Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);
+
+    // System Service
+    await Get.putAsync(() => Logger().init());
+
+    // Device Services
     if (isDesktop) {
       await Get.putAsync(() => DesktopService().init(), permanent: true);
     } else {
