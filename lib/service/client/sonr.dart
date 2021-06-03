@@ -221,13 +221,13 @@ class SonrService extends GetxService {
     } else {
       SonrOverlay.invite(data);
     }
-
-    // Logging
-    Logger.info("Node(Callback) Invited: " + data.toString());
   }
 
   /// @ Node Has Been Accepted
   void _handleResponded(AuthReply reply) async {
+    // Logging
+    Logger.info("Node(Callback) Responded: " + reply.toString());
+
     // Handle Contact Response
     if (reply.type == AuthReply_Type.FlatContact) {
       await HapticFeedback.heavyImpact();
@@ -243,9 +243,6 @@ class SonrService extends GetxService {
     } else {
       _session.onReply(reply);
     }
-
-    // Logging
-    Logger.info("Node(Callback) Responded: " + reply.toString());
   }
 
   /// @ Transfer Has Updated Progress
