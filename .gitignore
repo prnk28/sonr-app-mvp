@@ -23,7 +23,7 @@ Gemfile
 *.iws
 .idea/
 .sonr/
-
+env_gen.txt
 /lib/env.dart
 
 # Visual Studio Code related

@@ -24,6 +24,10 @@ environment_config:
       env_var: hs_key
     hs_secret:
       env_var: hs_secret
+    hub_key:
+      env_var: hub_key
+    hub_secret:
+      env_var: hub_secret
     sentry_dsn:
       env_var: sentry_dsn
     storj_key:
@@ -87,8 +91,8 @@ dependencies:
   posthog_flutter:
     git: git@github.com:sonr-io/posthog-flutter.git
   sonr_plugin:
-    git: git@github.com:sonr-io/plugin.git
-    #path: ../plugin/ #-- Uncomment for Local Development
+    #git: git@github.com:sonr-io/plugin.git
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0
