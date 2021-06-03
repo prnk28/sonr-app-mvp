@@ -11,7 +11,7 @@ class SearchResultsView extends GetView<DashboardController> {
       child: ListView.builder(
           itemCount: controller.results.length,
           itemBuilder: (context, index) {
-            return TransferItem(controller.results[index], type: TransferItemView.ListItem);
+            return TransferCardItem(controller.results[index], type: CardsViewType.ListItem);
           }),
     );
   }

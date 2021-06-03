@@ -11,27 +11,27 @@ import 'package:sonr_app/style/style.dart';
 
 /// @ Card Element/View type Enums
 
-enum TransferItemView { CardItem, GridItem, ListItem }
+enum CardsViewType { CardItem, GridItem, ListItem }
 
 //// @ TransferView: Builds View based on TransferItem Payload Type
-class TransferItem extends StatelessWidget {
+class TransferCardItem extends StatelessWidget {
   /// TransferItem: SQL Reference to Protobuf
   final TransferCard item;
 
   /// Size/Shape of Transfer View
-  final TransferItemView type;
-  const TransferItem(this.item, {Key? key, this.type = TransferItemView.CardItem}) : super(key: key);
+  final CardsViewType type;
+  const TransferCardItem(this.item, {Key? key, this.type = CardsViewType.CardItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // @ Build Contact Card by Size
     if (item.payload == Payload.CONTACT) {
       switch (type) {
-        case TransferItemView.CardItem:
+        case CardsViewType.CardItem:
           return ContactCardItemView(item);
-        case TransferItemView.GridItem:
+        case CardsViewType.GridItem:
           return ContactGridItemView(item);
-        case TransferItemView.ListItem:
+        case CardsViewType.ListItem:
           return ContactListItemView(item);
       }
     }
@@ -39,11 +39,11 @@ class TransferItem extends StatelessWidget {
     // @ Build URL Card by Size
     else if (item.payload == Payload.URL) {
       switch (type) {
-        case TransferItemView.CardItem:
+        case CardsViewType.CardItem:
           return URLCardItemView(item);
-        case TransferItemView.GridItem:
+        case CardsViewType.GridItem:
           return URLGridItemView(item);
-        case TransferItemView.ListItem:
+        case CardsViewType.ListItem:
           return URLListItemView(item);
       }
     }
@@ -51,18 +51,18 @@ class TransferItem extends StatelessWidget {
     // @ Build Media/File Card by Size
     else {
       switch (type) {
-        case TransferItemView.CardItem:
+        case CardsViewType.CardItem:
           return MetaCardItemView(item);
-        case TransferItemView.GridItem:
+        case CardsViewType.GridItem:
           return MetaGridItemView(item);
-        case TransferItemView.ListItem:
+        case CardsViewType.ListItem:
           return MetaListItemView(item);
       }
     }
   }
 }
 
-extension CardsViewElementTypeUtils on TransferItemsType {
+extension TransferItemsTypeUtils on TransferItemsType {
   /// Return Empty Image Index by Type
   String get emptyLabel => "No ${this.toString().substring(this.toString().indexOf('.') + 1)} yet";
 
@@ -111,7 +111,7 @@ class CardsGridView extends StatelessWidget {
           controller: controller,
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(type.transferItemAtIndex(index), type: TransferItemView.GridItem);
+            return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.GridItem);
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
         );
@@ -137,7 +137,7 @@ class CardsListView extends StatelessWidget {
           controller: controller,
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(type.transferItemAtIndex(index), type: TransferItemView.ListItem);
+            return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.ListItem);
           },
         );
       } else {
