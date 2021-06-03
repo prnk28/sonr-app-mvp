@@ -32,7 +32,7 @@ class TransferScreen extends GetView<TransferController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       LocalView(),
-                      DevicesView(),
+                      //DevicesView(),
                     ],
                   ),
           ),
