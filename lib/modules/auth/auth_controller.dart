@@ -1,6 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 
-class AuthController extends GetxController {
+class AuthorizeController extends GetxController {
   // @ Invite Management
   /// Accept a provided Contact Invite
   /// Parameters: `withShare` will send back own Contact

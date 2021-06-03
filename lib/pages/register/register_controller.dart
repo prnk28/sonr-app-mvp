@@ -172,7 +172,7 @@ class RegisterController extends GetxController {
 
   /// @ Request Location Permissions
   Future<bool> requestLocation() async {
-    if (await Permission.locationWhenInUse.request().isGranted) {
+    if (await Permission.location.request().isGranted) {
       Get.find<MobileService>().updatePermissionsStatus();
       status(RegisterStatus.Gallery);
       return true;

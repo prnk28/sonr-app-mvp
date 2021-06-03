@@ -4,11 +4,6 @@ import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 // import 'package:sonr_app/service/device/ble.dart';
-import 'package:sonr_app/service/device/desktop.dart';
-import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/service/device/auth.dart';
-import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
@@ -57,52 +52,26 @@ class SonrRouting {
           curve: Curves.easeIn,
         ),
       ];
+}
 
-  /// @ Application Services
-  static initServices({bool isDesktop = false}) async {
-    // First: Device Services
-    await Get.putAsync(() => DeviceService().init(), permanent: true);
+/// #### Details
+/// Handles opening new page to display Cards, Item, or Error
+class Details {
+  static void openCardsList() {}
 
-    // System Service
-    await Get.putAsync(() => Logger().init(), permanent: true);
+  static void openCardsGrid() {}
 
-    // Device Services
-    if (isDesktop) {
-      await Get.putAsync(() => DesktopService().init(), permanent: true);
-    } else {
-      await Get.putAsync(() => AuthService().init(), permanent: true);
-      await Get.putAsync(() => MobileService().init(), permanent: true);
-    }
+  static void openDetailContact() {}
 
-    // Second: User Services
-    await Get.putAsync(() => UserService().init(), permanent: true);
+  static void openDetailFile() {}
 
-    // Third: Initialize Data/Networking Services
-    await Get.putAsync(() => TransferService().init());
-    await Get.putAsync(() => CardService().init(), permanent: true);
-    await Get.putAsync(() => LobbyService().init());
-    await Get.putAsync(() => SonrService().init(), permanent: true);
+  static void openDetailMedia() {}
 
-    // Fourth: UI Services
-    await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-    await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
-  }
+  static void openDetailUrl() {}
 
-  /// @ Method Validates Required Services Registered
-  static bool get areServicesRegistered {
-    return DeviceService.isRegistered &&
-        UserService.isRegistered &&
-        CardService.isRegistered &&
-        LobbyService.isRegistered &&
-        UserService.isRegistered;
-  }
+  static void openErrorConnection() {}
 
-  static List<String> get excludedModules => [
-        'open_file',
-        'animated_widgets',
-        'get',
-        'path_provider',
-        'camerawesome_plugin',
-        'file_picker',
-      ];
+  static void openErrorPermissions() {}
+
+  static void openErrorTransfer() {}
 }

@@ -9,7 +9,7 @@ class Auth {
   /// Invite Received
   static void invite(AuthInvite invite) {
     // Place Controller
-    final controller = Get.put<AuthController>(AuthController());
+    final controller = Get.put<AuthorizeController>(AuthorizeController());
 
     // Open Sheet
     Get.bottomSheet(
@@ -21,7 +21,7 @@ class Auth {
   /// Reply Contact Received
   static void reply(AuthReply reply) {
     // Place Controller
-    final controller = Get.put<AuthController>(AuthController());
+    final controller = Get.put<AuthorizeController>(AuthorizeController());
 
     // Open Sheet
     Get.bottomSheet(
@@ -80,7 +80,7 @@ class ReplyOverlayView extends StatelessWidget {
 
 //// @ TransferView: Builds Invite View based on AuthInvite Payload Type
 class _AuthInviteSheet extends StatelessWidget {
-  final AuthController controller;
+  final AuthorizeController controller;
   final AuthInvite invite;
 
   const _AuthInviteSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
@@ -113,7 +113,7 @@ class _AuthInviteSheet extends StatelessWidget {
 
 //// @ TransferView: Builds Invite View based on AuthInvite Payload Type - Contact Only
 class _AuthReplySheet extends StatelessWidget {
-  final AuthController controller;
+  final AuthorizeController controller;
   final AuthReply reply;
   const _AuthReplySheet({Key? key, required this.controller, required this.reply}) : super(key: key);
   @override

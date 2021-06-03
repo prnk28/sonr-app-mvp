@@ -7,7 +7,7 @@ import 'package:feedback/feedback.dart';
 /// @ Main Method
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrRouting.initServices();
+  await SonrServices.init();
   await SentryFlutter.init(
     Logger.sentryOptions,
     isIOSChecker: () => DeviceService.isIOS,

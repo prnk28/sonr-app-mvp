@@ -14,7 +14,7 @@ class DesktopService extends GetxService {
 
   DesktopService() {
     Timer.periodic(1.seconds, (timer) {
-      if (SonrRouting.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
         SonrService.update(Position.create());
       }
     });

@@ -5,6 +5,6 @@ import 'main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrRouting.initServices(isDesktop: true);
+  await SonrServices.init(isDesktop: true);
   runApp(App(isDesktop: true));
 }

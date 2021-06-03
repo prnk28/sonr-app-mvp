@@ -70,7 +70,7 @@ class MobileService extends GetxService {
 
   MobileService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (SonrRouting.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
         SonrService.update(position.value);
       }
     });
