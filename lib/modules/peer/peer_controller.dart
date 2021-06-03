@@ -2,7 +2,6 @@ import 'package:rive/rive.dart';
 import 'dart:async';
 import 'package:sonr_app/style/style.dart';
 
-
 /// @ Reactive Controller for Peer Bubble
 class PeerController extends GetxController with SingleGetTickerProviderMixin {
   // Required Properties
@@ -120,7 +119,12 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       // Check not already Pending
       if (!_isPending!.value) {
         // Perform Invite
-        TransferService.sendInviteToPeer(this.peer.value);
+        var session = TransferService.sendInviteToPeer(this.peer.value);
+
+        // Listen to Session
+        if (session != null) {
+          session.status.listen(_handleTransferStatus);
+        }
 
         // Check for File
         if (TransferService.payload.value.isTransfer) {

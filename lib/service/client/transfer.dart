@@ -179,7 +179,7 @@ class TransferService extends GetxService {
   }
 
   /// @ Send Invite with Peer
-  static void sendInviteToPeer(Peer peer) {
+  static RxSession? sendInviteToPeer(Peer peer) {
     // Analytics
     Posthog().capture(
       eventName: '[TransferService]: Selected-Peer',
@@ -196,7 +196,7 @@ class TransferService extends GetxService {
       to._invite.setPeer(peer);
 
       // Send Invite
-      SonrService.invite(to._invite.value);
+      return SonrService.invite(to._invite.value);
     }
     return null;
   }

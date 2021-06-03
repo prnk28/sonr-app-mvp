@@ -157,11 +157,12 @@ class SonrService extends GetxService {
   }
 
   /// @ Invite Peer with Built Request
-  static void invite(AuthInvite request) async {
+  static RxSession? invite(AuthInvite request) {
     if (isReady) {
       // Send Invite
       to._node.invite(request);
       to._session.outgoing(request);
+      return to._session;
     }
   }
 
@@ -169,6 +170,7 @@ class SonrService extends GetxService {
   static void respond(AuthReply request) async {
     if (isReady) {
       to._node.respond(request);
+      to._session.onReply(request);
     }
   }
 
@@ -274,6 +276,9 @@ class SonrService extends GetxService {
 
   /// @ Mark as Received File
   Future<void> _handleReceived(Transfer data) async {
+    // Check for Callback
+    _session.onComplete(data);
+
     // Save Card to Gallery
     if (data.payload.isTransfer) {
       await DeviceService.saveTransfer(data.file);
@@ -287,14 +292,6 @@ class SonrService extends GetxService {
         payload: data.payload,
         file: data.file,
       );
-    }
-
-    // Check for Callback
-    _session.onComplete(data);
-
-    // Close any Existing Overlays
-    if (SonrOverlay.isOpen) {
-      SonrOverlay.closeAll();
     }
 
     // Present Feedback
