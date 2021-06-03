@@ -1,0 +1,7 @@
+// Flutter Gen
+flutter pub run environment_config:generate --ip_key=873dbe322aea47f89dcf729dcc8f60e8 --rapid_host=find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com --rapid_key=a09329a7a8mshc7688c2dc3de4f9p197eb4jsn186162847bfb --hs_key=89d91f4cc4031106054ff7791df374b84135b11e7a6de8f05dbf75f3a667bb9e --hs_secret=f2713dbbc096dbd08352a2814ddede287db3a3a86628ca369caa4b4b25a5f290 --storj_key=1cCYAHeo6b3QziQe9B9VXKtgBUJ6D6ZbAovEvr2U4DqND9iGTmqrX37NQcugmjDmsgKHs6XbqRyr3RV2RKjFPSrYeQfqJT3mNB8SisU1y6wAkdJYnAwseCSMGr912SFBpCr6u2P5wkhEQDAhYpdyyQNY6ARrHKK1ZnhqA1AbqJaXaNpr8vtG94kSXiJSbhHbQWRKzZnfCEekNbYiSmkHMEsBpwaPAtnazMKpbQkigZG2z7hQerKSbaxVX3KtSBEaSNp8QNkvg4wn --storj_root_password=fu8c9f@c3b00k --sentry_dsn='https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326' --hub_key=bjxil5a2qmragp4idkichrrtlti  --hub_secret=bdm7tmdvyna3i5e4fxgcub2kcrnq2uykfwbt5qzi
+
+// Bitrise Gen
+#!/bin/sh
+flutter pub get
+flutter pub run environment_config:generate --ip_key=$ip_key --rapid_host=$rapid_host  --rapid_key=$rapid_key --hs_key=$hs_key  --hs_secret=$hs_secret --storj_key=$storj_key --storj_root_password=$storj_root_password --sentry_dsn=$sentry_dsn --hub_key=$hub_key --hub_secret=$hub_secret
