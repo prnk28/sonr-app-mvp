@@ -1,2 +1,0 @@
-app_identifier("io.sonr.apple") # The bundle identifier of your app
-apple_id("pradn@sonr.io") # Your Apple email address

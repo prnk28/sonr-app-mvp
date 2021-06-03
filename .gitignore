@@ -23,9 +23,10 @@ Gemfile
 *.iws
 .idea/
 .sonr/
-
-/lib/env.dart
 env_gen.txt
+/lib/env.dart
+
+
 # Visual Studio Code related
 .vscode/
 workspace.code-workspace
