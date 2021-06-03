@@ -245,7 +245,7 @@ class SonrService extends GetxService {
     }
 
     // Logging
-    Logger.info("Node(Callback) Invited: " + reply.toString());
+    Logger.info("Node(Callback) Responded: " + reply.toString());
   }
 
   /// @ Transfer Has Updated Progress
@@ -260,6 +260,7 @@ class SonrService extends GetxService {
   void _handleTransmitted(Transfer data) async {
     // Check for Callback
     _session.onComplete(data);
+    TransferService.resetPayload();
 
     // Feedback
     DeviceService.playSound(type: UISoundType.Transmitted);
@@ -304,6 +305,17 @@ class SonrService extends GetxService {
   void _handleError(ErrorMessage data) async {
     if (data.severity != ErrorMessage_Severity.LOG) {
       SonrSnack.error("", error: data);
+    } else {
+      // Reset Views
+      if (SonrOverlay.isOpen) {
+        SonrOverlay.closeAll();
+      }
+
+      // Reset Payload
+      TransferService.resetPayload();
+
+      // Reset Session
+      _session.reset();
     }
 
     // Logging

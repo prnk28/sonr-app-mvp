@@ -64,7 +64,7 @@ class SonrRouting {
     await Get.putAsync(() => DeviceService().init(), permanent: true);
 
     // System Service
-    await Get.putAsync(() => Logger().init());
+    await Get.putAsync(() => Logger().init(), permanent: true);
 
     // Device Services
     if (isDesktop) {
@@ -72,16 +72,15 @@ class SonrRouting {
     } else {
       await Get.putAsync(() => AuthService().init(), permanent: true);
       await Get.putAsync(() => MobileService().init(), permanent: true);
-      //await Get.putAsync(() => BLEService().init(), permanent: true);
     }
 
     // Second: User Services
     await Get.putAsync(() => UserService().init(), permanent: true);
 
     // Third: Initialize Data/Networking Services
-    await Get.putAsync(() => TransferService().init(), permanent: true);
+    await Get.putAsync(() => TransferService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
-    await Get.putAsync(() => LobbyService().init(), permanent: true);
+    await Get.putAsync(() => LobbyService().init());
     await Get.putAsync(() => SonrService().init(), permanent: true);
 
     // Fourth: UI Services
