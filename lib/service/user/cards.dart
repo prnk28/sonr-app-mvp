@@ -187,8 +187,10 @@ class CardService extends GetxService {
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
-    if (totalCount > 0) {
-      await to._database.deleteAllCards();
+    if (isRegistered) {
+      if (totalCount > 0) {
+        await to._database.deleteAllCards();
+      }
     }
   }
 
