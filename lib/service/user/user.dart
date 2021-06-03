@@ -51,16 +51,14 @@ class UserService extends GetxService {
     _hasUser(_userBox.hasData("user"));
 
     if (DeviceService.isDesktop) {
-      _hasUser(true);
-      _contact(Contact(
-          profile: Profile(
-        firstName: "Anonymous",
-        lastName: DeviceService.platform.toString(),
-      )));
+      // Delete User
+      _userBox.remove('user');
+      _hasUser(false);
+      _isNewUser(true);
     }
 
     // Check if Exists
-    if (_hasUser.value && DeviceService.isMobile) {
+    if (_hasUser.value) {
       try {
         var profileJson = _userBox.read("user");
         var user = User.fromJson(profileJson);
