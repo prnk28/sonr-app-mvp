@@ -47,6 +47,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
 
@@ -160,6 +161,7 @@ class Margin {
   }
 }
 
+/// Class Handles Theme Data and General Dark Mode Features
 class SonrTheme {
   /// Method sets [DarkMode] for Device and Updates [ThemeData]
   static void setDarkMode({required bool isDark}) {
@@ -179,4 +181,28 @@ class SonrTheme {
     // Set Theme Mode
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
+}
+
+/// Extension to Automatically Handle Text Color
+extension DesignTextAutoUtils on String {
+  /// Automatically Set White/Dark based on Dark Mode for `H2` Text
+  DesignText get h2Auto => Get.isDarkMode ? this.h2_White : this.h2;
+
+  /// Automatically Set White/Dark based on Dark Mode for `H3` Text
+  DesignText get h3Auto => Get.isDarkMode ? this.h3_White : this.h3;
+
+  /// Automatically Set White/Dark based on Dark Mode for `H4` Text
+  DesignText get h4Auto => Get.isDarkMode ? this.h4_White : this.h4;
+
+  /// Automatically Set White/Dark based on Dark Mode for `H5` Text
+  DesignText get h5Auto => Get.isDarkMode ? this.h5_White : this.h5;
+
+  /// Automatically Set White/Dark based on Dark Mode for `H6` Text
+  DesignText get h6Auto => Get.isDarkMode ? this.h6_White : this.h6;
+
+  /// Automatically Set White/Dark based on Dark Mode for `Paragraph` Text
+  DesignText get pAuto => Get.isDarkMode ? this.p_White : this.p;
+
+  /// Automatically Set White/Dark based on Dark Mode for `Light` Text
+  DesignText get lAuto => Get.isDarkMode ? this.l_White : this.l;
 }

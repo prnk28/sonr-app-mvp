@@ -20,23 +20,19 @@ class SonrService extends GetxService {
   static SonrService get to => Get.find<SonrService>();
 
   // @ Set Properties
-  final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
+  final RxSession _session = RxSession();
 
   // @ Static Accessors
-  static RxDouble get progress => to._progress;
   static Rx<Status> get status => to._status;
   static bool get isReady => to._status.value.isReady;
+  static RxSession get session => to._session;
 
   // @ Set References
   late Node _node;
-  var _received = Completer<Transfer>();
-  Completer<Transfer> get received => _received;
   bool _initialized = false;
-
-  // Registered Callbacks
-  Function(TransferStatus)? _transferCallback;
+  bool _connected = false;
 
   /// @ Updates Node^ //
   SonrService() {
@@ -48,11 +44,6 @@ class SonrService extends GetxService {
         }
       }
     });
-  }
-
-  // @ Register Handler for Transfer Updates
-  void registerTransferUpdates(Function(TransferStatus) reply) {
-    _transferCallback = reply;
   }
 
   /// @ Initialize Service Method
@@ -93,10 +84,11 @@ class SonrService extends GetxService {
       _node.onReceived = _handleReceived;
       _node.onTransmitted = _handleTransmitted;
       _node.onError = _handleError;
+      _initialized = true;
     }
 
     // Check not Connected
-    if (_status.value.isNotConnected) {
+    if (!_connected) {
       // Connect Node
       _node.connect();
 
@@ -104,6 +96,7 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile) {
         _node.update(Request.newUpdatePosition(MobileService.position.value));
       }
+      _connected = true;
     }
   }
 
@@ -168,6 +161,7 @@ class SonrService extends GetxService {
     if (isReady) {
       // Send Invite
       to._node.invite(request);
+      to._session.outgoing(request);
     }
   }
 
@@ -184,11 +178,6 @@ class SonrService extends GetxService {
       // Send Invite
       to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
-  }
-
-  /// @ Async Function notifies transfer complete
-  static Future<Transfer> completed() async {
-    return to.received.future;
   }
 
   // **************************
@@ -213,12 +202,15 @@ class SonrService extends GetxService {
     // Update Status
     _status(data.value);
 
-    // Log
+    // Logging
     Logger.info("Node(Callback) Status: " + data.value.toString());
   }
 
   /// @ Node Has Been Invited
   void _handleInvited(AuthInvite data) async {
+    // Create Incoming Session
+    to._session.incoming(data);
+
     // Handle Feedback
     DeviceService.playSound(type: UISoundType.Swipe);
     DeviceService.feedback();
@@ -230,7 +222,7 @@ class SonrService extends GetxService {
       SonrOverlay.invite(data);
     }
 
-    // Log
+    // Logging
     Logger.info("Node(Callback) Invited: " + data.toString());
   }
 
@@ -249,55 +241,56 @@ class SonrService extends GetxService {
     else if (reply.type == AuthReply_Type.Cancel) {
       await HapticFeedback.vibrate();
     } else {
-      // Check for Callback
-      if (_transferCallback != null) {
-        _transferCallback!(TransferStatusUtil.statusFromReply(reply));
-      }
+      _session.onReply(reply);
     }
 
-    // Log
+    // Logging
     Logger.info("Node(Callback) Invited: " + reply.toString());
   }
 
   /// @ Transfer Has Updated Progress
   void _handleProgress(double data) async {
-    _progress(data);
+    _session.onProgress(data);
 
-    // Log
+    // Logging
     Logger.info("Node(Callback) Progress: " + data.toString());
   }
 
   /// @ Completes Transmission Sequence
   void _handleTransmitted(Transfer data) async {
     // Check for Callback
-    if (_transferCallback != null) {
-      _transferCallback!(TransferStatus.Completed);
-      _transferCallback = null;
-    }
+    _session.onComplete(data);
 
     // Feedback
     DeviceService.playSound(type: UISoundType.Transmitted);
     await HapticFeedback.heavyImpact();
 
-    // Log Activity
+    // Logging Activity
     CardService.addActivityShared(payload: data.payload, file: data.file);
 
-    // Log
+    // Logging
     Logger.info("Node(Callback) Transmitted: " + data.toString());
   }
 
   /// @ Mark as Received File
   Future<void> _handleReceived(Transfer data) async {
     // Save Card to Gallery
-    if (DeviceService.isMobile) {
-      await CardService.addCard(data);
-    } else {
-      if (data.payload.isTransfer) {
-        await DeviceService.saveTransfer(data.file);
-      }
+    if (data.payload.isTransfer) {
+      await DeviceService.saveTransfer(data.file);
     }
 
-    to.received.complete(data);
+    // Update Database
+    if (DeviceService.isMobile) {
+      await CardService.addCard(data);
+      await CardService.addActivityReceived(
+        owner: data.owner,
+        payload: data.payload,
+        file: data.file,
+      );
+    }
+
+    // Check for Callback
+    _session.onComplete(data);
 
     // Close any Existing Overlays
     if (SonrOverlay.isOpen) {
@@ -308,7 +301,7 @@ class SonrService extends GetxService {
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: UISoundType.Received);
 
-    // Log
+    // Logging
     Logger.info("Node(Callback) Received: " + data.toString());
   }
 
@@ -318,7 +311,7 @@ class SonrService extends GetxService {
       SonrSnack.error("", error: data);
     }
 
-    // Log
+    // Logging
     Logger.sError(data);
   }
 
@@ -341,18 +334,5 @@ class SonrService extends GetxService {
           rapidApiHost: Env.rapid_host,
           rapidApiKey: Env.rapid_key,
         ));
-  }
-}
-
-/// @ Transfer Status Enum
-enum TransferStatus { Accepted, Denied, Completed }
-
-extension TransferStatusUtil on TransferStatus {
-  static TransferStatus statusFromReply(AuthReply reply) {
-    if (reply.decision) {
-      return TransferStatus.Accepted;
-    } else {
-      return TransferStatus.Denied;
-    }
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:sonr_app/style/style.dart';
@@ -15,6 +16,7 @@ class TransferService extends GetxService {
   final _payload = Payload.NONE.obs;
   final _invite = AuthInvite().obs;
   final _sonrFile = SonrFile().obs;
+  final _sessions = Queue<RxSession>().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
@@ -23,6 +25,7 @@ class TransferService extends GetxService {
   static Rx<SonrFile> get file => to._sonrFile;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
   static RxBool get hasPayload => to._hasPayload;
+  static Rx<Queue> get sessions => to._sessions;
 
   /// @ Initialize Service
   Future<TransferService> init() async {
@@ -195,6 +198,7 @@ class TransferService extends GetxService {
       // Send Invite
       SonrService.invite(to._invite.value);
     }
+    return null;
   }
 
   /// @ Sets File from Other Source

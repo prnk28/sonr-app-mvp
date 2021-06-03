@@ -55,11 +55,7 @@ class _DevicesEmptyView extends GetView<TransferController> {
     return Container(
       padding: EdgeInsets.only(top: 24),
       margin: EdgeInsets.symmetric(horizontal: 48),
-      child: ColorButton.primary(
-        onPressed: () {},
-        text: "Add Device",
-        icon: SonrIcons.Add,
-      ),
+      child: "Coming Soon!".h4Auto,
     );
   }
 }

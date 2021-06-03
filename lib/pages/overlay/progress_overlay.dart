@@ -50,7 +50,7 @@ class ProgressView extends HookWidget {
                           size: Size(Get.width, Get.height),
                           painter: WavePainter(
                             waveAnimation: hookController,
-                            percent: SonrService.progress.value,
+                            percent: SonrService.session.progress.value,
                             gradient: gradient,
                           ),
                         ),
@@ -96,7 +96,7 @@ class ProgressView extends HookWidget {
     return Center(
         child: utilizeProgress
             ? Obx(() {
-                if (SonrService.progress.value >= 0.5) {
+                if (SonrService.session.progress.value >= 0.5) {
                   return FadeIn(child: file.single.mime.type.gradient(size: 165));
                 } else {
                   return Container();

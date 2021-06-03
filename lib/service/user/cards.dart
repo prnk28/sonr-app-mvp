@@ -89,8 +89,6 @@ class CardService extends GetxService {
   /// @ Add New Card to Database
   static addCard(Transfer card) async {
     if (card.payload.isTransfer) {
-      await DeviceService.saveTransfer(card.file);
-
       // Store in Database
       await to._database.addFileCard(card);
       _refreshCount();
@@ -240,8 +238,10 @@ class CardService extends GetxService {
 
     if (invite.file.single.size > 5000000) {
       // Handle Card Received
-      SonrService.completed().then((value) {
-        SonrOverlay.back();
+      SonrService.session.status.listen((s) {
+        if (s.isCompleted) {
+          SonrOverlay.back();
+        }
       });
     } else {
       // Handle Animation Completed
