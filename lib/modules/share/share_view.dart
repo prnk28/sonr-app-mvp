@@ -10,17 +10,7 @@ class SharePopupView extends GetView<ShareController> {
     return Obx(() => SonrScaffold(
         appBar: DesignAppBar(
           centerTitle: true,
-          title: controller.hasSelected.value
-              ? "Share (${controller.selectedItems.length})".headThree(
-                  color: Get.theme.focusColor,
-                  weight: FontWeight.w800,
-                  align: TextAlign.start,
-                )
-              : "Share".headThree(
-                  color: Get.theme.focusColor,
-                  weight: FontWeight.w800,
-                  align: TextAlign.start,
-                ),
+          title: _ShareBarTitle(),
           leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
           action: AnimatedScale(
             scale: controller.hasSelected.value ? 1.0 : 0.0,
