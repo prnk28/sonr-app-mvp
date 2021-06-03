@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
@@ -92,7 +92,6 @@ class MobileService extends GetxService {
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
 
     // Audio Player
-    _audioPlayer.disableLog();
     await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
 
     // Update Device Values
@@ -127,7 +126,6 @@ class MobileService extends GetxService {
     _accelStream.cancel();
     _compassStream.cancel();
     _orienStream.cancel();
-    _audioPlayer.clearCache();
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
     _remoteLinkStream.cancel();
@@ -246,7 +244,7 @@ class MobileService extends GetxService {
   /// @ Update Method
   Future<void> updatePermissionsStatus() async {
     _hasCamera(await Permission.camera.isGranted);
-    _hasLocation(await Permission.locationWhenInUse.isGranted);
+    _hasLocation(await Permission.location.isGranted);
     _hasMicrophone(await Permission.microphone.isGranted);
     _hasNotifications(await Permission.notification.isGranted);
     _hasPhotos(await Permission.photos.isGranted);
@@ -330,7 +328,7 @@ class MobileService extends GetxService {
           description: 'Sonr requires location in order to find devices in your area.',
           acceptTitle: "Allow",
           declineTitle: "Decline")) {
-        if (await Permission.locationWhenInUse.request().isGranted) {
+        if (await Permission.location.request().isGranted) {
           updatePermissionsStatus();
           SonrOverlay.back();
           return true;

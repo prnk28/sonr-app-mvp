@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
+// ignore: unused_import
 import 'local/devices_view.dart';
 import 'local/local_view.dart';
 import 'payload_sheet.dart';
