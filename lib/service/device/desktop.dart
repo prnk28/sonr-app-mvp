@@ -12,6 +12,14 @@ class DesktopService extends GetxService {
   final _storageBox = GetStorage();
   final _hasContact = false.obs;
 
+  DesktopService() {
+    Timer.periodic(1.seconds, (timer) {
+      if (SonrRouting.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+        SonrService.update(Position.create());
+      }
+    });
+  }
+
   // // References
   // MainEntry _main;
   // FlutterSystray _systemTray;
@@ -45,9 +53,7 @@ class DesktopService extends GetxService {
   }
 
   /// @ Method Saves this Device Info
-  Future<void> saveContact(Contact contact) async {
-    
-  }
+  Future<void> saveContact(Contact contact) async {}
 
   // /// @ Add Event Handler to Tray Action
   // void registerEventHandler(String handlerKey, Function handler) {

@@ -68,6 +68,14 @@ class MobileService extends GetxService {
   late StreamSubscription<CompassEvent> _compassStream;
   late StreamSubscription<OrientationEvent> _orienStream;
 
+  MobileService() {
+    Timer.periodic(250.milliseconds, (timer) {
+      if (SonrRouting.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+        SonrService.update(position.value);
+      }
+    });
+  }
+
   // * Device Service Initialization * //
   Future<MobileService> init() async {
     // Handle Keyboard Visibility

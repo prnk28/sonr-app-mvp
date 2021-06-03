@@ -28,23 +28,12 @@ class SonrService extends GetxService {
   static Rx<Status> get status => to._status;
   static bool get isReady => to._status.value.isReady;
   static RxSession get session => to._session;
+  static Completer<bool> hasInitialized = Completer<bool>();
 
   // @ Set References
   late Node _node;
   bool _initialized = false;
   bool _connected = false;
-
-  /// @ Updates Node^ //
-  SonrService() {
-    Timer.periodic(250.milliseconds, (timer) {
-      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
-        // Publish Position
-        if (to._status.value.isBootstrapped) {
-          _node.update(Request.newUpdatePosition(MobileService.position.value));
-        }
-      }
-    });
-  }
 
   /// @ Initialize Service Method
   Future<SonrService> init() async {
@@ -64,6 +53,7 @@ class SonrService extends GetxService {
       _node.onTransmitted = _handleTransmitted;
       _node.onError = _handleError;
       _initialized = true;
+      hasInitialized.complete(true);
       return this;
     } else {
       return this;
@@ -85,6 +75,7 @@ class SonrService extends GetxService {
       _node.onTransmitted = _handleTransmitted;
       _node.onError = _handleError;
       _initialized = true;
+      hasInitialized.complete(true);
     }
 
     // Check not Connected
@@ -136,6 +127,13 @@ class SonrService extends GetxService {
       // Perform Routine
       var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
       return response;
+    }
+  }
+
+  /// @ Send Position Update for Node
+  static void update(Position position) {
+    if (isReady) {
+      to._node.update(Request.newUpdatePosition(MobileService.position.value));
     }
   }
 
