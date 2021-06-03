@@ -96,7 +96,6 @@ extension TransferItemsTypeUtils on TransferItemsType {
 }
 
 /// @ Displays Cards in a Grid Based on Element Type
-
 class CardsGridView extends StatelessWidget {
   final TransferItemsType type;
   final ScrollController? controller;

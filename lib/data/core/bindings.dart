@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/modules/card/tile/tile_controller.dart';
+import 'package:sonr_app/modules/card/contact/tile/tile_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';

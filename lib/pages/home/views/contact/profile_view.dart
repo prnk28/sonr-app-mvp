@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/card/tile/tile_item.dart';
+import 'package:sonr_app/modules/card/contact/tile/tile_item.dart';
 import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/style/style.dart';
 import 'editor/general/fields.dart';
