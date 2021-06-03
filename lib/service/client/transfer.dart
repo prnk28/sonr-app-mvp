@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:sonr_app/style/style.dart';
 import 'package:file_picker/file_picker.dart';
@@ -210,6 +211,15 @@ class TransferService extends GetxService {
 
     // Handle File Payload
     return await _handlePayload(file.payload, file: file);
+  }
+
+  /// @ Write Uint8List Image Data to Storage
+  static Future<String> writeImageToStorage(Uint8List data) async {
+    final Directory output = await getTemporaryDirectory();
+    final String screenshotFilePath = '${output.path}/feedback.png';
+    final File screenshotFile = File(screenshotFilePath);
+    await screenshotFile.writeAsBytes(data);
+    return screenshotFilePath;
   }
 
   /// Set Transfer Payload for File

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:feedback/feedback.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/service/device/auth.dart';
@@ -142,6 +144,36 @@ class UserService extends GetxService {
       to._hasUser(true);
     }
     return user;
+  }
+
+  /// @ Method to Provide User Feedback in Application
+  static Future<void> openFeedback(BuildContext context) async {
+    // Completer Function
+    Completer<Tuple<String, Uint8List?>> completer = Completer<Tuple<String, Uint8List?>>();
+
+    // Display Feedback
+    BetterFeedback.of(context)?.show((String feedback, Uint8List? feedbackScreenshot) {
+      completer.complete(Tuple(feedback, feedbackScreenshot));
+    });
+
+    // Await for Feedback
+    var data = await completer.future;
+    var screenshotPath = "";
+
+    // Save Image
+    if (data.item2 != null) {
+      screenshotPath = await TransferService.writeImageToStorage(data.item2!);
+    }
+
+    // Send Feedback
+    final Email email = Email(
+      body: data.item1,
+      subject: 'Sonr In-App Feedback',
+      recipients: ['contact@sonr.io'],
+      attachmentPaths: screenshotPath != "" ? [screenshotPath] : [],
+      isHTML: false,
+    );
+    await FlutterEmailSender.send(email);
   }
 
   /// @ Trigger iOS Local Network with Alert

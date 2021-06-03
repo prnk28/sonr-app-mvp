@@ -33,7 +33,7 @@ class _HomeAppBarTitle extends GetView<HomeController> {
             key: ValueKey<String>(controller.title.value),
             onTap: controller.onTitleTap,
             onLongPress: () {
-              UserService.toggleDarkMode();
+              UserService.openFeedback(context);
             },
             child: controller.title.value.headThree(
               color: Get.theme.focusColor,

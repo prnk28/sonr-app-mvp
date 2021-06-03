@@ -20,7 +20,9 @@ class TransferScreen extends GetView<TransferController> {
             centerTitle: true,
             leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.closeToHome()),
             action: _RemoteActionButton(),
-            title: controller.title.value.headThree(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black),
+            title: GestureDetector(
+                onLongPress: () => UserService.openFeedback(context),
+                child: controller.title.value.headThree(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
           ),
           bottomSheet: PayloadSheetView(),
           body: SingleChildScrollView(
