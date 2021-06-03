@@ -57,6 +57,26 @@ class SharePopupView extends GetView<ShareController> {
   }
 }
 
+class _ShareBarTitle extends GetView<ShareController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => GestureDetector(
+          onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
+          child: controller.hasSelected.value
+              ? "Share (${controller.selectedItems.length})".headThree(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
+                )
+              : "Share".headThree(
+                  color: Get.theme.focusColor,
+                  weight: FontWeight.w800,
+                  align: TextAlign.start,
+                ),
+        ));
+  }
+}
+
 class _MediaView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {

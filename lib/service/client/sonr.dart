@@ -186,7 +186,7 @@ class SonrService extends GetxService {
   /// @ Handle Bootstrap Result
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
-    if (data.value == Status.BOOTSTRAPPED) {
+    if (data.value == Status.AVAILABLE) {
       DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
@@ -332,11 +332,12 @@ class SonrService extends GetxService {
         settings: UserService.user.settings,
         location: DeviceService.location,
         clientKeys: ConnectionRequest_ClientKeys(
-          hsKey: Env.hs_key,
-          hsSecret: Env.hs_secret,
-          ipKey: Env.ip_key,
-          rapidApiHost: Env.rapid_host,
-          rapidApiKey: Env.rapid_key,
-        ));
+            hsKey: Env.hs_key,
+            hsSecret: Env.hs_secret,
+            ipKey: Env.ip_key,
+            rapidApiHost: Env.rapid_host,
+            rapidApiKey: Env.rapid_key,
+            hubKey: Env.hub_key,
+            hubSecret: Env.hub_secret));
   }
 }

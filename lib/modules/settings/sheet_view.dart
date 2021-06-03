@@ -22,7 +22,7 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: "Settings".h2,
+                      child: GestureDetector(onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback), child: "Settings".h2),
                     ),
                     Padding(padding: EdgeWith.top(24)),
 
