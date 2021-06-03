@@ -26,7 +26,7 @@ class SonrService extends GetxService {
 
   // @ Static Accessors
   static Rx<Status> get status => to._status;
-  static bool get isReady => to._status.value.isReady;
+  static bool get isAvailable => to._status.value.isAvailable;
   static RxSession get session => to._session;
   static Completer<bool> hasInitialized = Completer<bool>();
 
@@ -116,14 +116,14 @@ class SonrService extends GetxService {
     required String fingerprint,
     required String words,
   }) async {
-    if (isReady) {
+    if (isAvailable) {
       return await to._node.remoteCreateRequest(RemoteCreateRequest(file: file, fingerprint: fingerprint, sName: UserService.sName, words: words));
     }
   }
 
   /// @ Join an Existing Remote
   static Future<RemoteJoinResponse?> joinRemote(String link) async {
-    if (isReady) {
+    if (isAvailable) {
       // Perform Routine
       var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
       return response;
@@ -132,14 +132,14 @@ class SonrService extends GetxService {
 
   /// @ Send Position Update for Node
   static void update(Position position) {
-    if (isReady) {
+    if (isAvailable) {
       to._node.update(Request.newUpdatePosition(MobileService.position.value));
     }
   }
 
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
-    if (isReady) {
+    if (isAvailable) {
       if (to._properties.value.isFlatMode != isFlatMode) {
         to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
         to._node.update(Request.newUpdateProperties(to._properties.value));
@@ -149,14 +149,14 @@ class SonrService extends GetxService {
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
-    if (isReady) {
+    if (isAvailable) {
       to._node.update(Request.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
   static RxSession? invite(AuthInvite request) {
-    if (isReady) {
+    if (isAvailable) {
       // Send Invite
       to._node.invite(request);
       to._session.outgoing(request);
@@ -166,7 +166,7 @@ class SonrService extends GetxService {
 
   /// @ Respond-Peer Event
   static void respond(AuthReply request) async {
-    if (isReady) {
+    if (isAvailable) {
       to._node.respond(request);
       to._session.onReply(request);
     }
@@ -174,7 +174,7 @@ class SonrService extends GetxService {
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
-    if (isReady) {
+    if (isAvailable) {
       // Send Invite
       to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
