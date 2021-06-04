@@ -16,7 +16,7 @@ class TransferService extends GetxService {
   final _payload = Payload.NONE.obs;
   final _invite = AuthInvite().obs;
   final _sonrFile = SonrFile().obs;
-  final _sessions = Queue<RxSession>().obs;
+  final _sessions = Queue<Session>().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
@@ -179,7 +179,7 @@ class TransferService extends GetxService {
   }
 
   /// @ Send Invite with Peer
-  static RxSession? sendInviteToPeer(Peer peer) {
+  static Session? sendInviteToPeer(Peer peer) {
     // Analytics
     Posthog().capture(
       eventName: '[TransferService]: Selected-Peer',

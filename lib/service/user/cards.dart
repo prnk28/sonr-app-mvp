@@ -274,7 +274,7 @@ class CardService extends GetxService {
 
     // Present Home Controller
     if (Get.currentRoute != "/transfer") {
-      Get.offNamed('/home/received');
+      Get.offNamed('/home');
     }
   }
 

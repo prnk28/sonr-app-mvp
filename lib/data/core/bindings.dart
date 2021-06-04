@@ -13,6 +13,7 @@ import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -104,6 +105,7 @@ class SonrServices {
     await Get.putAsync(() => TransferService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init());
+    await Get.putAsync(() => SessionService().init());
     await Get.putAsync(() => SonrService().init(), permanent: true);
 
     // Fourth: UI Services

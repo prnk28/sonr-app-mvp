@@ -57,7 +57,7 @@ extension TransferStatusUtil on SessionStatus {
 }
 
 /// @ Class for Transfer Session
-class RxSession {
+class Session {
   // @ Constants
   /// Incoming or Outgoing Session
   SessionDirection direction = SessionDirection.None;
@@ -65,8 +65,11 @@ class RxSession {
   /// Session Payload
   Payload payload = Payload.NONE;
 
-  /// Session Peer
-  Peer peer = Peer();
+  /// Session Sending Peer
+  Peer from = Peer();
+
+  /// Session Receiving Peer
+  Peer to = Peer();
 
   // @ Properties
   /// Current Session Status
@@ -82,15 +85,13 @@ class RxSession {
   /// Getter to check if Session is Valid
   bool get isValid => status.value.isNot(SessionStatus.Default) && payload != Payload.NONE && direction != SessionDirection.None;
 
-  /// Getter for Session ID
-  String get id => peer.idPeer;
-
   // @ Constructer
   /// Create Incoming Session from AuthInvite Request
   void incoming(AuthInvite invite) {
     this.direction = SessionDirection.Incoming;
     this.payload = invite.payload;
-    this.peer = invite.from;
+    this.to = invite.to;
+    this.from = invite.from;
     status(SessionStatus.Invited);
   }
 
@@ -98,14 +99,28 @@ class RxSession {
   void outgoing(AuthInvite invite) {
     this.direction = SessionDirection.Outgoing;
     this.payload = invite.payload;
-    this.peer = invite.to;
+    this.to = invite.to;
+    this.from = invite.from;
     status(SessionStatus.Pending);
   }
 
   // @ Methods
-  /// Checks wether this session is for this peer
-  bool isForPeer(Peer other) {
-    return this.peer.idPeer == other.idPeer;
+  /// Return AuthReply based on Invite Type
+  AuthReply buildReply({required bool decision}) {
+    // Get Reply Type
+    AuthReply_Type replyType;
+    if (this.payload.isTransfer) {
+      replyType = AuthReply_Type.Transfer;
+    } else if (this.payload.isContact) {
+      replyType = AuthReply_Type.Contact;
+    } else if (this.payload.isFlatContact) {
+      replyType = AuthReply_Type.FlatContact;
+    } else {
+      replyType = AuthReply_Type.None;
+    }
+
+    // Return Reply
+    return AuthReply(decision: decision, to: this.from, from: this.to, type: replyType);
   }
 
   /// User Sent Reply
@@ -148,6 +163,7 @@ class RxSession {
     // Reset Defaults
     this.direction = SessionDirection.None;
     this.payload = Payload.NONE;
-    this.peer = Peer();
+    this.from = Peer();
+    this.to = Peer();
   }
 }

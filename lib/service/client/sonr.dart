@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
@@ -9,9 +8,9 @@ import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
-import '../user/cards.dart';
 import 'lobby.dart';
 import '../user/user.dart';
+import 'session.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
 class SonrService extends GetxService {
@@ -22,16 +21,17 @@ class SonrService extends GetxService {
   // @ Set Properties
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
-  final RxSession _session = RxSession();
+  final Session _session = Session();
 
   // @ Static Accessors
   static Rx<Status> get status => to._status;
-  static RxSession get session => to._session;
+  static Session get session => to._session;
 
   // @ Set References
   late Node _node;
   bool _initialized = false;
 
+  // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
   Future<SonrService> init() async {
     // Initialize
@@ -39,38 +39,33 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
-      // Create Node
-      _node = await SonrCore.initialize(_buildConnRequest());
-      _node.onStatus = _handleStatus;
-      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
-      _initialized = true;
+      await initNode();
       return this;
     } else {
       return this;
     }
   }
 
+  /// @ Initializes Node Instance
+  Future<void> initNode() async {
+    // Create Node
+    _node = await SonrCore.initialize(_buildConnRequest());
+    _node.onStatus = _handleStatus;
+    _node.onRefreshed = LobbyService.to.handleRefresh;
+    _node.onInvited = SessionService.to.handleInvite;
+    _node.onReplied = SessionService.to.handleReply;
+    _node.onProgressed = SessionService.to.handleProgress;
+    _node.onReceived = SessionService.to.handleReceived;
+    _node.onTransmitted = SessionService.to.handleTransmitted;
+    _node.onError = _handleError;
+    _initialized = true;
+  }
+
   /// @ Connect to Service Method
   Future<void> connect() async {
     // Check Initialized
     if (!_initialized) {
-      // Create Node
-      _node = await SonrCore.initialize(_buildConnRequest());
-      _node.onStatus = _handleStatus;
-      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
-      _initialized = true;
+      await initNode();
     }
 
     // Connect Node
@@ -82,7 +77,8 @@ class SonrService extends GetxService {
     }
   }
 
-  // /// @ Method to Pass Discovered BLE Peers
+  // * ------------------- Methods ----------------------------
+  /// @ Method to Pass Discovered BLE Peers
   // static void discover(List<BLEDevice> devices) {
   //   if (isReady) {
   //     // Call Method
@@ -146,7 +142,7 @@ class SonrService extends GetxService {
   }
 
   /// @ Invite Peer with Built Request
-  static RxSession? invite(AuthInvite request) {
+  static Session? invite(AuthInvite request) {
     if (status.value.hasConnection) {
       // Send Invite
       to._node.invite(request);
@@ -170,9 +166,7 @@ class SonrService extends GetxService {
     }
   }
 
-  // **************************
-  // ******* Callbacks ********
-  // **************************
+  // * ------------------- Callbacks ----------------------------
   /// @ Handle Bootstrap Result
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
@@ -196,98 +190,6 @@ class SonrService extends GetxService {
     Logger.info("Node(Callback) Status: " + data.value.toString());
   }
 
-  /// @ Node Has Been Invited
-  void _handleInvited(AuthInvite data) async {
-    // Create Incoming Session
-    to._session.incoming(data);
-
-    // Handle Feedback
-    DeviceService.playSound(type: UISoundType.Swipe);
-    DeviceService.feedback();
-
-    // Check for Flat
-    if (data.isFlat && data.payload == Payload.CONTACT) {
-      FlatMode.invite(data.contact);
-    } else {
-      SonrOverlay.invite(data);
-    }
-  }
-
-  /// @ Node Has Been Accepted
-  void _handleResponded(AuthReply reply) async {
-    // Logging
-    Logger.info("Node(Callback) Responded: " + reply.toString());
-
-    // Handle Contact Response
-    if (reply.type == AuthReply_Type.FlatContact) {
-      await HapticFeedback.heavyImpact();
-      FlatMode.response(reply.data.contact);
-    } else if (reply.type == AuthReply_Type.Contact) {
-      await HapticFeedback.vibrate();
-      SonrOverlay.reply(reply);
-    }
-
-    // For Cancel
-    else if (reply.type == AuthReply_Type.Cancel) {
-      await HapticFeedback.vibrate();
-    } else {
-      _session.onReply(reply);
-    }
-  }
-
-  /// @ Transfer Has Updated Progress
-  void _handleProgress(double data) async {
-    _session.onProgress(data);
-
-    // Logging
-    Logger.info("Node(Callback) Progress: " + data.toString());
-  }
-
-  /// @ Completes Transmission Sequence
-  void _handleTransmitted(Transfer data) async {
-    // Check for Callback
-    _session.onComplete(data);
-    TransferService.resetPayload();
-
-    // Feedback
-    DeviceService.playSound(type: UISoundType.Transmitted);
-    await HapticFeedback.heavyImpact();
-
-    // Logging Activity
-    CardService.addActivityShared(payload: data.payload, file: data.file);
-
-    // Logging
-    Logger.info("Node(Callback) Transmitted: " + data.toString());
-  }
-
-  /// @ Mark as Received File
-  Future<void> _handleReceived(Transfer data) async {
-    // Check for Callback
-    _session.onComplete(data);
-
-    // Save Card to Gallery
-    if (data.payload.isTransfer) {
-      await DeviceService.saveTransfer(data.file);
-    }
-
-    // Update Database
-    if (DeviceService.isMobile) {
-      await CardService.addCard(data);
-      await CardService.addActivityReceived(
-        owner: data.owner,
-        payload: data.payload,
-        file: data.file,
-      );
-    }
-
-    // Present Feedback
-    await HapticFeedback.heavyImpact();
-    DeviceService.playSound(type: UISoundType.Received);
-
-    // Logging
-    Logger.info("Node(Callback) Received: " + data.toString());
-  }
-
   /// @ An Error Has Occurred
   void _handleError(ErrorMessage data) async {
     if (data.severity != ErrorMessage_Severity.LOG) {
@@ -309,9 +211,7 @@ class SonrService extends GetxService {
     Logger.sError(data);
   }
 
-  // ************************
-  // ******* Helpers ********
-  // ************************
+  // * ------------------- Helpers ----------------------------
   // Builds Connection Request
   ConnectionRequest _buildConnRequest() {
     return ConnectionRequest(
