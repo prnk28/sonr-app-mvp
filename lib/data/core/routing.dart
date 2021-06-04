@@ -53,25 +53,3 @@ class SonrRouting {
         ),
       ];
 }
-
-/// #### Details
-/// Handles opening new page to display Cards, Item, or Error
-class Details {
-  static void openCardsList() {}
-
-  static void openCardsGrid() {}
-
-  static void openDetailContact() {}
-
-  static void openDetailFile() {}
-
-  static void openDetailMedia() {}
-
-  static void openDetailUrl() {}
-
-  static void openErrorConnection() {}
-
-  static void openErrorPermissions() {}
-
-  static void openErrorTransfer() {}
-}

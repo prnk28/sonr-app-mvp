@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/authorize/authorize.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
@@ -41,7 +42,7 @@ class SessionService extends GetxService {
     if (data.isFlat && data.payload == Payload.CONTACT) {
       FlatMode.invite(data.contact);
     } else {
-      SonrOverlay.invite(data);
+      Authorize.invite(data);
     }
   }
 
@@ -56,7 +57,7 @@ class SessionService extends GetxService {
       FlatMode.response(data.data.contact);
     } else if (data.type == AuthReply_Type.Contact) {
       await HapticFeedback.vibrate();
-      SonrOverlay.reply(data);
+      Authorize.reply(data);
     }
 
     // For Cancel

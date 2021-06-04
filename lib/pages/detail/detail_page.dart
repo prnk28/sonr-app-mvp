@@ -2,23 +2,24 @@ import 'package:sonr_app/style/style.dart';
 import 'detail.dart';
 import 'views/views.dart';
 
-class DetailPage extends StatelessWidget {
-  /// Page Type
-  final DetailPageType type;
-  final TransferItemsType? itemsType;
+class Details {
+  /// Return Details CardGrid Page
+  static Widget cardsGrid(TransferItemsType itemsType) {
+    return CardsView.display(DetailPageType.CardsGrid, itemsType);
+  }
 
-  // * Constructer *
-  const DetailPage({Key? key, required this.type, this.itemsType}) : super(key: key);
+  /// Return Details CardList Page
+  static Widget cardsList(TransferItemsType itemsType) {
+    return CardsView.display(DetailPageType.CardsList, itemsType);
+  }
 
-  // Builds View By Page Type
-  @override
-  Widget build(BuildContext context) {
-    if (type.isCards) {
-      return CardsView.display(type, itemsType!);
-    } else if (type.isDetail) {
-      return DetailView.display(type);
-    } else {
-      return ErrorView.display(type);
-    }
+  /// Return Details Item Detail Page
+  static void toItemDetail(DetailPageType type) {
+    Get.to(DetailView.display(type));
+  }
+
+  /// Return Details Error Page
+  static void toError(DetailPageType type) {
+    Get.to(ErrorView.display(type));
   }
 }

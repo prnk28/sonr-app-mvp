@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/card/card.dart';
+import 'package:sonr_app/pages/detail/detail_page.dart';
 import 'package:sonr_app/style/style.dart';
 
 /// @ QuickAccessScreen from Home
@@ -16,6 +17,6 @@ class QuickAccessScreen extends StatelessWidget {
           subtitle: type.subtitle(),
           title: type.title(),
         ),
-        body: CardsGridView(type: type));
+        body: Details.cardsGrid(type));
   }
 }

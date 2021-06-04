@@ -1,13 +1,22 @@
+import 'package:sonr_app/modules/card/url/card_item.dart';
 import 'package:sonr_app/modules/card/url/grid_item.dart';
 import 'package:sonr_app/modules/card/url/list_item.dart';
+import 'package:sonr_app/style/style.dart';
+
 import 'contact/card_item.dart';
 import 'contact/grid_item.dart';
 import 'contact/list_item.dart';
 import 'file/card_item.dart';
 import 'file/grid_item.dart';
 import 'file/list_item.dart';
-import 'url/card_item.dart';
-import 'package:sonr_app/style/style.dart';
+export 'contact/card_item.dart';
+export 'contact/grid_item.dart';
+export 'contact/list_item.dart';
+export 'file/card_item.dart';
+export 'file/grid_item.dart';
+export 'file/list_item.dart';
+export 'url/card_item.dart';
+export 'package:sonr_app/style/style.dart';
 
 /// @ Card Element/View type Enums
 
@@ -92,70 +101,5 @@ extension TransferItemsTypeUtils on TransferItemsType {
       default:
         return CardService.media.reversed.toList()[index];
     }
-  }
-}
-
-/// @ Displays Cards in a Grid Based on Element Type
-class CardsGridView extends StatelessWidget {
-  final TransferItemsType type;
-  final ScrollController? controller;
-  CardsGridView({required this.type, this.controller, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      // @ 2. Build View
-      if (type.itemCount > 0) {
-        return GridView.builder(
-          controller: controller,
-          itemCount: type.itemCount,
-          itemBuilder: (BuildContext context, int index) {
-            return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.GridItem);
-          },
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
-        );
-      } else {
-        return _CardsViewEmpty(type);
-      }
-    });
-  }
-}
-
-/// @ Card List View - By Elements Type
-class CardsListView extends StatelessWidget {
-  final TransferItemsType type;
-  final ScrollController? controller;
-  CardsListView({required this.type, this.controller, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      // @ 2. Build View
-      if (type.itemCount > 0) {
-        return ListView.builder(
-          controller: controller,
-          itemCount: type.itemCount,
-          itemBuilder: (BuildContext context, int index) {
-            return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.ListItem);
-          },
-        );
-      } else {
-        return _CardsViewEmpty(type);
-      }
-    });
-  }
-}
-
-/// @ Helper Method to Build Empty List Value
-class _CardsViewEmpty extends StatelessWidget {
-  final TransferItemsType type;
-  const _CardsViewEmpty(this.type, {Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      width: Get.width,
-      child: AssetController.getNoFiles(type.index),
-    );
   }
 }
