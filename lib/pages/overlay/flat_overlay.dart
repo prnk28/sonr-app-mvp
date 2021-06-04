@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:sonr_app/modules/auth/contact_auth.dart';
-
-import '../../style/style.dart';
+import 'package:sonr_app/modules/authorize/contact_auth.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
 enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }

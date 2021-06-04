@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/auth/auth_controller.dart';
+import 'package:sonr_app/modules/authorize/auth_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'contact_auth.dart';
 import 'file_auth.dart';
