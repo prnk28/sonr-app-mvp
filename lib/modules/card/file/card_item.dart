@@ -16,7 +16,7 @@ class MetaCardItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 420,
+      height: 310,
       width: Get.width - 64,
       decoration: Neumorphic.floating(
         theme: Get.theme,

@@ -12,10 +12,7 @@ class MediaAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicAvatarCard(
-      themeData: Get.theme,
-      profile: invite.from.profile,
-      child: Column(
+    return Column(
         mainAxisSize: MainAxisSize.max,
         key: UniqueKey(),
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,7 +31,7 @@ class MediaAuthView extends StatelessWidget {
           Divider(),
           Container(
             width: invite.file.single.thumbBuffer.length > 0 ? Get.width - 50 : Get.width - 150,
-            height: invite.file.single.thumbBuffer.length > 0 ? Get.height / 3 : Get.height / 5,
+            height: invite.file.single.thumbBuffer.length > 0 ? Get.height / 3 - 136 : Get.height / 5,
             child: invite.file.single.thumbBuffer.length > 0
                 ? Image.memory(
                     Uint8List.fromList(invite.file.single.thumbBuffer),
@@ -60,7 +57,6 @@ class MediaAuthView extends StatelessWidget {
             ],
           ),
         ],
-      ),
     );
   }
 }

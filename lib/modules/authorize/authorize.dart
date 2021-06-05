@@ -42,13 +42,56 @@ class _AuthInviteSheet extends StatelessWidget {
   const _AuthInviteSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BounceInDown(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16),
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         color: Colors.transparent,
-        child: _buildView(),
-      ),
-    );
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 42.0),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: Neumorphic.floating(theme: Get.theme),
+                width: _getWidth(context),
+                height: _getHeight(context),
+                margin: _getMargin(context),
+                child: _buildView(),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                  margin: EdgeInsets.only(top: 16),
+                  decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
+                  padding: EdgeInsets.all(4),
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    child: invite.from.profile.hasPicture()
+                        ? CircleAvatar(
+                            backgroundImage: MemoryImage(Uint8List.fromList(invite.from.profile.picture)),
+                          )
+                        : SonrIcons.Avatar.greyWith(size: 80),
+                  )),
+            )
+          ],
+        ));
+  }
+
+  EdgeInsets _getMargin(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return EdgeInsets.symmetric(horizontal: 8);
+  }
+
+  double _getHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.65 - 110;
+  }
+
+  double _getWidth(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var factor = width * 0.15;
+    return width - factor;
   }
 
   // Builds View By Payload
