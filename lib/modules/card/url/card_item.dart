@@ -29,7 +29,7 @@ class URLCardItemView extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      SonrSnack.error("Could not launch the URL.");
+      Snack.error("Could not launch the URL.");
     }
   }
 }

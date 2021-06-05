@@ -97,7 +97,7 @@ class LobbyService extends GetxService {
       _flatModeCancelled(false);
     });
     var flatPeer = LobbyService.local.value.flatFirst()!;
-    SonrSnack.success("Sent Contact to ${flatPeer.profile.firstName}");
+    Snack.success("Sent Contact to ${flatPeer.profile.firstName}");
     Get.back();
     return true;
   }

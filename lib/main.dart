@@ -29,7 +29,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
-      getPages: SonrRouting.pages,
+      getPages: Route.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [

@@ -57,7 +57,7 @@ class URLLinkView extends StatelessWidget {
   void _copyURL() async {
     if (enableCopy && data.url.isURL) {
       Clipboard.setData(ClipboardData(text: data.url));
-      SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+      Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
     }
   }
 
@@ -67,7 +67,7 @@ class URLLinkView extends StatelessWidget {
       if (await canLaunch(data.url)) {
         await launch(data.url);
       } else {
-        SonrSnack.error("Could not launch the URL.");
+        Snack.error("Could not launch the URL.");
       }
     }
   }

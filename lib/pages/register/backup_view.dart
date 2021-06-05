@@ -54,6 +54,6 @@ class BackupCodeView extends GetView<RegisterController> {
   /// Copy Backup Code to Clipboard
   void _copyCode() async {
     Clipboard.setData(ClipboardData(text: controller.mnemonic.value));
-    SonrSnack.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+    Snack.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
   }
 }

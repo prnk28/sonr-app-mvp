@@ -74,7 +74,7 @@ class _ShareCameraButtonItem extends StatelessWidget {
           // Request Permissions
           else {
             var result = await Get.find<MobileService>().requestCamera();
-            result ? TransferService.chooseCamera() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+            result ? TransferService.chooseCamera() : Snack.error("Sonr cannot open Camera without Permissions");
           }
         },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -109,7 +109,7 @@ class _ShareFileButtonItem extends StatelessWidget {
             if (status) {
               await TransferService.chooseFile();
             } else {
-              SonrSnack.error("Cannot pick Media without Permissions");
+              Snack.error("Cannot pick Media without Permissions");
             }
           }
         },

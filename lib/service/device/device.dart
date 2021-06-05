@@ -191,9 +191,9 @@ class DeviceService extends GetxService {
 
       // Check Result
       if (result) {
-        SonrSnack.success("Succesfully Received $title!");
+        Snack.success("Succesfully Received $title!");
       } else {
-        SonrSnack.error("Unable to save $title to your Gallery");
+        Snack.error("Unable to save $title to your Gallery");
       }
     }
 

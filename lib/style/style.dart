@@ -26,9 +26,13 @@ export 'buttons/color.dart';
 export 'buttons/plain.dart';
 export 'buttons/confirm.dart';
 export 'elements/scaffold.dart';
-export 'elements/snackbar.dart';
 export 'elements/appbar.dart';
 export 'animation/animation.dart';
+
+// Custom Route Aspects
+export 'route/popup.dart';
+export 'route/sheet.dart';
+export 'route/snackbar.dart';
 
 // Global UI Widgets
 export 'elements/shape.dart';
@@ -39,7 +43,7 @@ export 'form/dropdown.dart';
 export 'form/textfield.dart';
 
 // UI Packages
-export 'package:flutter/material.dart';
+export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 export 'package:feedback/feedback.dart';
@@ -49,8 +53,10 @@ import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
+/// * Widget Position Enum * //
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
 
+/// * Widget List Extension * //
 extension WidgetListUtils on List<Widget> {
   /// Accessor Method to Create a Row
   Widget row(
@@ -183,6 +189,7 @@ class SonrTheme {
   }
 }
 
+/// * AutoColor Text Management * //
 /// Extension to Automatically Handle Text Color
 extension DesignTextAutoUtils on String {
   /// Automatically Set White/Dark based on Dark Mode for `H2` Text
@@ -206,3 +213,5 @@ extension DesignTextAutoUtils on String {
   /// Automatically Set White/Dark based on Dark Mode for `Light` Text
   DesignText get lAuto => Get.isDarkMode ? this.l_White : this.l;
 }
+
+/// * Widget Position Enum * //

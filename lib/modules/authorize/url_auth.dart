@@ -75,7 +75,7 @@ class URLAuthView extends StatelessWidget {
     if (await canLaunch(invite.url.url)) {
       await launch(invite.url.url);
     } else {
-      SonrSnack.error("Could not launch the URL.");
+      Snack.error("Could not launch the URL.");
     }
   }
 }

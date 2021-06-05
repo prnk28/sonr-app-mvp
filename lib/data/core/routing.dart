@@ -8,7 +8,7 @@ import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
 /// @ Constant Routing Information
-class SonrRouting {
+class Route {
   static get pages => [
         // ** Home Page ** //
         GetPage(

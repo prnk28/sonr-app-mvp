@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -17,18 +16,6 @@ class MediaAuthView extends StatelessWidget {
         key: UniqueKey(),
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // @ Header
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            // From Information
-            Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              ProfileName(profile: invite.from.profile, isHeader: true),
-              Row(children: [
-                invite.file.single.prettyType().toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
-                "   ${invite.file.prettySize()}".h5
-              ]),
-            ]),
-          ]),
-          Divider(),
           Container(
             width: invite.file.single.thumbBuffer.length > 0 ? Get.width - 50 : Get.width - 150,
             height: invite.file.single.thumbBuffer.length > 0 ? Get.height / 3 - 136 : Get.height / 5,
