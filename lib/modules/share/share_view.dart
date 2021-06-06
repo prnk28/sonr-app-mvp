@@ -8,10 +8,9 @@ class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-        appBar: PageAppBar(
-          centerTitle: true,
-          title: _ShareBarTitle(),
-          leading: ActionButton(iconData: SonrIcons.Close, onPressed: () => controller.close()),
+        appBar: DetailAppBar(
+          title: "Share",
+          onPressed: () => controller.close(),
           action: AnimatedScale(
               scale: controller.hasSelected.value ? 1.0 : 0.0,
               child: ActionButton(
@@ -44,24 +43,6 @@ class SharePopupView extends GetView<ShareController> {
             },
           )
         ])));
-  }
-}
-
-class _ShareBarTitle extends GetView<ShareController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => GestureDetector(
-          onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
-          child: controller.hasSelected.value
-              ? "Share (${controller.selectedItems.length})".heading(
-                  color: Get.theme.focusColor,
-                  align: TextAlign.start,
-                )
-              : "Share".heading(
-                  color: Get.theme.focusColor,
-                  align: TextAlign.start,
-                ),
-        ));
   }
 }
 

@@ -111,9 +111,7 @@ class SonrTextField extends StatelessWidget {
                 ]))
             : Container(),
         Container(
-          decoration: Neumorphic.floating(
-            theme: Get.theme,
-          ),
+          decoration: SonrTheme.cardDecoration,
           margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(

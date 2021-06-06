@@ -17,13 +17,11 @@ class TransferScreen extends GetView<TransferController> {
     // Build View
     return Obx(() => SonrScaffold(
           gradient: SonrGradients.PlumBath,
-          appBar: PageAppBar(
-            centerTitle: true,
-            leading: ActionButton(iconData: SonrIcons.Close, onPressed: () => controller.closeToHome()),
+          appBar: DetailAppBar(
+            onPressed: () => controller.closeToHome(),
             action: _RemoteActionButton(),
-            title: GestureDetector(
-                onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
-                child: controller.title.value.heading(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
+            title: "Transfer",
+            isClose: true,
           ),
           bottomSheet: PayloadSheetView(),
           body: SingleChildScrollView(

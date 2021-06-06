@@ -201,8 +201,8 @@ class SonrTheme {
         stops: [0, 0.45, 1],
         center: Alignment.center,
         focal: Alignment.topRight,
-        tileMode: TileMode.repeated,
-        radius: 0.74,
+        tileMode: TileMode.clamp,
+        radius: 0.72,
       );
 
   static BoxDecoration get cardDecoration => BoxDecoration(

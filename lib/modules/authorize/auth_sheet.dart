@@ -58,7 +58,7 @@ class _AuthInviteSheet extends StatelessWidget {
                 profile: invite.from.profile,
               ),
               _buildView(),
-              Divider(),
+              Divider(color: SonrTheme.separatorColor,),
               ColorButton.primary(
                 onPressed: () {
                   CardService.handleInviteResponse(true, invite);
@@ -174,9 +174,7 @@ class _AuthInviteFileContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: Height.ratio(0.275),
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: BoxDecoration(color: SonrTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
       padding: EdgeInsets.all(8),
       child: _buildView(Width.ratio(0.8), Height.ratio(0.3)),
     );

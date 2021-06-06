@@ -11,7 +11,6 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 import 'add/add_social.dart';
-import 'editor/editor_controller.dart';
 
 // @ PeerStatus Enum
 enum ProfileViewStatus {
@@ -105,12 +104,6 @@ class ProfileController extends GetxController {
     HapticFeedback.heavyImpact();
     // step(TileStep(nextStep, previousStep, saveTile));
     Get.dialog(AddTileView(), barrierDismissible: false);
-  }
-
-  /// @ Start Editing for Details
-  void setEditingMode() {
-    HapticFeedback.heavyImpact();
-    EditorController.open();
   }
 
   /// @ End Add/Edit State

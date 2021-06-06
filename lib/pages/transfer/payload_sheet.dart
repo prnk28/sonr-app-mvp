@@ -29,9 +29,7 @@ class PayloadSheetView extends StatelessWidget {
             // Build Single Item
             Container(
                 padding: EdgeInsets.all(8),
-                decoration: Neumorphic.floating(
-                  theme: Get.theme,
-                ),
+                decoration: SonrTheme.cardDecoration,
                 child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
         return Container(
@@ -82,9 +80,7 @@ class _SonrFileListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(8),
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Row(children: [
         item.hasThumbnail()
             ? Container(

@@ -7,14 +7,9 @@ class EditorView extends GetView<EditorController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-        appBar: PageAppBar(
-          centerTitle: true,
-          title: controller.title.value.subheading(
-            color: Get.theme.focusColor,
-            align: TextAlign.start,
-          ),
-          leading: PlainIconButton(
-              icon: controller.status.value.leadingIcon.gradient(size: 32, value: SonrGradients.PhoenixStart), onPressed: controller.handleLeading),
+        appBar: DetailAppBar(
+          onPressed: controller.handleLeading,
+          title: controller.title.value,
         ),
         body: FadeInLeft(key: ValueKey<EditorFieldStatus>(controller.status.value), child: _buildView(controller.status.value))));
   }

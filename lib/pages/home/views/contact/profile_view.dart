@@ -88,7 +88,6 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      leading: PlainIconButton(icon: SonrIcons.Edit.gradient(value: SonrGradient.Tertiary), onPressed: controller.setEditingMode),
       expandedHeight: Get.height / 6 + 16,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
@@ -137,7 +136,6 @@ class _ProfileInfoView extends GetView<ProfileController> {
 
   Widget _buildName() {
     return GestureDetector(
-        onLongPress: controller.setEditingMode,
         child: Obx(() => [
               UserService.contact.value.fullName.paragraph(color: SonrTheme.textColor),
               _ProfileContactButtons(),

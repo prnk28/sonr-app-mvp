@@ -22,9 +22,7 @@ class ContactAuthView extends StatelessWidget {
     return Container(
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -103,9 +101,7 @@ class ContactFlatCard extends StatelessWidget {
     return Container(
       height: 420 * scale!,
       width: (Get.width - 64) * scale!,
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Container(
         height: 75,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [

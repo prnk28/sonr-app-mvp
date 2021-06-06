@@ -12,9 +12,7 @@ class URLAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [

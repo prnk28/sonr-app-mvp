@@ -18,9 +18,7 @@ class MetaCardItemView extends StatelessWidget {
     return Container(
       height: 310,
       width: Get.width - 64,
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Hero(
         tag: card.file!.single.path,
         child: MetaBox(

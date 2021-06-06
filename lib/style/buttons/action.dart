@@ -4,13 +4,15 @@ class ActionButton extends StatelessWidget {
   /// Function called on Tap Up
   final Function onPressed;
 
+  final bool isPrimary;
+
   /// Widget for Action Icon: Max Size 32
   final IconData iconData;
 
   /// String for Text Below Button
   final String? label;
 
-  const ActionButton({Key? key, required this.onPressed, required this.iconData, this.label}) : super(key: key);
+  const ActionButton({Key? key, required this.onPressed, required this.iconData, this.isPrimary = false, this.label}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     if (label != null) {
@@ -20,13 +22,13 @@ class ActionButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _ActionIconButton(onPressed, iconData),
+            _ActionIconButton(onPressed, iconData, isPrimary),
             label!.light(color: Get.theme.hintColor),
           ],
         ),
       );
     }
-    return _ActionIconButton(onPressed, iconData);
+    return _ActionIconButton(onPressed, iconData, isPrimary);
   }
 }
 
@@ -36,7 +38,8 @@ class _ActionIconButton extends StatelessWidget {
 
   /// Widget for Action Icon: Max Size 32
   final IconData iconData;
-  const _ActionIconButton(this.onPressed, this.iconData, {Key? key}) : super(key: key);
+  final bool isPrimary;
+  const _ActionIconButton(this.onPressed, this.iconData, this.isPrimary, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -57,11 +60,13 @@ class _ActionIconButton extends StatelessWidget {
                     color: UserService.isDarkMode ? SonrTheme.foregroundColor : Color(0xffEAEAEA),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(
-                    iconData,
-                    color: SonrTheme.textColor,
-                    size: 24,
-                  ),
+                  child: isPrimary
+                      ? iconData.gradient(value: SonrTheme.primaryGradient, size: 24)
+                      : Icon(
+                          iconData,
+                          color: SonrTheme.textColor,
+                          size: 24,
+                        ),
                 ),
               ),
             ),

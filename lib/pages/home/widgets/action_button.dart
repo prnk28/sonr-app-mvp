@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/settings/sheet_view.dart';
+import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
 import 'package:sonr_app/pages/home/views/dashboard/activity_view.dart';
 import 'package:sonr_app/style.dart';
 import '../home_controller.dart';
@@ -22,7 +22,8 @@ class HomeActionButton extends GetView<HomeController> {
         key: ValueKey<HomeView>(HomeView.Contact),
         iconData: SonrIcons.Settings,
         onPressed: () {
-          Get.bottomSheet(SettingsSheet());
+          HapticFeedback.heavyImpact();
+          EditorController.open();
         },
       );
     } else {
