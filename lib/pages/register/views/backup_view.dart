@@ -1,5 +1,5 @@
 import 'package:sonr_app/style/style.dart';
-import 'register_controller.dart';
+import '../register_controller.dart';
 
 class BackupCodeView extends GetView<RegisterController> {
   BackupCodeView({Key? key}) : super(key: key);

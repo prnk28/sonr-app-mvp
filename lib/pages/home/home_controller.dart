@@ -3,7 +3,7 @@ import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum HomeView { Dashboard, Contact, DesktopExplorer, DesktopLinker }
+enum HomeView { Dashboard, Contact, Explorer }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -50,12 +50,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       });
     } else {
       // Set View
-      if (UserService.hasUser.value) {
-        Get.find<SonrService>().connect();
-        view(HomeView.DesktopExplorer);
-      } else {
-        view(HomeView.DesktopLinker);
-      }
+      view(HomeView.Explorer);
     }
 
     // Initialize

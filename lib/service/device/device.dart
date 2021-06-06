@@ -134,12 +134,12 @@ class DeviceService extends GetxService {
   /// @ Method Determines LaunchPage and Changes Screen
   static void initialPage({required Duration delay}) async {
     Future.delayed(delay, () {
-      // @ Mobile Page
-      if (isMobile) {
-        // Check for User
-        if (!UserService.hasUser.value) {
-          Get.offNamed("/register");
-        } else {
+      // Check for User
+      if (!UserService.hasUser.value) {
+        Get.offNamed("/register");
+      } else {
+        // Check Platform
+        if (isMobile) {
           // All Valid
           if (MobileService.hasLocation.value) {
             Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
@@ -153,11 +153,9 @@ class DeviceService extends GetxService {
               }
             });
           }
+        } else {
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
         }
-      }
-      // @ Desktop Page
-      else {
-        Get.offNamed("/home");
       }
     });
   }

@@ -20,7 +20,7 @@ extension RegisterNameStatusUtil on RegisterNameStatus {
   }
 }
 
-enum RegisterStatus { Name, Backup, Contact, Location, Gallery }
+enum RegisterStatus { Name, Backup, Contact, Location, Gallery, Linker }
 
 class RegisterController extends GetxController {
   // Properties
@@ -38,6 +38,11 @@ class RegisterController extends GetxController {
 
   // * Constructer * //
   onInit() {
+    // Check Platform
+    if (DeviceService.isDesktop) {
+      status(RegisterStatus.Linker);
+      status.refresh();
+    }
     super.onInit();
   }
 
@@ -98,9 +103,13 @@ class RegisterController extends GetxController {
         FocusManager.instance.primaryFocus!.unfocus();
       }
 
-      // Process data.
-      await UserService.newUser(contact);
-      status(RegisterStatus.Location);
+      // Process data
+      if (DeviceService.isMobile) {
+        await UserService.newUser(contact);
+        status(RegisterStatus.Location);
+      } else {
+        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+      }
     }
   }
 

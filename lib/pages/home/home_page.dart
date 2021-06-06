@@ -1,7 +1,6 @@
 import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/desktop/explorer_view.dart';
-import 'package:sonr_app/pages/home/views/desktop/linker_view.dart';
 import 'package:sonr_app/style/style.dart';
 import 'views/dashboard/dashboard_view.dart';
 import 'home_controller.dart';
@@ -17,13 +16,13 @@ class HomePage extends GetView<HomeController> {
       floatingAction: ShareButton(),
       bottomNavigationBar: HomeBottomNavBar(),
       appBar: HomeAppBar(),
-      body: DeviceService.isMobile ? _HomeMobileBody() : _HomeDesktopBody(),
+      body: DeviceService.isMobile ? _HomeMobile() : _HomeDesktop(),
     );
   }
 }
 
 /// @ Class for HomeView Body when Mobile Platform
-class _HomeMobileBody extends GetView<HomeController> {
+class _HomeMobile extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,24 +34,13 @@ class _HomeMobileBody extends GetView<HomeController> {
 }
 
 /// @ Class For HomeView Body when Desktop Platform
-class _HomeDesktopBody extends GetView<HomeController> {
+class _HomeDesktop extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlideSwitcher.fade(
           duration: 1.seconds,
-          child: Container(width: 1200, height: 800, child: _buildView(controller.view.value)),
+          child: Container(width: 1200, height: 800, child: ExplorerDesktopView(key: ValueKey<HomeView>(controller.view.value))),
         ));
-  }
-
-  Widget _buildView(HomeView view) {
-    switch (view) {
-      case HomeView.DesktopExplorer:
-        return ExplorerDesktopView(key: ValueKey<HomeView>(view));
-      case HomeView.DesktopLinker:
-        return RegisterDesktopView(key: ValueKey<HomeView>(view));
-      default:
-        return Container();
-    }
   }
 }
 

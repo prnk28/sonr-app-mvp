@@ -1,5 +1,5 @@
 import 'package:sonr_app/style/style.dart';
-import 'register_controller.dart';
+import '../register_controller.dart';
 
 class BoardingLocationView extends GetView<RegisterController> {
   BoardingLocationView({Key? key}) : super(key: key);

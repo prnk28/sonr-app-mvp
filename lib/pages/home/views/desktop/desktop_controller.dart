@@ -51,7 +51,7 @@ class DesktopController extends GetxController {
 
       // Process data.
       SonrService.to.connect();
-      Get.find<HomeController>().changeView(HomeView.DesktopExplorer);
+      Get.find<HomeController>().changeView(HomeView.Explorer);
     }
   }
 }
