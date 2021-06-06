@@ -121,7 +121,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Username
-          ["${UserService.contact.value.sName}".subheading(), ".snr/".subheading(color: Get.theme.hintColor)].row(),
+          ["${UserService.contact.value.sName}".subheading(color: SonrTheme.textColor), ".snr/".subheading(color: SonrTheme.greyColor)].row(),
 
           // First/Last Name
           _buildName(),
@@ -137,8 +137,10 @@ class _ProfileInfoView extends GetView<ProfileController> {
   Widget _buildName() {
     return GestureDetector(
         onLongPress: controller.setEditingMode,
-        child: Obx(
-            () => [UserService.contact.value.fullName.paragraph(), _ProfileContactButtons()].row(mainAxisAlignment: MainAxisAlignment.spaceBetween)));
+        child: Obx(() => [
+              UserService.contact.value.fullName.paragraph(color: SonrTheme.textColor),
+              _ProfileContactButtons(),
+            ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween)));
   }
 
   Widget _buildBio() {

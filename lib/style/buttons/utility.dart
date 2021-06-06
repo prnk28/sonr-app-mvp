@@ -73,6 +73,6 @@ class ButtonUtility {
   }
 
   static Widget buildText(String text) {
-    return Container(child: text.light(color: SonrColor.White));
+    return Container(child: text.subheading(color: SonrColor.White));
   }
 }

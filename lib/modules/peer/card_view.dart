@@ -100,10 +100,10 @@ class _PeerMainCard extends StatelessWidget {
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.profile.fullName}".subheading(),
+          "${controller.peer.value.profile.fullName}".subheading(color: SonrTheme.textColor),
 
           // Username
-          "${controller.peer.value.profile.sName}.snr/".paragraph(color: SonrColor.Grey),
+          "${controller.peer.value.profile.sName}.snr/".paragraph(color: SonrTheme.greyColor),
         ].column());
   }
 }

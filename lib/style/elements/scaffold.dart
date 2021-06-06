@@ -11,6 +11,7 @@ class SonrScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final bool? resizeToAvoidBottomInset;
   final Gradient? gradient;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   SonrScaffold({
     Key? key,
@@ -21,6 +22,7 @@ class SonrScaffold extends StatelessWidget {
     this.bottomSheet,
     this.floatingAction,
     this.gradient,
+    this.floatingActionButtonLocation,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class SonrScaffold extends StatelessWidget {
       extendBody: true,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
+      floatingActionButtonLocation: floatingActionButtonLocation ?? _FixedCenterDockedFabLocation(),
       body: Stack(
         children: [
           // Gradient

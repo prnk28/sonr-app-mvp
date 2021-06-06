@@ -51,6 +51,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/service/user/user.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 /// * Widget Position Enum * //
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -186,6 +188,12 @@ class SonrTheme {
     // Set Theme Mode
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
+
+  /// Returns Current Text Color
+  static Color get textColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Returns Current Text Color for Grey
+  static Color get greyColor => Get.theme.hintColor;
 }
 
 /// * Widget Position Enum * //

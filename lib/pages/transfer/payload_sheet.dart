@@ -62,11 +62,11 @@ class _SonrFileListHeader extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettyName().paragraph(),
+            child: TransferService.file.value.prettyName().subheading(color: SonrTheme.textColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettySize().paragraph(),
+            child: TransferService.file.value.prettySize().light(color: SonrTheme.textColor),
           )
         ],
       ),
@@ -101,18 +101,18 @@ class _SonrFileListItem extends StatelessWidget {
         Container(
             width: Width.ratio(0.5),
             height: Height.ratio(0.15),
-            padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+            padding: EdgeInsets.only(left: 16, right: 8, bottom: 8),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: item.prettyType().paragraph(),
+                child: item.prettyType().subheading(color: SonrTheme.textColor),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 4.0),
                 child: item.prettyName().paragraph(color: Get.theme.hintColor),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 2.0),
                 child: item.prettySize().paragraph(color: Get.theme.hintColor),
               )
             ])),
@@ -175,7 +175,11 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: [UserService.contact.value.firstName.paragraph(), " ".paragraph(), UserService.contact.value.lastName.light()].row(),
+              child: [
+                UserService.contact.value.firstName.paragraph(color: SonrTheme.textColor),
+                " ".paragraph(color: SonrTheme.textColor),
+                UserService.contact.value.lastName.light(color: SonrTheme.textColor)
+              ].row(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -191,7 +195,7 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyName().paragraph(),
+              child: TransferService.file.value.prettyName().paragraph(color: SonrTheme.textColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -203,18 +207,15 @@ class _PayloadSingleItem extends StatelessWidget {
       return Container(
           width: Width.ratio(0.5),
           height: Height.ratio(0.15),
-          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 8),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(padding: const EdgeInsets.only(top: 16.0), child: TransferService.file.value.prettyType().subheading(color: SonrTheme.textColor)),
             Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyType().subheading()
+              padding: const EdgeInsets.only(top: 4.0),
+              child: TransferService.file.value.prettyName().light(color: Get.theme.hintColor),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettyName().paragraph(color: Get.theme.hintColor),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 2.0),
               child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));

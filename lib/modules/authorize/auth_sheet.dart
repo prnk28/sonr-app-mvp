@@ -146,15 +146,15 @@ class _AuthInviteFileHeader extends StatelessWidget {
   TextStyle _buildTextStyle(FontWeight weight) {
     if (weight == FontWeight.bold) {
       return TextStyle(
-        fontFamily: "Manrope",
+        fontFamily: "RFlex",
         fontWeight: FontWeight.w700,
         fontSize: 20,
         color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
       );
     } else {
       return TextStyle(
-        fontFamily: "OpenSans",
-        fontWeight: FontWeight.w400,
+        fontFamily: "RFlex",
+        fontWeight: FontWeight.w300,
         fontSize: 19,
         color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
       );
