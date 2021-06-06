@@ -60,7 +60,10 @@ class _AuthInviteSheet extends StatelessWidget {
               _buildView(),
               Divider(),
               ColorButton.primary(
-                onPressed: () => CardService.handleInviteResponse(true, invite),
+                onPressed: () {
+                  CardService.handleInviteResponse(true, invite);
+                  Sheet.close();
+                },
                 text: "Accept",
                 icon: SonrIcons.Check,
                 margin: EdgeInsets.symmetric(horizontal: 54),

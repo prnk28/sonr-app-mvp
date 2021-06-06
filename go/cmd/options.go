@@ -11,7 +11,7 @@ import (
 
 var options = []flutter.Option{
 	flutter.WindowInitialDimensions(1280, 800),
-	flutter.WindowMode(flutter.WindowModeBorderless),
+	flutter.WindowMode(flutter.WindowModeDefault),
 	flutter.PopBehavior(flutter.PopBehaviorHide),
 	flutter.AddPlugin(&path_provider.PathProviderPlugin{
 		VendorName:      "https://sonr.io",
