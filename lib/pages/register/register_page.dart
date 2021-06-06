@@ -10,7 +10,7 @@ class RegisterPage extends GetView<RegisterController> {
       width: Get.width,
       height: Get.height,
       decoration: Neumorphic.floating(theme: Get.theme),
-      child: DeviceService.isMobile ? _RegisterDesktop() : _RegisterMobile(),
+      child: DeviceService.isMobile ? _RegisterMobile() : _RegisterDesktop(),
     );
   }
 }
