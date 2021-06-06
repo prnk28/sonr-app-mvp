@@ -148,10 +148,9 @@ class ColorButton extends StatelessWidget {
                     scale: pressed.value ? pressedScale : 1.0,
                     child: AnimatedContainer(
                         decoration: decoration,
-                        margin: margin ?? const EdgeInsets.symmetric(horizontal: 24),
                         duration: ButtonUtility.K_BUTTON_DURATION,
                         curve: Curves.ease,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                         child: child))),
             isPressed));
   }

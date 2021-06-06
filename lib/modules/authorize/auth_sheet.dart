@@ -96,21 +96,24 @@ class _AuthInviteFileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Container(
-          margin: EdgeInsets.only(top: 8),
-          decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-            BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.4)),
-          ]),
-          padding: EdgeInsets.all(4),
-          child: Container(
-            width: 70,
-            height: 70,
-            child: profile.hasPicture()
-                ? CircleAvatar(
-                    backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
-                  )
-                : SonrIcons.Avatar.greyWith(size: 80),
-          )),
+      [
+        Container(
+            margin: EdgeInsets.only(top: 8, left: 8),
+            decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
+              BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.4)),
+            ]),
+            padding: EdgeInsets.all(4),
+            child: Container(
+              width: 64,
+              height: 64,
+              child: profile.hasPicture()
+                  ? CircleAvatar(
+                      backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                    )
+                  : SonrIcons.User.gradient(size: 42),
+            )),
+        profile.sNameText(isDarkMode: UserService.isDarkMode),
+      ].column(),
 
       // From Information
       Container(
@@ -170,7 +173,7 @@ class _AuthInviteFileContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Height.ratio(0.28),
+      height: Height.ratio(0.275),
       decoration: Neumorphic.floating(
         theme: Get.theme,
       ),

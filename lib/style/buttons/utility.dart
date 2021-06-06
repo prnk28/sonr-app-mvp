@@ -30,24 +30,28 @@ class ButtonUtility {
           return Container(
               padding: EdgeInsets.all(8),
               child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildText(text)]));
         case WidgetPosition.Right:
           return Container(
               padding: EdgeInsets.all(8),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [buildText(text), Padding(padding: EdgeInsets.all(4)), buildIcon(icon)]));
         case WidgetPosition.Top:
           return Container(
               padding: EdgeInsets.all(8),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildText(text)]));
         case WidgetPosition.Bottom:
           return Container(
               padding: EdgeInsets.all(8),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [buildText(text), Padding(padding: EdgeInsets.all(4)), buildIcon(icon)]));
         case WidgetPosition.Center:
@@ -65,9 +69,9 @@ class ButtonUtility {
       children: <Widget>[
         Positioned(
           top: 2.0,
-          child: Icon(data, color: SonrColor.Black.withOpacity(0.5), size: 20),
+          child: Icon(data, color: SonrColor.Black.withOpacity(0.25), size: 24),
         ),
-        Icon(data, color: Colors.white, size: 20),
+        Icon(data, color: Colors.white, size: 24),
       ],
     );
   }
