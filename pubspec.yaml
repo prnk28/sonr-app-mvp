@@ -120,23 +120,6 @@ flutter:
     fonts:
     - asset: assets/fonts/AlongSans.otf
 
-  - family:  Manrope
-    fonts:
-      - asset: assets/fonts/Manrope-200.ttf
-        weight: 200
-      - asset: assets/fonts/Manrope-300.ttf
-        weight: 300
-      - asset: assets/fonts/Manrope-400.ttf
-        weight: 400
-      - asset: assets/fonts/Manrope-500.ttf
-        weight: 500
-      - asset: assets/fonts/Manrope-600.ttf
-        weight: 600
-      - asset: assets/fonts/Manrope-700.ttf
-        weight: 700
-      - asset: assets/fonts/Manrope-800.ttf
-        weight: 800
-
   - family:  RFlex
     fonts:
       - asset: assets/fonts/RFlex-100.otf
@@ -172,10 +155,6 @@ flutter:
       - asset: assets/fonts/RFlex-900-italic.otf
         weight: 900
         style: italic
-
-  - family:  OpenSans
-    fonts:
-      - asset: assets/fonts/OpenSans-Regular.ttf
 
   - family:  SonrIcons
     fonts:

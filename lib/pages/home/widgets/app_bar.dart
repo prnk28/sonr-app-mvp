@@ -46,9 +46,10 @@ class _HomeAppBarSubtitle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.view.value == HomeView.Dashboard
-        ? "Hi ${UserService.contact.value.firstName},".heading(
+        ? "Hi ${UserService.contact.value.firstName},".subheading(
             color: Get.theme.focusColor,
             align: TextAlign.start,
+            fontSize: 32
           )
         : Container());
   }
