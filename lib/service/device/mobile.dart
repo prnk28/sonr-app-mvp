@@ -15,7 +15,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:uni_links/uni_links.dart';
 
-// import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
 // @ Enum defines Type of Permission
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 

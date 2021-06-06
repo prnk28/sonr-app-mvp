@@ -60,7 +60,6 @@ dependencies:
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
   connectivity: ^3.0.6
-  # flutter_blue: ^0.8.0
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3

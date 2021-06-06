@@ -68,25 +68,24 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(left: 14.0, right: 14, top: 60.0),
-        child: NavigationToolbar(
-          centerMiddle: false,
-          leading: IconButton(
-              onPressed: onPressed,
-              icon: Icon(
-                isClose ? SonrIcons.Close : SonrIcons.Back,
-                color: SonrTheme.textColor,
-                size: 28,
-              )),
-          trailing: _buildTrailing(),
-          middle: title.toUpperCase().light(color: SonrTheme.textColor, fontSize: 24),
-        ),
-      
+      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
+      child: NavigationToolbar(
+        centerMiddle: false,
+        leading: IconButton(
+            onPressed: onPressed,
+            icon: Icon(
+              isClose ? SonrIcons.Close : SonrIcons.Back,
+              color: SonrTheme.textColor,
+              size: 28,
+            )),
+        trailing: _buildTrailing(),
+        middle: title.toUpperCase().light(color: SonrTheme.textColor, fontSize: 24),
+      ),
     );
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 16);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
 
   Widget _buildTrailing() {
     return action != null ? action! : Container(width: 32, height: 32);
