@@ -12,7 +12,7 @@ class FileAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NeumorphicAvatarCard(
-      themeData: Get.theme,
+        themeData: Get.theme,
         profile: invite.from.profile,
         child: Column(
           mainAxisSize: MainAxisSize.max,
