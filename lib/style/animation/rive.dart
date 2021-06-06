@@ -87,6 +87,7 @@ class _RiveContainer extends State<RiveContainer> {
           child: _riveArtboard == null
               ? widget.placeholder ?? Container()
               : Rive(
+                  fit: BoxFit.fitHeight,
                   artboard: _riveArtboard!,
                 )),
     );

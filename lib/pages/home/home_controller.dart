@@ -3,7 +3,7 @@ import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum HomeView { Dashboard, Contact }
+enum HomeView { Dashboard, Contact, DesktopExplorer, DesktopLinker }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -31,21 +31,32 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Controller Constructer
   @override
   onInit() {
-    // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 2);
-    scrollController = ScrollController();
+    // Check Platform
+    if (DeviceService.isMobile) {
+      // Handle Tab Controller
+      tabController = TabController(vsync: this, length: 2);
+      scrollController = ScrollController();
 
-    // Listen for Updates
-    tabController.addListener(() {
-      // Set Index
-      bottomIndex(tabController.index);
+      // Listen for Updates
+      tabController.addListener(() {
+        // Set Index
+        bottomIndex(tabController.index);
 
-      // Set Page
-      view(HomeView.values[tabController.index]);
+        // Set Page
+        view(HomeView.values[tabController.index]);
 
-      // Update Title
-      title(view.value.title);
-    });
+        // Update Title
+        title(view.value.title);
+      });
+    } else {
+      // Set View
+      if (UserService.hasUser.value) {
+        Get.find<SonrService>().connect();
+        view(HomeView.DesktopExplorer);
+      } else {
+        view(HomeView.DesktopLinker);
+      }
+    }
 
     // Initialize
     super.onInit();
@@ -72,6 +83,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     _statusStream.cancel();
     pageIndex(0);
     super.onClose();
+  }
+
+  /// @ Change View
+  void changeView(HomeView newView) {
+    view(newView);
+    view.refresh();
   }
 
   /// @ Handle Title Tap

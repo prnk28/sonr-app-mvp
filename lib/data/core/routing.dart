@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/desktop/window.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
@@ -18,17 +17,6 @@ class Route {
               return HomePage();
             },
             binding: HomeBinding(),
-            transition: Transition.fadeIn,
-            curve: Curves.easeIn,
-            middlewares: [GetMiddleware()]),
-
-        // ** Home Page ** //
-        GetPage(
-            name: '/desktop',
-            page: () {
-              return DesktopWindow();
-            },
-            binding: DesktopBinding(),
             transition: Transition.fadeIn,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),

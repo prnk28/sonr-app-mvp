@@ -1,12 +1,19 @@
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-import 'window_controller.dart';
+class DesktopController extends GetxController {
+  // @ Accessors
+  Payload get currentPayload => inviteRequest.value.payload;
 
-class LinkController extends GetxController {
+  // @ Properties
+  final isNotEmpty = false.obs;
+  final inviteRequest = AuthInvite().obs;
   final firstName = "".obs;
   final lastName = "".obs;
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final lastNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
+
+  final scrollController = ScrollController();
 
   /// @ Validates Fields
   bool validate() {
@@ -22,7 +29,15 @@ class LinkController extends GetxController {
     return firstNameValid && lastNameValid;
   }
 
-  /// @ Submits Contact
+  /// Choose File
+  Future<void> chooseFile(Peer peer) async {
+    bool selected = await TransferService.chooseFile();
+    if (selected) {
+      TransferService.sendInviteToPeer(peer);
+    }
+  }
+
+  /// Submits Contact
   setContact() async {
     if (validate()) {
       // Remove Textfield Focus
@@ -36,7 +51,7 @@ class LinkController extends GetxController {
 
       // Process data.
       SonrService.to.connect();
-      Get.find<WindowController>().changeView(DesktopView.Explorer);
+      Get.find<HomeController>().changeView(HomeView.DesktopExplorer);
     }
   }
 }

@@ -157,7 +157,7 @@ class DeviceService extends GetxService {
       }
       // @ Desktop Page
       else {
-        Get.offNamed("/desktop");
+        Get.offNamed("/home");
       }
     });
   }

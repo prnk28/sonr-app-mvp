@@ -2,7 +2,6 @@ import 'package:sonr_app/modules/authorize/auth_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'contact_auth.dart';
 import 'file_auth.dart';
-import 'media_auth.dart';
 import 'url_auth.dart';
 
 class Authorize {
@@ -22,9 +21,6 @@ class Authorize {
 
   /// Reply Contact Received
   static void reply(AuthReply reply) {
-    // Place Controller
-    //final controller = Get.put<AuthorizeController>(AuthorizeController());
-
     // Open Sheet
     Get.bottomSheet(
       Container(
@@ -37,7 +33,7 @@ class Authorize {
   }
 }
 
-//// @ TransferView: Builds Invite View based on AuthInvite Payload Type
+/// @ TransferView: Builds Invite View based on AuthInvite Payload Type
 class _AuthInviteSheet extends StatelessWidget {
   final AuthorizeController controller;
   final AuthInvite invite;
@@ -62,6 +58,13 @@ class _AuthInviteSheet extends StatelessWidget {
                 profile: invite.from.profile,
               ),
               _buildView(),
+              Divider(),
+              ColorButton.primary(
+                onPressed: () => CardService.handleInviteResponse(true, invite),
+                text: "Accept",
+                icon: SonrIcons.Check,
+                margin: EdgeInsets.symmetric(horizontal: 54),
+              ),
             ],
           )),
     );
@@ -69,10 +72,8 @@ class _AuthInviteSheet extends StatelessWidget {
 
   // Builds View By Payload
   Widget _buildView() {
-    if (invite.payload == Payload.FILE) {
-      return FileAuthView(invite);
-    } else if (invite.payload == Payload.MEDIA) {
-      return MediaAuthView(invite);
+    if (invite.payload.isTransfer) {
+      return _AuthInviteFileContent(file: invite.file);
     } else if (invite.payload == Payload.URL) {
       return URLAuthView(invite);
     } else {
@@ -81,6 +82,7 @@ class _AuthInviteSheet extends StatelessWidget {
   }
 }
 
+/// @ Header: Auth Invite File Header
 class _AuthInviteFileHeader extends StatelessWidget {
   final Payload payload;
   final Profile profile;
@@ -98,8 +100,8 @@ class _AuthInviteFileHeader extends StatelessWidget {
           ]),
           padding: EdgeInsets.all(4),
           child: Container(
-            width: 80,
-            height: 80,
+            width: 70,
+            height: 70,
             child: profile.hasPicture()
                 ? CircleAvatar(
                     backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
@@ -117,7 +119,7 @@ class _AuthInviteFileHeader extends StatelessWidget {
             style: _buildTextStyle(FontWeight.bold),
           ),
           TextSpan(
-            text: "wants to share an ",
+            text: " wants to share an ",
             style: _buildTextStyle(FontWeight.normal),
           ),
           TextSpan(
@@ -153,6 +155,37 @@ class _AuthInviteFileHeader extends StatelessWidget {
         fontSize: 19,
         color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
       );
+    }
+  }
+}
+
+/// @ Content: Auth Invite File Content
+class _AuthInviteFileContent extends StatelessWidget {
+  final SonrFile file;
+
+  const _AuthInviteFileContent({Key? key, required this.file}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: Height.ratio(0.28),
+      decoration: Neumorphic.floating(
+        theme: Get.theme,
+      ),
+      padding: EdgeInsets.all(8),
+      child: _buildView(Width.ratio(0.8), Height.ratio(0.3)),
+    );
+  }
+
+  Widget _buildView(double width, double height) {
+    if (file.payload.isMedia) {
+      return file.single.thumbBuffer.length > 0
+          ? Image.memory(
+              Uint8List.fromList(file.single.thumbBuffer),
+              fit: BoxFit.fitHeight,
+            )
+          : file.single.mime.type.gradient();
+    } else {
+      return RiveContainer(type: RiveBoard.Documents, width: width, height: height);
     }
   }
 }

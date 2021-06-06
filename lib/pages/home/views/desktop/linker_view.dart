@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
 import 'package:sonr_app/style/style.dart';
+import 'desktop_controller.dart';
 
-class RegisterDesktopView extends GetView<LinkController> {
+class RegisterDesktopView extends GetView<DesktopController> {
   final RxInt counter = 0.obs;
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();

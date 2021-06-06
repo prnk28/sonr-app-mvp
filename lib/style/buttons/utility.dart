@@ -3,7 +3,7 @@ import '../style.dart';
 class ButtonUtility {
   static const K_BUTTON_DURATION = Duration(milliseconds: 150);
   static const K_CONFIRM_DURATION = Duration(milliseconds: 325);
-  static const double K_BORDER_RADIUS = 8;
+  static const double K_BORDER_RADIUS = 40;
   static const K_BUTTON_PADDING = EdgeInsets.symmetric(horizontal: 24, vertical: 8);
 
   // @ Helper to Build Complete View
