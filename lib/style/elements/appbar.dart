@@ -101,7 +101,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPanStart: onPanStart,
       onPanUpdate: onPanUpdate,
       child: Container(
-        padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
+        padding: const EdgeInsets.only(left: 14.0, right: 14, top: 60.0),
         child: NavigationToolbar(
           centerMiddle: false,
           leading: IconButton(
@@ -119,7 +119,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 16);
 
   // Handles Drag Update for Desktop Build
   void onPanUpdate(DragUpdateDetails details) async {

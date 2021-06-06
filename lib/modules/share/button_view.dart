@@ -48,7 +48,7 @@ class ShareOptionsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Height.ratio(0.18),
+      height: Height.ratio(0.2),
       width: Get.width,
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
@@ -91,7 +91,7 @@ class _ShareCameraButtonItem extends StatelessWidget {
             padding: EdgeInsets.all(24),
           child:Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Camera'.light(color: SonrColor.White) : 'Camera'.light(color: SonrColor.Grey),
+          'Camera'.light(color: SonrTheme.textColor.withOpacity(0.8)),
         ]),
       ),
     );
@@ -133,7 +133,7 @@ class _ShareFileButtonItem extends StatelessWidget {
             padding: EdgeInsets.all(24),
           child:Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'File'.light(color: SonrColor.White) : 'File'.light(color: SonrColor.Grey),
+          'File'.light(color: SonrTheme.textColor.withOpacity(0.8)),
         ]),
       ),
     );
@@ -159,7 +159,7 @@ class _ShareContactButtonItem extends StatelessWidget {
             padding: EdgeInsets.all(24),
           child:Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Contact'.light(color: SonrColor.White) : 'Contact'.light(color: SonrColor.Grey),
+          'Contact'.light(color: SonrTheme.textColor.withOpacity(0.8)),
         ]),
       ),
     );
