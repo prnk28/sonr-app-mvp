@@ -93,7 +93,7 @@ class _MediaInfoView extends StatelessWidget {
           ),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            "${file.prettySize()} From".h3,
+            "${file.prettySize()} From".subheading(),
 
             // Owner
             ProfileName(profile: owner, isHeader: true),
@@ -102,11 +102,11 @@ class _MediaInfoView extends StatelessWidget {
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Name ".h6,
+              "Name ".paragraph(),
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: "${file.single.name}".p,
+                child: "${file.single.name}".paragraph(),
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -114,23 +114,23 @@ class _MediaInfoView extends StatelessWidget {
 
             // File Size
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Size ".h6,
+              "Size ".paragraph(),
               Spacer(),
-              "${file.prettySize()}".p,
+              "${file.prettySize()}".paragraph()
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Kind ".h6,
+              "Kind ".paragraph(),
               Spacer(),
-              "${file.single.mime.value}".p,
+              "${file.single.mime.value}".paragraph(),
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "ID ".h6,
+              "ID ".paragraph(),
               Spacer(),
-              "${file.single.id}".p,
+              "${file.single.id}".paragraph(),
             ]),
 
             Padding(padding: EdgeInsets.all(4)),

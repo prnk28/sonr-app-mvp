@@ -22,14 +22,15 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: GestureDetector(onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback), child: "Settings".h2),
+                      child:
+                          GestureDetector(onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback), child: "Settings".heading()),
                     ),
                     Padding(padding: EdgeWith.top(24)),
 
                     // @ Dark Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Dark Mode Title
-                      "Dark Mode".h6,
+                      "Dark Mode".paragraph(),
 
                       // Dark Mode Switch
                       Switch(
@@ -44,7 +45,7 @@ class SettingsSheet extends StatelessWidget {
                     // @ Flat Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Dark Mode Title
-                      "Flat Mode".h6,
+                      "Flat Mode".paragraph(),
 
                       // Dark Mode Switch
                       Switch(
@@ -59,7 +60,7 @@ class SettingsSheet extends StatelessWidget {
                     // @ PointShare Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Point Share Title
-                      "Point To Share".h6,
+                      "Point To Share".paragraph(),
 
                       // Point Share Mode Switch
                       Switch(
@@ -76,7 +77,7 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: "Alpha - 0.9.2".l,
+                      child: "Alpha - 0.9.2".light(),
                     ),
                     Padding(padding: EdgeWith.top(36)),
                   ]),

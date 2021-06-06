@@ -13,7 +13,7 @@ class GeneralEditorView extends GetView<EditorController> {
         Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 24),
-            child: "General".headFour(align: TextAlign.start, color: Get.theme.focusColor)),
+            child: "General".subheading(align: TextAlign.start, color: Get.theme.focusColor)),
         Padding(padding: EdgeInsets.only(top: 4)),
         Container(
           height: Height.ratio(0.45),
@@ -48,7 +48,7 @@ class _EditOptionsButton extends GetView<EditorController> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           UserService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? option.name.h6_White : option.name.h6,
+          UserService.isDarkMode ? option.name.paragraph(color: SonrColor.White) : option.name.paragraph(),
         ]),
       ),
     );

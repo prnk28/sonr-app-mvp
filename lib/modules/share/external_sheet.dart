@@ -65,7 +65,7 @@ class ShareSheet extends StatelessWidget {
             // Bottom Left Close/Cancel Button
             ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart, size: 42)),
 
-            "Share".h2,
+            "Share".heading(),
 
             // @ Top Right Confirm Button
             ActionButton(
@@ -172,8 +172,8 @@ class _ShareItemURL extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              data.title.h3,
-              data.description.p,
+              data.title.subheading(),
+              data.description.paragraph(),
             ],
           ),
         ),
@@ -222,8 +222,8 @@ class _ShareItemURL extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              data.title.h3,
-              data.description.p,
+              data.title.subheading(),
+              data.description.paragraph(),
             ],
           ),
         ),

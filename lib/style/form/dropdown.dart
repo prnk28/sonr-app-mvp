@@ -69,7 +69,7 @@ class SonrDropdown extends StatelessWidget {
         Spacer(),
         initial.hasIcon ? initial.icon! : Container(),
         Padding(padding: EdgeInsets.all(4)),
-        initial.text.h6,
+        initial.text.light(),
         Spacer(flex: selectedFlex!),
         Get.find<SonrPositionedOverlay>().overlays.length == 0
             ? UserService.isDarkMode
@@ -90,7 +90,7 @@ class SonrDropdown extends StatelessWidget {
           Spacer(),
           item.hasIcon ? item.icon! : Container(),
           Padding(padding: EdgeInsets.only(right: 10)),
-          item.text.headSix(color: SonrColor.Grey),
+          item.text.light(color: SonrColor.Grey),
           Spacer(flex: selectedFlex!),
           Get.find<SonrPositionedOverlay>().overlays.length == 0
               ? UserService.isDarkMode
@@ -103,7 +103,7 @@ class SonrDropdown extends StatelessWidget {
         ]);
       } else {
         return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          item.text.headSix(color: SonrColor.Grey),
+          item.text.light(color: SonrColor.Grey),
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon! : Container(),
           Get.find<SonrPositionedOverlay>().overlays.length == 0
@@ -137,11 +137,11 @@ class SonrDropdownItem extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: text.h6,
+          child: text.light(),
         )
       ]);
     } else {
-      return Row(children: [Padding(padding: EdgeInsets.all(4)), text.h6]);
+      return Row(children: [Padding(padding: EdgeInsets.all(4)), text.light()]);
     }
   }
 }

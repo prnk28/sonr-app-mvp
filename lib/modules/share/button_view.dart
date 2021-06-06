@@ -80,7 +80,7 @@ class _ShareCameraButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 75),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Camera'.h6_White : 'Camera'.h6_Grey,
+          UserService.isDarkMode ? 'Camera'.paragraph(color: SonrColor.White) : 'Camera'.paragraph(color: SonrColor.Grey),
         ]),
       ),
     );
@@ -116,7 +116,7 @@ class _ShareFileButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 75),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'File'.h6_White : 'File'.h6_Grey,
+          UserService.isDarkMode ? 'File'.paragraph(color: SonrColor.White) : 'File'.paragraph(color: SonrColor.Grey),
         ]),
       ),
     );
@@ -136,7 +136,7 @@ class _ShareContactButtonItem extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 75),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Contact'.h6_White : 'Contact'.h6_Grey,
+          UserService.isDarkMode ? 'Contact'.paragraph(color: SonrColor.White) : 'Contact'.paragraph(color: SonrColor.Grey),
         ]),
       ),
     );

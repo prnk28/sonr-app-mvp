@@ -12,7 +12,7 @@ class LocalView extends GetView<TransferController> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(left: 24.0),
-            child: "Local".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+            child: "Local".subheading(align: TextAlign.start, color: Get.theme.focusColor),
           ),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),

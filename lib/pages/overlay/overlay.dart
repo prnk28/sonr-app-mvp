@@ -68,10 +68,10 @@ class AlertOverlayView extends StatelessWidget {
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        title.h2,
+        title.heading(),
         Padding(
           padding: EdgeInsets.only(left: 10.0),
-          child: description.p,
+          child: description.paragraph(),
         ),
         Padding(padding: EdgeInsets.all(4)),
         Divider(),
@@ -183,10 +183,10 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
       height: Get.height / 3 + 50,
       child: Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          title.h4,
+          title.heading(),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
-            child: description.p_Grey,
+            child: description.paragraph(color: Get.theme.focusColor),
           ),
           Padding(padding: EdgeInsets.all(4)),
           Divider(),
@@ -202,7 +202,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                       SonrOverlay.back();
                     }
                   },
-                  child: declineTitle.h6_Red),
+                  child: declineTitle.paragraph(color: SonrColor.Critical)),
             ),
             // Accept Button
             ColorButton.primary(

@@ -84,7 +84,7 @@ class _NameStatus extends GetView<RegisterController> {
                     ],
                   ),
                   Padding(padding: EdgeInsets.all(4)),
-                  _buildLabel(controller.nameStatus.value).h6_White
+                  _buildLabel(controller.nameStatus.value).paragraph(color: SonrColor.White)
                 ])),
             decoration: BoxDecoration(gradient: _buildGradient(controller.nameStatus.value), borderRadius: BorderRadius.circular(8), boxShadow: [
               BoxShadow(

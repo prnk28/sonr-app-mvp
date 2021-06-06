@@ -34,7 +34,9 @@ class URLLinkView extends StatelessWidget {
         onTap: _launchURL,
         onLongPress: _copyURL,
         child: Container(
-            decoration: Neumorphic.indented(theme: Get.theme,),
+            decoration: Neumorphic.indented(
+              theme: Get.theme,
+            ),
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
             padding: EdgeInsets.symmetric(vertical: 6),
             child: Row(children: [
@@ -104,8 +106,8 @@ class _URLLinkInfo extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            data.title.h3,
-            data.description.p,
+            data.title.subheading(),
+            data.description.paragraph(),
           ],
         ),
       );

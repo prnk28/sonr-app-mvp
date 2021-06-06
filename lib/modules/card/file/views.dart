@@ -182,13 +182,13 @@ class ReceivedText extends StatelessWidget {
       // Get String
       String dateText = dateFormat.format(this.received);
       String timeText = timeFormat.format(this.received);
-      return Row(children: [dateText.h6_White, timeText.p_White]);
+      return Row(children: [dateText.paragraph(color: SonrColor.White), timeText.paragraph(color: SonrColor.White)]);
     } else {
       // Formatters
       final dateFormat = DateFormat.yMd();
 
       // Get String
-      return dateFormat.format(this.received).h6_White;
+      return dateFormat.format(this.received).paragraph(color: SonrColor.White);
     }
   }
 }

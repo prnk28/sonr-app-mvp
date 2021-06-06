@@ -24,7 +24,7 @@ class ActionButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _ActionIconButton(onPressed, icon, size),
-            label!.h5_Grey,
+            label!.light(color: Get.theme.hintColor),
           ],
         ),
       );

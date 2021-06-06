@@ -27,7 +27,7 @@ class FileAuthView extends StatelessWidget {
                 ProfileName(profile: invite.from.profile, isHeader: true),
                 Row(children: [
                   invite.payload.toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
-                  "   ${invite.file.prettySize()}".h5
+                  "   ${invite.file.prettySize()}".paragraph()
                 ]),
               ]),
             ]),
@@ -54,7 +54,8 @@ class FileAuthView extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 54),
                 ),
                 Padding(padding: EdgeInsets.all(8)),
-                PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline".h6_Grey),
+                PlainTextButton(
+                    onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline".paragraph(color: Get.theme.hintColor)),
               ],
             ),
           ],

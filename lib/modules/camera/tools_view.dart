@@ -44,7 +44,7 @@ class _CaptureToolsView extends StatelessWidget {
             HapticFeedback.heavyImpact();
             controller.handleCapture(false);
           },
-          child: [SonrIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".h6].row(),
+          child: [SonrIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".paragraph()].row(),
         ),
 
         // Right Button - Continue

@@ -41,7 +41,7 @@ class DashboardView extends GetView<DashboardController> {
         key: ValueKey(RecentsViewStatus.Default),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(padding: EdgeInsets.only(top: 8)),
-          "Quick Access".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+          "Quick Access".subheading(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
               height: Height.ratio(0.425),

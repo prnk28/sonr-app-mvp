@@ -156,7 +156,7 @@ extension AssetPathEntityUtils on AssetPathEntity {
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         duration: 150.milliseconds,
-        child: isSelected ? this.label().h6_White : this.label().h6_Grey);
+        child: isSelected ? this.label().light(color: SonrColor.White) : this.label().light(color: Get.theme.hintColor));
   }
 
   String label() {

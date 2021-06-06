@@ -17,7 +17,7 @@ class BackupCodeView extends GetView<RegisterController> {
             Divider(color: Get.theme.hintColor.withOpacity(0.6), indent: 8, endIndent: 8),
             Padding(padding: EdgeInsets.all(8)),
             "This is your Backup Code if you ever erase your Profile from this device. Back this code in a Safe Location in order to recover your Account."
-                .p_Grey,
+                .paragraph(color: Get.theme.focusColor),
             Padding(padding: EdgeInsets.all(8)),
 
             // Code
@@ -26,7 +26,7 @@ class BackupCodeView extends GetView<RegisterController> {
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 56),
-                child: controller.mnemonic.value.h3,
+                child: controller.mnemonic.value.subheading(),
               ),
             ),
             Spacer(),

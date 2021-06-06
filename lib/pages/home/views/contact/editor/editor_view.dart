@@ -9,9 +9,8 @@ class EditorView extends GetView<EditorController> {
     return Obx(() => SonrScaffold(
         appBar: DesignAppBar(
           centerTitle: true,
-          title: controller.title.value.headThree(
+          title: controller.title.value.subheading(
             color: Get.theme.focusColor,
-            weight: FontWeight.w800,
             align: TextAlign.start,
           ),
           leading: PlainIconButton(

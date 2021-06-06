@@ -121,7 +121,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Username
-          ["${UserService.contact.value.sName}".h3, ".snr/".h3_Grey].row(),
+          ["${UserService.contact.value.sName}".subheading(), ".snr/".subheading(color: Get.theme.hintColor)].row(),
 
           // First/Last Name
           _buildName(),
@@ -137,12 +137,13 @@ class _ProfileInfoView extends GetView<ProfileController> {
   Widget _buildName() {
     return GestureDetector(
         onLongPress: controller.setEditingMode,
-        child: Obx(() => [UserService.contact.value.fullName.h5, _ProfileContactButtons()].row(mainAxisAlignment: MainAxisAlignment.spaceBetween)));
+        child: Obx(
+            () => [UserService.contact.value.fullName.paragraph(), _ProfileContactButtons()].row(mainAxisAlignment: MainAxisAlignment.spaceBetween)));
   }
 
   Widget _buildBio() {
     if (UserService.contact.value.hasBio()) {
-      return '"${UserService.contact.value.bio}"'.p;
+      return '"${UserService.contact.value.bio}"'.paragraph();
     }
     return Container();
   }
@@ -165,7 +166,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [SonrIcons.Twitter.gradient(size: 32), Padding(padding: EdgeInsets.all(8)), "Tap to Link Twitter".h6],
+                      children: [SonrIcons.Twitter.gradient(size: 32), Padding(padding: EdgeInsets.all(8)), "Tap to Link Twitter".paragraph()],
                     ),
                   ),
                 ),

@@ -44,7 +44,7 @@ class ProfileName extends StatelessWidget {
     if (this.isHeader) {
       return "${profile.firstName} ${profile.lastName}".gradient(value: SonrGradients.SolidStone);
     } else {
-      return Row(children: ["${profile.firstName} ".h6, profile.lastName.l]);
+      return Row(children: ["${profile.firstName} ".paragraph(), profile.lastName.light()]);
     }
   }
 }

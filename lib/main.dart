@@ -63,7 +63,7 @@ class App extends StatelessWidget {
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: FadeInUp(child: "Sonr".hero),
+                child: FadeInUp(child: "Sonr".hero()),
               ),
             ],
           ));
@@ -84,7 +84,7 @@ class App extends StatelessWidget {
             // @ Fade Animation of Text
             Positioned(
               bottom: 100,
-              child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero),
+              child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero()),
             ),
           ],
         ));

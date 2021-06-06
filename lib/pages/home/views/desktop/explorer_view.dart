@@ -40,7 +40,7 @@ class ExplorerDesktopView extends GetView<DesktopController> {
                 width: 500,
                 child: Image.asset('assets/illustrations/EmptyLobby.png'),
               ),
-              "Nobody Around".h5_Grey
+              "Nobody Around".paragraph(color: Get.theme.focusColor),
             ].column(mainAxisAlignment: MainAxisAlignment.center),
           );
         }

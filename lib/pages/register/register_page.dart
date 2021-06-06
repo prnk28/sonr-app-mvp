@@ -22,7 +22,7 @@ class _RegisterDesktop extends GetView<RegisterController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
+    return Scaffold(body: Obx(
       () => Container(
         padding: EdgeInsets.symmetric(horizontal: 280),
         child: Column(children: <Widget>[
@@ -103,7 +103,7 @@ class _RegisterDesktop extends GetView<RegisterController> {
             ),
           )
         ]),
-      ),
+      )),
     );
   }
 }

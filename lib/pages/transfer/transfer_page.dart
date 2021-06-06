@@ -23,7 +23,7 @@ class TransferScreen extends GetView<TransferController> {
             action: _RemoteActionButton(),
             title: GestureDetector(
                 onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
-                child: controller.title.value.headThree(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
+                child: controller.title.value.heading(align: TextAlign.center, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
           ),
           bottomSheet: PayloadSheetView(),
           body: SingleChildScrollView(

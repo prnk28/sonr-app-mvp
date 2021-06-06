@@ -27,7 +27,8 @@ class SharePopupView extends GetView<ShareController> {
               SliverToBoxAdapter(child: ShareOptionsRow()),
               SliverPadding(padding: EdgeInsets.only(top: 8)),
               SliverToBoxAdapter(
-                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
+                  child:
+                      Container(padding: EdgeInsets.only(left: 24), child: "Media".subheading(align: TextAlign.start, color: Get.theme.focusColor))),
               SliverToBoxAdapter(child: _TagsView()),
               SliverPadding(padding: EdgeInsets.all(4)),
               // @ Builds List of Social Tile
@@ -53,14 +54,12 @@ class _ShareBarTitle extends GetView<ShareController> {
     return Obx(() => GestureDetector(
           onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
           child: controller.hasSelected.value
-              ? "Share (${controller.selectedItems.length})".headThree(
+              ? "Share (${controller.selectedItems.length})".heading(
                   color: Get.theme.focusColor,
-                  weight: FontWeight.w800,
                   align: TextAlign.start,
                 )
-              : "Share".headThree(
+              : "Share".heading(
                   color: Get.theme.focusColor,
-                  weight: FontWeight.w800,
                   align: TextAlign.start,
                 ),
         ));

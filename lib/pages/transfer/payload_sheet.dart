@@ -62,11 +62,11 @@ class _SonrFileListHeader extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettyName().h4,
+            child: TransferService.file.value.prettyName().paragraph(),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettySize().h5,
+            child: TransferService.file.value.prettySize().paragraph(),
           )
         ],
       ),
@@ -105,15 +105,15 @@ class _SonrFileListItem extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: item.prettyType().h6,
+                child: item.prettyType().paragraph(),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: item.prettyName().p_Grey,
+                child: item.prettyName().paragraph(color: Get.theme.hintColor),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: item.prettySize().p_Grey,
+                child: item.prettySize().paragraph(color: Get.theme.hintColor),
               )
             ])),
         // Button
@@ -175,11 +175,11 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: [UserService.contact.value.firstName.h6, " ".h6, UserService.contact.value.lastName.l].row(),
+              child: [UserService.contact.value.firstName.paragraph(), " ".paragraph(), UserService.contact.value.lastName.light()].row(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: "Contact Card".p_Grey,
+              child: "Contact Card".paragraph(),
             )
           ]));
     } else if (TransferService.payload.value == Payload.URL) {
@@ -191,11 +191,11 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyName().h6,
+              child: TransferService.file.value.prettyName().paragraph(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettySize().p_Grey,
+              child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     } else {
@@ -207,15 +207,15 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyType().h6,
+              child: TransferService.file.value.prettyType().subheading()
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettyName().p_Grey,
+              child: TransferService.file.value.prettyName().paragraph(color: Get.theme.hintColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettySize().p_Grey,
+              child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     }

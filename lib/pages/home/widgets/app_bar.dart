@@ -33,9 +33,8 @@ class _HomeAppBarTitle extends GetView<HomeController> {
             key: ValueKey<String>(controller.title.value),
             onTap: controller.onTitleTap,
             onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
-            child: controller.title.value.headThree(
+            child: controller.title.value.heading(
               color: Get.theme.focusColor,
-              weight: FontWeight.w800,
               align: TextAlign.start,
             ),
           ),
@@ -47,9 +46,8 @@ class _HomeAppBarSubtitle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.view.value == HomeView.Dashboard
-        ? "Hi ${UserService.contact.value.firstName},".headThree(
+        ? "Hi ${UserService.contact.value.firstName},".heading(
             color: Get.theme.focusColor,
-            weight: FontWeight.w400,
             align: TextAlign.start,
           )
         : Container());

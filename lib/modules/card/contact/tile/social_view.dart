@@ -132,7 +132,7 @@ class _TweetItem extends StatelessWidget {
         width: 150,
         child: SingleChildScrollView(
           child: Column(
-            children: [latestTweet.text!.p, PostText.date(latestTweet.createdAt!)],
+            children: [latestTweet.text!.paragraph(), PostText.date(latestTweet.createdAt!)],
           ),
         ),
       );
@@ -149,7 +149,7 @@ class _TweetItem extends StatelessWidget {
             Container(
               width: 55,
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.p]),
+                  mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.paragraph()]),
             ),
             Container(
               width: 265,
@@ -157,7 +157,7 @@ class _TweetItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   PostText.date(tweets![index].createdAt!),
-                  tweets[index].text!.p,
+                  tweets[index].text!.paragraph(),
                 ],
               ),
             ),
@@ -184,7 +184,7 @@ class _YoutubeItem extends StatelessWidget {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [video.title!.p, PostText.date(video.publishTime!)],
+          children: [video.title!.paragraph(), PostText.date(video.publishTime!)],
         ),
       ),
     );
@@ -196,7 +196,7 @@ class PostText {
   static Widget date(String pubDate) {
     var date = DateTime.parse(pubDate);
     var output = DateFormat.yMMMMd('en_US');
-    return output.format(date).toString().p;
+    return output.format(date).toString().paragraph();
   }
 
   // @ Build Description Text
@@ -214,6 +214,6 @@ class PostText {
 
     // Limit Characters
     var text = cleaned.substring(0, maxDesc) + "...";
-    return text.p;
+    return text.paragraph();
   }
 }
