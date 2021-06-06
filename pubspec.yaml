@@ -60,7 +60,7 @@ dependencies:
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
   connectivity: ^3.0.6
-  flutter_blue: ^0.8.0
+  # flutter_blue: ^0.8.0
   flutter_compass: ^0.6.0
   flutter_keyboard_visibility: ^5.0.1
   geolocator: ^7.0.3
@@ -91,8 +91,8 @@ dependencies:
   posthog_flutter:
     git: git@github.com:sonr-io/posthog-flutter.git
   sonr_plugin:
-    git: git@github.com:sonr-io/plugin.git
-    #path: ../plugin/ #-- Uncomment for Local Development
+    #git: git@github.com:sonr-io/plugin.git
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0

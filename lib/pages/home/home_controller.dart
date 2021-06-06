@@ -65,7 +65,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void onReady() {
     // Check Entry Arguments
     HomeArguments args = Get.arguments;
-    if (args.isFirstLoad) {
+    if (args.isFirstLoad && DeviceService.isMobile) {
       MobileService.checkInitialShare();
     }
     super.onReady();

@@ -13,8 +13,8 @@ class HomePage extends GetView<HomeController> {
     return SonrScaffold(
       gradient: SonrGradients.PlumBath,
       resizeToAvoidBottomInset: false,
-      floatingAction: ShareButton(),
-      bottomNavigationBar: HomeBottomNavBar(),
+      floatingAction: DeviceService.isMobile ? ShareButton() : Container(),
+      bottomNavigationBar: DeviceService.isMobile ? HomeBottomNavBar() : Container(),
       appBar: HomeAppBar(),
       body: DeviceService.isMobile ? _HomeMobile() : _HomeDesktop(),
     );
