@@ -44,8 +44,7 @@ class DashboardView extends GetView<DashboardController> {
           "Dashboard".subheading(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
-              height: Height.ratio(0.425),
-              padding: EdgeInsets.all(8),
+              height: Height.ratio(0.435),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -112,11 +111,14 @@ class _QuickOptionButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Container(
-            decoration: SonrTheme.cardDecoration,
+            decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
             child: data.image(),
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(24),
           ),
-          Padding(padding: EdgeInsets.only(top: 8)),
+          Padding(padding: EdgeInsets.only(top: 4)),
           data.label(),
         ]),
       ),

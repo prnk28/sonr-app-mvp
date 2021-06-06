@@ -53,9 +53,9 @@ class ShareOptionsRow extends StatelessWidget {
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         const _ShareCameraButtonItem(),
-        VerticalDivider(color: SonrColor.Grey),
+        VerticalDivider(color: SonrTheme.separatorColor),
         const _ShareContactButtonItem(),
-        VerticalDivider(color: SonrColor.Grey),
+        VerticalDivider(color: SonrTheme.separatorColor),
         const _ShareFileButtonItem(),
       ]),
     );
@@ -83,7 +83,13 @@ class _ShareCameraButtonItem extends StatelessWidget {
           }
         },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 75),
+                  Container(
+                      decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.all(24),
+          child:Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
           UserService.isDarkMode ? 'Camera'.light(color: SonrColor.White) : 'Camera'.light(color: SonrColor.Grey),
         ]),
@@ -118,8 +124,14 @@ class _ShareFileButtonItem extends StatelessWidget {
             }
           }
         },
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 75),
+        child:  Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+                      decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.all(24),
+          child:Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
           UserService.isDarkMode ? 'File'.light(color: SonrColor.White) : 'File'.light(color: SonrColor.Grey),
         ]),
@@ -139,7 +151,13 @@ class _ShareContactButtonItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => TransferService.chooseContact(),
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 75),
+          Container(
+                      decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.all(24),
+          child:Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
           UserService.isDarkMode ? 'Contact'.light(color: SonrColor.White) : 'Contact'.light(color: SonrColor.Grey),
         ]),

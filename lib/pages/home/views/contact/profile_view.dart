@@ -50,7 +50,7 @@ class _DefaultProfileView extends GetView<ProfileController> {
       primary: true,
       slivers: [
         // @ Builds Profile Header
-        _ProfileHeaderBar(),
+        SliverToBoxAdapter(child:Center(child: ProfileAvatarField())),
         SliverToBoxAdapter(child: _ProfileInfoView()),
         SliverPadding(padding: EdgeInsets.all(14)),
 
@@ -73,58 +73,26 @@ class _DefaultProfileView extends GetView<ProfileController> {
   }
 }
 
-class _ProfileHeaderBar extends GetView<ProfileController> {
-  // Sliver Attributes
-  final bool? automaticallyImplyLeading;
-  final double? expandedHeight;
-
-  const _ProfileHeaderBar({Key? key, this.automaticallyImplyLeading, this.expandedHeight}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      floating: false,
-      snap: false,
-      backgroundColor: Colors.transparent,
-      foregroundColor: Colors.transparent,
-      expandedHeight: Get.height / 6 + 16,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        background: GestureDetector(
-          child: Container(
-            height: Get.height / 6 + 16, // Same Header Color
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // @ Avatar
-                Center(child: ProfileAvatarField()),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _ProfileInfoView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.only(top: 8),
       width: Get.width,
       height: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Username
-          ["${UserService.contact.value.sName}".subheading(color: SonrTheme.textColor), ".snr/".subheading(color: SonrTheme.greyColor)].row(),
+                    // First/Last Name
+  UserService.contact.value.fullName.subheading(color: SonrTheme.textColor),
 
-          // First/Last Name
-          _buildName(),
+          // Username
+          ["${UserService.contact.value.sName}".light(color: SonrTheme.textColor), ".snr/".light(color: SonrTheme.greyColor),
+          Spacer(), _ProfileContactButtons(),].row(),
+
+
           Padding(padding: EdgeInsets.all(12)),
           // Bio/ LastTweet
           _buildBio(),
@@ -132,14 +100,6 @@ class _ProfileInfoView extends GetView<ProfileController> {
         ],
       ),
     );
-  }
-
-  Widget _buildName() {
-    return GestureDetector(
-        child: Obx(() => [
-              UserService.contact.value.fullName.paragraph(color: SonrTheme.textColor),
-              _ProfileContactButtons(),
-            ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween)));
   }
 
   Widget _buildBio() {

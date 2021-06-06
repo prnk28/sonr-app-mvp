@@ -6,13 +6,10 @@ class ActivityPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-      appBar: PageAppBar(
-        centerTitle: true,
-        title: "Activity".heading(
-          color: Get.theme.focusColor,
-          align: TextAlign.start,
-        ),
-        leading: ActionButton(iconData: SonrIcons.Close, onPressed: () => Get.back(closeOverlays: true)),
+      appBar: DetailAppBar(
+        isClose: true,
+        title: "Activity",
+        onPressed: () => Get.back(closeOverlays: true),
         action: ActionButton(
             iconData: SonrIcons.Clear,
             onPressed: () async {
@@ -64,9 +61,7 @@ class _ActivityListItem extends StatelessWidget {
           ),
         ),
         child: Container(
-          decoration: Neumorphic.floating(
-            theme: Get.theme,
-          ),
+          decoration: SonrTheme.cardDecoration,
           child: ListTile(
             title: _buildMessage(),
           ),
@@ -88,7 +83,7 @@ class _ActivityListItem extends StatelessWidget {
         return [
           item.payload.icon(size: 24, color: Get.theme.focusColor),
           " You ".paragraph(),
-          item.activity.value.paragraph(color: SonrColor.Primary),
+          item.activity.value.light(color: SonrColor.Primary),
           _description(item).paragraph()
         ].row();
       case ActivityType.Received:

@@ -13,13 +13,12 @@ class GeneralEditorView extends GetView<EditorController> {
             padding: EdgeInsets.only(left: 24),
             child: "General".subheading(align: TextAlign.start, color: Get.theme.focusColor)),
         Container(
-            height: Height.ratio(0.5),
+            height: Height.ratio(0.475),
             padding: EdgeInsets.all(8),
             child: GridView.builder(
                 itemCount: ContactOptions.values.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 24,
                   crossAxisSpacing: 24,
                 ),
                 itemBuilder: (context, index) {
@@ -36,11 +35,11 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ Dark Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Dark Mode Title
-                  "Dark Mode".paragraph(),
+                  "Dark Mode".light(),
 
                   // Dark Mode Switch
                   Switch(
-                    activeColor: SonrTheme.textColor,
+                    activeColor: SonrTheme.backgroundColor,
                     activeTrackColor: SonrColor.Primary,
                     inactiveTrackColor: SonrTheme.textColor,
                     value: controller.isDarkModeEnabled.value,
@@ -52,11 +51,11 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ Flat Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Dark Mode Title
-                  "Flat Mode".paragraph(),
+                  "Flat Mode".light(color: SonrTheme.textColor),
 
                   // Dark Mode Switch
                   Switch(
-                    activeColor: SonrTheme.textColor,
+                    activeColor: SonrTheme.backgroundColor,
                     activeTrackColor: SonrColor.Primary,
                     inactiveTrackColor: SonrTheme.textColor,
                     value: controller.isFlatModeEnabled.value,
@@ -68,11 +67,11 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ PointShare Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Point Share Title
-                  "Point To Share".paragraph(),
+                  "Point To Share".light(color: SonrTheme.textColor),
 
                   // Point Share Mode Switch
                   Switch(
-                      activeColor: SonrTheme.textColor,
+                      activeColor: SonrTheme.backgroundColor,
                       activeTrackColor: SonrColor.Primary,
                       inactiveTrackColor: SonrTheme.textColor,
                       value: controller.isPointToShareEnabled.value,
@@ -80,12 +79,12 @@ class GeneralEditorView extends GetView<EditorController> {
                         controller.setPointShare(val);
                       })
                 ]),
-                Padding(padding: EdgeWith.top(8)),
+                Spacer(),
                 // @ Version Number
-                Align(
-                  heightFactor: 0.9,
+                Container(
+                  padding: EdgeInsets.only(bottom: 8),
                   alignment: Alignment.topCenter,
-                  child: "Alpha - 0.9.2".light(),
+                  child: "Alpha - 0.9.3".light(color: SonrTheme.textColor),
                 ),
               ]),
             ))
@@ -108,7 +107,7 @@ class _EditOptionsButton extends GetView<EditorController> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           UserService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? option.name.paragraph(color: SonrColor.White) : option.name.paragraph(),
+          UserService.isDarkMode ? option.name.light(color: SonrTheme.textColor) : option.name.light(color: SonrTheme.textColor),
         ]),
       ),
     );

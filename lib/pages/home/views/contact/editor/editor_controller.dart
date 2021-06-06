@@ -19,15 +19,15 @@ extension EditorFieldStatusUtils on EditorFieldStatus {
   String get name {
     switch (this) {
       case EditorFieldStatus.Default:
-        return "Edit Contact";
+        return "Settings";
       case EditorFieldStatus.FieldName:
-        return "Editing Name";
+        return "Names";
       case EditorFieldStatus.FieldGender:
-        return "Editing Gender";
+        return "Gender";
       case EditorFieldStatus.FieldPhone:
-        return "Editing Phone";
+        return "Phones";
       case EditorFieldStatus.FieldAddresses:
-        return "Edditiing Address";
+        return "Addresses";
     }
   }
 

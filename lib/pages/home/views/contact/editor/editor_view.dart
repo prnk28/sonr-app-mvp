@@ -11,7 +11,7 @@ class EditorView extends GetView<EditorController> {
           onPressed: controller.handleLeading,
           title: controller.title.value,
         ),
-        body: FadeInLeft(key: ValueKey<EditorFieldStatus>(controller.status.value), child: _buildView(controller.status.value))));
+        body:  _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
