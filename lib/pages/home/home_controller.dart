@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
-enum HomeView { Dashboard, Contact }
+enum HomeView { Dashboard, Contact, Explorer }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -31,21 +31,27 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Controller Constructer
   @override
   onInit() {
-    // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 2);
-    scrollController = ScrollController();
+    // Check Platform
+    if (DeviceService.isMobile) {
+      // Handle Tab Controller
+      tabController = TabController(vsync: this, length: 2);
+      scrollController = ScrollController();
 
-    // Listen for Updates
-    tabController.addListener(() {
-      // Set Index
-      bottomIndex(tabController.index);
+      // Listen for Updates
+      tabController.addListener(() {
+        // Set Index
+        bottomIndex(tabController.index);
 
-      // Set Page
-      view(HomeView.values[tabController.index]);
+        // Set Page
+        view(HomeView.values[tabController.index]);
 
-      // Update Title
-      title(view.value.title);
-    });
+        // Update Title
+        title(view.value.title);
+      });
+    } else {
+      // Set View
+      view(HomeView.Explorer);
+    }
 
     // Initialize
     super.onInit();
@@ -72,6 +78,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     _statusStream.cancel();
     pageIndex(0);
     super.onClose();
+  }
+
+  /// @ Change View
+  void changeView(HomeView newView) {
+    view(newView);
+    view.refresh();
   }
 
   /// @ Handle Title Tap
@@ -159,12 +171,12 @@ extension HomeViewUtils on HomeView {
   bool get isMain => this == HomeView.Dashboard;
 
   // # Returns IconData for Type
-  IconData get iconData {
+  IconData iconData(bool isSelected) {
     switch (this) {
       case HomeView.Dashboard:
-        return SonrIcons.Category;
+        return isSelected ? SonrIcons.HomeActive : SonrIcons.HomeInactive;
       case HomeView.Contact:
-        return SonrIcons.Profile;
+        return isSelected ? SonrIcons.PersonalActive : SonrIcons.PersonalInactive;
       default:
         return Icons.deck;
     }
@@ -174,9 +186,9 @@ extension HomeViewUtils on HomeView {
   double get iconSize {
     switch (this) {
       case HomeView.Dashboard:
-        return 34;
+        return 32;
       case HomeView.Contact:
-        return 38;
+        return 32;
       default:
         return 32;
     }

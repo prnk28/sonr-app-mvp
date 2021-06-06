@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:sonr_app/pages/home/views/dashboard/quick_screen.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'dashboard_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +41,10 @@ class DashboardView extends GetView<DashboardController> {
         key: ValueKey(RecentsViewStatus.Default),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(padding: EdgeInsets.only(top: 8)),
-          "Quick Access".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+          "Dashboard".subheading(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
-              height: Height.ratio(0.425),
-              padding: EdgeInsets.all(8),
+              height: Height.ratio(0.435),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -112,11 +111,14 @@ class _QuickOptionButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Container(
-            decoration: Neumorphic.floating(theme: Get.theme),
+            decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
             child: data.image(),
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(24),
           ),
-          Padding(padding: EdgeInsets.only(top: 8)),
+          Padding(padding: EdgeInsets.only(top: 4)),
           data.label(),
         ]),
       ),

@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
@@ -63,9 +62,9 @@ class ShareSheet extends StatelessWidget {
           // @ Top Banner
           Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             // Bottom Left Close/Cancel Button
-            ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart, size: 42)),
+            ActionButton(onPressed: () => Get.back(), iconData: SonrIcons.Close),
 
-            "Share".h2,
+            "Share".heading(),
 
             // @ Top Right Confirm Button
             ActionButton(
@@ -76,7 +75,7 @@ class ShareSheet extends StatelessWidget {
                     TransferService.setMedia(mediaFile!);
                   }
                 },
-                icon: SonrIcons.Check.gradient(value: SonrGradients.NorthMiracle, size: 42)),
+                iconData: SonrIcons.Check),
           ]),
 
           // @ Window Content
@@ -172,8 +171,8 @@ class _ShareItemURL extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              data.title.h3,
-              data.description.p,
+              data.title.subheading(),
+              data.description.paragraph(),
             ],
           ),
         ),
@@ -182,7 +181,7 @@ class _ShareItemURL extends StatelessWidget {
         GestureDetector(
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: data.url));
-            SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+            Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
               decoration: Neumorphic.indented(
@@ -222,8 +221,8 @@ class _ShareItemURL extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              data.title.h3,
-              data.description.p,
+              data.title.subheading(),
+              data.description.paragraph(),
             ],
           ),
         ),
@@ -232,7 +231,7 @@ class _ShareItemURL extends StatelessWidget {
         GestureDetector(
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: data.url));
-            SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+            Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
               decoration: Neumorphic.indented(
@@ -262,7 +261,7 @@ class _ShareItemURL extends StatelessWidget {
     return GestureDetector(
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: data.url));
-        SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+        Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(
         decoration: Neumorphic.indented(

@@ -1,11 +1,11 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 enum TransferItemsType { Media, Files, Contacts, Links }
 
 extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns List Length as H5 Text
   Widget subtitle() {
-    return Container(child: "${this.countString()} Items".headFive(color: Get.theme.focusColor, weight: FontWeight.w400, align: TextAlign.start));
+    return Container(child: "${this.countString()} Items".light(color: Get.theme.focusColor, align: TextAlign.start));
   }
 
   /// Gets Count of Items for Type
@@ -29,15 +29,15 @@ extension TransferItemsTypeUtils on TransferItemsType {
 
   /// Returns `name()` as H3 Text
   Widget title() {
-    return name().h3;
+    return name().subheading();
   }
 
   /// Returns `name()` for Button Label
   Widget label() {
     if (UserService.isDarkMode) {
-      return this.name().h6_White;
+      return this.name().light(color: SonrColor.White.withOpacity(0.8));
     } else {
-      return this.name().h6;
+      return this.name().light(color: SonrColor.Black.withOpacity(0.8));
     }
   }
 
@@ -55,8 +55,8 @@ extension TransferItemsTypeUtils on TransferItemsType {
     return Image.asset(
       this.imagePath(),
       fit: BoxFit.fitHeight,
-      width: 100,
-      height: 100,
+      width: 75,
+      height: 75,
     );
   }
 

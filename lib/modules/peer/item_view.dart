@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'profile_view.dart';
 
 /// @ PeerListItem for Remote View
@@ -24,7 +24,7 @@ class _PeerListItemState extends State<PeerListItem> {
             backgroundColor: Colors.transparent,
             collapsedBackgroundColor: Colors.transparent,
             leading: ProfileAvatar.fromPeer(widget.peer, size: 50),
-            title: "${widget.peer.profile.fullName}".h3,
+            title: "${widget.peer.profile.fullName}".subheading(),
             subtitle: RichText(
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.fade,

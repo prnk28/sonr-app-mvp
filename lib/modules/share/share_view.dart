@@ -2,33 +2,21 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'button_view.dart';
 import 'share_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-        appBar: DesignAppBar(
-          centerTitle: true,
-          title: controller.hasSelected.value
-              ? "Share (${controller.selectedItems.length})".headThree(
-                  color: Get.theme.focusColor,
-                  weight: FontWeight.w800,
-                  align: TextAlign.start,
-                )
-              : "Share".headThree(
-                  color: Get.theme.focusColor,
-                  weight: FontWeight.w800,
-                  align: TextAlign.start,
-                ),
-          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
+        appBar: DetailAppBar(
+          title: "Share",
+          onPressed: () => controller.close(),
           action: AnimatedScale(
-            scale: controller.hasSelected.value ? 1.0 : 0.0,
-            child: ActionButton(
-              onPressed: () => controller.confirmMediaSelection(),
-              icon: SonrIcons.Share.gradient(value: SonrGradients.CrystalRiver),
-            ),
-          ),
+              scale: controller.hasSelected.value ? 1.0 : 0.0,
+              child: ActionButton(
+                onPressed: () => controller.confirmMediaSelection(),
+                iconData: SonrIcons.Share,
+              )),
         ),
         body: Stack(children: [
           CustomScrollView(
@@ -37,7 +25,8 @@ class SharePopupView extends GetView<ShareController> {
               SliverToBoxAdapter(child: ShareOptionsRow()),
               SliverPadding(padding: EdgeInsets.only(top: 8)),
               SliverToBoxAdapter(
-                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".headFour(align: TextAlign.start, color: Get.theme.focusColor))),
+                  child:
+                      Container(padding: EdgeInsets.only(left: 24), child: "Media".subheading(align: TextAlign.start, color: Get.theme.focusColor))),
               SliverToBoxAdapter(child: _TagsView()),
               SliverPadding(padding: EdgeInsets.all(4)),
               // @ Builds List of Social Tile

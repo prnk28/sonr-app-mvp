@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class DeviceItemView extends StatelessWidget {
   final Device device;
@@ -15,7 +15,7 @@ class DeviceItemView extends StatelessWidget {
             child: device.platform.icon(size: 64),
           ),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? device.name.h6_White : device.name.h6
+          UserService.isDarkMode ? device.name.paragraph(color: SonrColor.White) : device.name.paragraph()
         ],
       ),
     );

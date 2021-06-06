@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
@@ -8,13 +8,14 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/share/external_sheet.dart';
 import 'package:sonr_app/pages/transfer/remote/sheet_view.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:uni_links/uni_links.dart';
 
+// import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
 // @ Enum defines Type of Permission
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 
@@ -68,6 +69,14 @@ class MobileService extends GetxService {
   late StreamSubscription<CompassEvent> _compassStream;
   late StreamSubscription<OrientationEvent> _orienStream;
 
+  MobileService() {
+    Timer.periodic(250.milliseconds, (timer) {
+      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+        SonrService.update(position.value);
+      }
+    });
+  }
+
   // * Device Service Initialization * //
   Future<MobileService> init() async {
     // Handle Keyboard Visibility
@@ -84,7 +93,6 @@ class MobileService extends GetxService {
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
 
     // Audio Player
-    _audioPlayer.disableLog();
     await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
 
     // Update Device Values
@@ -119,7 +127,6 @@ class MobileService extends GetxService {
     _accelStream.cancel();
     _compassStream.cancel();
     _orienStream.cancel();
-    _audioPlayer.clearCache();
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
     _remoteLinkStream.cancel();
@@ -173,7 +180,7 @@ class MobileService extends GetxService {
     var file = File(path);
     var exists = await file.exists();
     if (!exists) {
-      SonrSnack.error("Unable to save Captured Media to your Gallery");
+      Snack.error("Unable to save Captured Media to your Gallery");
       return false;
     } else {
       if (isVideo) {
@@ -184,7 +191,7 @@ class MobileService extends GetxService {
 
         // Visualize Result
         if (result) {
-          SonrSnack.error("Unable to save Captured Photo to your Gallery");
+          Snack.error("Unable to save Captured Photo to your Gallery");
         }
         return result;
       } else {
@@ -192,7 +199,7 @@ class MobileService extends GetxService {
         var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
         var result = await asset.exists;
         if (!result) {
-          SonrSnack.error("Unable to save Captured Video to your Gallery");
+          Snack.error("Unable to save Captured Video to your Gallery");
         }
         return result;
       }
@@ -238,7 +245,7 @@ class MobileService extends GetxService {
   /// @ Update Method
   Future<void> updatePermissionsStatus() async {
     _hasCamera(await Permission.camera.isGranted);
-    _hasLocation(await Permission.locationWhenInUse.isGranted);
+    _hasLocation(await Permission.location.isGranted);
     _hasMicrophone(await Permission.microphone.isGranted);
     _hasNotifications(await Permission.notification.isGranted);
     _hasPhotos(await Permission.photos.isGranted);
@@ -322,7 +329,7 @@ class MobileService extends GetxService {
           description: 'Sonr requires location in order to find devices in your area.',
           acceptTitle: "Allow",
           declineTitle: "Decline")) {
-        if (await Permission.locationWhenInUse.request().isGranted) {
+        if (await Permission.location.request().isGranted) {
           updatePermissionsStatus();
           SonrOverlay.back();
           return true;
@@ -464,3 +471,109 @@ class MobileService extends GetxService {
     }
   }
 }
+
+// import 'dart:async';
+
+// // import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
+// import 'package:sonr_app/style/style.dart';
+// import 'package:flutter_blue/flutter_blue.dart';
+
+// class BLEService extends GetxService {
+//   // Static Analyzers
+//   static bool get isRegistered => Get.isRegistered<LobbyService>();
+//   static BLEService get to => Get.find<BLEService>();
+
+//   // @ Properties
+//   final _devices = RxList<BLEDevice>();
+//   final _selfUdid = BLESonrUdid("").obs;
+//   final _status = BLEStatus.None.obs;
+
+//   // @ References
+//   final FlutterBlue _reader = FlutterBlue.instance;
+//   // final FlutterBlePeripheral _writer = FlutterBlePeripheral();
+//   late StreamSubscription _deviceStream;
+
+//   /// * Initializes Service for Mobile Devices *
+//   Future<BLEService> init() async {
+//     // Set Status from Availibility
+//     _status(BLEStatusUtils.fromData(Tuple(await _reader.isAvailable, await _reader.isOn)));
+
+//     // Bind Status Stream
+//     return this;
+//   }
+
+//   /// #### Inititalize MultiAddr from Connected SonrService
+//   static Future<void> initMultiAddr(String maddr) async {
+//     // Check if Platform is Mobile
+//     if (DeviceService.isMobile) {
+//       // Set Udid
+//       to._selfUdid(BLESonrUdid.fromData(DeviceService.platform, maddr));
+
+//       print("MultiAddr: " + maddr);
+//       // Begin Scanning
+//       // to._startAdvertise();
+//     }
+//   }
+
+//   /// #### Begin Discovery of Peers
+//   static Future<void> discover(String maddr) async {
+//     if (DeviceService.isMobile) {
+//       // Scan Devices
+//       if (to._status.value.isReady) {
+//         // Start scanning
+//         to._status(to._status.value.setIsScanning(true));
+//         to._refreshScan();
+//         to._status(to._status.value.setIsScanning(false));
+//       }
+//     }
+//   }
+
+//   // Helper: Refreshes Scan
+//   void _refreshScan() async {
+//     // Start Scan with 4s Timeout
+//     _reader.startScan(timeout: 4.seconds);
+
+//     // Listen to scan results
+//     _deviceStream = _reader.scanResults.listen(_handleScanResults);
+
+//     // Stop scanning
+//     _reader.stopScan();
+//   }
+
+//   // // Helper: Starts Advertising
+//   // void _startAdvertise() async {
+//   //   // Check for Not Advertising
+//   //   if (!await _writer.isAdvertising()) {
+//   //     // Validate Self Udid
+//   //     if (_selfUdid.value.isValid) {
+//   //       // Start Broadcast
+//   //       await _writer.start(_selfUdid.value.toAdvertiseData());
+//   //       to._status(to._status.value.setIsAdvertising(true));
+//   //     }
+//   //   }
+//   // }
+
+//   // // Helper: Stops Advertising
+//   // void _stopAdvertise() async {
+//   //   if (await _writer.isAdvertising()) {
+//   //     await _writer.stop();
+//   //     to._status(to._status.value.setIsAdvertising(false));
+//   //   }
+//   // }
+
+//   // Helper: Handles Scan Results
+//   void _handleScanResults(List<ScanResult> results) {
+//     // Add Devices from Results
+//     _devices.addAllScanResults(results);
+//     _devices.refresh();
+//     _devices.printCount();
+//   }
+
+//   // * Handle Close for Service * //
+//   @override
+//   void onClose() {
+//     // _stopAdvertise();
+//     _deviceStream.cancel();
+//     super.onClose();
+//   }
+// }

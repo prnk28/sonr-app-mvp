@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'fixed_overlay.dart';
 import 'positioned_overlay.dart';
 export 'fixed_overlay.dart';
@@ -61,17 +61,15 @@ class AlertOverlayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       // backendColor: Colors.transparent,
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        title.h2,
+        title.heading(),
         Padding(
           padding: EdgeInsets.only(left: 10.0),
-          child: description.p,
+          child: description.paragraph(),
         ),
         Padding(padding: EdgeInsets.all(4)),
         Divider(),
@@ -176,17 +174,15 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       margin: EdgeInsets.symmetric(horizontal: 16),
       height: Get.height / 3 + 50,
       child: Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          title.h4,
+          title.heading(),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
-            child: description.p_Grey,
+            child: description.paragraph(color: Get.theme.focusColor),
           ),
           Padding(padding: EdgeInsets.all(4)),
           Divider(),
@@ -202,7 +198,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                       SonrOverlay.back();
                     }
                   },
-                  child: declineTitle.h6_Red),
+                  child: declineTitle.paragraph(color: SonrColor.Critical)),
             ),
             // Accept Button
             ColorButton.primary(

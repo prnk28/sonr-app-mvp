@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import '../style.dart';
+import '../../style.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum RiveBoard { SplashPortrait, SplashLandscape, Documents }
@@ -87,6 +87,7 @@ class _RiveContainer extends State<RiveContainer> {
           child: _riveArtboard == null
               ? widget.placeholder ?? Container()
               : Rive(
+                  fit: BoxFit.fitHeight,
                   artboard: _riveArtboard!,
                 )),
     );

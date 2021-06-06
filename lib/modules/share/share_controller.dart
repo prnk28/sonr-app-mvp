@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 enum ShareViewType {
@@ -87,7 +87,7 @@ class ShareController extends GetxController {
         var done = await TransferService.chooseCamera();
         _handleConfirmation(done);
       } else {
-        SonrSnack.error("Sonr cannot open Camera without Permissions");
+        Snack.error("Sonr cannot open Camera without Permissions");
       }
     }
   }
@@ -114,7 +114,7 @@ class ShareController extends GetxController {
         var done = await TransferService.chooseFile();
         _handleConfirmation(done);
       } else {
-        SonrSnack.error("Cannot pick Media without Permissions");
+        Snack.error("Cannot pick Media without Permissions");
       }
     }
   }
@@ -133,7 +133,7 @@ class ShareController extends GetxController {
       var done = await TransferService.setFile(sonrFile);
       _handleConfirmation(done);
     } else {
-      SonrSnack.missing("No Files Selected");
+      Snack.missing("No Files Selected");
     }
   }
 

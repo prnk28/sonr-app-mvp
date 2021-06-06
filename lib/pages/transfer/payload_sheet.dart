@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class PayloadSheetView extends StatelessWidget {
   @override
@@ -29,9 +29,7 @@ class PayloadSheetView extends StatelessWidget {
             // Build Single Item
             Container(
                 padding: EdgeInsets.all(8),
-                decoration: Neumorphic.floating(
-                  theme: Get.theme,
-                ),
+                decoration: SonrTheme.cardDecoration,
                 child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
         return Container(
@@ -62,11 +60,11 @@ class _SonrFileListHeader extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettyName().h4,
+            child: TransferService.file.value.prettyName().subheading(color: SonrTheme.textColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettySize().h5,
+            child: TransferService.file.value.prettySize().light(color: SonrTheme.textColor),
           )
         ],
       ),
@@ -82,9 +80,7 @@ class _SonrFileListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(8),
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Row(children: [
         item.hasThumbnail()
             ? Container(
@@ -101,19 +97,19 @@ class _SonrFileListItem extends StatelessWidget {
         Container(
             width: Width.ratio(0.5),
             height: Height.ratio(0.15),
-            padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+            padding: EdgeInsets.only(left: 16, right: 8, bottom: 8),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: item.prettyType().h6,
+                child: item.prettyType().subheading(color: SonrTheme.textColor),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: item.prettyName().p_Grey,
+                padding: const EdgeInsets.only(top: 4.0),
+                child: item.prettyName().paragraph(color: Get.theme.hintColor),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: item.prettySize().p_Grey,
+                padding: const EdgeInsets.only(top: 2.0),
+                child: item.prettySize().paragraph(color: Get.theme.hintColor),
               )
             ])),
         // Button
@@ -175,11 +171,15 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: [UserService.contact.value.firstName.h6, " ".h6, UserService.contact.value.lastName.l].row(),
+              child: [
+                UserService.contact.value.firstName.paragraph(color: SonrTheme.textColor),
+                " ".paragraph(color: SonrTheme.textColor),
+                UserService.contact.value.lastName.light(color: SonrTheme.textColor)
+              ].row(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: "Contact Card".p_Grey,
+              child: "Contact Card".paragraph(),
             )
           ]));
     } else if (TransferService.payload.value == Payload.URL) {
@@ -191,11 +191,11 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyName().h6,
+              child: TransferService.file.value.prettyName().paragraph(color: SonrTheme.textColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettySize().p_Grey,
+              child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     } else {
@@ -203,19 +203,16 @@ class _PayloadSingleItem extends StatelessWidget {
       return Container(
           width: Width.ratio(0.5),
           height: Height.ratio(0.15),
-          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 8),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(padding: const EdgeInsets.only(top: 16.0), child: TransferService.file.value.prettyType().subheading(color: SonrTheme.textColor)),
             Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyType().h6,
+              padding: const EdgeInsets.only(top: 4.0),
+              child: TransferService.file.value.prettyName().light(color: Get.theme.hintColor),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettyName().p_Grey,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettySize().p_Grey,
+              padding: const EdgeInsets.only(top: 2.0),
+              child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     }

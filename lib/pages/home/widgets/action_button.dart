@@ -1,6 +1,6 @@
-import 'package:sonr_app/modules/settings/sheet_view.dart';
+import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
 import 'package:sonr_app/pages/home/views/dashboard/activity_view.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import '../home_controller.dart';
 
 class HomeActionButton extends GetView<HomeController> {
@@ -20,9 +20,10 @@ class HomeActionButton extends GetView<HomeController> {
     if (page == HomeView.Contact) {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Contact),
-        icon: SonrIcons.Settings.gradient(size: 28),
+        iconData: SonrIcons.Settings,
         onPressed: () {
-          Get.bottomSheet(SettingsSheet());
+          HapticFeedback.heavyImpact();
+          EditorController.open();
         },
       );
     } else {
@@ -30,7 +31,7 @@ class HomeActionButton extends GetView<HomeController> {
         padding: const EdgeInsets.only(bottom: 42.0),
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Dashboard),
-          icon: SonrIcons.Alerts.gradient(size: 28),
+          iconData: SonrIcons.Alerts,
           onPressed: () {
             Get.to(ActivityPopup(), transition: Transition.downToUp);
           },

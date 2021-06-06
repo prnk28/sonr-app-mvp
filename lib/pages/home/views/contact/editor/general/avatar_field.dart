@@ -1,5 +1,5 @@
 import 'package:camerawesome/camerawesome_plugin.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import '../../profile_controller.dart';
 
 class ProfileAvatarField extends GetView<ProfileController> {
@@ -15,18 +15,20 @@ class ProfileAvatarField extends GetView<ProfileController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
               padding: EdgeInsets.all(10),
-              decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
-              child: Obx(() => Container(
+              decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
+              child :Container(
                     width: 120,
                     height: 120,
                     child: UserService.contact.value.hasPicture()
                         ? CircleAvatar(
-                            backgroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
+                            backgroundColor: SonrTheme.foregroundColor,
+                            foregroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
                           )
                         : SonrIcons.Avatar.greyWith(size: 120),
-                  )),
+                  )
             ),
-          ),
+            ),
+
         );
       } else {
         return GestureDetector(
@@ -36,14 +38,14 @@ class ProfileAvatarField extends GetView<ProfileController> {
           child: Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
+                padding: EdgeInsets.all(8),
+                 decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
                 child: Container(
-                    width: 120,
-                    height: 120,
+                    width: 100,
+                    height: 100,
                     child: CircleAvatar(
-                      child: SonrIcons.Avatar.greyWith(size: 120),
-                      backgroundColor: Color(0xfff0f6fa).withOpacity(0.8),
+                      child: SonrIcons.Avatar.greyWith(size: 80),
+                      backgroundColor: SonrTheme.foregroundColor,
                     ))),
           ),
         );
@@ -73,7 +75,7 @@ class EditPictureView extends GetView<ProfileController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         PlainButton(icon: SonrIcons.Close, onPressed: controller.exitToViewing),
-                        headerText.h2,
+                        headerText.subheading(),
                         Padding(padding: EdgeInsets.all(16))
                       ]),
                 ),

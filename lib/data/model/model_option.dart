@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 enum ContactOptions {
   Names,

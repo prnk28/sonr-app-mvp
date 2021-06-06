@@ -16,5 +16,5 @@ export 'model/model_meta.dart';
 export 'model/model_cards.dart';
 export 'model/model_hs.dart';
 export 'model/model_option.dart';
-export 'model/model_search.dart';
+export 'model/model_transfer.dart';
 export 'model/rx_proto.dart';

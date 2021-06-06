@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 /// Builds Avatar Image from [Profile] data
@@ -18,17 +18,19 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
-        padding: EdgeInsets.all(4),
-        child: Container(
-          width: size,
-          height: size,
-          child: profile.hasPicture()
-              ? CircleAvatar(
-                  backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
-                )
-              : SonrIcons.Avatar.greyWith(size: size),
-        ));
+        decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
+            padding: EdgeInsets.all(4),
+            child: Container(
+              width: size,
+              height: size,
+              child: profile.hasPicture()
+                  ? CircleAvatar(
+                                              backgroundColor: SonrTheme.foregroundColor,
+                      foregroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                    )
+                  : SonrIcons.User.gradient(size: size * 0.7),
+            )
+    );
   }
 }
 
@@ -44,7 +46,7 @@ class ProfileName extends StatelessWidget {
     if (this.isHeader) {
       return "${profile.firstName} ${profile.lastName}".gradient(value: SonrGradients.SolidStone);
     } else {
-      return Row(children: ["${profile.firstName} ".h6, profile.lastName.l]);
+      return Row(children: ["${profile.firstName} ".paragraph(), profile.lastName.light()]);
     }
   }
 }

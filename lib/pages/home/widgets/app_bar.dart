@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'action_button.dart';
 import '../home_controller.dart';
 
@@ -7,7 +7,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlideSwitcher.fade(
           duration: 2.seconds,
-          child: DesignAppBar(
+          child: PageAppBar(
             centerTitle: controller.view.value.isMain,
             key: ValueKey(false),
             subtitle: Padding(
@@ -33,9 +33,8 @@ class _HomeAppBarTitle extends GetView<HomeController> {
             key: ValueKey<String>(controller.title.value),
             onTap: controller.onTitleTap,
             onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
-            child: controller.title.value.headThree(
+            child: controller.title.value.heading(
               color: Get.theme.focusColor,
-              weight: FontWeight.w800,
               align: TextAlign.start,
             ),
           ),
@@ -47,9 +46,8 @@ class _HomeAppBarSubtitle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.view.value == HomeView.Dashboard
-        ? "Hi ${UserService.contact.value.firstName},".headThree(
-            color: Get.theme.focusColor,
-            weight: FontWeight.w400,
+        ? "Hi ${UserService.contact.value.firstName},".subheading(
+            color: Get.theme.focusColor.withOpacity(0.8),
             align: TextAlign.start,
           )
         : Container());

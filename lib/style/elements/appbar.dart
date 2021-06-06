@@ -1,8 +1,8 @@
 import 'dart:ui';
-import '../style.dart';
+import '../../style.dart';
 
 /// @ Home Screen Header
-class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
+class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   static const draggableChannel = MethodChannel('io.sonr.desktop/window');
 
   /// Appears below Subtitle with Bold Font
@@ -13,7 +13,7 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final Widget? action;
   final bool centerTitle;
-  DesignAppBar({
+  PageAppBar({
     required this.title,
     this.leading,
     this.action,
@@ -50,6 +50,76 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+
+  // Handles Drag Update for Desktop Build
+  void onPanUpdate(DragUpdateDetails details) async {
+    if (DeviceService.isDesktop) {
+      await draggableChannel.invokeMethod('onPanUpdate');
+    }
+  }
+
+  // Handles Drag Start for Desktop Build
+  void onPanStart(DragStartDetails details) async {
+    if (DeviceService.isDesktop) {
+      await draggableChannel.invokeMethod('onPanStart', {"dx": details.globalPosition.dx, "dy": details.globalPosition.dy});
+    }
+  }
+
+  Widget _buildTrailing() {
+    if (DeviceService.isDesktop) {
+      return Container(
+          width: 56,
+          height: 56,
+          child: PlainIconButton(icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose")));
+    } else {
+      return action != null ? action! : Container(width: 32, height: 32);
+    }
+  }
+}
+
+/// @ Home Screen Header
+class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
+  static const draggableChannel = MethodChannel('io.sonr.desktop/window');
+
+  /// Appears below Subtitle with Bold Font
+  final String title;
+  final void Function()? onPressed;
+
+  /// Appears above Title with Light Font
+  final bool isClose;
+  final Widget? action;
+  DetailAppBar({
+    required this.onPressed,
+    required this.title,
+    this.isClose = false,
+    this.action,
+    Key? key,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanStart: onPanStart,
+      onPanUpdate: onPanUpdate,
+      child: Container(
+        padding: const EdgeInsets.only(left: 14.0, right: 14, top: 60.0),
+        child: NavigationToolbar(
+          centerMiddle: false,
+          leading: IconButton(
+              onPressed: onPressed,
+              icon: Icon(
+                isClose ? SonrIcons.Close : SonrIcons.Back,
+                color: SonrTheme.textColor,
+                size: 28,
+              )),
+          trailing: _buildTrailing(),
+          middle: title.toUpperCase().light(color: SonrTheme.textColor, fontSize: 24),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 16);
 
   // Handles Drag Update for Desktop Build
   void onPanUpdate(DragUpdateDetails details) async {

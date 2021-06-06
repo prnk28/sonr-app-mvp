@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:feedback/feedback.dart';
 
 /// @ Main Method
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrRouting.initServices();
+  await SonrServices.init();
   await SentryFlutter.init(
     Logger.sentryOptions,
     isIOSChecker: () => DeviceService.isIOS,
@@ -29,7 +29,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
-      getPages: SonrRouting.pages,
+      getPages: Route.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [
@@ -63,7 +63,7 @@ class App extends StatelessWidget {
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: FadeInUp(child: "Sonr".hero),
+                child: FadeInUp(child: "Sonr".hero()),
               ),
             ],
           ));
@@ -84,7 +84,7 @@ class App extends StatelessWidget {
             // @ Fade Animation of Text
             Positioned(
               bottom: 100,
-              child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero),
+              child: FadeInUp(delay: 2222.milliseconds, child: "Sonr".hero()),
             ),
           ],
         ));

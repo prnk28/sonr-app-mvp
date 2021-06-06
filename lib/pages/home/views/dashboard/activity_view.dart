@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 /// @ Activity View
 class ActivityPopup extends StatelessWidget {
@@ -6,16 +6,12 @@ class ActivityPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-      appBar: DesignAppBar(
-        centerTitle: true,
-        title: "Activity".headFour(
-          color: Get.theme.focusColor,
-          weight: FontWeight.w800,
-          align: TextAlign.start,
-        ),
-        leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
+      appBar: DetailAppBar(
+        isClose: true,
+        title: "Activity",
+        onPressed: () => Get.back(closeOverlays: true),
         action: ActionButton(
-            icon: SonrIcons.Clear.gradient(),
+            iconData: SonrIcons.Clear,
             onPressed: () async {
               if (CardService.activity.length > 0) {
                 var decision = await SonrOverlay.question(
@@ -35,7 +31,7 @@ class ActivityPopup extends StatelessWidget {
                   })
               : Center(
                   child: Container(
-                    child: [Image.asset('assets/illustrations/NoAlerts.png'), "No Alerts".headFive(color: Get.theme.hintColor)].column(),
+                    child: [Image.asset('assets/illustrations/NoAlerts.png'), "No Alerts".subheading(color: Get.theme.hintColor)].column(),
                     padding: EdgeInsets.all(64),
                   ),
                 ))),
@@ -65,9 +61,7 @@ class _ActivityListItem extends StatelessWidget {
           ),
         ),
         child: Container(
-          decoration: Neumorphic.floating(
-            theme: Get.theme,
-          ),
+          decoration: SonrTheme.cardDecoration,
           child: ListTile(
             title: _buildMessage(),
           ),
@@ -79,14 +73,33 @@ class _ActivityListItem extends StatelessWidget {
   Widget _buildMessage() {
     switch (item.activity) {
       case ActivityType.Deleted:
-        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Red, _description(item).h6].row();
+        return [
+          item.payload.icon(size: 24, color: Get.theme.focusColor),
+          " You ".paragraph(),
+          item.activity.value.paragraph(color: SonrColor.Critical),
+          _description(item).paragraph()
+        ].row();
       case ActivityType.Shared:
-        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Blue, _description(item).h6].row();
+        return [
+          item.payload.icon(size: 24, color: Get.theme.focusColor),
+          " You ".paragraph(),
+          item.activity.value.light(color: SonrColor.Primary),
+          _description(item).paragraph()
+        ].row();
       case ActivityType.Received:
-        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Purple, _description(item).h6].row();
+        return [
+          item.payload.icon(size: 24, color: Get.theme.focusColor),
+          " You ".paragraph(),
+          item.activity.value.paragraph(color: SonrColor.Secondary),
+          _description(item).paragraph()
+        ].row();
       default:
-        return [item.payload.icon(size: 24, color: Get.theme.focusColor), " You ".h6, item.activity.value.h6_Grey, _description(item).h6]
-            .row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
+        return [
+          item.payload.icon(size: 24, color: Get.theme.focusColor),
+          " You ".paragraph(),
+          item.activity.value.paragraph(color: SonrColor.Grey),
+          _description(item).paragraph()
+        ].row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }
   }
 

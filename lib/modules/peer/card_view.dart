@@ -1,6 +1,6 @@
 import 'package:rive/rive.dart';
 import 'peer_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'profile_view.dart';
 
 const double K_CARD_WIDTH = 160;
@@ -21,12 +21,7 @@ class PeerCard extends GetWidget<PeerController> {
         width: K_CARD_WIDTH,
         height: K_CARD_HEIGHT,
         clipBehavior: Clip.antiAlias,
-        decoration: Neumorphic.floating(
-          theme: Get.theme,
-          border: controller.isHitting.value
-              ? Border.all(color: Get.theme.dividerColor.withOpacity(0.75), width: controller.borderWidth.value)
-              : Border.all(color: Get.theme.dividerColor, width: 1),
-        ),
+        decoration: SonrTheme.cardDecoration,
         margin: EdgeInsets.all(24),
         child: Stack(children: [
           // Rive Board
@@ -100,10 +95,10 @@ class _PeerMainCard extends StatelessWidget {
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.profile.fullName}".h6,
+          "${controller.peer.value.profile.fullName}".subheading(color: SonrTheme.textColor),
 
           // Username
-          "${controller.peer.value.profile.sName}.snr/".p_Grey,
+          "${controller.peer.value.profile.sName}.snr/".paragraph(color: SonrTheme.greyColor),
         ].column());
   }
 }
@@ -133,7 +128,7 @@ class _PeerDetailsCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-              child: Obx(() => controller.peer.value.prettyHeadingDirection().h6_White),
+              child: Obx(() => controller.peer.value.prettyHeadingDirection().paragraph(color: SonrColor.White)),
             ),
           ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center),
 
@@ -145,7 +140,7 @@ class _PeerDetailsCard extends StatelessWidget {
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.model}".h5,
+          "${controller.peer.value.model}".paragraph(),
         ].column());
   }
 }

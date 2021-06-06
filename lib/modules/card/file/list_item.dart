@@ -1,7 +1,7 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'views.dart';
 
 class MetaListItemView extends StatelessWidget {
@@ -62,11 +62,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: [item.contact!.firstName.h6, " ".h6, item.contact!.lastName.l].row(),
+              child: [item.contact!.firstName.paragraph(), " ".paragraph(), item.contact!.lastName.light()].row(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: "Contact Card".p_Grey,
+              child: "Contact Card".paragraph(color: Get.theme.hintColor),
             )
           ]));
     } else if (item.payload == Payload.URL) {
@@ -77,11 +77,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.file!.prettyName().h6,
+              child: item.file!.prettyName().paragraph(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file!.prettySize().p_Grey,
+              child: item.file!.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     } else {
@@ -91,11 +91,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.file!.prettyName().h6,
+              child: item.file!.prettyName().paragraph(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file!.prettySize().p_Grey,
+              child: item.file!.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     }

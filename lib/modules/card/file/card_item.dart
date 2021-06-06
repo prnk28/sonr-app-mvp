@@ -3,7 +3,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'views.dart';
 
@@ -16,11 +16,9 @@ class MetaCardItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 420,
+      height: 310,
       width: Get.width - 64,
-      decoration: Neumorphic.floating(
-        theme: Get.theme,
-      ),
+      decoration: SonrTheme.cardDecoration,
       child: Hero(
         tag: card.file!.single.path,
         child: MetaBox(
@@ -45,7 +43,7 @@ class MetaCardItemView extends StatelessWidget {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ActionButton(
-                      icon: SonrIcons.About.grey,
+                      iconData: SonrIcons.About,
                       onPressed: () {
                         SonrOverlay.show(
                             _MediaInfoView(card.file!, card.owner, onConfirmed: () {
@@ -93,7 +91,7 @@ class _MediaInfoView extends StatelessWidget {
           ),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            "${file.prettySize()} From".h3,
+            "${file.prettySize()} From".subheading(),
 
             // Owner
             ProfileName(profile: owner, isHeader: true),
@@ -102,35 +100,31 @@ class _MediaInfoView extends StatelessWidget {
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Name ".h6,
+              "Name ".paragraph(),
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: "${file.single.name}".p,
+                child: "${file.single.name}".paragraph(),
                 width: Get.width - 220,
                 height: 22,
               ),
             ]),
 
             // File Size
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Size ".h6,
-              Spacer(),
-              "${file.prettySize()}".p,
-            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: ["Size ".paragraph(), Spacer(), "${file.prettySize()}".paragraph()]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Kind ".h6,
+              "Kind ".paragraph(),
               Spacer(),
-              "${file.single.mime.value}".p,
+              "${file.single.mime.value}".paragraph(),
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "ID ".h6,
+              "ID ".paragraph(),
               Spacer(),
-              "${file.single.id}".p,
+              "${file.single.id}".paragraph(),
             ]),
 
             Padding(padding: EdgeInsets.all(4)),

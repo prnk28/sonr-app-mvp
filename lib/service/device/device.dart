@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import '../../env.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
@@ -134,12 +134,12 @@ class DeviceService extends GetxService {
   /// @ Method Determines LaunchPage and Changes Screen
   static void initialPage({required Duration delay}) async {
     Future.delayed(delay, () {
-      // @ Mobile Page
-      if (isMobile) {
-        // Check for User
-        if (!UserService.hasUser.value) {
-          Get.offNamed("/register");
-        } else {
+      // Check for User
+      if (!UserService.hasUser.value) {
+        Get.offNamed("/register");
+      } else {
+        // Check Platform
+        if (isMobile) {
           // All Valid
           if (MobileService.hasLocation.value) {
             Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
@@ -153,11 +153,9 @@ class DeviceService extends GetxService {
               }
             });
           }
+        } else {
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
         }
-      }
-      // @ Desktop Page
-      else {
-        Get.offNamed("/desktop");
       }
     });
   }
@@ -191,9 +189,9 @@ class DeviceService extends GetxService {
 
       // Check Result
       if (result) {
-        SonrSnack.success("Succesfully Received $title!");
+        Snack.success("Succesfully Received $title!");
       } else {
-        SonrSnack.error("Unable to save $title to your Gallery");
+        Snack.error("Unable to save $title to your Gallery");
       }
     }
 

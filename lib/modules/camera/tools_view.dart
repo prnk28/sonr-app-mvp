@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'camera_controller.dart';
 
 class CameraToolsView extends StatelessWidget {
@@ -44,7 +44,7 @@ class _CaptureToolsView extends StatelessWidget {
             HapticFeedback.heavyImpact();
             controller.handleCapture(false);
           },
-          child: [SonrIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".h6].row(),
+          child: [SonrIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".paragraph()].row(),
         ),
 
         // Right Button - Continue

@@ -3,7 +3,7 @@ export 'external_sheet.dart';
 export 'share_controller.dart';
 export 'share_view.dart';
 
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'share_controller.dart';
 import 'share_view.dart';
 

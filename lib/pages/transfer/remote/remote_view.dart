@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/peer/item_view.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'remote_controller.dart';
 
 /// @ Main Card View
@@ -17,7 +17,7 @@ class RemoteView extends GetView<RemoteLobbyController> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 24.0),
-              child: "Lobby Link".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+              child: "Lobby Link".subheading(align: TextAlign.start, color: Get.theme.focusColor),
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 4)),

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:video_player/video_player.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'details_view.dart';
 
@@ -182,13 +182,13 @@ class ReceivedText extends StatelessWidget {
       // Get String
       String dateText = dateFormat.format(this.received);
       String timeText = timeFormat.format(this.received);
-      return Row(children: [dateText.h6_White, timeText.p_White]);
+      return Row(children: [dateText.paragraph(color: SonrColor.White), timeText.paragraph(color: SonrColor.White)]);
     } else {
       // Formatters
       final dateFormat = DateFormat.yMd();
 
       // Get String
-      return dateFormat.format(this.received).h6_White;
+      return dateFormat.format(this.received).paragraph(color: SonrColor.White);
     }
   }
 }

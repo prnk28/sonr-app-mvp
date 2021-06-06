@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'share.dart';
 
 class ShareButton extends StatelessWidget {
@@ -23,11 +23,16 @@ class ShareButton extends StatelessWidget {
                     Future.delayed(150.milliseconds, () => ShareView.popup());
                   },
                   child: ClipPolygon(
-                    borderRadius: 18,
+                    borderRadius: 24,
                     rotate: 30,
+                    boxShadows: SonrTheme.polyBoxShadow,
                     sides: 6,
                     child: Container(
-                      decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
+                      decoration: BoxDecoration(
+                        gradient: SonrTheme.primaryGradient,
+                        boxShadow: SonrTheme.boxShadow,
+                        border: Border.all(color: SonrTheme.foregroundColor, width: 1),
+                      ),
                       alignment: Alignment.center,
                       child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
                     ),
@@ -43,14 +48,14 @@ class ShareOptionsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Height.ratio(0.18),
+      height: Height.ratio(0.2),
       width: Get.width,
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         const _ShareCameraButtonItem(),
-        VerticalDivider(color: SonrColor.Grey),
+        VerticalDivider(color: SonrTheme.separatorColor),
         const _ShareContactButtonItem(),
-        VerticalDivider(color: SonrColor.Grey),
+        VerticalDivider(color: SonrTheme.separatorColor),
         const _ShareFileButtonItem(),
       ]),
     );
@@ -74,13 +79,19 @@ class _ShareCameraButtonItem extends StatelessWidget {
           // Request Permissions
           else {
             var result = await Get.find<MobileService>().requestCamera();
-            result ? TransferService.chooseCamera() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+            result ? TransferService.chooseCamera() : Snack.error("Sonr cannot open Camera without Permissions");
           }
         },
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 75),
+                  Container(
+                      decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.all(24),
+          child:Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Camera'.h6_White : 'Camera'.h6_Grey,
+          'Camera'.light(color: SonrTheme.textColor.withOpacity(0.8)),
         ]),
       ),
     );
@@ -109,14 +120,20 @@ class _ShareFileButtonItem extends StatelessWidget {
             if (status) {
               await TransferService.chooseFile();
             } else {
-              SonrSnack.error("Cannot pick Media without Permissions");
+              Snack.error("Cannot pick Media without Permissions");
             }
           }
         },
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 75),
+        child:  Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+                      decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.all(24),
+          child:Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'File'.h6_White : 'File'.h6_Grey,
+          'File'.light(color: SonrTheme.textColor.withOpacity(0.8)),
         ]),
       ),
     );
@@ -134,9 +151,15 @@ class _ShareContactButtonItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () => TransferService.chooseContact(),
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 75),
+          Container(
+                      decoration: BoxDecoration(
+              color: SonrTheme.foregroundColor,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.all(24),
+          child:Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 52)),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? 'Contact'.h6_White : 'Contact'.h6_Grey,
+          'Contact'.light(color: SonrTheme.textColor.withOpacity(0.8)),
         ]),
       ),
     );

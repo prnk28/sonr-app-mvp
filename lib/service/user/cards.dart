@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/pages/overlay/overlay.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
 export 'package:sonr_app/data/database/cards_db.dart';
 
@@ -89,8 +89,6 @@ class CardService extends GetxService {
   /// @ Add New Card to Database
   static addCard(Transfer card) async {
     if (card.payload.isTransfer) {
-      await DeviceService.saveTransfer(card.file);
-
       // Store in Database
       await to._database.addFileCard(card);
       _refreshCount();
@@ -189,8 +187,10 @@ class CardService extends GetxService {
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
-    if (totalCount > 0) {
-      await to._database.deleteAllCards();
+    if (isRegistered) {
+      if (totalCount > 0) {
+        await to._database.deleteAllCards();
+      }
     }
   }
 
@@ -240,8 +240,10 @@ class CardService extends GetxService {
 
     if (invite.file.single.size > 5000000) {
       // Handle Card Received
-      SonrService.completed().then((value) {
-        SonrOverlay.back();
+      SonrService.session.status.listen((s) {
+        if (s.isCompleted) {
+          SonrOverlay.back();
+        }
       });
     } else {
       // Handle Animation Completed
@@ -272,7 +274,7 @@ class CardService extends GetxService {
 
     // Present Home Controller
     if (Get.currentRoute != "/transfer") {
-      Get.offNamed('/home/received');
+      Get.offNamed('/home');
     }
   }
 

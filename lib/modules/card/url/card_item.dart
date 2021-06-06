@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// @ Widget for Expanded Media View
@@ -29,7 +29,7 @@ class URLCardItemView extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      SonrSnack.error("Could not launch the URL.");
+      Snack.error("Could not launch the URL.");
     }
   }
 }

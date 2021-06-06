@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/peer/card_view.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import '../transfer_controller.dart';
 
 class LocalView extends GetView<TransferController> {
@@ -12,7 +12,7 @@ class LocalView extends GetView<TransferController> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(left: 24.0),
-            child: "Local".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+            child: "Local".subheading(align: TextAlign.start, color: SonrTheme.textColor),
           ),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),

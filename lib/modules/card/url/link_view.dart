@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,7 +34,9 @@ class URLLinkView extends StatelessWidget {
         onTap: _launchURL,
         onLongPress: _copyURL,
         child: Container(
-            decoration: Neumorphic.indented(theme: Get.theme,),
+            decoration: Neumorphic.indented(
+              theme: Get.theme,
+            ),
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
             padding: EdgeInsets.symmetric(vertical: 6),
             child: Row(children: [
@@ -57,7 +59,7 @@ class URLLinkView extends StatelessWidget {
   void _copyURL() async {
     if (enableCopy && data.url.isURL) {
       Clipboard.setData(ClipboardData(text: data.url));
-      SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+      Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
     }
   }
 
@@ -67,7 +69,7 @@ class URLLinkView extends StatelessWidget {
       if (await canLaunch(data.url)) {
         await launch(data.url);
       } else {
-        SonrSnack.error("Could not launch the URL.");
+        Snack.error("Could not launch the URL.");
       }
     }
   }
@@ -104,8 +106,8 @@ class _URLLinkInfo extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            data.title.h3,
-            data.description.p,
+            data.title.subheading(),
+            data.description.paragraph(),
           ],
         ),
       );

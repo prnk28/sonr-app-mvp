@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/peer/card_view.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import '../transfer_controller.dart';
 
 class DevicesView extends GetView<TransferController> {
@@ -12,7 +12,7 @@ class DevicesView extends GetView<TransferController> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(left: 24.0),
-            child: "My Devices".headFour(align: TextAlign.start, color: Get.theme.focusColor),
+            child: "My Devices".subheading(align: TextAlign.start, color: Get.theme.focusColor),
           ),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),
@@ -55,11 +55,7 @@ class _DevicesEmptyView extends GetView<TransferController> {
     return Container(
       padding: EdgeInsets.only(top: 24),
       margin: EdgeInsets.symmetric(horizontal: 48),
-      child: ColorButton.primary(
-        onPressed: () {},
-        text: "Add Device",
-        icon: SonrIcons.Add,
-      ),
+      child: "Coming Soon!".paragraph(color: SonrColor.White),
     );
   }
 }

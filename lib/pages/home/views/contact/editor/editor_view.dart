@@ -1,23 +1,17 @@
 import 'package:get/get.dart';
 import 'editor_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'general/fields.dart';
 
 class EditorView extends GetView<EditorController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-        appBar: DesignAppBar(
-          centerTitle: true,
-          title: controller.title.value.headThree(
-            color: Get.theme.focusColor,
-            weight: FontWeight.w800,
-            align: TextAlign.start,
-          ),
-          leading: PlainIconButton(
-              icon: controller.status.value.leadingIcon.gradient(size: 32, value: SonrGradients.PhoenixStart), onPressed: controller.handleLeading),
+        appBar: DetailAppBar(
+          onPressed: controller.handleLeading,
+          title: controller.title.value,
         ),
-        body: FadeInLeft(key: ValueKey<EditorFieldStatus>(controller.status.value), child: _buildView(controller.status.value))));
+        body:  _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item

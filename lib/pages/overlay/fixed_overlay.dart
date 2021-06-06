@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/auth/auth.dart';
-import 'package:sonr_app/style/style.dart';
-import 'package:sonr_plugin/sonr_plugin.dart';
+import 'package:sonr_app/style.dart';
 import 'overlay.dart';
 
 /// @ Class Controls Active Overlays ** //
@@ -116,48 +114,6 @@ class SonrOverlay extends GetxService {
     _controller.currentOverlay(alertOverlay);
     _controller.overlays.add(alertOverlay);
     return completer.future as Future<bool>;
-  }
-
-  /// @ Method Finds Overlay Controller and Prompts Invite
-  static void invite(AuthInvite invite,
-      {bool barrierDismissible = false,
-      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration entryDuration = const Duration(milliseconds: 450)}) {
-    if (!isOpen) {
-      // Create Overlay
-      var cardOverlay = _SonrFixedOverlayEntry(
-        SonrOffset.Top,
-        entryDuration,
-        barrierDismissible,
-        InviteOverlayView(invite: invite),
-        backgroundColor: Colors.black87,
-      );
-
-      // Add Overlay to List
-      _controller.currentOverlay(cardOverlay);
-      _controller.overlays.add(cardOverlay);
-    }
-  }
-
-  /// @ Method Finds Overlay Controller to Show Reply
-  static void reply(AuthReply reply,
-      {bool barrierDismissible = false,
-      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration entryDuration = const Duration(milliseconds: 450)}) {
-    if (!isOpen) {
-      // Create Overlay
-      var cardOverlay = _SonrFixedOverlayEntry(
-        SonrOffset.Top,
-        entryDuration,
-        barrierDismissible,
-        ReplyOverlayView(reply: reply),
-        backgroundColor: Colors.black87,
-      );
-
-      // Add Overlay to List
-      _controller.currentOverlay(cardOverlay);
-      _controller.overlays.add(cardOverlay);
-    }
   }
 
   /// @ Method Pops Current Overlay

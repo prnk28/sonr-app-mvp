@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:sonr_app/modules/auth/contact_auth.dart';
-
-import '../../style/style.dart';
+import 'package:sonr_app/modules/authorize/contact_auth.dart';
+import 'package:sonr_app/style.dart';
 
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
 enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }
@@ -162,7 +161,7 @@ class _FlatModeController extends GetxController {
         // No Peers
         if (LobbyService.local.value.flatPeerCount() == 0) {
           Get.back();
-          SonrSnack.error("No Peers in Flat Mode");
+          Snack.error("No Peers in Flat Mode");
         } else if (LobbyService.local.value.flatPeerCount() == 1) {
           if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value.flatFirst())) {
             Future.delayed(K_TRANSLATE_DURATION, () {
@@ -170,7 +169,7 @@ class _FlatModeController extends GetxController {
             });
           }
         } else {
-          SonrSnack.error("Too Many Peers in Flat Mode");
+          Snack.error("Too Many Peers in Flat Mode");
         }
       }
     }

@@ -1,17 +1,6 @@
 import 'package:rive/rive.dart';
 import 'dart:async';
-import 'package:sonr_app/style/style.dart';
-
-/// @ Peer Controller Status
-enum PeerStatus { Default, Pending, Accepted, Declined, Complete }
-
-extension PeerStatusUtils on PeerStatus {
-  bool get isIdle => this == PeerStatus.Default;
-  bool get isPending => this == PeerStatus.Pending;
-  bool get isAccepted => this == PeerStatus.Accepted;
-  bool get isDeclined => this == PeerStatus.Declined;
-  bool get isComplete => this == PeerStatus.Complete;
-}
+import 'package:sonr_app/style.dart';
 
 /// @ Reactive Controller for Peer Bubble
 class PeerController extends GetxController with SingleGetTickerProviderMixin {
@@ -129,11 +118,13 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     if (isReady.value && DeviceService.isMobile) {
       // Check not already Pending
       if (!_isPending!.value) {
-        // Register Callback
-        Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
-
         // Perform Invite
-        TransferService.sendInviteToPeer(this.peer.value);
+        var session = TransferService.sendInviteToPeer(this.peer.value);
+
+        // Listen to Session
+        if (session != null) {
+          session.status.listen(_handleTransferStatus);
+        }
 
         // Check for File
         if (TransferService.payload.value.isTransfer) {
@@ -201,10 +192,10 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // @ Handle Peer Response
-  _handleTransferStatus(TransferStatus data) {
-    if (data == TransferStatus.Accepted) {
+  _handleTransferStatus(SessionStatus data) {
+    if (data == SessionStatus.Accepted) {
       updateStatus(PeerStatus.Accepted);
-    } else if (data == TransferStatus.Denied) {
+    } else if (data == SessionStatus.Denied) {
       updateStatus(PeerStatus.Declined);
     } else {
       updateStatus(PeerStatus.Complete);

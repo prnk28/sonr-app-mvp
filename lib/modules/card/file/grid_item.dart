@@ -1,7 +1,7 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 import 'views.dart';
 
@@ -106,7 +106,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
             // Mime Icon
             item!.file!.single.mime.type.gradient(size: 96),
 
-            item!.file!.prettySize().p_Grey,
+            item!.file!.prettySize().paragraph(color: Get.theme.hintColor),
 
             // Basic Info
             Padding(

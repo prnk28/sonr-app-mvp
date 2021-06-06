@@ -2,7 +2,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../data.dart';
 
@@ -156,7 +156,7 @@ extension AssetPathEntityUtils on AssetPathEntity {
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         duration: 150.milliseconds,
-        child: isSelected ? this.label().h6_White : this.label().h6_Grey);
+        child: isSelected ? this.label().light(color: SonrColor.White) : this.label().light(color: Get.theme.hintColor));
   }
 
   String label() {

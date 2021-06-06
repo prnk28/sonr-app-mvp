@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class DesktopService extends GetxService {
   // Accessors
@@ -11,6 +11,14 @@ class DesktopService extends GetxService {
 
   final _storageBox = GetStorage();
   final _hasContact = false.obs;
+
+  DesktopService() {
+    Timer.periodic(1.seconds, (timer) {
+      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+        SonrService.update(Position.create());
+      }
+    });
+  }
 
   // // References
   // MainEntry _main;
@@ -45,9 +53,7 @@ class DesktopService extends GetxService {
   }
 
   /// @ Method Saves this Device Info
-  Future<void> saveContact(Contact contact) async {
-    
-  }
+  Future<void> saveContact(Contact contact) async {}
 
   // /// @ Add Event Handler to Tray Action
   // void registerEventHandler(String handlerKey, Function handler) {
