@@ -13,7 +13,7 @@ import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/service/device/auth.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {

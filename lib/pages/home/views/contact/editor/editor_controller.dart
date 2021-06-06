@@ -3,7 +3,7 @@ export 'design_editor.dart';
 export 'general_editor.dart';
 export 'social_editor.dart';
 
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 import 'editor_view.dart';
 

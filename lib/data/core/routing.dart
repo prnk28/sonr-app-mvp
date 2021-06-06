@@ -3,7 +3,7 @@ import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 // import 'package:sonr_app/service/device/ble.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'bindings.dart';
 
 /// @ Constant Routing Information

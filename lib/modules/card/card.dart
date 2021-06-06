@@ -1,7 +1,7 @@
 import 'package:sonr_app/modules/card/url/card_item.dart';
 import 'package:sonr_app/modules/card/url/grid_item.dart';
 import 'package:sonr_app/modules/card/url/list_item.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 import 'contact/card_item.dart';
 import 'contact/grid_item.dart';
@@ -16,7 +16,7 @@ export 'file/card_item.dart';
 export 'file/grid_item.dart';
 export 'file/list_item.dart';
 export 'url/card_item.dart';
-export 'package:sonr_app/style/style.dart';
+export 'package:sonr_app/style.dart';
 
 /// @ Card Element/View type Enums
 

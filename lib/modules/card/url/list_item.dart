@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class URLListItemView extends StatelessWidget {
   final TransferCard item;

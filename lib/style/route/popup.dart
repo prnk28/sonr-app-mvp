@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class Popup {
   final Widget child;

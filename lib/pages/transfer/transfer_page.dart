@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 // ignore: unused_import
 import 'local/devices_view.dart';
 import 'local/local_view.dart';
@@ -17,9 +17,9 @@ class TransferScreen extends GetView<TransferController> {
     // Build View
     return Obx(() => SonrScaffold(
           gradient: SonrGradients.PlumBath,
-          appBar: DesignAppBar(
+          appBar: PageAppBar(
             centerTitle: true,
-            leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.closeToHome()),
+            leading: ActionButton(iconData: SonrIcons.Close, onPressed: () => controller.closeToHome()),
             action: _RemoteActionButton(),
             title: GestureDetector(
                 onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
@@ -46,7 +46,7 @@ class _RemoteActionButton extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return ActionButton(
-        icon: SonrIcons.Compass.gradient(size: 28),
+        iconData: SonrIcons.Compass,
         onPressed: () {
           // Creates New Lobby
           if (!controller.isRemoteActive.value) {

@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'action_button.dart';
 import '../home_controller.dart';
 
@@ -7,7 +7,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlideSwitcher.fade(
           duration: 2.seconds,
-          child: DesignAppBar(
+          child: PageAppBar(
             centerTitle: controller.view.value.isMain,
             key: ValueKey(false),
             subtitle: Padding(

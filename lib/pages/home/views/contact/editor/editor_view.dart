@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 import 'editor_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'general/fields.dart';
 
 class EditorView extends GetView<EditorController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-        appBar: DesignAppBar(
+        appBar: PageAppBar(
           centerTitle: true,
           title: controller.title.value.subheading(
             color: Get.theme.focusColor,

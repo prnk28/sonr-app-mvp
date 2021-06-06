@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/card/card.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'dashboard_controller.dart';
 
 class SearchResultsView extends GetView<DashboardController> {

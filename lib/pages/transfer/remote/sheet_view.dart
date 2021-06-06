@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class RemoteSheet {
   static void open(String link) {

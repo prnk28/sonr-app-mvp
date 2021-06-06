@@ -1,5 +1,5 @@
 import '../profile_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 /// ** Builds Add Social Form Dialog ** //
 class AddTileView extends StatelessWidget {

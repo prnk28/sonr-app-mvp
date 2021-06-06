@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class PayloadSheetView extends StatelessWidget {
   @override

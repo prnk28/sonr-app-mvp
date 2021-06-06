@@ -1,6 +1,6 @@
 import 'package:sonr_app/modules/authorize/auth_sheet.dart';
 import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
 import '../user/cards.dart';
 

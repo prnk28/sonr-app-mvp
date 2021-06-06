@@ -2,24 +2,23 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'button_view.dart';
 import 'share_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        appBar: DesignAppBar(
+        appBar: PageAppBar(
           centerTitle: true,
           title: _ShareBarTitle(),
-          leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => controller.close()),
+          leading: ActionButton(iconData: SonrIcons.Close, onPressed: () => controller.close()),
+          action: AnimatedScale(
+              scale: controller.hasSelected.value ? 1.0 : 0.0,
+              child: ActionButton(
+                onPressed: () => controller.confirmMediaSelection(),
+                iconData: SonrIcons.Share,
+              )),
         ),
-        floatingAction: AnimatedScale(
-            scale: controller.hasSelected.value ? 1.0 : 0.0,
-            child: ActionButton(
-              onPressed: () => controller.confirmMediaSelection(),
-              icon: SonrIcons.Share.gradient(value: SonrGradients.CrystalRiver),
-            )),
         body: Stack(children: [
           CustomScrollView(
             slivers: [

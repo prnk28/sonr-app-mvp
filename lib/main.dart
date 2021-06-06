@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:feedback/feedback.dart';
 

@@ -160,6 +160,10 @@ flutter:
     fonts:
       - asset: assets/fonts/Sonricons.ttf
 
+  - family:  SonrNavIcons
+    fonts:
+      - asset: assets/fonts/SonrNavIcons.ttf
+
   # -- Media --
   assets:
     - assets/cards/

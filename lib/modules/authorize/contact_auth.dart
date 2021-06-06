@@ -1,6 +1,6 @@
 import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:get/get.dart';
 
@@ -132,31 +132,22 @@ class ContactFlatCard extends StatelessWidget {
             ActionButton(
               onPressed: () {},
               label: "Mobile",
-              icon: SonrIcons.Call.gradient(
-                value: SonrGradients.CrystalRiver,
-                size: 36,
-              ),
-              size: 72,
+              iconData: SonrIcons.Call,
+              //    size: 72,
             ),
             Padding(padding: EdgeInsets.all(6)),
             ActionButton(
               onPressed: () {},
               label: "Text",
-              icon: SonrIcons.Mail.gradient(
-                value: SonrGradients.NightCall,
-                size: 36,
-              ),
-              size: 72,
+              iconData: SonrIcons.Mail,
+              //    size: 72,
             ),
             Padding(padding: EdgeInsets.all(6)),
             ActionButton(
                 onPressed: () {},
                 label: "Video",
-                size: 72,
-                icon: SonrIcons.VideoCamera.gradient(
-                  value: SonrGradients.OctoberSilence,
-                  size: 36,
-                )),
+                //    size: 72,
+                iconData: SonrIcons.VideoCamera),
           ])),
 
           Divider(),

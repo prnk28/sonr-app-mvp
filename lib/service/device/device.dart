@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import '../../env.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;

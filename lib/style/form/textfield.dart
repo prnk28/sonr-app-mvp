@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/style/style.dart' hide Platform;
+import 'package:sonr_app/style.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
 enum TextInputValidStatus { None, Valid, Invalid }
@@ -215,9 +215,7 @@ class SonrSearchField extends StatelessWidget {
       children: <Widget>[
         Container(
             margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-            decoration: Neumorphic.floating(
-              theme: Get.theme,
-            ),
+            decoration: SonrTheme.cardDecoration,
             padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
             child: Stack(children: [
               Padding(
@@ -226,11 +224,11 @@ class SonrSearchField extends StatelessWidget {
                     UserService.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
+                        padding: const EdgeInsets.only(left: 14.0),
                         child: TextField(
                             style: TextStyle(
-                                fontFamily: 'Manrope',
-                                fontSize: 20,
+                                fontFamily: 'RFlex',
+                                fontSize: 24,
                                 fontWeight: FontWeight.w400,
                                 color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
                             autofillHints: autofillHints,
@@ -241,8 +239,8 @@ class SonrSearchField extends StatelessWidget {
                             decoration: InputDecoration.collapsed(
                                 hintText: "Search...",
                                 hintStyle: TextStyle(
-                                    fontFamily: 'Manrope',
-                                    fontSize: 20,
+                                    fontFamily: 'RFlex',
+                                    fontSize: 24,
                                     fontWeight: FontWeight.w400,
                                     color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
                       ),

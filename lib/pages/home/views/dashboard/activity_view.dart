@@ -1,4 +1,4 @@
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 /// @ Activity View
 class ActivityPopup extends StatelessWidget {
@@ -6,15 +6,15 @@ class ActivityPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-      appBar: DesignAppBar(
+      appBar: PageAppBar(
         centerTitle: true,
         title: "Activity".heading(
           color: Get.theme.focusColor,
           align: TextAlign.start,
         ),
-        leading: ActionButton(icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart), onPressed: () => Get.back(closeOverlays: true)),
+        leading: ActionButton(iconData: SonrIcons.Close, onPressed: () => Get.back(closeOverlays: true)),
         action: ActionButton(
-            icon: SonrIcons.Clear.gradient(),
+            iconData: SonrIcons.Clear,
             onPressed: () async {
               if (CardService.activity.length > 0) {
                 var decision = await SonrOverlay.question(

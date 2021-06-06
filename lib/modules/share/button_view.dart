@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'share.dart';
 
 class ShareButton extends StatelessWidget {
@@ -23,11 +23,16 @@ class ShareButton extends StatelessWidget {
                     Future.delayed(150.milliseconds, () => ShareView.popup());
                   },
                   child: ClipPolygon(
-                    borderRadius: 18,
+                    borderRadius: 24,
                     rotate: 30,
+                    boxShadows: SonrTheme.polyBoxShadow,
                     sides: 6,
                     child: Container(
-                      decoration: BoxDecoration(gradient: SonrGradients.SeaShore),
+                      decoration: BoxDecoration(
+                        gradient: SonrTheme.primaryGradient,
+                        boxShadow: SonrTheme.boxShadow,
+                        border: Border.all(color: SonrTheme.foregroundColor, width: 1),
+                      ),
                       alignment: Alignment.center,
                       child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
                     ),

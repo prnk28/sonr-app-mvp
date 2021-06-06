@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'dart:math';
 
 /// @ Standardized Uniform Scaffold
@@ -27,31 +27,12 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: SonrTheme.backgroundColor,
       extendBody: true,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: floatingActionButtonLocation ?? _FixedCenterDockedFabLocation(),
-      body: Stack(
-        children: [
-          // Gradient
-          _BackgroundGradient(gradient: gradient ?? SonrGradients.NorthMiracle),
-
-          // Overlay Color
-          Container(
-            height: Get.height,
-            width: Get.width,
-            color: Get.theme.scaffoldBackgroundColor,
-          ),
-
-          // Blue
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5.1188, sigmaY: 5.1188),
-            child: Container(width: Get.width, height: Get.height),
-          ),
-          SafeArea(child: body ?? Container())
-        ],
-      ),
+      body: SafeArea(child: body ?? Container()),
       appBar: appBar,
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingAction,
@@ -86,34 +67,5 @@ class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
     final double fabX = (scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width) / 2.0;
     return Offset(fabX, getDockedY(scaffoldGeometry));
-  }
-}
-
-/// @ Animated Background Gradient
-class _BackgroundGradient extends StatelessWidget {
-  final Gradient? gradient;
-  const _BackgroundGradient({Key? key, this.gradient}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    if (gradient != SonrGradients.NorthMiracle) {
-      return Pulse(
-        infinite: true,
-        duration: Duration(seconds: 4),
-        child: Container(
-          height: Get.height,
-          width: Get.width,
-          decoration: BoxDecoration(color: Get.theme.backgroundColor, gradient: SonrGradients.NorthMiracle),
-        ),
-      );
-    } else {
-      return Opacity(
-        opacity: 0.5,
-        child: Container(
-          height: Get.height,
-          width: Get.width,
-          decoration: BoxDecoration(color: Get.theme.backgroundColor, gradient: SonrGradients.NorthMiracle),
-        ),
-      );
-    }
   }
 }

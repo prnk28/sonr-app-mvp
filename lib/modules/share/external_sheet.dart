@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
@@ -63,7 +62,7 @@ class ShareSheet extends StatelessWidget {
           // @ Top Banner
           Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             // Bottom Left Close/Cancel Button
-            ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart, size: 42)),
+            ActionButton(onPressed: () => Get.back(), iconData: SonrIcons.Close),
 
             "Share".heading(),
 
@@ -76,7 +75,7 @@ class ShareSheet extends StatelessWidget {
                     TransferService.setMedia(mediaFile!);
                   }
                 },
-                icon: SonrIcons.Check.gradient(value: SonrGradients.NorthMiracle, size: 42)),
+                iconData: SonrIcons.Check),
           ]),
 
           // @ Window Content

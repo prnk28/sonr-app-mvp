@@ -1,6 +1,6 @@
 import 'package:sonr_app/modules/card/contact/tile/tile_item.dart';
 import 'package:sonr_app/modules/search/social_search.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'editor/general/fields.dart';
 import 'profile_controller.dart';
 
@@ -9,7 +9,8 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     Posthog().screen(screenName: "Contact");
-    return Obx(() => NeumorphicCard(themeData: Get.theme, child: _buildView(controller.status.value)));
+    return Obx(() => Container(
+        decoration: SonrTheme.cardDecoration, padding: EdgeInsets.all(8), margin: EdgeInsets.only(left:24, right: 24, bottom: 56), child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item

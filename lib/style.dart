@@ -1,13 +1,13 @@
-export '../service/device/device.dart';
-export '../service/device/desktop.dart';
-export '../service/device/mobile.dart';
-export '../service/client/transfer.dart';
-export '../service/client/lobby.dart';
-export '../service/client/sonr.dart';
-export '../service/user/cards.dart';
-export '../service/user/user.dart';
-export '../service/user/assets.dart';
-export '../service/user/logger.dart';
+export 'service/device/device.dart';
+export 'service/device/desktop.dart';
+export 'service/device/mobile.dart';
+export 'service/client/transfer.dart';
+export 'service/client/lobby.dart';
+export 'service/client/sonr.dart';
+export 'service/user/cards.dart';
+export 'service/user/user.dart';
+export 'service/user/assets.dart';
+export 'service/user/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';
@@ -21,26 +21,26 @@ export 'package:sonr_app/data/data.dart';
 export 'package:posthog_flutter/posthog_flutter.dart';
 
 // Custom Theme Aspects
-export 'buttons/action.dart';
-export 'buttons/color.dart';
-export 'buttons/plain.dart';
-export 'buttons/confirm.dart';
-export 'elements/scaffold.dart';
-export 'elements/appbar.dart';
-export 'animation/animation.dart';
+export 'style/buttons/action.dart';
+export 'style/buttons/color.dart';
+export 'style/buttons/plain.dart';
+export 'style/buttons/confirm.dart';
+export 'style/elements/scaffold.dart';
+export 'style/elements/appbar.dart';
+export 'style/animation/animation.dart';
 
 // Custom Route Aspects
-export 'route/popup.dart';
-export 'route/sheet.dart';
-export 'route/snackbar.dart';
+export 'style/route/popup.dart';
+export 'style/route/sheet.dart';
+export 'style/route/snackbar.dart';
 
 // Global UI Widgets
-export 'elements/shape.dart';
-export 'elements/painter.dart';
-export '../pages/overlay/overlay.dart';
-export '../pages/overlay/flat_overlay.dart';
-export 'form/dropdown.dart';
-export 'form/textfield.dart';
+export 'style/elements/shape.dart';
+export 'style/elements/painter.dart';
+export 'pages/overlay/overlay.dart';
+export 'pages/overlay/flat_overlay.dart';
+export 'style/form/dropdown.dart';
+export 'style/form/textfield.dart';
 
 // UI Packages
 export 'package:flutter/material.dart' hide Route;
@@ -53,6 +53,8 @@ import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/user/user.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+
+import 'style/elements/clipper.dart';
 
 /// * Widget Position Enum * //
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -189,8 +191,68 @@ class SonrTheme {
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
 
+  /// Returns Primary Gradient
+  static Gradient get primaryGradient => RadialGradient(
+        colors: [
+          Color(0xffFFCF14),
+          Color(0xffF3ACFF),
+          Color(0xff8AECFF),
+        ],
+        stops: [0, 0.45, 1],
+        center: Alignment.center,
+        focal: Alignment.topRight,
+        tileMode: TileMode.repeated,
+        radius: 0.74,
+      );
+
+  static BoxDecoration get cardDecoration => BoxDecoration(
+        border: Border.all(color: SonrTheme.backgroundColor, width: 1),
+        color: SonrTheme.foregroundColor,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: SonrTheme.boxShadow,
+      );
+
+  /// Returns Current Text Color
+  static Color get backgroundColor => UserService.isDarkMode ? Colors.black : Colors.white;
+
+  static Color get separatorColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
+
+  static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
+
   /// Returns Current Text Color
   static Color get textColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Return Current Box Shadow
+  static List<BoxShadow> get boxShadow => UserService.isDarkMode
+      ? [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.6),
+            offset: Offset(0, 20),
+            blurRadius: 30,
+          )
+        ]
+      : [
+          BoxShadow(
+            color: Color(0xffD4D7E0).withOpacity(0.75),
+            offset: Offset(0, 20),
+            blurRadius: 30,
+          )
+        ];
+
+  /// Return Current Box Shadow
+  static List<PolygonBoxShadow> get polyBoxShadow => UserService.isDarkMode
+      ? [
+          PolygonBoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            elevation: 10,
+          )
+        ]
+      : [
+          PolygonBoxShadow(
+            color: Color(0xffD4D7E0).withOpacity(0.4),
+            elevation: 10,
+          )
+        ];
 
   /// Returns Current Text Color for Grey
   static Color get greyColor => Get.theme.hintColor;

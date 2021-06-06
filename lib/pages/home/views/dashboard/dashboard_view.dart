@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:sonr_app/pages/home/views/dashboard/quick_screen.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'dashboard_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +112,7 @@ class _QuickOptionButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Container(
-            decoration: Neumorphic.floating(theme: Get.theme),
+            decoration: SonrTheme.cardDecoration,
             child: data.image(),
             padding: EdgeInsets.all(8),
           ),

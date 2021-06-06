@@ -1,7 +1,7 @@
 import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/desktop/explorer_view.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'views/dashboard/dashboard_view.dart';
 import 'home_controller.dart';
 import 'views/contact/profile_view.dart';
@@ -49,11 +49,16 @@ class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: DeviceService.isIOS ? const EdgeInsets.only(bottom: 24.0) : EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: Container(
-        decoration: Neumorphic.floating(theme: Get.theme, radius: 20),
-        margin: EdgeInsets.symmetric(horizontal: 42),
-        height: 80,
+        decoration: BoxDecoration(
+          border: Border.all(color: SonrTheme.backgroundColor, width: 1),
+          color: SonrTheme.foregroundColor,
+          borderRadius: BorderRadius.circular(28.13),
+          boxShadow: SonrTheme.boxShadow,
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 72),
+        height: 72,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -98,15 +103,15 @@ class HomeBottomTabButton extends GetView<HomeController> {
           }
         },
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.only(top: 8.0, bottom: 8, left: view == HomeView.Dashboard ? 16 : 8, right: view == HomeView.Contact ? 16 : 8),
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
                     child: Container(
                         key: ValueKey(idx.value == view.index),
                         child: idx.value == view.index
-                            ? view.iconData.gradient(size: view.iconSize)
-                            : Icon(view.iconData, size: view.iconSize, color: Get.theme.hintColor)),
+                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.textColor)
+                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.textColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),

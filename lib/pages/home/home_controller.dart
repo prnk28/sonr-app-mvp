@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 
 enum HomeView { Dashboard, Contact, Explorer }
 
@@ -171,12 +171,12 @@ extension HomeViewUtils on HomeView {
   bool get isMain => this == HomeView.Dashboard;
 
   // # Returns IconData for Type
-  IconData get iconData {
+  IconData iconData(bool isSelected) {
     switch (this) {
       case HomeView.Dashboard:
-        return SonrIcons.Category;
+        return isSelected ? SonrIcons.HomeActive : SonrIcons.HomeInactive;
       case HomeView.Contact:
-        return SonrIcons.Profile;
+        return isSelected ? SonrIcons.PersonalActive : SonrIcons.PersonalInactive;
       default:
         return Icons.deck;
     }
@@ -186,9 +186,9 @@ extension HomeViewUtils on HomeView {
   double get iconSize {
     switch (this) {
       case HomeView.Dashboard:
-        return 34;
+        return 32;
       case HomeView.Contact:
-        return 38;
+        return 32;
       default:
         return 32;
     }

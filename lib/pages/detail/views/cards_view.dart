@@ -7,7 +7,7 @@ import 'package:sonr_app/modules/card/file/card_item.dart';
 import 'package:sonr_app/modules/card/file/grid_item.dart';
 import 'package:sonr_app/modules/card/file/list_item.dart';
 import 'package:sonr_app/modules/card/url/card_item.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_app/pages/detail/detail.dart';
 
 /// @ Card Element/View type Enums

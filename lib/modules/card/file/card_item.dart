@@ -3,7 +3,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'views.dart';
 
@@ -45,7 +45,7 @@ class MetaCardItemView extends StatelessWidget {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ActionButton(
-                      icon: SonrIcons.About.grey,
+                      iconData: SonrIcons.About,
                       onPressed: () {
                         SonrOverlay.show(
                             _MediaInfoView(card.file!, card.owner, onConfirmed: () {
@@ -113,11 +113,7 @@ class _MediaInfoView extends StatelessWidget {
             ]),
 
             // File Size
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              "Size ".paragraph(),
-              Spacer(),
-              "${file.prettySize()}".paragraph()
-            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: ["Size ".paragraph(), Spacer(), "${file.prettySize()}".paragraph()]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [

@@ -1,6 +1,6 @@
 import 'package:rive/rive.dart';
 import 'peer_controller.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/style.dart';
 import 'profile_view.dart';
 
 const double K_CARD_WIDTH = 160;
