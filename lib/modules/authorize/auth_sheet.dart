@@ -41,8 +41,7 @@ class _AuthInviteSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(color: SonrColor.White, borderRadius: BorderRadius.circular(24)),
-        width: Width.ratio(0.95),
+        decoration: BoxDecoration(color: SonrColor.White, borderRadius: BorderRadius.circular(24), boxShadow: SonrTheme.boxShadow),
         height: Height.ratio(0.71),
         margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Column(

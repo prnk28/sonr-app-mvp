@@ -51,15 +51,32 @@ class DashboardView extends GetView<DashboardController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _QuickOptionButton(data: TransferItemsType.values[0]),
-                      _QuickOptionButton(data: TransferItemsType.values[1]),
+                      ShapeButton(
+                        path: TransferItemsType.Media.imagePath(),
+                        label: TransferItemsType.Media.name(),
+                        fit: BoxFit.contain,
+                        onPressed: () => Details.toPostsList(TransferItemsType.Media),
+                      ),
+                      ShapeButton(
+                        path: TransferItemsType.Files.imagePath(),
+                        label: TransferItemsType.Files.name(),
+                        onPressed: () => Details.toPostsList(TransferItemsType.Files),
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _QuickOptionButton(data: TransferItemsType.values[2]),
-                      _QuickOptionButton(data: TransferItemsType.values[3]),
+                      ShapeButton(
+                        path: TransferItemsType.Contacts.imagePath(),
+                        label: TransferItemsType.Contacts.name(),
+                        onPressed: () => Details.toPostsList(TransferItemsType.Contacts),
+                      ),
+                      ShapeButton(
+                        path: TransferItemsType.Links.imagePath(),
+                        label: TransferItemsType.Links.name(),
+                        onPressed: () => Details.toPostsList(TransferItemsType.Links),
+                      ),
                     ],
                   ),
                 ],
@@ -96,32 +113,6 @@ class _CardSearchView extends GetView<DashboardController> {
                   controller.query.refresh();
                 },
               ))),
-    );
-  }
-}
-
-class _QuickOptionButton extends StatelessWidget {
-  final TransferItemsType data;
-  const _QuickOptionButton({Key? key, required this.data}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => data.count() > 0 ? Details.toPostsList(data) : Details.toError(data.detailsErrorPage()),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-            decoration: BoxDecoration(
-              color: SonrTheme.foregroundColor,
-              shape: BoxShape.circle,
-            ),
-            child: data.image(),
-            padding: EdgeInsets.all(24),
-          ),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          data.label(),
-        ]),
-      ),
     );
   }
 }

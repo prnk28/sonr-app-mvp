@@ -16,7 +16,7 @@ class PostFileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 32.0, top: 32.0),
+      padding: const EdgeInsets.only(bottom: 48.0, top: 16.0),
       child: Container(
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.symmetric(horizontal: 12),
@@ -63,7 +63,6 @@ class _PostFileOwnerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: 50,
-        padding: EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           children: [
             Container(
@@ -73,20 +72,18 @@ class _PostFileOwnerRow extends StatelessWidget {
                 ]),
                 padding: EdgeInsets.all(4),
                 child: Container(
-                  width: 64,
-                  height: 64,
                   child: profile.hasPicture()
                       ? CircleAvatar(
                           backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                         )
-                      : SonrIcons.User.gradient(size: 42),
+                      : SonrIcons.User.gradient(size: 32),
                 )),
-            profile.sNameText(isDarkMode: UserService.isDarkMode),
+            Padding(child: profile.sNameText(isDarkMode: UserService.isDarkMode), padding: EdgeInsets.only(left: 4)),
             Spacer(),
-            ActionButton(
+            Padding(child: ActionButton(
               onPressed: () {},
               iconData: SonrIcons.Statistic,
-            ),
+            ), padding: EdgeInsets.only(right: 4)),
             ActionButton(
               onPressed: () {},
               iconData: SonrIcons.Menu,

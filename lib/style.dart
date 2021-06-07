@@ -28,6 +28,7 @@ export 'style/buttons/confirm.dart';
 export 'style/elements/scaffold.dart';
 export 'style/elements/appbar.dart';
 export 'style/animation/animation.dart';
+export 'style/buttons/shape.dart';
 
 // Custom Route Aspects
 export 'style/route/popup.dart';
