@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/pages/detail/items/card/contact/tile/tile_controller.dart';
+import 'package:sonr_app/pages/detail/items/contact/tile/tile_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
 import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';

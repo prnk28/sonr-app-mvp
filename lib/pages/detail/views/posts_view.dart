@@ -1,10 +1,13 @@
-import 'package:sonr_app/pages/detail/items/card/url/grid_item.dart';
-import 'package:sonr_app/pages/detail/items/card/url/list_item.dart';
+import 'package:sonr_app/pages/detail/items/contact/grid_item.dart';
+import 'package:sonr_app/pages/detail/items/contact/list_item.dart';
+import 'package:sonr_app/pages/detail/items/url/card_item.dart';
+import 'package:sonr_app/pages/detail/items/url/list_item.dart';
+import 'package:sonr_app/pages/detail/items/post/file_item.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/pages/detail/detail.dart';
 
 /// @ Card Element/View type Enums
-enum CardsViewType { CardItem, GridItem, ListItem }
+enum PostItemType { CardItem, ListItem }
 
 //// @ TransferView: Builds View based on TransferItem Payload Type
 class TransferCardItem extends StatelessWidget {
@@ -12,19 +15,17 @@ class TransferCardItem extends StatelessWidget {
   final TransferCard item;
 
   /// Size/Shape of Transfer View
-  final CardsViewType type;
-  const TransferCardItem(this.item, {Key? key, this.type = CardsViewType.CardItem}) : super(key: key);
+  final PostItemType type;
+  const TransferCardItem(this.item, {Key? key, this.type = PostItemType.CardItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // @ Build Contact Card by Size
     if (item.payload == Payload.CONTACT) {
       switch (type) {
-        case CardsViewType.CardItem:
-          return ContactCardItemView(item);
-        case CardsViewType.GridItem:
+        case PostItemType.CardItem:
           return ContactGridItemView(item);
-        case CardsViewType.ListItem:
+        case PostItemType.ListItem:
           return ContactListItemView(item);
       }
     }
@@ -32,11 +33,9 @@ class TransferCardItem extends StatelessWidget {
     // @ Build URL Card by Size
     else if (item.payload == Payload.URL) {
       switch (type) {
-        case CardsViewType.CardItem:
+        case PostItemType.CardItem:
           return URLCardItemView(item);
-        case CardsViewType.GridItem:
-          return URLGridItemView(item);
-        case CardsViewType.ListItem:
+        case PostItemType.ListItem:
           return URLListItemView(item);
       }
     }
@@ -44,11 +43,9 @@ class TransferCardItem extends StatelessWidget {
     // @ Build Media/File Card by Size
     else {
       switch (type) {
-        case CardsViewType.CardItem:
+        case PostItemType.CardItem:
           return PostFileItem(item: item);
-        case CardsViewType.GridItem:
-          return PostFileItem(item: item);
-        case CardsViewType.ListItem:
+        case PostItemType.ListItem:
           return PostFileItem(item: item);
       }
     }
@@ -57,36 +54,15 @@ class TransferCardItem extends StatelessWidget {
 
 class PostsView {
   static Widget display(DetailPageType type, TransferItemsType itemsType) {
-    return CardsListView(type: itemsType);
-  }
-}
-
-/// @ Displays Cards in a Grid Based on Element Type
-class CardsGridView extends StatelessWidget {
-  final TransferItemsType type;
-  final ScrollController? controller;
-  CardsGridView({required this.type, this.controller, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      return GridView.builder(
-        controller: controller,
-        itemCount: type.itemCount,
-        itemBuilder: (BuildContext context, int index) {
-          return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.GridItem);
-        },
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
-      );
-    });
+    return PostsListView(type: itemsType);
   }
 }
 
 /// @ Card List View - By Elements Type
-class CardsListView extends StatelessWidget {
+class PostsListView extends StatelessWidget {
   final TransferItemsType type;
   final ScrollController? controller;
-  CardsListView({required this.type, this.controller, Key? key}) : super(key: key);
+  PostsListView({required this.type, this.controller, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +71,7 @@ class CardsListView extends StatelessWidget {
         controller: controller,
         itemCount: type.itemCount,
         itemBuilder: (BuildContext context, int index) {
-          return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.ListItem);
+          return TransferCardItem(type.transferItemAtIndex(index), type: PostItemType.ListItem);
         },
       );
     });

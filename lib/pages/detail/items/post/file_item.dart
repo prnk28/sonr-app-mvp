@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
-import 'package:sonr_app/pages/detail/items/card/post/views.dart';
+import 'package:sonr_app/pages/detail/items/post/views.dart';
 
 
 import 'package:sonr_app/service/user/cards.dart';

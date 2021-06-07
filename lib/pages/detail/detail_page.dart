@@ -5,7 +5,6 @@ import 'detail.dart';
 import 'views/views.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/detail/items/card/card.dart';
 export 'detail.dart';
 
 class Details {

@@ -19,7 +19,7 @@ export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
 export 'package:posthog_flutter/posthog_flutter.dart';
-export 'package:sonr_app/pages/detail/items/card/card.dart';
+
 // Custom Theme Aspects
 export 'style/buttons/action.dart';
 export 'style/buttons/color.dart';

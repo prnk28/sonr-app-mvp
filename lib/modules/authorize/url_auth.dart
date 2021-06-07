@@ -1,6 +1,6 @@
 
 import 'package:sonr_app/modules/peer/profile_view.dart';
-import 'package:sonr_app/pages/detail/items/card/url/link_view.dart';
+import 'package:sonr_app/pages/detail/items/url/link_view.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';

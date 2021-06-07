@@ -1,3 +1,10 @@
+export 'package:sonr_app/pages/detail/items/contact/card_item.dart';
+export 'package:sonr_app/pages/detail/items/contact/grid_item.dart';
+export 'package:sonr_app/pages/detail/items/contact/list_item.dart';
+export 'package:sonr_app/pages/detail/items/url/card_item.dart';
+export 'package:sonr_app/pages/detail/items/url/list_item.dart';
+export 'package:sonr_app/pages/detail/items/post/file_item.dart';
+
 enum DetailPageType {
   PostsList,
   DetailContact,
