@@ -1,3 +1,4 @@
+import 'package:sonr_app/pages/detail/detail.dart';
 import 'package:sonr_app/style.dart';
 
 enum TransferItemsType { Media, Files, Contacts, Links }
@@ -25,6 +26,20 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns Count of Items for Type as String
   String countString() {
     return this.count().toString();
+  }
+
+  /// Returns Error Page for Items Type
+  DetailPageType detailsErrorPage() {
+    switch (this) {
+      case TransferItemsType.Media:
+        return DetailPageType.ErrorEmptyMedia;
+      case TransferItemsType.Files:
+        return DetailPageType.ErrorEmptyFiles;
+      case TransferItemsType.Contacts:
+        return DetailPageType.ErrorEmptyContacts;
+      case TransferItemsType.Links:
+        return DetailPageType.ErrorEmptyLinks;
+    }
   }
 
   /// Returns `name()` as H3 Text

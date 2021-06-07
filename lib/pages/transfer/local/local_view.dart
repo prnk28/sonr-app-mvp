@@ -57,7 +57,7 @@ class _LocalEmptyView extends GetView<TransferController> {
       child: Container(
         padding: EdgeInsets.all(54),
         height: 260,
-        child: SonrAssetIllustration.NoPeers.widget,
+        child: Image.asset("assets/illustrations/EmptyLobby.png"),
       ),
     );
   }

@@ -115,19 +115,14 @@ class CardsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // @ 2. Build View
-      if (type.itemCount > 0) {
-        return GridView.builder(
-          controller: controller,
-          itemCount: type.itemCount,
-          itemBuilder: (BuildContext context, int index) {
-            return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.GridItem);
-          },
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
-        );
-      } else {
-        return _CardsViewEmpty(type);
-      }
+      return GridView.builder(
+        controller: controller,
+        itemCount: type.itemCount,
+        itemBuilder: (BuildContext context, int index) {
+          return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.GridItem);
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
+      );
     });
   }
 }
@@ -141,32 +136,13 @@ class CardsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // @ 2. Build View
-      if (type.itemCount > 0) {
-        return ListView.builder(
-          controller: controller,
-          itemCount: type.itemCount,
-          itemBuilder: (BuildContext context, int index) {
-            return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.ListItem);
-          },
-        );
-      } else {
-        return _CardsViewEmpty(type);
-      }
+      return ListView.builder(
+        controller: controller,
+        itemCount: type.itemCount,
+        itemBuilder: (BuildContext context, int index) {
+          return TransferCardItem(type.transferItemAtIndex(index), type: CardsViewType.ListItem);
+        },
+      );
     });
-  }
-}
-
-/// @ Helper Method to Build Empty List Value
-class _CardsViewEmpty extends StatelessWidget {
-  final TransferItemsType type;
-  const _CardsViewEmpty(this.type, {Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      width: Get.width,
-      child: AssetController.getNoFiles(type.index),
-    );
   }
 }

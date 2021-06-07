@@ -111,9 +111,9 @@ class ColorButton extends StatelessWidget {
     // Build Child
     return ColorButton(
         decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        ),
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+            border: Border.all(width: 2, color: SonrTheme.foregroundColor)),
         onPressed: onPressed,
         width: width,
         child: ButtonUtility.buildText(text),

@@ -11,7 +11,7 @@ class BoardingLocationView extends GetView<RegisterController> {
       color: Color.fromRGBO(255, 255, 255, 1),
       child: Stack(
         children: [
-          SonrAssetIllustration.LocationAccess.widget,
+          Image.asset("assets/illustrations/LocationPerm.png", width: Get.width, height: Get.height),
           Container(
             alignment: Alignment.bottomCenter,
             margin: EdgeInsets.only(bottom: 32),
@@ -33,7 +33,7 @@ class BoardingGalleryView extends GetView<RegisterController> {
       color: Color.fromRGBO(223, 138, 70, 1),
       child: Stack(
         children: [
-          SonrAssetIllustration.MediaAccess.widget,
+          Image.asset("assets/illustrations/MediaPerm.png", width: Get.width, height: Get.height),
           Container(
             alignment: Alignment.bottomCenter,
             margin: EdgeInsets.only(bottom: 32),

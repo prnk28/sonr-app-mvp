@@ -1,25 +1,52 @@
 import 'package:sonr_app/style.dart';
 import 'detail.dart';
 import 'views/views.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sonr_app/modules/card/card.dart';
 
 class Details {
-  /// Return Details CardGrid Page
-  static Widget cardsGrid(TransferItemsType itemsType) {
-    return CardsView.display(DetailPageType.CardsGrid, itemsType);
+  /// Shifts to Details CardGrid Page
+  static void toCardsGrid(TransferItemsType itemsType) {
+    _present(CardsView.display(DetailPageType.CardsGrid, itemsType), DetailPageType.CardsList, itemsType.name());
   }
 
-  /// Return Details CardList Page
-  static Widget cardsList(TransferItemsType itemsType) {
-    return CardsView.display(DetailPageType.CardsList, itemsType);
+  /// Shifts to Details CardList Page
+  static void toCardsList(TransferItemsType itemsType) {
+    _present(CardsView.display(DetailPageType.CardsList, itemsType), DetailPageType.CardsList, itemsType.name());
   }
 
-  /// Return Details Item Detail Page
+  /// Shifts to Details Item Detail Page
   static void toItemDetail(DetailPageType type) {
-    Get.to(DetailView.display(type));
+    _present(DetailView.display(type), type);
   }
 
-  /// Return Details Error Page
+  /// Shifts to Details Error Page
   static void toError(DetailPageType type) {
-    Get.to(ErrorView.display(type));
+    _present(ErrorView(type: type), type);
+  }
+
+  // @ Helper: To Shift Page
+  static void _present(Widget body, DetailPageType type, [String title = ""]) {
+    Get.to(DetailsScreen(body: body, type: type, title: title));
+  }
+}
+
+/// @ QuickAccessScreen from Home
+class DetailsScreen extends StatelessWidget {
+  final Widget body;
+  final DetailPageType type;
+  final String? title;
+  const DetailsScreen({Key? key, required this.type, required this.body, this.title}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SonrScaffold(
+        appBar: type.hasAppBar
+            ? DetailAppBar(
+                onPressed: () => Get.back(closeOverlays: true),
+                title: title ?? "Detail",
+              )
+            : null,
+        body: body);
   }
 }

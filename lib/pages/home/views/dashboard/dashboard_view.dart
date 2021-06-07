@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:sonr_app/pages/home/views/dashboard/quick_screen.dart';
+import 'package:sonr_app/pages/detail/detail_page.dart';
 import 'package:sonr_app/style.dart';
 import 'dashboard_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -106,7 +106,7 @@ class _QuickOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(QuickAccessScreen(type: data), transition: Transition.rightToLeftWithFade),
+      onTap: () => data.count() > 0 ? Details.toCardsList(data) : Details.toError(data.detailsErrorPage()),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
