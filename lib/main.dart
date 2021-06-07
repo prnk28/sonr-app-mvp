@@ -10,9 +10,6 @@ Future<void> main() async {
   await SonrServices.init();
   await SentryFlutter.init(
     Logger.sentryOptions,
-    isIOSChecker: () => DeviceService.isIOS,
-    isAndroidChecker: () => DeviceService.isAndroid,
-    // Init your App.
     appRunner: () => runApp(BetterFeedback(child: App(isDesktop: false))),
   );
 }
