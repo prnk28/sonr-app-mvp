@@ -1,6 +1,5 @@
 enum DetailPageType {
-  CardsList,
-  CardsGrid,
+  PostsList,
   DetailContact,
   DetailFile,
   DetailMedia,
@@ -14,8 +13,8 @@ enum DetailPageType {
 }
 
 extension DetailPageTypeUtils on DetailPageType {
-  /// Check if PageType is for Cards View
-  bool get isCards => this == DetailPageType.CardsList || this == DetailPageType.CardsGrid;
+  /// Check if PageType is for Posts View
+  bool get isPosts => this == DetailPageType.PostsList;
 
   /// Check if PageType is for Detail View
   bool get isDetail =>
@@ -34,7 +33,7 @@ extension DetailPageTypeUtils on DetailPageType {
       this == DetailPageType.ErrorPermMedia;
 
   /// Check if Should build Appbar
-  bool get hasAppBar => this.isDetail || this.isCards;
+  bool get hasAppBar => this.isDetail || this.isPosts;
 
   /// Returns Image Asset Path for Error
   String get errorImageAsset {

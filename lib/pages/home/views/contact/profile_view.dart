@@ -1,5 +1,6 @@
-import 'package:sonr_app/modules/card/contact/tile/tile_item.dart';
+
 import 'package:sonr_app/modules/search/social_search.dart';
+import 'package:sonr_app/pages/detail/items/card/contact/tile/tile_item.dart';
 import 'package:sonr_app/style.dart';
 import 'editor/general/fields.dart';
 import 'profile_controller.dart';

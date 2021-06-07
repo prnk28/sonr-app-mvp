@@ -106,7 +106,7 @@ class _QuickOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => data.count() > 0 ? Details.toCardsList(data) : Details.toError(data.detailsErrorPage()),
+      onTap: () => data.count() > 0 ? Details.toPostsList(data) : Details.toError(data.detailsErrorPage()),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [

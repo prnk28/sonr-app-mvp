@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/pages/detail/detail_page.dart';
 import 'package:video_player/video_player.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'details_view.dart';
 
 ///  Builds Container With Image as Decoration or Defaults to None if Not Image
 class MetaBox extends StatelessWidget {
@@ -24,7 +24,7 @@ class MetaBox extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.data != null) {
               return GestureDetector(
-                onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
+                onTap: () => Details.toDetailMediaItem(metadata, snapshot.data),
                 child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(

@@ -1,24 +1,37 @@
+import 'dart:io';
+
 import 'package:sonr_app/style.dart';
 import 'detail.dart';
 import 'views/views.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/card/card.dart';
+import 'package:sonr_app/pages/detail/items/card/card.dart';
+export 'detail.dart';
 
 class Details {
-  /// Shifts to Details CardGrid Page
-  static void toCardsGrid(TransferItemsType itemsType) {
-    _present(CardsView.display(DetailPageType.CardsGrid, itemsType), DetailPageType.CardsList, itemsType.name());
+  /// Shifts to Details PostList Page
+  static void toPostsList(TransferItemsType itemsType) {
+    _present(PostsView.display(DetailPageType.PostsList, itemsType), DetailPageType.PostsList, itemsType.name());
   }
 
-  /// Shifts to Details CardList Page
-  static void toCardsList(TransferItemsType itemsType) {
-    _present(CardsView.display(DetailPageType.CardsList, itemsType), DetailPageType.CardsList, itemsType.name());
+  /// Shifts to Details for Contact Item Page
+  static void toDetailContactItem(Contact item) {
+    _present(DetailView.contact(), DetailPageType.DetailContact);
   }
 
-  /// Shifts to Details Item Detail Page
-  static void toItemDetail(DetailPageType type) {
-    _present(DetailView.display(type), type);
+  /// Shifts to Details for File Item Page
+  static void toDetailFileItem(SonrFile_Item item) {
+    _present(DetailView.file(), DetailPageType.DetailFile);
+  }
+
+  /// Shifts to Details for Media Item Page
+  static void toDetailMediaItem(SonrFile_Item item, File? file) {
+    _present(DetailView.media(item), DetailPageType.DetailMedia);
+  }
+
+  /// Shifts to Details for Contact Item Page
+  static void toDetailUrlItem(URLLink item) {
+    _present(DetailView.url(), DetailPageType.DetailUrl);
   }
 
   /// Shifts to Details Error Page

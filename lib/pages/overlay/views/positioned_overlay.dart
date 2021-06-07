@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
-import 'overlay.dart';
+import '../overlay.dart';
 
 /// @ Class Controls Active Overlays ** //
 class SonrPositionedOverlay extends GetxService {

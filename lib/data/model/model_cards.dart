@@ -116,4 +116,35 @@ extension TransferItemsTypeUtils on TransferItemsType {
         return "assets/images/Links.png";
     }
   }
+
+  /// Return Empty Image Index by Type
+  String get emptyLabel => "No ${this.toString().substring(this.toString().indexOf('.') + 1)} yet";
+
+  /// Return Item Count by View Type
+  int get itemCount {
+    switch (this) {
+      case TransferItemsType.Files:
+        return CardService.files.length;
+      case TransferItemsType.Contacts:
+        return CardService.contacts.length;
+      case TransferItemsType.Links:
+        return CardService.links.length;
+      default:
+        return CardService.media.length;
+    }
+  }
+
+  /// Return TransferItem from Index Value
+  TransferCard transferItemAtIndex(int index) {
+    switch (this) {
+      case TransferItemsType.Files:
+        return CardService.files.reversed.toList()[index];
+      case TransferItemsType.Contacts:
+        return CardService.contacts.reversed.toList()[index];
+      case TransferItemsType.Links:
+        return CardService.links.reversed.toList()[index];
+      default:
+        return CardService.media.reversed.toList()[index];
+    }
+  }
 }

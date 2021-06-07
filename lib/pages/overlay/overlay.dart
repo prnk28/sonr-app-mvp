@@ -2,12 +2,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
-import 'fixed_overlay.dart';
-import 'positioned_overlay.dart';
-export 'fixed_overlay.dart';
-export 'flat_overlay.dart';
-export 'positioned_overlay.dart';
-export 'progress_overlay.dart';
+import 'controllers/fixed_overlay.dart';
+import 'views/positioned_overlay.dart';
+export 'controllers/fixed_overlay.dart';
+export 'controllers/flat_overlay.dart';
+export 'views/positioned_overlay.dart';
+export 'views/progress_overlay.dart';
 
 /// @ Class Builds Base Animated Overlay View ** //
 class BaseOverlayView extends StatefulWidget {
@@ -37,12 +37,14 @@ class _BaseOverlayViewState extends State<BaseOverlayView> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return widget.disableAnimation
-        ? widget.child
-        : SlideTransition(
-            position: position,
-            child: widget.child,
-          );
+    return Material(
+        type: MaterialType.transparency,
+        child: widget.disableAnimation
+            ? widget.child
+            : SlideTransition(
+                position: position,
+                child: widget.child,
+              ));
   }
 }
 
@@ -60,36 +62,39 @@ class AlertOverlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: SonrTheme.cardDecoration,
-      // backendColor: Colors.transparent,
-      margin: EdgeInsets.all(30),
-      // borderRadius: BorderRadius.circular(20),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        title.heading(),
-        Padding(
-          padding: EdgeInsets.only(left: 10.0),
-          child: description.paragraph(),
-        ),
-        Padding(padding: EdgeInsets.all(4)),
-        Divider(),
-        Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          // Accept Button
-          Container(
-            width: Get.width / 3,
-            child: ColorButton.primary(
-              onPressed: () {
-                onPressed();
-                if (closeOnResponse) {
-                  SonrOverlay.back();
-                }
-              },
-              icon: SonrIcons.Check,
-              text: buttonText,
-            ),
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        decoration: SonrTheme.cardDecoration,
+        // backendColor: Colors.transparent,
+        margin: EdgeInsets.all(30),
+        // borderRadius: BorderRadius.circular(20),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          title.heading(),
+          Padding(
+            padding: EdgeInsets.only(left: 10.0),
+            child: description.paragraph(),
           ),
+          Padding(padding: EdgeInsets.all(4)),
+          Divider(),
+          Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            // Accept Button
+            Container(
+              width: Get.width / 3,
+              child: ColorButton.primary(
+                onPressed: () {
+                  onPressed();
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                icon: SonrIcons.Check,
+                text: buttonText,
+              ),
+            ),
+          ]),
         ]),
-      ]),
+      ),
     );
   }
 }
@@ -173,46 +178,49 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: SonrTheme.cardDecoration,
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      height: Get.height / 3 + 50,
+    return Material(
+      type: MaterialType.transparency,
       child: Container(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          title.heading(),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: description.paragraph(color: Get.theme.focusColor),
-          ),
-          Padding(padding: EdgeInsets.all(4)),
-          Divider(),
-          Padding(padding: EdgeInsets.all(4)),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            // Decline Button
-            Container(
-              padding: EdgeInsets.only(left: 32),
-              child: TextButton(
-                  onPressed: () {
-                    onDecision(false);
-                    if (closeOnResponse) {
-                      SonrOverlay.back();
-                    }
-                  },
-                  child: declineTitle.paragraph(color: SonrColor.Critical)),
+        decoration: SonrTheme.cardDecoration,
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        height: Get.height / 3 + 50,
+        child: Container(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            title.heading(),
+            Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: description.paragraph(color: Get.theme.focusColor),
             ),
-            // Accept Button
-            ColorButton.primary(
-              onPressed: () {
-                onDecision(true);
-                if (closeOnResponse) {
-                  SonrOverlay.back();
-                }
-              },
-              icon: SonrIcons.Check,
-              text: acceptTitle,
-            ),
+            Padding(padding: EdgeInsets.all(4)),
+            Divider(),
+            Padding(padding: EdgeInsets.all(4)),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              // Decline Button
+              Container(
+                padding: EdgeInsets.only(left: 32),
+                child: TextButton(
+                    onPressed: () {
+                      onDecision(false);
+                      if (closeOnResponse) {
+                        SonrOverlay.back();
+                      }
+                    },
+                    child: declineTitle.paragraph(color: SonrColor.Critical)),
+              ),
+              // Accept Button
+              ColorButton.primary(
+                onPressed: () {
+                  onDecision(true);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                icon: SonrIcons.Check,
+                text: acceptTitle,
+              ),
+            ]),
           ]),
-        ]),
+        ),
       ),
     );
   }

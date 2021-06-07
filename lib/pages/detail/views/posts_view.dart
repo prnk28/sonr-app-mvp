@@ -1,12 +1,5 @@
-import 'package:sonr_app/modules/card/url/grid_item.dart';
-import 'package:sonr_app/modules/card/url/list_item.dart';
-import 'package:sonr_app/modules/card/contact/card_item.dart';
-import 'package:sonr_app/modules/card/contact/grid_item.dart';
-import 'package:sonr_app/modules/card/contact/list_item.dart';
-import 'package:sonr_app/modules/card/file/card_item.dart';
-import 'package:sonr_app/modules/card/file/grid_item.dart';
-import 'package:sonr_app/modules/card/file/list_item.dart';
-import 'package:sonr_app/modules/card/url/card_item.dart';
+import 'package:sonr_app/pages/detail/items/card/url/grid_item.dart';
+import 'package:sonr_app/pages/detail/items/card/url/list_item.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/pages/detail/detail.dart';
 
@@ -52,61 +45,23 @@ class TransferCardItem extends StatelessWidget {
     else {
       switch (type) {
         case CardsViewType.CardItem:
-          return MetaCardItemView(item);
+          return PostFileItem(item: item);
         case CardsViewType.GridItem:
-          return MetaGridItemView(item);
+          return PostFileItem(item: item);
         case CardsViewType.ListItem:
-          return MetaListItemView(item);
+          return PostFileItem(item: item);
       }
     }
   }
 }
 
-extension TransferItemsTypeUtils on TransferItemsType {
-  /// Return Empty Image Index by Type
-  String get emptyLabel => "No ${this.toString().substring(this.toString().indexOf('.') + 1)} yet";
-
-  /// Return Item Count by View Type
-  int get itemCount {
-    switch (this) {
-      case TransferItemsType.Files:
-        return CardService.files.length;
-      case TransferItemsType.Contacts:
-        return CardService.contacts.length;
-      case TransferItemsType.Links:
-        return CardService.links.length;
-      default:
-        return CardService.media.length;
-    }
-  }
-
-  /// Return TransferItem from Index Value
-  TransferCard transferItemAtIndex(int index) {
-    switch (this) {
-      case TransferItemsType.Files:
-        return CardService.files.reversed.toList()[index];
-      case TransferItemsType.Contacts:
-        return CardService.contacts.reversed.toList()[index];
-      case TransferItemsType.Links:
-        return CardService.links.reversed.toList()[index];
-      default:
-        return CardService.media.reversed.toList()[index];
-    }
-  }
-}
-
-class CardsView {
+class PostsView {
   static Widget display(DetailPageType type, TransferItemsType itemsType) {
-    if (type == DetailPageType.CardsGrid) {
-      return CardsGridView(type: itemsType);
-    } else {
-      return CardsListView(type: itemsType);
-    }
+    return CardsListView(type: itemsType);
   }
 }
 
 /// @ Displays Cards in a Grid Based on Element Type
-
 class CardsGridView extends StatelessWidget {
   final TransferItemsType type;
   final ScrollController? controller;

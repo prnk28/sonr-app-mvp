@@ -19,7 +19,7 @@ export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
 export 'package:posthog_flutter/posthog_flutter.dart';
-
+export 'package:sonr_app/pages/detail/items/card/card.dart';
 // Custom Theme Aspects
 export 'style/buttons/action.dart';
 export 'style/buttons/color.dart';
@@ -38,7 +38,7 @@ export 'style/route/snackbar.dart';
 export 'style/elements/shape.dart';
 export 'style/elements/painter.dart';
 export 'pages/overlay/overlay.dart';
-export 'pages/overlay/flat_overlay.dart';
+export 'pages/overlay/controllers/flat_overlay.dart';
 export 'style/form/dropdown.dart';
 export 'style/form/textfield.dart';
 
