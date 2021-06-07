@@ -27,18 +27,20 @@ class Sheet {
     if (!isOpen) {
       Get.bottomSheet(
           dismissible
-              ? Dismissible(
-                  key: key!,
-                  child: child,
-                  direction: DismissDirection.down,
-                  onDismissed: onDismissed!,
+              ? BlurredBackground(
+                  child: Dismissible(
+                    key: key!,
+                    child: child,
+                    direction: DismissDirection.down,
+                    onDismissed: onDismissed!,
+                  ),
                 )
-              : child,
+              : BlurredBackground(child: child),
           isDismissible: dismissible,
           persistent: persistent,
-          barrierColor: SonrColor.Black.withOpacity(0.65),
+          barrierColor: Colors.transparent,
           ignoreSafeArea: ignoreSafeArea,
-          elevation: elevation);
+          elevation: 0);
     }
   }
 

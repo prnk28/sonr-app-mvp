@@ -40,13 +40,15 @@ class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key? key, required this.type, required this.body, this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-        appBar: type.hasAppBar
-            ? DetailAppBar(
-                onPressed: () => Get.back(closeOverlays: true),
-                title: title ?? "Detail",
-              )
-            : null,
-        body: body);
+    if (type.hasAppBar) {
+      return SonrScaffold(
+          appBar: DetailAppBar(
+            onPressed: () => Get.back(closeOverlays: true),
+            title: title ?? "Detail",
+          ),
+          body: body);
+    } else {
+      return body;
+    }
   }
 }

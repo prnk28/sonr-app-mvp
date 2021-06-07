@@ -16,6 +16,7 @@ class GeneralEditorView extends GetView<EditorController> {
             height: Height.ratio(0.475),
             padding: EdgeInsets.all(8),
             child: GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: ContactOptions.values.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

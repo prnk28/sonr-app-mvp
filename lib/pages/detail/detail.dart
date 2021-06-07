@@ -15,13 +15,23 @@ enum DetailPageType {
 
 extension DetailPageTypeUtils on DetailPageType {
   /// Check if PageType is for Cards View
-  bool get isCards => this.toString().contains('Cards');
+  bool get isCards => this == DetailPageType.CardsList || this == DetailPageType.CardsGrid;
 
   /// Check if PageType is for Detail View
-  bool get isDetail => this.toString().contains('Detail');
+  bool get isDetail =>
+      this == DetailPageType.DetailContact ||
+      this == DetailPageType.DetailFile ||
+      this == DetailPageType.DetailMedia ||
+      this == DetailPageType.DetailUrl;
 
   /// Check if PageType is for Error View
-  bool get isError => this.toString().contains('Error');
+  bool get isError =>
+      this == DetailPageType.ErrorEmptyContacts ||
+      this == DetailPageType.ErrorEmptyFiles ||
+      this == DetailPageType.ErrorEmptyLinks ||
+      this == DetailPageType.ErrorEmptyMedia ||
+      this == DetailPageType.ErrorPermLocation ||
+      this == DetailPageType.ErrorPermMedia;
 
   /// Check if Should build Appbar
   bool get hasAppBar => this.isDetail || this.isCards;

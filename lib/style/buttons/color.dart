@@ -103,6 +103,7 @@ class ColorButton extends StatelessWidget {
     required Function onPressed,
     Function? onLongPressed,
     EdgeInsets? padding,
+    Color? textColor,
     EdgeInsets? margin,
     double? width,
     required String text,
@@ -113,12 +114,11 @@ class ColorButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-            border: Border.all(width: 2, color: SonrTheme.foregroundColor)),
+            border: Border.all(width: 2, color: Color(0xffE7E7E7))),
         onPressed: onPressed,
         width: width,
-        child: ButtonUtility.buildText(text),
+        child: ButtonUtility.buildNeutralText(text, textColor),
         padding: padding,
-        margin: margin,
         onLongPressed: onLongPressed,
         pressedScale: 0.98);
   }
@@ -126,36 +126,39 @@ class ColorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RxBool isPressed = false.obs;
-    return Container(
-        child: ObxValue<RxBool>(
-            (pressed) => GestureDetector(
-                onTapCancel: () => pressed(false),
-                onLongPressStart: (details) => pressed(true),
-                onLongPressUp: () async {
-                  pressed(false);
-                  await HapticFeedback.heavyImpact();
-                  Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
-                    if (onLongPressed != null) {
-                      onLongPressed!();
-                    }
-                  });
-                },
-                onTapDown: (detail) => pressed(true),
-                onTapUp: (details) async {
-                  pressed(false);
-                  await HapticFeedback.mediumImpact();
-                  Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
-                    onPressed();
-                  });
-                },
-                child: AnimatedScale(
-                    scale: pressed.value ? pressedScale : 1.0,
-                    child: AnimatedContainer(
-                        decoration: decoration,
-                        duration: ButtonUtility.K_BUTTON_DURATION,
-                        curve: Curves.ease,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                        child: child))),
-            isPressed));
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+          child: ObxValue<RxBool>(
+              (pressed) => GestureDetector(
+                  onTapCancel: () => pressed(false),
+                  onLongPressStart: (details) => pressed(true),
+                  onLongPressUp: () async {
+                    pressed(false);
+                    await HapticFeedback.heavyImpact();
+                    Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                      if (onLongPressed != null) {
+                        onLongPressed!();
+                      }
+                    });
+                  },
+                  onTapDown: (detail) => pressed(true),
+                  onTapUp: (details) async {
+                    pressed(false);
+                    await HapticFeedback.mediumImpact();
+                    Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                      onPressed();
+                    });
+                  },
+                  child: AnimatedScale(
+                      scale: pressed.value ? pressedScale : 1.0,
+                      child: AnimatedContainer(
+                          decoration: decoration,
+                          duration: ButtonUtility.K_BUTTON_DURATION,
+                          curve: Curves.ease,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          child: child))),
+              isPressed)),
+    );
   }
 }

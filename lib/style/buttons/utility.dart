@@ -13,7 +13,7 @@ class ButtonUtility {
         child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildText(text)]));
+            children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildPrimaryText(text)]));
   }
 
   // @ Helper Method to Build Icon View //
@@ -23,7 +23,7 @@ class ButtonUtility {
     } else if (icon != null && text == null) {
       return Container(padding: EdgeInsets.all(8), child: buildIcon(icon));
     } else if (text != null && icon == null) {
-      return Container(padding: EdgeInsets.all(8), child: buildText(text));
+      return Container(padding: EdgeInsets.all(8), child: buildPrimaryText(text));
     } else if (text != null && icon != null) {
       switch (iconPosition) {
         case WidgetPosition.Left:
@@ -32,28 +32,28 @@ class ButtonUtility {
               child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildText(text)]));
+                  children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildPrimaryText(text)]));
         case WidgetPosition.Right:
           return Container(
               padding: EdgeInsets.all(8),
               child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [buildText(text), Padding(padding: EdgeInsets.all(4)), buildIcon(icon)]));
+                  children: [buildPrimaryText(text), Padding(padding: EdgeInsets.all(4)), buildIcon(icon)]));
         case WidgetPosition.Top:
           return Container(
               padding: EdgeInsets.all(8),
               child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildText(text)]));
+                  children: [buildIcon(icon), Padding(padding: EdgeInsets.all(4)), buildPrimaryText(text)]));
         case WidgetPosition.Bottom:
           return Container(
               padding: EdgeInsets.all(8),
               child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [buildText(text), Padding(padding: EdgeInsets.all(4)), buildIcon(icon)]));
+                  children: [buildPrimaryText(text), Padding(padding: EdgeInsets.all(4)), buildIcon(icon)]));
         case WidgetPosition.Center:
           return icon.black;
         default:
@@ -68,7 +68,11 @@ class ButtonUtility {
     return Icon(data, color: Colors.white, size: 24);
   }
 
-  static Widget buildText(String text) {
+  static Widget buildPrimaryText(String text) {
     return Container(child: text.heading(color: SonrColor.White, fontSize: 22));
+  }
+
+  static Widget buildNeutralText(String text, Color? textColor) {
+    return Container(child: text.heading(color: textColor ?? SonrTheme.textColor, fontSize: 22));
   }
 }

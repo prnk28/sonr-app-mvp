@@ -20,9 +20,9 @@ class Popup {
     // Open Sheet
     if (!isOpen) {
       Get.dialog(
-        child,
+        BlurredBackground(child: child),
         barrierDismissible: dismissible,
-        barrierColor: SonrColor.Black.withOpacity(0.65),
+        barrierColor: Colors.transparent,
         useSafeArea: !ignoreSafeArea,
       );
     }
@@ -31,7 +31,7 @@ class Popup {
   /// Opens a Persistent Bottom Sheet
   factory Popup.open(Widget child, {bool ignoreSafeArea = false, bool dismissible = true}) {
     return Popup(
-      child,
+      BlurredBackground(child: child),
       dismissible,
       ignoreSafeArea,
     );

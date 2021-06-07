@@ -2,7 +2,6 @@ import 'package:sonr_app/modules/card/url/card_item.dart';
 import 'package:sonr_app/modules/card/url/grid_item.dart';
 import 'package:sonr_app/modules/card/url/list_item.dart';
 import 'package:sonr_app/style.dart';
-
 import 'contact/card_item.dart';
 import 'contact/grid_item.dart';
 import 'contact/list_item.dart';

@@ -22,6 +22,24 @@ class ArrowClipper extends CustomClipper<Path> {
   }
 }
 
+/// @ Blurred Background Painter
+class BlurredBackground extends StatelessWidget {
+  final Widget child;
+
+  const BlurredBackground({Key? key, required this.child}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+      child: Positioned.fill(
+        child: Container(
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
 /// @ Circle Ripple Painter
 class CirclePainter extends CustomPainter {
   CirclePainter(this._animation) : super(repaint: _animation);

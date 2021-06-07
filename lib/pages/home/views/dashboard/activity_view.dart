@@ -31,7 +31,7 @@ class ActivityPopup extends StatelessWidget {
                   })
               : Center(
                   child: Container(
-                    child: [Image.asset('assets/illustrations/NoAlerts.png'), "No Alerts".subheading(color: Get.theme.hintColor)].column(),
+                    child: [Image.asset('assets/illustrations/EmptyNotif.png'), "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)].column(),
                     padding: EdgeInsets.all(64),
                   ),
                 ))),
