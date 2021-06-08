@@ -19,7 +19,7 @@ class TransferScreen extends GetView<TransferController> {
           gradient: SonrGradients.PlumBath,
           appBar: DetailAppBar(
             onPressed: () => controller.closeToHome(),
-            action: _RemoteActionButton(),
+            // action: _RemoteActionButton(),
             title: "Transfer",
             isClose: true,
           ),
@@ -40,6 +40,7 @@ class TransferScreen extends GetView<TransferController> {
 }
 
 /// @ Profile Action Button Widget
+// ignore: unused_element
 class _RemoteActionButton extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
