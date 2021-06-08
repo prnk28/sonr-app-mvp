@@ -97,17 +97,22 @@ class RegisterController extends GetxController {
         sName: sName.value,
       ));
 
-      // Remove Textfield Focus
-      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
-      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus!.unfocus();
-      }
+      // Create User
+      await UserService.newUser(contact);
 
       // Process data
       if (DeviceService.isMobile) {
-        await UserService.newUser(contact);
+        // Remove Textfield Focus
+        FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+
+        // Change Status
         status(RegisterStatus.Location);
       } else {
+        // Connect to Network
+        SonrService.to.connect();
         await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
       }
     }

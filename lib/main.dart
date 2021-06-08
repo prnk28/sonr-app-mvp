@@ -6,12 +6,19 @@ import 'package:feedback/feedback.dart';
 
 /// @ Main Method
 Future<void> main() async {
+  // Init Services
   WidgetsFlutterBinding.ensureInitialized();
   await SonrServices.init();
-  await SentryFlutter.init(
-    Logger.sentryOptions,
-    appRunner: () => runApp(BetterFeedback(child: App(isDesktop: false))),
-  );
+
+  // Check Platform
+  if (DeviceService.isMobile) {
+    await SentryFlutter.init(
+      Logger.sentryOptions,
+      appRunner: () => runApp(BetterFeedback(child: App(isDesktop: false))),
+    );
+  } else {
+    runApp(App(isDesktop: true));
+  }
 }
 
 /// @ Root App Widget

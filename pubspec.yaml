@@ -89,6 +89,7 @@ dependencies:
   # -- Plugins --
   posthog_flutter:
     git: git@github.com:sonr-io/posthog-flutter.git
+    
   sonr_plugin:
     git: git@github.com:sonr-io/plugin.git
     #path: ../plugin/ #-- Uncomment for Local Development
