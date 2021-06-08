@@ -33,6 +33,7 @@ class PayloadSheetView extends StatelessWidget {
                 child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
         return Container(
+          alignment: Alignment.center,
           height: Height.ratio(0.15),
           margin: EdgeInsets.all(24),
           child: Container(

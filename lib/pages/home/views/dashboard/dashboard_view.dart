@@ -41,7 +41,7 @@ class DashboardView extends GetView<DashboardController> {
         key: ValueKey(RecentsViewStatus.Default),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(padding: EdgeInsets.only(top: 8)),
-          "Dashboard".subheading(align: TextAlign.start, color: Get.theme.focusColor),
+          "Dashboard".section(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
               height: Height.ratio(0.435),
@@ -55,12 +55,24 @@ class DashboardView extends GetView<DashboardController> {
                         path: TransferItemsType.Media.imagePath(),
                         label: TransferItemsType.Media.name(),
                         fit: BoxFit.contain,
-                        onPressed: () => Details.toPostsList(TransferItemsType.Media),
+                        onPressed: () {
+                          if (TransferItemsType.Media.count() > 0) {
+                            Details.toPostsList(TransferItemsType.Media);
+                          } else {
+                            Details.toError(DetailPageType.ErrorEmptyMedia);
+                          }
+                        },
                       ),
                       ShapeButton(
                         path: TransferItemsType.Files.imagePath(),
                         label: TransferItemsType.Files.name(),
-                        onPressed: () => Details.toPostsList(TransferItemsType.Files),
+                        onPressed: () {
+                          if (TransferItemsType.Files.count() > 0) {
+                            Details.toPostsList(TransferItemsType.Files);
+                          } else {
+                            Details.toError(DetailPageType.ErrorEmptyFiles);
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -70,12 +82,24 @@ class DashboardView extends GetView<DashboardController> {
                       ShapeButton(
                         path: TransferItemsType.Contacts.imagePath(),
                         label: TransferItemsType.Contacts.name(),
-                        onPressed: () => Details.toPostsList(TransferItemsType.Contacts),
+                        onPressed: () {
+                          if (TransferItemsType.Contacts.count() > 0) {
+                            Details.toPostsList(TransferItemsType.Contacts);
+                          } else {
+                            Details.toError(DetailPageType.ErrorEmptyContacts);
+                          }
+                        },
                       ),
                       ShapeButton(
                         path: TransferItemsType.Links.imagePath(),
                         label: TransferItemsType.Links.name(),
-                        onPressed: () => Details.toPostsList(TransferItemsType.Links),
+                        onPressed: () {
+                          if (TransferItemsType.Links.count() > 0) {
+                            Details.toPostsList(TransferItemsType.Links);
+                          } else {
+                            Details.toError(DetailPageType.ErrorEmptyLinks);
+                          }
+                        },
                       ),
                     ],
                   ),
