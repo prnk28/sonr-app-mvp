@@ -1,5 +1,7 @@
 import 'package:sonr_app/style.dart';
 
+import 'utility.dart';
+
 class ActionButton extends StatelessWidget {
   /// Function called on Tap Up
   final Function onPressed;
@@ -46,9 +48,12 @@ class _ActionIconButton extends StatelessWidget {
         (isPressed) => GestureDetector(
               onTapDown: (details) => isPressed(true),
               onTapCancel: () => isPressed(false),
-              onTapUp: (details) {
+              onTapUp: (details) async {
                 isPressed(false);
-                onPressed();
+                await HapticFeedback.mediumImpact();
+                Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                  onPressed();
+                });
               },
               child: AnimatedScale(
                 scale: isPressed.value ? 1.2 : 1.0,

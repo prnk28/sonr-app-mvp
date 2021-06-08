@@ -1,5 +1,7 @@
 import 'package:sonr_app/style.dart';
 
+import 'utility.dart';
+
 class ShapeButton extends StatelessWidget {
   /// Function called on Tap Up
   final Function onPressed;
@@ -16,7 +18,7 @@ class ShapeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: 150, maxWidth: 150),
+      constraints: BoxConstraints(maxHeight: 160, maxWidth: 160),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,15 +27,18 @@ class ShapeButton extends StatelessWidget {
               (isPressed) => GestureDetector(
                   onTapDown: (details) => isPressed(true),
                   onTapCancel: () => isPressed(false),
-                  onTapUp: (details) {
+                  onTapUp: (details) async {
                     isPressed(false);
-                    onPressed();
+                    await HapticFeedback.mediumImpact();
+                    Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                      onPressed();
+                    });
                   },
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       AnimatedScale(
-                        scale: isPressed.value ? 1.0 : 0.9,
+                        scale: isPressed.value ? 0.9 : 1.0,
                         child: Container(
                           width: 110,
                           height: 110,

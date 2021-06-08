@@ -10,7 +10,7 @@ export 'detail.dart';
 class Details {
   /// Shifts to Details PostList Page
   static void toPostsList(TransferItemsType itemsType) {
-    _present(PostsView.display(DetailPageType.PostsList, itemsType), DetailPageType.PostsList, itemsType.name());
+    _present(PostsListView(type: itemsType), DetailPageType.PostsList);
   }
 
   /// Shifts to Details for Contact Item Page

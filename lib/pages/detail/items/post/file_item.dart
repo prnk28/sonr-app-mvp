@@ -3,7 +3,6 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/pages/detail/items/post/views.dart';
 
-
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -29,15 +28,15 @@ class PostFileItem extends StatelessWidget {
 
             // File Content
             Container(
-                padding: EdgeInsets.symmetric(horizontal: 4),
+                padding: EdgeInsets.only(left: 8, right: 8, top: 8),
                 child: _PostFileContentView(
                   file: item.file!,
                 ),
                 height: 237),
-
+            Padding(padding: EdgeInsets.only(top: 8)),
             // Info of Transfer
             Container(
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding: EdgeInsets.only(left: 8, right: 8, top: 8),
               width: Get.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,10 +79,12 @@ class _PostFileOwnerRow extends StatelessWidget {
                 )),
             Padding(child: profile.sNameText(isDarkMode: UserService.isDarkMode), padding: EdgeInsets.only(left: 4)),
             Spacer(),
-            Padding(child: ActionButton(
-              onPressed: () {},
-              iconData: SonrIcons.Statistic,
-            ), padding: EdgeInsets.only(right: 4)),
+            Padding(
+                child: ActionButton(
+                  onPressed: () {},
+                  iconData: SonrIcons.Statistic,
+                ),
+                padding: EdgeInsets.only(right: 4)),
             ActionButton(
               onPressed: () {},
               iconData: SonrIcons.Menu,
@@ -104,7 +105,10 @@ class _PostFileContentView extends StatelessWidget {
     if (file.isMedia) {
       // Image
       if (file.single.mime.type == MIME_Type.IMAGE) {
-        return MetaImageBox(metadata: file.single, width: 72);
+        return MetaImageBox(
+          metadata: file.single,
+          width: Get.width,
+        );
       }
 
       // Other Media (Video, Audio)

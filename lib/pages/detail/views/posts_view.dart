@@ -47,12 +47,6 @@ class TransferCardItem extends StatelessWidget {
   }
 }
 
-class PostsView {
-  static Widget display(DetailPageType type, TransferItemsType itemsType) {
-    return PostsListView(type: itemsType);
-  }
-}
-
 /// @ Card List View - By Elements Type
 class PostsListView extends StatelessWidget {
   final TransferItemsType type;

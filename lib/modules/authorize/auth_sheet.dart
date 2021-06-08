@@ -40,10 +40,10 @@ class _AuthInviteSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(color: SonrColor.White, borderRadius: BorderRadius.circular(24), boxShadow: SonrTheme.boxShadow),
-        height: Height.ratio(0.71),
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.only(left: 8, right: 8),
+        decoration: SonrTheme.cardDecoration,
+        height: 460,
+        margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
         child: Column(
           children: [
             _AuthInviteFileHeader(
@@ -169,6 +169,7 @@ class _AuthInviteFileContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: Height.ratio(0.275),
+      width: Get.width,
       decoration: BoxDecoration(color: SonrTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
       padding: EdgeInsets.all(8),
       child: _buildView(Width.ratio(0.8), Height.ratio(0.3)),
