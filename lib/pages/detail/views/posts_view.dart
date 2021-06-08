@@ -42,12 +42,7 @@ class TransferCardItem extends StatelessWidget {
 
     // @ Build Media/File Card by Size
     else {
-      switch (type) {
-        case PostItemType.CardItem:
-          return PostFileItem(item: item);
-        case PostItemType.ListItem:
-          return PostFileItem(item: item);
-      }
+      return PostFileItem(item: item);
     }
   }
 }
