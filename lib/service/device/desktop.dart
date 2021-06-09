@@ -12,9 +12,6 @@ class DesktopService extends GetxService {
   static bool get isRegistered => Get.isRegistered<DesktopService>();
   static DesktopService get to => Get.find<DesktopService>();
 
-  final _storageBox = GetStorage();
-  final _hasContact = false.obs;
-
   DesktopService() {
     Timer.periodic(1.seconds, (timer) {
       if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
@@ -29,14 +26,6 @@ class DesktopService extends GetxService {
 
   // * Initialize * //
   Future<DesktopService> init() async {
-    // Load Box
-    await GetStorage.init();
-
-    if (_storageBox.hasData('contact')) {
-      _hasContact(true);
-    } else {
-      _hasContact(false);
-    }
     // @ 1. Root Main Entry
     _main = MainEntry(
       title: "Sonr",
@@ -51,7 +40,7 @@ class DesktopService extends GetxService {
     ]);
 
     // // Init Tray
-    // _systemTray = FlutterSystray.init();
+    _systemTray = Systray.init();
     return this;
   }
 
