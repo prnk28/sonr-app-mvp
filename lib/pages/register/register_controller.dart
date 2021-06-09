@@ -110,11 +110,24 @@ class RegisterController extends GetxController {
 
         // Change Status
         status(RegisterStatus.Location);
-      } else {
-        // Connect to Network
-        SonrService.to.connect();
-        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-      }
+      } else {}
+    }
+
+    // Check Desktop
+    if (DeviceService.isDesktop) {
+      // Get Contact from Values
+      var contact = Contact(
+          profile: Profile(
+        firstName: firstName.value,
+        lastName: lastName.value,
+      ));
+
+      // Create User
+      await UserService.newUser(contact);
+
+      // Connect to Network
+      SonrService.to.connect();
+      await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
     }
   }
 
