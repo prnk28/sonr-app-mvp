@@ -120,7 +120,7 @@ class SonrService extends GetxService {
   /// @ Send Position Update for Node
   static void update(Position position) {
     if (status.value.hasConnection) {
-      to._node.update(Request.newUpdatePosition(MobileService.position.value));
+      to._node.update(Request.newUpdatePosition(position));
     }
   }
 

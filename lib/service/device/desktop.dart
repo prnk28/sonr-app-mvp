@@ -39,13 +39,10 @@ class DesktopService extends GetxService {
       SystrayAction(name: "quit", label: "Quit", actionType: ActionType.Quit)
     ]);
 
-    // // Init Tray
+    // Init Tray
     _systemTray = Systray.init();
     return this;
   }
-
-  /// @ Method Saves this Device Info
-  Future<void> saveContact(Contact contact) async {}
 
   /// @ Add Event Handler to Tray Action
   void registerEventHandler(String handlerKey, Function handler) {
