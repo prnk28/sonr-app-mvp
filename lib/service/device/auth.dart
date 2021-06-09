@@ -112,55 +112,58 @@ class AuthService extends GetxService {
   static Future<UsernameResult> createUsername(
     String name,
   ) async {
-    // No Prefix Data
-    if (!to.hasPrefix.value) {
-      to._prefix = buildPrefix(name);
-      await to._storage.write(key: K_PREFIX_TAG, value: to._prefix);
-      to.hasPrefix(true);
+    if (isRegistered) {
+      // No Prefix Data
+      if (!to.hasPrefix.value) {
+        to._prefix = buildPrefix(name);
+        await to._storage.write(key: K_PREFIX_TAG, value: to._prefix);
+        to.hasPrefix(true);
+      }
+
+      // No Mnemonic Found
+      if (!to.hasMnemonic.value) {
+        to._mnemonic = bip39.generateMnemonic();
+        await to._storage.write(key: K_MNEMONIC_TAG, value: to._mnemonic);
+        to.hasMnemonic(true);
+      }
+
+      // Check Valid
+      if (to.result.value.isValidName(name)) {
+        to._name = name;
+        await to._storage.write(key: K_NAME_TAG, value: to._name);
+        to.hasName(true);
+
+        // Add UserRecord Domain
+        await to._nbClient.addRecord(HSRecord.newAuth(to._prefix, name, to.signatureHex));
+
+        // Analytics
+        FirebaseAnalytics().logEvent(
+          name: '[AuthService]: Create-Username',
+          parameters: {
+            'createdAt': DateTime.now().toString(),
+            'platform': DeviceService.platform.toString(),
+            'new-username': name,
+          },
+        );
+
+        // Return Mnemonic and Prefix
+        return UsernameResult.isValidFetch(name);
+      }
     }
-
-    // No Mnemonic Found
-    if (!to.hasMnemonic.value) {
-      to._mnemonic = bip39.generateMnemonic();
-      await to._storage.write(key: K_MNEMONIC_TAG, value: to._mnemonic);
-      to.hasMnemonic(true);
-    }
-
-    // Check Valid
-    if (to.result.value.isValidName(name)) {
-      to._name = name;
-      await to._storage.write(key: K_NAME_TAG, value: to._name);
-      to.hasName(true);
-
-      // Add UserRecord Domain
-      await to._nbClient.addRecord(HSRecord.newAuth(to._prefix, name, to.signatureHex));
-
-      // Analytics
-      FirebaseAnalytics().logEvent(
-        name: '[AuthService]: Create-Username',
-        parameters: {
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.platform.toString(),
-          'new-username': name,
-        },
-      );
-
-      // Return Mnemonic and Prefix
-      return UsernameResult.isValidFetch(name);
-    }
-
     // Return Mnemonic and Prefix
     return UsernameResult.isInvalid();
   }
 
   /// #### Returns User Data from Remote Backup
   static Future<User?> getUser() async {
-    if (to.hasPrefix.value) {
-      var data = await SonrCore.userStorjRequest(
-        StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, prefix: to._prefix),
-      );
-      if (data != null) {
-        return data.user;
+    if (isRegistered) {
+      if (to.hasPrefix.value) {
+        var data = await SonrCore.userStorjRequest(
+          StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, prefix: to._prefix),
+        );
+        if (data != null) {
+          return data.user;
+        }
       }
     }
     return null;
@@ -168,11 +171,13 @@ class AuthService extends GetxService {
 
   /// #### Place User into Remote Backup Storage
   static Future<bool> putUser() async {
-    // Reference
-    var resp =
-        await SonrCore.userStorjRequest(StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user));
-    if (resp != null) {
-      return resp.success;
+    if (isRegistered) {
+      // Reference
+      var resp = await SonrCore.userStorjRequest(
+          StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user));
+      if (resp != null) {
+        return resp.success;
+      }
     }
     return false;
   }
@@ -215,14 +220,16 @@ class AuthService extends GetxService {
 
   /// #### Checks if Username matches device id and prefix from records
   static Future<bool> validateUser(String n) async {
-    if (to.hasMnemonic.value) {
-      var data = to.result.value.hasName(n, buildPrefix(n));
-      if (data.exists) {
-        await to.saveValidatedUser(n);
-        return to._ecKeypair.publicKey.verifySHA512Signature(
-          to.mnemonicUTF,
-          data.record.fingerprint,
-        );
+    if (isRegistered) {
+      if (to.hasMnemonic.value) {
+        var data = to.result.value.hasName(n, buildPrefix(n));
+        if (data.exists) {
+          await to.saveValidatedUser(n);
+          return to._ecKeypair.publicKey.verifySHA512Signature(
+            to.mnemonicUTF,
+            data.record.fingerprint,
+          );
+        }
       }
     }
     return false;
@@ -233,9 +240,12 @@ class AuthService extends GetxService {
   // * --------------------------------------------------------------------------
   // Helper Method to Generate Prefix
   static String buildPrefix(String username) {
-    // Create New Prefix
-    var hmacSha256 = crypto.Hmac(crypto.sha256, utf8.encode(username + to.deviceID));
-    var digest = hmacSha256.convert(utf8.encode(username + to.deviceID));
-    return "$digest".substring(0, 16);
+    if (isRegistered) {
+      // Create New Prefix
+      var hmacSha256 = crypto.Hmac(crypto.sha256, utf8.encode(username + to.deviceID));
+      var digest = hmacSha256.convert(utf8.encode(username + to.deviceID));
+      return "$digest".substring(0, 16);
+    }
+    return "";
   }
 }

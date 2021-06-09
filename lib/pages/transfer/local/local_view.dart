@@ -34,7 +34,7 @@ class _LocalLobbyView extends GetView<TransferController> {
         // Scroll View
         Obx(() => Container(
               width: Get.width,
-              height: 260,
+              height: 400,
               child: CustomScrollView(
                 scrollDirection: Axis.horizontal,
                 controller: controller.scrollController,

@@ -12,15 +12,33 @@ class DesktopService extends GetxService {
   static bool get isRegistered => Get.isRegistered<DesktopService>();
   static DesktopService get to => Get.find<DesktopService>();
 
+  // References
+  final Position _position = Position(
+      proximity: Position_Proximity.Near,
+      accelerometer: Position_Accelerometer(x: 0, y: 0, z: 0),
+      facing: Position_Compass(
+        antiCardinal: Cardinal.S,
+        cardinal: Cardinal.N,
+        direction: 0,
+        antipodal: 180,
+      ),
+      heading: Position_Compass(
+        antiCardinal: Cardinal.S,
+        cardinal: Cardinal.N,
+        direction: 0,
+        antipodal: 180,
+      ),
+      orientation: Position_Orientation(pitch: 0, roll: 0, yaw: 0));
+
   DesktopService() {
     Timer.periodic(1.seconds, (timer) {
       if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
-        SonrService.update(Position.create());
+        SonrService.update(_position);
       }
     });
   }
 
-  // // References
+  // References
   late MainEntry _main;
   late Systray _systemTray;
 

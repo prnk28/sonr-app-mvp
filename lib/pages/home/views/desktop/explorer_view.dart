@@ -11,9 +11,9 @@ class ExplorerDesktopView extends GetView<DesktopController> {
     return Center(
       child: Obx(() {
         // Carousel View
-        if (controller.isNotEmpty.value) {
+        if (LobbyService.local.value.isNotEmpty) {
           return Container(
-            height: 260,
+            height: 400,
             child: CustomScrollView(
               physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.horizontal,

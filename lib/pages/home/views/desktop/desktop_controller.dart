@@ -5,7 +5,6 @@ class DesktopController extends GetxController {
   Payload get currentPayload => inviteRequest.value.payload;
 
   // @ Properties
-  final isNotEmpty = false.obs;
   final inviteRequest = AuthInvite().obs;
   final scrollController = ScrollController();
 

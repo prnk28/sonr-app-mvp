@@ -62,26 +62,38 @@ class LobbyService extends GetxService {
 
   /// @ Registers RemoteResponse to Lobby to Manage Callback
   static void registerRemoteCallback(String topic, LobbyCallback callback) {
-    // Check if Found
-    to._lobbyCallbacks[topic] = callback;
+    if (isRegistered) {
+      // Check if Found
+      to._lobbyCallbacks[topic] = callback;
+    }
   }
 
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
-    to._peerCallbacks[peer] = callback;
+    if (isRegistered) {
+      to._peerCallbacks[peer] = callback;
+    }
   }
 
   /// @ Removes Lobby Callback
   static void unregisterRemoteCallback(Lobby lobby) {
-    if (to._lobbyCallbacks.containsKey(lobby)) {
-      to._lobbyCallbacks.remove(lobby);
+    if (isRegistered) {
+      if (to._lobbyCallbacks.containsKey(lobby)) {
+        to._lobbyCallbacks.remove(lobby);
+      }
     }
   }
 
   /// @ Removes Peer Callback
   static void unregisterPeerCallback(Peer? peer) {
-    if (to._peerCallbacks.containsKey(peer)) {
-      to._peerCallbacks.remove(peer);
+    if (isRegistered) {
+      if (to._peerCallbacks.containsKey(peer)) {
+        to._peerCallbacks.remove(peer);
+      }
+    }
+
+    if (isRegistered) {
+      //
     }
   }
 

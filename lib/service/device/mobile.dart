@@ -134,106 +134,117 @@ class MobileService extends GetxService {
 
   /// @ Checks for Initial Media/Text to Share
   static checkInitialShare() async {
-    // @ Check for Media
-    if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
-      // Open Sheet
-      await Get.bottomSheet(ShareSheet.media(to._incomingMedia), isDismissible: false);
+    if (isRegistered) {
+      // @ Check for Media
+      if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
+        // Open Sheet
+        await Get.bottomSheet(ShareSheet.media(to._incomingMedia), isDismissible: false);
 
-      // Reset Incoming
-      to._incomingMedia.clear();
-      to._incomingMedia.refresh();
-    }
+        // Reset Incoming
+        to._incomingMedia.clear();
+        to._incomingMedia.refresh();
+      }
 
-    // @ Check for Text
-    if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
-      var data = await SonrService.getURL(to._incomingText.value);
-      // Open Sheet
-      await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
+      // @ Check for Text
+      if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
+        var data = await SonrService.getURL(to._incomingText.value);
+        // Open Sheet
+        await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
 
-      // Reset Incoming
-      to._incomingText("");
-      to._incomingText.refresh();
-    }
+        // Reset Incoming
+        to._incomingText("");
+        to._incomingText.refresh();
+      }
 
-    // @ Check for Remote
-    if (to._incomingRemote.value.isNotEmpty) {
-      RemoteSheet.open(to._incomingRemote.value);
+      // @ Check for Remote
+      if (to._incomingRemote.value.isNotEmpty) {
+        RemoteSheet.open(to._incomingRemote.value);
+      }
     }
   }
 
   /// @ Method Closes Keyboard if Active
   static void closeKeyboard({BuildContext? context}) async {
-    if (to._keyboardVisible.value) {
-      FocusScope.of(context ?? Get.context!).unfocus();
+    if (isRegistered) {
+      if (to._keyboardVisible.value) {
+        FocusScope.of(context ?? Get.context!).unfocus();
+      }
     }
   }
 
   /// @ Method Plays a UI Sound
   static void playSound(UISoundType type) async {
-    // await to._audioPlayer.play(type.file);
+    if (isRegistered) {
+      // await to._audioPlayer.play(type.file);
+    }
   }
 
   /// @ Saves Photo to Gallery
   static Future<bool> saveCapture(String path, bool isVideo) async {
-    // Validate Path
-    var file = File(path);
-    var exists = await file.exists();
-    if (!exists) {
-      Snack.error("Unable to save Captured Media to your Gallery");
-      return false;
-    } else {
-      if (isVideo) {
-        // Set Video File
-        File videoFile = File(path);
-        var asset = await (PhotoManager.editor.saveVideo(videoFile) as FutureOr<AssetEntity>);
-        var result = await asset.exists;
-
-        // Visualize Result
-        if (result) {
-          Snack.error("Unable to save Captured Photo to your Gallery");
-        }
-        return result;
+    if (isRegistered) {
+      // Validate Path
+      var file = File(path);
+      var exists = await file.exists();
+      if (!exists) {
+        Snack.error("Unable to save Captured Media to your Gallery");
+        return false;
       } else {
-        // Save Image to Gallery
-        var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
-        var result = await asset.exists;
-        if (!result) {
-          Snack.error("Unable to save Captured Video to your Gallery");
+        if (isVideo) {
+          // Set Video File
+          File videoFile = File(path);
+          var asset = await (PhotoManager.editor.saveVideo(videoFile) as FutureOr<AssetEntity>);
+          var result = await asset.exists;
+
+          // Visualize Result
+          if (result) {
+            Snack.error("Unable to save Captured Photo to your Gallery");
+          }
+          return result;
+        } else {
+          // Save Image to Gallery
+          var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
+          var result = await asset.exists;
+          if (!result) {
+            Snack.error("Unable to save Captured Video to your Gallery");
+          }
+          return result;
         }
-        return result;
       }
     }
+    return false;
   }
 
   /// @ Saves Received Media to Gallery
   static Future<bool> saveTransfer(SonrFile_Item meta) async {
-    // Initialize
-    AssetEntity? asset;
+    if (isRegistered) {
+      // Initialize
+      AssetEntity? asset;
 
-    // Get Data from Media
-    if (meta.mime.isImage && MobileService.hasGallery.value) {
-      asset = await PhotoManager.editor.saveImageWithPath(meta.path);
+      // Get Data from Media
+      if (meta.mime.isImage && MobileService.hasGallery.value) {
+        asset = await PhotoManager.editor.saveImageWithPath(meta.path);
 
-      // Visualize Result
-      if (asset != null) {
-        meta.id = asset.id;
-        return await asset.exists;
-      } else {
-        return false;
+        // Visualize Result
+        if (asset != null) {
+          meta.id = asset.id;
+          return await asset.exists;
+        } else {
+          return false;
+        }
       }
-    }
 
-    // Save Video to Gallery
-    else if (meta.mime.isVideo && MobileService.hasGallery.value) {
-      // Set Video File
-      asset = await PhotoManager.editor.saveVideo(meta.file);
+      // Save Video to Gallery
+      else if (meta.mime.isVideo && MobileService.hasGallery.value) {
+        // Set Video File
+        asset = await PhotoManager.editor.saveVideo(meta.file);
 
-      // Visualize Result
-      if (asset != null) {
-        meta.id = asset.id;
-        return await asset.exists;
-      } else {
-        return false;
+        // Visualize Result
+        if (asset != null) {
+          meta.id = asset.id;
+          return await asset.exists;
+        } else {
+          return false;
+        }
       }
     }
 
