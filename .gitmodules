@@ -2,3 +2,6 @@
 	path = plugin
 	url = https://github.com/sonr-io/plugin
 
+[submodule "systray"]
+	path = systray
+	url = https://github.com/sonr-io/systray

@@ -107,7 +107,7 @@ class _AuthInviteFileHeader extends StatelessWidget {
                     )
                   : SonrIcons.User.gradient(size: 42),
             )),
-        profile.sNameText(isDarkMode: UserService.isDarkMode),
+        sNameText(profile: profile),
       ].column(),
 
       // From Information
@@ -138,6 +138,25 @@ class _AuthInviteFileHeader extends StatelessWidget {
         ])),
       )
     ]);
+  }
+
+  /// Returns Widget Text of SName
+  Widget sNameText({required Profile profile}) {
+    return RichText(
+      text: TextSpan(children: [
+        TextSpan(
+            text: profile.sName,
+            style: TextStyle(
+                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
+        TextSpan(
+            text: ".snr/",
+            style: TextStyle(
+                fontFamily: "RFlex",
+                fontWeight: FontWeight.w100,
+                fontSize: 20,
+                color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
+      ]),
+    );
   }
 
   /// @ Helper: Builds Text Style for Spans

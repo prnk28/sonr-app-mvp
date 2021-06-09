@@ -87,15 +87,19 @@ dependencies:
   uni_links: ^0.5.1
 
   # -- Plugins --
-  posthog_flutter:
-    git: git@github.com:sonr-io/posthog-flutter.git
+  systray:
+    git: https://github.com/sonr-io/systray
 
   sonr_plugin:
     #git: git@github.com:sonr-io/plugin.git
     path: ../plugin/ #-- Uncomment for Local Development
 
+  posthog_flutter:
+    git: git@github.com:sonr-io/posthog-flutter.git
+
   # -- UI/UX --
   animate_do: ^2.0.0
+
   lottie: ^1.0.1
   rive: ^0.7.7
   supercharged: ^2.0.0

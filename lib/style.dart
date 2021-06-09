@@ -10,6 +10,7 @@ export 'service/user/assets.dart';
 export 'service/user/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
+
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
@@ -47,13 +48,14 @@ export 'style/form/textfield.dart';
 export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
+export 'style/design/design.dart';
 export 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/user/user.dart';
-import 'package:sonr_plugin/sonr_plugin.dart';
+import 'style/design/design.dart';
 
 import 'style/elements/clipper.dart';
 

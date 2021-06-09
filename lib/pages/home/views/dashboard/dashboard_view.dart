@@ -54,7 +54,7 @@ class DashboardView extends GetView<DashboardController> {
                       ShapeButton(
                         path: TransferItemsType.Media.imagePath(),
                         label: TransferItemsType.Media.name(),
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fitWidth,
                         onPressed: () {
                           if (TransferItemsType.Media.count() > 0) {
                             Details.toPostsList(TransferItemsType.Media);
