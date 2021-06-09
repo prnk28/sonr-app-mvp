@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
 import 'package:sonr_app/env.dart';
@@ -12,6 +11,7 @@ import 'package:crypton/crypton.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:sonr_app/service/user/user.dart';
+import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 // Storage Constants
@@ -136,9 +136,9 @@ class AuthService extends GetxService {
       await to._nbClient.addRecord(HSRecord.newAuth(to._prefix, name, to.signatureHex));
 
       // Analytics
-      Posthog().capture(
-        eventName: '[AuthService]: Create-Username',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[AuthService]: Create-Username',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.platform.toString(),
           'new-username': name,

@@ -90,9 +90,9 @@ class DeviceService extends GetxService {
         var pos = await Geolocator.getCurrentPosition();
 
         // Analytics
-        Posthog().capture(
-          eventName: '[DeviceService]: Find-Location',
-          properties: {
+        FirebaseAnalytics().logEvent(
+          name: '[DeviceService]: Find-Location',
+          parameters: {
             'createdAt': DateTime.now().toString(),
             'platform': platform.toString(),
             'isMobile': platform.isMobile,
@@ -112,9 +112,9 @@ class DeviceService extends GetxService {
 
     if (response.statusCode == 200) {
       // Analytics
-      Posthog().capture(
-        eventName: '[DeviceService]: Find-Location',
-        properties: {'createdAt': DateTime.now().toString(), 'platform': platform.toString(), 'isMobile': platform.isMobile, 'type': 'IP-Location'},
+      FirebaseAnalytics().logEvent(
+        name: '[DeviceService]: Find-Location',
+        parameters: {'createdAt': DateTime.now().toString(), 'platform': platform.toString(), 'isMobile': platform.isMobile, 'type': 'IP-Location'},
       );
 
       // Decode Json

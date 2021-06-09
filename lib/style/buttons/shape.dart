@@ -40,8 +40,8 @@ class ShapeButton extends StatelessWidget {
                       AnimatedScale(
                         scale: isPressed.value ? 0.9 : 1.0,
                         child: Container(
-                          width: 110,
-                          height: 110,
+                          width: 100,
+                          height: 100,
                           decoration: BoxDecoration(
                             color: SonrTheme.foregroundColor,
                             shape: BoxShape.circle,

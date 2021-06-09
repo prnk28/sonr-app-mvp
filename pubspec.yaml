@@ -70,6 +70,7 @@ dependencies:
 
   # -- Data --
   audioplayers: ^0.19.0
+  firebase_analytics: ^8.1.1
   open_file: ^3.2.0
   photo_manager: ^1.2.0
   path: ^1.8.0
@@ -93,9 +94,6 @@ dependencies:
   sonr_plugin:
     #git: git@github.com:sonr-io/plugin.git
     path: ../plugin/ #-- Uncomment for Local Development
-
-  posthog_flutter:
-    git: git@github.com:sonr-io/posthog-flutter.git
 
   # -- UI/UX --
   animate_do: ^2.0.0

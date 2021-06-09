@@ -13,7 +13,6 @@ class DashboardView extends GetView<DashboardController> {
   DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Posthog().screen(screenName: "Dashboard");
     return GestureDetector(
       onTap: () => controller.closeSearch(context),
       child: Container(
@@ -41,7 +40,7 @@ class DashboardView extends GetView<DashboardController> {
         key: ValueKey(RecentsViewStatus.Default),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(padding: EdgeInsets.only(top: 8)),
-          "Dashboard".section(align: TextAlign.start, color: Get.theme.focusColor),
+          "My Stuff".section(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
               height: Height.ratio(0.435),

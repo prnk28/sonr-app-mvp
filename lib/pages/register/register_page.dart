@@ -5,7 +5,6 @@ import 'register_controller.dart';
 class RegisterPage extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-    Posthog().screen(screenName: "Register");
     return Container(
       width: Get.width,
       height: Get.height,

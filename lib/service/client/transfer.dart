@@ -35,9 +35,9 @@ class TransferService extends GetxService {
   // @ Use Camera for Media File //
   static Future<bool> chooseCamera() async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-Camera',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-Camera',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -50,9 +50,9 @@ class TransferService extends GetxService {
       var result = await _handlePayload(Payload.MEDIA, file: file);
 
       // Analytics
-      Posthog().capture(
-        eventName: '[TransferService]: Confirmed-Camera',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[TransferService]: Confirmed-Camera',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
         },
@@ -67,9 +67,9 @@ class TransferService extends GetxService {
   // @ Set User Contact for Transfer //
   static Future<bool> chooseContact() async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-Contact',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-Contact',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -81,9 +81,9 @@ class TransferService extends GetxService {
   // @ Select Media File //
   static Future<bool> chooseMedia({bool withRedirect = true}) async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-Media',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-Media',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -95,9 +95,9 @@ class TransferService extends GetxService {
     // Check File
     if (result != null) {
       // Analytics
-      Posthog().capture(
-        eventName: '[TransferService]: Confirm-Media',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[TransferService]: Confirm-Media',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
         },
@@ -113,9 +113,9 @@ class TransferService extends GetxService {
   // @ Select Other File //
   static Future<bool> chooseFile() async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-File',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-File',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -127,9 +127,9 @@ class TransferService extends GetxService {
     // Check File
     if (result != null) {
       // Analytics
-      Posthog().capture(
-        eventName: '[TransferService]: Confirm-File',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[TransferService]: Confirm-File',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
         },
@@ -154,9 +154,9 @@ class TransferService extends GetxService {
   // @ Select Media File //
   static Future<bool> setUrl(String url) async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-URL',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-URL',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -167,9 +167,9 @@ class TransferService extends GetxService {
   // @ Select Media File //
   static Future<bool> setMedia(SonrFile file) async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-Media',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-Media',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -181,9 +181,9 @@ class TransferService extends GetxService {
   /// @ Send Invite with Peer
   static Session? sendInviteToPeer(Peer peer) {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Selected-Peer',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Selected-Peer',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'peer-platform': peer.platform.toString(),
         'platform': DeviceService.device.platform.toString(),
@@ -204,9 +204,9 @@ class TransferService extends GetxService {
   /// @ Sets File from Other Source
   static Future<bool> setFile(SonrFile file) async {
     // Analytics
-    Posthog().capture(
-      eventName: '[TransferService]: Choose-File',
-      properties: {
+    FirebaseAnalytics().logEvent(
+      name: '[TransferService]: Choose-File',
+      parameters: {
         'createdAt': DateTime.now().toString(),
         'payload': file.payload.toString(),
         'platform': DeviceService.device.platform.toString(),
@@ -234,9 +234,9 @@ class TransferService extends GetxService {
     // @ Handle Payload
     if (to._payload.value.isTransfer && file != null) {
       // Capture File Analytics
-      Posthog().capture(
-        eventName: '[TransferService]: Shared-File',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[TransferService]: Shared-File',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
           'totalSize': file.size,
@@ -279,9 +279,9 @@ class TransferService extends GetxService {
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
       // Capture Contact Analytics
-      Posthog().capture(
-        eventName: '[TransferService]: Shared-Contact',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[TransferService]: Shared-Contact',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
           'payload': Payload.CONTACT.toString(),
@@ -297,9 +297,9 @@ class TransferService extends GetxService {
     // Check for URL
     else if (to._payload.value == Payload.URL) {
       // Capture Contact Analytics
-      Posthog().capture(
-        eventName: '[TransferService]: Shared-Contact',
-        properties: {
+      FirebaseAnalytics().logEvent(
+        name: '[TransferService]: Shared-Contact',
+        parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
           'link': url,

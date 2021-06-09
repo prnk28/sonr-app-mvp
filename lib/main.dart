@@ -1,5 +1,5 @@
+import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
-import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:feedback/feedback.dart';
@@ -24,6 +24,8 @@ Future<void> main() async {
 /// @ Root App Widget
 class App extends StatelessWidget {
   final bool isDesktop;
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
   const App({Key? key, required this.isDesktop}) : super(key: key);
   @override
@@ -38,7 +40,7 @@ class App extends StatelessWidget {
       navigatorKey: Get.key,
       navigatorObservers: [
         GetObserver(),
-        PosthogObserver(),
+        observer,
       ],
       title: _title(),
       home: _buildScaffold(),

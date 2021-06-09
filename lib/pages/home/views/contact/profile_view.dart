@@ -9,7 +9,6 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Posthog().screen(screenName: "Contact");
     return Obx(() => Container(
         decoration: SonrTheme.cardDecoration, padding: EdgeInsets.all(8), margin: EdgeInsets.only(left:24, right: 24, bottom: 56), child: _buildView(controller.status.value)));
   }

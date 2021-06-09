@@ -78,16 +78,16 @@ extension DisplayTextUtils on String {
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
-      DisplayText(this, DisplayTextStyle.Section, align, color, fontSize, fontStyle);
+      DisplayText(this, DisplayTextStyle.Subheading, align, color, fontSize, fontStyle);
 
-  /// Heading - Default Size = 26
+  /// Heading - Default Size = 20
   DisplayText section({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
-      DisplayText(this, DisplayTextStyle.Heading, align, color, fontSize, fontStyle);
+      DisplayText(this, DisplayTextStyle.Section, align, color, fontSize, fontStyle);
 
   /// Paragraph - Default Size = 20
   DisplayText paragraph({
