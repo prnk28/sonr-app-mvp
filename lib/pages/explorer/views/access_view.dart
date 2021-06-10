@@ -13,12 +13,14 @@ class AccessView extends GetView<ExplorerController> {
       width: 800,
       height: 700,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(padding: EdgeInsets.only(top: 8)),
-        "Quick Access".section(align: TextAlign.start, color: Get.theme.focusColor),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: "Quick Access".section(align: TextAlign.start, color: Get.theme.focusColor),
+        ),
         Padding(padding: EdgeInsets.only(top: 4)),
         Center(
           child: Container(
-              height: Height.ratio(0.435),
+              height: 650,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

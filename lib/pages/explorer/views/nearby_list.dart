@@ -18,15 +18,15 @@ class NearbyListView extends GetView<ExplorerController> {
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.only(left: 24.0),
+              padding: const EdgeInsets.only(left: 24.0, top: 8),
               child: "Nearby Devices".section(align: TextAlign.start, color: SonrTheme.textColor),
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 4)),
-
-          // Scroll View
-          Obx(
-            () => LobbyService.local.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
+          Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Obx(
+              () => LobbyService.local.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
+            ),
           ),
         ],
       ),
