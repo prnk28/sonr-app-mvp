@@ -14,14 +14,14 @@ class TransferService extends GetxService {
   // Properties
   final _hasPayload = false.obs;
   final _payload = Payload.NONE.obs;
-  final _invite = AuthInvite().obs;
+  final _invite = InviteRequest().obs;
   final _sonrFile = SonrFile().obs;
   final _sessions = Queue<Session>().obs;
   final _thumbStatus = ThumbnailStatus.None.obs;
 
   // Property Accessors
   static Rx<Payload> get payload => to._payload;
-  static Rx<AuthInvite> get inviteRequest => to._invite;
+  static Rx<InviteRequest> get inviteRequest => to._invite;
   static Rx<SonrFile> get file => to._sonrFile;
   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
   static RxBool get hasPayload => to._hasPayload;
@@ -171,7 +171,7 @@ class TransferService extends GetxService {
   static Future<void> resetPayload() async {
     to._hasPayload(false);
     to._payload(Payload.NONE);
-    to._invite(AuthInvite());
+    to._invite(InviteRequest());
     to._sonrFile(SonrFile());
     to._thumbStatus(ThumbnailStatus.None);
   }

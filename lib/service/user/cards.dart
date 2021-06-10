@@ -212,7 +212,7 @@ class CardService extends GetxService {
   }
 
   /// @ Handles User Invite Response
-  static handleInviteResponse(bool decision, AuthInvite invite, {bool sendBackContact = false, bool closeOverlay = false}) {
+  static handleInviteResponse(bool decision, InviteRequest invite, {bool sendBackContact = false, bool closeOverlay = false}) {
     if (invite.payload == Payload.CONTACT) {
       to._handleAcceptContact(invite, sendBackContact);
     } else {
@@ -226,7 +226,7 @@ class CardService extends GetxService {
   }
 
   // @ Handle Accept Transfer Response
-  _handleAcceptTransfer(AuthInvite invite) {
+  _handleAcceptTransfer(InviteRequest invite) {
     // Check for Remote
     SonrService.respond(invite.newAcceptReply());
 
@@ -254,13 +254,13 @@ class CardService extends GetxService {
   }
 
 // @ Handle Decline Transfer Response
-  _handleDeclineTransfer(AuthInvite invite) {
+  _handleDeclineTransfer(InviteRequest invite) {
     SonrService.respond(invite.newDeclineReply());
     SonrOverlay.back();
   }
 
 // @ Handle Accept Contact Response
-  _handleAcceptContact(AuthInvite invite, bool sendBackContact) {
+  _handleAcceptContact(InviteRequest invite, bool sendBackContact) {
     // Save Card
     _database.addCard(invite.data);
 

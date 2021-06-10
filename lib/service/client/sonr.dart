@@ -147,7 +147,7 @@ class SonrService extends GetxService {
   }
 
   /// @ Invite Peer with Built Request
-  static Session? invite(AuthInvite request) {
+  static Session? invite(InviteRequest request) {
     if (status.value.hasConnection) {
       // Send Invite
       to._node.invite(request);
@@ -157,7 +157,7 @@ class SonrService extends GetxService {
   }
 
   /// @ Respond-Peer Event
-  static void respond(AuthReply request) async {
+  static void respond(InviteResponse request) async {
     if (status.value.hasConnection) {
       to._node.respond(request);
     }
@@ -166,7 +166,7 @@ class SonrService extends GetxService {
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.hasConnection) {
-      to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
+      to._node.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
   }
 
@@ -225,10 +225,10 @@ class SonrService extends GetxService {
         devices: UserService.user.devices,
         settings: UserService.user.settings,
         location: DeviceService.location,
-        clientKeys: ConnectionRequest_ClientKeys(
-            hsKey: Env.hs_key,
-            hsSecret: Env.hs_secret,
-            ipKey: Env.ip_key,
+        apiKeys: APIKeys(
+            handshakeKey: Env.hs_key,
+            handshakeSecret: Env.hs_secret,
+            ipApiKey: Env.ip_key,
             rapidApiHost: Env.rapid_host,
             rapidApiKey: Env.rapid_key,
             hubKey: Env.hub_key,

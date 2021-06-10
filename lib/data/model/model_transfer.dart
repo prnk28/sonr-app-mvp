@@ -86,8 +86,8 @@ class Session {
   bool get isValid => status.value.isNot(SessionStatus.Default) && payload != Payload.NONE && direction != SessionDirection.None;
 
   // @ Constructer
-  /// Create Incoming Session from AuthInvite Request
-  void incoming(AuthInvite invite) {
+  /// Create Incoming Session from InviteRequest Request
+  void incoming(InviteRequest invite) {
     this.direction = SessionDirection.Incoming;
     this.payload = invite.payload;
     this.to = invite.to;
@@ -95,8 +95,8 @@ class Session {
     status(SessionStatus.Invited);
   }
 
-  /// Create Outgoing Session from AuthInvite request
-  void outgoing(AuthInvite invite) {
+  /// Create Outgoing Session from InviteRequest request
+  void outgoing(InviteRequest invite) {
     this.direction = SessionDirection.Outgoing;
     this.payload = invite.payload;
     this.to = invite.to;
@@ -105,26 +105,26 @@ class Session {
   }
 
   // @ Methods
-  /// Return AuthReply based on Invite Type
-  AuthReply buildReply({required bool decision}) {
+  /// Return InviteResponse based on Invite Type
+  InviteResponse buildReply({required bool decision}) {
     // Get Reply Type
-    AuthReply_Type replyType;
+    InviteResponse_Type replyType;
     if (this.payload.isTransfer) {
-      replyType = AuthReply_Type.Transfer;
+      replyType = InviteResponse_Type.Transfer;
     } else if (this.payload.isContact) {
-      replyType = AuthReply_Type.Contact;
+      replyType = InviteResponse_Type.Contact;
     } else if (this.payload.isFlatContact) {
-      replyType = AuthReply_Type.FlatContact;
+      replyType = InviteResponse_Type.FlatContact;
     } else {
-      replyType = AuthReply_Type.None;
+      replyType = InviteResponse_Type.None;
     }
 
     // Return Reply
-    return AuthReply(decision: decision, to: this.from, from: this.to, type: replyType);
+    return InviteResponse(decision: decision, to: this.from, from: this.to, type: replyType);
   }
 
   /// User Sent Reply
-  void onReply(AuthReply reply) {
+  void onReply(InviteResponse reply) {
     if (reply.decision) {
       status(SessionStatus.Accepted);
     } else {

@@ -6,7 +6,7 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 
 /// @ File Invite Builds from Invite Protobuf
 class FileAuthView extends StatelessWidget {
-  final AuthInvite invite;
+  final InviteRequest invite;
   FileAuthView(this.invite);
 
   @override
