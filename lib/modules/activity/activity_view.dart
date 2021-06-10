@@ -12,28 +12,28 @@ class ActivityPopup extends GetView<ActivityController> {
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SonrScaffold(
-          appBar: DetailAppBar(
-            isClose: true,
-            title: "Activity",
-            onPressed: () => Get.back(closeOverlays: true),
-            action: ActionButton(
-                iconData: SonrIcons.Clear,
-                onPressed: () async {
-                  if (controller.activityLength > 0) {
-                    var decision = await SonrOverlay.question(
-                        title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
-                    if (decision) {
-                      CardService.clearAllActivity();
-                    }
-                  }
-                }),
-          ),
-          body: Container(
-              child: Obx(
-            () => controller.activityLength.value > 0 ? _ActivityListView() : _ActivityEmptyView(),
-          )),
-        ));
+    return SonrScaffold(
+      appBar: DetailAppBar(
+        isClose: true,
+        title: "Activity",
+        onPressed: () => Get.back(closeOverlays: true),
+        action: ActionButton(
+            iconData: SonrIcons.Clear,
+            onPressed: () async {
+              if (controller.activityLength > 0) {
+                var decision = await SonrOverlay.question(
+                    title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
+                if (decision) {
+                  CardService.clearAllActivity();
+                }
+              }
+            }),
+      ),
+      body: Container(
+          child: Obx(
+        () => CardService.activity.length > 0 ? _ActivityListView() : _ActivityEmptyView(),
+      )),
+    );
   }
 }
 

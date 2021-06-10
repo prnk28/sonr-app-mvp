@@ -53,7 +53,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
 class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Appears below Subtitle with Bold Font
   final String title;
-  final void Function()? onPressed;
+  final Function() onPressed;
 
   /// Appears above Title with Light Font
   final bool isClose;
@@ -71,13 +71,14 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
       child: NavigationToolbar(
         centerMiddle: false,
-        leading: IconButton(
+        leading: SizedBox(
+          width: 40,
+          height: 40,
+          child: ActionButton(
             onPressed: onPressed,
-            icon: Icon(
-              isClose ? SonrIcons.Close : SonrIcons.Back,
-              color: SonrTheme.textColor,
-              size: 28,
-            )),
+            iconData: isClose ? SonrIcons.Close : SonrIcons.Back,
+          ),
+        ),
         trailing: _buildTrailing(),
         middle: title.toUpperCase().light(color: SonrTheme.textColor, fontSize: 24),
       ),

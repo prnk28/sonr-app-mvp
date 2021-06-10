@@ -1,6 +1,8 @@
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style.dart';
 
+import 'edit_popup.dart';
+
 class PayloadSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,12 @@ class PayloadSheetView extends StatelessWidget {
                         controller: scrollController,
                         itemCount: TransferService.file.value.items.length + 1,
                         itemBuilder: (BuildContext context, int index) {
-                          return index == 0 ? _SonrFileListHeader() : _SonrFileListItem(item: TransferService.file.value.items[index - 1]);
+                          return index == 0
+                              ? _SonrFileListHeader()
+                              : _SonrFileListItem(
+                                  item: TransferService.file.value.items[index - 1],
+                                  index: index - 1,
+                                );
                         }),
                   );
                 })
@@ -75,8 +82,9 @@ class _SonrFileListHeader extends StatelessWidget {
 
 class _SonrFileListItem extends StatelessWidget {
   final SonrFile_Item item;
+  final int index;
 
-  const _SonrFileListItem({Key? key, required this.item}) : super(key: key);
+  const _SonrFileListItem({Key? key, required this.item, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,11 +123,16 @@ class _SonrFileListItem extends StatelessWidget {
             ])),
         // Button
         Container(
-          padding: EdgeInsets.only(left: 8),
+          padding: EdgeInsets.only(left: 24),
           alignment: Alignment.topRight,
-          child: PlainIconButton(
-            onPressed: () {},
-            icon: SonrIcons.MoreVertical.gradient(value: SonrGradient.Primary),
+          child: ActionButton(
+            onPressed: () {
+              SonrOverlay.show(EditPayloadPopup(
+                index: index,
+                item: item,
+              ));
+            },
+            iconData: SonrIcons.MoreVertical,
           ),
         ),
       ]),
@@ -135,11 +148,16 @@ class _PayloadSingleItem extends StatelessWidget {
               _buildLeading(),
               _buildTitle(),
               Container(
-                padding: EdgeInsets.only(left: 8),
+                padding: EdgeInsets.only(left: 24),
                 alignment: Alignment.topRight,
-                child: PlainIconButton(
-                  onPressed: () {},
-                  icon: SonrIcons.MoreVertical.gradient(value: SonrGradient.Primary),
+                child: ActionButton(
+                  onPressed: () {
+                    Popup.open(EditPayloadPopup(
+                      index: 0,
+                      item: TransferService.file.value.single,
+                    ));
+                  },
+                  iconData: SonrIcons.MoreVertical,
                 ),
               ),
             ])));
