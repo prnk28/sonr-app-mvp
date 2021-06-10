@@ -44,7 +44,7 @@ class DashboardView extends GetView<DashboardController> {
           Padding(padding: EdgeInsets.only(top: 4)),
           Container(
               height: Height.ratio(0.435),
-              width: Width.ratio(0.9),
+              width: Width.ratio(0.75),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
