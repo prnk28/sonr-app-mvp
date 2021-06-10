@@ -14,20 +14,14 @@ class Route {
         GetPage(
             name: '/home',
             page: () {
-              Get.find<SonrService>().connect();
-              return HomePage();
+              if (DeviceService.isMobile) {
+                Get.find<SonrService>().connect();
+                return HomePage();
+              } else {
+                return ExplorerPage();
+              }
             },
-            binding: HomeBinding(),
-            transition: Transition.fadeIn,
-            curve: Curves.easeIn,
-            middlewares: [GetMiddleware()]),
-
-        GetPage(
-            name: '/explorer',
-            page: () {
-              return ExplorerPage();
-            },
-            binding: ExplorerBinding(),
+            binding: DeviceService.isMobile ? HomeBinding() : ExplorerBinding(),
             transition: Transition.fadeIn,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),

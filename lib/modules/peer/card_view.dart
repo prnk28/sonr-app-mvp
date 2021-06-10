@@ -114,10 +114,6 @@ class _PeerMainCard extends StatelessWidget {
   }
 
   Widget _buildSName() {
-    if (controller.peer.value.profile.hasSName()) {
-    } else {
-      return Container();
-    }
     if (controller.peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
       return "${controller.peer.value.profile.lastName}".paragraph(color: SonrTheme.greyColor);
     } else {

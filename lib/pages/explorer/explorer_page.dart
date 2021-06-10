@@ -6,24 +6,24 @@ import 'views/access_view.dart';
 class ExplorerPage extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 1280,
-        height: 800,
-        child: Row(children: [
-          Container(
-            color: SonrColor.AccentPurple,
-            width: 1280 / 3 * 2,
-            // height: Get.height,
-            child: AccessView(),
-          ),
-          Container(
-            color: SonrColor.AccentBlue,
-            width: 1280 / 3,
-            // height: Get.height,
-            child: NearbyListView(),
-          ),
-        ]),
+    return Scaffold(
+      appBar: PageAppBar(title: "Welcome".heading()),
+      backgroundColor: SonrTheme.backgroundColor,
+      body: Center(
+        child: Container(
+          width: 1280,
+          height: 800,
+          child: Row(children: [
+            Container(
+              width: 1280 / 3 * 2,
+              child: AccessView(),
+            ),
+            Container(
+              width: 1280 / 3,
+              child: NearbyListView(),
+            ),
+          ]),
+        ),
       ),
     );
   }

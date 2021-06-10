@@ -30,8 +30,8 @@ class App extends StatelessWidget {
   const App({Key? key, required this.isDesktop}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    DeviceService.initialPage(delay: 3500.milliseconds);
     return GetMaterialApp(
+      onInit: () => _checkInitialPage(),
       themeMode: ThemeMode.system,
       theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
@@ -94,5 +94,54 @@ class App extends StatelessWidget {
             ),
           ],
         ));
+  }
+
+  Future<void> _checkInitialPage() async {
+    await Future.delayed(3500.milliseconds);
+
+    // # Check for User
+    if (!UserService.hasUser.value) {
+      // Anonymous Desktop
+      if (isDesktop) {
+        // Get Contact from Values
+        var contact = Contact(
+            profile: Profile(
+          firstName: "Anonymous",
+          lastName: DeviceService.platform.toString(),
+        ));
+
+        // Create User
+        await UserService.newUser(contact);
+
+        // Connect to Network
+        SonrService.to.connect();
+        await Get.offNamed("/home");
+      }
+      // Register Mobile
+      else {
+        Get.offNamed("/register");
+      }
+    }
+    // # Handle Returning
+    else {
+      // Check Platform
+      if (!isDesktop) {
+        // All Valid
+        if (MobileService.hasLocation.value) {
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        }
+
+        // No Location
+        else {
+          MobileService.to.requestLocation().then((value) {
+            if (value) {
+              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+            }
+          });
+        }
+      } else {
+        Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+      }
+    }
   }
 }

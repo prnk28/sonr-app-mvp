@@ -1,4 +1,3 @@
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style.dart';
 import '../../env.dart';
 import 'mobile.dart';
@@ -128,57 +127,6 @@ class DeviceService extends GetxService {
       );
     } else {
       throw Exception('Failed to Fetch Geolocation IP');
-    }
-  }
-
-  /// @ Method Determines LaunchPage and Changes Screen
-  static void initialPage({required Duration delay}) async {
-    // # Wait for Delay
-    await Future.delayed(delay);
-
-    // # Check for User
-    if (!UserService.hasUser.value) {
-      // Anonymous Desktop
-      if (isDesktop) {
-        // Get Contact from Values
-        var contact = Contact(
-            profile: Profile(
-          firstName: "Anonymous",
-          lastName: DeviceService.platform.toString(),
-        ));
-
-        // Create User
-        await UserService.newUser(contact);
-
-        // Connect to Network
-        SonrService.to.connect();
-        await Get.offNamed("/explorer");
-      }
-      // Register Mobile
-      else {
-        Get.offNamed("/register");
-      }
-    }
-    // # Handle Returning
-    else {
-      // Check Platform
-      if (isMobile) {
-        // All Valid
-        if (MobileService.hasLocation.value) {
-          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-        }
-
-        // No Location
-        else {
-          Get.find<MobileService>().requestLocation().then((value) {
-            if (value) {
-              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-            }
-          });
-        }
-      } else {
-        Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-      }
     }
   }
 
