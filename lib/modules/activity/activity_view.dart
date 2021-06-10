@@ -63,7 +63,7 @@ class _ActivityEmptyView extends StatelessWidget {
           ),
           "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
         ].column(),
-        padding: EdgeInsets.all(64),
+        padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
       ),
     );
   }

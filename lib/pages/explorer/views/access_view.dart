@@ -9,11 +9,12 @@ class AccessView extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: SonrTheme.cardDecoration,
       width: 800,
       height: 700,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(padding: EdgeInsets.only(top: 8)),
-        "My Stuff".section(align: TextAlign.start, color: Get.theme.focusColor),
+        "Quick Access".section(align: TextAlign.start, color: Get.theme.focusColor),
         Padding(padding: EdgeInsets.only(top: 4)),
         Center(
           child: Container(

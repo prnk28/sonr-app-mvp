@@ -58,12 +58,12 @@ class _LocalEmptyView extends GetView<TransferController> {
         child: [
           Image.asset(
             'assets/illustrations/EmptyLobby.png',
-            height: Height.ratio(0.6),
+            height: Height.ratio(0.35),
             fit: BoxFit.fitHeight,
           ),
           "Nobody Here..".subheading(color: Get.theme.hintColor, fontSize: 20)
         ].column(),
-        padding: EdgeInsets.all(64),
+        padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
       ),
     );
   }

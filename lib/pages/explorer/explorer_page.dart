@@ -15,10 +15,12 @@ class ExplorerPage extends GetView<ExplorerController> {
           height: 800,
           child: Row(children: [
             Container(
+              padding: EdgeInsets.all(24),
               width: 1280 / 3 * 2,
               child: AccessView(),
             ),
             Container(
+              padding: EdgeInsets.all(24),
               width: 1280 / 3,
               child: NearbyListView(),
             ),
