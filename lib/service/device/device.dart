@@ -133,31 +133,53 @@ class DeviceService extends GetxService {
 
   /// @ Method Determines LaunchPage and Changes Screen
   static void initialPage({required Duration delay}) async {
-    Future.delayed(delay, () {
-      // Check for User
-      if (!UserService.hasUser.value) {
-        Get.offNamed("/register");
-      } else {
-        // Check Platform
-        if (isMobile) {
-          // All Valid
-          if (MobileService.hasLocation.value) {
-            Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-          }
+    // # Wait for Delay
+    await Future.delayed(delay);
 
-          // No Location
-          else {
-            Get.find<MobileService>().requestLocation().then((value) {
-              if (value) {
-                Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-              }
-            });
-          }
-        } else {
+    // # Check for User
+    if (!UserService.hasUser.value) {
+      // Anonymous Desktop
+      if (isDesktop) {
+        // Get Contact from Values
+        var contact = Contact(
+            profile: Profile(
+          firstName: "Anonymous",
+          lastName: DeviceService.platform.toString(),
+        ));
+
+        // Create User
+        await UserService.newUser(contact);
+
+        // Connect to Network
+        SonrService.to.connect();
+        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+      }
+      // Register Mobile
+      else {
+        Get.offNamed("/register");
+      }
+    }
+    // # Handle Returning
+    else {
+      // Check Platform
+      if (isMobile) {
+        // All Valid
+        if (MobileService.hasLocation.value) {
           Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
         }
+
+        // No Location
+        else {
+          Get.find<MobileService>().requestLocation().then((value) {
+            if (value) {
+              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+            }
+          });
+        }
+      } else {
+        Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
       }
-    });
+    }
   }
 
   /// @ Method Plays a UI Sound

@@ -110,7 +110,7 @@ class RegisterController extends GetxController {
 
         // Change Status
         status(RegisterStatus.Location);
-      } else {}
+      }
     }
 
     // Check Desktop
@@ -118,8 +118,8 @@ class RegisterController extends GetxController {
       // Get Contact from Values
       var contact = Contact(
           profile: Profile(
-        firstName: firstName.value,
-        lastName: lastName.value,
+        firstName: "Anonymous",
+        lastName: DeviceService.platform.toString(),
       ));
 
       // Create User
