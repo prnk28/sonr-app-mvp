@@ -19,7 +19,7 @@ class NearbyListView extends GetView<ExplorerController> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 8),
-              child: "Nearby Devices".section(align: TextAlign.start, color: SonrTheme.textColor),
+              child: "Nearby Devices".subheading(align: TextAlign.start, color: SonrTheme.textColor),
             ),
           ),
           Padding(

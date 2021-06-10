@@ -15,7 +15,7 @@ class AccessView extends GetView<ExplorerController> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: "Quick Access".section(align: TextAlign.start, color: Get.theme.focusColor),
+          child: "Quick Access".subheading(align: TextAlign.start, color: Get.theme.focusColor),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),
         Center(
