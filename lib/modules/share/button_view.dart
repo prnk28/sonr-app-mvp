@@ -69,19 +69,10 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.chooseCamera,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-              decoration: BoxDecoration(
-                color: SonrTheme.foregroundColor,
-                shape: BoxShape.circle,
-              ),
-              padding: EdgeInsets.all(24),
-              child: Image.asset("assets/images/Camera.png", fit: BoxFit.fitHeight, height: 52)),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'Camera'.light(color: SonrTheme.textColor.withOpacity(0.8)),
-        ]),
+      child: ImageButton(
+        label: 'Camera',
+        onPressed: controller.chooseCamera,
+        path: 'assets/images/Camera.png',
       ),
     );
   }
@@ -93,23 +84,13 @@ class _ShareFileButtonItem extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.chooseFile,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-              decoration: BoxDecoration(
-                color: SonrTheme.foregroundColor,
-                shape: BoxShape.circle,
-              ),
-              padding: EdgeInsets.all(24),
-              child: Image.asset("assets/images/Folder.png", fit: BoxFit.fitHeight, height: 52)),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'File'.light(color: SonrTheme.textColor.withOpacity(0.8)),
-        ]),
-      ),
-    );
+        delay: 225.milliseconds,
+        duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
+        child: ImageButton(
+          label: 'File',
+          onPressed: controller.chooseFile,
+          path: 'assets/images/Folder.png',
+        ));
   }
 }
 
@@ -119,22 +100,12 @@ class _ShareContactButtonItem extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: GestureDetector(
-        onTap: controller.chooseContact,
-        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-              decoration: BoxDecoration(
-                color: SonrTheme.foregroundColor,
-                shape: BoxShape.circle,
-              ),
-              padding: EdgeInsets.all(24),
-              child: Image.asset("assets/images/Contact.png", fit: BoxFit.fitHeight, height: 52)),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          'Contact'.light(color: SonrTheme.textColor.withOpacity(0.8)),
-        ]),
-      ),
-    );
+        delay: 225.milliseconds,
+        duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
+        child: ImageButton(
+          label: 'Contact',
+          onPressed: controller.chooseContact,
+          path: 'assets/images/Contact.png',
+        ));
   }
 }

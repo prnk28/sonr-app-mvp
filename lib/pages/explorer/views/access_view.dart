@@ -11,16 +11,16 @@ class AccessView extends GetView<ExplorerController> {
     return Container(
       decoration: SonrTheme.cardDecoration,
       width: 800,
-      height: 700,
+      height: 625,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 24.0, top: 8),
           child: "Quick Access".subheading(align: TextAlign.start, color: Get.theme.focusColor),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),
         Center(
           child: Container(
-              height: 650,
+              height: 575,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
