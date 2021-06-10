@@ -20,6 +20,13 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<AssetController>(AssetController(), permanent: true);
+    Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
+  }
+
+  // Get Rive File for Peer Bubble
+  Future<RiveFile> _getRiveDataFile() async {
+    var data = await rootBundle.load('assets/animations/peer_border.riv');
+    return RiveFile.import(data);
   }
 }
 
@@ -55,14 +62,14 @@ class TransferBinding implements Bindings {
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
     Get.put<RemoteLobbyController>(RemoteLobbyController(), permanent: true);
-    Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
+    // Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
 
-  // Get Rive File for Peer Bubble
-  Future<RiveFile> _getRiveDataFile() async {
-    var data = await rootBundle.load('assets/animations/peer_border.riv');
-    return RiveFile.import(data);
-  }
+  // // Get Rive File for Peer Bubble
+  // Future<RiveFile> _getRiveDataFile() async {
+  //   var data = await rootBundle.load('assets/animations/peer_border.riv');
+  //   return RiveFile.import(data);
+  // }
 }
 
 /// #### SonrServices

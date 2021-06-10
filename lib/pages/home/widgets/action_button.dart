@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
-import 'package:sonr_app/pages/home/views/dashboard/activity_view.dart';
+import 'package:sonr_app/modules/activity/activity_view.dart';
 import 'package:sonr_app/style.dart';
 import '../home_controller.dart';
 

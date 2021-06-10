@@ -8,42 +8,64 @@ class ExplorerDesktopView extends GetView<DesktopController> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Obx(() {
-        // Carousel View
-        if (LobbyService.local.value.isNotEmpty) {
-          return Container(
-            height: 400,
-            child: CustomScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              controller: controller.scrollController,
-              slivers: LobbyService.local.value
-                  .mapAll((i) => Builder(
-                      builder: (context) => SliverToBoxAdapter(
-                              child: GestureDetector(
-                            onTap: () => controller.chooseFile(i),
-                            child: PeerCard(i),
-                          ))))
-                  .toList(),
+    return Container(
+      width: Get.width,
+      height: Get.height,
+      child: Column(
+        children: [
+          // Label
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24.0),
+              child: "Local".section(align: TextAlign.start, color: SonrTheme.textColor),
             ),
-          );
-        }
+          ),
+          Padding(padding: EdgeInsets.only(top: 4)),
 
-        // Default Empty View
-        else {
-          return Center(
-            child: [
-              Container(
-                padding: EdgeInsets.all(54),
-                width: 500,
-                child: Image.asset('assets/illustrations/EmptyLobby.png'),
+          // Scroll View
+          Obx(
+            () => LobbyService.local.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// @ LocalLobbyView:  When Lobby is NOT Empty
+class _LocalLobbyView extends GetView<DesktopController> {
+  @override
+  Widget build(BuildContext context) {
+    return
+        // Scroll View
+        Obx(() => Container(
+              width: Get.width,
+              height: 400,
+              child: CustomScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: controller.scrollController,
+                anchor: 0.225,
+                slivers: LobbyService.local.value
+                    .mapAll((i) => Builder(builder: (context) {
+                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                        }))
+                    .toList(),
               ),
-              "Nobody Around".paragraph(color: Get.theme.focusColor),
-            ].column(mainAxisAlignment: MainAxisAlignment.center),
-          );
-        }
-      }),
+            ));
+  }
+}
+
+/// @ LobbyEmptyView: When Lobby is Empty
+class _LocalEmptyView extends GetView<DesktopController> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.all(54),
+        height: 260,
+        child: Image.asset("assets/illustrations/EmptyLobby.png"),
+      ),
     );
   }
 }

@@ -637,6 +637,8 @@ github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1
 github.com/smartystreets/goconvey v1.6.4 h1:fv0U8FUIMPNf1L9lnHLvLhgicrIVChEkdzIKYqbNC9s=
 github.com/smartystreets/goconvey v1.6.4/go.mod h1:syvi0/a8iFYH4r/RixwvyeAJjdLS9QV7WQ/tjFTllLA=
 github.com/smola/gocompat v0.2.0/go.mod h1:1B0MlxbmoZNo3h8guHp8HztB3BSYR5itql9qtVc0ypY=
+github.com/sonr-io/plugin/go v0.9.14-0.20210609235712-68e4ccf81141 h1:IaSZDRcgizPGNg55WFBwZKVqrbhOl6PEr3eU3SHoSJk=
+github.com/sonr-io/plugin/go v0.9.14-0.20210609235712-68e4ccf81141/go.mod h1:ATubbIePqZYclfQr1sfeOqxLAGnNRN5fKaLnHnOQ1WE=
 github.com/sonr-io/systray/go v0.5.1 h1:YTy87VE5e5V6x/50efwqJUpVElFB/AvQxwkgPGdNHnQ=
 github.com/sonr-io/systray/go v0.5.1/go.mod h1:o3KU3MsfKILozJFDcgxfpbI3OO8GYN9bPxvMFJf9heI=
 github.com/spacemonkeygo/monkit/v3 v3.0.4/go.mod h1:JcK1pCbReQsOsMKF/POFSZCq7drXFybgGmbc27tuwes=

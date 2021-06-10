@@ -17,49 +17,52 @@ class PeerCard extends GetWidget<PeerController> {
     controller.initalize(peer);
 
     // Build View
-    return Obx(() => Container(
-        width: K_CARD_WIDTH,
-        height: K_CARD_HEIGHT,
-        clipBehavior: Clip.antiAlias,
-        decoration: SonrTheme.cardDecoration,
-        margin: EdgeInsets.all(24),
-        child: Stack(children: [
-          // Rive Board
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 34),
-              child: Container(
-                alignment: Alignment.center,
-                height: 96,
-                width: 96,
-                child: controller.board.value == null || controller.isFlipped.value
-                    ? Container()
-                    : Rive(
-                        artboard: controller.board.value!,
-                      ),
-              ),
-            ),
-          ),
+    return Obx(() => Padding(
+          padding: EdgeInsets.symmetric(vertical: 70),
+          child: Container(
+              width: K_CARD_WIDTH,
+              height: K_CARD_HEIGHT,
+              clipBehavior: Clip.antiAlias,
+              decoration: SonrTheme.cardDecoration,
+              margin: EdgeInsets.all(24),
+              child: Stack(children: [
+                // Rive Board
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 34),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 96,
+                      width: 96,
+                      child: controller.board.value == null || controller.isFlipped.value
+                          ? Container()
+                          : Rive(
+                              artboard: controller.board.value!,
+                            ),
+                    ),
+                  ),
+                ),
 
-          // Content
-          Container(
-            padding: EdgeInsets.all(8),
-            child: GestureDetector(
-              onTap: controller.invite,
-              child: AnimatedSlideSwitcher.fade(
-                child: controller.isFlipped.value
-                    ? _PeerDetailsCard(
-                        controller: controller,
-                        key: ValueKey<bool>(true),
-                      )
-                    : _PeerMainCard(
-                        controller: controller,
-                        key: ValueKey<bool>(false),
-                      ),
-              ),
-            ),
-          ),
-        ])));
+                // Content
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: GestureDetector(
+                    onTap: controller.invite,
+                    child: AnimatedSlideSwitcher.fade(
+                      child: controller.isFlipped.value
+                          ? _PeerDetailsCard(
+                              controller: controller,
+                              key: ValueKey<bool>(true),
+                            )
+                          : _PeerMainCard(
+                              controller: controller,
+                              key: ValueKey<bool>(false),
+                            ),
+                    ),
+                  ),
+                ),
+              ])),
+        ));
   }
 }
 

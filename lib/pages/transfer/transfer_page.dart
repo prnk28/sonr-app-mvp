@@ -4,7 +4,7 @@ import 'package:sonr_app/style.dart';
 // ignore: unused_import
 import 'local/devices_view.dart';
 import 'local/local_view.dart';
-import 'payload_sheet.dart';
+import 'payload/payload_sheet.dart';
 import 'remote/remote_view.dart';
 import 'transfer_controller.dart';
 

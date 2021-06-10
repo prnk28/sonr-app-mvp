@@ -200,7 +200,7 @@ class _AuthInviteFileContent extends StatelessWidget {
       return file.single.thumbBuffer.length > 0
           ? Image.memory(
               Uint8List.fromList(file.single.thumbBuffer),
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.fitWidth,
             )
           : file.single.mime.type.gradient();
     } else {
