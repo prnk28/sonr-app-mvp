@@ -93,7 +93,7 @@ dependencies:
     git: https://github.com/sonr-io/systray
 
   sonr_plugin:
-    git: git@github.com:sonr-io/plugin.git
+    git: https://github.com/sonr-io/plugin
     #path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
