@@ -40,7 +40,10 @@ class HomeBinding implements Bindings {
     if (DeviceService.isDesktop) {
       Get.put<DesktopController>(DesktopController(), permanent: true);
     }
+
+    // Subsidary Controllers
     Get.put(ShareController(), permanent: true);
+    Get.put(ActivityController(), permanent: true);
     Get.put<DashboardController>(DashboardController(), permanent: true);
     Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.put<EditorController>(EditorController(), permanent: true);
