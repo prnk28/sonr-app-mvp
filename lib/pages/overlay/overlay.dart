@@ -39,12 +39,14 @@ class _BaseOverlayViewState extends State<BaseOverlayView> with TickerProviderSt
   Widget build(BuildContext context) {
     return Material(
         type: MaterialType.transparency,
-        child: widget.disableAnimation
-            ? widget.child
-            : SlideTransition(
-                position: position,
-                child: widget.child,
-              ));
+        child: BlurredBackground(
+          child: widget.disableAnimation
+              ? widget.child
+              : SlideTransition(
+                  position: position,
+                  child: widget.child,
+                ),
+        ));
   }
 }
 
@@ -182,8 +184,8 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
       type: MaterialType.transparency,
       child: Container(
         decoration: SonrTheme.cardDecoration,
+        padding: EdgeInsets.symmetric(vertical: 24),
         margin: EdgeInsets.symmetric(horizontal: 16),
-        height: Get.height / 3 + 50,
         child: Container(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             title.heading(),
@@ -196,16 +198,14 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
             Padding(padding: EdgeInsets.all(4)),
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               // Decline Button
-              Container(
-                padding: EdgeInsets.only(left: 32),
-                child: TextButton(
-                    onPressed: () {
-                      onDecision(false);
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    child: declineTitle.paragraph(color: SonrColor.Critical)),
+              ColorButton.neutral(
+                onPressed: () {
+                  onDecision(false);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                text: declineTitle,
               ),
               // Accept Button
               ColorButton.primary(

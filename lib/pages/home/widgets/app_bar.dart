@@ -29,14 +29,9 @@ class _HomeAppBarTitle extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlideSwitcher.fade(
           duration: 2.seconds,
-          child: GestureDetector(
-            key: ValueKey<String>(controller.title.value),
-            onTap: controller.onTitleTap,
-            onLongPress: () => BetterFeedback.of(context)?.show(UserService.sendFeedback),
-            child: controller.title.value.heading(
-              color: Get.theme.focusColor,
-              align: TextAlign.start,
-            ),
+          child: controller.title.value.heading(
+            color: Get.theme.focusColor,
+            align: TextAlign.start,
           ),
         ));
   }

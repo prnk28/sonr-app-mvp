@@ -98,11 +98,27 @@ class _PeerMainCard extends StatelessWidget {
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.profile.fullName}".subheading(color: SonrTheme.textColor),
+          _buildName(),
 
           // Username
-          "${controller.peer.value.profile.sName}.snr/".paragraph(color: SonrTheme.greyColor),
+          _buildSName(),
         ].column());
+  }
+
+  Widget _buildName() {
+    if (controller.peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
+      return "${controller.peer.value.profile.firstName}".subheading(color: SonrTheme.textColor);
+    } else {
+      return "${controller.peer.value.profile.fullName}".subheading(color: SonrTheme.textColor);
+    }
+  }
+
+  Widget _buildSName() {
+    if (controller.peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
+      return "${controller.peer.value.profile.lastName}".paragraph(color: SonrTheme.greyColor);
+    } else {
+      return "${controller.peer.value.profile.sName}.snr/".paragraph(color: SonrTheme.greyColor);
+    }
   }
 }
 

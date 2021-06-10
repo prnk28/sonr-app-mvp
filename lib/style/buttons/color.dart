@@ -10,6 +10,7 @@ class ColorButton extends StatelessWidget {
   final Function? onLongPressed;
   final String? tooltip;
   final bool isEnabled;
+  final bool isPrimary;
   final double? width;
   final double pressedScale;
 
@@ -25,6 +26,7 @@ class ColorButton extends StatelessWidget {
     this.tooltip,
     this.isEnabled = true,
     this.width,
+    this.isPrimary = false,
   }) : super(key: key);
 
   // @ Primary Button //
@@ -62,8 +64,8 @@ class ColorButton extends StatelessWidget {
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         width: width,
-        padding: padding,
         margin: margin,
+        isPrimary: true,
         onLongPressed: onLongPressed,
         pressedScale: 0.95);
   }
@@ -92,7 +94,6 @@ class ColorButton extends StatelessWidget {
         width: width,
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
-        padding: padding,
         margin: margin,
         onLongPressed: onLongPressed,
         pressedScale: 0.98);
@@ -156,7 +157,7 @@ class ColorButton extends StatelessWidget {
                           decoration: decoration,
                           duration: ButtonUtility.K_BUTTON_DURATION,
                           curve: Curves.ease,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: isPrimary ? 6 : 12),
                           child: child))),
               isPressed)),
     );

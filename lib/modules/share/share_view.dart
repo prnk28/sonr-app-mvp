@@ -16,6 +16,7 @@ class SharePopupView extends GetView<ShareController> {
               child: ActionButton(
                 onPressed: () => controller.confirmMediaSelection(),
                 iconData: SonrIcons.Share,
+                banner: ActionBanner.selected(controller.selectedItems.length),
               )),
         ),
         body: Stack(children: [
@@ -25,8 +26,7 @@ class SharePopupView extends GetView<ShareController> {
               SliverToBoxAdapter(child: ShareOptionsRow()),
               SliverPadding(padding: EdgeInsets.only(top: 8)),
               SliverToBoxAdapter(
-                  child:
-                      Container(padding: EdgeInsets.only(left: 24), child: "Media".subheading(align: TextAlign.start, color: Get.theme.focusColor))),
+                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".section(align: TextAlign.start, color: Get.theme.focusColor))),
               SliverToBoxAdapter(child: _TagsView()),
               SliverPadding(padding: EdgeInsets.all(4)),
               // @ Builds List of Social Tile

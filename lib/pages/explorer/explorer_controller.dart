@@ -1,6 +1,6 @@
 import 'package:sonr_app/style.dart';
 
-class DesktopController extends GetxController {
+class ExplorerController extends GetxController {
   // @ Accessors
   Payload get currentPayload => inviteRequest.value.payload;
 

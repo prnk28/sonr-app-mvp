@@ -1,3 +1,4 @@
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 
 class AuthorizeController extends GetxController {
@@ -38,7 +39,7 @@ class AuthorizeController extends GetxController {
 
     if (invite.file.single.size > 5000000) {
       // Handle Card Received
-      SonrService.session.status.listen((s) {
+      SessionService.session.status.listen((s) {
         if (s.isCompleted) {
           SonrOverlay.back();
         }

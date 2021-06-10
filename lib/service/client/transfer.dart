@@ -34,75 +34,91 @@ class TransferService extends GetxService {
 
   // @ Use Camera for Media File //
   static Future<bool> chooseCamera() async {
-    // Analytics
-    FirebaseAnalytics().logEvent(
-      name: '[TransferService]: Choose-Camera',
-      parameters: {
-        'createdAt': DateTime.now().toString(),
-        'platform': DeviceService.device.platform.toString(),
-      },
-    );
-
-    // Initialize
-    Completer<bool> completer = Completer<bool>();
-    // Move to View
-    CameraView.open(onMediaSelected: (SonrFile file) async {
-      var result = await _handlePayload(Payload.MEDIA, file: file);
-
+    if (DeviceService.isMobile) {
       // Analytics
       FirebaseAnalytics().logEvent(
-        name: '[TransferService]: Confirmed-Camera',
+        name: '[TransferService]: Choose-Camera',
         parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
         },
       );
 
-      // Complete Result
-      completer.complete(result);
-    });
-    return completer.future;
+      // Initialize
+      Completer<bool> completer = Completer<bool>();
+      // Move to View
+      CameraView.open(onMediaSelected: (SonrFile file) async {
+        var result = await _handlePayload(Payload.MEDIA, file: file);
+
+        // Analytics
+        FirebaseAnalytics().logEvent(
+          name: '[TransferService]: Confirmed-Camera',
+          parameters: {
+            'createdAt': DateTime.now().toString(),
+            'platform': DeviceService.device.platform.toString(),
+          },
+        );
+
+        // Complete Result
+        completer.complete(result);
+      });
+
+      return completer.future;
+    }
+    return false;
   }
 
   // @ Set User Contact for Transfer //
   static Future<bool> chooseContact() async {
-    // Analytics
-    FirebaseAnalytics().logEvent(
-      name: '[TransferService]: Choose-Contact',
-      parameters: {
-        'createdAt': DateTime.now().toString(),
-        'platform': DeviceService.device.platform.toString(),
-      },
-    );
+    if (DeviceService.isMobile) {
+      // Analytics
+      if (DeviceService.isMobile) {
+        FirebaseAnalytics().logEvent(
+          name: '[TransferService]: Choose-Contact',
+          parameters: {
+            'createdAt': DateTime.now().toString(),
+            'platform': DeviceService.device.platform.toString(),
+          },
+        );
+      }
 
-    return await _handlePayload(Payload.CONTACT);
+      return await _handlePayload(Payload.CONTACT);
+    }
+    return false;
   }
 
   // @ Select Media File //
   static Future<bool> chooseMedia({bool withRedirect = true}) async {
     // Analytics
-    FirebaseAnalytics().logEvent(
-      name: '[TransferService]: Choose-Media',
-      parameters: {
-        'createdAt': DateTime.now().toString(),
-        'platform': DeviceService.device.platform.toString(),
-      },
-    );
-
-    // Load Picker
-    var result = await _handleSelectRequest(FileType.media);
-
-    // Check File
-    if (result != null) {
-      // Analytics
+    if (DeviceService.isMobile) {
       FirebaseAnalytics().logEvent(
-        name: '[TransferService]: Confirm-Media',
+        name: '[TransferService]: Choose-Media',
         parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
         },
       );
+    }
+    // Load Picker
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.media,
+      withData: true,
+      allowMultiple: true,
+      allowCompression: true,
+    );
 
+    // Check File
+    if (result != null) {
+      // Analytics
+      if (DeviceService.isMobile) {
+        FirebaseAnalytics().logEvent(
+          name: '[TransferService]: Confirm-Media',
+          parameters: {
+            'createdAt': DateTime.now().toString(),
+            'platform': DeviceService.device.platform.toString(),
+          },
+        );
+      }
       // Convert To File
       var file = result.toSonrFile(payload: Payload.MEDIA);
       return await _handlePayload(file.payload, file: file);
@@ -113,31 +129,40 @@ class TransferService extends GetxService {
   // @ Select Other File //
   static Future<bool> chooseFile() async {
     // Analytics
-    FirebaseAnalytics().logEvent(
-      name: '[TransferService]: Choose-File',
-      parameters: {
-        'createdAt': DateTime.now().toString(),
-        'platform': DeviceService.device.platform.toString(),
-      },
-    );
-
-    // Load Picker
-    var result = await _handleSelectRequest(FileType.any);
-
-    // Check File
-    if (result != null) {
-      // Analytics
+    if (DeviceService.isMobile) {
       FirebaseAnalytics().logEvent(
-        name: '[TransferService]: Confirm-File',
+        name: '[TransferService]: Choose-File',
         parameters: {
           'createdAt': DateTime.now().toString(),
           'platform': DeviceService.device.platform.toString(),
         },
       );
+    }
+    // Load Picker
+    if (DeviceService.isMobile) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+      if (result != null) {
+        // Analytics
+        if (DeviceService.isMobile) {
+          FirebaseAnalytics().logEvent(
+            name: '[TransferService]: Confirm-File',
+            parameters: {
+              'createdAt': DateTime.now().toString(),
+              'platform': DeviceService.device.platform.toString(),
+            },
+          );
+        }
 
-      // Confirm File
-      var file = result.toSonrFile(payload: Payload.FILE);
-      return await _handlePayload(file.payload, file: file);
+        // Confirm File
+        var file = result.toSonrFile(payload: Payload.FILE);
+        return await _handlePayload(file.payload, file: file);
+      } else {
+        var filePath = await SonrService.pickFile();
+        var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
+        if (filePath != null) {
+          return await _handlePayload(file.payload, file: file);
+        }
+      }
     }
     return false;
   }
@@ -174,7 +199,6 @@ class TransferService extends GetxService {
         'platform': DeviceService.device.platform.toString(),
       },
     );
-
     return await _handlePayload(file.payload, file: file);
   }
 
@@ -320,28 +344,5 @@ class TransferService extends GetxService {
       to._hasPayload(false);
     }
     return to._hasPayload.value;
-  }
-
-  // # Generic Method for Different File Types
-  static Future<FilePickerResult?> _handleSelectRequest(FileType type) async {
-    // @ Check if File Already Queued
-    // Check Type for Custom Files
-    if (type == FileType.any) {
-      return await FilePicker.platform.pickFiles(
-        withData: true,
-        allowMultiple: true,
-        allowCompression: true,
-      );
-    }
-
-    // For Media/Audio Files
-    else {
-      return await FilePicker.platform.pickFiles(
-        type: FileType.media,
-        withData: true,
-        allowMultiple: true,
-        allowCompression: true,
-      );
-    }
   }
 }

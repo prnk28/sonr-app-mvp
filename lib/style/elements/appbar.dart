@@ -21,21 +21,28 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
-      child: NavigationToolbar(
-        centerMiddle: centerTitle,
-        leading: leading,
-        trailing: _buildTrailing(),
-        middle: AnimatedSlideSwitcher.fade(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              subtitle != null ? subtitle! : Container(),
-              title,
-            ],
+    return GestureDetector(
+      onLongPress: () {
+        if (DeviceService.isMobile) {
+          BetterFeedback.of(context)?.show(UserService.sendFeedback);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
+        child: NavigationToolbar(
+          centerMiddle: centerTitle,
+          leading: leading,
+          trailing: _buildTrailing(),
+          middle: AnimatedSlideSwitcher.fade(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                subtitle != null ? subtitle! : Container(),
+                title,
+              ],
+            ),
           ),
         ),
       ),
@@ -53,7 +60,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
 class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Appears below Subtitle with Bold Font
   final String title;
-  final void Function()? onPressed;
+  final Function() onPressed;
 
   /// Appears above Title with Light Font
   final bool isClose;
@@ -67,25 +74,33 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
-      child: NavigationToolbar(
-        centerMiddle: false,
-        leading: IconButton(
-            onPressed: onPressed,
-            icon: Icon(
-              isClose ? SonrIcons.Close : SonrIcons.Back,
-              color: SonrTheme.textColor,
-              size: 28,
-            )),
-        trailing: _buildTrailing(),
-        middle: title.toUpperCase().light(color: SonrTheme.textColor, fontSize: 24),
+    return SafeArea(
+      top: true,
+      child: GestureDetector(
+        onLongPress: () {
+          if (DeviceService.isMobile) {
+            BetterFeedback.of(context)?.show(UserService.sendFeedback);
+          }
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 14),
+          padding: EdgeInsets.only(top: 24, bottom: 24),
+          child: NavigationToolbar(
+            centerMiddle: false,
+            leading: ActionButton(
+              onPressed: onPressed,
+              iconData: isClose ? SonrIcons.Close : SonrIcons.Back,
+            ),
+            trailing: _buildTrailing(),
+            middle: title.toUpperCase().light(color: SonrTheme.textColor, fontSize: 24),
+          ),
+        ),
       ),
     );
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 32);
 
   Widget _buildTrailing() {
     return action != null ? action! : Container(width: 32, height: 32);

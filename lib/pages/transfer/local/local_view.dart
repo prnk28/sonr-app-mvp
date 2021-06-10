@@ -55,9 +55,15 @@ class _LocalEmptyView extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: EdgeInsets.all(54),
-        height: 260,
-        child: Image.asset("assets/illustrations/EmptyLobby.png"),
+        child: [
+          Image.asset(
+            'assets/illustrations/EmptyLobby.png',
+            height: Height.ratio(0.35),
+            fit: BoxFit.fitHeight,
+          ),
+          "Nobody Here..".subheading(color: Get.theme.hintColor, fontSize: 20)
+        ].column(),
+        padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
       ),
     );
   }

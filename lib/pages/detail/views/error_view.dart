@@ -17,7 +17,8 @@ class ErrorView extends StatelessWidget {
           Container(
             width: Get.width,
             height: Get.height,
-            decoration: BoxDecoration(image: DecorationImage(image: AssetImage(type.errorImageAsset), fit: BoxFit.fitHeight)),
+            decoration: BoxDecoration(color: type.errorBackgroundColor),
+            foregroundDecoration: BoxDecoration(image: DecorationImage(image: AssetImage(type.errorImageAsset), fit: BoxFit.fitHeight)),
           ),
           Container(
             padding: EdgeInsets.only(bottom: 32),

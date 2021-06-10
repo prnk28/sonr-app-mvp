@@ -28,13 +28,11 @@ class HomeActionButton extends GetView<HomeController> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 42.0),
+        padding: const EdgeInsets.only(bottom: 32.0, right: 8),
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Dashboard),
           iconData: SonrIcons.Alerts,
-          onPressed: () {
-            Get.to(ActivityPopup(), transition: Transition.downToUp);
-          },
+          onPressed: () => ActivityPopup.open(),
         ),
       );
     }

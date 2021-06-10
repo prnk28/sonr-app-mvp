@@ -21,11 +21,9 @@ class SonrService extends GetxService {
   // @ Set Properties
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
-  final Session _session = Session();
 
   // @ Static Accessors
   static Rx<Status> get status => to._status;
-  static Session get session => to._session;
 
   // @ Set References
   late Node _node;
@@ -124,6 +122,13 @@ class SonrService extends GetxService {
     }
   }
 
+  static Future<String?> pickFile() async {
+    if (status.value.hasConnection && DeviceService.isDesktop) {
+      return await to._node.pickFile();
+    }
+    return null;
+  }
+
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
     if (status.value.hasConnection) {
@@ -146,8 +151,8 @@ class SonrService extends GetxService {
     if (status.value.hasConnection) {
       // Send Invite
       to._node.invite(request);
-      to._session.outgoing(request);
-      return to._session;
+      SessionService.setOutgoing(request);
+      return SessionService.session;
     }
   }
 
@@ -155,7 +160,6 @@ class SonrService extends GetxService {
   static void respond(AuthReply request) async {
     if (status.value.hasConnection) {
       to._node.respond(request);
-      to._session.onReply(request);
     }
   }
 
@@ -204,7 +208,7 @@ class SonrService extends GetxService {
       TransferService.resetPayload();
 
       // Reset Session
-      _session.reset();
+      SessionService.reset();
     }
 
     // Logging

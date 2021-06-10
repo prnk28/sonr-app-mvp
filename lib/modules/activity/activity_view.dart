@@ -1,7 +1,14 @@
 import 'package:sonr_app/style.dart';
+import 'activity_controller.dart';
+import 'past_item.dart';
 
 /// @ Activity View
-class ActivityPopup extends StatelessWidget {
+class ActivityPopup extends GetView<ActivityController> {
+  /// Method Opens Activity Popup
+  static void open() {
+    Get.to(ActivityPopup(), transition: Transition.downToUp);
+  }
+
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -13,7 +20,7 @@ class ActivityPopup extends StatelessWidget {
         action: ActionButton(
             iconData: SonrIcons.Clear,
             onPressed: () async {
-              if (CardService.activity.length > 0) {
+              if (controller.activityLength > 0) {
                 var decision = await SonrOverlay.question(
                     title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
                 if (decision) {
@@ -23,96 +30,41 @@ class ActivityPopup extends StatelessWidget {
             }),
       ),
       body: Container(
-          child: Obx(() => CardService.activity.length > 0
-              ? ListView.builder(
-                  itemCount: CardService.activity.length,
-                  itemBuilder: (context, index) {
-                    return _ActivityListItem(item: CardService.activity[index]);
-                  })
-              : Center(
-                  child: Container(
-                    child: [Image.asset('assets/illustrations/EmptyNotif.png'), "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)].column(),
-                    padding: EdgeInsets.all(64),
-                  ),
-                ))),
+          child: Obx(
+        () => CardService.activity.length > 0 ? _ActivityListView() : _ActivityEmptyView(),
+      )),
     );
   }
 }
 
-/// @ Activity List Item
-class _ActivityListItem extends StatelessWidget {
-  final TransferActivity item;
-
-  const _ActivityListItem({Key? key, required this.item}) : super(key: key);
+// @ Helper: View for Past/Current Activity
+class _ActivityListView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
-      padding: EdgeInsets.only(bottom: 24),
-      child: Dismissible(
-        key: ValueKey(item),
-        onDismissed: (direction) => CardService.clearActivity(item),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          color: SonrColor.Critical,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: SonrIcons.Cancel.whiteWith(size: 28),
+    return Obx(() => ListView.builder(
+        itemCount: controller.activityLength.value,
+        itemBuilder: (context, index) {
+          return PastActivityItem(item: controller.pastActivities[index]);
+        }));
+  }
+}
+
+// @ Helper: View for Empty Activity
+class _ActivityEmptyView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        child: [
+          Image.asset(
+            'assets/illustrations/EmptyNotif.png',
+            height: Height.ratio(0.6),
+            fit: BoxFit.fitHeight,
           ),
-        ),
-        child: Container(
-          decoration: SonrTheme.cardDecoration,
-          child: ListTile(
-            title: _buildMessage(),
-          ),
-        ),
+          "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
+        ].column(),
+        padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
       ),
     );
-  }
-
-  Widget _buildMessage() {
-    switch (item.activity) {
-      case ActivityType.Deleted:
-        return [
-          item.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(),
-          item.activity.value.paragraph(color: SonrColor.Critical),
-          _description(item).paragraph()
-        ].row();
-      case ActivityType.Shared:
-        return [
-          item.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(),
-          item.activity.value.light(color: SonrColor.Primary),
-          _description(item).paragraph()
-        ].row();
-      case ActivityType.Received:
-        return [
-          item.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(),
-          item.activity.value.paragraph(color: SonrColor.Secondary),
-          _description(item).paragraph()
-        ].row();
-      default:
-        return [
-          item.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(),
-          item.activity.value.paragraph(color: SonrColor.Grey),
-          _description(item).paragraph()
-        ].row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
-    }
-  }
-
-  String _description(TransferActivity activity) {
-    if (activity.payload == Payload.FILES) {
-      return " some Files"; //+ " from ${card.owner.firstName}";
-    } else if (activity.payload == Payload.FILE || activity.payload == Payload.MEDIA) {
-      return " a " + activity.mime.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";
-    } else {
-      if (activity.payload == Payload.CONTACT) {
-        return " a Contact"; // + " from ${card.owner.firstName}";
-      }
-      return " a Link"; // + " from ${card.owner.firstName}";
-    }
   }
 }

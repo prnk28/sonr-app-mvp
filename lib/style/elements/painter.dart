@@ -31,10 +31,8 @@ class BlurredBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-      child: Positioned.fill(
-        child: Container(
-          child: child,
-        ),
+      child: Container(
+        child: child,
       ),
     );
   }

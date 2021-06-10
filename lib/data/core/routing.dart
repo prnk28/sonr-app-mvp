@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/pages/explorer/explorer_page.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
@@ -13,10 +14,14 @@ class Route {
         GetPage(
             name: '/home',
             page: () {
-              Get.find<SonrService>().connect();
-              return HomePage();
+              if (DeviceService.isMobile) {
+                Get.find<SonrService>().connect();
+                return HomePage();
+              } else {
+                return ExplorerPage();
+              }
             },
-            binding: HomeBinding(),
+            binding: DeviceService.isMobile ? HomeBinding() : ExplorerBinding(),
             transition: Transition.fadeIn,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),

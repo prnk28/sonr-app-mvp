@@ -13,6 +13,8 @@ github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAE
 github.com/PuerkitoBio/goquery v1.6.1 h1:FgjbQZKl5HTmcn4sKBgvx8vv63nhyhIpv7lJpFGCWpk=
 github.com/PuerkitoBio/goquery v1.6.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
+github.com/TheTitanrain/w32 v0.0.0-20180517000239-4f5cfb03fabf h1:FPsprx82rdrX2jiKyS17BH6IrTmUBYqZa/CXT4uvb+I=
+github.com/TheTitanrain/w32 v0.0.0-20180517000239-4f5cfb03fabf/go.mod h1:peYoMncQljjNS6tZwI9WVyQB3qZS6u79/N3mBOcnd3I=
 github.com/Xuanwo/go-locale v1.0.0 h1:oqC32Kyiu2XZq+fxtwEg0mWiv9WyDhyHu+sT5cDkgME=
 github.com/Xuanwo/go-locale v1.0.0/go.mod h1:kB9tcLfr4Sp+ByIE9SE7vbUkXkGQqel2XH3EHpL0haA=
 github.com/adrg/xdg v0.2.1 h1:VSVdnH7cQ7V+B33qSJHTCRlNgra1607Q8PzEmnvb2Ic=
@@ -637,8 +639,10 @@ github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1
 github.com/smartystreets/goconvey v1.6.4 h1:fv0U8FUIMPNf1L9lnHLvLhgicrIVChEkdzIKYqbNC9s=
 github.com/smartystreets/goconvey v1.6.4/go.mod h1:syvi0/a8iFYH4r/RixwvyeAJjdLS9QV7WQ/tjFTllLA=
 github.com/smola/gocompat v0.2.0/go.mod h1:1B0MlxbmoZNo3h8guHp8HztB3BSYR5itql9qtVc0ypY=
-github.com/sonr-io/plugin/go v0.9.14-0.20210609235712-68e4ccf81141 h1:IaSZDRcgizPGNg55WFBwZKVqrbhOl6PEr3eU3SHoSJk=
-github.com/sonr-io/plugin/go v0.9.14-0.20210609235712-68e4ccf81141/go.mod h1:ATubbIePqZYclfQr1sfeOqxLAGnNRN5fKaLnHnOQ1WE=
+github.com/sonr-io/core v0.9.4 h1:ETOOKC3dG7BGd5pmsmQpN0sJXz267NKv5iFvQWoAyyc=
+github.com/sonr-io/core v0.9.4/go.mod h1:0+gUxlPFk27cuTAjcJ7fECFeftfR1fL2ZVyXshQckqY=
+github.com/sonr-io/plugin/go v0.9.17 h1:P/19kPZ+2+NiiYxI4ed8eEm69XLMfK1AWln9jKVqzYw=
+github.com/sonr-io/plugin/go v0.9.17/go.mod h1:AQseHTNWm3eBJe3QJjIqPdsmc21WAWr+kK5ktsYmlPQ=
 github.com/sonr-io/systray/go v0.5.1 h1:YTy87VE5e5V6x/50efwqJUpVElFB/AvQxwkgPGdNHnQ=
 github.com/sonr-io/systray/go v0.5.1/go.mod h1:o3KU3MsfKILozJFDcgxfpbI3OO8GYN9bPxvMFJf9heI=
 github.com/spacemonkeygo/monkit/v3 v3.0.4/go.mod h1:JcK1pCbReQsOsMKF/POFSZCq7drXFybgGmbc27tuwes=
@@ -658,6 +662,8 @@ github.com/spf13/cobra v0.0.5/go.mod h1:3K3wKZymM7VvHMDS9+Akkh4K60UwM26emMESw8tL
 github.com/spf13/jwalterweatherman v1.0.0/go.mod h1:cQK4TGJAtQXfYWX+Ddv3mKDzgVb68N+wFjFa4jdeBTo=
 github.com/spf13/pflag v1.0.3/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=
 github.com/spf13/viper v1.3.2/go.mod h1:ZiWeW+zYFKm7srdB9IoDzzZXaJaI5eL9QjNiN/DMA2s=
+github.com/sqweek/dialog v0.0.0-20200911184034-8a3d98e8211d h1:Chay1rwJnXxI27H+pzu7P81BKf647un9GOoRPTdXN18=
+github.com/sqweek/dialog v0.0.0-20200911184034-8a3d98e8211d/go.mod h1:/qNPSY91qTz/8TgHEMioAUc6q7+3SOybeKczHMXFcXw=
 github.com/src-d/envconfig v1.0.0/go.mod h1:Q9YQZ7BKITldTBnoxsE5gOeB5y66RyPXeue/R4aaNBc=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

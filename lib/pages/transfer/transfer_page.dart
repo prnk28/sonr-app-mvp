@@ -17,7 +17,6 @@ class TransferScreen extends GetView<TransferController> {
           gradient: SonrGradients.PlumBath,
           appBar: DetailAppBar(
             onPressed: () => controller.closeToHome(),
-            // action: _RemoteActionButton(),
             title: "Transfer",
             isClose: true,
           ),

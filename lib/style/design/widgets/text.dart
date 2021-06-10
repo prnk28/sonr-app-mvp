@@ -55,7 +55,7 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
 extension DisplayTextUtils on String {
   /// Hero
   DisplayText hero({
-    Color color = SonrColor.Black,
+    Color color = SonrColor.White,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,

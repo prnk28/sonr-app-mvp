@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/pages/detail/items/contact/tile/tile_controller.dart';
@@ -7,7 +8,7 @@ import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart'
 import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
-import 'package:sonr_app/pages/home/views/desktop/desktop_controller.dart';
+import 'package:sonr_app/pages/explorer/explorer_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
@@ -36,15 +37,20 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<HomeController>(HomeController(), permanent: true);
 
-    // Place Desktop Controller
-    if (DeviceService.isDesktop) {
-      Get.put<DesktopController>(DesktopController(), permanent: true);
-    }
+    // Subsidary Controllers
     Get.put(ShareController(), permanent: true);
+    Get.put(ActivityController(), permanent: true);
     Get.put<DashboardController>(DashboardController(), permanent: true);
     Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.put<EditorController>(EditorController(), permanent: true);
     Get.create<TileController>(() => TileController());
+  }
+}
+
+class ExplorerBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<ExplorerController>(ExplorerController(), permanent: true);
   }
 }
 

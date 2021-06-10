@@ -1,6 +1,5 @@
 import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/views/desktop/explorer_view.dart';
 import 'package:sonr_app/style.dart';
 import 'views/dashboard/dashboard_view.dart';
 import 'home_controller.dart';
@@ -13,36 +12,18 @@ class HomePage extends GetView<HomeController> {
     return SonrScaffold(
       gradient: SonrGradients.PlumBath,
       resizeToAvoidBottomInset: false,
-      floatingAction: DeviceService.isMobile ? ShareButton() : Container(),
-      bottomNavigationBar: DeviceService.isMobile ? HomeBottomNavBar() : Container(),
+      floatingAction: ShareButton(),
+      bottomNavigationBar: HomeBottomNavBar(),
       appBar: HomeAppBar(),
-      body: DeviceService.isMobile ? _HomeMobile() : _HomeDesktop(),
+      body: Container(
+          child: TabBarView(controller: controller.tabController, children: [
+        DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
+        ProfileView(key: ValueKey<HomeView>(HomeView.Contact)),
+      ])),
     );
   }
 }
 
-/// @ Class for HomeView Body when Mobile Platform
-class _HomeMobile extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: TabBarView(controller: controller.tabController, children: [
-      DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-      ProfileView(key: ValueKey<HomeView>(HomeView.Contact)),
-    ]));
-  }
-}
-
-/// @ Class For HomeView Body when Desktop Platform
-class _HomeDesktop extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlideSwitcher.fade(
-          duration: 1.seconds,
-          child: Container(width: 1200, height: 800, child: ExplorerDesktopView(key: ValueKey<HomeView>(controller.view.value))),
-        ));
-  }
-}
 
 /// @ Home Tab Bar Navigation
 class HomeBottomNavBar extends GetView<HomeController> {
