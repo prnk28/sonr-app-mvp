@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
 import 'share.dart';
 
+const K_ROW_BUTTON_SIZE = 75.0;
+const K_ROW_CIRCLE_SIZE = 95.0;
+
 class ShareButton extends StatelessWidget {
   ShareButton() : super(key: GlobalKey());
   @override
@@ -71,6 +74,9 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: ImageButton(
         label: 'Camera',
+        imageWidth: K_ROW_BUTTON_SIZE,
+        imageHeight: K_ROW_BUTTON_SIZE,
+        circleSize: K_ROW_CIRCLE_SIZE,
         onPressed: controller.chooseCamera,
         path: 'assets/images/Camera.png',
       ),
@@ -88,6 +94,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
+                  imageWidth: K_ROW_BUTTON_SIZE,
+        imageHeight: K_ROW_BUTTON_SIZE,
+        circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
           path: 'assets/images/Folder.png',
         ));
@@ -104,6 +113,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
+                  imageWidth: K_ROW_BUTTON_SIZE,
+        imageHeight: K_ROW_BUTTON_SIZE,
+        circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
           path: 'assets/images/Contact.png',
         ));

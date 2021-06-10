@@ -21,11 +21,15 @@ class ImageButton extends StatelessWidget {
   /// Button Image Height
   final double imageHeight;
 
+  /// Circle Size
+  final double circleSize;
+
   const ImageButton(
       {Key? key,
       required this.onPressed,
       required this.path,
       required this.label,
+      this.circleSize = 110,
       this.imageFit = BoxFit.contain,
       this.imageWidth = 100,
       this.imageHeight = 100})
@@ -55,8 +59,8 @@ class ImageButton extends StatelessWidget {
                       AnimatedScale(
                         scale: isPressed.value ? 0.9 : 1.0,
                         child: Container(
-                          width: 110,
-                          height: 110,
+                          width: circleSize,
+                          height: circleSize,
                           decoration: BoxDecoration(
                             color: SonrTheme.foregroundColor,
                             shape: BoxShape.circle,

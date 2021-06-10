@@ -5,6 +5,8 @@ export 'package:sonr_app/pages/detail/items/url/card_item.dart';
 export 'package:sonr_app/pages/detail/items/url/list_item.dart';
 export 'package:sonr_app/pages/detail/items/post/file_item.dart';
 
+import 'package:sonr_app/style.dart';
+
 enum DetailPageType {
   PostsList,
   DetailContact,
@@ -62,6 +64,21 @@ extension DetailPageTypeUtils on DetailPageType {
         return basePath + "MediaPerm.png";
       default:
         return "";
+    }
+  }
+
+  Color get errorBackgroundColor {
+    switch (this) {
+      case DetailPageType.ErrorEmptyContacts:
+        return Colors.white;
+      case DetailPageType.ErrorEmptyFiles:
+        return Colors.white;
+      case DetailPageType.ErrorEmptyLinks:
+        return Color.fromRGBO(160, 179, 192, 1.0);
+      case DetailPageType.ErrorEmptyMedia:
+        return Color.fromRGBO(240, 240, 244, 1.0);
+      default:
+        return SonrTheme.backgroundColor;
     }
   }
 }
