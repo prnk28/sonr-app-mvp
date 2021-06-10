@@ -639,10 +639,10 @@ github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1
 github.com/smartystreets/goconvey v1.6.4 h1:fv0U8FUIMPNf1L9lnHLvLhgicrIVChEkdzIKYqbNC9s=
 github.com/smartystreets/goconvey v1.6.4/go.mod h1:syvi0/a8iFYH4r/RixwvyeAJjdLS9QV7WQ/tjFTllLA=
 github.com/smola/gocompat v0.2.0/go.mod h1:1B0MlxbmoZNo3h8guHp8HztB3BSYR5itql9qtVc0ypY=
-github.com/sonr-io/core v0.9.3 h1:9IjqXSJVS66dKG/U9lxoWkmAuzKYIDzvZTE281sHUqg=
-github.com/sonr-io/core v0.9.3/go.mod h1:0+gUxlPFk27cuTAjcJ7fECFeftfR1fL2ZVyXshQckqY=
-github.com/sonr-io/plugin/go v0.9.16 h1:8TuhQHJzVlvtCOmTLwJ7hEYaeBCp8AfOkN1GSOzDrVU=
-github.com/sonr-io/plugin/go v0.9.16/go.mod h1:3KFSmBaoZlkeYvlz5oSTVnXy+L1KykTdmue6+5j8Quo=
+github.com/sonr-io/core v0.9.4 h1:ETOOKC3dG7BGd5pmsmQpN0sJXz267NKv5iFvQWoAyyc=
+github.com/sonr-io/core v0.9.4/go.mod h1:0+gUxlPFk27cuTAjcJ7fECFeftfR1fL2ZVyXshQckqY=
+github.com/sonr-io/plugin/go v0.9.17 h1:P/19kPZ+2+NiiYxI4ed8eEm69XLMfK1AWln9jKVqzYw=
+github.com/sonr-io/plugin/go v0.9.17/go.mod h1:AQseHTNWm3eBJe3QJjIqPdsmc21WAWr+kK5ktsYmlPQ=
 github.com/sonr-io/systray/go v0.5.1 h1:YTy87VE5e5V6x/50efwqJUpVElFB/AvQxwkgPGdNHnQ=
 github.com/sonr-io/systray/go v0.5.1/go.mod h1:o3KU3MsfKILozJFDcgxfpbI3OO8GYN9bPxvMFJf9heI=
 github.com/spacemonkeygo/monkit/v3 v3.0.4/go.mod h1:JcK1pCbReQsOsMKF/POFSZCq7drXFybgGmbc27tuwes=
