@@ -93,8 +93,8 @@ dependencies:
     git: https://github.com/sonr-io/systray
 
   sonr_plugin:
-    #git: git@github.com:sonr-io/plugin.git
-    path: ../plugin/ #-- Uncomment for Local Development
+    git: git@github.com:sonr-io/plugin.git
+    #path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0
