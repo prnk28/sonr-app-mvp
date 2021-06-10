@@ -9,6 +9,7 @@ class NearbyListView extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: SonrTheme.foregroundColor,
       width: 400,
       height: 700,
       child: Column(
@@ -62,9 +63,15 @@ class _LocalEmptyView extends GetView<ExplorerController> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: EdgeInsets.all(54),
-        height: 260,
-        child: Image.asset("assets/illustrations/EmptyLobby.png"),
+        child: [
+          Image.asset(
+            'assets/illustrations/EmptyLobby.png',
+            height: Height.ratio(0.6),
+            fit: BoxFit.fitHeight,
+          ),
+          "Nobody Here..".subheading(color: Get.theme.hintColor, fontSize: 20)
+        ].column(),
+        padding: EdgeInsets.all(64),
       ),
     );
   }
