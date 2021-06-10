@@ -2,10 +2,10 @@ import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
 import 'activity_controller.dart';
 
-class ActivityListItem extends GetView<ActivityController> {
+class PastActivityItem extends GetView<ActivityController> {
   final TransferActivity item;
 
-  const ActivityListItem({Key? key, required this.item}) : super(key: key);
+  const PastActivityItem({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

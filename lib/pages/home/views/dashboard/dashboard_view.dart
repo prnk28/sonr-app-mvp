@@ -50,7 +50,7 @@ class DashboardView extends GetView<DashboardController> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ImageButton(
                           path: TransferItemsType.Media.imagePath(),
@@ -79,7 +79,7 @@ class DashboardView extends GetView<DashboardController> {
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ImageButton(
                           path: TransferItemsType.Contacts.imagePath(),
