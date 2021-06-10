@@ -8,7 +8,7 @@ import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart'
 import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
-import 'package:sonr_app/pages/home/views/explorer/explorer_controller.dart';
+import 'package:sonr_app/pages/explorer/explorer_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
@@ -37,11 +37,6 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<HomeController>(HomeController(), permanent: true);
 
-    // Place Desktop Controller
-    if (DeviceService.isDesktop) {
-      Get.put<ExplorerController>(ExplorerController(), permanent: true);
-    }
-
     // Subsidary Controllers
     Get.put(ShareController(), permanent: true);
     Get.put(ActivityController(), permanent: true);
@@ -49,6 +44,13 @@ class HomeBinding implements Bindings {
     Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.put<EditorController>(EditorController(), permanent: true);
     Get.create<TileController>(() => TileController());
+  }
+}
+
+class ExplorerBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<ExplorerController>(ExplorerController(), permanent: true);
   }
 }
 

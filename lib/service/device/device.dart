@@ -152,7 +152,7 @@ class DeviceService extends GetxService {
 
         // Connect to Network
         SonrService.to.connect();
-        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        await Get.offNamed("/explorer");
       }
       // Register Mobile
       else {

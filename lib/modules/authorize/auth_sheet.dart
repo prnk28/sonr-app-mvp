@@ -40,6 +40,7 @@ class _AuthInviteSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FadeInUpBig(
+      duration: 500.milliseconds,
       child: Container(
           padding: EdgeInsets.only(left: 8, right: 8),
           decoration: SonrTheme.cardDecoration,

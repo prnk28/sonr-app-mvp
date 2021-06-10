@@ -55,7 +55,14 @@ class _ActivityEmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        child: [Image.asset('assets/illustrations/EmptyNotif.png'), "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)].column(),
+        child: [
+          Image.asset(
+            'assets/illustrations/EmptyNotif.png',
+            height: Height.ratio(0.6),
+            fit: BoxFit.fitHeight,
+          ),
+          "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
+        ].column(),
         padding: EdgeInsets.all(64),
       ),
     );

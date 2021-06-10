@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/style.dart';
-import 'explorer_controller.dart';
+import '../explorer_controller.dart';
 
-class ExplorerDesktopView extends GetView<ExplorerController> {
-  ExplorerDesktopView({Key? key}) : super(key: key);
+class NearbyListView extends GetView<ExplorerController> {
+  NearbyListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Get.width,
-      height: Get.height,
+      width: 400,
+      height: 700,
       child: Column(
         children: [
           // Label
