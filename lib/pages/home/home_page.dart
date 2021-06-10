@@ -1,6 +1,6 @@
 import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/views/desktop/explorer_view.dart';
+import 'package:sonr_app/pages/home/views/explorer/explorer_view.dart';
 import 'package:sonr_app/style.dart';
 import 'views/dashboard/dashboard_view.dart';
 import 'home_controller.dart';

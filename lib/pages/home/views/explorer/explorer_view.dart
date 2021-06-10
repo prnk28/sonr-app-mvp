@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/style.dart';
-import 'desktop_controller.dart';
+import 'explorer_controller.dart';
 
-class ExplorerDesktopView extends GetView<DesktopController> {
+class ExplorerDesktopView extends GetView<ExplorerController> {
   ExplorerDesktopView({Key? key}) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class ExplorerDesktopView extends GetView<DesktopController> {
 }
 
 /// @ LocalLobbyView:  When Lobby is NOT Empty
-class _LocalLobbyView extends GetView<DesktopController> {
+class _LocalLobbyView extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
     return
@@ -57,7 +57,7 @@ class _LocalLobbyView extends GetView<DesktopController> {
 }
 
 /// @ LobbyEmptyView: When Lobby is Empty
-class _LocalEmptyView extends GetView<DesktopController> {
+class _LocalEmptyView extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
     return Center(
