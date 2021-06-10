@@ -182,7 +182,6 @@ class CardService extends GetxService {
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
     await to._database.deleteCardFromID(id);
-    // await to._database.addActivity(ActivityType.Deleted, _TransferFromItem(card));
     _refreshCount();
   }
 
