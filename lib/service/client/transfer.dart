@@ -139,22 +139,30 @@ class TransferService extends GetxService {
       );
     }
     // Load Picker
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
-    if (result != null) {
-      // Analytics
-      if (DeviceService.isMobile) {
-        FirebaseAnalytics().logEvent(
-          name: '[TransferService]: Confirm-File',
-          parameters: {
-            'createdAt': DateTime.now().toString(),
-            'platform': DeviceService.device.platform.toString(),
-          },
-        );
-      }
+    if (DeviceService.isMobile) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+      if (result != null) {
+        // Analytics
+        if (DeviceService.isMobile) {
+          FirebaseAnalytics().logEvent(
+            name: '[TransferService]: Confirm-File',
+            parameters: {
+              'createdAt': DateTime.now().toString(),
+              'platform': DeviceService.device.platform.toString(),
+            },
+          );
+        }
 
-      // Confirm File
-      var file = result.toSonrFile(payload: Payload.FILE);
-      return await _handlePayload(file.payload, file: file);
+        // Confirm File
+        var file = result.toSonrFile(payload: Payload.FILE);
+        return await _handlePayload(file.payload, file: file);
+      } else {
+        var filePath = await SonrService.pickFile();
+        var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
+        if (filePath != null) {
+          return await _handlePayload(file.payload, file: file);
+        }
+      }
     }
     return false;
   }

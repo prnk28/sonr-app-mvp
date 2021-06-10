@@ -122,6 +122,13 @@ class SonrService extends GetxService {
     }
   }
 
+  static Future<String?> pickFile() async {
+    if (status.value.hasConnection && DeviceService.isDesktop) {
+      return await to._node.pickFile();
+    }
+    return null;
+  }
+
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
     if (status.value.hasConnection) {
