@@ -12,5 +12,3 @@ require (
 	github.com/sonr-io/plugin/go v0.9.16
 	github.com/sonr-io/systray/go v0.5.1
 )
-
-//replace github.com/sonr-io/core => /Users/prad/Sonr/core
