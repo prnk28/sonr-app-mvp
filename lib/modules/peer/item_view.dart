@@ -10,7 +10,7 @@ class PeerListItem extends GetWidget<PeerController> {
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer, setAnimated: false);
-    return Column(
+    return Padding(padding: EdgeInsets.all(8), child: Column(
       children: [
         Container(
           decoration: SonrTheme.cardDecoration,
@@ -21,9 +21,8 @@ class PeerListItem extends GetWidget<PeerController> {
             subtitle: _buildContent(),
           ),
         ),
-        Padding(padding: EdgeInsets.all(8))
       ],
-    );
+    ));
   }
 
   Widget _buildTitle() {
@@ -49,6 +48,7 @@ class PeerListItem extends GetWidget<PeerController> {
     return Padding(
       padding: EdgeInsets.only(right: 16, top: 24, bottom: 8),
       child: Container(
+        alignment: Alignment.center,
         child: ColorButton.primary(
           onPressed: () {
             TransferService.chooseFile().then((value) {

@@ -74,9 +74,9 @@ extension DetailPageTypeUtils on DetailPageType {
       case DetailPageType.ErrorEmptyFiles:
         return Colors.white;
       case DetailPageType.ErrorEmptyLinks:
-        return Color.fromRGBO(160, 179, 192, 1.0);
+        return Color.fromRGBO(159, 177, 192, 1.0);
       case DetailPageType.ErrorEmptyMedia:
-        return Color.fromRGBO(240, 240, 244, 1.0);
+        return Color.fromRGBO(240, 244, 244, 1.0);
       default:
         return SonrTheme.backgroundColor;
     }
