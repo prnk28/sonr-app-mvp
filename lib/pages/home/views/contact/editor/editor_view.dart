@@ -10,8 +10,9 @@ class EditorView extends GetView<EditorController> {
         appBar: DetailAppBar(
           onPressed: controller.handleLeading,
           title: controller.title.value,
+          isClose: true,
         ),
-        body:  _buildView(controller.status.value)));
+        body: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -24,17 +25,6 @@ class EditorView extends GetView<EditorController> {
     else if (status == EditorFieldStatus.FieldPhone) {
       return EditPhoneView(key: ValueKey<EditorFieldStatus>(EditorFieldStatus.FieldPhone));
     }
-
-    // TODO: Edit Addresses
-    // else if (status == EditorFieldStatus.FieldAddresses) {
-    //   return EditNameView(key: ValueKey<EditorFieldStatus>(EditorFieldStatus.FieldName));
-    // }
-
-    // TODO: Edit Gender
-    // else if (status == EditorFieldStatus.FieldGender) {
-    //   return EditNameView(key: ValueKey<EditorFieldStatus>(EditorFieldStatus.FieldName));
-    // }
-
     // Default View
     else {
       return GeneralEditorView();

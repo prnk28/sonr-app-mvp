@@ -1,4 +1,3 @@
-
 import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/pages/detail/items/contact/tile/tile_item.dart';
 import 'package:sonr_app/style.dart';
@@ -10,7 +9,10 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-        decoration: SonrTheme.cardDecoration, padding: EdgeInsets.all(8), margin: EdgeInsets.only(left:24, right: 24, bottom: 56), child: _buildView(controller.status.value)));
+        decoration: SonrTheme.cardDecoration,
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.only(left: 24, right: 24, bottom: 56),
+        child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -24,16 +26,6 @@ class ProfileView extends GetView<ProfileController> {
     else if (status == ProfileViewStatus.AddSocial) {
       return AddTileView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddSocial));
     }
-
-    // TODO: Edit Addresses
-    // else if (status == ProfileViewStatus.FieldAddresses) {
-    //   return EditNameView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.FieldName));
-    // }
-
-    // TODO: Edit Gender
-    // else if (status == ProfileViewStatus.FieldGender) {
-    //   return EditNameView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.FieldName));
-    // }
 
     // Default View
     else {
@@ -50,7 +42,7 @@ class _DefaultProfileView extends GetView<ProfileController> {
       primary: true,
       slivers: [
         // @ Builds Profile Header
-        SliverToBoxAdapter(child:Center(child: ProfileAvatarField())),
+        SliverToBoxAdapter(child: Center(child: ProfileAvatarField())),
         SliverToBoxAdapter(child: _ProfileInfoView()),
         SliverPadding(padding: EdgeInsets.all(14)),
 
@@ -85,13 +77,16 @@ class _ProfileInfoView extends GetView<ProfileController> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-                    // First/Last Name
-  UserService.contact.value.fullName.subheading(color: SonrTheme.textColor),
+          // First/Last Name
+          UserService.contact.value.fullName.subheading(color: SonrTheme.textColor),
 
           // Username
-          ["${UserService.contact.value.sName}".light(color: SonrTheme.textColor), ".snr/".light(color: SonrTheme.greyColor),
-          Spacer(), _ProfileContactButtons(),].row(),
-
+          [
+            "${UserService.contact.value.sName}".light(color: SonrTheme.textColor),
+            ".snr/".light(color: SonrTheme.greyColor),
+            Spacer(),
+            _ProfileContactButtons(),
+          ].row(),
 
           Padding(padding: EdgeInsets.all(12)),
           // Bio/ LastTweet

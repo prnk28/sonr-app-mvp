@@ -82,6 +82,7 @@ class _ActionIconButton extends StatelessWidget {
               child: AnimatedScale(
                 scale: isPressed.value ? 1.2 : 1.0,
                 child: Container(
+                  constraints: BoxConstraints.tight(Size(40, 40)),
                   width: 40,
                   height: 40,
                   alignment: Alignment.center,
