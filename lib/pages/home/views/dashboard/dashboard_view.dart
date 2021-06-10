@@ -50,10 +50,11 @@ class DashboardView extends GetView<DashboardController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ShapeButton(
+                      ImageButton(
                         path: TransferItemsType.Media.imagePath(),
                         label: TransferItemsType.Media.name(),
-                        fit: BoxFit.fitWidth,
+                        imageFit: BoxFit.fitWidth,
+                        imageWidth: 130,
                         onPressed: () {
                           if (TransferItemsType.Media.count() > 0) {
                             Details.toPostsList(TransferItemsType.Media);
@@ -62,7 +63,7 @@ class DashboardView extends GetView<DashboardController> {
                           }
                         },
                       ),
-                      ShapeButton(
+                      ImageButton(
                         path: TransferItemsType.Files.imagePath(),
                         label: TransferItemsType.Files.name(),
                         onPressed: () {
@@ -78,7 +79,7 @@ class DashboardView extends GetView<DashboardController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ShapeButton(
+                      ImageButton(
                         path: TransferItemsType.Contacts.imagePath(),
                         label: TransferItemsType.Contacts.name(),
                         onPressed: () {
@@ -89,8 +90,10 @@ class DashboardView extends GetView<DashboardController> {
                           }
                         },
                       ),
-                      ShapeButton(
+                      ImageButton(
                         path: TransferItemsType.Links.imagePath(),
+                        imageWidth: 90,
+                        imageHeight: 90,
                         label: TransferItemsType.Links.name(),
                         onPressed: () {
                           if (TransferItemsType.Links.count() > 0) {

@@ -2,7 +2,7 @@ import 'package:sonr_app/style.dart';
 
 import 'utility.dart';
 
-class ShapeButton extends StatelessWidget {
+class ImageButton extends StatelessWidget {
   /// Function called on Tap Up
   final Function onPressed;
 
@@ -12,10 +12,24 @@ class ShapeButton extends StatelessWidget {
   /// String for Text Below Button
   final String label;
 
-  /// F
-  final BoxFit fit;
+  /// Current Image Fit
+  final BoxFit imageFit;
 
-  const ShapeButton({Key? key, required this.onPressed, required this.path, required this.label, this.fit = BoxFit.contain}) : super(key: key);
+  /// Button Image Width
+  final double imageWidth;
+
+  /// Button Image Height
+  final double imageHeight;
+
+  const ImageButton(
+      {Key? key,
+      required this.onPressed,
+      required this.path,
+      required this.label,
+      this.imageFit = BoxFit.contain,
+      this.imageWidth = 100,
+      this.imageHeight = 100})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,8 +55,8 @@ class ShapeButton extends StatelessWidget {
                       AnimatedScale(
                         scale: isPressed.value ? 0.9 : 1.0,
                         child: Container(
-                          width: 100,
-                          height: 100,
+                          width: 110,
+                          height: 110,
                           decoration: BoxDecoration(
                             color: SonrTheme.foregroundColor,
                             shape: BoxShape.circle,
@@ -53,11 +67,11 @@ class ShapeButton extends StatelessWidget {
                       AnimatedScale(
                         scale: isPressed.value ? 1.1 : 1.0,
                         child: Container(
-                          width: 100,
-                          height: 100,
+                          width: imageWidth,
+                          height: imageHeight,
                           child: Image.asset(
                             path,
-                            fit: fit,
+                            fit: imageFit,
                           ),
                         ),
                       )
