@@ -183,7 +183,6 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
       child: Container(
         decoration: SonrTheme.cardDecoration,
         margin: EdgeInsets.symmetric(horizontal: 16),
-        height: Get.height / 3 + 50,
         child: Container(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             title.heading(),
@@ -196,16 +195,14 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
             Padding(padding: EdgeInsets.all(4)),
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               // Decline Button
-              Container(
-                padding: EdgeInsets.only(left: 32),
-                child: TextButton(
-                    onPressed: () {
-                      onDecision(false);
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    child: declineTitle.paragraph(color: SonrColor.Critical)),
+              ColorButton.neutral(
+                onPressed: () {
+                  onDecision(false);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                text: declineTitle,
               ),
               // Accept Button
               ColorButton.primary(
