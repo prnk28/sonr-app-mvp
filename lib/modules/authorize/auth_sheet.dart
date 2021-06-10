@@ -39,33 +39,35 @@ class _AuthInviteSheet extends StatelessWidget {
   const _AuthInviteSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(left: 8, right: 8),
-        decoration: SonrTheme.cardDecoration,
-        height: 460,
-        margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
-        child: Column(
-          children: [
-            _AuthInviteFileHeader(
-              file: invite.file,
-              payload: invite.payload,
-              profile: invite.from.profile,
-            ),
-            _buildView(),
-            Divider(
-              color: SonrTheme.separatorColor,
-            ),
-            ColorButton.primary(
-              onPressed: () {
-                CardService.handleInviteResponse(true, invite);
-                Sheet.close();
-              },
-              text: "Accept",
-              icon: SonrIcons.Check,
-              margin: EdgeInsets.symmetric(horizontal: 54),
-            ),
-          ],
-        ));
+    return FadeInUpBig(
+      child: Container(
+          padding: EdgeInsets.only(left: 8, right: 8),
+          decoration: SonrTheme.cardDecoration,
+          height: 460,
+          margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
+          child: Column(
+            children: [
+              _AuthInviteFileHeader(
+                file: invite.file,
+                payload: invite.payload,
+                profile: invite.from.profile,
+              ),
+              _buildView(),
+              Divider(
+                color: SonrTheme.separatorColor,
+              ),
+              ColorButton.primary(
+                onPressed: () {
+                  CardService.handleInviteResponse(true, invite);
+                  Sheet.close();
+                },
+                text: "Accept",
+                icon: SonrIcons.Check,
+                margin: EdgeInsets.symmetric(horizontal: 54),
+              ),
+            ],
+          )),
+    );
   }
 
   // Builds View By Payload

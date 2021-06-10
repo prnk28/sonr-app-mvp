@@ -42,72 +42,74 @@ class DashboardView extends GetView<DashboardController> {
           Padding(padding: EdgeInsets.only(top: 8)),
           "My Stuff".section(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
-          Container(
-              height: Height.ratio(0.435),
-              width: Width.ratio(0.75),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ImageButton(
-                        path: TransferItemsType.Media.imagePath(),
-                        label: TransferItemsType.Media.name(),
-                        imageFit: BoxFit.fitWidth,
-                        imageWidth: 130,
-                        onPressed: () {
-                          if (TransferItemsType.Media.count() > 0) {
-                            Details.toPostsList(TransferItemsType.Media);
-                          } else {
-                            Details.toError(DetailPageType.ErrorEmptyMedia);
-                          }
-                        },
-                      ),
-                      ImageButton(
-                        path: TransferItemsType.Files.imagePath(),
-                        label: TransferItemsType.Files.name(),
-                        onPressed: () {
-                          if (TransferItemsType.Files.count() > 0) {
-                            Details.toPostsList(TransferItemsType.Files);
-                          } else {
-                            Details.toError(DetailPageType.ErrorEmptyFiles);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ImageButton(
-                        path: TransferItemsType.Contacts.imagePath(),
-                        label: TransferItemsType.Contacts.name(),
-                        onPressed: () {
-                          if (TransferItemsType.Contacts.count() > 0) {
-                            Details.toPostsList(TransferItemsType.Contacts);
-                          } else {
-                            Details.toError(DetailPageType.ErrorEmptyContacts);
-                          }
-                        },
-                      ),
-                      ImageButton(
-                        path: TransferItemsType.Links.imagePath(),
-                        imageWidth: 90,
-                        imageHeight: 90,
-                        label: TransferItemsType.Links.name(),
-                        onPressed: () {
-                          if (TransferItemsType.Links.count() > 0) {
-                            Details.toPostsList(TransferItemsType.Links);
-                          } else {
-                            Details.toError(DetailPageType.ErrorEmptyLinks);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              )),
+          Center(
+            child: Container(
+                height: Height.ratio(0.435),
+                width: Width.ratio(0.75),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ImageButton(
+                          path: TransferItemsType.Media.imagePath(),
+                          label: TransferItemsType.Media.name(),
+                          imageFit: BoxFit.fitWidth,
+                          imageWidth: 130,
+                          onPressed: () {
+                            if (TransferItemsType.Media.count() > 0) {
+                              Details.toPostsList(TransferItemsType.Media);
+                            } else {
+                              Details.toError(DetailPageType.ErrorEmptyMedia);
+                            }
+                          },
+                        ),
+                        ImageButton(
+                          path: TransferItemsType.Files.imagePath(),
+                          label: TransferItemsType.Files.name(),
+                          onPressed: () {
+                            if (TransferItemsType.Files.count() > 0) {
+                              Details.toPostsList(TransferItemsType.Files);
+                            } else {
+                              Details.toError(DetailPageType.ErrorEmptyFiles);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ImageButton(
+                          path: TransferItemsType.Contacts.imagePath(),
+                          label: TransferItemsType.Contacts.name(),
+                          onPressed: () {
+                            if (TransferItemsType.Contacts.count() > 0) {
+                              Details.toPostsList(TransferItemsType.Contacts);
+                            } else {
+                              Details.toError(DetailPageType.ErrorEmptyContacts);
+                            }
+                          },
+                        ),
+                        ImageButton(
+                          path: TransferItemsType.Links.imagePath(),
+                          imageWidth: 90,
+                          imageHeight: 90,
+                          label: TransferItemsType.Links.name(),
+                          onPressed: () {
+                            if (TransferItemsType.Links.count() > 0) {
+                              Details.toPostsList(TransferItemsType.Links);
+                            } else {
+                              Details.toError(DetailPageType.ErrorEmptyLinks);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ),
         ]),
       );
     } else {
