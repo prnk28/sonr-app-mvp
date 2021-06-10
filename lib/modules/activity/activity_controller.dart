@@ -1,8 +1,9 @@
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 
 class ActivityController extends GetxController {
   /// Current Activity
-  final currentActivity = SonrService.session;
+  final currentActivity = SessionService.session;
 
   /// Past Activities
   final pastActivities = CardService.activity;
@@ -17,5 +18,5 @@ class ActivityController extends GetxController {
   }
 
   /// Method Helper Returns Active Session Number from Bool
-  int _hasValidSession() => SonrService.session.isValid ? 1 : 0;
+  int _hasValidSession() => SessionService.session.isValid ? 1 : 0;
 }

@@ -28,6 +28,10 @@ class SessionService extends GetxService {
     to._session.outgoing(invite);
   }
 
+  static void reset() {
+    to._session.reset();
+  }
+
   // * ------------------- Callbacks ----------------------------
   /// Peer has Invited User
   void handleInvite(AuthInvite data) {
