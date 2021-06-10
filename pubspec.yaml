@@ -48,7 +48,6 @@ dependencies:
   bip39: ^1.0.6
   crypton: ^2.0.1
   environment_config: ^3.0.0
-  file_picker: ^3.0.1
   flutter_hooks: ^0.17.0
   flutter_secure_storage: ^4.2.0
   get: ^4.1.4
@@ -70,6 +69,7 @@ dependencies:
 
   # -- Data --
   audioplayers: ^0.19.0
+  file_picker: ^3.0.2+2
   firebase_core: ^1.2.1
   firebase_analytics: ^8.1.1
   open_file: ^3.2.0
@@ -89,12 +89,9 @@ dependencies:
   uni_links: ^0.5.1
 
   # -- Plugins --
-  systray:
-    git: https://github.com/sonr-io/systray
-
   sonr_plugin:
-    git: https://github.com/sonr-io/plugin
-    #path: ../plugin/ #-- Uncomment for Local Development
+    #git: https://github.com/sonr-io/plugin
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0
@@ -102,6 +99,7 @@ dependencies:
   rive: ^0.7.7
   styled_widget: ^0.3.1
   supercharged: ^2.0.0
+  systray: ^0.5.3
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
