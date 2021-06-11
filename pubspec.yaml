@@ -95,7 +95,7 @@ dependencies:
 
   # -- UI/UX --
   animate_do: ^2.0.0
-  rive: ^0.7.15
+  rive: ^0.7.7
   styled_widget: ^0.3.1
   supercharged: ^2.0.0
   systray: ^0.5.3
