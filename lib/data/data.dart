@@ -11,7 +11,6 @@ export 'database/cards_converter.dart';
 export 'database/cards_db.dart';
 
 // Models
-export 'model/model_ble.dart';
 export 'model/model_meta.dart';
 export 'model/model_cards.dart';
 export 'model/model_hs.dart';
