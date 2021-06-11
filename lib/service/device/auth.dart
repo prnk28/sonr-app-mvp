@@ -10,7 +10,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypton/crypton.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:crypto/crypto.dart' as crypto;
-import 'package:sonr_app/service/user/user.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
@@ -55,7 +54,7 @@ class AuthService extends GetxService {
   String get signatureHex => String.fromCharCodes(signature);
 
   // Retreives User_Crypto Data
-  static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
+  //static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
   static String get mnemonic => to._mnemonic;
   static String get prefix => to._prefix;
 
@@ -167,19 +166,6 @@ class AuthService extends GetxService {
       }
     }
     return null;
-  }
-
-  /// #### Place User into Remote Backup Storage
-  static Future<bool> putUser() async {
-    if (isRegistered) {
-      // Reference
-      var resp = await SonrCore.userStorjRequest(
-          StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, user: UserService.user));
-      if (resp != null) {
-        return resp.success;
-      }
-    }
-    return false;
   }
 
   /// #### Refreshes Record Table from Namebase Client

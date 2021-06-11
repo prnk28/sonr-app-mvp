@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
@@ -18,12 +17,6 @@ class ContactCardItemView extends StatelessWidget {
         tag: card.id,
         child: Container(
           height: 75,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-            colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-            fit: BoxFit.cover,
-            image: AssetController.randomCard.image,
-          )),
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(padding: EdgeInsets.all(4)),
             // Build Profile Pic

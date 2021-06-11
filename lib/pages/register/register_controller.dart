@@ -76,7 +76,7 @@ class RegisterController extends GetxController {
           status(RegisterStatus.Backup);
         }
       } else {
-        await UserService.returnUser();
+        //await UserService.returnUser();
         status(RegisterStatus.Location);
       }
     }
@@ -98,7 +98,7 @@ class RegisterController extends GetxController {
       ));
 
       // Create User
-      await UserService.newUser(contact);
+      await UserService.newContact(contact);
 
       // Process data
       if (DeviceService.isMobile) {
@@ -123,7 +123,7 @@ class RegisterController extends GetxController {
       ));
 
       // Create User
-      await UserService.newUser(contact);
+      await UserService.newContact(contact);
 
       // Connect to Network
       SonrService.to.connect();

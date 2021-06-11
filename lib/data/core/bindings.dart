@@ -20,7 +20,6 @@ import 'package:sonr_app/style.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<AssetController>(AssetController(), permanent: true);
     Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
 
@@ -36,7 +35,6 @@ class HomeBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<HomeController>(HomeController(), permanent: true);
-
     // Subsidary Controllers
     Get.put(ShareController(), permanent: true);
     Get.put(ActivityController(), permanent: true);

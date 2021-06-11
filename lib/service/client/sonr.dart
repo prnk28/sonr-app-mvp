@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/service/device/auth.dart';
-// import 'package:sonr_app/service/device/ble.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
@@ -220,10 +218,7 @@ class SonrService extends GetxService {
   ConnectionRequest _buildConnRequest(ConnectionRequest_Type type) {
     return ConnectionRequest(
         contact: UserService.contact.value,
-        crypto: AuthService.isRegistered ? AuthService.userCrypto : null,
         device: DeviceService.device,
-        devices: UserService.user.devices,
-        settings: UserService.user.settings,
         location: DeviceService.location,
         type: type,
         apiKeys: APIKeys(

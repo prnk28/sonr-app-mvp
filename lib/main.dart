@@ -111,7 +111,7 @@ class App extends StatelessWidget {
         ));
 
         // Create User
-        await UserService.newUser(contact);
+        await UserService.newContact(contact);
 
         // Connect to Network
         SonrService.to.connect();
