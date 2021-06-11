@@ -48,7 +48,7 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     await initNode(ConnectionRequest(
-      type: _isAuth ? ConnectionRequest_Type.AUTH : ConnectionRequest_Type.CONNECT,
+      type: ConnectionRequest_Type.CONNECT,
       contact: UserService.hasUser.value ? UserService.contact.value : null,
       device: DeviceService.device,
       location: DeviceService.location,
@@ -120,33 +120,13 @@ class SonrService extends GetxService {
 
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
-    var link = await to._node.getURL(url);
+    var link = await SonrCore.getUrlLink(url);
     return link ?? URLLink(url: url);
   }
 
   /// @ Request Local Network Access on iOS
   static void requestLocalNetwork() async {
     to._node.requestLocalNetwork();
-  }
-
-  /// @ Create a New Remote
-  static Future<RemoteCreateResponse?> createRemote({
-    required SonrFile file,
-    required String fingerprint,
-    required String words,
-  }) async {
-    if (status.value.hasConnection) {
-      return await to._node.remoteCreateRequest(RemoteCreateRequest(file: file, fingerprint: fingerprint, sName: UserService.sName, words: words));
-    }
-  }
-
-  /// @ Join an Existing Remote
-  static Future<RemoteJoinResponse?> joinRemote(String link) async {
-    if (status.value.hasConnection) {
-      // Perform Routine
-      var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
-      return response;
-    }
   }
 
   /// @ Send Position Update for Node

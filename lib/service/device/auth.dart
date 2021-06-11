@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/client/sonr.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:get/get.dart';
@@ -54,7 +53,6 @@ class AuthService extends GetxService {
   String get signatureHex => String.fromCharCodes(signature);
 
   // Retreives User_Crypto Data
-  //static User_Crypto get userCrypto => User_Crypto(prefix: to._prefix, signature: to.signatureHex, privateKey: to._ecKeypair.privateKey.toString());
   static String get mnemonic => to._mnemonic;
   static String get prefix => to._prefix;
 
@@ -151,21 +149,6 @@ class AuthService extends GetxService {
     }
     // Return Mnemonic and Prefix
     return UsernameResult.isInvalid();
-  }
-
-  /// #### Returns User Data from Remote Backup
-  static Future<User?> getUser() async {
-    if (isRegistered) {
-      if (to.hasPrefix.value) {
-        var data = await SonrCore.userStorjRequest(
-          StorjRequest(storjApiKey: Env.storj_key, storjRootPassword: Env.storj_root_password, prefix: to._prefix),
-        );
-        if (data != null) {
-          return data.user;
-        }
-      }
-    }
-    return null;
   }
 
   /// #### Refreshes Record Table from Namebase Client

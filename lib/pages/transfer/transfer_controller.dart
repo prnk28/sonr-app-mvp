@@ -1,16 +1,12 @@
 import 'dart:async';
-import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
-
-import 'remote/remote_controller.dart';
 
 class TransferController extends GetxController {
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
   final isNotEmpty = false.obs;
-  final isRemoteActive = false.obs;
   final centerKey = ValueKey("").obs;
 
   // @ Direction Properties
@@ -49,29 +45,6 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
-  /// @ Method to Create Remote Lobby
-  void createRemote() async {
-    // Check if Transfer Exists
-    if (TransferService.hasPayload.value) {
-      // Sign Mnemonic
-      var data = await AuthService.signRemoteFingerprint();
-
-      // Start Remote
-      var resp = await SonrService.createRemote(file: TransferService.file.value, fingerprint: data.item1, words: data.item2);
-
-      // Validate Response
-      if (resp != null) {
-        if (resp.success) {
-          title("Remote");
-          Get.find<RemoteLobbyController>().initRemote(resp);
-          isRemoteActive(true);
-        }
-      } else {
-        isRemoteActive(false);
-      }
-    }
-  }
-
   /// @ Closes Window for Transfer Page
   void closeToHome() {
     TransferService.resetPayload();
@@ -104,11 +77,6 @@ class TransferController extends GetxController {
     if (!isClosed) {
       // Set Strings
       isNotEmpty(data.isNotEmpty);
-
-      // Check if Remote
-      if (!isRemoteActive.value) {
-        title(data.prettyCount());
-      }
     }
   }
 }

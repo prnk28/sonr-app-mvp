@@ -10,7 +10,6 @@ import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
 import 'package:sonr_app/pages/explorer/explorer_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
-import 'package:sonr_app/pages/transfer/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/service/device/auth.dart';
@@ -65,15 +64,7 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
-    Get.put<RemoteLobbyController>(RemoteLobbyController(), permanent: true);
-    // Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
-
-  // // Get Rive File for Peer Bubble
-  // Future<RiveFile> _getRiveDataFile() async {
-  //   var data = await rootBundle.load('assets/animations/peer_border.riv');
-  //   return RiveFile.import(data);
-  // }
 }
 
 /// #### SonrServices
