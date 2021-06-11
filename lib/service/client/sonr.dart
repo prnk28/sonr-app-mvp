@@ -25,7 +25,17 @@ class SonrService extends GetxService {
 
   // @ Set References
   late Node _node;
-  bool _initialized = false;
+  final _apiKeys = APIKeys(
+    handshakeKey: Env.hs_key,
+    handshakeSecret: Env.hs_secret,
+    hubKey: Env.hub_key,
+    hubSecret: Env.hub_secret,
+    ipApiKey: Env.ip_key,
+    storjApiKey: Env.storj_key,
+    storjRootPassword: Env.storj_root_password,
+    rapidApiHost: Env.rapid_host,
+    rapidApiKey: Env.rapid_key,
+  );
 
   // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
@@ -34,18 +44,21 @@ class SonrService extends GetxService {
     _properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled));
 
     // Check for Connect Requirements
-    if (DeviceService.isReadyToConnect) {
-      await initNode();
-      return this;
-    } else {
-      return this;
-    }
+    await initNode(ConnectionRequest(
+      type: UserService.hasUser.value ? ConnectionRequest_Type.CONNECT : ConnectionRequest_Type.AUTH,
+      contact: UserService.hasUser.value ? UserService.contact.value : null,
+      device: DeviceService.device,
+      location: DeviceService.location,
+      apiKeys: _apiKeys,
+    ));
+
+    return this;
   }
 
   /// @ Initializes Node Instance
-  Future<void> initNode() async {
+  Future<void> initNode(ConnectionRequest request) async {
     // Create Node
-    _node = await SonrCore.initialize(_buildConnRequest(ConnectionRequest_Type.CONNECT));
+    _node = await SonrCore.initialize(request);
     _node.onStatus = _handleStatus;
     _node.onRefreshed = LobbyService.to.handleRefresh;
     _node.onInvited = SessionService.to.handleInvite;
@@ -54,16 +67,10 @@ class SonrService extends GetxService {
     _node.onReceived = SessionService.to.handleReceived;
     _node.onTransmitted = SessionService.to.handleTransmitted;
     _node.onError = _handleError;
-    _initialized = true;
   }
 
   /// @ Connect to Service Method
   Future<void> connect() async {
-    // Check Initialized
-    if (!_initialized) {
-      await initNode();
-    }
-
     // Connect Node
     _node.connect();
 
@@ -211,23 +218,5 @@ class SonrService extends GetxService {
 
     // Logging
     Logger.sError(data);
-  }
-
-  // * ------------------- Helpers ----------------------------
-  // Builds Connection Request
-  ConnectionRequest _buildConnRequest(ConnectionRequest_Type type) {
-    return ConnectionRequest(
-        contact: UserService.contact.value,
-        device: DeviceService.device,
-        location: DeviceService.location,
-        type: type,
-        apiKeys: APIKeys(
-            handshakeKey: Env.hs_key,
-            handshakeSecret: Env.hs_secret,
-            ipApiKey: Env.ip_key,
-            rapidApiHost: Env.rapid_host,
-            rapidApiKey: Env.rapid_key,
-            hubKey: Env.hub_key,
-            hubSecret: Env.hub_secret));
   }
 }
