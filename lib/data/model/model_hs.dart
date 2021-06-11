@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:get/get_connect/connect.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/service/device/auth.dart';
 
 const FINGERPRINT_DIVIDER = "v=0;fingerprint=";
 const AUTH_DIVIDER = "._auth.";
@@ -102,12 +101,10 @@ enum NameCheckType {
   All,
   Available,
   Blocked,
-  InvalidPrefix,
   Restricted,
   Unblocked,
   Unrestricted,
   Unavailable,
-  ValidPrefix,
 }
 
 /// #### `UsernameResult`
@@ -126,8 +123,8 @@ class UsernameResult {
   });
 
   /// Creates Valid Username Result and Fetch's Prefix and Mnemonic from `MobileService`
-  factory UsernameResult.isValidFetch(String username) =>
-      UsernameResult(username: username, isValid: true, prefix: AuthService.prefix, mnemonic: AuthService.mnemonic);
+  factory UsernameResult.isValidFetch(String username, String prefix, String mnemonic) =>
+      UsernameResult(username: username, isValid: true, prefix: prefix, mnemonic: mnemonic);
 
   /// Creates Invalid Username Result
   factory UsernameResult.isInvalid() => UsernameResult(username: "-", isValid: false, prefix: "-", mnemonic: "-");
@@ -149,11 +146,8 @@ class NamebaseResult {
   /// Checks if Name not on Restricted List
   bool isNameUnrestricted(String n) => !K_RESTRICTED_NAMES.any((v) => v == n.toLowerCase());
 
-  /// Checks if Name Provided with Prefix is Available
-  bool isPrefixAvailable(String n) => !records.any((r) => r.equalsPrefix(AuthService.buildPrefix(n)));
-
   /// Checks if Name Provided is Valid with ALL Checks
-  bool isValidName(String n) => isNameAvailable(n) && isNameUnblocked(n) && isNameUnrestricted(n) && isPrefixAvailable(n);
+  bool isValidName(String n) => isNameAvailable(n) && isNameUnblocked(n) && isNameUnrestricted(n);
 
   NamebaseResult({required this.success, this.isBlank = false, this.records = const []});
 
@@ -176,14 +170,10 @@ class NamebaseResult {
         return isNameUnblocked(name);
       case NameCheckType.Unrestricted:
         return isNameUnrestricted(name);
-      case NameCheckType.ValidPrefix:
-        return isPrefixAvailable(name);
       case NameCheckType.All:
         return isValidName(name);
       case NameCheckType.Blocked:
         return !isNameUnblocked(name);
-      case NameCheckType.InvalidPrefix:
-        return !isPrefixAvailable(name);
       case NameCheckType.Restricted:
         return !isNameUnrestricted(name);
       case NameCheckType.Unavailable:

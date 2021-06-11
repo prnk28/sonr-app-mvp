@@ -7,7 +7,6 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 import '../data.dart';
 
 enum MediaOrientation { Portrait, Landscape }
-
 enum ThumbnailStatus { None, Loading, Complete }
 
 extension TransferCardUtils on TransferCard {

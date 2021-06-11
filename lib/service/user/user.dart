@@ -26,7 +26,7 @@ class UserService extends GetxService {
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
   static Rx<Contact> get contact => to._contact;
-  
+
   // Getters for Preferences
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;

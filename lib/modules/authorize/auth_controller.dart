@@ -11,7 +11,7 @@ class AuthorizeController extends GetxController {
 
     // Check if Send Back
     if (withShare) {
-      SonrService.respond(invite.newAcceptReply());
+      SonrService.respond(invite.newAcceptResponse());
     }
 
     // Return to HomeScreen
@@ -26,7 +26,7 @@ class AuthorizeController extends GetxController {
   /// Accept a provided Transfer Invite
   void acceptTransferInvite(InviteRequest invite) {
     // Check for Remote
-    SonrService.respond(invite.newAcceptReply());
+    SonrService.respond(invite.newAcceptResponse());
 
     // Switch View
     Get.back(closeOverlays: true);
@@ -54,13 +54,13 @@ class AuthorizeController extends GetxController {
 
   /// Decline a provided Contact Invite
   void declineContactInvite(InviteRequest invite) {
-    SonrService.respond(invite.newDeclineReply());
+    SonrService.respond(invite.newDeclineResponse());
     Get.back(closeOverlays: true);
   }
 
   /// Decline a provided Transfer Invite
   void declineTransferInvite(InviteRequest invite) {
-    SonrService.respond(invite.newDeclineReply());
+    SonrService.respond(invite.newDeclineResponse());
     Get.back(closeOverlays: true);
   }
 

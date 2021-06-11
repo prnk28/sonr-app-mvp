@@ -228,7 +228,7 @@ class CardService extends GetxService {
   // @ Handle Accept Transfer Response
   _handleAcceptTransfer(InviteRequest invite) {
     // Check for Remote
-    SonrService.respond(invite.newAcceptReply());
+    SonrService.respond(invite.newAcceptResponse());
 
     // Switch View
     SonrOverlay.back();
@@ -255,7 +255,7 @@ class CardService extends GetxService {
 
 // @ Handle Decline Transfer Response
   _handleDeclineTransfer(InviteRequest invite) {
-    SonrService.respond(invite.newDeclineReply());
+    SonrService.respond(invite.newDeclineResponse());
     SonrOverlay.back();
   }
 
@@ -266,7 +266,7 @@ class CardService extends GetxService {
 
     // Check if Send Back
     if (sendBackContact) {
-      SonrService.respond(invite.newAcceptReply());
+      SonrService.respond(invite.newAcceptResponse());
     }
 
     // Return to HomeScreen

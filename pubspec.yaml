@@ -46,10 +46,8 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   bip39: ^1.0.6
-  crypton: ^2.0.1
   environment_config: ^3.0.0
   flutter_hooks: ^0.17.0
-  flutter_secure_storage: ^4.2.0
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0

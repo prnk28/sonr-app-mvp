@@ -1,6 +1,5 @@
 export 'rive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../style.dart';
 
 /// @ Animated Scale
@@ -60,43 +59,9 @@ class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateM
   }
 }
 
-/// @ Sonr Ripples
-class AnimatedRipples extends HookWidget {
-  const AnimatedRipples({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = useAnimationController(duration: const Duration(milliseconds: 2000))..repeat();
-    final size = 400.0;
-    return Center(
-      child: CustomPaint(
-        painter: CirclePainter(
-          controller,
-        ),
-        child: SizedBox(
-          width: size * 4.125,
-          height: size * 4.125,
-          child: ScaleTransition(
-              scale: Tween(begin: 0.98, end: 1.0).animate(
-                CurvedAnimation(
-                  parent: controller,
-                  curve: const CurveWave(),
-                ),
-              ),
-              child: child),
-        ),
-      ),
-    );
-  }
-}
-
 /// @ Animated Slide Switch
 enum _SwitchType { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
+
 class AnimatedSlideSwitcher extends StatelessWidget {
   final _SwitchType _animation;
   final Widget child;

@@ -63,7 +63,7 @@ class RegisterController extends GetxController {
 
   Future<void> setName() async {
     // Refresh Records
-    AuthService.to.refresh();
+    AuthService.to.refreshRecords();
 
     // Validate
     if (await validateName()) {
@@ -148,19 +148,13 @@ class RegisterController extends GetxController {
   Future<bool> validateName() async {
     // Update Status
     if (sName.value.length > 3 && !sName.value.contains(" ")) {
-
       // Check Available
       if (AuthService.to.result.value.checkName(
         NameCheckType.Unavailable,
         sName.value,
       )) {
-        if (await AuthService.validateUser(sName.value)) {
-          nameStatus(RegisterNameStatus.Returning);
-          return true;
-        } else {
-          nameStatus(RegisterNameStatus.Unavailable);
-          return false;
-        }
+        nameStatus(RegisterNameStatus.Unavailable);
+        return false;
       }
       // Check Unblocked
       else if (AuthService.to.result.value.checkName(
@@ -176,14 +170,6 @@ class RegisterController extends GetxController {
         sName.value,
       )) {
         nameStatus(RegisterNameStatus.Restricted);
-        return false;
-      }
-      // Check Unregisted Device
-      else if (AuthService.to.result.value.checkName(
-        NameCheckType.InvalidPrefix,
-        sName.value,
-      )) {
-        nameStatus(RegisterNameStatus.DeviceRegistered);
         return false;
       }
       // Check Valid

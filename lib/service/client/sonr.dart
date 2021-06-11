@@ -29,11 +29,9 @@ class SonrService extends GetxService {
   final _apiKeys = APIKeys(
     handshakeKey: Env.hs_key,
     handshakeSecret: Env.hs_secret,
-    hubKey: Env.hub_key,
-    hubSecret: Env.hub_secret,
+    textileKey: Env.hub_key,
+    textileSecret: Env.hub_secret,
     ipApiKey: Env.ip_key,
-    storjApiKey: Env.storj_key,
-    storjRootPassword: Env.storj_root_password,
     rapidApiHost: Env.rapid_host,
     rapidApiKey: Env.rapid_key,
   );
@@ -106,16 +104,16 @@ class SonrService extends GetxService {
   //   }
   // }
 
-  static Future<AuthenticationResponse?> checkSName(String name) async {
-    if (isRegistered) {
-      return await to._node.checkSName(AuthenticationRequest(
-        type: AuthenticationRequest_Type.CHECK_NAME,
-        sName: name,
-        device: DeviceService.device,
-        apiKeys: to._apiKeys,
-      ));
-    }
-    return null;
+  static Future<SignResponse> sign(SignRequest request) async {
+    return await to._node.sign(request);
+  }
+
+  static Future<StoreResponse> store(StoreRequest request) async {
+    return await to._node.store(request);
+  }
+
+  static Future<VerifyResponse> verify(VerifyRequest request) async {
+    return await to._node.verify(request);
   }
 
   /// @ Retreive URLLink Metadata

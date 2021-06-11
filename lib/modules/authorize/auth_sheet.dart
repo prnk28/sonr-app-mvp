@@ -13,7 +13,7 @@ class Authorize {
       Popup.open(ContactAuthView(false, invite: invite), dismissible: false);
     } else {
       Sheet.dissmissible(ValueKey(invite), _InviteRequestSheet(controller: controller, invite: invite), (direction) {
-        SonrService.respond(invite.newDeclineReply());
+        SonrService.respond(invite.newDeclineResponse());
         Sheet.close();
       });
     }
