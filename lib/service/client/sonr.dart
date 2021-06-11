@@ -25,6 +25,7 @@ class SonrService extends GetxService {
 
   // @ Set References
   late Node _node;
+  bool _isAuth = false;
   final _apiKeys = APIKeys(
     handshakeKey: Env.hs_key,
     handshakeSecret: Env.hs_secret,
@@ -43,9 +44,11 @@ class SonrService extends GetxService {
     // Initialize
     _properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled));
 
+    _isAuth = !UserService.hasUser.value;
+
     // Check for Connect Requirements
     await initNode(ConnectionRequest(
-      type: UserService.hasUser.value ? ConnectionRequest_Type.CONNECT : ConnectionRequest_Type.AUTH,
+      type: _isAuth ? ConnectionRequest_Type.AUTH : ConnectionRequest_Type.CONNECT,
       contact: UserService.hasUser.value ? UserService.contact.value : null,
       device: DeviceService.device,
       location: DeviceService.location,
@@ -71,6 +74,20 @@ class SonrService extends GetxService {
 
   /// @ Connect to Service Method
   Future<void> connect() async {
+    // Reconnect if Previously Auth
+    if (_isAuth) {
+      await initNode(ConnectionRequest(
+        type: ConnectionRequest_Type.CONNECT,
+        contact: UserService.hasUser.value ? UserService.contact.value : null,
+        device: DeviceService.device,
+        location: DeviceService.location,
+        apiKeys: _apiKeys,
+      ));
+
+      // Revert Auth Value
+      _isAuth = false;
+    }
+
     // Connect Node
     _node.connect();
 
@@ -88,6 +105,18 @@ class SonrService extends GetxService {
   //     to._node.discover(devices.toDiscoverRequest());
   //   }
   // }
+
+  static Future<AuthenticationResponse?> checkSName(String name) async {
+    if (isRegistered) {
+      return await to._node.checkSName(AuthenticationRequest(
+        type: AuthenticationRequest_Type.CHECK_NAME,
+        sName: name,
+        device: DeviceService.device,
+        apiKeys: to._apiKeys,
+      ));
+    }
+    return null;
+  }
 
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {

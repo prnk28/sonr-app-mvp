@@ -148,6 +148,7 @@ class RegisterController extends GetxController {
   Future<bool> validateName() async {
     // Update Status
     if (sName.value.length > 3 && !sName.value.contains(" ")) {
+
       // Check Available
       if (AuthService.to.result.value.checkName(
         NameCheckType.Unavailable,
