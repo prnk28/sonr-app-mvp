@@ -47,7 +47,7 @@ class SonrService extends GetxService {
   /// @ Initializes Node Instance
   Future<void> initNode() async {
     // Create Node
-    _node = await SonrCore.initialize(_buildConnRequest());
+    _node = await SonrCore.initialize(_buildConnRequest(ConnectionRequest_Type.CONNECT));
     _node.onStatus = _handleStatus;
     _node.onRefreshed = LobbyService.to.handleRefresh;
     _node.onInvited = SessionService.to.handleInvite;
@@ -217,7 +217,7 @@ class SonrService extends GetxService {
 
   // * ------------------- Helpers ----------------------------
   // Builds Connection Request
-  ConnectionRequest _buildConnRequest() {
+  ConnectionRequest _buildConnRequest(ConnectionRequest_Type type) {
     return ConnectionRequest(
         contact: UserService.contact.value,
         crypto: AuthService.isRegistered ? AuthService.userCrypto : null,
@@ -225,6 +225,7 @@ class SonrService extends GetxService {
         devices: UserService.user.devices,
         settings: UserService.user.settings,
         location: DeviceService.location,
+        type: type,
         apiKeys: APIKeys(
             handshakeKey: Env.hs_key,
             handshakeSecret: Env.hs_secret,
