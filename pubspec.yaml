@@ -30,10 +30,6 @@ environment_config:
       env_var: hub_secret
     sentry_dsn:
       env_var: sentry_dsn
-    storj_key:
-      env_var: storj_key
-    storj_root_password:
-      env_var: storj_root_password
 
 # ** ================== **
 # **    DEPENDENCIES    **
