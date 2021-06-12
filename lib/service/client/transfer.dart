@@ -157,7 +157,7 @@ class TransferService extends GetxService {
         var file = result.toSonrFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
-        var filePath = await SonrService.pickFile();
+        var filePath = await SonrService.to.node.pickFile();
         var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
           return await _handlePayload(file.payload, file: file);

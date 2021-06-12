@@ -8,7 +8,11 @@ import 'package:sonr_app/style.dart';
 import 'bindings.dart';
 
 /// @ Constant Routing Information
-class Route {
+class AppRoute {
+
+  static const HOME_PAGE = "/home";
+
+  /// Returns List of App Pages
   static get pages => [
         // ** Home Page ** //
         GetPage(

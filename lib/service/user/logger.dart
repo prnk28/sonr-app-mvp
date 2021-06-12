@@ -85,7 +85,7 @@ class Logger extends GetxService {
     options.debug = buildMode.isDebug;
 
     // Add Excludes
-    SonrServices.excludedModules.forEach((ex) {
+    AppServices.excludedModules.forEach((ex) {
       options.addInAppExclude(ex);
     });
   }

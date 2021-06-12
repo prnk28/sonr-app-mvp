@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
@@ -69,7 +70,7 @@ class TransferBinding implements Bindings {
 
 /// #### SonrServices
 /// Initialize and Check Services
-class SonrServices {
+class AppServices {
   /// @ Application Services
   static Future<void> init({bool isDesktop = false}) async {
     // First: Device Services
@@ -106,6 +107,7 @@ class SonrServices {
     return DeviceService.isRegistered && UserService.isRegistered && LobbyService.isRegistered;
   }
 
+  /// @ Returns Excluded Sentry Modules
   static List<String> get excludedModules => [
         'open_file',
         'animated_widgets',
@@ -114,4 +116,15 @@ class SonrServices {
         'camerawesome_plugin',
         'file_picker',
       ];
+
+  /// @ Returns APIKeys from `Env.dart`
+  static APIKeys get apiKeys => APIKeys(
+        handshakeKey: Env.hs_key,
+        handshakeSecret: Env.hs_secret,
+        textileKey: Env.hub_key,
+        textileSecret: Env.hub_secret,
+        ipApiKey: Env.ip_key,
+        rapidApiHost: Env.rapid_host,
+        rapidApiKey: Env.rapid_key,
+      );
 }

@@ -66,7 +66,7 @@ class MobileService extends GetxService {
 
   MobileService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+      if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
         SonrService.update(position.value);
       }
     });
@@ -412,7 +412,7 @@ class MobileService extends GetxService {
           buttonText: "Continue",
           barrierDismissible: false);
 
-      SonrService.requestLocalNetwork();
+      SonrService.to.node.requestLocalNetwork();
       updatePermissionsStatus();
       SonrOverlay.back();
     }
@@ -447,7 +447,6 @@ class MobileService extends GetxService {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
     }
   }
-
 
   // # Saves Received Media to Gallery
   _handleSharedText(String text) async {

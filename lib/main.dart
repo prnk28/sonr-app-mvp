@@ -8,7 +8,7 @@ import 'package:feedback/feedback.dart';
 Future<void> main() async {
   // Init Services
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrServices.init();
+  await AppServices.init();
 
   // Check Platform
   if (DeviceService.isMobile) {
@@ -35,7 +35,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
-      getPages: Route.pages,
+      getPages: AppRoute.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [
