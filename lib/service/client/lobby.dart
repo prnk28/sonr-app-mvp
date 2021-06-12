@@ -91,10 +91,6 @@ class LobbyService extends GetxService {
         to._peerCallbacks.remove(peer);
       }
     }
-
-    if (isRegistered) {
-      //
-    }
   }
 
   /// @ Method to Cancel Flat Mode
