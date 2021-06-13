@@ -35,15 +35,14 @@ class AuthService extends GetxService {
   /// #### Creates Crypto User Data, Returns Mnemonic Text
   static Future<UsernameResult> createUsername(String name) async {
     if (isRegistered) {
-      var prefix = await signPrefix(name);
-      var mnemonic = bip39.generateMnemonic();
-      var fingerprint = await signFingerprint(mnemonic);
-
-      // Sign Mnemonic Value
-
       // Check Valid
       if (to.result.value.isValidName(name)) {
-        // Sign Mnemonic Value
+        var prefix = await signPrefix(name);
+        var mnemonic = bip39.generateMnemonic();
+        var fingerprint = await signFingerprint(mnemonic);
+
+        // Logging
+        Logger.info("Prefix: $prefix \n Mnemonic: $mnemonic \n Fingerprint: $fingerprint");
 
         // Add UserRecord Domain
         await to._nbClient.addRecord(HSRecord.newAuth(prefix, name, fingerprint));
@@ -89,7 +88,7 @@ class AuthService extends GetxService {
     var request = Request.newSignText(username + DeviceService.device.id);
     var response = await SonrService.sign(request);
 
-    print(response.toString());
+    Logger.info(response.toString());
 
     // Check Result
     if (response.isSigned) {
@@ -104,7 +103,7 @@ class AuthService extends GetxService {
     var request = Request.newSignText(mnemonic);
     var response = await SonrService.sign(request);
 
-    print(response.toString());
+    Logger.info(response.toString());
     // Check Result
     if (response.isSigned) {
       var value = utf8.decode(response.signedValue);
