@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sentry/sentry.dart';
 
 class UserService extends GetxService {
   // Accessors
@@ -48,6 +49,7 @@ class UserService extends GetxService {
     // Check if Exists
     if (_hasUser.value) {
       try {
+        // Get ContactJSOn
         var profileJson = _userBox.read("contact");
         var contact = Contact.fromJson(profileJson);
 
@@ -55,15 +57,11 @@ class UserService extends GetxService {
         _contact(contact);
         _isNewUser(false);
 
-        // Configure Sentry
-        Sentry.configureScope((scope) => scope.user = SentryUser(
-              id: DeviceService.device.id,
-              username: _contact.value.sName,
-              extras: {
-                "firstName": _contact.value.firstName,
-                "lastName": _contact.value.lastName,
-              },
-            ));
+        // Configure Firebase Scope
+        FirebaseAnalytics().setUserId(DeviceService.device.id);
+        FirebaseAnalytics().setUserProperty(name: "firstname", value: _contact.value.firstName);
+        FirebaseAnalytics().setUserProperty(name: "lastName", value: _contact.value.lastName);
+        FirebaseAnalytics().setUserProperty(name: "platform", value: DeviceService.device.platform.toString());
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
@@ -109,16 +107,25 @@ class UserService extends GetxService {
       screenshotPath = await TransferService.writeImageToStorage(screenshot);
     }
 
-    // Create Email
-    final Email email = Email(
-      body: message,
-      subject: 'Sonr In-App Feedback',
-      recipients: ['contact@sonr.io'],
-      bcc: ['rishir@sonr.io', 'pradn@sonr.io'],
-      attachmentPaths: screenshotPath != "" ? [screenshotPath] : [],
-      isHTML: false,
-    );
-    await FlutterEmailSender.send(email);
+    // Create Instance
+    Reference ref = FirebaseStorage.instance.ref().child('screenshots').child(screenshotPath);
+
+    // Set Metadata
+    final metadata = SettableMetadata(contentType: 'image/jpeg', customMetadata: {'path': screenshotPath});
+
+    // Upload to Firebase
+    UploadTask uploadTask = ref.putFile(File(screenshotPath), metadata);
+    await uploadTask.whenComplete(() => {});
+    String link = await ref.getDownloadURL();
+
+    // Update Firestore
+    DocumentReference docRef = FirebaseFirestore.instance.collection("feedback").doc();
+    docRef.update({
+      "firstname": UserService.contact.value.firstName,
+      "lastname": UserService.contact.value.lastName,
+      "message": message,
+      "screenshot": link,
+    });
   }
 
   /// @ Trigger iOS Local Network with Alert
