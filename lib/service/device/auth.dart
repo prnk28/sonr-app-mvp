@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_hs.dart';
 import 'package:sonr_app/service/device/device.dart';
@@ -23,9 +25,6 @@ class AuthService extends GetxService {
   // References
   final _nbClient = NamebaseClient();
 
-  // Shortcuts
-  String get deviceID => DeviceService.device.id;
-
   /// #### Initializes Auth Service ^
   Future<AuthService> init() async {
     // Get Records
@@ -34,9 +33,7 @@ class AuthService extends GetxService {
   }
 
   /// #### Creates Crypto User Data, Returns Mnemonic Text
-  static Future<UsernameResult> createUsername(
-    String name,
-  ) async {
+  static Future<UsernameResult> createUsername(String name) async {
     if (isRegistered) {
       var prefix = await signPrefix(name);
       var mnemonic = bip39.generateMnemonic();
@@ -89,12 +86,15 @@ class AuthService extends GetxService {
   // Helper Method to Generate Prefix
   static Future<String> signPrefix(String username) async {
     // Create New Prefix
-    var request = Request.newSignText(username + to.deviceID);
+    var request = Request.newSignText(username + DeviceService.device.id);
     var response = await SonrService.sign(request);
+
+    print(response.toString());
 
     // Check Result
     if (response.isSigned) {
-      return response.signedText.substring(0, 16);
+      var value = utf8.decode(response.signedValue);
+      return value.substring(0, 16);
     }
     return "";
   }
@@ -104,9 +104,11 @@ class AuthService extends GetxService {
     var request = Request.newSignText(mnemonic);
     var response = await SonrService.sign(request);
 
+    print(response.toString());
     // Check Result
     if (response.isSigned) {
-      return response.signedText;
+      var value = utf8.decode(response.signedValue);
+      return value;
     }
     return "";
   }
