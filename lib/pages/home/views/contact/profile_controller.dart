@@ -8,8 +8,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/style.dart';
 import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:sonr_app/data/data.dart';
-
 import 'add/add_social.dart';
 
 // @ PeerStatus Enum

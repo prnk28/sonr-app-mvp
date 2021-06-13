@@ -13,5 +13,3 @@ export 'database/cards_db.dart';
 export 'model/model_meta.dart';
 export 'model/model_cards.dart';
 export 'model/model_option.dart';
-export 'model/model_transfer.dart';
-export 'model/rx_proto.dart';

@@ -184,7 +184,7 @@ class ShareController extends GetxController {
 
       // Check View Type
       if (this.type.value.isViewPopup) {
-        Get.offNamed("/transfer");
+        AppPage.Transfer.offNamed();
       } else {
         Get.back(closeOverlays: true);
       }
