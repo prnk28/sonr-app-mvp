@@ -73,7 +73,9 @@ class TransferBinding implements Bindings {
 class AppServices {
   /// @ Application Services
   static Future<void> init({bool isDesktop = false}) async {
+    // Firebase Reference
     await Firebase.initializeApp();
+
     // First: Device Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);
 

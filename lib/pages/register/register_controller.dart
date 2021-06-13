@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
@@ -39,7 +40,7 @@ class RegisterController extends GetxController {
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
   // References
-  final _nbClient = NamebaseClient();
+  final _nbClient = NamebaseClient(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
 
   // * Constructer * //
   onInit() {

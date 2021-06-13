@@ -85,8 +85,8 @@ dependencies:
 
   # -- Plugins --
   sonr_plugin:
-    git: https://github.com/sonr-io/plugin
-    #path: ../plugin/ #-- Uncomment for Local Development
+    #git: https://github.com/sonr-io/plugin
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0
