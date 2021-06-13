@@ -24,7 +24,7 @@ class SessionService extends GetxService {
   static void acceptInvite(bool decision, {bool sendBackContact = false, bool closeOverlay = false}) {}
 
   /// Set Session to Prepare for Outgoing Transfer
-  static void setOutgoing(AuthInvite invite) {
+  static void setOutgoing(InviteRequest invite) {
     to._session.outgoing(invite);
   }
 
@@ -34,7 +34,7 @@ class SessionService extends GetxService {
 
   // * ------------------- Callbacks ----------------------------
   /// Peer has Invited User
-  void handleInvite(AuthInvite data) {
+  void handleInvite(InviteRequest data) {
     // Create Incoming Session
     to._session.incoming(data);
 
@@ -51,21 +51,21 @@ class SessionService extends GetxService {
   }
 
   /// Peer has Responded
-  void handleReply(AuthReply data) async {
+  void handleReply(InviteResponse data) async {
     // Logging
     Logger.info("Node(Callback) Responded: " + data.toString());
 
     // Handle Contact Response
-    if (data.type == AuthReply_Type.FlatContact) {
+    if (data.type == InviteResponse_Type.FlatContact) {
       await HapticFeedback.heavyImpact();
       FlatMode.response(data.data.contact);
-    } else if (data.type == AuthReply_Type.Contact) {
+    } else if (data.type == InviteResponse_Type.Contact) {
       await HapticFeedback.vibrate();
       Authorize.reply(data);
     }
 
     // For Cancel
-    else if (data.type == AuthReply_Type.Cancel) {
+    else if (data.type == InviteResponse_Type.Cancel) {
       await HapticFeedback.vibrate();
     } else {
       _session.onReply(data);

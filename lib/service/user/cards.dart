@@ -59,23 +59,17 @@ class CardService extends GetxService {
   // Counts
   static int get totalCount => to._contacts.length + to._files.length + to._links.length + to._media.length;
 
-  // References
-  late CardsDatabase _database;
-
   // * Constructer * //
   Future<CardService> init() async {
     // Check Device
     if (DeviceService.isMobile) {
-      // Set Database
-      _database = CardsDatabase();
-
       // Bind Streams
-      _activity.bindStream(_database.watchActivity());
-      _allCards.bindStream(_database.watchAllCards());
-      _media.bindStream(_database.watchMedia());
-      _contacts.bindStream(_database.watchContacts());
-      _files.bindStream(_database.watchFiles());
-      _links.bindStream(_database.watchUrls());
+      //  _activity.bindStream(_database.watchActivity());
+      //  _allCards.bindStream(_database.watchAllCards());
+      //   _media.bindStream(_database.watchMedia());
+      //   _contacts.bindStream(_database.watchContacts());
+      //     _files.bindStream(_database.watchFiles());
+      //     _links.bindStream(_database.watchUrls());
 
       // Set Initial Counter
       int counter = 1;
@@ -89,14 +83,16 @@ class CardService extends GetxService {
 
   /// @ Add New Card to Database
   static addCard(Transfer card) async {
-    if (card.payload.isTransfer) {
-      // Store in Database
-      await to._database.addFileCard(card);
-      _refreshCount();
-    } else {
-      // Store in Database
-      await to._database.addCard(card);
-      _refreshCount();
+    if (isRegistered) {
+      if (card.payload.isTransfer) {
+        // Store in Database
+        //await to._database.addFileCard(card);
+        _refreshCount();
+      } else {
+        // Store in Database
+        //await to._database.addCard(card);
+        _refreshCount();
+      }
     }
   }
 
@@ -106,10 +102,12 @@ class CardService extends GetxService {
     required Profile owner,
     SonrFile? file,
   }) async {
-    if (file != null && file.exists) {
-      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
-    } else {
-      await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
+    if (isRegistered) {
+      if (file != null && file.exists) {
+        // await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
+      } else {
+        // await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
+      }
     }
   }
 
@@ -119,10 +117,12 @@ class CardService extends GetxService {
     required Profile owner,
     SonrFile? file,
   }) async {
-    if (file != null && file.exists) {
-      await to._database.addActivity(ActivityType.Received, payload, owner, mime: file.single.mime.type);
-    } else {
-      await to._database.addActivity(ActivityType.Received, payload, owner, mime: MIME_Type.OTHER);
+    if (isRegistered) {
+      if (file != null && file.exists) {
+        //  await to._database.addActivity(ActivityType.Received, payload, owner, mime: file.single.mime.type);
+      } else {
+        //  await to._database.addActivity(ActivityType.Received, payload, owner, mime: MIME_Type.OTHER);
+      }
     }
   }
 
@@ -131,104 +131,129 @@ class CardService extends GetxService {
     required Payload payload,
     SonrFile? file,
   }) async {
-    if (file != null && file.exists) {
-      await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: file.single.mime.type);
-    } else {
-      await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
+    if (isRegistered) {
+      if (file != null && file.exists) {
+        //await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: file.single.mime.type);
+      } else {
+        // await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
+      }
     }
   }
 
   /// @ Returns total Card Count
   static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
-    // Get Total Entries
-    var cards = await to._database.allCardEntries;
+    if (isRegistered) {
+      // Get Total Entries
+      //var cards = await to._database.allCardEntries;
 
-    // Filter from Options
-    if (withoutContacts) {
-      cards.removeWhere((element) => element.payload == Payload.CONTACT);
-    }
-    if (withoutMedia) {
-      cards.removeWhere((element) => element.payload == Payload.FILE);
-    }
-    if (withoutURLs) {
-      cards.removeWhere((element) => element.payload == Payload.URL);
-    }
+      // Filter from Options
+      if (withoutContacts) {
+        //   cards.removeWhere((element) => element.payload == Payload.CONTACT);
+      }
+      if (withoutMedia) {
+        //  cards.removeWhere((element) => element.payload == Payload.FILE);
+      }
+      if (withoutURLs) {
+        // cards.removeWhere((element) => element.payload == Payload.URL);
+      }
 
-    // Return Remaining
-    return cards.length;
+      // Return Remaining
+      //return cards.length;
+    }
+    return 0;
   }
 
   /// @ Clear Single Activity
   static clearActivity(TransferActivity activity) async {
-    if (hasActivity) {
-      await to._database.clearActivity(activity);
+    if (isRegistered) {
+      if (hasActivity) {
+        // await to._database.clearActivity(activity);
+      }
     }
   }
 
   /// @ Clear All Activity
   static clearAllActivity() async {
-    if (hasActivity) {
-      await to._database.clearAllActivity();
+    if (isRegistered) {
+      if (hasActivity) {
+        //  await to._database.clearAllActivity();
+      }
     }
   }
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCard(TransferCard card) async {
-    await to._database.deleteCard(card);
-    addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
-    _refreshCount();
+    if (isRegistered) {
+      //await to._database.deleteCard(card);
+      addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
+      _refreshCount();
+    }
   }
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
-    await to._database.deleteCardFromID(id);
-    _refreshCount();
+    if (isRegistered) {
+      // await to._database.deleteCardFromID(id);
+      _refreshCount();
+    }
   }
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
     if (isRegistered) {
       if (totalCount > 0) {
-        await to._database.deleteAllCards();
+        //  await to._database.deleteAllCards();
       }
     }
   }
 
   /// @ Load IO File from Metadata
   static Future<File> loadFileFromMetadata(SonrFile_Item metadata) async {
-    var asset = await AssetEntity.fromId(metadata.id);
-    if (asset != null) {
-      var file = await asset.file;
-      if (file != null) {
-        return file;
+    if (isRegistered) {
+      var asset = await AssetEntity.fromId(metadata.id);
+      if (asset != null) {
+        var file = await asset.file;
+        if (file != null) {
+          return file;
+        }
       }
+      return metadata.file;
+    } else {
+      return File("");
     }
-    return metadata.file;
   }
 
   /// @ Load SonrFile from Metadata
   static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Item metadata) async {
-    return metadata.toSonrFile();
+    if (isRegistered) {
+      return metadata.toSonrFile();
+    } else {
+      return SonrFile();
+    }
   }
 
   /// @ Handles User Invite Response
-  static handleInviteResponse(bool decision, AuthInvite invite, {bool sendBackContact = false, bool closeOverlay = false}) {
-    if (invite.payload == Payload.CONTACT) {
-      to._handleAcceptContact(invite, sendBackContact);
-    } else {
-      decision ? to._handleAcceptTransfer(invite) : to._handleDeclineTransfer(invite);
+  static handleInviteResponse(bool decision, InviteRequest invite, {bool sendBackContact = false, bool closeOverlay = false}) {
+    if (isRegistered) {
+      if (invite.payload == Payload.CONTACT) {
+        to._handleAcceptContact(invite, sendBackContact);
+      } else {
+        decision ? to._handleAcceptTransfer(invite) : to._handleDeclineTransfer(invite);
+      }
     }
   }
 
   static void reset() {
-    to._database.clearAllActivity();
-    to._database.deleteAllCards();
+    if (isRegistered) {
+      // to._database.clearAllActivity();
+      //  to._database.deleteAllCards();
+    }
   }
 
   // @ Handle Accept Transfer Response
-  _handleAcceptTransfer(AuthInvite invite) {
+  _handleAcceptTransfer(InviteRequest invite) {
     // Check for Remote
-    SonrService.respond(invite.newAcceptReply());
+    SonrService.respond(invite.newAcceptResponse());
 
     // Switch View
     SonrOverlay.back();
@@ -254,19 +279,19 @@ class CardService extends GetxService {
   }
 
 // @ Handle Decline Transfer Response
-  _handleDeclineTransfer(AuthInvite invite) {
-    SonrService.respond(invite.newDeclineReply());
+  _handleDeclineTransfer(InviteRequest invite) {
+    SonrService.respond(invite.newDeclineResponse());
     SonrOverlay.back();
   }
 
 // @ Handle Accept Contact Response
-  _handleAcceptContact(AuthInvite invite, bool sendBackContact) {
+  _handleAcceptContact(InviteRequest invite, bool sendBackContact) {
     // Save Card
-    _database.addCard(invite.data);
+    //  _database.addCard(invite.data);
 
     // Check if Send Back
     if (sendBackContact) {
-      SonrService.respond(invite.newAcceptReply());
+      SonrService.respond(invite.newAcceptResponse());
     }
 
     // Return to HomeScreen

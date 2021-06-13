@@ -5,13 +5,13 @@ class AuthorizeController extends GetxController {
   // @ Invite Management
   /// Accept a provided Contact Invite
   /// Parameters: `withShare` will send back own Contact
-  void acceptContactInvite(AuthInvite invite, {bool withShare = false}) {
+  void acceptContactInvite(InviteRequest invite, {bool withShare = false}) {
     // Save Card
     CardService.addCard(invite.data);
 
     // Check if Send Back
     if (withShare) {
-      SonrService.respond(invite.newAcceptReply());
+      SonrService.respond(invite.newAcceptResponse());
     }
 
     // Return to HomeScreen
@@ -24,9 +24,9 @@ class AuthorizeController extends GetxController {
   }
 
   /// Accept a provided Transfer Invite
-  void acceptTransferInvite(AuthInvite invite) {
+  void acceptTransferInvite(InviteRequest invite) {
     // Check for Remote
-    SonrService.respond(invite.newAcceptReply());
+    SonrService.respond(invite.newAcceptResponse());
 
     // Switch View
     Get.back(closeOverlays: true);
@@ -53,21 +53,21 @@ class AuthorizeController extends GetxController {
   }
 
   /// Decline a provided Contact Invite
-  void declineContactInvite(AuthInvite invite) {
-    SonrService.respond(invite.newDeclineReply());
+  void declineContactInvite(InviteRequest invite) {
+    SonrService.respond(invite.newDeclineResponse());
     Get.back(closeOverlays: true);
   }
 
   /// Decline a provided Transfer Invite
-  void declineTransferInvite(AuthInvite invite) {
-    SonrService.respond(invite.newDeclineReply());
+  void declineTransferInvite(InviteRequest invite) {
+    SonrService.respond(invite.newDeclineResponse());
     Get.back(closeOverlays: true);
   }
 
   // @ Reply Management
   /// Accept a Provided Contact Reply
-  void acceptContactReply(AuthReply reply) {}
+  void acceptContactReply(InviteResponse reply) {}
 
   /// Decline a Provided Contact Reply
-  void declineContactReply(AuthReply reply) {}
+  void declineContactReply(InviteResponse reply) {}
 }

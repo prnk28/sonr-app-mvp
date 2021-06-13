@@ -91,10 +91,6 @@ class LobbyService extends GetxService {
         to._peerCallbacks.remove(peer);
       }
     }
-
-    if (isRegistered) {
-      //
-    }
   }
 
   /// @ Method to Cancel Flat Mode
@@ -141,14 +137,6 @@ class LobbyService extends GetxService {
 
       // Refresh Values
       _local.refresh();
-    }
-
-    // @ Update Remote Topics
-    else if (data.type == Lobby_Type.REMOTE && data.hasRemote()) {
-      // Check for callback
-      if (_lobbyCallbacks.containsKey(data.remote.topic)) {
-        _lobbyCallbacks[data.remote.topic]!(data);
-      }
     }
   }
 

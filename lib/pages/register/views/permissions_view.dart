@@ -45,13 +45,13 @@ class BoardingGalleryView extends GetView<RegisterController> {
           Container(
             width: Get.width,
             height: Get.height,
-            decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/illustrations/MediaPerm.png"), fit: BoxFit.fitHeight)),
+            decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/illustrations/MediaPerm.png"), fit: BoxFit.fill)),
           ),
           Container(
             padding: EdgeInsets.only(bottom: 32),
             alignment: Alignment.bottomCenter,
             child: ColorButton.neutral(
-              onPressed: controller.requestLocation,
+              onPressed: controller.requestGallery,
               text: "Grant Gallery",
             ),
           )

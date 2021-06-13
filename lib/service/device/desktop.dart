@@ -30,9 +30,13 @@ class DesktopService extends GetxService {
       ),
       orientation: Position_Orientation(pitch: 0, roll: 0, yaw: 0));
 
+  // Properties
+  static Position get position => to._position;
+
+  // Constructer
   DesktopService() {
     Timer.periodic(1.seconds, (timer) {
-      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+      if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
         SonrService.update(_position);
       }
     });

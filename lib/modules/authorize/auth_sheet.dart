@@ -6,21 +6,21 @@ import 'url_auth.dart';
 
 class Authorize {
   /// Invite Received
-  static void invite(AuthInvite invite) {
+  static void invite(InviteRequest invite) {
     // Place Controller
     final controller = Get.put<AuthorizeController>(AuthorizeController());
     if (invite.payload == Payload.CONTACT) {
       Popup.open(ContactAuthView(false, invite: invite), dismissible: false);
     } else {
-      Sheet.dissmissible(ValueKey(invite), _AuthInviteSheet(controller: controller, invite: invite), (direction) {
-        SonrService.respond(invite.newDeclineReply());
+      Sheet.dissmissible(ValueKey(invite), _InviteRequestSheet(controller: controller, invite: invite), (direction) {
+        SonrService.respond(invite.newDeclineResponse());
         Sheet.close();
       });
     }
   }
 
   /// Reply Contact Received
-  static void reply(AuthReply reply) {
+  static void reply(InviteResponse reply) {
     // Open Sheet
     Popup.open(
       Container(
@@ -31,12 +31,12 @@ class Authorize {
   }
 }
 
-/// @ TransferView: Builds Invite View based on AuthInvite Payload Type
-class _AuthInviteSheet extends StatelessWidget {
+/// @ TransferView: Builds Invite View based on InviteRequest Payload Type
+class _InviteRequestSheet extends StatelessWidget {
   final AuthorizeController controller;
-  final AuthInvite invite;
+  final InviteRequest invite;
 
-  const _AuthInviteSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
+  const _InviteRequestSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return FadeInUpBig(
@@ -48,7 +48,7 @@ class _AuthInviteSheet extends StatelessWidget {
           margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
           child: Column(
             children: [
-              _AuthInviteFileHeader(
+              _InviteRequestFileHeader(
                 file: invite.file,
                 payload: invite.payload,
                 profile: invite.from.profile,
@@ -74,7 +74,7 @@ class _AuthInviteSheet extends StatelessWidget {
   // Builds View By Payload
   Widget _buildView() {
     if (invite.payload.isTransfer) {
-      return _AuthInviteFileContent(file: invite.file);
+      return _InviteRequestFileContent(file: invite.file);
     } else if (invite.payload == Payload.URL) {
       return URLAuthView(invite);
     } else {
@@ -84,12 +84,12 @@ class _AuthInviteSheet extends StatelessWidget {
 }
 
 /// @ Header: Auth Invite File Header
-class _AuthInviteFileHeader extends StatelessWidget {
+class _InviteRequestFileHeader extends StatelessWidget {
   final Payload payload;
   final Profile profile;
   final SonrFile file;
 
-  const _AuthInviteFileHeader({Key? key, required this.payload, required this.profile, required this.file}) : super(key: key);
+  const _InviteRequestFileHeader({Key? key, required this.payload, required this.profile, required this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return // @ Header
@@ -183,10 +183,10 @@ class _AuthInviteFileHeader extends StatelessWidget {
 }
 
 /// @ Content: Auth Invite File Content
-class _AuthInviteFileContent extends StatelessWidget {
+class _InviteRequestFileContent extends StatelessWidget {
   final SonrFile file;
 
-  const _AuthInviteFileContent({Key? key, required this.file}) : super(key: key);
+  const _InviteRequestFileContent({Key? key, required this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

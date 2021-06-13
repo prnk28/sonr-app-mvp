@@ -1,21 +1,22 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:feedback/feedback.dart';
 
 /// @ Main Method
 Future<void> main() async {
   // Init Services
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrServices.init();
+  await AppServices.init();
 
   // Check Platform
   if (DeviceService.isMobile) {
-    await SentryFlutter.init(
-      Logger.sentryOptions,
-      appRunner: () => runApp(BetterFeedback(child: App(isDesktop: false))),
-    );
+    runZonedGuarded(() {
+      runApp(BetterFeedback(child: App(isDesktop: false)));
+    }, FirebaseCrashlytics.instance.recordError);
   } else {
     runApp(App(isDesktop: true));
   }
@@ -35,7 +36,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
-      getPages: Route.pages,
+      getPages: AppRoute.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [
@@ -111,7 +112,7 @@ class App extends StatelessWidget {
         ));
 
         // Create User
-        await UserService.newUser(contact);
+        await UserService.newContact(contact);
 
         // Connect to Network
         SonrService.to.connect();

@@ -5,7 +5,7 @@ class ExplorerController extends GetxController {
   Payload get currentPayload => inviteRequest.value.payload;
 
   // @ Properties
-  final inviteRequest = AuthInvite().obs;
+  final inviteRequest = InviteRequest().obs;
   final scrollController = ScrollController();
 
   /// Choose File

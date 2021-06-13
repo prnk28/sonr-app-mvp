@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/env.dart';
-import 'package:sonr_app/service/device/auth.dart';
-// import 'package:sonr_app/service/device/ble.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
@@ -26,147 +23,116 @@ class SonrService extends GetxService {
   static Rx<Status> get status => to._status;
 
   // @ Set References
-  late Node _node;
-  bool _initialized = false;
+  late Node node;
 
   // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
   Future<SonrService> init() async {
     // Initialize
     _properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled));
-
-    // Check for Connect Requirements
-    if (DeviceService.isReadyToConnect) {
-      await initNode();
-      return this;
-    } else {
-      return this;
-    }
-  }
-
-  /// @ Initializes Node Instance
-  Future<void> initNode() async {
     // Create Node
-    _node = await SonrCore.initialize(_buildConnRequest());
-    _node.onStatus = _handleStatus;
-    _node.onRefreshed = LobbyService.to.handleRefresh;
-    _node.onInvited = SessionService.to.handleInvite;
-    _node.onReplied = SessionService.to.handleReply;
-    _node.onProgressed = SessionService.to.handleProgress;
-    _node.onReceived = SessionService.to.handleReceived;
-    _node.onTransmitted = SessionService.to.handleTransmitted;
-    _node.onError = _handleError;
-    _initialized = true;
+    node = await SonrCore.initialize(InitializeRequest(
+      apiKeys: AppServices.apiKeys,
+      device: DeviceService.device,
+    ));
+
+    // Set Handlers
+    node.onStatus = _handleStatus;
+    node.onError = _handleError;
+    node.onRefreshed = LobbyService.to.handleRefresh;
+    node.onInvited = SessionService.to.handleInvite;
+    node.onReplied = SessionService.to.handleReply;
+    node.onProgressed = SessionService.to.handleProgress;
+    node.onReceived = SessionService.to.handleReceived;
+    node.onTransmitted = SessionService.to.handleTransmitted;
+    return this;
   }
 
   /// @ Connect to Service Method
-  Future<void> connect() async {
-    // Check Initialized
-    if (!_initialized) {
-      await initNode();
-    }
+  Future<bool> connect() async {
+    // Check for User
+    if (UserService.hasUser.value) {
+      // Connect Node
+      node.connect(ConnectionRequest(
+        contact: UserService.contact.value,
+        location: DeviceService.location,
+      ));
 
-    // Connect Node
-    _node.connect();
-
-    // Update for Mobile
-    if (DeviceService.isMobile) {
-      _node.update(Request.newUpdatePosition(MobileService.position.value));
+      // Send Initial Position Update
+      node.update(Request.newUpdatePosition(DeviceService.isMobile ? MobileService.position.value : DesktopService.position));
+      return true;
+    } else {
+      return false;
     }
   }
 
   // * ------------------- Methods ----------------------------
-  /// @ Method to Pass Discovered BLE Peers
-  // static void discover(List<BLEDevice> devices) {
-  //   if (isReady) {
-  //     // Call Method
-  //     to._node.discover(devices.toDiscoverRequest());
-  //   }
-  // }
+  /// @ Sign Provided Data with Private Key
+  static Future<SignResponse> sign(SignRequest request) async {
+    return await to.node.sign(request);
+  }
+
+  /// @ Store Property in Memory Store
+  static Future<StoreResponse> store(StoreRequest request) async {
+    return await to.node.store(request);
+  }
+
+  /// @ Verify Provided Data with Private Key
+  static Future<VerifyResponse> verify(VerifyRequest request) async {
+    return await to.node.verify(request);
+  }
 
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
-    var link = await to._node.getURL(url);
+    var link = await SonrCore.getUrlLink(url);
     return link ?? URLLink(url: url);
-  }
-
-  /// @ Request Local Network Access on iOS
-  static void requestLocalNetwork() async {
-    to._node.requestLocalNetwork();
-  }
-
-  /// @ Create a New Remote
-  static Future<RemoteCreateResponse?> createRemote({
-    required SonrFile file,
-    required String fingerprint,
-    required String words,
-  }) async {
-    if (status.value.hasConnection) {
-      return await to._node.remoteCreateRequest(RemoteCreateRequest(file: file, fingerprint: fingerprint, sName: UserService.sName, words: words));
-    }
-  }
-
-  /// @ Join an Existing Remote
-  static Future<RemoteJoinResponse?> joinRemote(String link) async {
-    if (status.value.hasConnection) {
-      // Perform Routine
-      var response = await to._node.remoteJoinRequest(RemoteJoinRequest(topic: link));
-      return response;
-    }
   }
 
   /// @ Send Position Update for Node
   static void update(Position position) {
-    if (status.value.hasConnection) {
-      to._node.update(Request.newUpdatePosition(position));
+    if (status.value.isConnected) {
+      to.node.update(Request.newUpdatePosition(position));
     }
-  }
-
-  static Future<String?> pickFile() async {
-    if (status.value.hasConnection && DeviceService.isDesktop) {
-      return await to._node.pickFile();
-    }
-    return null;
   }
 
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
-    if (status.value.hasConnection) {
+    if (status.value.isConnected) {
       if (to._properties.value.isFlatMode != isFlatMode) {
         to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
-        to._node.update(Request.newUpdateProperties(to._properties.value));
+        to.node.update(Request.newUpdateProperties(to._properties.value));
       }
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
-    if (status.value.hasConnection) {
-      to._node.update(Request.newUpdateContact(contact));
+    if (status.value.isConnected) {
+      to.node.update(Request.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
-  static Session? invite(AuthInvite request) {
-    if (status.value.hasConnection) {
+  static Session? invite(InviteRequest request) {
+    if (status.value.isConnected) {
       // Send Invite
-      to._node.invite(request);
+      to.node.invite(request);
       SessionService.setOutgoing(request);
       return SessionService.session;
     }
   }
 
   /// @ Respond-Peer Event
-  static void respond(AuthReply request) async {
-    if (status.value.hasConnection) {
-      to._node.respond(request);
+  static void respond(InviteResponse request) async {
+    if (status.value.isConnected) {
+      to.node.respond(request);
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
-    if (status.value.hasConnection) {
-      to._node.invite(AuthInvite(to: peer!)..setContact(UserService.contact.value, isFlat: true));
+    if (status.value.isConnected) {
+      to.node.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
   }
 
@@ -179,12 +145,8 @@ class SonrService extends GetxService {
 
       // Handle Available
       if (DeviceService.isMobile) {
-        _node.update(Request.newUpdatePosition(MobileService.position.value));
+        node.update(Request.newUpdatePosition(MobileService.position.value));
       }
-    }
-    // Set MultiAddr
-    else if (data.value == Status.CONNECTED) {
-      // BLEService.initMultiAddr(data.multiaddr);
     }
 
     // Update Status
@@ -213,25 +175,5 @@ class SonrService extends GetxService {
 
     // Logging
     Logger.sError(data);
-  }
-
-  // * ------------------- Helpers ----------------------------
-  // Builds Connection Request
-  ConnectionRequest _buildConnRequest() {
-    return ConnectionRequest(
-        contact: UserService.contact.value,
-        crypto: AuthService.isRegistered ? AuthService.userCrypto : null,
-        device: DeviceService.device,
-        devices: UserService.user.devices,
-        settings: UserService.user.settings,
-        location: DeviceService.location,
-        clientKeys: ConnectionRequest_ClientKeys(
-            hsKey: Env.hs_key,
-            hsSecret: Env.hs_secret,
-            ipKey: Env.ip_key,
-            rapidApiHost: Env.rapid_host,
-            rapidApiKey: Env.rapid_key,
-            hubKey: Env.hub_key,
-            hubSecret: Env.hub_secret));
   }
 }

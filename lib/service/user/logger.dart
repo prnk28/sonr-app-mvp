@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sentry/sentry.dart';
 import 'package:logger/logger.dart' as util;
 
 class Logger extends GetxService {
@@ -66,27 +63,4 @@ class Logger extends GetxService {
     }
   }
 
-  /// Reports dart [error] along with its [stackTrace] to Sentry.io.
-  static SentryEvent? reportError(SentryEvent event, {dynamic hint}) {
-    if (buildMode.isDebug) {
-      return event;
-    } else {
-      return event;
-    }
-  }
-
-  /// Returns Sentry Options from Logger
-  static FutureOr<void> sentryOptions(SentryFlutterOptions options) {
-    // Properties
-    options.dsn = Env.sentry_dsn;
-    options.sampleRate = 0.1;
-    options.serverName = "[App] ${DeviceService.platform.toString()}";
-    options.beforeSend = reportError;
-    options.debug = buildMode.isDebug;
-
-    // Add Excludes
-    SonrServices.excludedModules.forEach((ex) {
-      options.addInAppExclude(ex);
-    });
-  }
 }

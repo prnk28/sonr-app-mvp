@@ -30,10 +30,6 @@ environment_config:
       env_var: hub_secret
     sentry_dsn:
       env_var: sentry_dsn
-    storj_key:
-      env_var: storj_key
-    storj_root_password:
-      env_var: storj_root_password
 
 # ** ================== **
 # **    DEPENDENCIES    **
@@ -46,16 +42,16 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   bip39: ^1.0.6
-  crypton: ^2.0.1
   environment_config: ^3.0.0
-  file_picker: ^3.0.1
+  firebase_core: ^1.2.1
+  firebase_analytics: ^8.1.1
+  firebase_crashlytics: ^2.0.6
+  firebase_storage: ^8.1.3
   flutter_hooks: ^0.17.0
-  flutter_secure_storage: ^4.2.0
   get: ^4.1.4
   get_storage: ^2.0.2
   intl: ^0.17.0
   logger: ^1.0.0
-  sentry_flutter: ^5.0.0
 
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
@@ -70,38 +66,34 @@ dependencies:
 
   # -- Data --
   audioplayers: ^0.19.0
-  firebase_core: ^1.2.1
-  firebase_analytics: ^8.1.1
+  file_picker: ^3.0.2+2
   open_file: ^3.2.0
   photo_manager: ^1.2.0
   path: ^1.8.0
   path_provider: ^2.0.1
   share: ^2.0.1
   vector_math: ^2.1.0
-  video_player: ^2.0.0-nullsafety.9
+  video_player: ^2.1.6
 
   # -- Network --
+  cloud_firestore: ^2.2.2
   feedback: ^1.2.2
-  flutter_email_sender: ^5.0.0
   mime: ^1.0.0
   moor: ^4.3.2
   receive_sharing_intent: ^1.4.5
   uni_links: ^0.5.1
 
   # -- Plugins --
-  systray:
-    git: https://github.com/sonr-io/systray
-
   sonr_plugin:
-    git: https://github.com/sonr-io/plugin
-    #path: ../plugin/ #-- Uncomment for Local Development
+    #git: https://github.com/sonr-io/plugin
+    path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0
-  lottie: ^1.0.1
   rive: ^0.7.7
   styled_widget: ^0.3.1
   supercharged: ^2.0.0
+  systray: ^0.5.3
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:

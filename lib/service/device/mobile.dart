@@ -7,13 +7,11 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/share/external_sheet.dart';
-import 'package:sonr_app/pages/transfer/remote/sheet_view.dart';
 import 'package:sonr_app/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device/device.dart';
-import 'package:uni_links/uni_links.dart';
 
 // @ Enum defines Type of Permission
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
@@ -38,7 +36,6 @@ class MobileService extends GetxService {
   final _keyboardVisible = false.obs;
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
-  final _incomingRemote = "".obs;
   final _incomingText = "".obs;
 
   // Getters for Device/Location References
@@ -61,7 +58,6 @@ class MobileService extends GetxService {
   }
 
   // References
-  late StreamSubscription _remoteLinkStream;
   late StreamSubscription _externalMediaStream;
   late StreamSubscription _externalTextStream;
   late StreamSubscription<AccelerometerEvent> _accelStream;
@@ -70,7 +66,7 @@ class MobileService extends GetxService {
 
   MobileService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (SonrServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
+      if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
         SonrService.update(position.value);
       }
     });
@@ -116,7 +112,6 @@ class MobileService extends GetxService {
     // Listen to Incoming Text/File
     _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
     _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
-    _remoteLinkStream = linkStream.listen(_handleSharedRemote);
     return this;
   }
 
@@ -128,7 +123,6 @@ class MobileService extends GetxService {
     _orienStream.cancel();
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
-    _remoteLinkStream.cancel();
     super.onClose();
   }
 
@@ -154,11 +148,6 @@ class MobileService extends GetxService {
         // Reset Incoming
         to._incomingText("");
         to._incomingText.refresh();
-      }
-
-      // @ Check for Remote
-      if (to._incomingRemote.value.isNotEmpty) {
-        RemoteSheet.open(to._incomingRemote.value);
       }
     }
   }
@@ -423,7 +412,7 @@ class MobileService extends GetxService {
           buttonText: "Continue",
           barrierDismissible: false);
 
-      SonrService.requestLocalNetwork();
+      SonrService.to.node.requestLocalNetwork();
       updatePermissionsStatus();
       SonrOverlay.back();
     }
@@ -456,17 +445,6 @@ class MobileService extends GetxService {
   _handleSharedFiles(List<SharedMediaFile> data) async {
     if (!Get.isBottomSheetOpen!) {
       await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
-    }
-  }
-
-  // # Handle Incoming Remote Link
-  _handleSharedRemote(String? link) async {
-    if (link != null) {
-      Logger.info('Shared Remote Link: ' + link);
-      if (link.contains(".remote.")) {
-        _incomingRemote(link);
-        RemoteSheet.open(to._incomingRemote.value.substring(7));
-      }
     }
   }
 

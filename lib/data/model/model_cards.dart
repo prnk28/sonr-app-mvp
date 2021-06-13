@@ -2,7 +2,6 @@ import 'package:sonr_app/pages/detail/detail.dart';
 import 'package:sonr_app/style.dart';
 
 enum TransferItemsType { Media, Files, Contacts, Links }
-
 extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns List Length as H5 Text
   Widget subtitle() {
