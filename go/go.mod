@@ -9,6 +9,6 @@ require (
 	github.com/jld3103/go-flutter-open_file v0.0.0-20191015224027-100716ccb0bd
 	github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210401125244-74289af412c2
 	github.com/pkg/errors v0.9.1
-	github.com/sonr-io/plugin/go v0.9.17
+	github.com/sonr-io/plugin/go v0.9.33
 	github.com/sonr-io/systray/go v0.5.1
 )
