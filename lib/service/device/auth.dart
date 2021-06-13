@@ -94,7 +94,7 @@ class AuthService extends GetxService {
 
     // Check Result
     if (response.isSigned) {
-      return response.signedText.data.single.substring(0, 16);
+      return response.signedText.substring(0, 16);
     }
     return "";
   }
@@ -106,7 +106,7 @@ class AuthService extends GetxService {
 
     // Check Result
     if (response.isSigned) {
-      return response.signedText.data.single;
+      return response.signedText;
     }
     return "";
   }
