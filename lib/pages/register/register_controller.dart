@@ -4,8 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style.dart';
+import 'package:bip39/bip39.dart' as bip39;
 
 enum RegisterNameStatus { Default, Returning, TooShort, Available, Unavailable, Blocked, Restricted, DeviceRegistered }
 
@@ -30,14 +30,22 @@ class RegisterController extends GetxController {
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterStatus>(RegisterStatus.Name);
+  final auth = Rx<HSRecord>(HSRecord.blank());
+  final result = Rx<NamebaseResult>(NamebaseResult.blank());
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final lastNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
+  // References
+  final _nbClient = NamebaseClient();
+
   // * Constructer * //
   onInit() {
+    // Get Records
+    refreshRecords();
+
     // Check Platform
     if (DeviceService.isDesktop) {
       status(RegisterStatus.Linker);
@@ -63,20 +71,38 @@ class RegisterController extends GetxController {
 
   Future<void> setName() async {
     // Refresh Records
-    AuthService.to.refreshRecords();
+    refreshRecords();
 
     // Validate
     if (await validateName()) {
       if (nameStatus.value != RegisterNameStatus.Returning) {
-        // Create User Data
-        var data = await AuthService.createUsername(sName.value);
+        // Check Valid
+        if (result.value.isValidName(sName.value)) {
+          var prefix = await signPrefix(sName.value);
+          var genMnemomic = bip39.generateMnemonic();
+          var fingerprint = await signFingerprint(genMnemomic);
 
-        if (data.isValid) {
-          mnemonic(data.mnemonic);
+          // Logging
+          Logger.info("Prefix: $prefix \n Mnemonic: $genMnemomic \n Fingerprint: $fingerprint");
+
+          // Add UserRecord Domain
+          await _nbClient.addRecord(HSRecord.newAuth(prefix, sName.value, fingerprint));
+
+          // Analytics
+          FirebaseAnalytics().logEvent(
+            name: '[AuthService]: Create-Username',
+            parameters: {
+              'createdAt': DateTime.now().toString(),
+              'platform': DeviceService.platform.toString(),
+              'new-username': sName.value,
+            },
+          );
+
+          // Update Status
+          mnemonic(genMnemomic);
           status(RegisterStatus.Backup);
         }
       } else {
-        //await UserService.returnUser();
         status(RegisterStatus.Location);
       }
     }
@@ -149,7 +175,7 @@ class RegisterController extends GetxController {
     // Update Status
     if (sName.value.length > 3 && !sName.value.contains(" ")) {
       // Check Available
-      if (AuthService.to.result.value.checkName(
+      if (result.value.checkName(
         NameCheckType.Unavailable,
         sName.value,
       )) {
@@ -157,7 +183,7 @@ class RegisterController extends GetxController {
         return false;
       }
       // Check Unblocked
-      else if (AuthService.to.result.value.checkName(
+      else if (result.value.checkName(
         NameCheckType.Blocked,
         sName.value,
       )) {
@@ -165,7 +191,7 @@ class RegisterController extends GetxController {
         return false;
       }
       // Check Unrestricted
-      else if (AuthService.to.result.value.checkName(
+      else if (result.value.checkName(
         NameCheckType.Restricted,
         sName.value,
       )) {
@@ -217,5 +243,50 @@ class RegisterController extends GetxController {
         return false;
       }
     }
+  }
+
+  /// #### Refreshes Record Table from Namebase Client
+  Future<void> refreshRecords() async {
+    // Set Data From Response
+    var data = await _nbClient.refresh();
+    if (data.success) {
+      result(data);
+      result.refresh();
+    }
+  }
+
+  /// #### Checks if Username matches device id and prefix from records
+  static Future<bool> validateUser(String n, String mnemonic) async {
+    var request = Request.newVerifyText(original: mnemonic, signature: mnemonic);
+    var response = await SonrService.verify(request);
+    return response.isVerified;
+  }
+
+  // Helper Method to Generate Prefix
+  static Future<String> signPrefix(String username) async {
+    // Create New Prefix
+    var request = Request.newSignText(username + DeviceService.device.id);
+    var response = await SonrService.sign(request);
+
+    Logger.info(response.toString());
+
+    // Check Result
+    if (response.isSigned) {
+      return response.signedValue.substring(0, 16);
+    }
+    return "";
+  }
+
+  static Future<String> signFingerprint(String mnemonic) async {
+    // Create New Prefix
+    var request = Request.newSignText(mnemonic);
+    var response = await SonrService.sign(request);
+
+    Logger.info(response.toString());
+    // Check Result
+    if (response.isSigned) {
+      return response.signedValue;
+    }
+    return "";
   }
 }

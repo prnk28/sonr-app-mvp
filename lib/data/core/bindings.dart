@@ -13,7 +13,6 @@ import 'package:sonr_app/pages/explorer/explorer_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/service/client/session.dart';
-import 'package:sonr_app/service/device/auth.dart';
 import 'package:sonr_app/style.dart';
 
 /// @ Initial Controller Bindings
@@ -83,7 +82,6 @@ class AppServices {
     if (isDesktop) {
       await Get.putAsync(() => DesktopService().init(), permanent: true);
     } else {
-      await Get.putAsync(() => AuthService().init(), permanent: true);
       await Get.putAsync(() => MobileService().init(), permanent: true);
     }
 
