@@ -78,15 +78,16 @@ class RegisterController extends GetxController {
       if (nameStatus.value != RegisterNameStatus.Returning) {
         // Check Valid
         if (result.value.isValidName(sName.value)) {
-          var prefix = await signPrefix(sName.value);
           var genMnemomic = bip39.generateMnemonic();
-          var fingerprint = await signFingerprint(genMnemomic);
+          var result = await signUser(sName.value, genMnemomic);
 
           // Logging
-          Logger.info("Prefix: $prefix \n Mnemonic: $genMnemomic \n Fingerprint: $fingerprint");
+          Logger.info(
+              "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicIdentity}");
 
           // Add UserRecord Domain
-          await _nbClient.addRecord(HSRecord.newAuth(prefix, sName.value, fingerprint));
+          await _nbClient.addRecord(
+              HSRecord.newAuth(result.signedPrefix, sName.value, result.signedFingerprint), HSRecord.newName(sName.value, result.publicIdentity));
 
           // Analytics
           FirebaseAnalytics().logEvent(
@@ -263,30 +264,13 @@ class RegisterController extends GetxController {
   }
 
   // Helper Method to Generate Prefix
-  static Future<String> signPrefix(String username) async {
+  static Future<SignResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
-    var request = Request.newSignText(username + DeviceService.device.id);
+    var request = Request.newSignature(username, mnemonic);
     var response = await SonrService.sign(request);
-
     Logger.info(response.toString());
 
     // Check Result
-    if (response.isSigned) {
-      return response.signedValue.substring(0, 16);
-    }
-    return "";
-  }
-
-  static Future<String> signFingerprint(String mnemonic) async {
-    // Create New Prefix
-    var request = Request.newSignText(mnemonic);
-    var response = await SonrService.sign(request);
-
-    Logger.info(response.toString());
-    // Check Result
-    if (response.isSigned) {
-      return response.signedValue;
-    }
-    return "";
+    return response;
   }
 }

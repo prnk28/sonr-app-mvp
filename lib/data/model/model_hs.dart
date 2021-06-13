@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:get/get_connect/connect.dart';
 import 'package:sonr_app/data/data.dart';
 
+const IDENTITY_DIVIDER = "id=";
 const FINGERPRINT_DIVIDER = "v=0;fingerprint=";
 const AUTH_DIVIDER = "._auth.";
 const TRANSFER_DIVIDER = ".transfer.";
@@ -42,6 +43,11 @@ class HSRecord {
   /// Returns Auth Based Record
   factory HSRecord.newAuth(String prefix, String name, String fingerprint) {
     return HSRecord(ttl: 5, type: "TXT", host: "$prefix$AUTH_DIVIDER$name", value: FINGERPRINT_DIVIDER + fingerprint);
+  }
+
+  /// Returns Auth Based Record
+  factory HSRecord.newName(String name, String identity) {
+    return HSRecord(ttl: 5, type: "TXT", host: name, value: IDENTITY_DIVIDER + identity);
   }
 
   /// Returns Remote Transfer Based Record

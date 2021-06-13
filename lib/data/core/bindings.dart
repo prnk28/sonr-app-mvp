@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/env.dart';
@@ -72,6 +73,7 @@ class TransferBinding implements Bindings {
 class AppServices {
   /// @ Application Services
   static Future<void> init({bool isDesktop = false}) async {
+    await Firebase.initializeApp();
     // First: Device Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);
 

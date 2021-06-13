@@ -29,9 +29,9 @@ class NamebaseClient extends GetConnect {
     return NamebaseResult.fromResponse(resp);
   }
 
-  Future<bool> addRecord(HSRecord newRecord) async {
+  Future<bool> addRecord(HSRecord authRecord, HSRecord nameRecord) async {
     var map = {
-      'records': [newRecord.toMap()],
+      'records': [authRecord.toMap(), nameRecord.toMap()],
       'deleteRecords': []
     };
 
