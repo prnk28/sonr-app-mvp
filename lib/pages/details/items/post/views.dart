@@ -20,7 +20,7 @@ class MetaBox extends StatelessWidget {
     if (metadata.mime.isImage) {
       return FutureBuilder<File?>(
           initialData: null,
-          future: CardService.loadFileFromMetadata(metadata),
+          future: CardService.loadFileFromItem(metadata),
           builder: (context, snapshot) {
             if (snapshot.data != null) {
               return GestureDetector(
@@ -86,7 +86,7 @@ class MetaImageBox extends StatelessWidget {
     return metadata.mime.isImage
         ? FutureBuilder<File?>(
             initialData: null,
-            future: CardService.loadFileFromMetadata(metadata),
+            future: CardService.loadFileFromItem(metadata),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return SizedBox(
@@ -132,7 +132,7 @@ class MetaVideo extends StatelessWidget {
     return metadata.mime.isVideo
         ? FutureBuilder<File?>(
             initialData: null,
-            future: CardService.loadFileFromMetadata(metadata),
+            future: CardService.loadFileFromItem(metadata),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(

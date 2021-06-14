@@ -13,22 +13,7 @@ class DesktopService extends GetxService {
   static DesktopService get to => Get.find<DesktopService>();
 
   // References
-  final Position _position = Position(
-      proximity: Position_Proximity.Near,
-      accelerometer: Position_Accelerometer(x: 0, y: 0, z: 0),
-      facing: Position_Compass(
-        antiCardinal: Cardinal.S,
-        cardinal: Cardinal.N,
-        direction: 0,
-        antipodal: 180,
-      ),
-      heading: Position_Compass(
-        antiCardinal: Cardinal.S,
-        cardinal: Cardinal.N,
-        direction: 0,
-        antipodal: 180,
-      ),
-      orientation: Position_Orientation(pitch: 0, roll: 0, yaw: 0));
+  final Position _position = PositionUtils.newDefault();
 
   // Properties
   static Position get position => to._position;

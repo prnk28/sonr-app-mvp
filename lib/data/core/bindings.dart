@@ -75,7 +75,9 @@ class AppServices {
   /// @ Application Services
   static Future<void> init({bool isDesktop = false}) async {
     // Firebase Reference
-    await Firebase.initializeApp();
+    if (!isDesktop) {
+      await Firebase.initializeApp();
+    }
 
     // First: Device Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);

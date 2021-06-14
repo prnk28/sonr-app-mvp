@@ -190,25 +190,25 @@ class CardService extends GetxService {
   }
 
   /// @ Load IO File from Metadata
-  static Future<File> loadFileFromMetadata(SonrFile_Item metadata) async {
+  static Future<File> loadFileFromItem(SonrFile_Item item) async {
     if (DeviceService.isMobile && isRegistered) {
-      var asset = await AssetEntity.fromId(metadata.id);
+      var asset = await AssetEntity.fromId(item.id);
       if (asset != null) {
         var file = await asset.file;
         if (file != null) {
           return file;
         }
       }
-      return metadata.file;
+      return item.file;
     } else {
       return File("");
     }
   }
 
   /// @ Load SonrFile from Metadata
-  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Item metadata) async {
+  static Future<SonrFile> loadSonrFileFromItem(SonrFile_Item item) async {
     if (DeviceService.isMobile && isRegistered) {
-      return metadata.toSonrFile();
+      return item.toSonrFile();
     } else {
       return SonrFile();
     }
