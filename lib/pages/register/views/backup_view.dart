@@ -54,6 +54,6 @@ class BackupCodeView extends GetView<RegisterController> {
   /// Copy Backup Code to Clipboard
   void _copyCode() async {
     Clipboard.setData(ClipboardData(text: controller.mnemonic.value));
-    Snack.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+    AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
   }
 }

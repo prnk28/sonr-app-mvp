@@ -37,7 +37,7 @@ class TileController extends GetxController {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      Snack.error("Could not launch the URL.");
+      AppRoute.snack(SnackArgs.error("Could not launch the URL."));
     }
   }
 

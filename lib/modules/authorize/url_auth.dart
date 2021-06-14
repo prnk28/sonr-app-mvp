@@ -12,7 +12,7 @@ class URLAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: SonrTheme.cardDecoration,
+      decoration: SonrTheme.boxDecoration,
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -21,7 +21,7 @@ class URLAuthView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
             child: Container(
               padding: EdgeInsets.all(4),
-              decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
+              decoration: SonrTheme.boxCircleDecoration,
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(
@@ -73,7 +73,7 @@ class URLAuthView extends StatelessWidget {
     if (await canLaunch(invite.url.url)) {
       await launch(invite.url.url);
     } else {
-      Snack.error("Could not launch the URL.");
+      AppRoute.snack(SnackArgs.error("Could not launch the URL."));
     }
   }
 }

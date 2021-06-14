@@ -158,7 +158,7 @@ class SonrService extends GetxService {
   /// @ An Error Has Occurred
   void _handleError(ErrorMessage data) async {
     if (data.severity != ErrorMessage_Severity.LOG) {
-      Snack.error("", error: data);
+      AppRoute.snack(SnackArgs.error("", error: data));
     } else {
       // Reset Views
       if (SonrOverlay.isOpen) {

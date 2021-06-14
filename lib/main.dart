@@ -34,8 +34,8 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       onInit: () => _checkInitialPage(),
       themeMode: ThemeMode.system,
-      theme: SonrDesign.LightTheme,
-      darkTheme: SonrDesign.DarkTheme,
+      theme: SonrTheme.LightTheme,
+      darkTheme: SonrTheme.DarkTheme,
       getPages: [
         AppPage.Home.config(),
         AppPage.Register.config(),

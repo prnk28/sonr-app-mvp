@@ -23,7 +23,7 @@ class PeerCard extends GetWidget<PeerController> {
               width: K_CARD_WIDTH,
               height: K_CARD_HEIGHT,
               clipBehavior: Clip.antiAlias,
-              decoration: SonrTheme.cardDecoration,
+              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.all(24),
               child: Stack(children: [
                 // Rive Board

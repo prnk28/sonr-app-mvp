@@ -41,7 +41,7 @@ class _InviteRequestSheet extends StatelessWidget {
       duration: 500.milliseconds,
       child: Container(
           padding: EdgeInsets.only(left: 8, right: 8),
-          decoration: SonrTheme.cardDecoration,
+          decoration: SonrTheme.boxDecoration,
           height: 460,
           margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
           child: Column(
@@ -95,9 +95,7 @@ class _InviteRequestFileHeader extends StatelessWidget {
       [
         Container(
             margin: EdgeInsets.only(top: 8, left: 8),
-            decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-              BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
-            ]),
+            decoration: SonrTheme.boxCircleDecoration,
             padding: EdgeInsets.all(4),
             child: Container(
               width: 64,

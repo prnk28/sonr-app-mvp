@@ -23,7 +23,7 @@ class PastActivityItem extends GetView<ActivityController> {
           ),
         ),
         child: Container(
-          decoration: SonrTheme.cardDecoration,
+          decoration: SonrTheme.boxDecoration,
           child: ListTile(title: item.messageText()),
         ),
       ),

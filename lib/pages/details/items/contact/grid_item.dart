@@ -13,9 +13,7 @@ class ContactGridItemView extends StatelessWidget {
               width: 160,
               height: 190,
               clipBehavior: Clip.antiAlias,
-              decoration: Neumorphic.floating(
-                theme: Get.theme,
-              ),
+              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.all(32),
               child: Stack(children: [
                 // Content

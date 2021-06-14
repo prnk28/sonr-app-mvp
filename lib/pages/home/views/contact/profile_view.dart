@@ -9,7 +9,7 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-        decoration: SonrTheme.cardDecoration,
+        decoration: SonrTheme.boxDecoration,
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.only(left: 24, right: 24, bottom: 136),
         child: _buildView(controller.status.value)));

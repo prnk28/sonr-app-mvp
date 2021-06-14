@@ -13,9 +13,7 @@ class CameraToolsView extends StatelessWidget {
     return Container(
         alignment: Alignment.bottomCenter,
         child: Container(
-            decoration: Neumorphic.floating(
-              theme: Get.theme,
-            ),
+            decoration: SonrTheme.boxDecoration,
             padding: EdgeInsets.only(top: 20, bottom: 40),
             child: AnimatedSlideSwitcher.slideUp(child: _buildToolsView(controller.status.value))));
   }
@@ -118,9 +116,9 @@ class _CaptureButton extends StatelessWidget {
           aspectRatio: 1,
           child: Container(
             margin: EdgeInsets.all(14),
-            decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
+            decoration: SonrTheme.boxCircleDecoration,
             child: Container(
-              decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
+              decoration: SonrTheme.boxCircleDecoration,
               margin: EdgeInsets.all(14),
               child: GestureDetector(
                 onTap: () {
@@ -138,18 +136,20 @@ class _CaptureButton extends StatelessWidget {
                 },
                 child: Obx(
                   () => Container(
-                    child: Center(
-                        child: SonrIcons.Camera.gradient(
-                      value: UserService.isDarkMode ? SonrGradients.PremiumWhite : SonrGradients.PremiumDark,
-                      size: 40,
-                    )),
-                    decoration: Neumorphic.floating(
-                        theme: Get.theme,
-                        shape: BoxShape.circle,
-                        border: controller.videoInProgress.value
-                            ? Border.all(color: SonrColor.Critical, width: 4)
-                            : Border.all(color: SonrColor.Black, width: 0)),
-                  ),
+                      child: Center(
+                          child: SonrIcons.Camera.gradient(
+                        value: UserService.isDarkMode ? SonrGradients.PremiumWhite : SonrGradients.PremiumDark,
+                        size: 40,
+                      )),
+                      decoration: BoxDecoration(
+                          border: controller.videoInProgress.value
+                              ? Border.all(color: SonrColor.Critical, width: 4)
+                              : Border.all(color: SonrColor.Black, width: 0),
+                          color: SonrColor.White,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
+                          ])),
                 ),
               ),
               // Interior Compass

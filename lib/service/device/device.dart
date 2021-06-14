@@ -163,9 +163,9 @@ class DeviceService extends GetxService {
 
       // Check Result
       if (result.isValid) {
-        Snack.success("Succesfully Received $title!");
+        AppRoute.snack(SnackArgs.success("Succesfully Received $title!"));
       } else {
-        Snack.error("Unable to save $title to your Gallery");
+        AppRoute.snack(SnackArgs.error("Unable to save $title to your Gallery"));
       }
 
       return result;

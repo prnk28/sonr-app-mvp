@@ -10,9 +10,7 @@ class URLCardItemView extends StatelessWidget {
     return GestureDetector(
       onTap: () => launchURL(item.url!.url),
       child: Container(
-        decoration: Neumorphic.floating(
-          theme: Get.theme,
-        ),
+        decoration: SonrTheme.boxDecoration,
         child: Hero(
           tag: item.id,
           child: Container(
@@ -29,7 +27,7 @@ class URLCardItemView extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      Snack.error("Could not launch the URL.");
+      AppRoute.snack(SnackArgs.error("Could not launch the URL."));
     }
   }
 }

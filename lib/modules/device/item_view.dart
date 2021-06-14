@@ -11,7 +11,7 @@ class DeviceItemView extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
+            decoration: SonrTheme.boxCircleDecoration,
             child: device.platform.icon(size: 64),
           ),
           Padding(padding: EdgeInsets.only(top: 4)),

@@ -11,7 +11,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.only(bottom: 24),
       child: Container(
-        decoration: SonrTheme.cardDecoration,
+        decoration: SonrTheme.boxDecoration,
         child: Row(
           children: [
             _CurrentActivityPeer(),

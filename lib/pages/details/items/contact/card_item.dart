@@ -12,7 +12,7 @@ class ContactCardItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 420,
-      decoration: SonrTheme.cardDecoration,
+      decoration: SonrTheme.boxDecoration,
       child: Hero(
         tag: card.id,
         child: Container(

@@ -20,7 +20,7 @@ class PostFileItem extends StatelessWidget {
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.symmetric(horizontal: 12),
         height: 400,
-        decoration: SonrTheme.cardDecoration,
+        decoration: SonrTheme.boxDecoration,
         child: Column(
           children: [
             // Owner Info

@@ -20,7 +20,7 @@ class NamePage extends GetView<RegisterController> {
                   _NameStatus(),
                   Padding(padding: EdgeInsets.all(8)),
                   Container(
-                      decoration: SonrTheme.cardDecoration,
+                      decoration: SonrTheme.boxDecoration,
                       margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
                       padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
                       child: Stack(children: [

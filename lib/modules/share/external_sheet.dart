@@ -51,9 +51,7 @@ class ShareSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: Neumorphic.floating(
-          theme: Get.theme,
-        ),
+        decoration: SonrTheme.boxDecoration,
         width: size.width,
         height: size.height,
         padding: EdgeInsets.only(top: 6),
@@ -83,12 +81,7 @@ class ShareSheet extends StatelessWidget {
           Container(
             width: size.width,
             height: size.height,
-            child: Container(
-                margin: EdgeInsets.only(top: 4, bottom: 4, left: 8),
-                decoration: Neumorphic.floating(
-                  theme: Get.theme,
-                ),
-                child: child),
+            child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: SonrTheme.boxDecoration, child: child),
           ),
           Spacer()
         ]));
@@ -181,7 +174,7 @@ class _ShareItemURL extends StatelessWidget {
         GestureDetector(
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: data.url));
-            Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+            AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
           },
           child: Container(
               decoration: Neumorphic.indented(
@@ -231,7 +224,7 @@ class _ShareItemURL extends StatelessWidget {
         GestureDetector(
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: data.url));
-            Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+            AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
           },
           child: Container(
               decoration: Neumorphic.indented(
@@ -261,7 +254,7 @@ class _ShareItemURL extends StatelessWidget {
     return GestureDetector(
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: data.url));
-        Snack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+        AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
       },
       child: Container(
         decoration: Neumorphic.indented(

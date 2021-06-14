@@ -175,7 +175,7 @@ class MobileService extends GetxService {
       var file = File(path);
       var exists = await file.exists();
       if (!exists) {
-        Snack.error("Unable to save Captured Media to your Gallery");
+        AppRoute.snack(SnackArgs.error("Unable to save Captured Media to your Gallery"));
         return false;
       } else {
         if (isVideo) {
@@ -186,7 +186,7 @@ class MobileService extends GetxService {
 
           // Visualize Result
           if (result) {
-            Snack.error("Unable to save Captured Photo to your Gallery");
+            AppRoute.snack(SnackArgs.error("Unable to save Captured Photo to your Gallery"));
           }
           return result;
         } else {
@@ -194,7 +194,7 @@ class MobileService extends GetxService {
           var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
           var result = await asset.exists;
           if (!result) {
-            Snack.error("Unable to save Captured Video to your Gallery");
+            AppRoute.snack(SnackArgs.error("Unable to save Captured Video to your Gallery"));
           }
           return result;
         }

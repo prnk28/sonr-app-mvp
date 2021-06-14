@@ -9,7 +9,7 @@ class NearbyListView extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: SonrTheme.cardDecoration,
+      decoration: SonrTheme.boxDecoration,
       width: 400,
       height: 700,
       child: Column(

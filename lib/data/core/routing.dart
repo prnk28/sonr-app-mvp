@@ -35,6 +35,12 @@ extension AppRoute on AppPage {
   /// Checks Whether BottomSheet is Currently Closed
   static bool get isSheetClosed => !isSheetOpen;
 
+  /// Checks Whether Snackbar is Currently Open
+  static bool get isSnackOpen => Get.isSnackbarOpen!;
+
+  /// Checks Whether Snackbar is Currently Closed
+  static bool get isSnackClosed => !isSnackOpen;
+
   // ^ AppPage Properties ^
   /// Returns Animation Curve
   Curve get curve => Curves.easeIn;
@@ -170,9 +176,9 @@ extension AppRoute on AppPage {
       if (this.isDialog) {
         // Check Delay
         if (delay != null) {
-          Future.delayed(delay, () => Get.to(this.page(), transition: this.transition));
+          Future.delayed(delay, () => Get.to(this.page(), transition: this.transition, arguments: args));
         } else {
-          Get.to(this.page(), transition: this.transition);
+          Get.to(this.page(), transition: this.transition, arguments: args);
         }
       }
     }
@@ -241,6 +247,23 @@ extension AppRoute on AppPage {
           barrierColor: Colors.transparent,
           ignoreSafeArea: ignoreSafeArea,
           elevation: 0);
+    }
+  }
+
+  /// Display snackbar on bottom of current page
+  static Future<void> snack(SnackArgs args) async {
+    if (isSnackClosed) {
+      Get.snackbar(
+        args.title!,
+        args.message,
+        snackStyle: SnackStyle.FLOATING,
+        duration: Duration(milliseconds: args.duration),
+        snackPosition: SnackPosition.BOTTOM,
+        reverseAnimationCurve: Curves.elasticOut,
+        backgroundColor: args.color,
+        icon: args.icon,
+        colorText: SonrColor.White,
+      );
     }
   }
 

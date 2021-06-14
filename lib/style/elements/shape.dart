@@ -35,9 +35,7 @@ class ShapeContainer extends StatelessWidget {
     return ClipPath(
       clipper: path,
       child: Container(
-          decoration: Neumorphic.floating(
-            theme: Get.theme,
-          ),
+          decoration: SonrTheme.boxDecoration,
           child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
     );
   }

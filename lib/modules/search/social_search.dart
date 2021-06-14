@@ -56,9 +56,7 @@ class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
       child: Stack(alignment: Alignment.center, children: [
         Container(
             margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-            decoration: Neumorphic.floating(
-              theme: Get.theme,
-            ),
+            decoration: SonrTheme.boxDecoration,
             padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
             child: Stack(alignment: Alignment.center, children: [
               Padding(

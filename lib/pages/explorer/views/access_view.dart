@@ -8,7 +8,7 @@ class AccessView extends GetView<ExplorerController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: SonrTheme.cardDecoration,
+      decoration: SonrTheme.boxDecoration,
       width: 800,
       height: 625,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

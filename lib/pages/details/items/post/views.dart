@@ -66,7 +66,7 @@ class MetaIcon extends StatelessWidget {
       width: width,
       height: height,
       child: Container(
-        decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
+        decoration: SonrTheme.boxCircleDecoration,
         child: metadata.mime.type.gradient(size: iconSize),
       ),
     );

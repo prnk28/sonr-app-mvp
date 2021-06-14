@@ -54,7 +54,7 @@ class SonrDropdown extends StatelessWidget {
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 3),
-            decoration: Neumorphic.floating(theme: Get.theme, radius: 0),
+            decoration: SonrTheme.boxDecoration,
             child: AnimatedSlideSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
           ),
         ),

@@ -87,7 +87,7 @@ class ShareController extends GetxController {
         var done = await TransferService.chooseCamera();
         _handleConfirmation(done);
       } else {
-        Snack.error("Sonr cannot open Camera without Permissions");
+        AppRoute.snack(SnackArgs.error("Sonr cannot open Camera without Permissions"));
       }
     }
   }
@@ -114,7 +114,7 @@ class ShareController extends GetxController {
         var done = await TransferService.chooseFile();
         _handleConfirmation(done);
       } else {
-        Snack.error("Cannot pick Media without Permissions");
+        AppRoute.snack(SnackArgs.error("Cannot pick Media without Permissions"));
       }
     }
   }
@@ -133,7 +133,7 @@ class ShareController extends GetxController {
       var done = await TransferService.setFile(sonrFile);
       _handleConfirmation(done);
     } else {
-      Snack.missing("No Files Selected");
+      AppRoute.snack(SnackArgs.missing("No Files Selected"));
     }
   }
 
