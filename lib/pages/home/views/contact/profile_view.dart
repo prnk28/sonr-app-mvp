@@ -8,8 +8,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-        decoration: SonrTheme.boxDecoration,
+    return Obx(() => BoxContainer(
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.only(left: 24, right: 24, bottom: 136),
         child: _buildView(controller.status.value)));

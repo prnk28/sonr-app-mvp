@@ -33,10 +33,7 @@ class PayloadSheetView extends StatelessWidget {
                 })
             :
             // Build Single Item
-            Container(
-                padding: EdgeInsets.all(8),
-                decoration: SonrTheme.boxDecoration,
-                child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
+            BoxContainer(padding: EdgeInsets.all(8), child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
         return Container(
           alignment: Alignment.center,
@@ -86,9 +83,8 @@ class _SonrFileListItem extends StatelessWidget {
   const _SonrFileListItem({Key? key, required this.item, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BoxContainer(
       margin: EdgeInsets.all(8),
-      decoration: SonrTheme.boxDecoration,
       child: Row(children: [
         item.hasThumbnail()
             ? Container(
@@ -244,7 +240,8 @@ class _PayloadItemThumbnail extends StatelessWidget {
     if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
       return GestureDetector(
         onTap: () => OpenFile.open(TransferService.file.value.single.path),
-        child: Container(
+        child: BoxContainer(
+            clipBehavior: Clip.hardEdge,
             height: Height.ratio(0.125),
             width: Height.ratio(0.125),
             child: Image.memory(

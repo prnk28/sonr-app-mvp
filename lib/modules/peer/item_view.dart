@@ -12,8 +12,7 @@ class PeerListItem extends GetWidget<PeerController> {
     controller.initalize(peer, setAnimated: false);
     return Padding(padding: EdgeInsets.all(8), child: Column(
       children: [
-        Container(
-          decoration: SonrTheme.boxDecoration,
+        BoxContainer(
           margin: EdgeWith.horizontal(8),
           child: ListTile(
             leading: ProfileAvatar.fromPeer(peer, size: 50),

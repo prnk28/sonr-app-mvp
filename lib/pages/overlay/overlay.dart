@@ -66,8 +66,7 @@ class AlertOverlayView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: Container(
-        decoration: SonrTheme.boxDecoration,
+      child: BoxContainer(
         // backendColor: Colors.transparent,
         margin: EdgeInsets.all(30),
         // borderRadius: BorderRadius.circular(20),
@@ -136,9 +135,8 @@ class DropdownOverlayView extends StatelessWidget {
         child: Container(
           height: (items.length * size.height) / 1.5 + height!,
           width: size.width + width!,
-          child: Container(
+          child: BoxContainer(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            decoration: SonrTheme.boxDecoration,
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,
@@ -182,8 +180,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: Container(
-        decoration: SonrTheme.boxDecoration,
+      child: BoxContainer(
         padding: EdgeInsets.symmetric(vertical: 24),
         margin: EdgeInsets.symmetric(horizontal: 16),
         child: Container(

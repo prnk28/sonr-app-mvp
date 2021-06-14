@@ -29,10 +29,9 @@ class FileAuthView extends StatelessWidget {
           ]),
         ]),
         Divider(),
-        Container(
+        BoxContainer(
           width: Get.width - 50,
           height: Get.height / 3,
-          decoration: SonrTheme.boxDecoration,
           padding: EdgeInsets.all(8),
           child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3),
         ),

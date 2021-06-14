@@ -110,8 +110,7 @@ class SonrTextField extends StatelessWidget {
                       : Container(),
                 ]))
             : Container(),
-        Container(
-          decoration: SonrTheme.boxDecoration,
+        BoxContainer(
           margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
@@ -211,9 +210,8 @@ class SonrSearchField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
+        BoxContainer(
             margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-            decoration: SonrTheme.boxDecoration,
             padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
             child: Stack(children: [
               Padding(

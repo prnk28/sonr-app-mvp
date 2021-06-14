@@ -20,10 +20,9 @@ class FormPage extends GetView<RegisterController> {
                 "Edit Profile".gradient(value: SonrGradients.PremiumWhite, size: 52),
                 Divider(color: Get.theme.hintColor.withOpacity(0.6), indent: 8, endIndent: 8),
                 Padding(padding: EdgeInsets.all(8)),
-                Container(
+                CircleContainer(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(4),
-                  decoration: SonrTheme.boxCircleDecoration,
                   child: Container(
                     alignment: Alignment.center,
                     width: 120,

@@ -11,17 +11,15 @@ class URLAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: SonrTheme.boxDecoration,
+    return BoxContainer(
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
-            child: Container(
+            child: CircleContainer(
               padding: EdgeInsets.all(4),
-              decoration: SonrTheme.boxCircleDecoration,
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(

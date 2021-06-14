@@ -16,11 +16,10 @@ class PostFileItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 48.0, top: 16.0),
-      child: Container(
+      child: BoxContainer(
         padding: EdgeInsets.all(8),
         margin: EdgeInsets.symmetric(horizontal: 12),
         height: 400,
-        decoration: SonrTheme.boxDecoration,
         child: Column(
           children: [
             // Owner Info

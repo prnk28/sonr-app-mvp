@@ -65,8 +65,7 @@ class MetaIcon extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       width: width,
       height: height,
-      child: Container(
-        decoration: SonrTheme.boxCircleDecoration,
+      child: CircleContainer(
         child: metadata.mime.type.gradient(size: iconSize),
       ),
     );

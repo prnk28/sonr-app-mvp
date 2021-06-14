@@ -12,8 +12,7 @@ class CameraToolsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.bottomCenter,
-        child: Container(
-            decoration: SonrTheme.boxDecoration,
+        child: BoxContainer(
             padding: EdgeInsets.only(top: 20, bottom: 40),
             child: AnimatedSlideSwitcher.slideUp(child: _buildToolsView(controller.status.value))));
   }
@@ -114,11 +113,9 @@ class _CaptureButton extends StatelessWidget {
         height: 150,
         child: AspectRatio(
           aspectRatio: 1,
-          child: Container(
+          child: CircleContainer(
             margin: EdgeInsets.all(14),
-            decoration: SonrTheme.boxCircleDecoration,
-            child: Container(
-              decoration: SonrTheme.boxCircleDecoration,
+            child: CircleContainer(
               margin: EdgeInsets.all(14),
               child: GestureDetector(
                 onTap: () {

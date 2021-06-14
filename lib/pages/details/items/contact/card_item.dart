@@ -10,9 +10,8 @@ class ContactCardItemView extends StatelessWidget {
   ContactCardItemView(this.card, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BoxContainer(
       height: 420,
-      decoration: SonrTheme.boxDecoration,
       child: Hero(
         tag: card.id,
         child: Container(
@@ -22,8 +21,7 @@ class ContactCardItemView extends StatelessWidget {
             // Build Profile Pic
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Container(
-                decoration: SonrTheme.boxCircleDecoration,
+              child: CircleContainer(
                 padding: EdgeInsets.all(10),
                 child: ProfileAvatar.fromContact(card.contact!),
               ),

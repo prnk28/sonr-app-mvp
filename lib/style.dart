@@ -23,6 +23,7 @@ export 'package:firebase_analytics/firebase_analytics.dart';
 export 'style/components/color.dart';
 export 'style/components/gradient.dart';
 export 'style/components/icon.dart';
+export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
 // Custom Theme Aspects
@@ -195,32 +196,13 @@ class SonrTheme {
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
 
-  /// Returns Primary Gradient
-  static Gradient get primaryGradient => RadialGradient(
-        colors: [
-          Color(0xffFFCF14),
-          Color(0xffF3ACFF),
-          Color(0xff8AECFF),
-        ],
-        stops: [0, 0.45, 1],
-        center: Alignment.center,
-        focal: Alignment.topRight,
-        tileMode: TileMode.clamp,
-        radius: 0.72,
-      );
-
-  /// Returns Standard Box Decoration for App
-  static BoxDecoration get boxDecoration => BoxDecoration(
-        border: Border.all(color: SonrTheme.backgroundColor, width: 1),
-        color: SonrTheme.foregroundColor,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: SonrTheme.boxShadow,
-      );
-
-  /// Returns Circle Box Decoration for App
-  static BoxDecoration get boxCircleDecoration => BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-        BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
-      ]);
+  // /// Returns Standard Box Decoration for App
+  // static BoxDecoration get boxDecoration => BoxDecoration(
+  //       border: Border.all(color: SonrTheme.backgroundColor, width: 1),
+  //       color: SonrTheme.foregroundColor,
+  //       borderRadius: BorderRadius.circular(24),
+  //       boxShadow: SonrTheme.boxShadow,
+  //     );
 
   /// Returns Light Theme for App
   static ThemeData get LightTheme => ThemeData(

@@ -24,20 +24,11 @@ class ShareButton extends StatelessWidget {
                     isPressed(false);
                     Future.delayed(150.milliseconds, () => AppPage.Share.to(init: ShareController.initPopup));
                   },
-                  child: ClipPolygon(
-                    borderRadius: 24,
+                  child: PolyContainer(
+                    radius: 24,
                     rotate: 30,
-                    boxShadows: SonrTheme.polyBoxShadow,
                     sides: 6,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: SonrTheme.primaryGradient,
-                        boxShadow: SonrTheme.boxShadow,
-                        border: Border.all(color: SonrTheme.foregroundColor, width: 1),
-                      ),
-                      alignment: Alignment.center,
-                      child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
-                    ),
+                    child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
                   ),
                 ),
               )),

@@ -50,8 +50,7 @@ class ShareSheet extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: SonrTheme.boxDecoration,
+    return BoxContainer(
         width: size.width,
         height: size.height,
         padding: EdgeInsets.only(top: 6),
@@ -78,10 +77,10 @@ class ShareSheet extends StatelessWidget {
 
           // @ Window Content
           Spacer(),
-          Container(
+          BoxContainer(
             width: size.width,
             height: size.height,
-            child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: SonrTheme.boxDecoration, child: child),
+            child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), child: child),
           ),
           Spacer()
         ]));
@@ -98,8 +97,7 @@ class _ShareItemMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get Shared File
     SharedMediaFile sharedIntent = sharedFiles!.length > 1 ? sharedFiles!.last : sharedFiles!.first;
-    return Container(
-        decoration: SonrTheme.boxDecoration,
+    return BoxContainer(
         margin: EdgeInsets.all(10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -136,8 +134,7 @@ class _ShareItemURL extends StatelessWidget {
 
         // @ Indent View
         Expanded(
-          child: Container(
-              decoration: SonrTheme.boxDecoration,
+          child: BoxContainer(
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -174,8 +171,7 @@ class _ShareItemURL extends StatelessWidget {
             Clipboard.setData(ClipboardData(text: data.url));
             AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
           },
-          child: Container(
-              decoration: SonrTheme.boxDecoration,
+          child: BoxContainer(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -222,8 +218,7 @@ class _ShareItemURL extends StatelessWidget {
             Clipboard.setData(ClipboardData(text: data.url));
             AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
           },
-          child: Container(
-              decoration: SonrTheme.boxDecoration,
+          child: BoxContainer(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -250,8 +245,7 @@ class _ShareItemURL extends StatelessWidget {
         Clipboard.setData(ClipboardData(text: data.url));
         AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
       },
-      child: Container(
-        decoration: SonrTheme.boxDecoration,
+      child: BoxContainer(
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

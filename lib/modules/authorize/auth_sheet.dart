@@ -39,9 +39,8 @@ class _InviteRequestSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return FadeInUpBig(
       duration: 500.milliseconds,
-      child: Container(
+      child: BoxContainer(
           padding: EdgeInsets.only(left: 8, right: 8),
-          decoration: SonrTheme.boxDecoration,
           height: 460,
           margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
           child: Column(
@@ -93,9 +92,8 @@ class _InviteRequestFileHeader extends StatelessWidget {
     return // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       [
-        Container(
+        CircleContainer(
             margin: EdgeInsets.only(top: 8, left: 8),
-            decoration: SonrTheme.boxCircleDecoration,
             padding: EdgeInsets.all(4),
             child: Container(
               width: 64,

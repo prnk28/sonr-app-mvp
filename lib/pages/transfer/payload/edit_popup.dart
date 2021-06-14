@@ -11,10 +11,9 @@ class EditPayloadPopup extends StatelessWidget {
     return Center(
         child: Material(
       type: MaterialType.transparency,
-      child: Container(
+      child: BoxContainer(
         width: Get.width,
         padding: EdgeInsets.only(left: 8, right: 8),
-        decoration: SonrTheme.boxDecoration,
         height: 460,
         margin: EdgeInsets.only(left: 10, right: 10, top: 24),
         child: Column(

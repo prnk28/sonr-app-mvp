@@ -102,9 +102,8 @@ class _EditOptionsButton extends GetView<EditorController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => controller.shiftScreen(option),
-      child: Container(
+      child: BoxContainer(
         margin: EdgeInsets.all(24),
-        decoration: SonrTheme.boxDecoration,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           UserService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),

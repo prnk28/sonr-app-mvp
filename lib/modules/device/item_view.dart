@@ -10,8 +10,7 @@ class DeviceItemView extends StatelessWidget {
       height: 150,
       child: Column(
         children: [
-          Container(
-            decoration: SonrTheme.boxCircleDecoration,
+          CircleContainer(
             child: device.platform.icon(size: 64),
           ),
           Padding(padding: EdgeInsets.only(top: 4)),

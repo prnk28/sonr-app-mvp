@@ -53,8 +53,7 @@ class SocialTileItem extends GetWidget<TileController> {
         controller.launchURL(item.post.link.url);
         HapticFeedback.mediumImpact();
       },
-      child: Container(
-        decoration: SonrTheme.boxDecoration,
+      child: BoxContainer(
         child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,

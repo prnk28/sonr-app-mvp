@@ -19,18 +19,16 @@ class ContactAuthView extends StatelessWidget {
     } else {
       card = invite!.contact;
     }
-    return Container(
+    return BoxContainer(
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
-      decoration: SonrTheme.boxDecoration,
       child: Column(children: [
         Row(children: [
           // @ Photo
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8),
-              child: Container(
-                decoration: SonrTheme.boxDecoration,
+              child: BoxContainer(
                 padding: EdgeInsets.all(4),
                 child: ProfileAvatar(profile: card.profile),
               ),
@@ -96,10 +94,9 @@ class ContactFlatCard extends StatelessWidget {
   ContactFlatCard(this.contact, {this.scale, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BoxContainer(
       height: 420 * scale!,
       width: (Get.width - 64) * scale!,
-      decoration: SonrTheme.boxDecoration,
       child: Container(
         height: 75,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -107,9 +104,8 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Container(
+            child: CircleContainer(
                 padding: EdgeInsets.all(10),
-                decoration: SonrTheme.boxCircleDecoration,
                 child: ProfileAvatar(
                   profile: contact!.profile,
                 )),

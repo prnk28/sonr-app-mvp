@@ -19,11 +19,10 @@ class PeerCard extends GetWidget<PeerController> {
     // Build View
     return Obx(() => Padding(
           padding: EdgeInsets.symmetric(vertical: 70),
-          child: Container(
+          child: BoxContainer(
               width: K_CARD_WIDTH,
               height: K_CARD_HEIGHT,
               clipBehavior: Clip.antiAlias,
-              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.all(24),
               child: Stack(children: [
                 // Rive Board

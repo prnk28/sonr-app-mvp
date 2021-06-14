@@ -9,11 +9,10 @@ class ContactGridItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
-        (isFlipped) => Container(
+        (isFlipped) => BoxContainer(
               width: 160,
               height: 190,
               clipBehavior: Clip.antiAlias,
-              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.all(32),
               child: Stack(children: [
                 // Content

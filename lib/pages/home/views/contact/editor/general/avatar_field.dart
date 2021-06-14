@@ -96,9 +96,8 @@ class _ProfilePictureCameraView extends GetView<ProfileController> {
             height: context.heightTransformer(reducedBy: 50),
             child: Column(children: [
               // @ Picture Preview
-              Container(
+              CircleContainer(
                   padding: EdgeInsets.all(10),
-                  decoration: SonrTheme.boxCircleDecoration,
                   child: AnimatedContainer(
                     decoration: BoxDecoration(shape: BoxShape.circle),
                     width: 140,

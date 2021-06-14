@@ -35,31 +35,10 @@ class ShapeContainer extends StatelessWidget {
     return ClipPath(
       clipper: path,
       child: Container(
-          decoration: SonrTheme.boxDecoration,
+          //decoration: SonrTheme.boxDecoration,
           child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
     );
   }
-}
-
-/// @ Hexagon Shape Path
-class HexagonClip extends CustomClipper<Path> {
-  @override
-  getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, 0);
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height * 0.8);
-    path.lineTo(size.width * 0.8, size.height);
-    path.lineTo(size.width * 0.2, size.height);
-    path.lineTo(0, size.height * 0.8);
-    path.lineTo(0, 0);
-
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 /// @ Message Neumorphic Path

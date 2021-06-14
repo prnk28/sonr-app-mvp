@@ -43,6 +43,20 @@ class SonrGradient {
   static Gradient get Tertiary => _bottomUp([SonrColor.fromHex("#00FA9A"), SonrColor.fromHex("#00c87b")]);
   static Gradient get Neutral => _bottomUp([SonrColor.fromHex("#a2a2a2"), SonrColor.fromHex("#a2a2a2")]);
   static Gradient get Critical => _bottomUp([SonrColor.fromHex('#ff176b'), SonrColor.fromHex('#ff176b', opacity: 0.7)]);
+
+  /// Returns Theme Gradient
+  static Gradient get Theme => RadialGradient(
+        colors: [
+          Color(0xffFFCF14),
+          Color(0xffF3ACFF),
+          Color(0xff8AECFF),
+        ],
+        stops: [0, 0.45, 1],
+        center: Alignment.center,
+        focal: Alignment.topRight,
+        tileMode: TileMode.clamp,
+        radius: 0.72,
+      );
 }
 
 class SonrGradients {

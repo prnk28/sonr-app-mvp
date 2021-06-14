@@ -9,8 +9,7 @@ class URLCardItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => launchURL(item.url!.url),
-      child: Container(
-        decoration: SonrTheme.boxDecoration,
+      child: BoxContainer(
         child: Hero(
           tag: item.id,
           child: Container(
