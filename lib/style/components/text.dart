@@ -50,6 +50,54 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
 
   /// Retreive Font Size
   double get fontSize => _defaultParams.item3;
+
+  TextStyle style({
+    Color? color,
+    double? fontSize,
+    FontStyle fontStyle = FontStyle.normal,
+  }) =>
+      TextStyle(
+        fontStyle: fontStyle,
+        fontFamily: this.fontFamily,
+        fontWeight: this.fontWeight,
+        fontSize: fontSize ?? this.fontSize,
+        color: color ?? SonrTheme.textColor,
+        fontFeatures: [
+          FontFeature.tabularFigures(),
+        ],
+      );
+}
+
+extension TextSpanListUtils on List<TextSpan> {
+  /// Converts this List of `TextSpan` into a `RichText` Widget
+  RichText rich({
+    Key? key,
+    TextAlign textAlign = TextAlign.start,
+    TextDirection? textDirection,
+    bool softWrap = true,
+    TextOverflow overflow = TextOverflow.clip,
+    double textScaleFactor = 1.0,
+    int? maxLines,
+    Locale? locale,
+    StrutStyle? strutStyle,
+    TextWidthBasis textWidthBasis = TextWidthBasis.parent,
+    TextHeightBehavior? textHeightBehavior,
+  }) {
+    return RichText(
+      text: TextSpan(children: this),
+      key: key,
+      textAlign: textAlign,
+      textDirection: textDirection,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaleFactor: textScaleFactor,
+      maxLines: maxLines,
+      locale: locale,
+      strutStyle: strutStyle,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
+    );
+  }
 }
 
 extension DisplayTextUtils on String {
@@ -71,6 +119,17 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Heading, align, color, fontSize, fontStyle);
 
+  /// Heading **Span** - Default Size = 32
+  TextSpan headingSpan({
+    Color color = SonrColor.Black,
+    FontStyle fontStyle = FontStyle.normal,
+    double? fontSize,
+  }) =>
+      TextSpan(
+        text: this,
+        style: DisplayTextStyle.Heading.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
+      );
+
   /// Subheading - Default Size = 26
   DisplayText subheading({
     Color color = SonrColor.Black,
@@ -80,7 +139,18 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Subheading, align, color, fontSize, fontStyle);
 
-  /// Heading - Default Size = 20
+  /// Subheading **Span** - Default Size = 26
+  TextSpan subheadingSpan({
+    Color color = SonrColor.Black,
+    FontStyle fontStyle = FontStyle.normal,
+    double? fontSize,
+  }) =>
+      TextSpan(
+        text: this,
+        style: DisplayTextStyle.Subheading.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
+      );
+
+  /// Section - Default Size = 20
   DisplayText section({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -88,6 +158,17 @@ extension DisplayTextUtils on String {
     double? fontSize,
   }) =>
       DisplayText(this, DisplayTextStyle.Section, align, color, fontSize, fontStyle);
+
+  /// Section **Span** - Default Size = 20
+  TextSpan sectionSpan({
+    Color color = SonrColor.Black,
+    FontStyle fontStyle = FontStyle.normal,
+    double? fontSize,
+  }) =>
+      TextSpan(
+        text: this,
+        style: DisplayTextStyle.Section.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
+      );
 
   /// Paragraph - Default Size = 20
   DisplayText paragraph({
@@ -98,7 +179,18 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Paragraph, align, color, fontSize, fontStyle);
 
-  /// Paragraph - Default Size = 20
+  /// Paragraph **Span** - Default Size = 20
+  TextSpan paragraphSpan({
+    Color color = SonrColor.Black,
+    FontStyle fontStyle = FontStyle.normal,
+    double? fontSize,
+  }) =>
+      TextSpan(
+        text: this,
+        style: DisplayTextStyle.Paragraph.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
+      );
+
+  /// Light - Default Size = 20
   DisplayText light({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -106,6 +198,17 @@ extension DisplayTextUtils on String {
     double? fontSize,
   }) =>
       DisplayText(this, DisplayTextStyle.Light, align, color, fontSize, fontStyle);
+
+  /// Light **Span** - Default Size = 20
+  TextSpan lightSpan({
+    Color color = SonrColor.Black,
+    FontStyle fontStyle = FontStyle.normal,
+    double? fontSize,
+  }) =>
+      TextSpan(
+        text: this,
+        style: DisplayTextStyle.Light.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
+      );
 
   /// Gradient Style Text
   GradientText gradient({double size = 32, required Gradient value, Key? key}) => GradientText(this, value, size, key: key);
@@ -150,21 +253,14 @@ class DisplayText extends StatelessWidget {
 
   // @ Builds Text Widget
   Text _buildText(BuildContext context, TextAlign align) {
-    return Text(
-      text,
-      overflow: TextOverflow.visible,
-      textAlign: align,
-      style: TextStyle(
-        fontStyle: fontStyle,
-        fontFamily: style.fontFamily,
-        fontWeight: style.fontWeight,
-        fontSize: fontSize ?? style.fontSize,
-        color: color,
-        fontFeatures: [
-          FontFeature.tabularFigures(),
-        ],
-      ),
-    );
+    return Text(text,
+        overflow: TextOverflow.visible,
+        textAlign: align,
+        style: style.style(
+          fontSize: fontSize,
+          fontStyle: fontStyle,
+          color: color,
+        ));
   }
 }
 
@@ -230,33 +326,7 @@ class URLText extends StatelessWidget {
       }
     }
 
-    // Return Text Spans
-    var spans = [
-      TextSpan(
-          text: host,
-          style: TextStyle(
-              fontFamily: 'Manrope',
-              decoration: TextDecoration.underline,
-              decorationStyle: TextDecorationStyle.dotted,
-              fontWeight: FontWeight.w300,
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
-              color: Colors.blueGrey[300])),
-      TextSpan(
-          text: directories > 0 ? path : "",
-          style: TextStyle(
-              fontFamily: 'Manrope',
-              decoration: TextDecoration.underline,
-              decorationStyle: TextDecorationStyle.dotted,
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-              color: Colors.blue[600]))
-    ];
-
-    return RichText(
-      overflow: TextOverflow.fade,
-      text: TextSpan(children: spans),
-    );
+    return [host.lightSpan(fontSize: 16), directories > 0 ? path.subheadingSpan(fontSize: 16) : "".subheadingSpan()].rich();
   }
 
   String replaceAt(int index, String newChar, String oldStr) {

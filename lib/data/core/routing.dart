@@ -36,7 +36,7 @@ extension AppRoute on AppPage {
   static bool get isSheetClosed => !isSheetOpen;
 
   /// Checks Whether Snackbar is Currently Open
-  static bool get isSnackOpen => Get.isSnackbarOpen!;
+  static bool get isSnackOpen => Get.isSnackbarOpen ?? true;
 
   /// Checks Whether Snackbar is Currently Closed
   static bool get isSnackClosed => !isSnackOpen;

@@ -104,75 +104,20 @@ class _InviteRequestFileHeader extends StatelessWidget {
                     )
                   : SonrIcons.User.gradient(size: 42),
             )),
-        sNameText(profile: profile),
+        [profile.sName.lightSpan(), ".snr/".paragraphSpan()].rich(),
       ].column(),
 
       // From Information
       Container(
-        width: Width.ratio(0.6),
-        child: RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: profile.firstName,
-            style: _buildTextStyle(FontWeight.bold),
-          ),
-          TextSpan(
-            text: " wants to share an ",
-            style: _buildTextStyle(FontWeight.normal),
-          ),
-          TextSpan(
-            text: file.prettyType(),
-            style: _buildTextStyle(FontWeight.bold),
-          ),
-          TextSpan(
-            text: " of size ",
-            style: _buildTextStyle(FontWeight.normal),
-          ),
-          TextSpan(
-            text: file.prettySize(),
-            style: _buildTextStyle(FontWeight.bold),
-          ),
-        ])),
-      )
+          width: Width.ratio(0.6),
+          child: [
+            profile.firstName.headingSpan(fontSize: 20),
+            " wants to share an ".lightSpan(fontSize: 19),
+            file.prettyType().headingSpan(fontSize: 20),
+            " of size ".lightSpan(fontSize: 19),
+            file.prettySize().headingSpan(fontSize: 20)
+          ].rich())
     ]);
-  }
-
-  /// Returns Widget Text of SName
-  Widget sNameText({required Profile profile}) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: profile.sName,
-            style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
-        TextSpan(
-            text: ".snr/",
-            style: TextStyle(
-                fontFamily: "RFlex",
-                fontWeight: FontWeight.w100,
-                fontSize: 20,
-                color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-      ]),
-    );
-  }
-
-  /// @ Helper: Builds Text Style for Spans
-  TextStyle _buildTextStyle(FontWeight weight) {
-    if (weight == FontWeight.bold) {
-      return TextStyle(
-        fontFamily: "RFlex",
-        fontWeight: FontWeight.w700,
-        fontSize: 20,
-        color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
-      );
-    } else {
-      return TextStyle(
-        fontFamily: "RFlex",
-        fontWeight: FontWeight.w300,
-        fontSize: 19,
-        color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
-      );
-    }
   }
 }
 
