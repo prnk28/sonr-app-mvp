@@ -23,7 +23,7 @@ class FormPage extends GetView<RegisterController> {
                 Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(4),
-                  decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
+                  decoration: SonrTheme.boxCircleDecoration,
                   child: Container(
                     alignment: Alignment.center,
                     width: 120,

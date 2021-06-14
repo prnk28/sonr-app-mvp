@@ -94,7 +94,6 @@ class _SonrFileListItem extends StatelessWidget {
             ? Container(
                 height: Height.ratio(0.125),
                 width: Height.ratio(0.125),
-                decoration: Neumorphic.indented(theme: Get.theme),
                 clipBehavior: Clip.hardEdge,
                 child: Image.memory(
                   Uint8List.fromList(item.thumbBuffer),
@@ -260,7 +259,6 @@ class _PayloadItemThumbnail extends StatelessWidget {
           child: Container(
               height: Height.ratio(0.125),
               width: Height.ratio(0.125),
-              decoration: Neumorphic.indented(theme: Get.theme),
               clipBehavior: Clip.hardEdge,
               child: Image.memory(
                 TransferService.file.value.single.thumbnail!,

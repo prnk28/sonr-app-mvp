@@ -23,7 +23,7 @@ class ContactCardItemView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: Container(
-                decoration: Neumorphic.indented(theme: Get.theme, shape: BoxShape.circle),
+                decoration: SonrTheme.boxCircleDecoration,
                 padding: EdgeInsets.all(10),
                 child: ProfileAvatar.fromContact(card.contact!),
               ),

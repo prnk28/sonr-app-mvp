@@ -19,10 +19,11 @@ export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
 export 'package:firebase_analytics/firebase_analytics.dart';
 
-// Theme Elements
-export 'style/elements/color.dart';
-export 'style/elements/gradient.dart';
-export 'style/elements/icon.dart';
+// Theme Components
+export 'style/components/color.dart';
+export 'style/components/gradient.dart';
+export 'style/components/icon.dart';
+export 'style/components/text.dart';
 
 // Custom Theme Aspects
 export 'style/buttons/action.dart';
@@ -50,14 +51,13 @@ export 'pages/overlay/controllers/flat_overlay.dart';
 export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
-export 'style/design/design.dart';
 export 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/user.dart';
-import 'style/elements/color.dart';
+import 'style/components/color.dart';
 import 'style/elements/clipper.dart';
 
 /// * Widget Position Enum * //

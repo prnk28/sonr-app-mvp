@@ -113,7 +113,6 @@ class _ProfileInfoView extends GetView<ProfileController> {
         return Container(
           width: Get.width,
           height: 72,
-          decoration: Neumorphic.indented(theme: Get.theme),
           child: UserService.contact.value.hasSocialMedia(Contact_Social_Media.Twitter)
               ? Text("Last Tweet")
               : GestureDetector(

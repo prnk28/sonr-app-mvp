@@ -99,9 +99,7 @@ class _ShareItemMedia extends StatelessWidget {
     // Get Shared File
     SharedMediaFile sharedIntent = sharedFiles!.length > 1 ? sharedFiles!.last : sharedFiles!.first;
     return Container(
-        decoration: Neumorphic.indented(
-          theme: Get.theme,
-        ),
+        decoration: SonrTheme.boxDecoration,
         margin: EdgeInsets.all(10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -139,7 +137,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Indent View
         Expanded(
           child: Container(
-              decoration: Neumorphic.indented(theme: Get.theme, radius: 20),
+              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -177,9 +175,7 @@ class _ShareItemURL extends StatelessWidget {
             AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
           },
           child: Container(
-              decoration: Neumorphic.indented(
-                theme: Get.theme,
-              ),
+              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -227,9 +223,7 @@ class _ShareItemURL extends StatelessWidget {
             AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
           },
           child: Container(
-              decoration: Neumorphic.indented(
-                theme: Get.theme,
-              ),
+              decoration: SonrTheme.boxDecoration,
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -257,9 +251,7 @@ class _ShareItemURL extends StatelessWidget {
         AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
       },
       child: Container(
-        decoration: Neumorphic.indented(
-          theme: Get.theme,
-        ),
+        decoration: SonrTheme.boxDecoration,
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

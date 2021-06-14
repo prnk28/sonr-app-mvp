@@ -59,37 +59,25 @@ class ConfirmButton extends StatelessWidget {
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
-    BoxDecoration defaultDecoration =
-        BoxDecoration(gradient: SonrGradient.Neutral, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
-      BoxShadow(
-        offset: Offset(0, 4),
-        color: SonrColor.Primary.withOpacity(0.4),
-        blurRadius: Get.theme.blurRadius,
-        spreadRadius: Get.theme.spreadRadius,
-      )
-    ]);
+    BoxDecoration defaultDecoration = BoxDecoration(
+      gradient: SonrGradient.Neutral,
+      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      boxShadow: SonrTheme.boxShadow,
+    );
 
     // Confirm Decoration
-    BoxDecoration confirmDecoration =
-        BoxDecoration(gradient: SonrGradient.Primary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
-      BoxShadow(
-        offset: Offset(0, 4),
-        color: SonrColor.Primary.withOpacity(0.4),
-        blurRadius: Get.theme.blurRadius,
-        spreadRadius: Get.theme.spreadRadius,
-      )
-    ]);
+    BoxDecoration confirmDecoration = BoxDecoration(
+      gradient: SonrGradient.Primary,
+      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      boxShadow: SonrTheme.boxShadow,
+    );
 
     // Complete Decoration
-    BoxDecoration completeDecoration =
-        BoxDecoration(gradient: SonrGradient.Tertiary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
-      BoxShadow(
-        offset: Offset(0, 4),
-        color: SonrColor.Primary.withOpacity(0.4),
-        blurRadius: Get.theme.blurRadius,
-        spreadRadius: Get.theme.spreadRadius,
-      )
-    ]);
+    BoxDecoration completeDecoration = BoxDecoration(
+      gradient: SonrGradient.Tertiary,
+      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      boxShadow: SonrTheme.boxShadow,
+    );
 
     // Build Child
     return ConfirmButton(
@@ -133,37 +121,25 @@ class ConfirmButton extends StatelessWidget {
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Default Decoration
-    BoxDecoration defaultDecoration =
-        BoxDecoration(gradient: SonrGradient.Neutral, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
-      BoxShadow(
-        offset: Offset(0, 4),
-        color: SonrColor.Primary.withOpacity(0.4),
-        blurRadius: Get.theme.blurRadius,
-        spreadRadius: Get.theme.spreadRadius,
-      )
-    ]);
+    BoxDecoration defaultDecoration = BoxDecoration(
+      gradient: SonrGradient.Neutral,
+      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      boxShadow: SonrTheme.boxShadow,
+    );
 
     // Confirm Decoration
-    BoxDecoration confirmDecoration =
-        BoxDecoration(gradient: SonrGradient.Primary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
-      BoxShadow(
-        offset: Offset(0, 4),
-        color: SonrColor.Primary.withOpacity(0.4),
-        blurRadius: Get.theme.blurRadius,
-        spreadRadius: Get.theme.spreadRadius,
-      )
-    ]);
+    BoxDecoration confirmDecoration = BoxDecoration(
+      gradient: SonrGradient.Primary,
+      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      boxShadow: SonrTheme.boxShadow,
+    );
 
     // Complete Decoration
-    BoxDecoration completeDecoration =
-        BoxDecoration(gradient: SonrGradient.Critical, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: [
-      BoxShadow(
-        offset: Offset(0, 4),
-        color: SonrColor.Primary.withOpacity(0.4),
-        blurRadius: Get.theme.blurRadius,
-        spreadRadius: Get.theme.spreadRadius,
-      )
-    ]);
+    BoxDecoration completeDecoration = BoxDecoration(
+      gradient: SonrGradient.Critical,
+      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      boxShadow: SonrTheme.boxShadow,
+    );
 
     // Build Child
     return ConfirmButton(

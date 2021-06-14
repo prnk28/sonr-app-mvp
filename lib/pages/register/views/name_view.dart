@@ -86,14 +86,11 @@ class _NameStatus extends GetView<RegisterController> {
                   Padding(padding: EdgeInsets.all(4)),
                   _buildLabel(controller.nameStatus.value).paragraph(color: SonrColor.White)
                 ])),
-            decoration: BoxDecoration(gradient: _buildGradient(controller.nameStatus.value), borderRadius: BorderRadius.circular(8), boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 4),
-                color: SonrColor.Primary.withOpacity(0.4),
-                blurRadius: Get.theme.blurRadius,
-                spreadRadius: Get.theme.spreadRadius,
-              )
-            ]),
+            decoration: BoxDecoration(
+              gradient: _buildGradient(controller.nameStatus.value),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: SonrTheme.boxShadow,
+            ),
           ));
   }
 
