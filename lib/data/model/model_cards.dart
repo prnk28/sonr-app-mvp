@@ -1,5 +1,6 @@
 import 'package:sonr_app/pages/detail/detail.dart';
 import 'package:sonr_app/style.dart';
+import 'package:sonr_app/data/database/service.dart';
 
 enum TransferItemsType { Media, Files, Contacts, Links }
 extension TransferItemsTypeUtils on TransferItemsType {

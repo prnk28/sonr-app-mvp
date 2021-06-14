@@ -4,7 +4,6 @@ export 'service/device/mobile.dart';
 export 'service/client/transfer.dart';
 export 'service/client/lobby.dart';
 export 'service/client/sonr.dart';
-export 'service/user/cards.dart';
 export 'service/user/user.dart';
 export 'data/core/logger.dart';
 export 'package:flutter/services.dart';

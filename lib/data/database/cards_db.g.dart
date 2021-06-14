@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cards_db.dart';
+part of 'database.dart';
 
 // **************************************************************************
 // MoorGenerator

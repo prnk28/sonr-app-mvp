@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:moor/moor.dart';
 import 'dart:io';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'cards_converter.dart';
+import 'converter.dart';
 part 'cards_db.g.dart';
 
 enum ActivityType { Deleted, Shared, Received }

@@ -47,7 +47,6 @@ class ActivityPopup extends GetView<ActivityController> {
 class _ActivityListView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    if (controller.hasActiveSession.value) {}
     return Obx(() {
       if (controller.hasActiveSession.value) {
         return ListView.builder(

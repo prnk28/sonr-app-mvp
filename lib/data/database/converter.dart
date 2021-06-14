@@ -1,7 +1,7 @@
 // stores preferences as strings
 import 'package:moor/moor.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'cards_db.dart';
+import 'database.dart';
 
 class ActivityConverter extends TypeConverter<ActivityType, int> {
   const ActivityConverter();
