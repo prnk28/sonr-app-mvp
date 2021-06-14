@@ -26,8 +26,11 @@ class GradientTabs extends StatelessWidget {
     return List<Widget>.generate(
         tabs.length,
         (index) => GestureDetector(
-              onTap: () => currentIndex(index),
-              child: Container(
+              onTap: () {
+                currentIndex(index);
+                onTabChanged(index);
+              },
+              child: AnimatedContainer(
                 constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
                 height: 48,
                 alignment: Alignment.center,
@@ -51,6 +54,7 @@ class GradientTabs extends StatelessWidget {
                           )
                         : null,
                     color: currentIndex.value == index ? null : Colors.transparent),
+                duration: 150.milliseconds,
               ),
             ));
   }

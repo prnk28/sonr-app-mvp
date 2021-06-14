@@ -75,9 +75,9 @@ class ContactAuthView extends StatelessWidget {
                 SonrOverlay.back();
                 if (!isReply) {
                   var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  SessionService.setInviteDecision(true, sendBackContact: result);
+                  SessionService.decisionForInvite(true, sendBackContact: result);
                 } else {
-                  SessionService.setInviteDecision(true);
+                  SessionService.decisionForInvite(true);
                 }
               },
               text: "Accept",

@@ -47,7 +47,7 @@ class FileAuthView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ColorButton.primary(
-                  onPressed: () => SessionService.setInviteDecision(true),
+                  onPressed: () => SessionService.decisionForInvite(true),
                   text: "Accept",
                   gradient: SonrGradient.Tertiary,
                   icon: SonrIcons.Check,
@@ -55,7 +55,7 @@ class FileAuthView extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(8)),
                 PlainTextButton(
-                    onPressed: () => SessionService.setInviteDecision(false), text: "Decline".paragraph(color: Get.theme.hintColor)),
+                    onPressed: () => SessionService.decisionForInvite(false), text: "Decline".paragraph(color: Get.theme.hintColor)),
               ],
             ),
           ],

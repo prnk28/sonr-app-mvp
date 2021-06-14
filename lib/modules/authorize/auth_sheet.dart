@@ -57,7 +57,7 @@ class _InviteRequestSheet extends StatelessWidget {
               ),
               ColorButton.primary(
                 onPressed: () {
-                  SessionService.setInviteDecision(true);
+                  SessionService.decisionForInvite(true);
                   AppRoute.closeSheet();
                 },
                 text: "Accept",

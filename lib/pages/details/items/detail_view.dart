@@ -1,25 +1,10 @@
 import 'dart:io';
 import 'package:sonr_app/style.dart';
 
-class DetailView {
-  static Widget contact() {
-    return DetailContactView();
-  }
-
-  static Widget file() {
-    return DetailFileView();
-  }
-
-  static Widget media(SonrFile_Item item, {File? file}) {
-    return DetailMediaView(item: item, file: file);
-  }
-
-  static Widget url() {
-    return DetailUrlView();
-  }
-}
-
 class DetailContactView extends StatelessWidget {
+  final Contact contact;
+
+  const DetailContactView({Key? key, required this.contact}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container();
@@ -27,6 +12,9 @@ class DetailContactView extends StatelessWidget {
 }
 
 class DetailFileView extends StatelessWidget {
+  final SonrFile file;
+
+  const DetailFileView({Key? key, required this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container();
@@ -54,6 +42,9 @@ class DetailMediaView extends StatelessWidget {
 }
 
 class DetailUrlView extends StatelessWidget {
+  final URLLink urlLink;
+
+  const DetailUrlView({Key? key, required this.urlLink}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container();

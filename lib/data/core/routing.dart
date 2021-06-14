@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/activity/activity_view.dart';
 import 'package:sonr_app/modules/share/share_view.dart';
+import 'package:sonr_app/pages/details/pages.dart';
 import 'package:sonr_app/pages/explorer/explorer_page.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
@@ -8,12 +9,32 @@ import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/style.dart';
 import 'bindings.dart';
 
-typedef InitFunction = Future<void> Function();
-
 /// @ Enum Values for App Page
-enum AppPage { Home, Register, Transfer, Share, Activity }
+enum AppPage { Home, Register, Transfer, Share, Activity, Error, Detail, Posts }
 
 extension AppRoute on AppPage {
+  // ^ Static Accessors ^
+  /// Returns Current Route Name
+  static String get current => Get.currentRoute;
+
+  /// Checks if Current Route is Given Page
+  static bool isCurrent(AppPage page) => Get.currentRoute == page.name;
+
+  /// Checks if Current Route is NOT Given Page
+  static bool isNotCurrent(AppPage page) => Get.currentRoute != page.name;
+
+  /// Checks Whether Dialog is Currently Open
+  static bool get isPopupOpen => Get.isDialogOpen ?? false;
+
+  /// Checks Whether Dialog is Currently Closed
+  static bool get isPopupClosed => !isPopupOpen;
+
+  /// Checks Whether BottomSheet is Currently Open
+  static bool get isSheetOpen => Get.isBottomSheetOpen ?? false;
+
+  /// Checks Whether BottomSheet is Currently Closed
+  static bool get isSheetClosed => !isSheetOpen;
+
   // ^ AppPage Properties ^
   /// Returns Animation Curve
   Curve get curve => Curves.easeIn;
@@ -40,7 +61,7 @@ extension AppRoute on AppPage {
   }
 
   /// If this Page is Full Screen Dialog
-  bool get isDialog => this == AppPage.Activity || this == AppPage.Share;
+  bool get isDialog => this == AppPage.Activity || this == AppPage.Share || this == AppPage.Detail || this == AppPage.Error || this == AppPage.Posts;
 
   /// Returns Page Name
   String get name {
@@ -60,11 +81,18 @@ extension AppRoute on AppPage {
       case AppPage.Register:
         return () => RegisterPage();
       case AppPage.Transfer:
-        return () => TransferScreen();
+        return () => TransferPage();
+      case AppPage.Detail:
+        return () => DetailPage();
+      case AppPage.Error:
+        return () => ErrorPage();
+      case AppPage.Posts:
+        return () => PostsPage();
       case AppPage.Share:
         return () => SharePopupView();
       case AppPage.Activity:
         return () => ActivityPopup();
+
       default:
         return () {
           if (DeviceService.isMobile) {
@@ -92,16 +120,30 @@ extension AppRoute on AppPage {
   /// Pop the current named [page] in the stack and push a new one in its place
   Future<void> off({
     dynamic args,
-    InitFunction? init,
+    void Function()? init,
     Duration? delay,
+    bool condition = true,
+    bool closeCurrent = false,
   }) async {
     // Init Function
     if (init != null) {
       init();
     }
 
-    // Shift Screen
-    Get.offNamed(this.name, arguments: args);
+    // Check for Close Current
+    if (closeCurrent) {
+      close();
+    }
+
+    // Check for Condition
+    if (condition) {
+      // Shift Screen
+      if (delay != null) {
+        Future.delayed(delay, () => Get.offNamed(this.name, arguments: args));
+      } else {
+        Get.offNamed(this.name, arguments: args);
+      }
+    }
   }
 
   /// Pushes a new named [page] to the stack.
@@ -109,31 +151,32 @@ extension AppRoute on AppPage {
     dynamic args,
     void Function()? init,
     Duration? delay,
+    bool condition = true,
+    bool closeCurrent = false,
   }) async {
     // Init Function
     if (init != null) {
       init();
     }
 
-    // Push Screen
-    if (this.isDialog) {
-      Get.to(this.page(), transition: this.transition);
-    } else {
-      Get.toNamed(this.name, arguments: args);
+    // Check for Close Current
+    if (closeCurrent) {
+      close();
+    }
+
+    // Check for Condition
+    if (condition) {
+      // Push Screen
+      if (this.isDialog) {
+        // Check Delay
+        if (delay != null) {
+          Future.delayed(delay, () => Get.to(this.page(), transition: this.transition));
+        } else {
+          Get.to(this.page(), transition: this.transition);
+        }
+      }
     }
   }
-
-  /// Checks Whether Dialog is Currently Open
-  static bool get isPopupOpen => Get.isDialogOpen ?? false;
-
-  /// Checks Whether Dialog is Currently Closed
-  static bool get isPopupClosed => !isPopupOpen;
-
-  /// Checks Whether BottomSheet is Currently Open
-  static bool get isSheetOpen => Get.isBottomSheetOpen ?? false;
-
-  /// Checks Whether BottomSheet is Currently Closed
-  static bool get isSheetClosed => !isSheetOpen;
 
   /// Pushes a Popup Modal
   static Future<void> popup(

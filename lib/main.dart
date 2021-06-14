@@ -119,7 +119,7 @@ class App extends StatelessWidget {
         await UserService.newContact(contact);
 
         // Connect to Network
-        AppPage.Home.off(init: SonrService.to.connect, args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(init: SonrService.to.connect, args: HomePageArgs(isFirstLoad: true));
       }
       // Register Mobile
       else {
@@ -132,19 +132,19 @@ class App extends StatelessWidget {
       if (!isDesktop) {
         // All Valid
         if (MobileService.hasLocation.value) {
-          AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
+          AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
         }
 
         // No Location
         else {
           MobileService.to.requestLocation().then((value) {
             if (value) {
-              AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
+              AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
             }
           });
         }
       } else {
-        AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
       }
     }
   }

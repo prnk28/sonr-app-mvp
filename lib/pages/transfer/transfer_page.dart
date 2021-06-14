@@ -8,7 +8,7 @@ import 'payload/payload_sheet.dart';
 import 'transfer_controller.dart';
 
 /// @ Transfer Screen Entry Point
-class TransferScreen extends GetView<TransferController> {
+class TransferPage extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     // Build View

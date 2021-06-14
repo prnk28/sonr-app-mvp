@@ -81,68 +81,46 @@ class CardService extends GetxService {
   }
 
   /// @ Add New Card to Database
-  static addCard(Transfer card) async {
-    if (isRegistered) {
+  static addCard(Transfer card, ActivityType activityType) async {
+    // Update Database
+    if (DeviceService.isMobile && isRegistered) {
       // Store in Database
       await to._database.addCard(card);
+      await to._database.addActivity(activityType, card.payload, card.owner);
       _refreshCount();
     }
   }
 
   // @ Add New File Card to Database
-  static addFileCard(Transfer card, SonrFile file) async {
-    // Store in Database
-    await to._database.addFileCard(card, file);
-    _refreshCount();
-  }
+  static addFileCard(Transfer card, SonrFile file, ActivityType activityType) async {
+    // Update Database
+    if (DeviceService.isMobile && isRegistered) {
+      // Store in Database
+      await to._database.addFileCard(card, file);
 
-  /// @ Add New Activity for deleted card
-  static addActivityDeleted({
-    required Payload payload,
-    required Profile owner,
-    SonrFile? file,
-  }) async {
-    if (isRegistered) {
-      if (file != null && file.exists) {
-        await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
-      } else {
-        await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
-      }
-    }
-  }
-
-  /// @ Add New Activity for received card
-  static addActivityReceived({
-    required Payload payload,
-    required Profile owner,
-    SonrFile? file,
-  }) async {
-    if (isRegistered) {
-      if (file != null && file.exists) {
-        await to._database.addActivity(ActivityType.Received, payload, owner, mime: file.single.mime.type);
-      } else {
-        await to._database.addActivity(ActivityType.Received, payload, owner, mime: MIME_Type.OTHER);
-      }
+      await to._database.addActivity(activityType, card.payload, card.owner, mime: file.single.mime.type);
+      _refreshCount();
     }
   }
 
   /// @ Add New Activity for deleted card
-  static addActivityShared({
+  static addActivity({
+    required ActivityType type,
     required Payload payload,
     SonrFile? file,
   }) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       if (file != null && file.exists) {
-        await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: file.single.mime.type);
+        await to._database.addActivity(type, payload, UserService.contact.value.profile, mime: file.single.mime.type);
       } else {
-        await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
+        await to._database.addActivity(type, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
       }
     }
   }
 
   /// @ Returns total Card Count
   static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       // Get Total Entries
       var cards = await to._database.allCardEntries;
 
@@ -165,7 +143,7 @@ class CardService extends GetxService {
 
   /// @ Clear Single Activity
   static clearActivity(TransferActivity activity) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       if (hasActivity) {
         await to._database.clearActivity(activity);
       }
@@ -174,7 +152,7 @@ class CardService extends GetxService {
 
   /// @ Clear All Activity
   static clearAllActivity() async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       if (hasActivity) {
         await to._database.clearAllActivity();
       }
@@ -183,16 +161,20 @@ class CardService extends GetxService {
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCard(TransferCard card) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       await to._database.deleteCard(card);
-      addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
+      if (card.file != null) {
+        await to._database.addActivity(ActivityType.Deleted, card.payload, card.owner, mime: card.file!.single.mime.type);
+      } else {
+        await to._database.addActivity(ActivityType.Deleted, card.payload, card.owner);
+      }
       _refreshCount();
     }
   }
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       await to._database.deleteCardFromID(id);
       _refreshCount();
     }
@@ -200,7 +182,7 @@ class CardService extends GetxService {
 
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       if (totalCount > 0) {
         await to._database.deleteAllCards();
       }
@@ -209,7 +191,7 @@ class CardService extends GetxService {
 
   /// @ Load IO File from Metadata
   static Future<File> loadFileFromMetadata(SonrFile_Item metadata) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       var asset = await AssetEntity.fromId(metadata.id);
       if (asset != null) {
         var file = await asset.file;
@@ -225,7 +207,7 @@ class CardService extends GetxService {
 
   /// @ Load SonrFile from Metadata
   static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Item metadata) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       return metadata.toSonrFile();
     } else {
       return SonrFile();
@@ -234,22 +216,24 @@ class CardService extends GetxService {
 
   // @ Helper: Refresh Category Count
   static void _refreshCount() {
-    // Set Category Count
-    int counter = 1;
-    hasContacts ? counter += 1 : counter += 0;
-    hasFiles ? counter += 1 : counter += 0;
-    hasLinks ? counter += 1 : counter += 0;
-    to._categoryCount(counter);
+    if (DeviceService.isMobile && isRegistered) {
+      // Set Category Count
+      int counter = 1;
+      hasContacts ? counter += 1 : counter += 0;
+      hasFiles ? counter += 1 : counter += 0;
+      hasLinks ? counter += 1 : counter += 0;
+      to._categoryCount(counter);
 
-    // Set Individual File Count
-    if (hasFiles) {
-      to._documentCount(to._files.count((i) => i.mime == MIME_Type.TEXT));
-      to._pdfCount(to._files.count((i) => i.mime == MIME_Type.PDF));
-      to._presentationCount(to._files.count((i) => i.mime == MIME_Type.PRESENTATION));
-      to._spreadsheetCount(to._files.count((i) => i.mime == MIME_Type.SPREADSHEET));
-      to._otherCount(to._files.count((i) => i.mime == MIME_Type.OTHER));
-      to._photosCount(to._files.count((i) => i.mime == MIME_Type.IMAGE));
-      to._videosCount(to._files.count((i) => i.mime == MIME_Type.VIDEO));
+      // Set Individual File Count
+      if (hasFiles) {
+        to._documentCount(to._files.count((i) => i.mime == MIME_Type.TEXT));
+        to._pdfCount(to._files.count((i) => i.mime == MIME_Type.PDF));
+        to._presentationCount(to._files.count((i) => i.mime == MIME_Type.PRESENTATION));
+        to._spreadsheetCount(to._files.count((i) => i.mime == MIME_Type.SPREADSHEET));
+        to._otherCount(to._files.count((i) => i.mime == MIME_Type.OTHER));
+        to._photosCount(to._files.count((i) => i.mime == MIME_Type.IMAGE));
+        to._videosCount(to._files.count((i) => i.mime == MIME_Type.VIDEO));
+      }
     }
   }
 }

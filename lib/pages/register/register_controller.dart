@@ -155,7 +155,7 @@ class RegisterController extends GetxController {
 
       // Connect to Network
       SonrService.to.connect();
-      AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
+      AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
     }
   }
 
@@ -229,7 +229,7 @@ class RegisterController extends GetxController {
     if (DeviceService.isAndroid) {
       if (await Permission.storage.request().isGranted) {
         Get.find<MobileService>().updatePermissionsStatus();
-        AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
         return true;
       } else {
         Get.find<MobileService>().updatePermissionsStatus();
@@ -238,7 +238,7 @@ class RegisterController extends GetxController {
     } else {
       if (await Permission.photos.request().isGranted) {
         Get.find<MobileService>().updatePermissionsStatus();
-        AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
         return true;
       } else {
         Get.find<MobileService>().updatePermissionsStatus();

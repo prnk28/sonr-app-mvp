@@ -1,19 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:sonr_app/service/client/sonr.dart';
 
-class HomeArguments {
+class ActivityPageArgs {
+  final bool isNewSession;
+  ActivityPageArgs({required this.isNewSession});
+}
+
+class HomePageArgs {
   final bool isFirstLoad;
   final bool hasNewCard;
   final bool firstNewCard;
   final Transfer? newCard;
 
-  HomeArguments({this.isFirstLoad = false, this.hasNewCard = false, this.firstNewCard = false, this.newCard});
+  HomePageArgs({this.isFirstLoad = false, this.hasNewCard = false, this.firstNewCard = false, this.newCard});
 }
 
-class ActivityArguments {
-  final bool isNewSession;
-  ActivityArguments({required this.isNewSession});
-}
+
 
 /// Build Mode Enum
 enum BuildMode { Release, Debug }

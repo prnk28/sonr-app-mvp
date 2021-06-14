@@ -1,4 +1,3 @@
-import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
 import 'package:sonr_app/style.dart';
 import '../home_controller.dart';
@@ -32,7 +31,7 @@ class HomeActionButton extends GetView<HomeController> {
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Dashboard),
           iconData: SonrIcons.Alerts,
-          onPressed: () => AppPage.Activity.to(init: ActivityController.initSession),
+          onPressed: () => AppPage.Activity.to(),
         ),
       );
     }
