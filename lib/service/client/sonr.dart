@@ -6,7 +6,7 @@ import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
 import 'lobby.dart';
-import '../user/user.dart';
+import '../device/user.dart';
 import 'session.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 

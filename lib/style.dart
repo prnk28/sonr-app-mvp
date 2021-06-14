@@ -4,7 +4,7 @@ export 'service/device/mobile.dart';
 export 'service/client/transfer.dart';
 export 'service/client/lobby.dart';
 export 'service/client/sonr.dart';
-export 'service/user/user.dart';
+export 'service/device/user.dart';
 export 'data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
@@ -58,7 +58,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/service/user/user.dart';
+import 'package:sonr_app/service/device/user.dart';
 import 'style/design/design.dart';
 
 import 'style/elements/clipper.dart';
