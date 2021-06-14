@@ -10,6 +10,11 @@ class HomeArguments {
   HomeArguments({this.isFirstLoad = false, this.hasNewCard = false, this.firstNewCard = false, this.newCard});
 }
 
+class ActivityArguments {
+  final bool isNewSession;
+  ActivityArguments({required this.isNewSession});
+}
+
 /// Build Mode Enum
 enum BuildMode { Release, Debug }
 

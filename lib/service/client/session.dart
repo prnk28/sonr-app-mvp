@@ -11,9 +11,11 @@ class SessionService extends GetxService {
 
   // @ Properties
   final Session _session = Session();
+  final _hasActiveSession = false.obs;
 
   /// Returns Current Session
   static Session get session => to._session;
+  static Rx<bool> get hasActiveSession => to._hasActiveSession;
 
   Future<SessionService> init() async {
     return this;
@@ -21,7 +23,19 @@ class SessionService extends GetxService {
 
   // * ------------------- Methods ----------------------------
   /// Accept Invite for Current Session
-  static void acceptInvite(bool decision, {bool sendBackContact = false, bool closeOverlay = false}) {}
+  static void setInviteDecision(bool decision, {bool sendBackContact = false, bool closeOverlay = false}) {
+    if (isRegistered) {
+      // Set Active
+      to._hasActiveSession(true);
+
+      // Handle Payload
+      if (to._session.payload == Payload.CONTACT) {
+        to._handleAcceptContact(sendBackContact);
+      } else {
+        decision ? to._handleAcceptTransfer() : to._handleDeclineTransfer();
+      }
+    }
+  }
 
   /// Set Session to Prepare for Outgoing Transfer
   static void setOutgoing(InviteRequest invite) {
@@ -147,6 +161,59 @@ class SessionService extends GetxService {
         payload: data.payload,
         file: data.file,
       );
+    }
+  }
+
+  // @ Handle Accept Transfer Response
+  _handleAcceptTransfer() {
+    // Check for Remote
+    SonrService.respond(to._session.buildReply(decision: true));
+
+    // Switch View
+    SonrOverlay.back();
+    SonrOverlay.show(
+      ProgressView(to._session, to._session.totalSize > 5000000),
+      barrierDismissible: false,
+      disableAnimation: true,
+    );
+
+    // if (invite.file.single.size > 5000000) {
+    // Handle Card Received
+    SessionService.session.status.listen((s) {
+      if (s.isCompleted) {
+        SonrOverlay.back();
+      }
+    });
+    // } else {
+    // Handle Animation Completed
+    Future.delayed(1600.milliseconds, () {
+      SonrOverlay.back();
+    });
+    // }
+  }
+
+// @ Handle Decline Transfer Response
+  _handleDeclineTransfer() {
+    SonrService.respond(to._session.buildReply(decision: false));
+    SonrOverlay.back();
+  }
+
+// @ Handle Accept Contact Response
+  _handleAcceptContact(bool sendBackContact) {
+    // Save Card
+    CardService.addCard(to._session.transfer.value);
+
+    // Check if Send Back
+    if (sendBackContact) {
+      SonrService.respond(to._session.buildReply(decision: true));
+    }
+
+    // Return to HomeScreen
+    Get.back();
+
+    // Present Home Controller
+    if (Get.currentRoute != "/transfer") {
+      Get.offNamed('/home');
     }
   }
 }

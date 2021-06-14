@@ -9,6 +9,12 @@ class ActivityPopup extends GetView<ActivityController> {
     Get.to(ActivityPopup(), transition: Transition.downToUp);
   }
 
+  /// Method Opens Activity Popup with Session
+  static void openSession() {
+    Get.to(ActivityPopup(), transition: Transition.downToUp);
+    Get.find<ActivityController>().handleArguments(ActivityArguments(isNewSession: true));
+  }
+
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -41,11 +47,18 @@ class ActivityPopup extends GetView<ActivityController> {
 class _ActivityListView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ListView.builder(
-        itemCount: controller.activityLength.value,
-        itemBuilder: (context, index) {
-          return PastActivityItem(item: controller.pastActivities[index]);
-        }));
+    if (controller.hasActiveSession.value) {}
+    return Obx(() {
+      if (controller.hasActiveSession.value) {
+        return ListView.builder(
+            itemCount: controller.activityLength.value,
+            itemBuilder: (context, index) {
+              return PastActivityItem(item: controller.pastActivities[index]);
+            });
+      } else {
+        return GradientTabsRow(tabs: ["Active", "Past"], onTabChanged: controller.setView);
+      }
+    });
   }
 }
 

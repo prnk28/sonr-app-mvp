@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -33,14 +34,14 @@ class MediaAuthView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ColorButton.primary(
-              onPressed: () => CardService.handleInviteResponse(true, invite),
+              onPressed: () => SessionService.setInviteDecision(true),
               text: "Accept",
               gradient: SonrGradient.Tertiary,
               icon: SonrIcons.Check,
               margin: EdgeInsets.symmetric(horizontal: 54),
             ),
             Padding(padding: EdgeInsets.all(8)),
-            PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline".paragraph(color: Get.theme.hintColor)),
+            PlainTextButton(onPressed: () => SessionService.setInviteDecision(false), text: "Decline".paragraph(color: Get.theme.hintColor)),
           ],
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:sonr_app/modules/peer/profile_view.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -75,9 +76,9 @@ class ContactAuthView extends StatelessWidget {
                 SonrOverlay.back();
                 if (!isReply) {
                   var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  CardService.handleInviteResponse(true, invite!, sendBackContact: result);
+                  SessionService.setInviteDecision(true, sendBackContact: result);
                 } else {
-                  CardService.handleInviteResponse(true, invite!);
+                  SessionService.setInviteDecision(true);
                 }
               },
               text: "Accept",

@@ -2,8 +2,8 @@ import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 
 class ActivityController extends GetxController {
-  /// Current Activity
-  final currentActivity = SessionService.session;
+  /// Has Session Active
+  final hasActiveSession = false.obs;
 
   /// Past Activities
   final pastActivities = CardService.activity;
@@ -15,6 +15,17 @@ class ActivityController extends GetxController {
   void onInit() {
     activityLength(CardService.activity.length + _hasValidSession());
     super.onInit();
+  }
+
+  void setView(int index) {
+    
+  }
+
+  void handleArguments(dynamic args) {
+    if (args is ActivityArguments) {
+      // Update Active Session
+      hasActiveSession(args.isNewSession);
+    }
   }
 
   /// Method Helper Returns Active Session Number from Bool

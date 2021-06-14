@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/authorize/auth_controller.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 import 'contact_auth.dart';
 import 'file_auth.dart';
@@ -8,11 +8,10 @@ class Authorize {
   /// Invite Received
   static void invite(InviteRequest invite) {
     // Place Controller
-    final controller = Get.put<AuthorizeController>(AuthorizeController());
     if (invite.payload == Payload.CONTACT) {
       Popup.open(ContactAuthView(false, invite: invite), dismissible: false);
     } else {
-      Sheet.dissmissible(ValueKey(invite), _InviteRequestSheet(controller: controller, invite: invite), (direction) {
+      Sheet.dissmissible(ValueKey(invite), _InviteRequestSheet(invite: invite), (direction) {
         SonrService.respond(invite.newDeclineResponse());
         Sheet.close();
       });
@@ -33,10 +32,9 @@ class Authorize {
 
 /// @ TransferView: Builds Invite View based on InviteRequest Payload Type
 class _InviteRequestSheet extends StatelessWidget {
-  final AuthorizeController controller;
   final InviteRequest invite;
 
-  const _InviteRequestSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
+  const _InviteRequestSheet({Key? key, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return FadeInUpBig(
@@ -59,7 +57,7 @@ class _InviteRequestSheet extends StatelessWidget {
               ),
               ColorButton.primary(
                 onPressed: () {
-                  CardService.handleInviteResponse(true, invite);
+                  SessionService.setInviteDecision(true);
                   Sheet.close();
                 },
                 text: "Accept",

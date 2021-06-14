@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/peer/profile_view.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -47,7 +48,7 @@ class FileAuthView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ColorButton.primary(
-                  onPressed: () => CardService.handleInviteResponse(true, invite),
+                  onPressed: () => SessionService.setInviteDecision(true),
                   text: "Accept",
                   gradient: SonrGradient.Tertiary,
                   icon: SonrIcons.Check,
@@ -55,7 +56,7 @@ class FileAuthView extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(8)),
                 PlainTextButton(
-                    onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline".paragraph(color: Get.theme.hintColor)),
+                    onPressed: () => SessionService.setInviteDecision(false), text: "Decline".paragraph(color: Get.theme.hintColor)),
               ],
             ),
           ],

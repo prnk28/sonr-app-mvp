@@ -6,13 +6,13 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 
 class ProgressView extends HookWidget {
   //  Properties
-  final SonrFile file;
+  final Session session;
   final Gradient gradient = SonrGradient.Progress;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
 
   // Constructer
-  ProgressView(this.file, this.utilizeProgress) : super(key: UniqueKey());
+  ProgressView(this.session, this.utilizeProgress) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class ProgressView extends HookWidget {
         child: utilizeProgress
             ? Obx(() {
                 if (SessionService.session.progress.value >= 0.5) {
-                  return FadeIn(child: file.single.mime.type.gradient(size: 165));
+                  return FadeIn(child: session.payload.gradient(size: 165));
                 } else {
                   return Container();
                 }
@@ -106,6 +106,6 @@ class ProgressView extends HookWidget {
             : FadeIn(
                 delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
                 duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-                child: file.single.mime.type.gradient(size: 165)));
+                child: session.payload.gradient(size: 165)));
   }
 }
