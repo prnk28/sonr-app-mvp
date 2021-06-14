@@ -11,7 +11,7 @@ class ProfileView extends GetView<ProfileController> {
     return Obx(() => Container(
         decoration: SonrTheme.cardDecoration,
         padding: EdgeInsets.all(8),
-        margin: EdgeInsets.only(left: 24, right: 24, bottom: 56),
+        margin: EdgeInsets.only(left: 24, right: 24, bottom: 136),
         child: _buildView(controller.status.value)));
   }
 

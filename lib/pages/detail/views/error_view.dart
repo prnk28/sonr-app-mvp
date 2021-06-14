@@ -26,7 +26,7 @@ class ErrorView extends StatelessWidget {
             child: ColorButton.neutral(
               onPressed: () => Get.back(closeOverlays: true),
               text: "Return Home",
-              textColor: type == DetailPageType.ErrorEmptyLinks ? Colors.white : null,
+              textColor: type == DetailPageType.ErrorEmptyLinks ? SonrColor.White : SonrColor.Black,
             ),
           ),
         ],
