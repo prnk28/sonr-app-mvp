@@ -30,7 +30,7 @@ class SonrScaffold extends StatelessWidget {
       backgroundColor: SonrTheme.backgroundColor,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: floatingActionButtonLocation ?? _FixedCenterDockedFabLocation(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(child: body ?? Container()),
       appBar: appBar,
       bottomNavigationBar: bottomNavigationBar,

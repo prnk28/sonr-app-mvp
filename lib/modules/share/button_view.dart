@@ -10,7 +10,7 @@ class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 36.0),
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: ObxValue<RxBool>(
           (isPressed) => AnimatedScale(
               duration: Duration(milliseconds: 150),
@@ -94,9 +94,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
-                  imageWidth: K_ROW_BUTTON_SIZE,
-        imageHeight: K_ROW_BUTTON_SIZE,
-        circleSize: K_ROW_CIRCLE_SIZE,
+          imageWidth: K_ROW_BUTTON_SIZE,
+          imageHeight: K_ROW_BUTTON_SIZE,
+          circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
           path: 'assets/images/Folder.png',
         ));
@@ -113,9 +113,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
-                  imageWidth: K_ROW_BUTTON_SIZE,
-        imageHeight: K_ROW_BUTTON_SIZE,
-        circleSize: K_ROW_CIRCLE_SIZE,
+          imageWidth: K_ROW_BUTTON_SIZE,
+          imageHeight: K_ROW_BUTTON_SIZE,
+          circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
           path: 'assets/images/Contact.png',
         ));

@@ -21,6 +21,7 @@ class GradientTabs extends StatelessWidget {
         0.obs);
   }
 
+  // @ Helper: Method to Build Tab Options
   List<Widget> _buildTabs(RxInt currentIndex) {
     return List<Widget>.generate(
         tabs.length,
@@ -30,7 +31,9 @@ class GradientTabs extends StatelessWidget {
                 constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
                 height: 48,
                 alignment: Alignment.center,
-                child: tabs[index].light(color: currentIndex.value == index ? SonrColor.White : SonrColor.Black),
+                child: AnimatedScale(
+                    scale: currentIndex.value == index ? 1.1 : 1.0,
+                    child: tabs[index].light(color: currentIndex.value == index ? SonrColor.White : SonrColor.Black)),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     gradient: currentIndex.value == index
