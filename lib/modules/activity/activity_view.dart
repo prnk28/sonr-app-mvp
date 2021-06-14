@@ -1,14 +1,11 @@
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 import 'activity_controller.dart';
+import 'current_item.dart';
 import 'past_item.dart';
 
 /// @ Activity View
 class ActivityPopup extends GetView<ActivityController> {
-  /// Method Opens Activity Popup
-  static void open() {
-    Get.to(ActivityPopup(), transition: Transition.downToUp);
-  }
-
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -16,55 +13,83 @@ class ActivityPopup extends GetView<ActivityController> {
       appBar: DetailAppBar(
         isClose: true,
         title: "Activity",
-        onPressed: () => Get.back(closeOverlays: true),
+        onPressed: () => AppRoute.close(),
         action: ActionButton(
-            iconData: SonrIcons.Clear,
-            onPressed: () async {
-              if (controller.activityLength > 0) {
-                var decision = await SonrOverlay.question(
-                    title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
-                if (decision) {
-                  CardService.clearAllActivity();
-                }
-              }
-            }),
+          iconData: SonrIcons.Clear,
+          onPressed: controller.clearAllActivity,
+        ),
       ),
-      body: Container(
+      body: Column(children: [
+        _ActivityHeader(),
+        Expanded(
           child: Obx(
-        () => CardService.activity.length > 0 ? _ActivityListView() : _ActivityEmptyView(),
-      )),
+            () => _buildExpandedChild(
+              controller.hasActiveSession.value,
+              controller.currentPageIndex.value,
+            ),
+          ),
+        )
+      ]),
     );
   }
-}
 
-// @ Helper: View for Past/Current Activity
-class _ActivityListView extends GetView<ActivityController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => ListView.builder(
-        itemCount: controller.activityLength.value,
-        itemBuilder: (context, index) {
-          return PastActivityItem(item: controller.pastActivities[index]);
-        }));
+  // @ Helper: Builds Expanded Child by Status
+  Widget _buildExpandedChild(bool hasSession, int currentPageIndex) {
+    if (hasSession) {
+      return controller.currentPageIndex.value == 0 ? _CurrentActivityView() : _PastActivityView();
+    } else {
+      return _PastActivityView();
+    }
   }
 }
 
-// @ Helper: View for Empty Activity
-class _ActivityEmptyView extends StatelessWidget {
+class _ActivityHeader extends GetView<ActivityController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => controller.hasActiveSession.value
+        ? GradientTabs(
+            tabs: ["Active", "Past"],
+            onTabChanged: (index) => controller.setView(index),
+          )
+        : Container());
+  }
+}
+
+class _PastActivityView extends GetView<ActivityController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Obx(
+      () => CardService.activity.length > 0
+          ? ListView.builder(
+              itemCount: controller.activityLength.value,
+              itemBuilder: (context, index) {
+                return PastActivityItem(item: controller.pastActivities[index]);
+              })
+          : Center(
+              child: Container(
+                child: [
+                  Padding(padding: EdgeInsets.all(24)),
+                  Image.asset(
+                    'assets/illustrations/EmptyNotif.png',
+                    height: Height.ratio(0.4),
+                    fit: BoxFit.fitHeight,
+                  ),
+                  Padding(padding: EdgeInsets.all(8)),
+                  "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
+                ].column(),
+                padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
+              ),
+            ),
+    ));
+  }
+}
+
+class _CurrentActivityView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        child: [
-          Image.asset(
-            'assets/illustrations/EmptyNotif.png',
-            height: Height.ratio(0.6),
-            fit: BoxFit.fitHeight,
-          ),
-          "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
-        ].column(),
-        padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
-      ),
+      child: CurrentActivityItem(session: SessionService.session),
     );
   }
 }

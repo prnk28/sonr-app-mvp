@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/style.dart';
-import 'share.dart';
 
 const K_ROW_BUTTON_SIZE = 75.0;
 const K_ROW_CIRCLE_SIZE = 95.0;
@@ -10,7 +10,7 @@ class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 36.0),
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: ObxValue<RxBool>(
           (isPressed) => AnimatedScale(
               duration: Duration(milliseconds: 150),
@@ -22,22 +22,13 @@ class ShareButton extends StatelessWidget {
                   onTapDown: (details) => isPressed(true),
                   onTapUp: (details) {
                     isPressed(false);
-                    Future.delayed(150.milliseconds, () => ShareView.popup());
+                    Future.delayed(150.milliseconds, () => AppPage.Share.to(init: ShareController.initPopup));
                   },
-                  child: ClipPolygon(
-                    borderRadius: 24,
+                  child: PolyContainer(
+                    radius: 24,
                     rotate: 30,
-                    boxShadows: SonrTheme.polyBoxShadow,
                     sides: 6,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: SonrTheme.primaryGradient,
-                        boxShadow: SonrTheme.boxShadow,
-                        border: Border.all(color: SonrTheme.foregroundColor, width: 1),
-                      ),
-                      alignment: Alignment.center,
-                      child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
-                    ),
+                    child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
                   ),
                 ),
               )),
@@ -94,9 +85,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
-                  imageWidth: K_ROW_BUTTON_SIZE,
-        imageHeight: K_ROW_BUTTON_SIZE,
-        circleSize: K_ROW_CIRCLE_SIZE,
+          imageWidth: K_ROW_BUTTON_SIZE,
+          imageHeight: K_ROW_BUTTON_SIZE,
+          circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
           path: 'assets/images/Folder.png',
         ));
@@ -113,9 +104,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
-                  imageWidth: K_ROW_BUTTON_SIZE,
-        imageHeight: K_ROW_BUTTON_SIZE,
-        circleSize: K_ROW_CIRCLE_SIZE,
+          imageWidth: K_ROW_BUTTON_SIZE,
+          imageHeight: K_ROW_BUTTON_SIZE,
+          circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
           path: 'assets/images/Contact.png',
         ));

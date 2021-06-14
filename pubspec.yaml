@@ -57,7 +57,7 @@ dependencies:
   camerawesome: ^0.3.0-nullsafety
   connectivity: ^3.0.6
   flutter_compass: ^0.6.0
-  flutter_keyboard_visibility: ^5.0.1
+  flutter_keyboard_visibility: ^5.0.2
   geolocator: ^7.0.3
   motion_sensors: ^0.1.0
   permission_handler: ^8.0.1
@@ -80,7 +80,9 @@ dependencies:
   feedback: ^1.2.2
   mime: ^1.0.0
   moor: ^4.3.2
+  moor_flutter: ^4.0.0
   receive_sharing_intent: ^1.4.5
+  sqlite3_flutter_libs: ^0.5.0
   uni_links: ^0.5.1
 
   # -- Plugins --

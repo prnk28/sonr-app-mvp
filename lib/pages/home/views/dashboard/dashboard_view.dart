@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:sonr_app/pages/detail/detail_page.dart';
 import 'package:sonr_app/style.dart';
 import 'dashboard_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -55,15 +54,15 @@ class DashboardView extends GetView<DashboardController> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
-                            path: TransferItemsType.Media.imagePath(),
-                            label: TransferItemsType.Media.name(),
+                            path: PostItemType.Media.imagePath(),
+                            label: PostItemType.Media.name(),
                             imageFit: BoxFit.fitWidth,
                             imageWidth: 130,
                             onPressed: () {
-                              if (TransferItemsType.Media.count() > 0) {
-                                Details.toPostsList(TransferItemsType.Media);
+                              if (PostItemType.Media.count() > 0) {
+                                AppPage.Posts.to(args: PostsPageArgs.media());
                               } else {
-                                Details.toError(DetailPageType.ErrorEmptyMedia);
+                                AppPage.Error.to(args: ErrorPageArgs.emptyMedia());
                               }
                             },
                           ),
@@ -71,13 +70,13 @@ class DashboardView extends GetView<DashboardController> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
-                            path: TransferItemsType.Files.imagePath(),
-                            label: TransferItemsType.Files.name(),
+                            path: PostItemType.Files.imagePath(),
+                            label: PostItemType.Files.name(),
                             onPressed: () {
-                              if (TransferItemsType.Files.count() > 0) {
-                                Details.toPostsList(TransferItemsType.Files);
+                              if (PostItemType.Files.count() > 0) {
+                                AppPage.Posts.to(args: PostsPageArgs.files());
                               } else {
-                                Details.toError(DetailPageType.ErrorEmptyFiles);
+                                AppPage.Error.to(args: ErrorPageArgs.emptyFiles());
                               }
                             },
                           ),
@@ -90,13 +89,13 @@ class DashboardView extends GetView<DashboardController> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
-                            path: TransferItemsType.Contacts.imagePath(),
-                            label: TransferItemsType.Contacts.name(),
+                            path: PostItemType.Contacts.imagePath(),
+                            label: PostItemType.Contacts.name(),
                             onPressed: () {
-                              if (TransferItemsType.Contacts.count() > 0) {
-                                Details.toPostsList(TransferItemsType.Contacts);
+                              if (PostItemType.Contacts.count() > 0) {
+                                AppPage.Posts.to(args: PostsPageArgs.contacts());
                               } else {
-                                Details.toError(DetailPageType.ErrorEmptyContacts);
+                                AppPage.Error.to(args: ErrorPageArgs.emptyContacts());
                               }
                             },
                           ),
@@ -104,15 +103,15 @@ class DashboardView extends GetView<DashboardController> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
-                            path: TransferItemsType.Links.imagePath(),
+                            path: PostItemType.Links.imagePath(),
                             imageWidth: 90,
                             imageHeight: 90,
-                            label: TransferItemsType.Links.name(),
+                            label: PostItemType.Links.name(),
                             onPressed: () {
-                              if (TransferItemsType.Links.count() > 0) {
-                                Details.toPostsList(TransferItemsType.Links);
+                              if (PostItemType.Links.count() > 0) {
+                                AppPage.Posts.to(args: PostsPageArgs.links());
                               } else {
-                                Details.toError(DetailPageType.ErrorEmptyLinks);
+                                AppPage.Error.to(args: ErrorPageArgs.emptyLinks());
                               }
                             },
                           ),

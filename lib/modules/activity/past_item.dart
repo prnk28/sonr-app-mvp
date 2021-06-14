@@ -22,8 +22,7 @@ class PastActivityItem extends GetView<ActivityController> {
             child: SonrIcons.Cancel.whiteWith(size: 28),
           ),
         ),
-        child: Container(
-          decoration: SonrTheme.cardDecoration,
+        child: BoxContainer(
           child: ListTile(title: item.messageText()),
         ),
       ),

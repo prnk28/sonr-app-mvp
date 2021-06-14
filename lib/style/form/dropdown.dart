@@ -52,9 +52,8 @@ class SonrDropdown extends StatelessWidget {
               index.refresh();
             }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
           },
-          child: Container(
+          child: BoxContainer(
             margin: EdgeInsets.symmetric(horizontal: 3),
-            decoration: Neumorphic.floating(theme: Get.theme, radius: 0),
             child: AnimatedSlideSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
           ),
         ),
@@ -130,9 +129,8 @@ class SonrDropdownItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (hasIcon) {
       return Row(children: [
-        Container(
+        BoxContainer(
           child: icon,
-          decoration: Neumorphic.indented(theme: Get.theme),
           padding: EdgeInsets.all(10),
         ),
         Padding(

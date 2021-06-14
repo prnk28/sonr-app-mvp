@@ -1,8 +1,9 @@
-import 'package:sonr_app/pages/detail/detail.dart';
 import 'package:sonr_app/style.dart';
+import 'package:sonr_app/data/database/service.dart';
 
-enum TransferItemsType { Media, Files, Contacts, Links }
-extension TransferItemsTypeUtils on TransferItemsType {
+enum PostItemType { Media, Files, Contacts, Links }
+
+extension PostItemTypeUtils on PostItemType {
   /// Returns List Length as H5 Text
   Widget subtitle() {
     return Container(child: "${this.countString()} Items".light(color: Get.theme.focusColor, align: TextAlign.start));
@@ -11,13 +12,13 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Gets Count of Items for Type
   int count() {
     switch (this) {
-      case TransferItemsType.Media:
+      case PostItemType.Media:
         return CardService.media.length;
-      case TransferItemsType.Files:
+      case PostItemType.Files:
         return CardService.files.length;
-      case TransferItemsType.Contacts:
+      case PostItemType.Contacts:
         return CardService.contacts.length;
-      case TransferItemsType.Links:
+      case PostItemType.Links:
         return CardService.links.length;
     }
   }
@@ -25,20 +26,6 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns Count of Items for Type as String
   String countString() {
     return this.count().toString();
-  }
-
-  /// Returns Error Page for Items Type
-  DetailPageType detailsErrorPage() {
-    switch (this) {
-      case TransferItemsType.Media:
-        return DetailPageType.ErrorEmptyMedia;
-      case TransferItemsType.Files:
-        return DetailPageType.ErrorEmptyFiles;
-      case TransferItemsType.Contacts:
-        return DetailPageType.ErrorEmptyContacts;
-      case TransferItemsType.Links:
-        return DetailPageType.ErrorEmptyLinks;
-    }
   }
 
   /// Returns `name()` as H3 Text
@@ -77,13 +64,13 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns Gradient Icon for Type
   Gradient gradient() {
     switch (this) {
-      case TransferItemsType.Media:
+      case PostItemType.Media:
         return SonrGradients.PerfectBlue;
-      case TransferItemsType.Files:
+      case PostItemType.Files:
         return SonrGradients.ItmeoBranding;
-      case TransferItemsType.Contacts:
+      case PostItemType.Contacts:
         return SonrGradients.AmourAmour;
-      case TransferItemsType.Links:
+      case PostItemType.Links:
         return SonrGradients.FrozenHeat;
     }
   }
@@ -91,13 +78,13 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns IconData for Type
   IconData iconData() {
     switch (this) {
-      case TransferItemsType.Media:
+      case PostItemType.Media:
         return SonrIcons.Album;
-      case TransferItemsType.Files:
+      case PostItemType.Files:
         return SonrIcons.Folder;
-      case TransferItemsType.Contacts:
+      case PostItemType.Contacts:
         return SonrIcons.ContactCard;
-      case TransferItemsType.Links:
+      case PostItemType.Links:
         return SonrIcons.Clip;
     }
   }
@@ -105,13 +92,13 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Returns Image Path for type
   String imagePath() {
     switch (this) {
-      case TransferItemsType.Media:
+      case PostItemType.Media:
         return "assets/images/Gallery.png";
-      case TransferItemsType.Files:
+      case PostItemType.Files:
         return "assets/images/Files.png";
-      case TransferItemsType.Contacts:
+      case PostItemType.Contacts:
         return "assets/images/Contacts.png";
-      case TransferItemsType.Links:
+      case PostItemType.Links:
         return "assets/images/Links.png";
     }
   }
@@ -122,11 +109,11 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Return Item Count by View Type
   int get itemCount {
     switch (this) {
-      case TransferItemsType.Files:
+      case PostItemType.Files:
         return CardService.files.length;
-      case TransferItemsType.Contacts:
+      case PostItemType.Contacts:
         return CardService.contacts.length;
-      case TransferItemsType.Links:
+      case PostItemType.Links:
         return CardService.links.length;
       default:
         return CardService.media.length;
@@ -136,11 +123,11 @@ extension TransferItemsTypeUtils on TransferItemsType {
   /// Return TransferItem from Index Value
   TransferCard transferItemAtIndex(int index) {
     switch (this) {
-      case TransferItemsType.Files:
+      case PostItemType.Files:
         return CardService.files.reversed.toList()[index];
-      case TransferItemsType.Contacts:
+      case PostItemType.Contacts:
         return CardService.contacts.reversed.toList()[index];
-      case TransferItemsType.Links:
+      case PostItemType.Links:
         return CardService.links.reversed.toList()[index];
       default:
         return CardService.media.reversed.toList()[index];

@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/peer/profile_view.dart';
-import 'package:sonr_app/service/user/cards.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:get/get.dart';
@@ -19,20 +19,16 @@ class ContactAuthView extends StatelessWidget {
     } else {
       card = invite!.contact;
     }
-    return Container(
+    return BoxContainer(
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
-      decoration: SonrTheme.cardDecoration,
       child: Column(children: [
         Row(children: [
           // @ Photo
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8),
-              child: Container(
-                decoration: Neumorphic.floating(
-                  theme: Get.theme,
-                ),
+              child: BoxContainer(
                 padding: EdgeInsets.all(4),
                 child: ProfileAvatar(profile: card.profile),
               ),
@@ -75,9 +71,9 @@ class ContactAuthView extends StatelessWidget {
                 SonrOverlay.back();
                 if (!isReply) {
                   var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  CardService.handleInviteResponse(true, invite!, sendBackContact: result);
+                  SessionService.decisionForInvite(true, sendBackContact: result);
                 } else {
-                  CardService.handleInviteResponse(true, invite!);
+                  SessionService.decisionForInvite(true);
                 }
               },
               text: "Accept",
@@ -98,10 +94,9 @@ class ContactFlatCard extends StatelessWidget {
   ContactFlatCard(this.contact, {this.scale, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BoxContainer(
       height: 420 * scale!,
       width: (Get.width - 64) * scale!,
-      decoration: SonrTheme.cardDecoration,
       child: Container(
         height: 75,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -109,9 +104,8 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Container(
+            child: CircleContainer(
                 padding: EdgeInsets.all(10),
-                decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
                 child: ProfileAvatar(
                   profile: contact!.profile,
                 )),

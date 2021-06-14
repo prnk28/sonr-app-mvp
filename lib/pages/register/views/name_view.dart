@@ -19,8 +19,7 @@ class NamePage extends GetView<RegisterController> {
                 children: <Widget>[
                   _NameStatus(),
                   Padding(padding: EdgeInsets.all(8)),
-                  Container(
-                      decoration: SonrTheme.cardDecoration,
+                  BoxContainer(
                       margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
                       padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
                       child: Stack(children: [
@@ -86,14 +85,11 @@ class _NameStatus extends GetView<RegisterController> {
                   Padding(padding: EdgeInsets.all(4)),
                   _buildLabel(controller.nameStatus.value).paragraph(color: SonrColor.White)
                 ])),
-            decoration: BoxDecoration(gradient: _buildGradient(controller.nameStatus.value), borderRadius: BorderRadius.circular(8), boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 4),
-                color: SonrColor.Primary.withOpacity(0.4),
-                blurRadius: Get.theme.blurRadius,
-                spreadRadius: Get.theme.spreadRadius,
-              )
-            ]),
+            decoration: BoxDecoration(
+              gradient: _buildGradient(controller.nameStatus.value),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: SonrTheme.boxShadow,
+            ),
           ));
   }
 

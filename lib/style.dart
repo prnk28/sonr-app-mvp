@@ -4,9 +4,8 @@ export 'service/device/mobile.dart';
 export 'service/client/transfer.dart';
 export 'service/client/lobby.dart';
 export 'service/client/sonr.dart';
-export 'service/user/cards.dart';
-export 'service/user/user.dart';
-export 'service/user/logger.dart';
+export 'service/device/user.dart';
+export 'data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
 
@@ -20,6 +19,13 @@ export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
 export 'package:firebase_analytics/firebase_analytics.dart';
 
+// Theme Components
+export 'style/components/color.dart';
+export 'style/components/gradient.dart';
+export 'style/components/icon.dart';
+export 'style/components/shape.dart';
+export 'style/components/text.dart';
+
 // Custom Theme Aspects
 export 'style/buttons/action.dart';
 export 'style/buttons/color.dart';
@@ -27,35 +33,32 @@ export 'style/buttons/plain.dart';
 export 'style/buttons/confirm.dart';
 export 'style/elements/scaffold.dart';
 export 'style/elements/appbar.dart';
-export 'style/animation/animation.dart';
+export 'style/elements/animation.dart';
 export 'style/buttons/image.dart';
 
-// Custom Route Aspects
-export 'style/route/popup.dart';
-export 'style/route/sheet.dart';
-export 'style/route/snackbar.dart';
+// Form Styles
+export 'style/form/checklist.dart';
+export 'style/form/dropdown.dart';
+export 'style/form/textfield.dart';
+export 'style/form/tabs.dart';
 
 // Global UI Widgets
 export 'style/elements/shape.dart';
 export 'style/elements/painter.dart';
 export 'pages/overlay/overlay.dart';
 export 'pages/overlay/controllers/flat_overlay.dart';
-export 'style/form/dropdown.dart';
-export 'style/form/textfield.dart';
 
 // UI Packages
 export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
-export 'style/design/design.dart';
 export 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/service/user/user.dart';
-import 'style/design/design.dart';
-
+import 'package:sonr_app/service/device/user.dart';
+import 'style/components/color.dart';
 import 'style/elements/clipper.dart';
 
 /// * Widget Position Enum * //
@@ -193,25 +196,38 @@ class SonrTheme {
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
 
-  /// Returns Primary Gradient
-  static Gradient get primaryGradient => RadialGradient(
-        colors: [
-          Color(0xffFFCF14),
-          Color(0xffF3ACFF),
-          Color(0xff8AECFF),
-        ],
-        stops: [0, 0.45, 1],
-        center: Alignment.center,
-        focal: Alignment.topRight,
-        tileMode: TileMode.clamp,
-        radius: 0.72,
+  /// Returns Light Theme for App
+  static ThemeData get LightTheme => ThemeData(
+        brightness: Brightness.light,
+        primaryColor: SonrColor.Primary,
+        backgroundColor: SonrColor.White,
+        dividerColor: Colors.white.withOpacity(0.65),
+        scaffoldBackgroundColor: SonrColor.White.withOpacity(0.75),
+        splashColor: SonrColor.Primary.withOpacity(0.2),
+        errorColor: SonrColor.Critical,
+        accentColor: SonrColor.Secondary,
+        focusColor: SonrColor.Black,
+        hintColor: SonrColor.Grey,
+        cardColor: Color(0xfff0f6fa).withOpacity(0.85),
+        canvasColor: Color(0xffffffff).withOpacity(0.75),
+        shadowColor: Color(0xffc7ccd0),
       );
 
-  static BoxDecoration get cardDecoration => BoxDecoration(
-        border: Border.all(color: SonrTheme.backgroundColor, width: 1),
-        color: SonrTheme.foregroundColor,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: SonrTheme.boxShadow,
+  /// Returns Dark Theme for App
+  static ThemeData get DarkTheme => ThemeData(
+        brightness: Brightness.dark,
+        dividerColor: SonrColor.Black.withOpacity(0.65),
+        primaryColor: SonrColor.Primary,
+        backgroundColor: SonrColor.Black,
+        scaffoldBackgroundColor: SonrColor.Black.withOpacity(0.85),
+        splashColor: SonrColor.Primary.withOpacity(0.2),
+        errorColor: SonrColor.Critical,
+        accentColor: SonrColor.AccentPurple,
+        focusColor: SonrColor.White,
+        hintColor: SonrColor.LightGrey,
+        cardColor: Color(0xff2f2a2a).withOpacity(0.75),
+        canvasColor: Color(0xff3e3737),
+        shadowColor: Color(0xff2f2a2a),
       );
 
   /// Returns Current Text Color
@@ -241,6 +257,14 @@ class SonrTheme {
           )
         ];
 
+  static List<BoxShadow> get circleBoxShadow => [
+        BoxShadow(
+          offset: Offset(2, 2),
+          blurRadius: 8,
+          color: SonrColor.Black.withOpacity(0.2),
+        ),
+      ];
+
   /// Return Current Box Shadow
   static List<PolygonBoxShadow> get polyBoxShadow => UserService.isDarkMode
       ? [
@@ -260,4 +284,69 @@ class SonrTheme {
   static Color get greyColor => Get.theme.hintColor;
 }
 
-/// * Widget Position Enum * //
+/// * Widget Extensions * //
+/// ## Edge Insets Helper Extensions
+extension EdgeWith on EdgeInsets {
+  // Top Only Insets
+  static EdgeInsets top(double value) {
+    return EdgeInsets.only(top: value);
+  }
+
+  // Bottom Only Insets
+  static EdgeInsets bottom(double value) {
+    return EdgeInsets.only(bottom: value);
+  }
+
+  // Left Only Insets
+  static EdgeInsets left(double value) {
+    return EdgeInsets.only(left: value);
+  }
+
+  // Right Only Insets
+  static EdgeInsets right(double value) {
+    return EdgeInsets.only(right: value);
+  }
+
+  // Vertical Symmetric Only Insets
+  static EdgeInsets vertical(double value) {
+    return EdgeInsets.symmetric(vertical: value);
+  }
+
+  // Horizontal Symmetric Only Insets
+  static EdgeInsets horizontal(double value) {
+    return EdgeInsets.symmetric(horizontal: value);
+  }
+}
+
+/// ## Padding Helper Extensions
+extension PadWith on Padding {
+  // Top Only Insets
+  static Padding top(double value) {
+    return Padding(padding: EdgeInsets.only(top: value));
+  }
+
+  // Bottom Only Insets
+  static Padding bottom(double value) {
+    return Padding(padding: EdgeInsets.only(bottom: value));
+  }
+
+  // Left Only Insets
+  static Padding left(double value) {
+    return Padding(padding: EdgeInsets.only(left: value));
+  }
+
+  // Right Only Insets
+  static Padding right(double value) {
+    return Padding(padding: EdgeInsets.only(right: value));
+  }
+
+  // Vertical Symmetric Only Insets
+  static Padding vertical(double value) {
+    return Padding(padding: EdgeInsets.symmetric(vertical: value));
+  }
+
+  // Horizontal Symmetric Only Insets
+  static Padding horizontal(double value) {
+    return Padding(padding: EdgeInsets.symmetric(horizontal: value));
+  }
+}

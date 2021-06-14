@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/peer/profile_view.dart';
-import 'package:sonr_app/pages/detail/items/url/link_view.dart';
+import 'package:sonr_app/pages/details/items/url/link_view.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,17 +11,15 @@ class URLAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: SonrTheme.cardDecoration,
+    return BoxContainer(
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
-            child: Container(
+            child: CircleContainer(
               padding: EdgeInsets.all(4),
-              decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(
@@ -73,7 +71,7 @@ class URLAuthView extends StatelessWidget {
     if (await canLaunch(invite.url.url)) {
       await launch(invite.url.url);
     } else {
-      Snack.error("Could not launch the URL.");
+      AppRoute.snack(SnackArgs.error("Could not launch the URL."));
     }
   }
 }

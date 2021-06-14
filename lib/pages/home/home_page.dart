@@ -12,8 +12,7 @@ class HomePage extends GetView<HomeController> {
     return SonrScaffold(
       gradient: SonrGradients.PlumBath,
       resizeToAvoidBottomInset: false,
-      floatingAction: ShareButton(),
-      bottomNavigationBar: HomeBottomNavBar(),
+      floatingAction: HomeFloatingBar(),
       appBar: HomeAppBar(),
       body: Container(
           child: TabBarView(controller: controller.tabController, children: [
@@ -24,42 +23,46 @@ class HomePage extends GetView<HomeController> {
   }
 }
 
-
 /// @ Home Tab Bar Navigation
-class HomeBottomNavBar extends GetView<HomeController> {
+class HomeFloatingBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0),
+      padding: const EdgeInsets.only(top: 36.0),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: SonrTheme.backgroundColor, width: 1),
-          color: SonrTheme.foregroundColor,
-          borderRadius: BorderRadius.circular(28.13),
-          boxShadow: SonrTheme.boxShadow,
-        ),
-        margin: EdgeInsets.symmetric(horizontal: 72),
-        height: 72,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Obx(() => Bounce(
-                from: 12,
-                duration: 1000.milliseconds,
-                animate: controller.view.value == HomeView.Dashboard,
-                key: ValueKey(controller.view.value == HomeView.Dashboard),
-                child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
-            Container(
-              width: Get.width * 0.20,
+        child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: SonrTheme.backgroundColor, width: 1),
+              color: SonrTheme.foregroundColor,
+              borderRadius: BorderRadius.circular(28.13),
+              boxShadow: SonrTheme.boxShadow,
             ),
-            Obx(() => Roulette(
-                  spins: 1,
-                  key: ValueKey(controller.view.value == HomeView.Contact),
-                  animate: controller.view.value == HomeView.Contact,
-                  child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
-                )),
-          ],
-        ),
+            margin: EdgeInsets.symmetric(horizontal: 72),
+            height: 72,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Obx(() => Bounce(
+                    from: 12,
+                    duration: 1000.milliseconds,
+                    animate: controller.view.value == HomeView.Dashboard,
+                    key: ValueKey(controller.view.value == HomeView.Dashboard),
+                    child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
+                Container(
+                  width: Get.width * 0.20,
+                ),
+                Obx(() => Roulette(
+                      spins: 1,
+                      key: ValueKey(controller.view.value == HomeView.Contact),
+                      animate: controller.view.value == HomeView.Contact,
+                      child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
+                    )),
+              ],
+            ),
+          ),
+          ShareButton(),
+        ]),
       ),
     );
   }

@@ -1,6 +1,5 @@
-import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/style.dart';
-
 import 'edit_popup.dart';
 
 class PayloadSheetView extends StatelessWidget {
@@ -34,10 +33,7 @@ class PayloadSheetView extends StatelessWidget {
                 })
             :
             // Build Single Item
-            Container(
-                padding: EdgeInsets.all(8),
-                decoration: SonrTheme.cardDecoration,
-                child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
+            BoxContainer(padding: EdgeInsets.all(8), child: Container(height: Height.ratio(0.15), child: _PayloadSingleItem()));
       } else {
         return Container(
           alignment: Alignment.center,
@@ -48,7 +44,7 @@ class PayloadSheetView extends StatelessWidget {
               child: ColorButton.primary(
                 icon: SonrIcons.Add,
                 text: "Add File",
-                onPressed: () => ShareView.dialog(),
+                onPressed: () => AppPage.Share.to(init: ShareController.initAlert),
               )),
         );
       }
@@ -87,15 +83,13 @@ class _SonrFileListItem extends StatelessWidget {
   const _SonrFileListItem({Key? key, required this.item, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BoxContainer(
       margin: EdgeInsets.all(8),
-      decoration: SonrTheme.cardDecoration,
       child: Row(children: [
         item.hasThumbnail()
             ? Container(
                 height: Height.ratio(0.125),
                 width: Height.ratio(0.125),
-                decoration: Neumorphic.indented(theme: Get.theme),
                 clipBehavior: Clip.hardEdge,
                 child: Image.memory(
                   Uint8List.fromList(item.thumbBuffer),
@@ -152,7 +146,7 @@ class _PayloadSingleItem extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: ActionButton(
                   onPressed: () {
-                    Popup.open(EditPayloadPopup(
+                    AppRoute.popup(EditPayloadPopup(
                       index: 0,
                       item: TransferService.file.value.single,
                     ));
@@ -243,41 +237,27 @@ class _PayloadItemThumbnail extends StatelessWidget {
   const _PayloadItemThumbnail({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      // Thumbnail Loading
-      if (TransferService.thumbStatus.value == ThumbnailStatus.Loading) {
-        return Container(
-          height: Height.ratio(0.125),
-          width: Height.ratio(0.125),
-          decoration: Neumorphic.floating(theme: Get.theme),
-          child: CircularProgressIndicator(),
-        );
-      }
+    if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
+      return GestureDetector(
+        onTap: () => OpenFile.open(TransferService.file.value.single.path),
+        child: BoxContainer(
+            clipBehavior: Clip.hardEdge,
+            height: Height.ratio(0.125),
+            width: Height.ratio(0.125),
+            child: Image.memory(
+              TransferService.file.value.single.thumbnail!,
+              fit: BoxFit.cover,
+            )),
+      );
+    }
 
-      // Media with Thumbnail
-      else if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
-        return GestureDetector(
-          onTap: () => OpenFile.open(TransferService.file.value.single.path),
-          child: Container(
-              height: Height.ratio(0.125),
-              width: Height.ratio(0.125),
-              decoration: Neumorphic.indented(theme: Get.theme),
-              clipBehavior: Clip.hardEdge,
-              child: Image.memory(
-                TransferService.file.value.single.thumbnail!,
-                fit: BoxFit.cover,
-              )),
-        );
-      }
-
-      // Non Thumbnail Media
-      else {
-        return Container(
-          height: Height.ratio(0.125),
-          width: Height.ratio(0.125),
-          child: TransferService.file.value.single.mime.type.gradient(size: Height.ratio(0.125)),
-        );
-      }
-    });
+    // Non Thumbnail Media
+    else {
+      return Container(
+        height: Height.ratio(0.125),
+        width: Height.ratio(0.125),
+        child: TransferService.payload.value.gradient(size: Height.ratio(0.125)),
+      );
+    }
   }
 }

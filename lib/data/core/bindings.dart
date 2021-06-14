@@ -5,7 +5,7 @@ import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/pages/detail/items/contact/tile/tile_controller.dart';
+import 'package:sonr_app/pages/details/items/contact/tile/tile_controller.dart';
 import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
 import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
@@ -15,6 +15,7 @@ import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
+import 'package:sonr_app/data/database/service.dart';
 
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {
@@ -37,7 +38,7 @@ class HomeBinding implements Bindings {
     Get.put<HomeController>(HomeController(), permanent: true);
     // Subsidary Controllers
     Get.put(ShareController(), permanent: true);
-    Get.put(ActivityController(), permanent: true);
+    Get.put(ActivityController());
     Get.put<DashboardController>(DashboardController(), permanent: true);
     Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.put<EditorController>(EditorController(), permanent: true);
@@ -74,7 +75,9 @@ class AppServices {
   /// @ Application Services
   static Future<void> init({bool isDesktop = false}) async {
     // Firebase Reference
-    await Firebase.initializeApp();
+    if (!isDesktop) {
+      await Firebase.initializeApp();
+    }
 
     // First: Device Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);

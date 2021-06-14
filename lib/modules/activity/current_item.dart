@@ -2,20 +2,21 @@ import 'package:sonr_app/style.dart';
 import 'activity_controller.dart';
 
 class CurrentActivityItem extends GetView<ActivityController> {
-  const CurrentActivityItem({Key? key}) : super(key: key);
+  final Session session;
+  const CurrentActivityItem({required this.session, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 100,
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.only(bottom: 24),
-      child: Container(
-        decoration: SonrTheme.cardDecoration,
+      child: BoxContainer(
+
         child: Row(
           children: [
             _CurrentActivityPeer(),
             _CurrentActivityContent(),
-            _CurrentActivityProgress(),
+            _CurrentActivityProgress(session: session),
           ],
         ),
       ),
@@ -41,8 +42,11 @@ class _CurrentActivityContent extends GetView<ActivityController> {
 
 // @ Helper: Builds Transfer Progress
 class _CurrentActivityProgress extends GetView<ActivityController> {
+  final Session session;
+
+  _CurrentActivityProgress({required this.session});
   @override
   Widget build(BuildContext context) {
-    return Text("Progress: ${controller.currentActivity.progress.value}");
+    return Obx(() => Text("Progress: " + session.progress.value.toString()));
   }
 }

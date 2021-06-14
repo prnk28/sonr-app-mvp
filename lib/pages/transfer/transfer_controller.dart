@@ -48,7 +48,7 @@ class TransferController extends GetxController {
   /// @ Closes Window for Transfer Page
   void closeToHome() {
     TransferService.resetPayload();
-    Get.offNamed("/home");
+    AppPage.Home.off();
   }
 
   /// @ User is Facing or No longer Facing a Peer

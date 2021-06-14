@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/authorize/auth_controller.dart';
+import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 import 'contact_auth.dart';
 import 'file_auth.dart';
@@ -8,13 +8,12 @@ class Authorize {
   /// Invite Received
   static void invite(InviteRequest invite) {
     // Place Controller
-    final controller = Get.put<AuthorizeController>(AuthorizeController());
     if (invite.payload == Payload.CONTACT) {
-      Popup.open(ContactAuthView(false, invite: invite), dismissible: false);
+      AppRoute.popup(ContactAuthView(false, invite: invite), dismissible: false);
     } else {
-      Sheet.dissmissible(ValueKey(invite), _InviteRequestSheet(controller: controller, invite: invite), (direction) {
+      AppRoute.sheet(_InviteRequestSheet(invite: invite), key: ValueKey(invite), dismissible: true, onDismissed: (direction) {
         SonrService.respond(invite.newDeclineResponse());
-        Sheet.close();
+        AppRoute.closeSheet();
       });
     }
   }
@@ -22,7 +21,7 @@ class Authorize {
   /// Reply Contact Received
   static void reply(InviteResponse reply) {
     // Open Sheet
-    Popup.open(
+    AppRoute.popup(
       Container(
         child: ContactAuthView(true, reply: reply),
       ),
@@ -33,17 +32,15 @@ class Authorize {
 
 /// @ TransferView: Builds Invite View based on InviteRequest Payload Type
 class _InviteRequestSheet extends StatelessWidget {
-  final AuthorizeController controller;
   final InviteRequest invite;
 
-  const _InviteRequestSheet({Key? key, required this.controller, required this.invite}) : super(key: key);
+  const _InviteRequestSheet({Key? key, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return FadeInUpBig(
       duration: 500.milliseconds,
-      child: Container(
+      child: BoxContainer(
           padding: EdgeInsets.only(left: 8, right: 8),
-          decoration: SonrTheme.cardDecoration,
           height: 460,
           margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
           child: Column(
@@ -59,8 +56,8 @@ class _InviteRequestSheet extends StatelessWidget {
               ),
               ColorButton.primary(
                 onPressed: () {
-                  CardService.handleInviteResponse(true, invite);
-                  Sheet.close();
+                  SessionService.decisionForInvite(true);
+                  AppRoute.closeSheet();
                 },
                 text: "Accept",
                 icon: SonrIcons.Check,
@@ -95,11 +92,8 @@ class _InviteRequestFileHeader extends StatelessWidget {
     return // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       [
-        Container(
+        CircleContainer(
             margin: EdgeInsets.only(top: 8, left: 8),
-            decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-              BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
-            ]),
             padding: EdgeInsets.all(4),
             child: Container(
               width: 64,
@@ -110,75 +104,20 @@ class _InviteRequestFileHeader extends StatelessWidget {
                     )
                   : SonrIcons.User.gradient(size: 42),
             )),
-        sNameText(profile: profile),
+        [profile.sName.lightSpan(), ".snr/".paragraphSpan()].rich(),
       ].column(),
 
       // From Information
       Container(
-        width: Width.ratio(0.6),
-        child: RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: profile.firstName,
-            style: _buildTextStyle(FontWeight.bold),
-          ),
-          TextSpan(
-            text: " wants to share an ",
-            style: _buildTextStyle(FontWeight.normal),
-          ),
-          TextSpan(
-            text: file.prettyType(),
-            style: _buildTextStyle(FontWeight.bold),
-          ),
-          TextSpan(
-            text: " of size ",
-            style: _buildTextStyle(FontWeight.normal),
-          ),
-          TextSpan(
-            text: file.prettySize(),
-            style: _buildTextStyle(FontWeight.bold),
-          ),
-        ])),
-      )
+          width: Width.ratio(0.6),
+          child: [
+            profile.firstName.headingSpan(fontSize: 20),
+            " wants to share an ".lightSpan(fontSize: 19),
+            file.prettyType().headingSpan(fontSize: 20),
+            " of size ".lightSpan(fontSize: 19),
+            file.prettySize().headingSpan(fontSize: 20)
+          ].rich())
     ]);
-  }
-
-  /// Returns Widget Text of SName
-  Widget sNameText({required Profile profile}) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: profile.sName,
-            style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
-        TextSpan(
-            text: ".snr/",
-            style: TextStyle(
-                fontFamily: "RFlex",
-                fontWeight: FontWeight.w100,
-                fontSize: 20,
-                color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-      ]),
-    );
-  }
-
-  /// @ Helper: Builds Text Style for Spans
-  TextStyle _buildTextStyle(FontWeight weight) {
-    if (weight == FontWeight.bold) {
-      return TextStyle(
-        fontFamily: "RFlex",
-        fontWeight: FontWeight.w700,
-        fontSize: 20,
-        color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
-      );
-    } else {
-      return TextStyle(
-        fontFamily: "RFlex",
-        fontWeight: FontWeight.w300,
-        fontSize: 19,
-        color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black,
-      );
-    }
   }
 }
 

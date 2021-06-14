@@ -4,9 +4,8 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
 import 'lobby.dart';
-import '../user/user.dart';
+import '../device/user.dart';
 import 'session.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
@@ -159,7 +158,7 @@ class SonrService extends GetxService {
   /// @ An Error Has Occurred
   void _handleError(ErrorMessage data) async {
     if (data.severity != ErrorMessage_Severity.LOG) {
-      Snack.error("", error: data);
+      AppRoute.snack(SnackArgs.error("", error: data));
     } else {
       // Reset Views
       if (SonrOverlay.isOpen) {

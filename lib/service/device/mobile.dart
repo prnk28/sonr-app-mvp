@@ -128,7 +128,7 @@ class MobileService extends GetxService {
 
   /// @ Checks for Initial Media/Text to Share
   static checkInitialShare() async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       // @ Check for Media
       if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
         // Open Sheet
@@ -154,7 +154,7 @@ class MobileService extends GetxService {
 
   /// @ Method Closes Keyboard if Active
   static void closeKeyboard({BuildContext? context}) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       if (to._keyboardVisible.value) {
         FocusScope.of(context ?? Get.context!).unfocus();
       }
@@ -163,19 +163,19 @@ class MobileService extends GetxService {
 
   /// @ Method Plays a UI Sound
   static void playSound(UISoundType type) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       // await to._audioPlayer.play(type.file);
     }
   }
 
   /// @ Saves Photo to Gallery
   static Future<bool> saveCapture(String path, bool isVideo) async {
-    if (isRegistered) {
+    if (DeviceService.isMobile && isRegistered) {
       // Validate Path
       var file = File(path);
       var exists = await file.exists();
       if (!exists) {
-        Snack.error("Unable to save Captured Media to your Gallery");
+        AppRoute.snack(SnackArgs.error("Unable to save Captured Media to your Gallery"));
         return false;
       } else {
         if (isVideo) {
@@ -186,7 +186,7 @@ class MobileService extends GetxService {
 
           // Visualize Result
           if (result) {
-            Snack.error("Unable to save Captured Photo to your Gallery");
+            AppRoute.snack(SnackArgs.error("Unable to save Captured Photo to your Gallery"));
           }
           return result;
         } else {
@@ -194,7 +194,7 @@ class MobileService extends GetxService {
           var asset = await (PhotoManager.editor.saveImageWithPath(path) as FutureOr<AssetEntity>);
           var result = await asset.exists;
           if (!result) {
-            Snack.error("Unable to save Captured Video to your Gallery");
+            AppRoute.snack(SnackArgs.error("Unable to save Captured Video to your Gallery"));
           }
           return result;
         }
@@ -204,8 +204,8 @@ class MobileService extends GetxService {
   }
 
   /// @ Saves Received Media to Gallery
-  static Future<bool> saveTransfer(SonrFile_Item meta) async {
-    if (isRegistered) {
+  static Future<SaveTransferEntry> saveTransfer(SonrFile_Item meta) async {
+    if (DeviceService.isMobile && isRegistered) {
       // Initialize
       AssetEntity? asset;
 
@@ -215,10 +215,7 @@ class MobileService extends GetxService {
 
         // Visualize Result
         if (asset != null) {
-          meta.id = asset.id;
-          return await asset.exists;
-        } else {
-          return false;
+          return await SaveTransferEntry.fromAssetEntity(meta, asset);
         }
       }
 
@@ -229,16 +226,12 @@ class MobileService extends GetxService {
 
         // Visualize Result
         if (asset != null) {
-          meta.id = asset.id;
-          return await asset.exists;
-        } else {
-          return false;
+          return await SaveTransferEntry.fromAssetEntity(meta, asset);
         }
       }
     }
-
     // Return Status
-    return false;
+    return SaveTransferEntry.fail();
   }
 
   /// @ Update Method
@@ -459,109 +452,3 @@ class MobileService extends GetxService {
     }
   }
 }
-
-// import 'dart:async';
-
-// // import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
-// import 'package:sonr_app/style/style.dart';
-// import 'package:flutter_blue/flutter_blue.dart';
-
-// class BLEService extends GetxService {
-//   // Static Analyzers
-//   static bool get isRegistered => Get.isRegistered<LobbyService>();
-//   static BLEService get to => Get.find<BLEService>();
-
-//   // @ Properties
-//   final _devices = RxList<BLEDevice>();
-//   final _selfUdid = BLESonrUdid("").obs;
-//   final _status = BLEStatus.None.obs;
-
-//   // @ References
-//   final FlutterBlue _reader = FlutterBlue.instance;
-//   // final FlutterBlePeripheral _writer = FlutterBlePeripheral();
-//   late StreamSubscription _deviceStream;
-
-//   /// * Initializes Service for Mobile Devices *
-//   Future<BLEService> init() async {
-//     // Set Status from Availibility
-//     _status(BLEStatusUtils.fromData(Tuple(await _reader.isAvailable, await _reader.isOn)));
-
-//     // Bind Status Stream
-//     return this;
-//   }
-
-//   /// #### Inititalize MultiAddr from Connected SonrService
-//   static Future<void> initMultiAddr(String maddr) async {
-//     // Check if Platform is Mobile
-//     if (DeviceService.isMobile) {
-//       // Set Udid
-//       to._selfUdid(BLESonrUdid.fromData(DeviceService.platform, maddr));
-
-//       print("MultiAddr: " + maddr);
-//       // Begin Scanning
-//       // to._startAdvertise();
-//     }
-//   }
-
-//   /// #### Begin Discovery of Peers
-//   static Future<void> discover(String maddr) async {
-//     if (DeviceService.isMobile) {
-//       // Scan Devices
-//       if (to._status.value.isReady) {
-//         // Start scanning
-//         to._status(to._status.value.setIsScanning(true));
-//         to._refreshScan();
-//         to._status(to._status.value.setIsScanning(false));
-//       }
-//     }
-//   }
-
-//   // Helper: Refreshes Scan
-//   void _refreshScan() async {
-//     // Start Scan with 4s Timeout
-//     _reader.startScan(timeout: 4.seconds);
-
-//     // Listen to scan results
-//     _deviceStream = _reader.scanResults.listen(_handleScanResults);
-
-//     // Stop scanning
-//     _reader.stopScan();
-//   }
-
-//   // // Helper: Starts Advertising
-//   // void _startAdvertise() async {
-//   //   // Check for Not Advertising
-//   //   if (!await _writer.isAdvertising()) {
-//   //     // Validate Self Udid
-//   //     if (_selfUdid.value.isValid) {
-//   //       // Start Broadcast
-//   //       await _writer.start(_selfUdid.value.toAdvertiseData());
-//   //       to._status(to._status.value.setIsAdvertising(true));
-//   //     }
-//   //   }
-//   // }
-
-//   // // Helper: Stops Advertising
-//   // void _stopAdvertise() async {
-//   //   if (await _writer.isAdvertising()) {
-//   //     await _writer.stop();
-//   //     to._status(to._status.value.setIsAdvertising(false));
-//   //   }
-//   // }
-
-//   // Helper: Handles Scan Results
-//   void _handleScanResults(List<ScanResult> results) {
-//     // Add Devices from Results
-//     _devices.addAllScanResults(results);
-//     _devices.refresh();
-//     _devices.printCount();
-//   }
-
-//   // * Handle Close for Service * //
-//   @override
-//   void onClose() {
-//     // _stopAdvertise();
-//     _deviceStream.cancel();
-//     super.onClose();
-//   }
-// }

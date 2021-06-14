@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/search/social_search.dart';
-import 'package:sonr_app/pages/detail/items/contact/tile/tile_item.dart';
+import 'package:sonr_app/pages/details/items/contact/tile/tile_item.dart';
 import 'package:sonr_app/style.dart';
 import 'editor/general/fields.dart';
 import 'profile_controller.dart';
@@ -8,10 +8,9 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-        decoration: SonrTheme.cardDecoration,
+    return Obx(() => BoxContainer(
         padding: EdgeInsets.all(8),
-        margin: EdgeInsets.only(left: 24, right: 24, bottom: 56),
+        margin: EdgeInsets.only(left: 24, right: 24, bottom: 136),
         child: _buildView(controller.status.value)));
   }
 
@@ -113,7 +112,6 @@ class _ProfileInfoView extends GetView<ProfileController> {
         return Container(
           width: Get.width,
           height: 72,
-          decoration: Neumorphic.indented(theme: Get.theme),
           child: UserService.contact.value.hasSocialMedia(Contact_Social_Media.Twitter)
               ? Text("Last Tweet")
               : GestureDetector(

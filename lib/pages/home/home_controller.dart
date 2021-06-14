@@ -64,7 +64,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onReady() {
     // Check Entry Arguments
-    HomeArguments args = Get.arguments;
+    HomePageArgs args = Get.arguments;
     if (args.isFirstLoad && DeviceService.isMobile) {
       MobileService.checkInitialShare();
     }
@@ -89,7 +89,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Handle Title Tap
   void onTitleTap() {
     if (LobbyService.local.value.count > 0) {
-      Get.offNamed("/transfer");
+      AppPage.Transfer.off();
     }
   }
 

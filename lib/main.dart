@@ -34,12 +34,12 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       onInit: () => _checkInitialPage(),
       themeMode: ThemeMode.system,
-      theme: SonrDesign.LightTheme,
-      darkTheme: SonrDesign.DarkTheme,
+      theme: SonrTheme.LightTheme,
+      darkTheme: SonrTheme.DarkTheme,
       getPages: [
-        AppPage.Home.getPage(),
-        AppPage.Register.getPage(),
-        AppPage.Transfer.getPage(),
+        AppPage.Home.config(),
+        AppPage.Register.config(),
+        AppPage.Transfer.config(),
       ],
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
@@ -119,12 +119,11 @@ class App extends StatelessWidget {
         await UserService.newContact(contact);
 
         // Connect to Network
-        SonrService.to.connect();
-        await Get.offNamed("/home");
+        AppPage.Home.off(init: SonrService.to.connect, args: HomePageArgs(isFirstLoad: true));
       }
       // Register Mobile
       else {
-        Get.offNamed("/register");
+        AppPage.Register.off();
       }
     }
     // # Handle Returning
@@ -133,19 +132,19 @@ class App extends StatelessWidget {
       if (!isDesktop) {
         // All Valid
         if (MobileService.hasLocation.value) {
-          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+          AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
         }
 
         // No Location
         else {
           MobileService.to.requestLocation().then((value) {
             if (value) {
-              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+              AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
             }
           });
         }
       } else {
-        Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
       }
     }
   }

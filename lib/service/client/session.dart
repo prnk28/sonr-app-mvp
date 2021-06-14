@@ -1,8 +1,8 @@
+import 'package:sonr_app/data/database/service.dart';
+import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/modules/authorize/auth_sheet.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sonr_plugin/sonr_plugin.dart' as sonr;
-import '../user/cards.dart';
 
 class SessionService extends GetxService {
   // Accessors
@@ -11,23 +11,61 @@ class SessionService extends GetxService {
 
   // @ Properties
   final Session _session = Session();
+  final _hasActiveSession = false.obs;
 
   /// Returns Current Session
   static Session get session => to._session;
+  static Rx<bool> get hasActiveSession => to._hasActiveSession;
 
   Future<SessionService> init() async {
     return this;
   }
 
   // * ------------------- Methods ----------------------------
-  /// Accept Invite for Current Session
-  static void acceptInvite(bool decision, {bool sendBackContact = false, bool closeOverlay = false}) {}
+  /// Decision for Invite on Current Session
+  static void decisionForInvite(bool decision, {bool sendBackContact = false, bool closeOverlay = false}) {
+    if (isRegistered) {
+      // Set Active
+      to._hasActiveSession(true);
+
+      // # Contact Transfer
+      if (to._session.payload.isContact) {
+        // Save Contact Card
+        if (decision) {
+          // Save Card
+          CardService.addCard(to._session.transfer.value, ActivityType.Received);
+
+          // Check if Send Back
+          if (sendBackContact) {
+            SonrService.respond(to._session.buildReply(decision: true));
+          }
+
+          // Present Home Controller
+          AppPage.Home.off(condition: AppRoute.isNotCurrent(AppPage.Transfer), closeCurrent: true);
+        }
+      }
+      // # File Transfer
+      else if (to._session.payload.isTransfer) {
+        // Prepare for Transfer
+        if (decision) {
+          // Check for Remote
+          SonrService.respond(to._session.buildReply(decision: true));
+          AppPage.Activity.to(init: ActivityController.initSession);
+        }
+        // Send Declined
+        else {
+          SonrService.respond(to._session.buildReply(decision: false));
+        }
+      }
+    }
+  }
 
   /// Set Session to Prepare for Outgoing Transfer
   static void setOutgoing(InviteRequest invite) {
     to._session.outgoing(invite);
   }
 
+  /// Resets the current Session
   static void reset() {
     to._session.reset();
   }
@@ -87,17 +125,13 @@ class SessionService extends GetxService {
 
     // Save Card to Gallery
     if (data.payload.isTransfer) {
-      await DeviceService.saveTransfer(data.file);
-    }
-
-    // Update Database
-    if (DeviceService.isMobile) {
-      await CardService.addCard(data);
-      await CardService.addActivityReceived(
-        owner: data.owner,
-        payload: data.payload,
-        file: data.file,
-      );
+      // Save File to Disk
+      SonrFile file = data.file;
+      var result = await DeviceService.saveTransfer(file);
+      file = result.copyAssetIds(file);
+      await CardService.addFileCard(data, file, ActivityType.Received);
+    } else {
+      await CardService.addCard(data, ActivityType.Received);
     }
 
     // Present Feedback
@@ -120,7 +154,11 @@ class SessionService extends GetxService {
     await HapticFeedback.heavyImpact();
 
     // Logging Activity
-    CardService.addActivityShared(payload: data.payload, file: data.file);
+    CardService.addActivity(
+      payload: data.payload,
+      file: data.file,
+      type: ActivityType.Shared,
+    );
 
     // Logging
     Logger.info("Node(Callback) Transmitted: " + data.toString());

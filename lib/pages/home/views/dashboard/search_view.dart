@@ -1,5 +1,6 @@
-import 'package:sonr_app/pages/detail/detail.dart';
-import 'package:sonr_app/pages/detail/items/contact/list_item.dart';
+import 'package:sonr_app/pages/details/items/contact/list_item.dart';
+import 'package:sonr_app/pages/details/items/post/file_item.dart';
+import 'package:sonr_app/pages/details/items/url/list_item.dart';
 import 'package:sonr_app/style.dart';
 import 'dashboard_controller.dart';
 

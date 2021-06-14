@@ -14,21 +14,19 @@ class ProfileAvatarField extends GetView<ProfileController> {
           child: Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
-              child :Container(
-                    width: 120,
-                    height: 120,
-                    child: UserService.contact.value.hasPicture()
-                        ? CircleAvatar(
-                            backgroundColor: SonrTheme.foregroundColor,
-                            foregroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
-                          )
-                        : SonrIcons.Avatar.greyWith(size: 120),
-                  )
-            ),
-            ),
-
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  child: UserService.contact.value.hasPicture()
+                      ? CircleAvatar(
+                          backgroundColor: SonrTheme.foregroundColor,
+                          foregroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
+                        )
+                      : SonrIcons.Avatar.greyWith(size: 120),
+                )),
+          ),
         );
       } else {
         return GestureDetector(
@@ -39,7 +37,7 @@ class ProfileAvatarField extends GetView<ProfileController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(8),
-                 decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
+                decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
                 child: Container(
                     width: 100,
                     height: 100,
@@ -98,9 +96,8 @@ class _ProfilePictureCameraView extends GetView<ProfileController> {
             height: context.heightTransformer(reducedBy: 50),
             child: Column(children: [
               // @ Picture Preview
-              Container(
+              CircleContainer(
                   padding: EdgeInsets.all(10),
-                  decoration: Neumorphic.floating(theme: Get.theme, shape: BoxShape.circle),
                   child: AnimatedContainer(
                     decoration: BoxDecoration(shape: BoxShape.circle),
                     width: 140,

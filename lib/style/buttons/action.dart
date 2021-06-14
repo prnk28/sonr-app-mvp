@@ -117,12 +117,12 @@ class ActionBanner {
 
   /// Build Alert Style Banner
   factory ActionBanner.alert(int count) {
-    return ActionBanner(count, SonrColor.AccentPink, SonrTheme.textColor);
+    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.textColor);
   }
 
   /// Build Selected Items Banner
   factory ActionBanner.selected(int count) {
-    return ActionBanner(count, SonrColor.AccentBlue, SonrTheme.textColor);
+    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.textColor);
   }
 
   /// Helper: Builds BoxDecoration from Banner Data

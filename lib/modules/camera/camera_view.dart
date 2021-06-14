@@ -2,8 +2,7 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/camera/tools_view.dart';
-import 'package:sonr_app/pages/detail/items/post/views.dart';
-
+import 'package:sonr_app/pages/details/items/post/views.dart';
 
 import 'package:sonr_app/style.dart';
 import 'camera_controller.dart';

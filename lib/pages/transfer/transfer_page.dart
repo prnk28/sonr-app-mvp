@@ -8,27 +8,27 @@ import 'payload/payload_sheet.dart';
 import 'transfer_controller.dart';
 
 /// @ Transfer Screen Entry Point
-class TransferScreen extends GetView<TransferController> {
+class TransferPage extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return Obx(() => SonrScaffold(
-          gradient: SonrGradients.PlumBath,
-          appBar: DetailAppBar(
-            onPressed: () => controller.closeToHome(),
-            title: "Transfer",
-            isClose: true,
-          ),
-          bottomSheet: PayloadSheetView(),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                LocalView(),
-                //DevicesView(),
-              ],
-            ),
-          ),
-        ));
+    return SonrScaffold(
+      gradient: SonrGradients.PlumBath,
+      appBar: DetailAppBar(
+        onPressed: () => controller.closeToHome(),
+        title: "Transfer",
+        isClose: true,
+      ),
+      bottomSheet: PayloadSheetView(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            LocalView(),
+            //DevicesView(),
+          ],
+        ),
+      ),
+    );
   }
 }

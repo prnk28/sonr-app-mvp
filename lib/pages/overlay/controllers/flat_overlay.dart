@@ -161,7 +161,7 @@ class _FlatModeController extends GetxController {
         // No Peers
         if (LobbyService.local.value.flatPeerCount() == 0) {
           Get.back();
-          Snack.error("No Peers in Flat Mode");
+          AppRoute.snack(SnackArgs.error("No Peers in Flat Mode"));
         } else if (LobbyService.local.value.flatPeerCount() == 1) {
           if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value.flatFirst())) {
             Future.delayed(K_TRANSLATE_DURATION, () {
@@ -169,7 +169,7 @@ class _FlatModeController extends GetxController {
             });
           }
         } else {
-          Snack.error("Too Many Peers in Flat Mode");
+          AppRoute.snack(SnackArgs.error("Too Many Peers in Flat Mode"));
         }
       }
     }

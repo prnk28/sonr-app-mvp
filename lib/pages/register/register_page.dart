@@ -5,10 +5,9 @@ import 'register_controller.dart';
 class RegisterPage extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BoxContainer(
       width: Get.width,
       height: Get.height,
-      decoration: Neumorphic.floating(theme: Get.theme),
       child: Obx(
         () => AnimatedSlideSwitcher.slideRight(
           child: _buildView(controller.status.value),
