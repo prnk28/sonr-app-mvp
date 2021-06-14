@@ -63,13 +63,13 @@ class CardsDatabase extends _$CardsDatabase {
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
   /// Add File card to Database
-  Future<int> addFileCard(Transfer card) async => into(transferCards).insert(TransferCardsCompanion(
+  Future<int> addFileCard(Transfer card, SonrFile file) async => into(transferCards).insert(TransferCardsCompanion(
       owner: Value(card.owner),
-      mime: Value(card.file.single.mime.type),
+      mime: Value(file.single.mime.type),
       payload: Value(card.payload),
-      contact: card.hasContact() ? Value(card.contact) : Value.absent(),
-      file: card.hasFile() ? Value(card.file) : Value.absent(),
-      url: card.hasUrl() ? Value(card.url) : Value.absent(),
+      contact: Value.absent(),
+      file: Value(file),
+      url: Value.absent(),
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
   /// Returns all Transfer Card Items

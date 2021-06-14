@@ -87,17 +87,13 @@ class SessionService extends GetxService {
 
     // Save Card to Gallery
     if (data.payload.isTransfer) {
-      await DeviceService.saveTransfer(data.file);
-    }
-
-    // Update Database
-    if (DeviceService.isMobile) {
-      await CardService.addCard(data);
-      await CardService.addActivityReceived(
-        owner: data.owner,
-        payload: data.payload,
-        file: data.file,
-      );
+      // Save File to Disk
+      SonrFile file = data.file;
+      var result = await DeviceService.saveTransfer(file);
+      file = result.copyAssetIds(file);
+      _addFileCard(data, file);
+    } else {
+      _addCard(data);
     }
 
     // Present Feedback
@@ -125,5 +121,32 @@ class SessionService extends GetxService {
     // Logging
     Logger.info("Node(Callback) Transmitted: " + data.toString());
     _session.reset();
+  }
+
+  // @ Helper Methods:
+  // Add Contact/URL card to Database
+  void _addCard(Transfer data) async {
+    // Update Database
+    if (DeviceService.isMobile) {
+      await CardService.addCard(data);
+      await CardService.addActivityReceived(
+        owner: data.owner,
+        payload: data.payload,
+        file: data.file,
+      );
+    }
+  }
+
+  // Add File card to Database
+  void _addFileCard(Transfer data, SonrFile file) async {
+    // Update Database
+    if (DeviceService.isMobile) {
+      await CardService.addFileCard(data, file);
+      await CardService.addActivityReceived(
+        owner: data.owner,
+        payload: data.payload,
+        file: data.file,
+      );
+    }
   }
 }

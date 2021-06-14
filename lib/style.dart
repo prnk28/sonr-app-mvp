@@ -6,7 +6,7 @@ export 'service/client/lobby.dart';
 export 'service/client/sonr.dart';
 export 'service/user/cards.dart';
 export 'service/user/user.dart';
-export 'service/user/logger.dart';
+export 'data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
 

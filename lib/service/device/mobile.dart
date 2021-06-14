@@ -204,7 +204,7 @@ class MobileService extends GetxService {
   }
 
   /// @ Saves Received Media to Gallery
-  static Future<bool> saveTransfer(SonrFile_Item meta) async {
+  static Future<SaveTransferEntry> saveTransfer(SonrFile_Item meta) async {
     if (isRegistered) {
       // Initialize
       AssetEntity? asset;
@@ -215,10 +215,7 @@ class MobileService extends GetxService {
 
         // Visualize Result
         if (asset != null) {
-          meta.id = asset.id;
-          return await asset.exists;
-        } else {
-          return false;
+          return await SaveTransferEntry.fromAssetEntity(meta, asset);
         }
       }
 
@@ -229,16 +226,12 @@ class MobileService extends GetxService {
 
         // Visualize Result
         if (asset != null) {
-          meta.id = asset.id;
-          return await asset.exists;
-        } else {
-          return false;
+          return await SaveTransferEntry.fromAssetEntity(meta, asset);
         }
       }
     }
-
     // Return Status
-    return false;
+    return SaveTransferEntry.fail();
   }
 
   /// @ Update Method

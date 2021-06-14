@@ -138,18 +138,22 @@ class DeviceService extends GetxService {
   }
 
   /// @ Saves Received Media to Gallery by Platform
-  static Future<void> saveTransfer(SonrFile file) async {
+  static Future<SaveTransferResult> saveTransfer(SonrFile file) async {
     // Save to Gallery for Mobile
     if (isMobile) {
       // Save All Files
-      bool result = true;
+      List<SaveTransferEntry> results = [];
       int mediaCount = 0;
       file.items.forEach((meta) async {
         if (meta.mime.isPhotoVideo) {
           mediaCount += 1;
-          result = await MobileService.saveTransfer(meta);
+          final data = await MobileService.saveTransfer(meta);
+          results.add(data);
         }
       });
+
+      // Create Transfer Result
+      final result = SaveTransferResult(results);
 
       // Get Title
       var title = mediaCount == file.count ? "Media" : "Transfer";
@@ -158,16 +162,19 @@ class DeviceService extends GetxService {
       }
 
       // Check Result
-      if (result) {
+      if (result.isValid) {
         Snack.success("Succesfully Received $title!");
       } else {
         Snack.error("Unable to save $title to your Gallery");
       }
+
+      return result;
     }
 
     // Open First File for Desktop
     else {
       await OpenFile.open(file.single.path);
+      return SaveTransferResult.success();
     }
   }
 }

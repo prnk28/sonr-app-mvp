@@ -13,6 +13,7 @@ class CardService extends GetxService {
   // Service Accessors
   static bool get isRegistered => Get.isRegistered<CardService>();
   static CardService get to => Get.find<CardService>();
+  final _database = CardsDatabase();
 
   // File Objects
   final _activity = RxList<TransferActivity>();
@@ -64,12 +65,12 @@ class CardService extends GetxService {
     // Check Device
     if (DeviceService.isMobile) {
       // Bind Streams
-      //  _activity.bindStream(_database.watchActivity());
-      //  _allCards.bindStream(_database.watchAllCards());
-      //   _media.bindStream(_database.watchMedia());
-      //   _contacts.bindStream(_database.watchContacts());
-      //     _files.bindStream(_database.watchFiles());
-      //     _links.bindStream(_database.watchUrls());
+      _activity.bindStream(_database.watchActivity());
+      _allCards.bindStream(_database.watchAllCards());
+      _media.bindStream(_database.watchMedia());
+      _contacts.bindStream(_database.watchContacts());
+      _files.bindStream(_database.watchFiles());
+      _links.bindStream(_database.watchUrls());
 
       // Set Initial Counter
       int counter = 1;
@@ -84,16 +85,17 @@ class CardService extends GetxService {
   /// @ Add New Card to Database
   static addCard(Transfer card) async {
     if (isRegistered) {
-      if (card.payload.isTransfer) {
-        // Store in Database
-        //await to._database.addFileCard(card);
-        _refreshCount();
-      } else {
-        // Store in Database
-        //await to._database.addCard(card);
-        _refreshCount();
-      }
+      // Store in Database
+      await to._database.addCard(card);
+      _refreshCount();
     }
+  }
+
+  // @ Add New File Card to Database
+  static addFileCard(Transfer card, SonrFile file) async {
+    // Store in Database
+    await to._database.addFileCard(card, file);
+    _refreshCount();
   }
 
   /// @ Add New Activity for deleted card
@@ -104,9 +106,9 @@ class CardService extends GetxService {
   }) async {
     if (isRegistered) {
       if (file != null && file.exists) {
-        // await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
+        await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: file.single.mime.type);
       } else {
-        // await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
+        await to._database.addActivity(ActivityType.Deleted, payload, owner, mime: MIME_Type.OTHER);
       }
     }
   }
@@ -119,9 +121,9 @@ class CardService extends GetxService {
   }) async {
     if (isRegistered) {
       if (file != null && file.exists) {
-        //  await to._database.addActivity(ActivityType.Received, payload, owner, mime: file.single.mime.type);
+        await to._database.addActivity(ActivityType.Received, payload, owner, mime: file.single.mime.type);
       } else {
-        //  await to._database.addActivity(ActivityType.Received, payload, owner, mime: MIME_Type.OTHER);
+        await to._database.addActivity(ActivityType.Received, payload, owner, mime: MIME_Type.OTHER);
       }
     }
   }
@@ -133,9 +135,9 @@ class CardService extends GetxService {
   }) async {
     if (isRegistered) {
       if (file != null && file.exists) {
-        //await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: file.single.mime.type);
+        await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: file.single.mime.type);
       } else {
-        // await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
+        await to._database.addActivity(ActivityType.Shared, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
       }
     }
   }
@@ -144,21 +146,21 @@ class CardService extends GetxService {
   static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
     if (isRegistered) {
       // Get Total Entries
-      //var cards = await to._database.allCardEntries;
+      var cards = await to._database.allCardEntries;
 
       // Filter from Options
       if (withoutContacts) {
-        //   cards.removeWhere((element) => element.payload == Payload.CONTACT);
+        cards.removeWhere((element) => element.payload == Payload.CONTACT);
       }
       if (withoutMedia) {
-        //  cards.removeWhere((element) => element.payload == Payload.FILE);
+        cards.removeWhere((element) => element.payload == Payload.FILE);
       }
       if (withoutURLs) {
-        // cards.removeWhere((element) => element.payload == Payload.URL);
+        cards.removeWhere((element) => element.payload == Payload.URL);
       }
 
       // Return Remaining
-      //return cards.length;
+      return cards.length;
     }
     return 0;
   }
@@ -167,7 +169,7 @@ class CardService extends GetxService {
   static clearActivity(TransferActivity activity) async {
     if (isRegistered) {
       if (hasActivity) {
-        // await to._database.clearActivity(activity);
+        await to._database.clearActivity(activity);
       }
     }
   }
@@ -176,7 +178,7 @@ class CardService extends GetxService {
   static clearAllActivity() async {
     if (isRegistered) {
       if (hasActivity) {
-        //  await to._database.clearAllActivity();
+        await to._database.clearAllActivity();
       }
     }
   }
@@ -184,7 +186,7 @@ class CardService extends GetxService {
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCard(TransferCard card) async {
     if (isRegistered) {
-      //await to._database.deleteCard(card);
+      await to._database.deleteCard(card);
       addActivityDeleted(payload: card.payload, owner: card.owner, file: card.file);
       _refreshCount();
     }
@@ -193,7 +195,7 @@ class CardService extends GetxService {
   /// @ Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
     if (isRegistered) {
-      // await to._database.deleteCardFromID(id);
+      await to._database.deleteCardFromID(id);
       _refreshCount();
     }
   }
@@ -202,7 +204,7 @@ class CardService extends GetxService {
   static deleteAllCards() async {
     if (isRegistered) {
       if (totalCount > 0) {
-        //  await to._database.deleteAllCards();
+        await to._database.deleteAllCards();
       }
     }
   }
@@ -245,8 +247,8 @@ class CardService extends GetxService {
 
   static void reset() {
     if (isRegistered) {
-      // to._database.clearAllActivity();
-      //  to._database.deleteAllCards();
+      to._database.clearAllActivity();
+      to._database.deleteAllCards();
     }
   }
 
@@ -287,7 +289,7 @@ class CardService extends GetxService {
 // @ Handle Accept Contact Response
   _handleAcceptContact(InviteRequest invite, bool sendBackContact) {
     // Save Card
-    //  _database.addCard(invite.data);
+    _database.addCard(invite.data);
 
     // Check if Send Back
     if (sendBackContact) {
