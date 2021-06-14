@@ -37,9 +37,9 @@ class App extends StatelessWidget {
       theme: SonrDesign.LightTheme,
       darkTheme: SonrDesign.DarkTheme,
       getPages: [
-        AppPage.Home.getPage(),
-        AppPage.Register.getPage(),
-        AppPage.Transfer.getPage(),
+        AppPage.Home.config(),
+        AppPage.Register.config(),
+        AppPage.Transfer.config(),
       ],
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,

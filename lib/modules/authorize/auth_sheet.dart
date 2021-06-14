@@ -9,11 +9,11 @@ class Authorize {
   static void invite(InviteRequest invite) {
     // Place Controller
     if (invite.payload == Payload.CONTACT) {
-      Popup.open(ContactAuthView(false, invite: invite), dismissible: false);
+      AppRoute.popup(ContactAuthView(false, invite: invite), dismissible: false);
     } else {
-      Sheet.dissmissible(ValueKey(invite), _InviteRequestSheet(invite: invite), (direction) {
+      AppRoute.sheet(_InviteRequestSheet(invite: invite), key: ValueKey(invite), dismissible: true, onDismissed: (direction) {
         SonrService.respond(invite.newDeclineResponse());
-        Sheet.close();
+        AppRoute.closeSheet();
       });
     }
   }
@@ -21,7 +21,7 @@ class Authorize {
   /// Reply Contact Received
   static void reply(InviteResponse reply) {
     // Open Sheet
-    Popup.open(
+    AppRoute.popup(
       Container(
         child: ContactAuthView(true, reply: reply),
       ),
@@ -58,7 +58,7 @@ class _InviteRequestSheet extends StatelessWidget {
               ColorButton.primary(
                 onPressed: () {
                   SessionService.setInviteDecision(true);
-                  Sheet.close();
+                  AppRoute.closeSheet();
                 },
                 text: "Accept",
                 icon: SonrIcons.Check,

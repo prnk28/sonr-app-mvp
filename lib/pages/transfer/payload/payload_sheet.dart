@@ -1,6 +1,5 @@
-import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/style.dart';
-
 import 'edit_popup.dart';
 
 class PayloadSheetView extends StatelessWidget {
@@ -48,7 +47,7 @@ class PayloadSheetView extends StatelessWidget {
               child: ColorButton.primary(
                 icon: SonrIcons.Add,
                 text: "Add File",
-                onPressed: () => ShareView.dialog(),
+                onPressed: () => AppPage.Share.to(init: ShareController.initAlert),
               )),
         );
       }
@@ -152,7 +151,7 @@ class _PayloadSingleItem extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: ActionButton(
                   onPressed: () {
-                    Popup.open(EditPayloadPopup(
+                    AppRoute.popup(EditPayloadPopup(
                       index: 0,
                       item: TransferService.file.value.single,
                     ));

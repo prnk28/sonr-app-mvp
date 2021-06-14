@@ -45,7 +45,7 @@ class ShareController extends GetxController {
   }
 
   /// Initializes Controller for Dialog - Dialog is for when in TransferScreen
-  static void initDialog() {
+  static void initAlert() {
     Get.find<ShareController>().type(ShareViewType.Dialog);
   }
 

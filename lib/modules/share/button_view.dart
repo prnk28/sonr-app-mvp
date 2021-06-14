@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/style.dart';
-import 'share.dart';
 
 const K_ROW_BUTTON_SIZE = 75.0;
 const K_ROW_CIRCLE_SIZE = 95.0;
@@ -22,7 +22,7 @@ class ShareButton extends StatelessWidget {
                   onTapDown: (details) => isPressed(true),
                   onTapUp: (details) {
                     isPressed(false);
-                    Future.delayed(150.milliseconds, () => ShareView.popup());
+                    Future.delayed(150.milliseconds, () => AppPage.Share.to(init: ShareController.initPopup));
                   },
                   child: ClipPolygon(
                     borderRadius: 24,
