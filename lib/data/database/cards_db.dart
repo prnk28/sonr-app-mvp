@@ -116,7 +116,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'transfer_cards.sqlite'));
+    final file = File(p.join(dbFolder.path, 'sonr-cards.sqlite'));
     return VmDatabase(file);
   });
 }
