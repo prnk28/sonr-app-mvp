@@ -51,7 +51,7 @@ class BoxContainer extends StatelessWidget {
         border: Border.all(color: SonrTheme.backgroundColor, width: 1),
         color: SonrTheme.foregroundColor,
         borderRadius: BorderRadius.circular(radius),
-        boxShadow: _BoxShadowUtil.boxShadow(),
+        boxShadow: SonrTheme.boxShadow,
       ),
     );
   }
@@ -101,9 +101,12 @@ class CircleContainer extends StatelessWidget {
       transformAlignment: transformAlignment,
       clipBehavior: clipBehavior,
       child: child,
-      decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-        BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
-      ]),
+      decoration: BoxDecoration(
+        border: Border.all(color: SonrTheme.foregroundColor, width: 1),
+        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+        shape: BoxShape.circle,
+        boxShadow: SonrTheme.circleBoxShadow,
+      ),
     );
   }
 }
@@ -157,12 +160,12 @@ class PolyContainer extends StatelessWidget {
     return ClipPolygon(
       borderRadius: radius,
       rotate: rotate,
-      boxShadows: _BoxShadowUtil.polyShadow(),
+      boxShadows: SonrTheme.polyBoxShadow,
       sides: sides,
       child: Container(
         decoration: BoxDecoration(
           gradient: gradient ?? SonrGradient.Theme,
-          boxShadow: _BoxShadowUtil.boxShadow(),
+          boxShadow: SonrTheme.boxShadow,
           border: Border.all(color: SonrTheme.foregroundColor, width: 1),
         ),
         key: key,
@@ -179,42 +182,5 @@ class PolyContainer extends StatelessWidget {
         child: child,
       ),
     );
-  }
-}
-
-/// @ Helper Class Builds Box Shadow By Container Type
-class _BoxShadowUtil {
-  static List<PolygonBoxShadow> polyShadow() {
-    return UserService.isDarkMode
-        ? [
-            PolygonBoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              elevation: 10,
-            )
-          ]
-        : [
-            PolygonBoxShadow(
-              color: Color(0xffD4D7E0).withOpacity(0.4),
-              elevation: 10,
-            )
-          ];
-  }
-
-  static List<BoxShadow> boxShadow() {
-    return UserService.isDarkMode
-        ? [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.6),
-              offset: Offset(0, 20),
-              blurRadius: 30,
-            )
-          ]
-        : [
-            BoxShadow(
-              color: Color(0xffD4D7E0).withOpacity(0.75),
-              offset: Offset(0, 20),
-              blurRadius: 30,
-            )
-          ];
   }
 }

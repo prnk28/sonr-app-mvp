@@ -196,14 +196,6 @@ class SonrTheme {
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
   }
 
-  // /// Returns Standard Box Decoration for App
-  // static BoxDecoration get boxDecoration => BoxDecoration(
-  //       border: Border.all(color: SonrTheme.backgroundColor, width: 1),
-  //       color: SonrTheme.foregroundColor,
-  //       borderRadius: BorderRadius.circular(24),
-  //       boxShadow: SonrTheme.boxShadow,
-  //     );
-
   /// Returns Light Theme for App
   static ThemeData get LightTheme => ThemeData(
         brightness: Brightness.light,
@@ -264,6 +256,14 @@ class SonrTheme {
             blurRadius: 30,
           )
         ];
+
+  static List<BoxShadow> get circleBoxShadow => [
+        BoxShadow(
+          offset: Offset(2, 2),
+          blurRadius: 8,
+          color: SonrColor.Black.withOpacity(0.2),
+        ),
+      ];
 
   /// Return Current Box Shadow
   static List<PolygonBoxShadow> get polyBoxShadow => UserService.isDarkMode
