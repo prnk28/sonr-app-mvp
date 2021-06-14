@@ -241,40 +241,26 @@ class _PayloadItemThumbnail extends StatelessWidget {
   const _PayloadItemThumbnail({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      // Thumbnail Loading
-      if (TransferService.thumbStatus.value == ThumbnailStatus.Loading) {
-        return Container(
-          height: Height.ratio(0.125),
-          width: Height.ratio(0.125),
-          decoration: SonrTheme.boxDecoration,
-          child: CircularProgressIndicator(),
-        );
-      }
+    if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
+      return GestureDetector(
+        onTap: () => OpenFile.open(TransferService.file.value.single.path),
+        child: Container(
+            height: Height.ratio(0.125),
+            width: Height.ratio(0.125),
+            child: Image.memory(
+              TransferService.file.value.single.thumbnail!,
+              fit: BoxFit.cover,
+            )),
+      );
+    }
 
-      // Media with Thumbnail
-      else if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
-        return GestureDetector(
-          onTap: () => OpenFile.open(TransferService.file.value.single.path),
-          child: Container(
-              height: Height.ratio(0.125),
-              width: Height.ratio(0.125),
-              clipBehavior: Clip.hardEdge,
-              child: Image.memory(
-                TransferService.file.value.single.thumbnail!,
-                fit: BoxFit.cover,
-              )),
-        );
-      }
-
-      // Non Thumbnail Media
-      else {
-        return Container(
-          height: Height.ratio(0.125),
-          width: Height.ratio(0.125),
-          child: TransferService.file.value.single.mime.type.gradient(size: Height.ratio(0.125)),
-        );
-      }
-    });
+    // Non Thumbnail Media
+    else {
+      return Container(
+        height: Height.ratio(0.125),
+        width: Height.ratio(0.125),
+        child: TransferService.payload.value.gradient(size: Height.ratio(0.125)),
+      );
+    }
   }
 }
