@@ -201,6 +201,11 @@ extension AppRoute on AppPage {
     }
   }
 
+  /// Closes Current Page
+  static void close() {
+    Get.back(closeOverlays: true);
+  }
+
   /// Closes Active Popup
   static void closePopup() {
     if (isPopupOpen) {

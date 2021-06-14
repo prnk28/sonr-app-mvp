@@ -1,38 +1,45 @@
-import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 
 class ActivityController extends GetxController {
+  /// Current List Length
+  final activityLength = 0.obs;
+
+  /// Current Page Index
+  final currentPageIndex = 0.obs;
+
   /// Has Session Active
   final hasActiveSession = false.obs;
 
   /// Past Activities
   final pastActivities = CardService.activity;
 
-  /// Current List Length
-  final activityLength = 0.obs;
-
   @override
   void onInit() {
-    activityLength(CardService.activity.length + _hasValidSession());
+    activityLength(CardService.activity.length);
     super.onInit();
   }
 
   /// Init View for Session
   static void initSession() {
-    Get.find<ActivityController>().handleArguments(ActivityArguments(isNewSession: true));
+    Get.find<ActivityController>().hasActiveSession(true);
+    Get.find<ActivityController>().hasActiveSession.refresh();
   }
 
-  void setView(int index) {
-    print(index);
-  }
-
-  void handleArguments(dynamic args) {
-    if (args is ActivityArguments) {
-      // Update Active Session
-      hasActiveSession(args.isNewSession);
+  /// Clear All Activity from Table
+  Future<void> clearAllActivity() async {
+    if (activityLength > 0) {
+      var decision = await SonrOverlay.question(
+          title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
+      if (decision) {
+        CardService.clearAllActivity();
+      }
     }
   }
 
-  /// Method Helper Returns Active Session Number from Bool
-  int _hasValidSession() => SessionService.session.isValid ? 1 : 0;
+  /// Method Sets Current View from Index
+  void setView(int index) {
+    print(index);
+    currentPageIndex(index);
+    currentPageIndex.refresh();
+  }
 }

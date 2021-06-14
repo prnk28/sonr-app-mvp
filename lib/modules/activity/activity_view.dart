@@ -11,62 +11,55 @@ class ActivityPopup extends GetView<ActivityController> {
       appBar: DetailAppBar(
         isClose: true,
         title: "Activity",
-        onPressed: () => Get.back(closeOverlays: true),
+        onPressed: () => AppRoute.close(),
         action: ActionButton(
-            iconData: SonrIcons.Clear,
-            onPressed: () async {
-              if (controller.activityLength > 0) {
-                var decision = await SonrOverlay.question(
-                    title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
-                if (decision) {
-                  CardService.clearAllActivity();
-                }
-              }
-            }),
+          iconData: SonrIcons.Clear,
+          onPressed: controller.clearAllActivity,
+        ),
       ),
-      body: Container(
-          child: Obx(
-        () => CardService.activity.length > 0 ? _ActivityListView() : _ActivityEmptyView(),
-      )),
+      body: Column(
+        children: [
+          _ActivityHeader(),
+          Expanded(
+            child: _PastActivityView(),
+          )
+        ],
+      ),
     );
   }
 }
 
-// @ Helper: View for Past/Current Activity
-class _ActivityListView extends GetView<ActivityController> {
+class _ActivityHeader extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.hasActiveSession.value) {
-        return ListView.builder(
-            itemCount: controller.activityLength.value,
-            itemBuilder: (context, index) {
-              return PastActivityItem(item: controller.pastActivities[index]);
-            });
-      } else {
-        return GradientTabs(tabs: ["Active", "Past"], onTabChanged: controller.setView);
-      }
-    });
+    return Obx(() => controller.hasActiveSession.value ? GradientTabs(tabs: ["Active", "Past"], onTabChanged: controller.setView) : Container());
   }
 }
 
-// @ Helper: View for Empty Activity
-class _ActivityEmptyView extends GetView<ActivityController> {
+class _PastActivityView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: [
-          GradientTabs(tabs: ["Active", "Past"], onTabChanged: controller.setView),
-          Image.asset(
-            'assets/illustrations/EmptyNotif.png',
-            height: Height.ratio(0.6),
-            fit: BoxFit.fitHeight,
-          ),
-          "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
-        ].column(),
-        padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
-      ),
-    );
+    return Container(
+        child: Obx(
+      () => CardService.activity.length > 0
+          ? ListView.builder(
+              itemCount: controller.activityLength.value,
+              itemBuilder: (context, index) {
+                return PastActivityItem(item: controller.pastActivities[index]);
+              })
+          : Center(
+              child: Container(
+                child: [
+                  Image.asset(
+                    'assets/illustrations/EmptyNotif.png',
+                    height: Height.ratio(0.4),
+                    fit: BoxFit.fitHeight,
+                  ),
+                  "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
+                ].column(),
+                padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
+              ),
+            ),
+    ));
   }
 }
