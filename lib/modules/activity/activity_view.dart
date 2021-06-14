@@ -4,17 +4,6 @@ import 'past_item.dart';
 
 /// @ Activity View
 class ActivityPopup extends GetView<ActivityController> {
-  /// Method Opens Activity Popup
-  static void open() {
-    Get.to(ActivityPopup(), transition: Transition.downToUp);
-  }
-
-  /// Method Opens Activity Popup with Session
-  static void openSession() {
-    Get.to(ActivityPopup(), transition: Transition.downToUp);
-    Get.find<ActivityController>().handleArguments(ActivityArguments(isNewSession: true));
-  }
-
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

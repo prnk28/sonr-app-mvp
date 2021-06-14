@@ -17,8 +17,13 @@ class ActivityController extends GetxController {
     super.onInit();
   }
 
+  /// Init View for Session
+  static void initSession() {
+    Get.find<ActivityController>().handleArguments(ActivityArguments(isNewSession: true));
+  }
+
   void setView(int index) {
-    
+    print(index);
   }
 
   void handleArguments(dynamic args) {

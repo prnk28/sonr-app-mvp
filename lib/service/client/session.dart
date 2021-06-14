@@ -213,7 +213,7 @@ class SessionService extends GetxService {
 
     // Present Home Controller
     if (Get.currentRoute != "/transfer") {
-      Get.offNamed('/home');
+      AppPage.Home.off();
     }
   }
 }

@@ -89,7 +89,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Handle Title Tap
   void onTitleTap() {
     if (LobbyService.local.value.count > 0) {
-      Get.offNamed("/transfer");
+      AppPage.Transfer.off();
     }
   }
 
