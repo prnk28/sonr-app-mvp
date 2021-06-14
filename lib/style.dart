@@ -32,7 +32,7 @@ export 'style/buttons/plain.dart';
 export 'style/buttons/confirm.dart';
 export 'style/elements/scaffold.dart';
 export 'style/elements/appbar.dart';
-export 'style/animation/animation.dart';
+export 'style/elements/animation.dart';
 export 'style/buttons/image.dart';
 
 // Form Styles
