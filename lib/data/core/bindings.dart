@@ -1,7 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity_controller.dart';
@@ -78,7 +76,6 @@ class AppServices {
   static Future<void> init({bool isDesktop = false}) async {
     // Firebase Reference
     await Firebase.initializeApp();
-    await Hive.initFlutter();
 
     // First: Device Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);
