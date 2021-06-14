@@ -11,15 +11,18 @@ class _GradientTab extends StatelessWidget {
   const _GradientTab({Key? key, required this.isActive, required this.title, required this.index, required this.onSelected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
-      height: 48,
-      alignment: Alignment.center,
-      child: title.light(color: isActive(index) ? SonrColor.White : SonrColor.Black),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: isActive(index) ? SonrTheme.primaryGradient : null,
-          color: isActive(index) ? null : Colors.transparent),
+    return GestureDetector(
+      onTap: onSelected(index),
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
+        height: 48,
+        alignment: Alignment.center,
+        child: title.light(color: isActive(index) ? SonrColor.White : SonrColor.Black),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: isActive(index) ? SonrTheme.primaryGradient : null,
+            color: isActive(index) ? null : Colors.transparent),
+      ),
     );
   }
 }
