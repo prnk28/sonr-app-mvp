@@ -1,7 +1,7 @@
 import 'package:sonr_app/style.dart';
 
 class _ChecklistOption extends StatelessWidget {
-  final ActiveCallback isActive;
+  final bool isActive;
   final String title;
   final int index;
   final Function(int idx) onSelected;
@@ -13,11 +13,11 @@ class _ChecklistOption extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: 140, minWidth: 40),
       height: 38,
       alignment: Alignment.center,
-      child: title.light(color: isActive(index) ? SonrColor.White : SonrColor.Black),
+      child: title.light(color: isActive ? SonrColor.White : SonrColor.Black),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          gradient: isActive(index) ? SonrTheme.primaryGradient : null,
-          color: isActive(index) ? null : Colors.transparent),
+          gradient: isActive ? SonrTheme.primaryGradient : null,
+          color: isActive ? null : Colors.transparent),
     );
   }
 }
@@ -40,7 +40,7 @@ class ChecklistColumn extends StatelessWidget {
                   .map<Widget>((e) => _ChecklistOption(
                         title: e,
                         index: options.indexOf(e),
-                        isActive: (index) => currentIdx.value == index,
+                        isActive: currentIdx.value == options.indexOf(e),
                         onSelected: (int idx) {
                           currentIdx(idx);
                           onSelectedOption(idx);

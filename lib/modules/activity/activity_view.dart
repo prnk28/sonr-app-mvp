@@ -55,19 +55,20 @@ class _ActivityListView extends GetView<ActivityController> {
               return PastActivityItem(item: controller.pastActivities[index]);
             });
       } else {
-        return GradientTabsRow(tabs: ["Active", "Past"], onTabChanged: controller.setView);
+        return GradientTabs(tabs: ["Active", "Past"], onTabChanged: controller.setView);
       }
     });
   }
 }
 
 // @ Helper: View for Empty Activity
-class _ActivityEmptyView extends StatelessWidget {
+class _ActivityEmptyView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         child: [
+          GradientTabs(tabs: ["Active", "Past"], onTabChanged: controller.setView),
           Image.asset(
             'assets/illustrations/EmptyNotif.png',
             height: Height.ratio(0.6),

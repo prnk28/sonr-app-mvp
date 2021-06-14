@@ -1,37 +1,10 @@
 import 'package:sonr_app/style.dart';
 
-typedef ActiveCallback = bool Function(int index);
-
-class _GradientTab extends StatelessWidget {
-  final ActiveCallback isActive;
-  final String title;
-  final int index;
-  final Function(int idx) onSelected;
-
-  const _GradientTab({Key? key, required this.isActive, required this.title, required this.index, required this.onSelected}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onSelected(index),
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
-        height: 48,
-        alignment: Alignment.center,
-        child: title.light(color: isActive(index) ? SonrColor.White : SonrColor.Black),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: isActive(index) ? SonrTheme.primaryGradient : null,
-            color: isActive(index) ? null : Colors.transparent),
-      ),
-    );
-  }
-}
-
 /// Form Field to Display List of Strings as Gradient Tab View
-class GradientTabsRow extends StatelessWidget {
+class GradientTabs extends StatelessWidget {
   final List<String> tabs;
   final Function(int idx) onTabChanged;
-  const GradientTabsRow({Key? key, required this.tabs, required this.onTabChanged}) : super(key: key);
+  const GradientTabs({Key? key, required this.tabs, required this.onTabChanged}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxInt>(
@@ -43,18 +16,39 @@ class GradientTabsRow extends StatelessWidget {
             padding: EdgeInsets.all(8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: tabs
-                  .map<Widget>((e) => _GradientTab(
-                        title: e,
-                        index: tabs.indexOf(e),
-                        isActive: (index) => currentIdx.value == index,
-                        onSelected: (int idx) {
-                          currentIdx(idx);
-                          onTabChanged(idx);
-                        },
-                      ))
-                  .toList(),
+              children: _buildTabs(currentIdx),
             )),
         0.obs);
+  }
+
+  List<Widget> _buildTabs(RxInt currentIndex) {
+    return List<Widget>.generate(
+        tabs.length,
+        (index) => GestureDetector(
+              onTap: () => currentIndex(index),
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
+                height: 48,
+                alignment: Alignment.center,
+                child: tabs[index].light(color: currentIndex.value == index ? SonrColor.White : SonrColor.Black),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: currentIndex.value == index
+                        ? RadialGradient(
+                            colors: [
+                              Color(0xffFFCF14),
+                              Color(0xffF3ACFF),
+                              Color(0xff8AECFF),
+                            ],
+                            stops: [0, 0.45, 1],
+                            center: Alignment.center,
+                            focal: Alignment.topRight,
+                            tileMode: TileMode.clamp,
+                            radius: 2,
+                          )
+                        : null,
+                    color: currentIndex.value == index ? null : Colors.transparent),
+              ),
+            ));
   }
 }
