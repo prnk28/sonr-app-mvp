@@ -265,7 +265,7 @@ class RegisterController extends GetxController {
   }
 
   // Helper Method to Generate Prefix
-  static Future<SignResponse> signUser(String username, String mnemonic) async {
+  static Future<AuthResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
     var request = Request.newSignature(username, mnemonic);
     var response = await SonrService.sign(request);

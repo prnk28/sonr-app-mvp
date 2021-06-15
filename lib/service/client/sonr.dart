@@ -67,7 +67,7 @@ class SonrService extends GetxService {
 
   // * ------------------- Methods ----------------------------
   /// @ Sign Provided Data with Private Key
-  static Future<SignResponse> sign(SignRequest request) async {
+  static Future<AuthResponse> sign(AuthRequest request) async {
     return await to.node.sign(request);
   }
 
