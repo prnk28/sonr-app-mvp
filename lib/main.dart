@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';

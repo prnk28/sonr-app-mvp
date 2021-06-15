@@ -15,7 +15,7 @@ class ContactAuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     Contact card;
     if (isReply) {
-      card = reply!.data.contact;
+      card = reply!.transfer.contact;
     } else {
       card = invite!.contact;
     }
