@@ -164,7 +164,7 @@ class PolyContainer extends StatelessWidget {
       sides: sides,
       child: Container(
         decoration: BoxDecoration(
-          gradient: gradient ?? SonrGradient.Theme,
+          gradient: gradient ?? SonrGradient.Theme(),
           boxShadow: SonrTheme.boxShadow,
           border: Border.all(color: SonrTheme.foregroundColor, width: 1),
         ),

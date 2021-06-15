@@ -46,18 +46,7 @@ class ColorButton extends StatelessWidget {
     // Build Child
     return ColorButton(
         decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [
-                Color(0xffFFCF14),
-                Color(0xffF3ACFF),
-                Color(0xff8AECFF),
-              ],
-              stops: [0, 0.45, 1],
-              center: Alignment.center,
-              focal: Alignment.topRight,
-              tileMode: TileMode.clamp,
-              radius: 2,
-            ),
+            gradient: SonrGradient.Theme(radius: 2),
             borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
             boxShadow: SonrTheme.boxShadow),
         onPressed: onPressed,
