@@ -38,7 +38,7 @@ class _DevicesLobbyView extends GetView<TransferController> {
                 scrollDirection: Axis.horizontal,
                 controller: controller.scrollController,
                 anchor: 0.225,
-                slivers: LobbyService.local.value
+                slivers: LocalService.lobby.value
                     .mapAll((i) => Builder(builder: (context) {
                           return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
                         }))

@@ -57,7 +57,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onInit();
 
     // Handle Streams
-    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
+    _lobbyStream = LocalService.lobby.listen(_handleLobbyStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
@@ -88,7 +88,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   /// @ Handle Title Tap
   void onTitleTap() {
-    if (LobbyService.local.value.count > 0) {
+    if (LocalService.lobby.value.count > 0) {
       AppPage.Transfer.off();
     }
   }
@@ -126,7 +126,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Revert Text
       Future.delayed(timeout, () {
         if (!isClosed) {
-          title("${LobbyService.local.value.count} Around");
+          title("${LocalService.lobby.value.count} Around");
           _timeoutActive = false;
         }
       });
@@ -154,7 +154,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      title("${LobbyService.local.value.count} Nearby");
+      title("${LocalService.lobby.value.count} Nearby");
       _timeoutActive = true;
 
       // Revert Text

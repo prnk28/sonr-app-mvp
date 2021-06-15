@@ -4,36 +4,36 @@ import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-class LobbyService extends GetxService {
+class LocalService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<LobbyService>();
-  static LobbyService get to => Get.find<LobbyService>();
+  static bool get isRegistered => Get.isRegistered<LocalService>();
+  static LocalService get to => Get.find<LocalService>();
 
-  // @ Set Properties
+  // Properties
   final _flatModeCancelled = false.obs;
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
-  final _lobbies = RxList<Lobby>();
-  final _local = Lobby().obs;
+  final _lobby = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
   final _position = Position().obs;
+  final _status = Rx<LocalStatus>(LocalStatus.Empty);
+
+  // References
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
-  // @ Routing to Reactive
-  static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
-  static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
-  static Rx<Lobby> get local => Get.find<LobbyService>()._local;
+  // Reactive Accessors
+  static RxBool get isFlatMode => to._isFlatMode;
+  static Rx<Lobby> get lobby => to._lobby;
+  static Rx<LocalStatus> get status => to._status;
 
   // @ References
-  bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
   StreamSubscription<Position>? _positionStream;
   Timer? _timer;
-  Map<String, LobbyCallback> _lobbyCallbacks = <String, LobbyCallback>{};
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // # Initialize Service Method
-  Future<LobbyService> init() async {
+  Future<LocalService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = MobileService.position.listen(_handlePosition);
     }
@@ -60,27 +60,10 @@ class LobbyService extends GetxService {
     });
   }
 
-  /// @ Registers RemoteResponse to Lobby to Manage Callback
-  static void registerRemoteCallback(String topic, LobbyCallback callback) {
-    if (isRegistered) {
-      // Check if Found
-      to._lobbyCallbacks[topic] = callback;
-    }
-  }
-
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
     if (isRegistered) {
       to._peerCallbacks[peer] = callback;
-    }
-  }
-
-  /// @ Removes Lobby Callback
-  static void unregisterRemoteCallback(Lobby lobby) {
-    if (isRegistered) {
-      if (to._lobbyCallbacks.containsKey(lobby)) {
-        to._lobbyCallbacks.remove(lobby);
-      }
     }
   }
 
@@ -104,7 +87,7 @@ class LobbyService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-    var flatPeer = LobbyService.local.value.flatFirst()!;
+    var flatPeer = LocalService.lobby.value.flatFirst()!;
     AppRoute.snack(SnackArgs.success("Sent Contact to ${flatPeer.profile.firstName}"));
     Get.back();
     return true;
@@ -112,13 +95,6 @@ class LobbyService extends GetxService {
 
   // # Handle Lobby Update //
   void handleRefresh(Lobby data) {
-    // @ Callbacks
-    // Handle Lobby Callbacks
-    if (_lobbyCallbacks.containsKey(data)) {
-      var call = _lobbyCallbacks[data]!;
-      call(data);
-    }
-
     // Handle Peer Callbacks
     data.peers.forEach((id, peer) {
       if (_peerCallbacks.containsKey(peer)) {
@@ -129,14 +105,17 @@ class LobbyService extends GetxService {
 
     // @ Update Local Topics
     if (data.type == Lobby_Type.LOCAL) {
-      // Update Flat Peers
-      _handleFlatPeers(data);
+      // Update Status
+      _status(LocalStatusUtils.localStatusFromCount(data.count));
 
       // Set Lobby
-      _local(data);
+      _lobby(data);
 
       // Refresh Values
-      _local.refresh();
+      _lobby.refresh();
+
+      // Update Flat Peers
+      _handleFlatPeers(data);
     }
   }
 
@@ -154,8 +133,11 @@ class LobbyService extends GetxService {
 
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {
+    // Initialize
+    bool flatModeEnabled = !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
+
     // Update Orientation
-    if (_flatModeEnabled && _localFlatPeers.length > 0) {
+    if (flatModeEnabled && _localFlatPeers.length > 0) {
       var newIsFacingFlat = data.accelerometer.y < 2.75;
       if (newIsFacingFlat != _lastIsFacingFlat.value) {
         if (newIsFacingFlat) {

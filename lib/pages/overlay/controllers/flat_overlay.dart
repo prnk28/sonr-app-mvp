@@ -38,7 +38,7 @@ class _FlatModeView extends StatelessWidget {
       autoRemove: false,
       builder: (controller) {
         return GestureDetector(
-          onTap: () => Get.find<LobbyService>().cancelFlatMode(),
+          onTap: () => Get.find<LocalService>().cancelFlatMode(),
           child: Container(
               width: Get.width,
               height: Get.height,
@@ -102,7 +102,7 @@ class _FlatModeController extends GetxController {
   // # Initialize Service Method
   @override
   void onInit() {
-    _isFlatStream = LobbyService.isFlatMode.listen(_handleFlatMode);
+    _isFlatStream = LocalService.isFlatMode.listen(_handleFlatMode);
     super.onInit();
   }
 
@@ -159,11 +159,11 @@ class _FlatModeController extends GetxController {
         transition(FlatModeTransition.SlideOut);
         animation(_FlatModeAnimation(transition.value));
         // No Peers
-        if (LobbyService.local.value.flatPeerCount() == 0) {
+        if (LocalService.lobby.value.flatPeerCount() == 0) {
           Get.back();
           AppRoute.snack(SnackArgs.error("No Peers in Flat Mode"));
-        } else if (LobbyService.local.value.flatPeerCount() == 1) {
-          if (Get.find<LobbyService>().sendFlatMode(LobbyService.local.value.flatFirst())) {
+        } else if (LocalService.lobby.value.flatPeerCount() == 1) {
+          if (Get.find<LocalService>().sendFlatMode(LocalService.lobby.value.flatFirst())) {
             Future.delayed(K_TRANSLATE_DURATION, () {
               status(FlatModeState.Pending);
             });

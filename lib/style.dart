@@ -2,7 +2,7 @@ export 'service/device/device.dart';
 export 'service/device/desktop.dart';
 export 'service/device/mobile.dart';
 export 'service/client/transfer.dart';
-export 'service/client/lobby.dart';
+export 'service/client/local.dart';
 export 'service/client/sonr.dart';
 export 'service/device/user.dart';
 export 'data/core/logger.dart';

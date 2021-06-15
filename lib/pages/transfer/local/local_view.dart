@@ -1,4 +1,5 @@
 import 'package:sonr_app/modules/peer/card_view.dart';
+import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/style.dart';
 import '../transfer_controller.dart';
 
@@ -18,34 +19,19 @@ class LocalView extends GetView<TransferController> {
         Padding(padding: EdgeInsets.only(top: 4)),
 
         // Scroll View
-        Obx(
-          () => LobbyService.local.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
-        ),
+        Obx(() => _buildView(LocalService.status.value)),
       ],
     );
   }
-}
 
-/// @ LocalLobbyView:  When Lobby is NOT Empty
-class _LocalLobbyView extends GetView<TransferController> {
-  @override
-  Widget build(BuildContext context) {
-    return
-        // Scroll View
-        Obx(() => Container(
-              width: Get.width,
-              height: 400,
-              child: CustomScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: controller.scrollController,
-                anchor: 0.225,
-                slivers: LobbyService.local.value
-                    .mapAll((i) => Builder(builder: (context) {
-                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
-                        }))
-                    .toList(),
-              ),
-            ));
+  Widget _buildView(LocalStatus status) {
+    if (status.isEmpty) {
+      return _LocalEmptyView();
+    } else if (status.isFew) {
+      return _LocalFewView();
+    } else {
+      return _LocalManyView();
+    }
   }
 }
 
@@ -68,5 +54,44 @@ class _LocalEmptyView extends GetView<TransferController> {
         padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
       ),
     );
+  }
+}
+
+/// @ _LocalFewView:  When Lobby is <= 5 Peers
+class _LocalFewView extends GetView<TransferController> {
+  @override
+  Widget build(BuildContext context) {
+    return
+        // Scroll View
+        Obx(() => Container(
+              width: Get.width,
+              height: 400,
+              child: CustomScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: controller.scrollController,
+                anchor: 0.225,
+                slivers: LocalService.lobby.value
+                    .mapAll((i) => Builder(builder: (context) {
+                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                        }))
+                    .toList(),
+              ),
+            ));
+  }
+}
+
+/// @ _LocalManyView:  When Lobby is > 5 Peers
+class _LocalManyView extends GetView<TransferController> {
+  @override
+  Widget build(BuildContext context) {
+    return
+        // Scroll View
+        Obx(() => Container(
+              width: Get.width,
+              height: 400,
+              child: ListView.builder(itemBuilder: (context, index) {
+                return PeerListItem(index: index, peer: LocalService.lobby.value.peerAtIndex(index));
+              }),
+            ));
   }
 }
