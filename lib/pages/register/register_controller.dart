@@ -91,7 +91,7 @@ class RegisterController extends GetxController {
               HSRecord.newAuth(result.signedPrefix, sName.value, result.signedFingerprint), HSRecord.newName(sName.value, result.publicIdentity));
 
           // Analytics
-          FirebaseAnalytics().logEvent(
+          Logger.event(
             name: '[AuthService]: Create-Username',
             parameters: {
               'createdAt': DateTime.now().toString(),

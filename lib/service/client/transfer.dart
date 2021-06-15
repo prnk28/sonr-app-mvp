@@ -36,7 +36,7 @@ class TransferService extends GetxService {
   static Future<bool> chooseCamera() async {
     if (DeviceService.isMobile) {
       // Analytics
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[TransferService]: Choose-Camera',
         parameters: {
           'createdAt': DateTime.now().toString(),
@@ -51,7 +51,7 @@ class TransferService extends GetxService {
         var result = await _handlePayload(Payload.MEDIA, file: file);
 
         // Analytics
-        FirebaseAnalytics().logEvent(
+        Logger.event(
           name: '[TransferService]: Confirmed-Camera',
           parameters: {
             'createdAt': DateTime.now().toString(),
@@ -73,7 +73,7 @@ class TransferService extends GetxService {
     if (DeviceService.isMobile) {
       // Analytics
       if (DeviceService.isMobile) {
-        FirebaseAnalytics().logEvent(
+        Logger.event(
           name: '[TransferService]: Choose-Contact',
           parameters: {
             'createdAt': DateTime.now().toString(),
@@ -91,7 +91,7 @@ class TransferService extends GetxService {
   static Future<bool> chooseMedia({bool withRedirect = true}) async {
     // Analytics
     if (DeviceService.isMobile) {
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[TransferService]: Choose-Media',
         parameters: {
           'createdAt': DateTime.now().toString(),
@@ -111,7 +111,7 @@ class TransferService extends GetxService {
     if (result != null) {
       // Analytics
       if (DeviceService.isMobile) {
-        FirebaseAnalytics().logEvent(
+        Logger.event(
           name: '[TransferService]: Confirm-Media',
           parameters: {
             'createdAt': DateTime.now().toString(),
@@ -130,7 +130,7 @@ class TransferService extends GetxService {
   static Future<bool> chooseFile() async {
     // Analytics
     if (DeviceService.isMobile) {
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[TransferService]: Choose-File',
         parameters: {
           'createdAt': DateTime.now().toString(),
@@ -144,7 +144,7 @@ class TransferService extends GetxService {
       if (result != null) {
         // Analytics
         if (DeviceService.isMobile) {
-          FirebaseAnalytics().logEvent(
+          Logger.event(
             name: '[TransferService]: Confirm-File',
             parameters: {
               'createdAt': DateTime.now().toString(),
@@ -179,7 +179,7 @@ class TransferService extends GetxService {
   // @ Select Media File //
   static Future<bool> setUrl(String url) async {
     // Analytics
-    FirebaseAnalytics().logEvent(
+    Logger.event(
       name: '[TransferService]: Choose-URL',
       parameters: {
         'createdAt': DateTime.now().toString(),
@@ -192,7 +192,7 @@ class TransferService extends GetxService {
   // @ Select Media File //
   static Future<bool> setMedia(SonrFile file) async {
     // Analytics
-    FirebaseAnalytics().logEvent(
+    Logger.event(
       name: '[TransferService]: Choose-Media',
       parameters: {
         'createdAt': DateTime.now().toString(),
@@ -205,7 +205,7 @@ class TransferService extends GetxService {
   /// @ Send Invite with Peer
   static Session? sendInviteToPeer(Peer peer) {
     // Analytics
-    FirebaseAnalytics().logEvent(
+    Logger.event(
       name: '[TransferService]: Selected-Peer',
       parameters: {
         'createdAt': DateTime.now().toString(),
@@ -228,7 +228,7 @@ class TransferService extends GetxService {
   /// @ Sets File from Other Source
   static Future<bool> setFile(SonrFile file) async {
     // Analytics
-    FirebaseAnalytics().logEvent(
+    Logger.event(
       name: '[TransferService]: Choose-File',
       parameters: {
         'createdAt': DateTime.now().toString(),
@@ -258,7 +258,7 @@ class TransferService extends GetxService {
     // @ Handle Payload
     if (to._payload.value.isTransfer && file != null) {
       // Capture File Analytics
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[TransferService]: Shared-File',
         parameters: {
           'createdAt': DateTime.now().toString(),
@@ -303,7 +303,7 @@ class TransferService extends GetxService {
     // Check for Contact
     else if (to._payload.value == Payload.CONTACT) {
       // Capture Contact Analytics
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[TransferService]: Shared-Contact',
         parameters: {
           'createdAt': DateTime.now().toString(),
@@ -321,7 +321,7 @@ class TransferService extends GetxService {
     // Check for URL
     else if (to._payload.value == Payload.URL) {
       // Capture Contact Analytics
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[TransferService]: Shared-Contact',
         parameters: {
           'createdAt': DateTime.now().toString(),

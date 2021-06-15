@@ -53,15 +53,12 @@ class UserService extends GetxService {
         var profileJson = _userBox.read("contact");
         var contact = Contact.fromJson(profileJson);
 
+        // Set User Properties
+        Logger.initProfile(contact.profile);
+
         // Set Contact Values
         _contact(contact);
         _isNewUser(false);
-
-        // Configure Firebase Scope
-        FirebaseAnalytics().setUserId(DeviceService.device.id);
-        FirebaseAnalytics().setUserProperty(name: "firstname", value: _contact.value.firstName);
-        FirebaseAnalytics().setUserProperty(name: "lastName", value: _contact.value.lastName);
-        FirebaseAnalytics().setUserProperty(name: "platform", value: DeviceService.device.platform.toString());
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
