@@ -94,8 +94,8 @@ class HomeBottomTabButton extends GetView<HomeController> {
                     child: Container(
                         key: ValueKey(idx.value == view.index),
                         child: idx.value == view.index
-                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.textColor)
-                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.textColor)),
+                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.itemColor)
+                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.itemColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),

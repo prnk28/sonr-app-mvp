@@ -98,18 +98,18 @@ class AppServices {
     // Third: Initialize Data/Networking Services
     await Get.putAsync(() => TransferService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
-    await Get.putAsync(() => LobbyService().init());
+    await Get.putAsync(() => LocalService().init());
     await Get.putAsync(() => SessionService().init());
     await Get.putAsync(() => SonrService().init(), permanent: true);
 
     // Fourth: UI Services
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-    await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
+    await Get.putAsync(() => PosOverlay().init(), permanent: true);
   }
 
   /// @ Method Validates Required Services Registered
   static bool get areServicesRegistered {
-    return DeviceService.isRegistered && UserService.isRegistered && LobbyService.isRegistered;
+    return DeviceService.isRegistered && UserService.isRegistered && LocalService.isRegistered;
   }
 
   /// @ Returns Excluded Sentry Modules

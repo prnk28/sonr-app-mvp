@@ -45,7 +45,7 @@ class SonrGradient {
   static Gradient get Critical => _bottomUp([SonrColor.fromHex('#ff176b'), SonrColor.fromHex('#ff176b', opacity: 0.7)]);
 
   /// Returns Theme Gradient
-  static Gradient get Theme => RadialGradient(
+  static Gradient Theme({double radius = 0.72}) => RadialGradient(
         colors: [
           Color(0xffFFCF14),
           Color(0xffF3ACFF),
@@ -55,7 +55,7 @@ class SonrGradient {
         center: Alignment.center,
         focal: Alignment.topRight,
         tileMode: TileMode.clamp,
-        radius: 0.72,
+        radius: radius,
       );
 }
 

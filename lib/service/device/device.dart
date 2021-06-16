@@ -89,7 +89,7 @@ class DeviceService extends GetxService {
         var pos = await Geolocator.getCurrentPosition();
 
         // Analytics
-        FirebaseAnalytics().logEvent(
+        Logger.event(
           name: '[DeviceService]: Find-Location',
           parameters: {
             'createdAt': DateTime.now().toString(),
@@ -111,7 +111,7 @@ class DeviceService extends GetxService {
 
     if (response.statusCode == 200) {
       // Analytics
-      FirebaseAnalytics().logEvent(
+      Logger.event(
         name: '[DeviceService]: Find-Location',
         parameters: {'createdAt': DateTime.now().toString(), 'platform': platform.toString(), 'isMobile': platform.isMobile, 'type': 'IP-Location'},
       );

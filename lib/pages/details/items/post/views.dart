@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/pages/details/arguments.dart';
 import 'package:video_player/video_player.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';

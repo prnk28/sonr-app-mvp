@@ -81,7 +81,7 @@ class SessionService extends GetxService {
     DeviceService.feedback();
 
     // Check for Flat
-    if (data.isFlat && data.payload == Payload.CONTACT) {
+    if (data.flatMode && data.payload == Payload.CONTACT) {
       FlatMode.invite(data.contact);
     } else {
       Authorize.invite(data);
@@ -94,12 +94,11 @@ class SessionService extends GetxService {
     Logger.info("Node(Callback) Responded: " + data.toString());
 
     // Handle Contact Response
-    if (data.type == InviteResponse_Type.FlatContact) {
+    if (data.type == InviteResponse_Type.Contact) {
       await HapticFeedback.heavyImpact();
-      FlatMode.response(data.data.contact);
-    } else if (data.type == InviteResponse_Type.Contact) {
-      await HapticFeedback.vibrate();
-      Authorize.reply(data);
+
+      // Check if Flat Mode
+      data.flatMode ? FlatMode.response(data.transfer.contact) : Authorize.reply(data);
     }
 
     // For Cancel

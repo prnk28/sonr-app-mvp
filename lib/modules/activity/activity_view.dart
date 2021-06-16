@@ -15,6 +15,7 @@ class ActivityPopup extends GetView<ActivityController> {
         title: "Activity",
         onPressed: () => AppRoute.close(),
         action: ActionButton(
+          key: controller.clearButtonKey,
           iconData: SonrIcons.Clear,
           onPressed: controller.clearAllActivity,
         ),

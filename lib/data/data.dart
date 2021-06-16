@@ -11,8 +11,9 @@ export 'database/database.dart';
 export 'database/service.dart';
 
 // Models
+export 'model/model_anim.dart';
+export 'model/model_state.dart';
 export 'model/model_meta.dart';
 export 'model/model_cards.dart';
 export 'model/model_option.dart';
 export 'model/model_result.dart';
-export 'package:sonr_app/pages/details/arguments.dart';

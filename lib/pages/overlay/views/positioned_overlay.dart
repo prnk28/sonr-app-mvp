@@ -6,21 +6,21 @@ import 'package:sonr_app/style.dart';
 import '../overlay.dart';
 
 /// @ Class Controls Active Overlays ** //
-class SonrPositionedOverlay extends GetxService {
+class PosOverlay extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<SonrPositionedOverlay>();
-  static SonrPositionedOverlay get to => Get.find<SonrPositionedOverlay>();
+  static bool get isRegistered => Get.isRegistered<PosOverlay>();
+  static PosOverlay get to => Get.find<PosOverlay>();
 
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrPositionedOverlayEntry?>(null);
 
   // References
-  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length == 0;
-  static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
-  static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
+  static bool get isOpen => Get.find<PosOverlay>().overlays.length == 0;
+  static int get count => Get.find<PosOverlay>().overlays.length;
+  static PosOverlay get _controller => Get.find<PosOverlay>();
 
-  Future<SonrPositionedOverlay> init() async {
+  Future<PosOverlay> init() async {
     return this;
   }
 
@@ -97,7 +97,7 @@ class _SonrPositionedOverlayEntry {
     overlayBackground = OverlayEntry(builder: (context) {
       return Positioned.fill(
         child: GestureDetector(
-          onTap: () => barrierDismissible ? SonrPositionedOverlay.back() : () {},
+          onTap: () => barrierDismissible ? PosOverlay.back() : () {},
         ),
       );
     });

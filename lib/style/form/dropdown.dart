@@ -47,7 +47,7 @@ class SonrDropdown extends StatelessWidget {
         key: _dropKey,
         child: GestureDetector(
           onTapUp: (details) {
-            SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {
+            PosOverlay.dropdown(items, _dropKey, (newIdx) {
               index(newIdx);
               index.refresh();
             }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
@@ -70,7 +70,7 @@ class SonrDropdown extends StatelessWidget {
         Padding(padding: EdgeInsets.all(4)),
         initial.text.light(),
         Spacer(flex: selectedFlex!),
-        Get.find<SonrPositionedOverlay>().overlays.length == 0
+        Get.find<PosOverlay>().overlays.length == 0
             ? UserService.isDarkMode
                 ? SonrIcons.Up.black
                 : SonrIcons.Up.white
@@ -91,7 +91,7 @@ class SonrDropdown extends StatelessWidget {
           Padding(padding: EdgeInsets.only(right: 10)),
           item.text.light(color: SonrColor.Grey),
           Spacer(flex: selectedFlex!),
-          Get.find<SonrPositionedOverlay>().overlays.length == 0
+          Get.find<PosOverlay>().overlays.length == 0
               ? UserService.isDarkMode
                   ? SonrIcons.Up.black
                   : SonrIcons.Up.white
@@ -105,7 +105,7 @@ class SonrDropdown extends StatelessWidget {
           item.text.light(color: SonrColor.Grey),
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon! : Container(),
-          Get.find<SonrPositionedOverlay>().overlays.length == 0
+          Get.find<PosOverlay>().overlays.length == 0
               ? UserService.isDarkMode
                   ? SonrIcons.Up.white
                   : SonrIcons.Up.black

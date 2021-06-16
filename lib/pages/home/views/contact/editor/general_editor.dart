@@ -42,7 +42,7 @@ class GeneralEditorView extends GetView<EditorController> {
                   Switch(
                     activeColor: SonrTheme.backgroundColor,
                     activeTrackColor: SonrColor.Primary,
-                    inactiveTrackColor: SonrTheme.textColor,
+                    inactiveTrackColor: SonrTheme.itemColor,
                     value: controller.isDarkModeEnabled.value,
                     onChanged: (val) => controller.setDarkMode(val),
                   )
@@ -52,13 +52,13 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ Flat Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Dark Mode Title
-                  "Flat Mode".light(color: SonrTheme.textColor),
+                  "Flat Mode".light(color: SonrTheme.itemColor),
 
                   // Dark Mode Switch
                   Switch(
                     activeColor: SonrTheme.backgroundColor,
                     activeTrackColor: SonrColor.Primary,
-                    inactiveTrackColor: SonrTheme.textColor,
+                    inactiveTrackColor: SonrTheme.itemColor,
                     value: controller.isFlatModeEnabled.value,
                     onChanged: (val) => controller.setFlatMode(val),
                   )
@@ -68,13 +68,13 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ PointShare Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Point Share Title
-                  "Point To Share".light(color: SonrTheme.textColor),
+                  "Point To Share".light(color: SonrTheme.itemColor),
 
                   // Point Share Mode Switch
                   Switch(
                       activeColor: SonrTheme.backgroundColor,
                       activeTrackColor: SonrColor.Primary,
-                      inactiveTrackColor: SonrTheme.textColor,
+                      inactiveTrackColor: SonrTheme.itemColor,
                       value: controller.isPointToShareEnabled.value,
                       onChanged: (val) async {
                         controller.setPointShare(val);
@@ -85,7 +85,7 @@ class GeneralEditorView extends GetView<EditorController> {
                 Container(
                   padding: EdgeInsets.only(bottom: 8),
                   alignment: Alignment.topCenter,
-                  child: "Alpha - 0.9.3".light(color: SonrTheme.textColor),
+                  child: "Alpha - 0.9.3".light(color: SonrTheme.itemColor),
                 ),
               ]),
             ))
@@ -107,7 +107,7 @@ class _EditOptionsButton extends GetView<EditorController> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           UserService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? option.name.light(color: SonrTheme.textColor) : option.name.light(color: SonrTheme.textColor),
+          UserService.isDarkMode ? option.name.light(color: SonrTheme.itemColor) : option.name.light(color: SonrTheme.itemColor),
         ]),
       ),
     );

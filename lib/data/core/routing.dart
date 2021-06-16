@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/activity/activity_view.dart';
 import 'package:sonr_app/modules/share/share_view.dart';
@@ -204,6 +206,94 @@ extension AppRoute on AppPage {
         useSafeArea: !ignoreSafeArea,
       );
     }
+  }
+
+  /// Pushes a Alert View Modal
+  static Future<bool> alert({
+    required String title,
+    required String description,
+    String buttonText = "Okay",
+    bool closeOnResponse = true,
+    bool ignoreSafeArea = false,
+    bool dismissible = true,
+  }) async {
+    // Create Future Completer
+    var completer = Completer<bool>();
+    Get.dialog(
+      BlurredBackground(
+          child: AlertOverlay(
+        title,
+        description,
+        buttonText,
+        () {
+          completer.complete();
+        },
+      )),
+      transitionDuration: 0.seconds,
+      barrierDismissible: dismissible,
+      barrierColor: Colors.transparent,
+      useSafeArea: !ignoreSafeArea,
+    );
+    return completer.future;
+  }
+
+  /// Pushes Postioned Modal relative to Parent Key
+  static Future<void> positioned(
+    Widget child, {
+    required GlobalKey parentKey,
+    bool ignoreSafeArea = false,
+    Offset? offset,
+  }) async {
+    final RxBool hasDismissed = false.obs;
+    Get.dialog(
+      BlurredBackground(
+          onTapped: () {
+            hasDismissed(true);
+            Future.delayed(300.milliseconds, () => Get.back());
+          },
+          child: PositionedOverlay(
+            parentKey: parentKey,
+            hasDismissed: hasDismissed,
+            child: child,
+            offset: offset,
+          )),
+      transitionDuration: 0.seconds,
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+      useSafeArea: !ignoreSafeArea,
+    );
+  }
+
+  /// Pushes a Question View Modal
+  static Future<bool> question({
+    required String title,
+    required String description,
+    String acceptTitle = "Yes!",
+    String declineTitle = "No",
+    bool closeOnResponse = true,
+    bool ignoreSafeArea = false,
+    bool dismissible = true,
+  }) async {
+    // Create Future Completer
+    var completer = Completer<bool>();
+    Get.dialog(
+      BlurredBackground(
+          child: QuestionOverlay(
+        title,
+        description,
+        (result) {
+          completer.complete(result);
+          Get.back();
+        },
+        acceptTitle,
+        declineTitle,
+      )),
+      transitionDuration: 0.seconds,
+      barrierDismissible: dismissible,
+      barrierColor: Colors.transparent,
+      useSafeArea: !ignoreSafeArea,
+    );
+    return completer.future;
   }
 
   /// Pushes a BottomSheet View

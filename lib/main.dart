@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
@@ -25,9 +23,6 @@ Future<void> main() async {
 /// @ Root App Widget
 class App extends StatelessWidget {
   final bool isDesktop;
-  static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
-
   const App({Key? key, required this.isDesktop}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -45,7 +40,7 @@ class App extends StatelessWidget {
       navigatorKey: Get.key,
       navigatorObservers: [
         GetObserver(),
-        observer,
+        Logger.Observer,
       ],
       title: _title(),
       home: _buildScaffold(),

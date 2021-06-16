@@ -73,6 +73,6 @@ class ButtonUtility {
   }
 
   static Widget buildNeutralText(String text, Color? textColor) {
-    return Container(child: text.heading(color: textColor ?? SonrTheme.textColor, fontSize: 22));
+    return Container(child: text.heading(color: textColor ?? SonrTheme.itemColor, fontSize: 22));
   }
 }

@@ -64,11 +64,11 @@ class _SonrFileListHeader extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettyName().subheading(color: SonrTheme.textColor),
+            child: TransferService.file.value.prettyName().subheading(color: SonrTheme.itemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettySize().light(color: SonrTheme.textColor),
+            child: TransferService.file.value.prettySize().light(color: SonrTheme.itemColor),
           )
         ],
       ),
@@ -104,7 +104,7 @@ class _SonrFileListItem extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: item.prettyType().subheading(color: SonrTheme.textColor),
+                child: item.prettyType().subheading(color: SonrTheme.itemColor),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
@@ -185,9 +185,9 @@ class _PayloadSingleItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: [
-                UserService.contact.value.firstName.paragraph(color: SonrTheme.textColor),
-                " ".paragraph(color: SonrTheme.textColor),
-                UserService.contact.value.lastName.light(color: SonrTheme.textColor)
+                UserService.contact.value.firstName.paragraph(color: SonrTheme.itemColor),
+                " ".paragraph(color: SonrTheme.itemColor),
+                UserService.contact.value.lastName.light(color: SonrTheme.itemColor)
               ].row(),
             ),
             Padding(
@@ -204,7 +204,7 @@ class _PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyName().paragraph(color: SonrTheme.textColor),
+              child: TransferService.file.value.prettyName().paragraph(color: SonrTheme.itemColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -218,7 +218,7 @@ class _PayloadSingleItem extends StatelessWidget {
           height: Height.ratio(0.15),
           padding: EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 8),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-            Padding(padding: const EdgeInsets.only(top: 16.0), child: TransferService.file.value.prettyType().subheading(color: SonrTheme.textColor)),
+            Padding(padding: const EdgeInsets.only(top: 16.0), child: TransferService.file.value.prettyType().subheading(color: SonrTheme.itemColor)),
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: TransferService.file.value.prettyName().light(color: Get.theme.hintColor),

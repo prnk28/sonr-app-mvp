@@ -2,13 +2,16 @@ export 'service/device/device.dart';
 export 'service/device/desktop.dart';
 export 'service/device/mobile.dart';
 export 'service/client/transfer.dart';
-export 'service/client/lobby.dart';
+export 'service/client/local.dart';
 export 'service/client/sonr.dart';
 export 'service/device/user.dart';
 export 'data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
-
+export 'package:flutter/material.dart' hide Route;
+export 'package:supercharged/supercharged.dart';
+export 'package:flutter/services.dart';
+export 'package:feedback/feedback.dart';
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
@@ -17,24 +20,29 @@ export 'package:sonr_app/style/elements/clipper.dart';
 export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
-export 'package:firebase_analytics/firebase_analytics.dart';
+
+// Custom Theme Buttons
+export 'style/buttons/action.dart';
+export 'style/buttons/arrow.dart';
+export 'style/buttons/color.dart';
+export 'style/buttons/plain.dart';
+export 'style/buttons/confirm.dart';
+export 'style/buttons/image.dart';
 
 // Theme Components
 export 'style/components/color.dart';
 export 'style/components/gradient.dart';
 export 'style/components/icon.dart';
+export 'style/components/overlay.dart';
 export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
-// Custom Theme Aspects
-export 'style/buttons/action.dart';
-export 'style/buttons/color.dart';
-export 'style/buttons/plain.dart';
-export 'style/buttons/confirm.dart';
+// Custom Theme Elements
+export 'style/elements/shape.dart';
+export 'style/elements/painter.dart';
 export 'style/elements/scaffold.dart';
 export 'style/elements/appbar.dart';
 export 'style/elements/animation.dart';
-export 'style/buttons/image.dart';
 
 // Form Styles
 export 'style/form/checklist.dart';
@@ -43,16 +51,10 @@ export 'style/form/textfield.dart';
 export 'style/form/tabs.dart';
 
 // Global UI Widgets
-export 'style/elements/shape.dart';
-export 'style/elements/painter.dart';
 export 'pages/overlay/overlay.dart';
 export 'pages/overlay/controllers/flat_overlay.dart';
 
 // UI Packages
-export 'package:flutter/material.dart' hide Route;
-export 'package:supercharged/supercharged.dart';
-export 'package:flutter/services.dart';
-export 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -238,7 +240,10 @@ class SonrTheme {
   static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
-  static Color get textColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+  static Color get itemColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Returns Current Text Color
+  static Color get itemColorInversed => UserService.isDarkMode ? SonrColor.Black : SonrColor.White;
 
   /// Return Current Box Shadow
   static List<BoxShadow> get boxShadow => UserService.isDarkMode

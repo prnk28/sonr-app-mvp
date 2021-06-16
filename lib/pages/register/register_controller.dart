@@ -91,7 +91,7 @@ class RegisterController extends GetxController {
               HSRecord.newAuth(result.signedPrefix, sName.value, result.signedFingerprint), HSRecord.newName(sName.value, result.publicIdentity));
 
           // Analytics
-          FirebaseAnalytics().logEvent(
+          Logger.event(
             name: '[AuthService]: Create-Username',
             parameters: {
               'createdAt': DateTime.now().toString(),
@@ -265,7 +265,7 @@ class RegisterController extends GetxController {
   }
 
   // Helper Method to Generate Prefix
-  static Future<SignResponse> signUser(String username, String mnemonic) async {
+  static Future<AuthResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
     var request = Request.newSignature(username, mnemonic);
     var response = await SonrService.sign(request);

@@ -15,7 +15,7 @@ class ContactAuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     Contact card;
     if (isReply) {
-      card = reply!.data.contact;
+      card = reply!.transfer.contact;
     } else {
       card = invite!.contact;
     }
@@ -70,7 +70,7 @@ class ContactAuthView extends StatelessWidget {
               onPressed: () async {
                 SonrOverlay.back();
                 if (!isReply) {
-                  var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
+                  var result = await AppRoute.question(title: "Send Back", description: "Would you like to send your contact back?");
                   SessionService.decisionForInvite(true, sendBackContact: result);
                 } else {
                   SessionService.decisionForInvite(true);

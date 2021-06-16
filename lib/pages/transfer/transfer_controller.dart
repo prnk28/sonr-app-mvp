@@ -17,22 +17,25 @@ class TransferController extends GetxController {
   // @ View Properties
   final directionTitle = "".obs;
   final cardinalTitle = "".obs;
+  final phonesEnabled = true.obs;
+  final desktopsEnabled = true.obs;
 
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
   late StreamSubscription<Payload> _payloadStream;
+  final localArrowButtonKey = GlobalKey();
   ScrollController scrollController = ScrollController();
 
   /// @ Controller Constructer
   void onInit() {
     // Set Initial Value
     _handlePositionUpdate(MobileService.position.value);
-    _handleLobbyUpdate(LobbyService.local.value);
+    _handleLobbyUpdate(LocalService.lobby.value);
 
     // Add Stream Handlers
     _positionStream = MobileService.position.listen(_handlePositionUpdate);
-    _lobbySizeStream = LobbyService.local.listen(_handleLobbyUpdate);
+    _lobbySizeStream = LocalService.lobby.listen(_handleLobbyUpdate);
     super.onInit();
   }
 
@@ -49,6 +52,21 @@ class TransferController extends GetxController {
   void closeToHome() {
     TransferService.resetPayload();
     AppPage.Home.off();
+  }
+
+  void onLocalArrowPressed() {
+    AppRoute.positioned(
+      Checklist(
+          options: [
+            ChecklistOption("Phones", phonesEnabled),
+            ChecklistOption("Desktops", desktopsEnabled),
+          ],
+          onSelectedOption: (index) {
+            print(index);
+          }),
+      offset: Offset(-80, -10),
+      parentKey: localArrowButtonKey,
+    );
   }
 
   /// @ User is Facing or No longer Facing a Peer

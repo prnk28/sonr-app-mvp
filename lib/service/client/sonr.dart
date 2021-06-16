@@ -4,7 +4,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
-import 'lobby.dart';
+import 'local.dart';
 import '../device/user.dart';
 import 'session.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
@@ -38,7 +38,7 @@ class SonrService extends GetxService {
     // Set Handlers
     node.onStatus = _handleStatus;
     node.onError = _handleError;
-    node.onRefreshed = LobbyService.to.handleRefresh;
+    node.onRefreshed = LocalService.to.handleRefresh;
     node.onInvited = SessionService.to.handleInvite;
     node.onReplied = SessionService.to.handleReply;
     node.onProgressed = SessionService.to.handleProgress;
@@ -67,7 +67,7 @@ class SonrService extends GetxService {
 
   // * ------------------- Methods ----------------------------
   /// @ Sign Provided Data with Private Key
-  static Future<SignResponse> sign(SignRequest request) async {
+  static Future<AuthResponse> sign(AuthRequest request) async {
     return await to.node.sign(request);
   }
 

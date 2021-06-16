@@ -92,7 +92,7 @@ class _ActionIconButton extends StatelessWidget {
                   ),
                   child: Icon(
                     iconData,
-                    color: SonrTheme.textColor,
+                    color: SonrTheme.itemColor,
                     size: 24,
                   ),
                 ),
@@ -117,12 +117,12 @@ class ActionBanner {
 
   /// Build Alert Style Banner
   factory ActionBanner.alert(int count) {
-    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.textColor);
+    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
   }
 
   /// Build Selected Items Banner
   factory ActionBanner.selected(int count) {
-    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.textColor);
+    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
   }
 
   /// Helper: Builds BoxDecoration from Banner Data

@@ -96,7 +96,7 @@ extension MimeIcon on MIME_Type {
 
 extension PayloadIcon on Payload {
   Widget gradient({double size = 32}) {
-    if (this == Payload.CONTACT || this == Payload.FLAT_CONTACT) {
+    if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.gradient(value: SonrGradients.SunnyMorning, size: size);
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.gradient(value: SonrGradients.Lollipop, size: size);
@@ -112,7 +112,7 @@ extension PayloadIcon on Payload {
   }
 
   Widget icon({double size = 32, Color color = SonrColor.White}) {
-    if (this == Payload.CONTACT || this == Payload.FLAT_CONTACT) {
+    if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.icon(color: color, size: size);
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.icon(color: color, size: size);
@@ -128,7 +128,7 @@ extension PayloadIcon on Payload {
   }
 
   Icon get black {
-    if (this == Payload.CONTACT || this == Payload.FLAT_CONTACT) {
+    if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.black;
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.black;
@@ -144,7 +144,7 @@ extension PayloadIcon on Payload {
   }
 
   Icon get white {
-    if (this == Payload.CONTACT || this == Payload.FLAT_CONTACT) {
+    if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.white;
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.white;
@@ -393,7 +393,7 @@ class SonrIcons {
   static const IconData Arroba = IconData(0xe900, fontFamily: _fontNavFamily);
   static const IconData Back = IconData(0xe901, fontFamily: _fontNavFamily);
   static const IconData CheckboxActive = IconData(0xe902, fontFamily: _fontNavFamily);
-  static const IconData CheckIboxnactive = IconData(0xe903, fontFamily: _fontNavFamily);
+  static const IconData CheckboxInactive = IconData(0xe903, fontFamily: _fontNavFamily);
   static const IconData Copy = IconData(0xe904, fontFamily: _fontNavFamily);
   static const IconData Down = IconData(0xe905, fontFamily: _fontNavFamily);
   static const IconData Edit = IconData(0xe906, fontFamily: _fontNavFamily);
