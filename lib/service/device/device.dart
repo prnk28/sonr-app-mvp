@@ -4,7 +4,6 @@ import 'mobile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
@@ -15,6 +14,7 @@ class DeviceService extends GetxService {
 
   // Properties
   final _device = Device().obs;
+  final _internetStatus = InternetStatus.NONE.obs;
 
   // Platform Checkers
   static bool get isDesktop => to._device.value.platform.isDesktop;
@@ -29,6 +29,9 @@ class DeviceService extends GetxService {
   static Platform get platform => to._device.value.platform;
   static Device get device => to._device.value;
 
+  // References
+  late InternetController _netController;
+
   // Connection Requirements
   static bool get isReadyToConnect {
     if (isMobile) {
@@ -40,9 +43,11 @@ class DeviceService extends GetxService {
 
   // * Device Service Initialization * //
   Future<DeviceService> init() async {
-    // Get Info
+    // Set Properties
     var platform = PlatformUtils.find();
     var directories = await Request.getDirectories(platform);
+    _netController = await InternetController.init(platform);
+    _internetStatus.bindStream(_netController.status());
 
     // Initialize Device
     _device.update((val) async {
@@ -75,7 +80,7 @@ class DeviceService extends GetxService {
     // # Check Platform
     if (platform.isMobile && MobileService.isRegistered) {
       // Check for Mobile Data
-      if (MobileService.connectivity.value == ConnectivityResult.mobile) {
+      if (to._internetStatus.value.isMobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
 
