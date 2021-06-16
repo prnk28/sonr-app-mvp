@@ -31,13 +31,11 @@ class ActivityController extends GetxController {
   /// Clear All Activity from Table
   Future<void> clearAllActivity() async {
     if (activityLength > 0) {
-      // var decision = await AppRoute.question(
-      //     title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
-      // if (decision) {
-      //   CardService.clearAllActivity();
-      // }
-
-      AppRoute.positioned(Text("text"), parentKey: clearButtonKey);
+      var decision =
+          await AppRoute.question(title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
+      if (decision) {
+        CardService.clearAllActivity();
+      }
     }
   }
 

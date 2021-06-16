@@ -393,7 +393,7 @@ class SonrIcons {
   static const IconData Arroba = IconData(0xe900, fontFamily: _fontNavFamily);
   static const IconData Back = IconData(0xe901, fontFamily: _fontNavFamily);
   static const IconData CheckboxActive = IconData(0xe902, fontFamily: _fontNavFamily);
-  static const IconData CheckIboxnactive = IconData(0xe903, fontFamily: _fontNavFamily);
+  static const IconData CheckboxInactive = IconData(0xe903, fontFamily: _fontNavFamily);
   static const IconData Copy = IconData(0xe904, fontFamily: _fontNavFamily);
   static const IconData Down = IconData(0xe905, fontFamily: _fontNavFamily);
   static const IconData Edit = IconData(0xe906, fontFamily: _fontNavFamily);

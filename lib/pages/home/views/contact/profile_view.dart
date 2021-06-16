@@ -77,11 +77,11 @@ class _ProfileInfoView extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // First/Last Name
-          UserService.contact.value.fullName.subheading(color: SonrTheme.textColor),
+          UserService.contact.value.fullName.subheading(color: SonrTheme.itemColor),
 
           // Username
           [
-            "${UserService.contact.value.sName}".light(color: SonrTheme.textColor),
+            "${UserService.contact.value.sName}".light(color: SonrTheme.itemColor),
             ".snr/".light(color: SonrTheme.greyColor),
             Spacer(),
             _ProfileContactButtons(),

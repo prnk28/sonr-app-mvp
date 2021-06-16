@@ -22,6 +22,7 @@ class TransferController extends GetxController {
   late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
   late StreamSubscription<Payload> _payloadStream;
+  final localArrowButtonKey = GlobalKey();
   ScrollController scrollController = ScrollController();
 
   /// @ Controller Constructer
@@ -49,6 +50,21 @@ class TransferController extends GetxController {
   void closeToHome() {
     TransferService.resetPayload();
     AppPage.Home.off();
+  }
+
+  void onLocalArrowPressed() {
+    AppRoute.positioned(
+      Checklist(
+          options: [
+            ChecklistOption("Hello 1", false.obs),
+            ChecklistOption("Hello 2", false.obs),
+          ],
+          onSelectedOption: (index) {
+            print(index);
+          }),
+      offset: Offset(-80, -10),
+      parentKey: localArrowButtonKey,
+    );
   }
 
   /// @ User is Facing or No longer Facing a Peer

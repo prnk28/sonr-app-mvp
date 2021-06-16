@@ -40,7 +40,7 @@ class PostFileItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  item.payload.toString().capitalizeFirst!.subheading(color: SonrTheme.textColor, fontSize: 20),
+                  item.payload.toString().capitalizeFirst!.subheading(color: SonrTheme.itemColor, fontSize: 20),
                   item.received.toString().subheading(color: SonrTheme.greyColor, fontSize: 16),
                 ],
               ),

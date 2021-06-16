@@ -240,7 +240,10 @@ class SonrTheme {
   static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
-  static Color get textColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+  static Color get itemColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Returns Current Text Color
+  static Color get itemColorInversed => UserService.isDarkMode ? SonrColor.Black : SonrColor.White;
 
   /// Return Current Box Shadow
   static List<BoxShadow> get boxShadow => UserService.isDarkMode

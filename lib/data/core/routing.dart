@@ -242,15 +242,21 @@ extension AppRoute on AppPage {
     Widget child, {
     required GlobalKey parentKey,
     bool ignoreSafeArea = false,
+    Offset? offset,
   }) async {
     final RxBool hasDismissed = false.obs;
     Get.dialog(
       BlurredBackground(
           onTapped: () {
             hasDismissed(true);
-            Future.delayed(250.milliseconds, () => Get.back());
+            Future.delayed(300.milliseconds, () => Get.back());
           },
-          child: PositionedOverlay(parentKey: parentKey, hasDismissed: hasDismissed, child: child)),
+          child: PositionedOverlay(
+            parentKey: parentKey,
+            hasDismissed: hasDismissed,
+            child: child,
+            offset: offset,
+          )),
       transitionDuration: 0.seconds,
       barrierDismissible: false,
       barrierColor: Colors.transparent,

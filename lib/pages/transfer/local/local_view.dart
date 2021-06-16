@@ -7,28 +7,16 @@ import '../transfer_controller.dart';
 class LocalView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    final GlobalKey arrowButtonKey = GlobalKey();
     return Column(
       children: [
         // Label
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            "Local".section(align: TextAlign.start, color: SonrTheme.textColor),
+            "Local".section(align: TextAlign.start, color: SonrTheme.itemColor),
             ArrowButton(
-              key: arrowButtonKey,
-              onPressed: () {
-                AppRoute.positioned(
-                    Checklist(
-                        options: [
-                          ChecklistOption("Hello 1", false.obs),
-                          ChecklistOption("Hello 2", false.obs),
-                        ],
-                        onSelectedOption: (index) {
-                          print(index);
-                        }),
-                    parentKey: arrowButtonKey);
-              },
+              key: controller.localArrowButtonKey,
+              onPressed: () => controller.onLocalArrowPressed(),
               title: 'CARDS',
             )
           ]),

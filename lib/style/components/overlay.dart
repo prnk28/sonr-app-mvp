@@ -52,9 +52,10 @@ class PositionedOverlay extends StatelessWidget {
   final GlobalKey parentKey;
   final Widget child;
   final RxBool hasDismissed;
+  final Offset? offset;
 
   // Constructer
-  PositionedOverlay({required this.parentKey, required this.child, required this.hasDismissed});
+  PositionedOverlay({required this.parentKey, required this.child, required this.hasDismissed, this.offset});
 
   @override
   Widget build(BuildContext context) {
@@ -62,34 +63,34 @@ class PositionedOverlay extends StatelessWidget {
     Offset offset = renderBox.localToGlobal(Offset.zero);
     Logger.info(offset.toString());
     return Obx(() => Container(
-      width: Get.width,
-      height: Get.height,
-      child: Stack(children: [
-        Positioned(
-          top: _calculateTop(offset),
-          right: _calculateRight(offset),
-          left: _calculateLeft(offset),
-          bottom: _calculateBottom(offset),
-          child: Container(
-              constraints: BoxConstraints(maxWidth: PositionedOverlay.MAX_WIDTH, maxHeight: PositionedOverlay.MAX_HEIGHT),
-              child: AnimatedBounce(
-                  direction: BounceDirectionUtils.fromOffset(
-                    top: _calculateTop(offset),
-                    right: _calculateRight(offset),
-                    left: _calculateLeft(offset),
-                    bottom: _calculateBottom(offset),
-                  ),
-                  isDisplayed: !hasDismissed.value,
-                  child: child)),
-        )
-      ]),
-    ));
+          width: Get.width,
+          height: Get.height,
+          child: Stack(children: [
+            Positioned(
+              top: _calculateTop(offset),
+              right: _calculateRight(offset),
+              left: _calculateLeft(offset),
+              bottom: _calculateBottom(offset),
+              child: Container(
+                  constraints: BoxConstraints(maxWidth: PositionedOverlay.MAX_WIDTH, maxHeight: PositionedOverlay.MAX_HEIGHT),
+                  child: AnimatedBounce(
+                      direction: BounceDirectionUtils.fromOffset(
+                        top: _calculateTop(offset),
+                        right: _calculateRight(offset),
+                        left: _calculateLeft(offset),
+                        bottom: _calculateBottom(offset),
+                      ),
+                      isDisplayed: !hasDismissed.value,
+                      child: child)),
+            )
+          ]),
+        ));
   }
 
   /// Calculates Top Position for Widget
   double? _calculateTop(Offset parentOffset) {
     if (parentOffset.dy + PositionedOverlay.MAX_HEIGHT < Height.full) {
-      return parentOffset.dy + 24;
+      return offset != null ? parentOffset.dy + offset!.dy : parentOffset.dy + 24;
     } else {
       return null;
     }
@@ -98,7 +99,7 @@ class PositionedOverlay extends StatelessWidget {
   /// Calculates Left Position for Widget
   double? _calculateLeft(Offset parentOffset) {
     if (parentOffset.dx + PositionedOverlay.MAX_WIDTH < Width.full) {
-      return parentOffset.dx;
+      return offset != null ? offset!.dx + parentOffset.dx : parentOffset.dx;
     } else {
       return null;
     }
@@ -107,7 +108,7 @@ class PositionedOverlay extends StatelessWidget {
   /// Calculates Right Position for Widget
   double? _calculateRight(Offset parentOffset) {
     if (parentOffset.dx + PositionedOverlay.MAX_WIDTH > Width.full) {
-      return Width.full - parentOffset.dx;
+      return offset != null ? offset!.dx + Width.full - parentOffset.dx : Width.full - parentOffset.dx;
     } else {
       return null;
     }
@@ -116,7 +117,7 @@ class PositionedOverlay extends StatelessWidget {
   /// Calculates Bottom Position for Widget
   double? _calculateBottom(Offset parentOffset) {
     if (parentOffset.dy + PositionedOverlay.MAX_HEIGHT > Height.full) {
-      return Height.full - parentOffset.dy + 24;
+      return offset != null ? Height.full - parentOffset.dy - 24 + offset!.dy : Height.full - parentOffset.dy - 24;
     } else {
       return null;
     }

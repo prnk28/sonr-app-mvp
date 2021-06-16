@@ -35,7 +35,7 @@ class ArrowButton extends StatelessWidget {
                       title.toUpperCase().light(fontSize: 20),
                       Padding(
                         padding: const EdgeInsets.only(top: 6.0, left: 4),
-                        child: SonrIcons.Down.icon(size: 16, color: SonrTheme.textColor),
+                        child: SonrIcons.Down.icon(size: 16, color: SonrTheme.itemColor),
                       ),
                     ],
                   ),

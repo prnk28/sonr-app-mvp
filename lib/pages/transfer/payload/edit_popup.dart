@@ -44,11 +44,11 @@ class _EditPayloadPopupInfo extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettyName().subheading(color: SonrTheme.textColor),
+            child: TransferService.file.value.prettyName().subheading(color: SonrTheme.itemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: TransferService.file.value.prettySize().light(color: SonrTheme.textColor),
+            child: TransferService.file.value.prettySize().light(color: SonrTheme.itemColor),
           )
         ],
       ),
