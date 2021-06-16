@@ -17,6 +17,8 @@ class TransferController extends GetxController {
   // @ View Properties
   final directionTitle = "".obs;
   final cardinalTitle = "".obs;
+  final phonesEnabled = true.obs;
+  final desktopsEnabled = true.obs;
 
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
@@ -56,8 +58,8 @@ class TransferController extends GetxController {
     AppRoute.positioned(
       Checklist(
           options: [
-            ChecklistOption("Hello 1", false.obs),
-            ChecklistOption("Hello 2", false.obs),
+            ChecklistOption("Phones", phonesEnabled),
+            ChecklistOption("Desktops", desktopsEnabled),
           ],
           onSelectedOption: (index) {
             print(index);

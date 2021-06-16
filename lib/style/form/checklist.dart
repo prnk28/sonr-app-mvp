@@ -73,10 +73,10 @@ class Checklist extends StatelessWidget {
                 constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
                 child: Column(children: [
                   Padding(padding: EdgeWith.top(4)),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     options[index].icon(),
                     Padding(
-                      padding: const EdgeInsets.only(right: 4.0),
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: options[index].text(),
                     ),
                   ]),

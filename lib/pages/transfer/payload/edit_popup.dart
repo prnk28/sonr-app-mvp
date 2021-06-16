@@ -15,7 +15,7 @@ class EditPayloadPopup extends StatelessWidget {
         width: Get.width,
         padding: EdgeInsets.only(left: 8, right: 8),
         height: 460,
-        margin: EdgeInsets.only(left: 10, right: 10, top: 24),
+        margin: EdgeInsets.only(left: 24, right: 24, top: 24),
         child: Column(
           children: [
             Container(

@@ -91,7 +91,13 @@ class _PeerMainCard extends StatelessWidget {
           // Avatar
           Obx(() => Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: ProfileAvatar.fromPeer(controller.peer.value, size: 72),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: SonrTheme.foregroundColor.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  child: ProfileAvatar.fromPeer(controller.peer.value, size: 72),
+                ),
               )),
 
           Spacer(),
