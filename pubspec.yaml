@@ -54,9 +54,10 @@ dependencies:
   logger: ^1.0.0
 
   # -- Device --
-  camerawesome: ^0.3.0-nullsafety
+  camerawesome: ^0.3.0+1
   connectivity: ^3.0.6
-  flutter_compass: ^0.6.0
+  data_connection_checker: ^0.2.1
+  flutter_compass: ^0.6.1
   flutter_keyboard_visibility: ^5.0.2
   geolocator: ^7.0.3
   motion_sensors: ^0.1.0
