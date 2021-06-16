@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/style.dart';
 import '../../env.dart';
 import 'mobile.dart';
@@ -14,7 +15,7 @@ class DeviceService extends GetxService {
 
   // Properties
   final _device = Device().obs;
-  final _internetStatus = InternetStatus.NONE.obs;
+  final _location = Location().obs;
 
   // Platform Checkers
   static bool get isDesktop => to._device.value.platform.isDesktop;
@@ -28,9 +29,7 @@ class DeviceService extends GetxService {
   // Property Accessors
   static Platform get platform => to._device.value.platform;
   static Device get device => to._device.value;
-
-  // References
-  late InternetController _netController;
+  static Location get location => to._location.value;
 
   // Connection Requirements
   static bool get isReadyToConnect {
@@ -46,8 +45,6 @@ class DeviceService extends GetxService {
     // Set Properties
     var platform = PlatformUtils.find();
     var directories = await Request.getDirectories(platform);
-    _netController = await InternetController.init(platform);
-    _internetStatus.bindStream(_netController.status());
 
     // Initialize Device
     _device.update((val) async {
@@ -75,12 +72,16 @@ class DeviceService extends GetxService {
     }
   }
 
-  /// @ Retreive Location by IP Address or GPS based on Connectivity
-  static Future<Location> get location async {
+  /// @ Retreive Location by IP Address
+  static Future<Location> findLocation(Platform platform) async {
     // # Check Platform
-    if (platform.isMobile && MobileService.isRegistered) {
+    if (platform.isMobile) {
+      // Find Connectivity
+      Connectivity _connectivity = Connectivity();
+      var result = await _connectivity.checkConnectivity();
+
       // Check for Mobile Data
-      if (to._internetStatus.value.isMobile) {
+      if (result == ConnectivityResult.mobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
 
