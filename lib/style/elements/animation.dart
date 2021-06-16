@@ -48,26 +48,28 @@ class _AnimatedBounce extends State<AnimatedBounce> {
 }
 
 /// @ Animated Down Big/ Up Big
-class AnimatedDownBig extends StatefulWidget {
+class AnimatedBig extends StatefulWidget {
   final Widget child;
-  final bool isDown;
+  final bool isDisplayed;
+  final BigDirection direction;
 
-  const AnimatedDownBig({
+  const AnimatedBig({
     required this.child,
-    required this.isDown,
+    required this.isDisplayed,
+    required this.direction,
   });
 
   @override
-  _AnimatedDownBigState createState() => _AnimatedDownBigState();
+  _AnimatedBigState createState() => _AnimatedBigState();
 }
 
-class _AnimatedDownBigState extends State<AnimatedDownBig> {
+class _AnimatedBigState extends State<AnimatedBig> {
   bool oldIsDown = true;
 
   @override
-  void didUpdateWidget(AnimatedDownBig oldWidget) {
-    if (oldWidget.isDown != widget.isDown) {
-      oldIsDown = oldWidget.isDown;
+  void didUpdateWidget(AnimatedBig oldWidget) {
+    if (oldWidget.isDisplayed != widget.isDisplayed) {
+      oldIsDown = oldWidget.isDisplayed;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -79,18 +81,11 @@ class _AnimatedDownBigState extends State<AnimatedDownBig> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isDown
-        ? FadeInDownBig(
-            animate: true,
-            from: 200,
-            delay: 250.milliseconds,
-            duration: 350.milliseconds,
+    return widget.isDisplayed
+        ? widget.direction.inAnimation(
             child: widget.child,
           )
-        : FadeOutUpBig(
-            animate: true,
-            from: 200,
-            duration: 200.milliseconds,
+        : widget.direction.outAnimation(
             child: widget.child,
           );
   }

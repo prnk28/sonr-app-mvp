@@ -13,8 +13,9 @@ class AlertOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
-        (hasDecided) => AnimatedDownBig(
-              isDown: !hasDecided.value,
+        (hasDecided) => AnimatedBig(
+              isDisplayed: !hasDecided.value,
+              direction: BigDirection.Up,
               child: BoxContainer(
                 padding: EdgeInsets.symmetric(vertical: 24),
                 margin: EdgeInsets.symmetric(horizontal: 16, vertical: 256),
@@ -144,8 +145,9 @@ class QuestionOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
-        (hasDecided) => AnimatedDownBig(
-              isDown: !hasDecided.value,
+        (hasDecided) => AnimatedBig(
+              direction: BigDirection.Down,
+              isDisplayed: !hasDecided.value,
               child: BoxContainer(
                 padding: EdgeInsets.symmetric(vertical: 24),
                 margin: EdgeInsets.symmetric(horizontal: 16, vertical: 256),

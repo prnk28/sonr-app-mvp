@@ -98,3 +98,64 @@ extension BounceDirectionUtils on BounceDirection {
     }
   }
 }
+
+/// Animated Fade Big Direction
+enum BigDirection { Up, Down }
+
+extension BigDirectionUtils on BigDirection {
+  /// Checks if Direction is `Up`
+  bool get isTop => this == BigDirection.Up;
+
+  /// Checks if Direction is `Down`
+  bool get isDown => this == BigDirection.Down;
+
+  /// Returns In Animation for Widget based On Direction
+  Widget inAnimation({required Widget child}) {
+    // Initialize Parameters
+    final duration = 350.milliseconds;
+    final delay = 200.milliseconds;
+
+    // Return Widget
+    switch (this) {
+      case BigDirection.Up:
+        return FadeInUpBig(
+          animate: true,
+          from: 200,
+          delay: delay,
+          duration: duration,
+          child: child,
+        );
+      case BigDirection.Down:
+        return FadeInDownBig(
+          animate: true,
+          from: 200,
+          delay: delay,
+          duration: duration,
+          child: child,
+        );
+    }
+  }
+
+  /// Returns Out Animation for Widget based On Direction
+  Widget outAnimation({required Widget child}) {
+    // Initialize Parameters
+    final duration = 200.milliseconds;
+    final animate = true;
+
+    // Return Widget
+    switch (this) {
+      case BigDirection.Up:
+        return FadeOutDown(
+          child: child,
+          animate: animate,
+          duration: duration,
+        );
+      case BigDirection.Down:
+        return FadeOutUp(
+          child: child,
+          animate: animate,
+          duration: duration,
+        );
+    }
+  }
+}
