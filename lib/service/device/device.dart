@@ -1,10 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:sonr_app/style.dart';
 import '../../env.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
@@ -16,8 +16,10 @@ class DeviceService extends GetxService {
   // Properties
   final _device = Device().obs;
   final _location = Location().obs;
+  final _connectivity = ConnectivityResult.none.obs;
 
   // Platform Checkers
+  static bool get hasInternet => to._connectivity.value != ConnectivityResult.none;
   static bool get isDesktop => to._device.value.platform.isDesktop;
   static bool get isMobile => to._device.value.platform.isMobile;
   static bool get isAndroid => to._device.value.platform.isAndroid;
@@ -42,9 +44,10 @@ class DeviceService extends GetxService {
 
   // * Device Service Initialization * //
   Future<DeviceService> init() async {
-    // Get Info
+    // Set Properties
     var platform = PlatformUtils.find();
     var directories = await Request.getDirectories(platform);
+    _connectivity.bindStream(Connectivity().onConnectivityChanged);
 
     // Initialize Device
     _device.update((val) async {
@@ -62,9 +65,6 @@ class DeviceService extends GetxService {
         }
       }
     });
-
-    // Set Location
-    _location(await findLocation(platform));
     return this;
   }
 
@@ -79,12 +79,8 @@ class DeviceService extends GetxService {
   static Future<Location> findLocation(Platform platform) async {
     // # Check Platform
     if (platform.isMobile) {
-      // Find Connectivity
-      Connectivity _connectivity = Connectivity();
-      var result = await _connectivity.checkConnectivity();
-
       // Check for Mobile Data
-      if (result == ConnectivityResult.mobile) {
+      if (to._connectivity.value == ConnectivityResult.mobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
 

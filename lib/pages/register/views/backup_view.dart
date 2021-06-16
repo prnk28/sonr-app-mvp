@@ -6,7 +6,6 @@ class BackupCodeView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-      gradient: SonrGradients.SeaShore,
       body: Container(
         padding: EdgeInsets.all(16),
         width: Get.width,

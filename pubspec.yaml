@@ -54,9 +54,9 @@ dependencies:
   logger: ^1.0.0
 
   # -- Device --
-  camerawesome: ^0.3.0-nullsafety
-  connectivity: ^3.0.6
-  flutter_compass: ^0.6.0
+  camerawesome: ^0.3.0+1
+  connectivity_plus: ^1.0.3
+  flutter_compass: ^0.6.1
   flutter_keyboard_visibility: ^5.0.2
   geolocator: ^7.0.3
   motion_sensors: ^0.1.0
@@ -87,9 +87,8 @@ dependencies:
 
   # -- Plugins --
   sonr_plugin:
-    #git:
-    #  url: git@github.com:sonr-io/plugin.git
-    path: ../plugin/ #-- Uncomment for Local Development
+    git: git@github.com:sonr-io/plugin.git
+    #path: ../plugin/ #-- Uncomment for Local Development
 
   # -- UI/UX --
   animate_do: ^2.0.0

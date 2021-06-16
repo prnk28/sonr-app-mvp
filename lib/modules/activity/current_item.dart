@@ -56,7 +56,6 @@ class _CurrentActivityPeer extends GetView<ActivityController> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      clipBehavior: Clip.none,
       children: [
         ProfileAvatar(profile: profile, size: 52),
         Padding(

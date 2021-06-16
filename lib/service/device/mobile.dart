@@ -64,6 +64,8 @@ class MobileService extends GetxService {
   late StreamSubscription<CompassEvent> _compassStream;
   late StreamSubscription<OrientationEvent> _orienStream;
 
+  // References
+
   MobileService() {
     Timer.periodic(250.milliseconds, (timer) {
       if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {

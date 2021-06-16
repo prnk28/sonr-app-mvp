@@ -110,7 +110,7 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Hero, align, color, fontSize, fontStyle);
 
-  /// Heading - Default Size = 32
+  /// Heading - Default Size = 32, FontWeight.w700
   DisplayText heading({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -119,7 +119,7 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Heading, align, color, fontSize, fontStyle);
 
-  /// Heading **Span** - Default Size = 32
+  /// Heading **Span** - Default Size = 32, FontWeight.w700
   TextSpan headingSpan({
     Color color = SonrColor.Black,
     FontStyle fontStyle = FontStyle.normal,
@@ -130,7 +130,7 @@ extension DisplayTextUtils on String {
         style: DisplayTextStyle.Heading.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
       );
 
-  /// Subheading - Default Size = 26
+  /// Subheading - Default Size = 26, FontWeight.w500
   DisplayText subheading({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -139,7 +139,7 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Subheading, align, color, fontSize, fontStyle);
 
-  /// Subheading **Span** - Default Size = 26
+  /// Subheading **Span** - Default Size = 26, FontWeight.w500
   TextSpan subheadingSpan({
     Color color = SonrColor.Black,
     FontStyle fontStyle = FontStyle.normal,
@@ -150,7 +150,7 @@ extension DisplayTextUtils on String {
         style: DisplayTextStyle.Subheading.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
       );
 
-  /// Section - Default Size = 20
+  /// Section - Default Size = 20, FontWeight.w700
   DisplayText section({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -159,7 +159,7 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Section, align, color, fontSize, fontStyle);
 
-  /// Section **Span** - Default Size = 20
+  /// Section **Span** - Default Size = 20, FontWeight.w700
   TextSpan sectionSpan({
     Color color = SonrColor.Black,
     FontStyle fontStyle = FontStyle.normal,
