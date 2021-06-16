@@ -3,7 +3,98 @@ import '../../style.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
-enum RiveBoard { SplashPortrait, SplashLandscape, Documents }
+/// @ Animated Down Big/ Up Big
+class AnimatedBounce extends StatefulWidget {
+  final Widget child;
+  final bool isDisplayed;
+  final BounceDirection direction;
+
+  const AnimatedBounce({
+    required this.child,
+    required this.isDisplayed,
+    required this.direction,
+  });
+
+  @override
+  _AnimatedBounce createState() => _AnimatedBounce();
+}
+
+class _AnimatedBounce extends State<AnimatedBounce> {
+  bool oldIsDisplayed = true;
+
+  @override
+  void didUpdateWidget(AnimatedBounce oldWidget) {
+    if (oldWidget.isDisplayed != widget.isDisplayed) {
+      oldIsDisplayed = oldWidget.isDisplayed;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.isDisplayed
+        ? widget.direction.inAnimation(
+            child: widget.child,
+          )
+        : widget.direction.outAnimation(
+            child: widget.child,
+          );
+  }
+}
+
+/// @ Animated Down Big/ Up Big
+class AnimatedDownBig extends StatefulWidget {
+  final Widget child;
+  final bool isDown;
+
+  const AnimatedDownBig({
+    required this.child,
+    required this.isDown,
+  });
+
+  @override
+  _AnimatedDownBigState createState() => _AnimatedDownBigState();
+}
+
+class _AnimatedDownBigState extends State<AnimatedDownBig> {
+  bool oldIsDown = true;
+
+  @override
+  void didUpdateWidget(AnimatedDownBig oldWidget) {
+    if (oldWidget.isDown != widget.isDown) {
+      oldIsDown = oldWidget.isDown;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.isDown
+        ? FadeInDownBig(
+            animate: true,
+            from: 200,
+            delay: 250.milliseconds,
+            duration: 350.milliseconds,
+            child: widget.child,
+          )
+        : FadeOutUpBig(
+            animate: true,
+            from: 200,
+            duration: 200.milliseconds,
+            child: widget.child,
+          );
+  }
+}
 
 /// @ Animated Scale
 class AnimatedScale extends StatefulWidget {

@@ -44,78 +44,6 @@ class SonrOverlay extends GetxService {
     return _controller.overlays.indexOf(overlay);
   }
 
-  /// @ Method Finds Overlay Controller and Prompts Question
-  static Future<bool> question(
-      {required String title,
-      required String description,
-      String acceptTitle = "Yes!",
-      String declineTitle = "No",
-      bool barrierDismissible = true,
-      bool closeOnResponse = true,
-      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Offset entryLocation = SonrOffset.Top,
-      Duration entryDuration = const Duration(milliseconds: 300)}) {
-    // Create Future Completer
-    var completer = Completer<bool>();
-
-    // Create Overlay
-    var questionOverlay = _SonrFixedOverlayEntry(
-        entryLocation,
-        entryDuration,
-        barrierDismissible,
-        QuestionOverlayView(
-          count,
-          title,
-          description,
-          (result) {
-            completer.complete(result);
-          },
-          acceptTitle,
-          declineTitle,
-          closeOnResponse,
-        ));
-
-    // Add Overlay to List
-    _controller.currentOverlay(questionOverlay);
-    _controller.overlays.add(questionOverlay);
-    return completer.future;
-  }
-
-  /// @ Method Finds Overlay Controller and Prompts Alert
-  static Future<bool> alert(
-      {required String title,
-      required String description,
-      String buttonText = "Okay",
-      bool barrierDismissible = true,
-      bool closeOnResponse = true,
-      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Offset entryLocation = SonrOffset.Top,
-      Duration entryDuration = const Duration(milliseconds: 300)}) {
-    // Create Future Completer
-    var completer = Completer();
-
-    // Create Overlay
-    var alertOverlay = _SonrFixedOverlayEntry(
-        entryLocation,
-        entryDuration,
-        barrierDismissible,
-        AlertOverlayView(
-          count,
-          title,
-          description,
-          buttonText,
-          closeOnResponse,
-          () {
-            completer.complete();
-          },
-        ));
-
-    // Add Overlay to List
-    _controller.currentOverlay(alertOverlay);
-    _controller.overlays.add(alertOverlay);
-    return completer.future as Future<bool>;
-  }
-
   /// @ Method Pops Current Overlay
   static void back() {
     if (isOpen) {
@@ -184,8 +112,7 @@ class _SonrFixedOverlayEntry {
     };
     overlayBackground = OverlayEntry(builder: (context) {
       return Positioned.fill(
-        child: Container(
-          color: backgroundColor ?? Colors.transparent,
+        child: BlurredBackground(
           child: GestureDetector(
             onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
           ),

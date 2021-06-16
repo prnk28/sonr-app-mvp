@@ -1,20 +1,37 @@
 import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/buttons/arrow.dart';
 import '../transfer_controller.dart';
 
 class LocalView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
+    final GlobalKey arrowButtonKey = GlobalKey();
     return Column(
       children: [
         // Label
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24.0),
-            child: "Local".section(align: TextAlign.start, color: SonrTheme.textColor),
-          ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            "Local".section(align: TextAlign.start, color: SonrTheme.textColor),
+            ArrowButton(
+              key: arrowButtonKey,
+              onPressed: () {
+                AppRoute.positioned(
+                    Checklist(
+                        options: [
+                          ChecklistOption("Hello 1", false.obs),
+                          ChecklistOption("Hello 2", false.obs),
+                        ],
+                        onSelectedOption: (index) {
+                          print(index);
+                        }),
+                    parentKey: arrowButtonKey);
+              },
+              title: 'CARDS',
+            )
+          ]),
         ),
         Padding(padding: EdgeInsets.only(top: 4)),
 

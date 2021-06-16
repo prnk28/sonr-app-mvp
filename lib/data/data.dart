@@ -11,6 +11,7 @@ export 'database/database.dart';
 export 'database/service.dart';
 
 // Models
+export 'model/model_anim.dart';
 export 'model/model_state.dart';
 export 'model/model_meta.dart';
 export 'model/model_cards.dart';

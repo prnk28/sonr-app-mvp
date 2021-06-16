@@ -1,13 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
-import 'controllers/fixed_overlay.dart';
 import 'views/positioned_overlay.dart';
 export 'controllers/fixed_overlay.dart';
 export 'controllers/flat_overlay.dart';
 export 'views/positioned_overlay.dart';
-export 'views/progress_overlay.dart';
 
 /// @ Class Builds Base Animated Overlay View ** //
 class BaseOverlayView extends StatefulWidget {
@@ -47,56 +44,6 @@ class _BaseOverlayViewState extends State<BaseOverlayView> with TickerProviderSt
                   child: widget.child,
                 ),
         ));
-  }
-}
-
-/// @ Class Builds Alert View Widget for Overlay ** //
-class AlertOverlayView extends StatelessWidget {
-  final int index; // Index of Overlay
-  final String title;
-  final String description;
-  final String buttonText;
-  final bool closeOnResponse;
-  final Function onPressed;
-
-  // Constructer
-  AlertOverlayView(this.index, this.title, this.description, this.buttonText, this.closeOnResponse, this.onPressed);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: BoxContainer(
-        // backendColor: Colors.transparent,
-        margin: EdgeInsets.all(30),
-        // borderRadius: BorderRadius.circular(20),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          title.heading(),
-          Padding(
-            padding: EdgeInsets.only(left: 10.0),
-            child: description.paragraph(),
-          ),
-          Padding(padding: EdgeInsets.all(4)),
-          Divider(),
-          Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            // Accept Button
-            Container(
-              width: Get.width / 3,
-              child: ColorButton.primary(
-                onPressed: () {
-                  onPressed();
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                icon: SonrIcons.Check,
-                text: buttonText,
-              ),
-            ),
-          ]),
-        ]),
-      ),
-    );
   }
 }
 
@@ -146,7 +93,7 @@ class DropdownOverlayView extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       onChanged(index);
-                      SonrPositionedOverlay.back();
+                      PosOverlay.back();
                     },
                     child: Container(
                       padding: EdgeInsets.all(8),
@@ -160,65 +107,5 @@ class DropdownOverlayView extends StatelessWidget {
         ),
       )
     ]);
-  }
-}
-
-/// @ Class Builds Question View Widget for Overlay ** //
-class QuestionOverlayView extends GetView<SonrOverlay> {
-  final int index; // Index of Overlay
-  final String title;
-  final String description;
-  final Function(bool) onDecision;
-  final String acceptTitle;
-  final String declineTitle;
-  final bool closeOnResponse;
-
-  // Constructer
-  QuestionOverlayView(this.index, this.title, this.description, this.onDecision, this.acceptTitle, this.declineTitle, this.closeOnResponse);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: BoxContainer(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        margin: EdgeInsets.symmetric(horizontal: 16),
-        child: Container(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            title.heading(),
-            Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: description.paragraph(color: Get.theme.focusColor),
-            ),
-            Padding(padding: EdgeInsets.all(4)),
-            Divider(),
-            Padding(padding: EdgeInsets.all(4)),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              // Decline Button
-              ColorButton.neutral(
-                onPressed: () {
-                  onDecision(false);
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                text: declineTitle,
-              ),
-              // Accept Button
-              ColorButton.primary(
-                onPressed: () {
-                  onDecision(true);
-                  if (closeOnResponse) {
-                    SonrOverlay.back();
-                  }
-                },
-                icon: SonrIcons.Check,
-                text: acceptTitle,
-              ),
-            ]),
-          ]),
-        ),
-      ),
-    );
   }
 }

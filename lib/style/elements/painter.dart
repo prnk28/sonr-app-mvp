@@ -25,14 +25,44 @@ class ArrowClipper extends CustomClipper<Path> {
 /// @ Blurred Background Painter
 class BlurredBackground extends StatelessWidget {
   final Widget child;
+  final Function? onTapped;
+  const BlurredBackground({Key? key, required this.child, this.onTapped}) : super(key: key);
 
-  const BlurredBackground({Key? key, required this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-      child: Container(
-        child: child,
+    // Display Filter
+    return SafeArea(
+      top: false,
+      right: false,
+      bottom: false,
+      left: false,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned.fill(
+              child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: FadeIn(
+              duration: 200.milliseconds,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  if (onTapped != null) {
+                    onTapped!();
+                  }
+                },
+                child: Container(
+                  width: Width.full,
+                  height: Height.full,
+                ),
+              ),
+            ),
+          )),
+          Material(
+            type: MaterialType.transparency,
+            child: child,
+          ),
+        ],
       ),
     );
   }

@@ -69,8 +69,8 @@ class EditorController extends GetxController {
   setPointShare(bool val) {
     if (val) {
       // Overlay Prompt
-      SonrOverlay.question(
-              barrierDismissible: false,
+      AppRoute.question(
+              dismissible: false,
               title: "Wait!",
               description: "Point To Share is still experimental, performance may not be stable. \n Do you still want to continue?",
               acceptTitle: "Continue",

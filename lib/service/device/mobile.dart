@@ -248,7 +248,7 @@ class MobileService extends GetxService {
   Future<bool> requestCamera() async {
     if (DeviceService.isMobile) {
       // Present Overlay
-      if (await SonrOverlay.question(
+      if (await AppRoute.question(
           title: 'Requires Permission',
           description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
           acceptTitle: "Allow",
@@ -276,7 +276,7 @@ class MobileService extends GetxService {
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     if (DeviceService.isMobile) {
       // Present Overlay
-      if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
+      if (await AppRoute.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
         if (DeviceService.isAndroid) {
           if (await Permission.storage.request().isGranted) {
             updatePermissionsStatus();
@@ -316,7 +316,7 @@ class MobileService extends GetxService {
   Future<bool> requestLocation() async {
     if (DeviceService.isMobile) {
       // Present Overlay
-      if (await SonrOverlay.question(
+      if (await AppRoute.question(
           title: 'Location',
           description: 'Sonr requires location in order to find devices in your area.',
           acceptTitle: "Allow",
@@ -346,7 +346,7 @@ class MobileService extends GetxService {
   Future<bool> requestMicrophone() async {
     if (DeviceService.isMobile) {
       // Present Overlay
-      if (await SonrOverlay.question(
+      if (await AppRoute.question(
           title: 'Microphone',
           description: 'Sonr uses your microphone in order to communicate with other devices.',
           acceptTitle: "Allow",
@@ -376,7 +376,7 @@ class MobileService extends GetxService {
   Future<bool> requestNotifications() async {
     // Present Overlay
     if (DeviceService.isMobile) {
-      if (await SonrOverlay.question(
+      if (await AppRoute.question(
           title: 'Requires Permission',
           description: 'Sonr would like to send you Notifications for Transfer Invites.',
           acceptTitle: "Allow",
@@ -399,15 +399,14 @@ class MobileService extends GetxService {
   /// @ Trigger iOS Local Network with Alert
   Future triggerNetwork() async {
     if (!_hasLocalNetwork.value && DeviceService.isIOS) {
-      await SonrOverlay.alert(
+      await AppRoute.alert(
           title: 'Requires Permission',
           description: 'Sonr requires local network permissions in order to maximize transfer speed.',
-          buttonText: "Continue",
-          barrierDismissible: false);
+          buttonText: "Grant",
+          dismissible: false);
 
       SonrService.to.node.requestLocalNetwork();
       updatePermissionsStatus();
-      SonrOverlay.back();
     }
     return true;
   }

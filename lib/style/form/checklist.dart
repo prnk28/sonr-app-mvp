@@ -12,10 +12,10 @@ class ChecklistOption {
 }
 
 /// Form Field to Display List of Strings as Gradient Tab View
-class ChecklistColumn extends StatelessWidget {
+class Checklist extends StatelessWidget {
   final List<ChecklistOption> options;
   final Function(int idx) onSelectedOption;
-  const ChecklistColumn({Key? key, required this.options, required this.onSelectedOption}) : super(key: key);
+  const Checklist({Key? key, required this.options, required this.onSelectedOption}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxInt>(

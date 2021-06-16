@@ -104,7 +104,7 @@ class AppServices {
 
     // Fourth: UI Services
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-    await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
+    await Get.putAsync(() => PosOverlay().init(), permanent: true);
   }
 
   /// @ Method Validates Required Services Registered
