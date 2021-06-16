@@ -13,7 +13,6 @@ class TransferPage extends GetView<TransferController> {
   Widget build(BuildContext context) {
     // Build View
     return SonrScaffold(
-      gradient: SonrGradients.PlumBath,
       appBar: DetailAppBar(
         onPressed: () => controller.closeToHome(),
         title: "Transfer",

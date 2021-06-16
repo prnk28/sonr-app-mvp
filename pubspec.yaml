@@ -55,7 +55,7 @@ dependencies:
 
   # -- Device --
   camerawesome: ^0.3.0+1
-  connectivity: ^3.0.6
+  connectivity_plus: ^1.0.3
   flutter_compass: ^0.6.1
   flutter_keyboard_visibility: ^5.0.2
   geolocator: ^7.0.3

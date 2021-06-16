@@ -7,59 +7,56 @@ class NamePage extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     final hint = SonrTextField.hintName();
     return SonrScaffold(
-        gradient: SonrGradients.SeaShore,
         body: Container(
-          width: Get.width,
-          height: Get.height,
-          margin: EdgeInsets.only(bottom: 8, top: 72),
-          child: Column(children: <Widget>[
-            Form(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _NameStatus(),
-                  Padding(padding: EdgeInsets.all(8)),
-                  BoxContainer(
-                      margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
-                      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-                      child: Stack(children: [
-                        TextField(
-                          style: TextStyle(
-                              fontFamily: 'Manrope',
-                              fontWeight: FontWeight.w400,
-                              color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
-                              fontSize: 24),
-                          autofocus: true,
-                          textInputAction: TextInputAction.done,
-                          autocorrect: false,
-                          textCapitalization: TextCapitalization.none,
-                          onEditingComplete: controller.setName,
-                          onChanged: controller.checkName,
-                          decoration: InputDecoration.collapsed(
-                              hintText: hint.item1,
-                              hintStyle: TextStyle(
-                                  fontFamily: 'Manrope',
-                                  fontWeight: FontWeight.w400,
-                                  color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(right: 36),
-                          child: Text(
-                            ".snr/",
-                            style: TextStyle(
-                                fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w400,
-                                color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
-                                fontSize: 24),
-                          ),
-                        ),
-                      ])),
-                ],
-              ),
-            )
-          ]),
-        ));
+      width: Get.width,
+      height: Get.height,
+      margin: EdgeInsets.only(bottom: 8, top: 72),
+      child: Column(children: <Widget>[
+        Form(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _NameStatus(),
+              Padding(padding: EdgeInsets.all(8)),
+              BoxContainer(
+                  margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
+                  padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                  child: Stack(children: [
+                    TextField(
+                      style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.w400,
+                          color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
+                          fontSize: 24),
+                      autofocus: true,
+                      textInputAction: TextInputAction.done,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.none,
+                      onEditingComplete: controller.setName,
+                      onChanged: controller.checkName,
+                      decoration: InputDecoration.collapsed(
+                          hintText: hint.item1,
+                          hintStyle: TextStyle(
+                              fontFamily: 'Manrope', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(right: 36),
+                      child: Text(
+                        ".snr/",
+                        style: TextStyle(
+                            fontFamily: 'Manrope',
+                            fontWeight: FontWeight.w400,
+                            color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
+                            fontSize: 24),
+                      ),
+                    ),
+                  ])),
+            ],
+          ),
+        )
+      ]),
+    ));
   }
 }
 
