@@ -54,7 +54,7 @@ class SonrService extends GetxService {
       // Connect Node
       node.connect(ConnectionRequest(
         contact: UserService.contact.value,
-        location: DeviceService.location,
+        location: await DeviceService.location,
       ));
 
       // Send Initial Position Update

@@ -15,7 +15,6 @@ class DeviceService extends GetxService {
 
   // Properties
   final _device = Device().obs;
-  final _location = Location().obs;
 
   // Platform Checkers
   static bool get isDesktop => to._device.value.platform.isDesktop;
@@ -29,7 +28,6 @@ class DeviceService extends GetxService {
   // Property Accessors
   static Platform get platform => to._device.value.platform;
   static Device get device => to._device.value;
-  static Location get location => to._location.value;
 
   // Connection Requirements
   static bool get isReadyToConnect {
@@ -62,9 +60,6 @@ class DeviceService extends GetxService {
         }
       }
     });
-
-    // Set Location
-    _location(await findLocation(platform));
     return this;
   }
 
@@ -75,16 +70,12 @@ class DeviceService extends GetxService {
     }
   }
 
-  /// @ Retreive Location by IP Address
-  static Future<Location> findLocation(Platform platform) async {
+  /// @ Retreive Location by IP Address or GPS based on Connectivity
+  static Future<Location> get location async {
     // # Check Platform
-    if (platform.isMobile) {
-      // Find Connectivity
-      Connectivity _connectivity = Connectivity();
-      var result = await _connectivity.checkConnectivity();
-
+    if (platform.isMobile && MobileService.isRegistered) {
       // Check for Mobile Data
-      if (result == ConnectivityResult.mobile) {
+      if (MobileService.connectivity.value == ConnectivityResult.mobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
 

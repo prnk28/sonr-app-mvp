@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,7 @@ class MobileService extends GetxService {
   static MobileService get to => Get.find<MobileService>();
 
   // Permissions
+  final _connectivity = Rx<ConnectivityResult>(ConnectivityResult.none);
   final _hasCamera = false.obs;
   final _hasLocation = false.obs;
   final _hasLocalNetwork = false.obs;
@@ -32,6 +34,7 @@ class MobileService extends GetxService {
 
   // Mobile Platform Controllers/Properties
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
+  final _connHandler = Connectivity();
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
   final _position = Rx<Position>(Position());
@@ -39,6 +42,7 @@ class MobileService extends GetxService {
   final _incomingText = "".obs;
 
   // Getters for Device/Location References
+  static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static RxBool get keyboardVisible => to._keyboardVisible;
   static Rx<Position> get position => to._position;
   static RxBool get hasCamera => to._hasCamera;
@@ -64,6 +68,8 @@ class MobileService extends GetxService {
   late StreamSubscription<CompassEvent> _compassStream;
   late StreamSubscription<OrientationEvent> _orienStream;
 
+  // References
+
   MobileService() {
     Timer.periodic(250.milliseconds, (timer) {
       if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
@@ -76,6 +82,7 @@ class MobileService extends GetxService {
   Future<MobileService> init() async {
     // Handle Keyboard Visibility
     _keyboardVisible.bindStream(_keyboardVisibleController.onChange);
+    _connectivity.bindStream(_connHandler.onConnectivityChanged);
 
     // @ Bind Sensors for Mobile
     // Bind Direction and Set Intervals
