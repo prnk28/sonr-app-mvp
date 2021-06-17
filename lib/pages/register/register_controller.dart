@@ -21,7 +21,15 @@ extension RegisterNameStatusUtil on RegisterNameStatus {
   }
 }
 
-enum RegisterStatus { Name, Backup, Contact, Location, Gallery, Linker }
+enum RegisterStatus {
+  Start,
+  Name,
+  Backup,
+  Contact,
+  Location,
+  Gallery,
+  Linker,
+}
 
 class RegisterController extends GetxController {
   // Properties
@@ -30,7 +38,7 @@ class RegisterController extends GetxController {
   final sName = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
-  final status = Rx<RegisterStatus>(RegisterStatus.Name);
+  final status = Rx<RegisterStatus>(RegisterStatus.Start);
   final auth = Rx<HSRecord>(HSRecord.blank());
   final result = Rx<NamebaseResult>(NamebaseResult.blank());
 
@@ -43,6 +51,7 @@ class RegisterController extends GetxController {
   final _nbClient = NamebaseClient(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
 
   // * Constructer * //
+  @override
   onInit() {
     // Get Records
     refreshRecords();
@@ -84,7 +93,8 @@ class RegisterController extends GetxController {
 
           // Logging
           Logger.info(
-              "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicIdentity}");
+            "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicIdentity}",
+          );
 
           // Add UserRecord Domain
           await _nbClient.addRecord(

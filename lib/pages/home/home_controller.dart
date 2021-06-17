@@ -111,11 +111,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Swaps Title when Lobby Size Changes
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    // Check Keyboard
-    if (DeviceService.isMobile) {
-      MobileService.closeKeyboard();
-    }
-
     // Check Valid
     if (!_timeoutActive && !isClosed && isTitleVisible.value) {
       // Swap Text

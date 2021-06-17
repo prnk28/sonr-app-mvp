@@ -155,10 +155,10 @@ class MobileService extends GetxService {
   }
 
   /// @ Method Closes Keyboard if Active
-  static void closeKeyboard({BuildContext? context}) async {
+  static void closeKeyboard({required BuildContext context}) async {
     if (DeviceService.isMobile && isRegistered) {
       if (to._keyboardVisible.value) {
-        FocusScope.of(context ?? Get.context!).unfocus();
+        FocusScope.of(context).unfocus();
       }
     }
   }
