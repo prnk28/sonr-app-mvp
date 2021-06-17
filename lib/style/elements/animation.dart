@@ -234,12 +234,21 @@ class HourglassIndicator extends StatelessWidget {
       width: 40,
       height: 40,
       child: Lottie.asset(
-        UserService.isDarkMode ? 'assets/animations/loader-white.json' : 'assets/animations/loader-black.json',
+        _assetPath,
         fit: BoxFit.fitHeight,
         animate: true,
         repeat: true,
       ),
     );
+  }
+
+  // Returns Animation Asset Path by Dark Mode
+  String get _assetPath {
+    if (UserService.isDarkMode) {
+      return 'assets/animations/loader-white.json';
+    } else {
+      return 'assets/animations/loader-black.json';
+    }
   }
 }
 
