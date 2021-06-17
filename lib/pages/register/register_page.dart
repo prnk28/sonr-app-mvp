@@ -1,5 +1,5 @@
+import 'package:sonr_app/pages/register/widgets/notifier.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sonr_app/style/buttons/utility.dart';
 import 'views/views.dart';
 import 'register_controller.dart';
 
@@ -18,72 +18,59 @@ class RegisterPage extends GetView<RegisterController> {
     );
   }
 
-  Widget _buildView(RegisterStatus status) {
+  Widget _buildView(RegisterPageType status) {
     // Return View
-    if (status == RegisterStatus.Location) {
-      return BoardingLocationView(key: ValueKey<RegisterStatus>(RegisterStatus.Location));
-    } else if (status == RegisterStatus.Gallery) {
-      return BoardingGalleryView(key: ValueKey<RegisterStatus>(RegisterStatus.Gallery));
-    } else if (status == RegisterStatus.Contact) {
-      return FormPage(key: ValueKey<RegisterStatus>(RegisterStatus.Contact));
-    } else if (status == RegisterStatus.Backup) {
-      return BackupCodeView(key: ValueKey<RegisterStatus>(RegisterStatus.Backup));
-    } else if (status == RegisterStatus.Start) {
-      return _StartView(key: ValueKey<RegisterStatus>(RegisterStatus.Start));
+    if (status.isPermissions) {
+      return NotifyingPermissionsView(
+          pages: List<Widget>.generate(RegisterPageTypeUtils.permissionsPageTypes.length, (index) {
+        final item = RegisterPageTypeUtils.permissionsPageTypes[index];
+        return PermPanel(
+          buttonText: item.permissionsButtonText(),
+          onPressed: item.permissionsButtonOnPressed(),
+          imagePath: item.permissionsImagePath(),
+          buttonTextColor: Colors.white,
+        );
+      }));
+    } else if (status.isSetup) {
+      return NotifyingSetupView(pages: [
+        NamePage(key: ValueKey<RegisterPageType>(RegisterPageType.Name)),
+        BackupCodeView(key: ValueKey<RegisterPageType>(RegisterPageType.Backup)),
+        ProfileSetupView(key: ValueKey<RegisterPageType>(RegisterPageType.Contact)),
+      ]);
     } else {
-      return NamePage(key: ValueKey<RegisterStatus>(RegisterStatus.Name));
+      return _StartView(key: ValueKey<RegisterPageType>(RegisterPageType.Intro));
     }
   }
 }
 
-class _StartView extends StatelessWidget {
+class _StartView extends GetView<RegisterController> {
   const _StartView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: SafeArea(
-          top: false,
-          bottom: false,
-          left: false,
-          right: false,
-          child: Stack(children: [
-            Container(
-              width: Get.width,
-              height: Get.height,
-              child: Image.asset(
-                "assets/illustrations/$_imageAsset",
-                fit: BoxFit.fill,
+      child: Stack(children: [
+        AnimatedBuilder(
+          animation: controller.panelNotifier,
+          builder: (context, _) {
+            return Container(
+              child: SlidingImage(
+                notifier: controller.panelNotifier,
+                screenCount: InfoPanelType.values.length,
+                image: AssetImage("assets/illustrations/$_imageAsset"),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 132, right: 32),
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  "Seamless Transfer".heading(color: SonrColor.White),
-                  "No File Size Limits".paragraph(color: SonrColor.White),
-                ],
-              ),
-            ),
-            Container(
-                padding: EdgeInsets.only(bottom: 24),
-                alignment: Alignment.bottomCenter,
-                child: ColorButton(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-                      border: Border.all(width: 2, color: Color(0xffE7E7E7))),
-                  onPressed: () {},
-                  pressedScale: 1.1,
-                  child: "Get Started".heading(
-                    fontSize: 20,
-                    color: SonrColor.White,
-                  ),
-                ))
-          ])),
+            );
+          },
+        ),
+        // Scrollable Page View
+        NotifyingIntroView(
+          pages: List<Widget>.generate(
+              InfoPanelType.values.length,
+              (index) => InfoPanel(
+                    type: InfoPanelType.values[index],
+                  )),
+        ),
+      ]),
     );
   }
 

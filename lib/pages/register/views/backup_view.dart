@@ -30,7 +30,7 @@ class BackupCodeView extends GetView<RegisterController> {
             ),
             Spacer(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   alignment: Alignment.bottomCenter,
@@ -40,7 +40,7 @@ class BackupCodeView extends GetView<RegisterController> {
                 Container(
                   alignment: Alignment.bottomCenter,
                   margin: EdgeInsets.only(bottom: 32),
-                  child: ColorButton.primary(onPressed: controller.nextFromBackup, text: "Next"),
+                  child: ColorButton.primary(onPressed: () => controller.nextPage(RegisterPageType.Contact), text: "Next"),
                 )
               ],
             ),

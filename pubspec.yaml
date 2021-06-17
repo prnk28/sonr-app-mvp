@@ -92,6 +92,7 @@ dependencies:
 
   # -- UI/UX --
   animate_do: ^2.0.0
+  dots_indicator: ^2.0.0
   lottie: ^1.0.1
   rive: ^0.7.7
   styled_widget: ^0.3.1

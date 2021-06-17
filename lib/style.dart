@@ -43,6 +43,7 @@ export 'style/elements/painter.dart';
 export 'style/elements/scaffold.dart';
 export 'style/elements/appbar.dart';
 export 'style/elements/animation.dart';
+export 'style/elements/image.dart';
 
 // Form Styles
 export 'style/form/checklist.dart';

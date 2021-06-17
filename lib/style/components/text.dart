@@ -51,6 +51,7 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
   /// Retreive Font Size
   double get fontSize => _defaultParams.item3;
 
+  /// Build Text Style for this Type
   TextStyle style({
     Color? color,
     double? fontSize,
@@ -170,7 +171,7 @@ extension DisplayTextUtils on String {
         style: DisplayTextStyle.Section.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
       );
 
-  /// Paragraph - Default Size = 20
+  /// Paragraph - Default Size = 20, FontWeight.w100
   DisplayText paragraph({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -179,7 +180,7 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Paragraph, align, color, fontSize, fontStyle);
 
-  /// Paragraph **Span** - Default Size = 20
+  /// Paragraph **Span** - Default Size = 20, FontWeight.w100
   TextSpan paragraphSpan({
     Color color = SonrColor.Black,
     FontStyle fontStyle = FontStyle.normal,
@@ -190,7 +191,7 @@ extension DisplayTextUtils on String {
         style: DisplayTextStyle.Paragraph.style(color: color, fontSize: fontSize, fontStyle: fontStyle),
       );
 
-  /// Light - Default Size = 20
+  /// Light - Default Size = 20,  FontWeight.w300
   DisplayText light({
     Color color = SonrColor.Black,
     TextAlign align = TextAlign.start,
@@ -199,7 +200,7 @@ extension DisplayTextUtils on String {
   }) =>
       DisplayText(this, DisplayTextStyle.Light, align, color, fontSize, fontStyle);
 
-  /// Light **Span** - Default Size = 20
+  /// Light **Span** - Default Size = 20, FontWeight.w300
   TextSpan lightSpan({
     Color color = SonrColor.Black,
     FontStyle fontStyle = FontStyle.normal,
@@ -212,6 +213,14 @@ extension DisplayTextUtils on String {
 
   /// Gradient Style Text
   GradientText gradient({double size = 32, required Gradient value, Key? key}) => GradientText(this, value, size, key: key);
+
+  /// Retreives Size of Painted Text
+  Size size(DisplayTextStyle style, {double fontSize = 20}) {
+    final TextPainter textPainter =
+        TextPainter(text: TextSpan(text: this, style: style.style(fontSize: fontSize)), maxLines: 1, textDirection: TextDirection.ltr)
+          ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
 
   /// URL Style Text
   URLText get url => URLText(this);
