@@ -66,11 +66,11 @@ class ShareSheet extends StatelessWidget {
             // @ Top Right Confirm Button
             ActionButton(
                 onPressed: () {
-                  if (payload == Payload.URL) {
-                    TransferService.setUrl(url!.url);
-                  } else {
-                    TransferService.setMedia(mediaFile!);
-                  }
+                  // if (payload == Payload.URL) {
+                  //   TransferService.setUrl(url!.url);
+                  // } else {
+                  //   TransferService.setMedia(mediaFile!);
+                  // }
                 },
                 iconData: SonrIcons.Check),
           ]),

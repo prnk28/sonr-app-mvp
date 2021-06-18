@@ -1,4 +1,4 @@
-import 'package:sonr_app/service/client/session.dart';
+import 'package:sonr_app/service/transfer/receiver.dart';
 import 'package:sonr_app/style.dart';
 import '../activity.dart';
 
@@ -23,7 +23,7 @@ class ActivityPopup extends GetView<ActivityController> {
         Expanded(
           child: Obx(
             () => _buildExpandedChild(
-              SessionService.hasActiveSession.value,
+              ReceiverService.hasSession.value,
               controller.currentPageIndex.value,
             ),
           ),
@@ -45,7 +45,7 @@ class ActivityPopup extends GetView<ActivityController> {
 class _ActivityHeader extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SessionService.hasActiveSession.value
+    return Obx(() => ReceiverService.hasSession.value
         ? GradientTabs(
             tabs: ["Active", "Past"],
             onTabChanged: (index) => controller.setView(index),
@@ -91,7 +91,7 @@ class _CurrentActivityView extends GetView<ActivityController> {
     return Container(
       alignment: Alignment.topCenter,
       padding: EdgeInsets.only(top: 24),
-      child: CurrentActivityItem(session: SessionService.session),
+      child: CurrentActivityItem(session: ReceiverService.session),
     );
   }
 }

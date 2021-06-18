@@ -1,3 +1,4 @@
+import 'package:sonr_app/service/transfer/sender.dart';
 import 'package:sonr_app/style.dart';
 import '../peer.dart';
 
@@ -44,9 +45,10 @@ class PeerListItem extends GetWidget<PeerController> {
         alignment: Alignment.center,
         child: ColorButton.primary(
           onPressed: () {
-            TransferService.chooseFile().then((value) {
-              if (value) {
-                TransferService.sendInviteToPeer(peer);
+            SenderService.choose(ChooseOption.File).then((value) {
+              if (value != null) {
+                value.setPeer(peer);
+                SenderService.invite(value);
               }
             });
           },

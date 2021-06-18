@@ -6,8 +6,11 @@ export 'views/share_view.dart';
 
 // Imports
 import 'package:get/get.dart';
+import 'package:sonr_app/pages/transfer/models/arguments.dart';
+import 'package:sonr_app/service/transfer/sender.dart';
 import 'package:sonr_app/style.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'models/log.dart';
 import 'models/type.dart';
 
 class ShareController extends GetxController {
@@ -65,7 +68,7 @@ class ShareController extends GetxController {
     // Check for Permissions
     if (MobileService.hasCamera.value) {
       // Check Done
-      var done = await TransferService.chooseCamera();
+      var done = await SenderService.choose(ChooseOption.Camera);
       _handleConfirmation(done);
     }
     // Request Permissions
@@ -73,7 +76,7 @@ class ShareController extends GetxController {
       var result = await Get.find<MobileService>().requestCamera();
       if (result) {
         // Check Done
-        var done = await TransferService.chooseCamera();
+        var done = await SenderService.choose(ChooseOption.Camera);
         _handleConfirmation(done);
       } else {
         AppRoute.snack(SnackArgs.error("Sonr cannot open Camera without Permissions"));
@@ -83,7 +86,7 @@ class ShareController extends GetxController {
 
   /// Choose Contact Card for Share
   Future<void> chooseContact() async {
-    var done = await TransferService.chooseContact();
+    var done = await SenderService.choose(ChooseOption.Contact);
     _handleConfirmation(done);
   }
 
@@ -91,7 +94,7 @@ class ShareController extends GetxController {
   Future<void> chooseFile() async {
     // Check Permissions
     if (MobileService.hasGallery.value) {
-      var done = await TransferService.chooseFile();
+      var done = await SenderService.choose(ChooseOption.File);
       _handleConfirmation(done);
     } else {
       // Request Permissions
@@ -99,7 +102,7 @@ class ShareController extends GetxController {
 
       // Check Status
       if (status) {
-        var done = await TransferService.chooseFile();
+        var done = await SenderService.choose(ChooseOption.File);
         _handleConfirmation(done);
       } else {
         AppRoute.snack(SnackArgs.error("Cannot pick Media without Permissions"));
@@ -118,8 +121,8 @@ class ShareController extends GetxController {
   Future<void> confirmMediaSelection() async {
     if (hasSelected.value) {
       var sonrFile = await selectedItems.toSonrFile();
-      var done = await TransferService.setFile(sonrFile);
-      _handleConfirmation(done);
+      var result = await SenderService.choose(ChooseOption.Media, file: sonrFile);
+      _handleConfirmation(result);
     } else {
       AppRoute.snack(SnackArgs.missing("No Files Selected"));
     }
@@ -163,16 +166,16 @@ class ShareController extends GetxController {
     hasSelected(selectedItems.length > 0);
   }
 
-  void _handleConfirmation(bool result) {
+  void _handleConfirmation(InviteRequest? request) {
     // Check Result Success
-    if (result) {
+    if (request != null) {
       // Reset Share Items
       selectedItems.clear();
       hasSelected(false);
 
       // Check View Type
       if (this.type.value.isViewPopup) {
-        AppPage.Transfer.off();
+        AppPage.Transfer.off(args: TransferArguments(request));
       } else {
         Get.back(closeOverlays: true);
       }

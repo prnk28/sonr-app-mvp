@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:sonr_app/pages/transfer/models/arguments.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
 
 class TransferController extends GetxController {
+  // @ Global Property Accessor
+  static InviteRequest get invite => Get.find<TransferController>().inviteRequest;
+
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
@@ -19,15 +23,18 @@ class TransferController extends GetxController {
   final cardinalTitle = "".obs;
   final phonesEnabled = true.obs;
   final desktopsEnabled = true.obs;
+  final hasInvite = false.obs;
 
   // References
   late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
   late StreamSubscription<Payload> _payloadStream;
+  late InviteRequest inviteRequest;
   final localArrowButtonKey = GlobalKey();
   ScrollController scrollController = ScrollController();
 
   /// @ Controller Constructer
+  @override
   void onInit() {
     // Set Initial Value
     _handlePositionUpdate(MobileService.position.value);
@@ -48,9 +55,19 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
+  /// @ First Method Called
+  void initialize() {
+    final args = Get.arguments;
+    if (args is TransferArguments) {
+      inviteRequest = args.request;
+      hasInvite(true);
+    } else {
+      hasInvite(false);
+    }
+  }
+
   /// @ Closes Window for Transfer Page
   void closeToHome() {
-    TransferService.resetPayload();
     AppPage.Home.off();
   }
 

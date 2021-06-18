@@ -1,3 +1,4 @@
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 
 /// @ Builds Thumbnail from Future
@@ -5,15 +6,17 @@ class PayloadItemThumbnail extends StatelessWidget {
   const PayloadItemThumbnail({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (TransferService.thumbStatus.value == ThumbnailStatus.Complete) {
+    final file = TransferController.invite.file;
+    final invite = TransferController.invite;
+    if (file.single.hasThumbnail()) {
       return GestureDetector(
-        onTap: () => OpenFile.open(TransferService.file.value.single.path),
+        onTap: () => OpenFile.open(file.single.path),
         child: BoxContainer(
             clipBehavior: Clip.hardEdge,
             height: Height.ratio(0.125),
             width: Height.ratio(0.125),
             child: Image.memory(
-              TransferService.file.value.single.thumbnail!,
+              file.single.thumbnail!,
               fit: BoxFit.cover,
             )),
       );
@@ -24,7 +27,7 @@ class PayloadItemThumbnail extends StatelessWidget {
       return Container(
         height: Height.ratio(0.125),
         width: Height.ratio(0.125),
-        child: TransferService.payload.value.gradient(size: Height.ratio(0.125)),
+        child: invite.payload.gradient(size: Height.ratio(0.125)),
       );
     }
   }

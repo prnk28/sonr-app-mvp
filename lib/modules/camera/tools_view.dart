@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/share/models/log.dart';
+import 'package:sonr_app/service/transfer/sender.dart';
 import 'package:sonr_app/style.dart';
 import 'camera_controller.dart';
 
@@ -13,8 +15,7 @@ class CameraToolsView extends StatelessWidget {
     return Container(
         alignment: Alignment.bottomCenter,
         child: BoxContainer(
-            padding: EdgeInsets.only(top: 20, bottom: 40),
-            child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
+            padding: EdgeInsets.only(top: 20, bottom: 40), child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
   }
 
   Widget _buildToolsView(CameraViewStatus status) {
@@ -95,7 +96,7 @@ class _DefaultToolsView extends StatelessWidget {
             onTap: () async {
               await HapticFeedback.heavyImpact();
               // Check for Permssions
-              await TransferService.chooseMedia();
+              await SenderService.choose(ChooseOption.Media);
             }),
       ]),
     );

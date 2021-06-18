@@ -1,310 +1,310 @@
-import 'dart:async';
-import 'dart:collection';
+// import 'dart:async';
+// import 'dart:collection';
 
-import 'package:sonr_app/style.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:sonr_app/style.dart';
+// import 'package:file_picker/file_picker.dart';
 
-/// @ Class for Managing Files
-class TransferService extends GetxService {
-  // Status
-  static bool get isRegistered => Get.isRegistered<TransferService>();
-  static TransferService get to => Get.find<TransferService>();
+// /// @ Class for Managing Files
+// class TransferService extends GetxService {
+//   // Status
+//   static bool get isRegistered => Get.isRegistered<TransferService>();
+//   static TransferService get to => Get.find<TransferService>();
 
-  // Properties
-  final _hasPayload = false.obs;
-  final _payload = Payload.NONE.obs;
-  final _invite = InviteRequest().obs;
-  final _sonrFile = SonrFile().obs;
-  final _sessions = Queue<Session>().obs;
-  final _thumbStatus = ThumbnailStatus.None.obs;
+//   // Properties
+//   final _hasPayload = false.obs;
+//   final _payload = Payload.NONE.obs;
+//   final _invite = InviteRequest().obs;
+//   final _sonrFile = SonrFile().obs;
+//   final _sessions = Queue<Session>().obs;
+//   final _thumbStatus = ThumbnailStatus.None.obs;
 
-  // Property Accessors
-  static Rx<Payload> get payload => to._payload;
-  static Rx<InviteRequest> get inviteRequest => to._invite;
-  static Rx<SonrFile> get file => to._sonrFile;
-  static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
-  static RxBool get hasPayload => to._hasPayload;
-  static Rx<Queue> get sessions => to._sessions;
+//   // Property Accessors
+//   static Rx<Payload> get payload => to._payload;
+//   static Rx<InviteRequest> get inviteRequest => to._invite;
+//   static Rx<SonrFile> get file => to._sonrFile;
+//   static Rx<ThumbnailStatus> get thumbStatus => to._thumbStatus;
+//   static RxBool get hasPayload => to._hasPayload;
+//   static Rx<Queue> get sessions => to._sessions;
 
-  /// @ Initialize Service
-  Future<TransferService> init() async {
-    return this;
-  }
+//   /// @ Initialize Service
+//   Future<TransferService> init() async {
+//     return this;
+//   }
 
-  // @ Use Camera for Media File //
-  static Future<bool> chooseCamera() async {
-    if (DeviceService.isMobile) {
-      // Analytics
-      Logger.event(
-        name: 'chooseCamera',
-        controller: 'TransferService',
-      );
+//   // @ Use Camera for Media File //
+//   static Future<bool> chooseCamera() async {
+//     if (DeviceService.isMobile) {
+//       // Analytics
+//       Logger.event(
+//         name: 'chooseCamera',
+//         controller: 'TransferService',
+//       );
 
-      // Initialize
-      Completer<bool> completer = Completer<bool>();
-      // Move to View
-      CameraView.open(onMediaSelected: (SonrFile file) async {
-        var result = await _handlePayload(Payload.MEDIA, file: file);
+//       // Initialize
+//       Completer<bool> completer = Completer<bool>();
+//       // Move to View
+//       CameraView.open(onMediaSelected: (SonrFile file) async {
+//         var result = await _handlePayload(Payload.MEDIA, file: file);
 
-        // Analytics
-        Logger.event(
-          name: 'confirmedCamera',
-          controller: 'TransferService',
-        );
+//         // Analytics
+//         Logger.event(
+//           name: 'confirmedCamera',
+//           controller: 'TransferService',
+//         );
 
-        // Complete Result
-        completer.complete(result);
-      });
+//         // Complete Result
+//         completer.complete(result);
+//       });
 
-      return completer.future;
-    }
-    return false;
-  }
+//       return completer.future;
+//     }
+//     return false;
+//   }
 
-  // @ Set User Contact for Transfer //
-  static Future<bool> chooseContact() async {
-    if (DeviceService.isMobile) {
-      // Analytics
-      if (DeviceService.isMobile) {
-        Logger.event(
-          controller: 'TransferService',
-          name: 'chooseContact',
-        );
-      }
+//   // @ Set User Contact for Transfer //
+//   static Future<bool> chooseContact() async {
+//     if (DeviceService.isMobile) {
+//       // Analytics
+//       if (DeviceService.isMobile) {
+//         Logger.event(
+//           controller: 'TransferService',
+//           name: 'chooseContact',
+//         );
+//       }
 
-      return await _handlePayload(Payload.CONTACT);
-    }
-    return false;
-  }
+//       return await _handlePayload(Payload.CONTACT);
+//     }
+//     return false;
+//   }
 
-  // @ Select Media File //
-  static Future<bool> chooseMedia({bool withRedirect = true}) async {
-    // Analytics
-    if (DeviceService.isMobile) {
-      Logger.event(
-        controller: 'TransferService',
-        name: 'chooseMedia',
-      );
-    }
-    // Load Picker
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.media,
-      withData: true,
-      allowMultiple: true,
-      allowCompression: true,
-    );
+//   // @ Select Media File //
+//   static Future<bool> chooseMedia({bool withRedirect = true}) async {
+//     // Analytics
+//     if (DeviceService.isMobile) {
+//       Logger.event(
+//         controller: 'TransferService',
+//         name: 'chooseMedia',
+//       );
+//     }
+//     // Load Picker
+//     FilePickerResult? result = await FilePicker.platform.pickFiles(
+//       type: FileType.media,
+//       withData: true,
+//       allowMultiple: true,
+//       allowCompression: true,
+//     );
 
-    // Check File
-    if (result != null) {
-      // Analytics
-      if (DeviceService.isMobile) {
-        Logger.event(
-          name: 'confirmMedia',
-          controller: 'TransferService',
-        );
-      }
-      // Convert To File
-      var file = result.toSonrFile(payload: Payload.MEDIA);
-      return await _handlePayload(file.payload, file: file);
-    }
-    return false;
-  }
+//     // Check File
+//     if (result != null) {
+//       // Analytics
+//       if (DeviceService.isMobile) {
+//         Logger.event(
+//           name: 'confirmMedia',
+//           controller: 'TransferService',
+//         );
+//       }
+//       // Convert To File
+//       var file = result.toSonrFile(payload: Payload.MEDIA);
+//       return await _handlePayload(file.payload, file: file);
+//     }
+//     return false;
+//   }
 
-  // @ Select Other File //
-  static Future<bool> chooseFile() async {
-    // Analytics
-    if (DeviceService.isMobile) {
-      Logger.event(
-        name: 'chooseFile',
-        controller: 'TransferService',
-      );
-    }
-    // Load Picker
-    if (DeviceService.isMobile) {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
-      if (result != null) {
-        // Analytics
-        if (DeviceService.isMobile) {
-          Logger.event(
-            name: 'confirmFile',
-            controller: 'TransferService',
-          );
-        }
+//   // @ Select Other File //
+//   static Future<bool> chooseFile() async {
+//     // Analytics
+//     if (DeviceService.isMobile) {
+//       Logger.event(
+//         name: 'chooseFile',
+//         controller: 'TransferService',
+//       );
+//     }
+//     // Load Picker
+//     if (DeviceService.isMobile) {
+//       FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+//       if (result != null) {
+//         // Analytics
+//         if (DeviceService.isMobile) {
+//           Logger.event(
+//             name: 'confirmFile',
+//             controller: 'TransferService',
+//           );
+//         }
 
-        // Confirm File
-        var file = result.toSonrFile(payload: Payload.FILE);
-        return await _handlePayload(file.payload, file: file);
-      } else {
-        var filePath = await SonrService.to.node.pickFile();
-        var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
-        if (filePath != null) {
-          return await _handlePayload(file.payload, file: file);
-        }
-      }
-    }
-    return false;
-  }
+//         // Confirm File
+//         var file = result.toSonrFile(payload: Payload.FILE);
+//         return await _handlePayload(file.payload, file: file);
+//       } else {
+//         var filePath = await SonrService.to.node.pickFile();
+//         var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
+//         if (filePath != null) {
+//           return await _handlePayload(file.payload, file: file);
+//         }
+//       }
+//     }
+//     return false;
+//   }
 
-  /// @ Resets Transfer Service
-  static Future<void> resetPayload() async {
-    to._hasPayload(false);
-    to._payload(Payload.NONE);
-    to._invite(InviteRequest());
-    to._sonrFile(SonrFile());
-    to._thumbStatus(ThumbnailStatus.None);
-  }
+//   /// @ Resets Transfer Service
+//   static Future<void> resetPayload() async {
+//     to._hasPayload(false);
+//     to._payload(Payload.NONE);
+//     to._invite(InviteRequest());
+//     to._sonrFile(SonrFile());
+//     to._thumbStatus(ThumbnailStatus.None);
+//   }
 
-  // @ Select Media File //
-  static Future<bool> setUrl(String url) async {
-    // Analytics
-    Logger.event(
-      name: 'chooseURL',
-      controller: 'TransferService',
-    );
-    return await _handlePayload(Payload.URL, url: url);
-  }
+//   // @ Select Media File //
+//   static Future<bool> setUrl(String url) async {
+//     // Analytics
+//     Logger.event(
+//       name: 'chooseURL',
+//       controller: 'TransferService',
+//     );
+//     return await _handlePayload(Payload.URL, url: url);
+//   }
 
-  // @ Select Media File //
-  static Future<bool> setMedia(SonrFile file) async {
-    // Analytics
-    Logger.event(
-      name: 'chooseMedia',
-      controller: 'TransferService',
-      parameters: {
-        'createdAt': DateTime.now().toString(),
-        'platform': DeviceService.device.platform.toString(),
-      },
-    );
-    return await _handlePayload(file.payload, file: file);
-  }
+//   // @ Select Media File //
+//   static Future<bool> setMedia(SonrFile file) async {
+//     // Analytics
+//     Logger.event(
+//       name: 'chooseMedia',
+//       controller: 'TransferService',
+//       parameters: {
+//         'createdAt': DateTime.now().toString(),
+//         'platform': DeviceService.device.platform.toString(),
+//       },
+//     );
+//     return await _handlePayload(file.payload, file: file);
+//   }
 
-  /// @ Send Invite with Peer
-  static Session? sendInviteToPeer(Peer peer) {
-    // Analytics
-    Logger.event(
-      name: 'selectedPeer',
-      controller: 'TransferService',
-      parameters: {
-        'peerPlatform': peer.platform.toString(),
-      },
-    );
+//   /// @ Send Invite with Peer
+//   static Session? sendInviteToPeer(Peer peer) {
+//     // Analytics
+//     Logger.event(
+//       name: 'selectedPeer',
+//       controller: 'TransferService',
+//       parameters: {
+//         'peerPlatform': peer.platform.toString(),
+//       },
+//     );
 
-    // Check if Payload Set
-    if (to._hasPayload.value) {
-      // Update Request
-      to._invite.setPeer(peer);
+//     // Check if Payload Set
+//     if (to._hasPayload.value) {
+//       // Update Request
+//       to._invite.setPeer(peer);
 
-      // Send Invite
-      return SonrService.invite(to._invite.value);
-    }
-    return null;
-  }
+//       // Send Invite
+//       return SonrService.invite(to._invite.value);
+//     }
+//     return null;
+//   }
 
-  /// @ Sets File from Other Source
-  static Future<bool> setFile(SonrFile file) async {
-    // Analytics
-    Logger.event(
-      name: 'chooseFile',
-      controller: 'TransferService',
-      parameters: {
-        'payload': file.payload.toString(),
-      },
-    );
+//   /// @ Sets File from Other Source
+//   static Future<bool> setFile(SonrFile file) async {
+//     // Analytics
+//     Logger.event(
+//       name: 'chooseFile',
+//       controller: 'TransferService',
+//       parameters: {
+//         'payload': file.payload.toString(),
+//       },
+//     );
 
-    // Handle File Payload
-    return await _handlePayload(file.payload, file: file);
-  }
+//     // Handle File Payload
+//     return await _handlePayload(file.payload, file: file);
+//   }
 
-  /// Set Transfer Payload for File
-  static Future<bool> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
-    // Initialize Request
-    to._payload(payload);
+//   /// Set Transfer Payload for File
+//   static Future<bool> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
+//     // Initialize Request
+//     to._payload(payload);
 
-    // @ Handle Payload
-    if (to._payload.value.isTransfer && file != null) {
-      // Capture File Analytics
-      Logger.event(
-        name: 'sharedFile',
-        controller: 'TransferService',
-        parameters: {
-          'totalSize': file.size,
-          'count': file.count,
-          'payload': file.payload.toString(),
-          'items': List.generate(
-              file.count,
-              (index) => {
-                    'mimeValue': file.items[index].mime.value,
-                    'mimeSubtype': file.items[index].mime.subtype,
-                    'size': file.items[index].size,
-                  })
-        },
-      );
+//     // @ Handle Payload
+//     if (to._payload.value.isTransfer && file != null) {
+//       // Capture File Analytics
+//       Logger.event(
+//         name: 'sharedFile',
+//         controller: 'TransferService',
+//         parameters: {
+//           'totalSize': file.size,
+//           'count': file.count,
+//           'payload': file.payload.toString(),
+//           'items': List.generate(
+//               file.count,
+//               (index) => {
+//                     'mimeValue': file.items[index].mime.value,
+//                     'mimeSubtype': file.items[index].mime.subtype,
+//                     'size': file.items[index].size,
+//                   })
+//         },
+//       );
 
-      // Check valid File Size Payload
-      if (file.size > 0) {
-        file.update();
-        to._invite.init(payload, file: file);
-        to._sonrFile(file);
+//       // Check valid File Size Payload
+//       if (file.size > 0) {
+//         file.update();
+//         to._invite.init(payload, file: file);
+//         to._sonrFile(file);
 
-        // Check for Media
-        if (to._invite.isMedia) {
-          // Set File Item
-          to._thumbStatus(ThumbnailStatus.Loading);
-          await to._sonrFile.value.setThumbnail();
+//         // Check for Media
+//         if (to._invite.isMedia) {
+//           // Set File Item
+//           to._thumbStatus(ThumbnailStatus.Loading);
+//           await to._sonrFile.value.setThumbnail();
 
-          // Check Result
-          if (to._sonrFile.value.single.hasThumbnail()) {
-            to._thumbStatus(ThumbnailStatus.Complete);
-          } else {
-            to._thumbStatus(ThumbnailStatus.None);
-          }
-        }
+//           // Check Result
+//           if (to._sonrFile.value.single.hasThumbnail()) {
+//             to._thumbStatus(ThumbnailStatus.Complete);
+//           } else {
+//             to._thumbStatus(ThumbnailStatus.None);
+//           }
+//         }
 
-        // Set Has Payload
-        to._hasPayload(true);
-      }
-    }
-    // Check for Contact
-    else if (to._payload.value == Payload.CONTACT) {
-      // Capture Contact Analytics
-      Logger.event(
-        name: 'sharedContact',
-        controller: 'TransferService',
-        parameters: {
-          'payload': Payload.CONTACT.toString(),
-        },
-      );
+//         // Set Has Payload
+//         to._hasPayload(true);
+//       }
+//     }
+//     // Check for Contact
+//     else if (to._payload.value == Payload.CONTACT) {
+//       // Capture Contact Analytics
+//       Logger.event(
+//         name: 'sharedContact',
+//         controller: 'TransferService',
+//         parameters: {
+//           'payload': Payload.CONTACT.toString(),
+//         },
+//       );
 
-      // Initialize Contact
-      to._invite.init(payload, contact: UserService.contact.value);
+//       // Initialize Contact
+//       to._invite.init(payload, contact: UserService.contact.value);
 
-      // Set Has Payload
-      to._hasPayload(true);
-    }
-    // Check for URL
-    else if (to._payload.value == Payload.URL) {
-      // Capture Contact Analytics
-      Logger.event(
-        name: 'sharedURL',
-        controller: 'TransferService',
-        parameters: {
-          'link': url,
-          'payload': Payload.URL.toString(),
-        },
-      );
+//       // Set Has Payload
+//       to._hasPayload(true);
+//     }
+//     // Check for URL
+//     else if (to._payload.value == Payload.URL) {
+//       // Capture Contact Analytics
+//       Logger.event(
+//         name: 'sharedURL',
+//         controller: 'TransferService',
+//         parameters: {
+//           'link': url,
+//           'payload': Payload.URL.toString(),
+//         },
+//       );
 
-      // Initialize URL
-      to._invite.init(payload, url: url!);
+//       // Initialize URL
+//       to._invite.init(payload, url: url!);
 
-      // Set Has Payload
-      to._hasPayload(true);
-    }
+//       // Set Has Payload
+//       to._hasPayload(true);
+//     }
 
-    // @ Check if Payload Set
-    if (!to._hasPayload.value) {
-      to._payload(Payload.NONE);
-      to._hasPayload(false);
-    }
-    return to._hasPayload.value;
-  }
-}
+//     // @ Check if Payload Set
+//     if (!to._hasPayload.value) {
+//       to._payload(Payload.NONE);
+//       to._hasPayload(false);
+//     }
+//     return to._hasPayload.value;
+//   }
+// }

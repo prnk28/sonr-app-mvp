@@ -1,3 +1,4 @@
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/pages/transfer/views/popup_view.dart';
 import 'package:sonr_app/style.dart';
 import 'thumbnail.dart';
@@ -5,10 +6,12 @@ import 'thumbnail.dart';
 class PayloadSingleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final file = TransferController.invite.file;
+    final invite = TransferController.invite;
     return Container(
         child: Obx(() => Row(children: [
-              _buildLeading(),
-              _buildTitle(),
+              _buildLeading(invite),
+              _buildTitle(invite),
               Container(
                 padding: EdgeInsets.only(left: 24),
                 alignment: Alignment.topRight,
@@ -16,7 +19,7 @@ class PayloadSingleItem extends StatelessWidget {
                   onPressed: () {
                     AppRoute.popup(EditPayloadPopup(
                       index: 0,
-                      item: TransferService.file.value.single,
+                      item: file.single,
                     ));
                   },
                   iconData: SonrIcons.MoreVertical,
@@ -25,25 +28,25 @@ class PayloadSingleItem extends StatelessWidget {
             ])));
   }
 
-  Widget _buildLeading() {
+  Widget _buildLeading(InviteRequest invite) {
     // # Undefined Type
-    if (TransferService.payload.value == Payload.NONE) {
+    if (invite.payload == Payload.NONE) {
       return HourglassIndicator();
     }
 
     // # Check for Media File Type
-    else if (TransferService.payload.value == Payload.MEDIA) {
+    else if (invite.payload == Payload.MEDIA) {
       return PayloadItemThumbnail();
     }
 
     // # Other Types
     else {
-      return TransferService.payload.value.gradient(size: Height.ratio(0.125));
+      return invite.payload.gradient(size: Height.ratio(0.125));
     }
   }
 
-  Widget _buildTitle() {
-    if (TransferService.payload.value == Payload.CONTACT) {
+  Widget _buildTitle(InviteRequest invite) {
+    if (invite.payload == Payload.CONTACT) {
       // Build Text View
       return Container(
           width: Width.ratio(0.5),
@@ -63,7 +66,7 @@ class PayloadSingleItem extends StatelessWidget {
               child: "Contact Card".paragraph(),
             )
           ]));
-    } else if (TransferService.payload.value == Payload.URL) {
+    } else if (invite.payload == Payload.URL) {
       // Build Text View
       return Container(
           width: Width.ratio(0.5),
@@ -72,11 +75,11 @@ class PayloadSingleItem extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: TransferService.file.value.prettyName().paragraph(color: SonrTheme.itemColor),
+              child: invite.file.prettyName().paragraph(color: SonrTheme.itemColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
+              child: invite.file.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     } else {
@@ -86,14 +89,14 @@ class PayloadSingleItem extends StatelessWidget {
           height: Height.ratio(0.15),
           padding: EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 8),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-            Padding(padding: const EdgeInsets.only(top: 16.0), child: TransferService.file.value.prettyType().subheading(color: SonrTheme.itemColor)),
+            Padding(padding: const EdgeInsets.only(top: 16.0), child: invite.file.prettyType().subheading(color: SonrTheme.itemColor)),
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: TransferService.file.value.prettyName().light(color: Get.theme.hintColor),
+              child: invite.file.prettyName().light(color: Get.theme.hintColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 2.0),
-              child: TransferService.file.value.prettySize().paragraph(color: Get.theme.hintColor),
+              child: invite.file.prettySize().paragraph(color: Get.theme.hintColor),
             )
           ]));
     }

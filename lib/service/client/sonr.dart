@@ -6,7 +6,8 @@ import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
 import 'local.dart';
 import '../device/user.dart';
-import 'session.dart';
+import '../transfer/receiver.dart';
+import '../transfer/sender.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
 class SonrService extends GetxService {
@@ -39,11 +40,11 @@ class SonrService extends GetxService {
     node.onStatus = _handleStatus;
     node.onError = _handleError;
     node.onRefreshed = LocalService.to.handleRefresh;
-    node.onInvited = SessionService.to.handleInvite;
-    node.onReplied = SessionService.to.handleReply;
-    node.onProgressed = SessionService.to.handleProgress;
-    node.onReceived = SessionService.to.handleReceived;
-    node.onTransmitted = SessionService.to.handleTransmitted;
+    node.onInvited = ReceiverService.to.handleInvite;
+    node.onReplied = SenderService.to.handleReply;
+    node.onProgressed = ReceiverService.to.handleProgress;
+    node.onReceived = ReceiverService.to.handleReceived;
+    node.onTransmitted = SenderService.to.handleTransmitted;
     return this;
   }
 
@@ -111,16 +112,6 @@ class SonrService extends GetxService {
     }
   }
 
-  /// @ Invite Peer with Built Request
-  static Session? invite(InviteRequest request) {
-    if (status.value.isConnected && isRegistered) {
-      // Send Invite
-      to.node.invite(request);
-      SessionService.setOutgoing(request);
-      return SessionService.session;
-    }
-  }
-
   /// @ Respond-Peer Event
   static void respond(InviteResponse request) async {
     if (status.value.isConnected && isRegistered) {
@@ -160,13 +151,7 @@ class SonrService extends GetxService {
   void _handleError(ErrorMessage data) async {
     if (data.severity != ErrorMessage_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
-    } else {
-      // Reset Payload
-      TransferService.resetPayload();
-
-      // Reset Session
-      SessionService.reset();
-    }
+    } else {}
 
     // Logging
     Logger.sError(data);

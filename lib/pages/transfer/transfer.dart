@@ -21,6 +21,7 @@ import 'widgets/payload/item.dart';
 class TransferPage extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
+    controller.initialize();
     // Build View
     return SonrScaffold(
       appBar: DetailAppBar(
@@ -42,12 +43,12 @@ class TransferPage extends GetView<TransferController> {
   }
 }
 
-class PayloadSheetView extends StatelessWidget {
+class PayloadSheetView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (TransferService.hasPayload.value) {
-        return TransferService.payload.value.isMultipleFiles
+      if (controller.hasInvite.value) {
+        return controller.inviteRequest.payload.isMultipleFiles
             // Build List View
             ? DraggableScrollableSheet(
                 expand: false,
@@ -55,17 +56,18 @@ class PayloadSheetView extends StatelessWidget {
                 maxChildSize: 0.5,
                 minChildSize: 0.2,
                 builder: (BuildContext context, ScrollController scrollController) {
+                  final file = controller.inviteRequest.file;
                   return Container(
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
                     foregroundDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
                     child: ListView.builder(
                         controller: scrollController,
-                        itemCount: TransferService.file.value.items.length + 1,
+                        itemCount: file.items.length + 1,
                         itemBuilder: (BuildContext context, int index) {
                           return index == 0
                               ? SonrFileListHeader()
                               : SonrFileListItem(
-                                  item: TransferService.file.value.items[index - 1],
+                                  item: file.items[index - 1],
                                   index: index - 1,
                                 );
                         }),

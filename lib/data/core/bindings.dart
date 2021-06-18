@@ -9,7 +9,8 @@ import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/service/client/session.dart';
+import 'package:sonr_app/service/transfer/receiver.dart';
+import 'package:sonr_app/service/transfer/sender.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/database/service.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
@@ -89,10 +90,11 @@ class AppServices {
     await Get.putAsync(() => UserService().init(), permanent: true);
 
     // Third: Initialize Data/Networking Services
-    await Get.putAsync(() => TransferService().init());
+    await Get.putAsync(() => SenderService().init());
+    await Get.putAsync(() => ReceiverService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LocalService().init());
-    await Get.putAsync(() => SessionService().init());
+
     await Get.putAsync(() => SonrService().init(), permanent: true);
   }
 

@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
-import 'package:sonr_app/service/client/session.dart';
+import 'package:sonr_app/service/transfer/receiver.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:get/get.dart';
@@ -71,9 +71,9 @@ class ContactAuthView extends StatelessWidget {
                 Get.back();
                 if (!isReply) {
                   var result = await AppRoute.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  SessionService.decisionForInvite(true, sendBackContact: result);
+                  ReceiverService.decide(true, sendBackContact: result);
                 } else {
-                  SessionService.decisionForInvite(true);
+                  ReceiverService.decide(true);
                 }
               },
               text: "Accept",
