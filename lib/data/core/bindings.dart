@@ -5,12 +5,9 @@ import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/pages/details/items/contact/tile/tile_controller.dart';
-import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
-import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
 import 'package:sonr_app/pages/explorer/explorer_controller.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/service/client/session.dart';
@@ -39,7 +36,6 @@ class HomeBinding implements Bindings {
     // Subsidary Controllers
     Get.put(ShareController(), permanent: true);
     Get.put(ActivityController());
-    Get.put<DashboardController>(DashboardController(), permanent: true);
     Get.put<ProfileController>(ProfileController(), permanent: true);
     Get.put<EditorController>(EditorController(), permanent: true);
     Get.create<TileController>(() => TileController());

@@ -1,4 +1,6 @@
-import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
+import 'package:sonr_app/pages/home/models/home_status.dart';
+import 'package:sonr_app/pages/personal/controllers/editor_controller.dart';
+
 import 'package:sonr_app/style.dart';
 import '../home_controller.dart';
 

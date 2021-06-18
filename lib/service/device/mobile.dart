@@ -6,7 +6,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/modules/share/external_sheet.dart';
+import 'package:sonr_app/modules/share/views/external_sheet.dart';
 import 'package:sonr_app/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';

@@ -1,0 +1,13 @@
+export 'package:sonr_app/pages/details/widgets/contact/grid_item.dart';
+export 'package:sonr_app/pages/details/widgets/contact/list_item.dart';
+export 'package:sonr_app/pages/details/widgets/url/card_item.dart';
+export 'package:sonr_app/pages/details/widgets/url/list_item.dart';
+export 'package:sonr_app/pages/details/widgets/post/file_item.dart';
+export 'package:sonr_app/pages/details/views/detail_view.dart';
+export 'package:sonr_app/pages/details/views/posts_view.dart';
+export 'package:sonr_app/pages/details/views/error_view.dart';
+export 'package:sonr_app/pages/details/widgets/post/item.dart';
+export 'widgets/url/card_item.dart';
+export 'widgets/url/link_view.dart';
+export 'widgets/url/list_item.dart';
+export 'widgets/post/views.dart';

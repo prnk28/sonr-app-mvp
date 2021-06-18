@@ -1,7 +1,7 @@
 import 'views/nearby_list.dart';
 import 'package:sonr_app/style.dart';
 import 'explorer_controller.dart';
-import 'views/access_view.dart';
+import 'views/access_grid.dart';
 
 class ExplorerPage extends GetView<ExplorerController> {
   @override

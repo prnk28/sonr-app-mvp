@@ -1,6 +1,7 @@
 import 'package:sonr_app/style.dart';
 import 'action_button.dart';
 import '../home_controller.dart';
+import 'package:sonr_app/pages/home/models/home_status.dart';
 
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override

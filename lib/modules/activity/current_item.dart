@@ -140,13 +140,14 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
                 alignment: Alignment.center,
                 width: _calculateWidth(progress.value),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
-                duration: 150.milliseconds,
+                duration: 100.milliseconds,
               ),
 
               // Progress of Transfer
               Align(
                 alignment: Alignment.center,
                 child: AnimatedSlideSwitcher.slideDown(
+                  duration: 100.milliseconds,
                   child: Container(
                     key: ValueKey<double>(progress.value),
                     child: _calculateText(progress.value).subheading(

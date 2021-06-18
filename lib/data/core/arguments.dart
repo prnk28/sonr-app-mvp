@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sonr_app/service/client/sonr.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/pages/details/items/detail_view.dart';
+import 'package:sonr_app/pages/details/details.dart';
 
 // ** ─── Activity Arguments ────────────────────────────────────────────────────────
 /// Class to Provide Arguments for ActivityPage

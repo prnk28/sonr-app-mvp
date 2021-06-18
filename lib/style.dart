@@ -16,7 +16,7 @@ export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
-export 'package:sonr_app/style/elements/clipper.dart';
+export 'package:sonr_app/style/elements/painter.dart';
 export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
@@ -60,8 +60,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/user.dart';
+import 'package:sonr_app/style/elements/painter.dart';
 import 'style/components/color.dart';
-import 'style/elements/clipper.dart';
 
 /// * Widget Position Enum * //
 enum WidgetPosition { Left, Right, Top, Bottom, Center }

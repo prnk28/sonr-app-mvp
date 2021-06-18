@@ -1,9 +1,10 @@
-import 'package:sonr_app/modules/share/button_view.dart';
+import 'package:sonr_app/modules/share/views/button_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
+import 'package:sonr_app/pages/personal/profile_view.dart';
 import 'package:sonr_app/style.dart';
-import 'views/dashboard/dashboard_view.dart';
+import 'models/home_status.dart';
 import 'home_controller.dart';
-import 'views/contact/profile_view.dart';
+import 'views/dashboard_view.dart';
 import 'widgets/app_bar.dart';
 
 class HomePage extends GetView<HomeController> {

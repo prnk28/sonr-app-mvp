@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/activity/activity_view.dart';
-import 'package:sonr_app/modules/share/share_view.dart';
-import 'package:sonr_app/pages/details/pages.dart';
+import 'package:sonr_app/modules/share/views/share_view.dart';
+import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/explorer/explorer_page.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
