@@ -68,8 +68,8 @@ class MobileService extends GetxService {
 
   MobileService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
-        SonrService.update(position.value);
+      if (AppServices.areServicesRegistered && isRegistered && NodeService.isRegistered) {
+        NodeService.update(position.value);
       }
     });
   }
@@ -143,7 +143,7 @@ class MobileService extends GetxService {
 
       // @ Check for Text
       if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
-        var data = await SonrService.getURL(to._incomingText.value);
+        var data = await NodeService.getURL(to._incomingText.value);
         // Open Sheet
         await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
 
@@ -386,7 +386,7 @@ class MobileService extends GetxService {
           buttonText: "Grant",
           dismissible: false);
 
-      SonrService.to.node.requestLocalNetwork();
+      NodeService.to.node.requestLocalNetwork();
       updatePermissionsStatus();
     }
     return true;
@@ -425,7 +425,7 @@ class MobileService extends GetxService {
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen! && GetUtils.isURL(text)) {
       // Get Data
-      var data = await SonrService.getURL(text);
+      var data = await NodeService.getURL(text);
 
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);

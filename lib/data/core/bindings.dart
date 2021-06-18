@@ -93,7 +93,7 @@ class AppServices {
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LocalService().init());
 
-    await Get.putAsync(() => SonrService().init(), permanent: true);
+    await Get.putAsync(() => NodeService().init(), permanent: true);
   }
 
   /// @ Method Validates Required Services Registered

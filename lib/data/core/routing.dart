@@ -134,7 +134,7 @@ extension AppRoute on AppPage {
       default:
         return () {
           if (DeviceService.isMobile) {
-            Get.find<SonrService>().connect();
+            Get.find<NodeService>().connect();
             return HomePage();
           } else {
             return ExplorerPage();

@@ -196,7 +196,7 @@ class RegisterController extends GetxController {
       await UserService.newContact(contact);
 
       // Connect to Network
-      SonrService.to.connect();
+      NodeService.to.connect();
       AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
     }
   }
@@ -295,7 +295,7 @@ class RegisterController extends GetxController {
   /// #### Checks if Username matches device id and prefix from records
   static Future<bool> validateUser(String n, String mnemonic) async {
     var request = Request.newVerifyText(original: mnemonic, signature: mnemonic);
-    var response = await SonrService.verify(request);
+    var response = await NodeService.verify(request);
     return response.isVerified;
   }
 
@@ -303,7 +303,7 @@ class RegisterController extends GetxController {
   static Future<AuthResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
     var request = Request.newSignature(username, mnemonic);
-    var response = await SonrService.sign(request);
+    var response = await NodeService.sign(request);
     Logger.info(response.toString());
 
     // Check Result

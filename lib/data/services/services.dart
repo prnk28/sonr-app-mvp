@@ -5,7 +5,7 @@ export 'controllers/local.dart';
 export 'controllers/mobile.dart';
 export 'controllers/receiver.dart';
 export 'controllers/sender.dart';
-export 'controllers/sonr.dart';
+export 'controllers/node.dart';
 export 'controllers/user.dart';
 
 // Models

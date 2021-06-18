@@ -18,7 +18,7 @@ class Authorize {
       AppRoute.popup(ContactAuthView(false, invite: invite), dismissible: false);
     } else {
       AppRoute.sheet(_InviteRequestSheet(invite: invite), key: ValueKey(invite), dismissible: true, onDismissed: (direction) {
-        SonrService.respond(invite.newDeclineResponse());
+        NodeService.respond(invite.newDeclineResponse());
         AppRoute.closeSheet();
       });
     }

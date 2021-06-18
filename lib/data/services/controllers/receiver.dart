@@ -53,7 +53,7 @@ class ReceiverService extends GetxService {
 
           // Check if Send Back
           if (sendBackContact) {
-            SonrService.respond(to._session.buildReply(decision: true));
+            NodeService.respond(to._session.buildReply(decision: true));
           }
 
           // Present Home Controller
@@ -68,13 +68,13 @@ class ReceiverService extends GetxService {
         // Check Decision
         if (decision) {
           // Check for Remote
-          SonrService.respond(to._session.buildReply(decision: true));
+          NodeService.respond(to._session.buildReply(decision: true));
           AppRoute.closeSheet();
           AppPage.Activity.to();
         }
         // Send Declined
         else {
-          SonrService.respond(to._session.buildReply(decision: false));
+          NodeService.respond(to._session.buildReply(decision: false));
         }
       }
     }

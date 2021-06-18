@@ -65,7 +65,7 @@ class SenderService extends GetxService {
       );
 
       // Send Invite
-      SonrService.to.node.invite(request);
+      NodeService.to.node.invite(request);
       to._session.outgoing(request);
       return to._session;
     }
@@ -154,7 +154,7 @@ class SenderService extends GetxService {
         var file = result.toSonrFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
-        var filePath = await SonrService.to.node.pickFile();
+        var filePath = await NodeService.to.node.pickFile();
         var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
           return await _handlePayload(file.payload, file: file);

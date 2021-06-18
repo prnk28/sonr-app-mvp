@@ -81,7 +81,7 @@ class LocalService extends GetxService {
   /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
-    SonrService.sendFlat(peer);
+    NodeService.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);
@@ -166,7 +166,7 @@ class LocalService extends GetxService {
         if (_lastIsFacingFlat.value) {
           // Update Refs
           _isFlatMode(true);
-          SonrService.setFlatMode(true);
+          NodeService.setFlatMode(true);
 
           // Present View
           if (_localFlatPeers.length == 0 && !_flatModeCancelled.value) {
@@ -184,7 +184,7 @@ class LocalService extends GetxService {
   // # Stop Timer for Facing Check
   void _resetTimer() {
     _isFlatMode(false);
-    SonrService.setFlatMode(false);
+    NodeService.setFlatMode(false);
     if (_timer != null) {
       _timer!.cancel();
       _timer = null;

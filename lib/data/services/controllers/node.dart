@@ -6,10 +6,10 @@ import 'local.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-class SonrService extends GetxService {
+class NodeService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<SonrService>();
-  static SonrService get to => Get.find<SonrService>();
+  static bool get isRegistered => Get.isRegistered<NodeService>();
+  static NodeService get to => Get.find<NodeService>();
 
   // @ Set Properties
   final _properties = Peer_Properties().obs;
@@ -23,7 +23,7 @@ class SonrService extends GetxService {
 
   // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
-  Future<SonrService> init() async {
+  Future<NodeService> init() async {
     // Initialize
     _properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled));
     // Create Node

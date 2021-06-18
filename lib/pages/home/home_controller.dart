@@ -19,7 +19,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final pageIndex = 0.obs;
   final bottomIndex = 0.obs;
   final view = HomeView.Dashboard.obs;
-  final sonrStatus = Rx<Status>(SonrService.status.value);
+  final sonrStatus = Rx<Status>(NodeService.status.value);
 
   // Propeties
   final query = "".obs;
@@ -69,7 +69,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Handle Streams
     _lobbyStream = LocalService.lobby.listen(_handleLobbyStream);
-    _statusStream = SonrService.status.listen(_handleStatus);
+    _statusStream = NodeService.status.listen(_handleStatus);
   }
 
   @override

@@ -14,7 +14,7 @@ class URLLinkView extends StatelessWidget {
 
   /// Fetches URLLink Data from String and Creates URLLinkView
   static Future<URLLinkView> fromString(String url, {bool enableLaunch = false, bool enableCopy = true}) async {
-    URLLink data = await SonrService.getURL(url);
+    URLLink data = await NodeService.getURL(url);
     return URLLinkView(data: data, enableCopy: enableCopy, enableLaunch: enableLaunch);
   }
 

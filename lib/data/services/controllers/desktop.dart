@@ -21,8 +21,8 @@ class DesktopService extends GetxService {
   // Constructer
   DesktopService() {
     Timer.periodic(1.seconds, (timer) {
-      if (AppServices.areServicesRegistered && isRegistered && SonrService.isRegistered) {
-        SonrService.update(_position);
+      if (AppServices.areServicesRegistered && isRegistered && NodeService.isRegistered) {
+        NodeService.update(_position);
       }
     });
   }

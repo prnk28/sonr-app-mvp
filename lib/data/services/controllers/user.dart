@@ -147,8 +147,8 @@ class UserService extends GetxService {
     await to._userBox.write("contact", data.writeToJson());
 
     // Send Update to Node
-    if (SonrService.status.value.isConnected) {
-      SonrService.setProfile(data);
+    if (NodeService.status.value.isConnected) {
+      NodeService.setProfile(data);
     }
   }
 
