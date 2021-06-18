@@ -103,11 +103,9 @@ class RegisterController extends GetxController {
           // Analytics
           Logger.event(
             name: 'createUsername',
+            controller: 'RegisterController',
             parameters: {
-              'createdAt': DateTime.now().toString(),
-              'platform': DeviceService.platform.toString(),
-              'new-username': sName.value,
-              'controller': 'RegisterController',
+              'username': sName.value,
             },
           );
 
@@ -163,27 +161,27 @@ class RegisterController extends GetxController {
 
   /// @ Submits Contact
   setContact() async {
-      // Get Contact from Values
-      var contact = Contact(
-          profile: Profile(
-        firstName: firstName.value,
-        lastName: lastName.value,
-        sName: sName.value,
-      ));
+    // Get Contact from Values
+    var contact = Contact(
+        profile: Profile(
+      firstName: firstName.value,
+      lastName: lastName.value,
+      sName: sName.value,
+    ));
 
-      // Create User
-      await UserService.newContact(contact);
+    // Create User
+    await UserService.newContact(contact);
 
-      // Process data
-      if (DeviceService.isMobile) {
-        // Remove Textfield Focus
-        FocusScopeNode currentFocus = FocusScope.of(Get.context!);
-        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus!.unfocus();
-        }
+    // Process data
+    if (DeviceService.isMobile) {
+      // Remove Textfield Focus
+      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        FocusManager.instance.primaryFocus!.unfocus();
+      }
 
-        // Change Status
-        nextPage(RegisterPageType.Location);
+      // Change Status
+      nextPage(RegisterPageType.Location);
     }
 
     // Check Desktop

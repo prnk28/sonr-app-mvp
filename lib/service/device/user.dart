@@ -99,31 +99,36 @@ class UserService extends GetxService {
   /// @ Method Collects user Feedback and Sends Email
   static void sendFeedback(String message, Uint8List? screenshot) async {
     var screenshotPath = "";
+    bool hasScreenshot = false;
 
     // Save Image
     if (screenshot != null) {
-      screenshotPath = await TransferService.writeImageToStorage(screenshot);
+      final Directory output = await getTemporaryDirectory();
+      final String screenshotFilePath = '${output.path}/feedback.png';
+      final File screenshotFile = File(screenshotFilePath);
+      await screenshotFile.writeAsBytes(screenshot);
+      screenshotPath = screenshotFilePath;
+      hasScreenshot = true;
     }
 
-    // Create Instance
-    Reference ref = FirebaseStorage.instance.ref().child('screenshots').child(screenshotPath);
+    // Check if Has Screenshot
+    if (hasScreenshot) {
+      // Create Instance
+      Reference ref = FirebaseStorage.instance.ref().child('screenshots').child(screenshotPath);
 
-    // Set Metadata
-    final metadata = SettableMetadata(contentType: 'image/jpeg', customMetadata: {'path': screenshotPath});
+      // Set Metadata
+      final feedback = SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {'path': screenshotPath},
+      );
 
-    // Upload to Firebase
-    UploadTask uploadTask = ref.putFile(File(screenshotPath), metadata);
-    await uploadTask.whenComplete(() => {});
-    String link = await ref.getDownloadURL();
-
-    // Update Firestore
-    DocumentReference docRef = FirebaseFirestore.instance.collection("feedback").doc();
-    docRef.update({
-      "firstname": UserService.contact.value.firstName,
-      "lastname": UserService.contact.value.lastName,
-      "message": message,
-      "screenshot": link,
-    });
+      // Upload to Firebase
+      UploadTask uploadTask = ref.putFile(File(screenshotPath), feedback);
+      await uploadTask.whenComplete(() => to._handleUploadScreenshot(ref, message));
+    } else {
+      // Post Only Message
+      to._handlePostFeedback(message);
+    }
   }
 
   /// @ Trigger iOS Local Network with Alert
@@ -144,5 +149,39 @@ class UserService extends GetxService {
     if (SonrService.status.value.isConnected) {
       SonrService.setProfile(data);
     }
+  }
+
+  /// @ Helper: Uploads User Screenshot
+  FutureOr<dynamic> _handleUploadScreenshot(Reference ref, String message) async {
+    // Fetch Link
+    String link = await ref.getDownloadURL();
+    await _handlePostFeedback(message, link: link);
+  }
+
+  /// @ Helper: Posts User Feedback
+  Future<void> _handlePostFeedback(String message, {String? link}) async {
+    // Update Firestore
+    DocumentReference docRef = FirebaseFirestore.instance.collection("feedback").doc();
+
+    // Check for Link
+    if (link != null) {
+      docRef.update({
+        "firstname": UserService.contact.value.profile.firstName,
+        "lastname": UserService.contact.value.profile.lastName,
+        "message": message,
+        "screenshot": link,
+        "hasScreenshot": true,
+      });
+    } else {
+      docRef.update({
+        "firstname": UserService.contact.value.profile.firstName,
+        "lastname": UserService.contact.value.profile.lastName,
+        "message": message,
+        "hasScreenshot": false,
+      });
+    }
+
+    // Log Feedback Event
+    
   }
 }

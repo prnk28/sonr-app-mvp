@@ -87,8 +87,8 @@ class DeviceService extends GetxService {
         // Analytics
         Logger.event(
           name: 'findLocation',
+          controller: 'DeviceService',
           parameters: {
-            'controller': 'DeviceService',
             'createdAt': DateTime.now().toString(),
             'platform': platform.toString(),
             'isMobile': platform.isMobile,
@@ -109,8 +109,14 @@ class DeviceService extends GetxService {
     if (response.statusCode == 200) {
       // Analytics
       Logger.event(
+        controller: 'DeviceService',
         name: '[DeviceService]: Find-Location',
-        parameters: {'createdAt': DateTime.now().toString(), 'platform': platform.toString(), 'isMobile': platform.isMobile, 'type': 'IP-Location'},
+        parameters: {
+          'createdAt': DateTime.now().toString(),
+          'platform': platform.toString(),
+          'isMobile': platform.isMobile,
+          'type': 'IP-Location',
+        },
       );
 
       // Decode Json

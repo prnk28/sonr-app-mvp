@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:sonr_app/style.dart';
 import 'package:file_picker/file_picker.dart';
@@ -38,11 +37,7 @@ class TransferService extends GetxService {
       // Analytics
       Logger.event(
         name: 'chooseCamera',
-        parameters: {
-          'controller': 'TransferService',
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.device.platform.toString(),
-        },
+        controller: 'TransferService',
       );
 
       // Initialize
@@ -54,11 +49,7 @@ class TransferService extends GetxService {
         // Analytics
         Logger.event(
           name: 'confirmedCamera',
-          parameters: {
-            'controller': 'TransferService',
-            'createdAt': DateTime.now().toString(),
-            'platform': DeviceService.device.platform.toString(),
-          },
+          controller: 'TransferService',
         );
 
         // Complete Result
@@ -76,12 +67,8 @@ class TransferService extends GetxService {
       // Analytics
       if (DeviceService.isMobile) {
         Logger.event(
+          controller: 'TransferService',
           name: 'chooseContact',
-          parameters: {
-            'controller': 'TransferService',
-            'createdAt': DateTime.now().toString(),
-            'platform': DeviceService.device.platform.toString(),
-          },
         );
       }
 
@@ -95,12 +82,8 @@ class TransferService extends GetxService {
     // Analytics
     if (DeviceService.isMobile) {
       Logger.event(
+        controller: 'TransferService',
         name: 'chooseMedia',
-        parameters: {
-          'controller': "TransferService",
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.device.platform.toString(),
-        },
       );
     }
     // Load Picker
@@ -117,11 +100,7 @@ class TransferService extends GetxService {
       if (DeviceService.isMobile) {
         Logger.event(
           name: 'confirmMedia',
-          parameters: {
-            'controller': 'TransferService',
-            'createdAt': DateTime.now().toString(),
-            'platform': DeviceService.device.platform.toString(),
-          },
+          controller: 'TransferService',
         );
       }
       // Convert To File
@@ -137,10 +116,7 @@ class TransferService extends GetxService {
     if (DeviceService.isMobile) {
       Logger.event(
         name: 'chooseFile',
-        parameters: {
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.device.platform.toString(),
-        },
+        controller: 'TransferService',
       );
     }
     // Load Picker
@@ -151,11 +127,7 @@ class TransferService extends GetxService {
         if (DeviceService.isMobile) {
           Logger.event(
             name: 'confirmFile',
-            parameters: {
-              'controller': 'TransferService',
-              'createdAt': DateTime.now().toString(),
-              'platform': DeviceService.device.platform.toString(),
-            },
+            controller: 'TransferService',
           );
         }
 
@@ -187,11 +159,7 @@ class TransferService extends GetxService {
     // Analytics
     Logger.event(
       name: 'chooseURL',
-      parameters: {
-        'controller': 'TransferService',
-        'createdAt': DateTime.now().toString(),
-        'platform': DeviceService.device.platform.toString(),
-      },
+      controller: 'TransferService',
     );
     return await _handlePayload(Payload.URL, url: url);
   }
@@ -201,8 +169,8 @@ class TransferService extends GetxService {
     // Analytics
     Logger.event(
       name: 'chooseMedia',
+      controller: 'TransferService',
       parameters: {
-        'controller': 'TransferService',
         'createdAt': DateTime.now().toString(),
         'platform': DeviceService.device.platform.toString(),
       },
@@ -215,11 +183,9 @@ class TransferService extends GetxService {
     // Analytics
     Logger.event(
       name: 'selectedPeer',
+      controller: 'TransferService',
       parameters: {
-        'controller': 'TransferService',
-        'createdAt': DateTime.now().toString(),
-        'peer-platform': peer.platform.toString(),
-        'platform': DeviceService.device.platform.toString(),
+        'peerPlatform': peer.platform.toString(),
       },
     );
 
@@ -239,25 +205,14 @@ class TransferService extends GetxService {
     // Analytics
     Logger.event(
       name: 'chooseFile',
+      controller: 'TransferService',
       parameters: {
-        'controller': 'TransferService',
-        'createdAt': DateTime.now().toString(),
         'payload': file.payload.toString(),
-        'platform': DeviceService.device.platform.toString(),
       },
     );
 
     // Handle File Payload
     return await _handlePayload(file.payload, file: file);
-  }
-
-  /// @ Write Uint8List Image Data to Storage
-  static Future<String> writeImageToStorage(Uint8List data) async {
-    final Directory output = await getTemporaryDirectory();
-    final String screenshotFilePath = '${output.path}/feedback.png';
-    final File screenshotFile = File(screenshotFilePath);
-    await screenshotFile.writeAsBytes(data);
-    return screenshotFilePath;
   }
 
   /// Set Transfer Payload for File
@@ -270,10 +225,8 @@ class TransferService extends GetxService {
       // Capture File Analytics
       Logger.event(
         name: 'sharedFile',
+        controller: 'TransferService',
         parameters: {
-          'controller': 'TransferService',
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.device.platform.toString(),
           'totalSize': file.size,
           'count': file.count,
           'payload': file.payload.toString(),
@@ -316,10 +269,8 @@ class TransferService extends GetxService {
       // Capture Contact Analytics
       Logger.event(
         name: 'sharedContact',
+        controller: 'TransferService',
         parameters: {
-          'controller': 'TransferService',
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.device.platform.toString(),
           'payload': Payload.CONTACT.toString(),
         },
       );
@@ -335,10 +286,8 @@ class TransferService extends GetxService {
       // Capture Contact Analytics
       Logger.event(
         name: 'sharedURL',
+        controller: 'TransferService',
         parameters: {
-          'controller': 'TransferService',
-          'createdAt': DateTime.now().toString(),
-          'platform': DeviceService.device.platform.toString(),
           'link': url,
           'payload': Payload.URL.toString(),
         },

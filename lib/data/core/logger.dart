@@ -47,11 +47,28 @@ class Logger extends GetxService {
   }
 
   /// @ Logs a Firebase Analytics Event
-  static void event({required String name, Map<String, Object?>? parameters}) async {
+  /// Adds Properties: `createdAt`, `platform`, `controller`
+  static void event({
+    required String name,
+    required String controller,
+    Map<String, Object?>? parameters,
+  }) async {
     if (isRegistered && DeviceService.isMobile) {
+      // Check Paramaters
+      var map = <String, Object?>{};
+      if (parameters != null) {
+        map.addAll(parameters);
+      }
+
+      // Add Essential Parameters
+      map["controller"] = controller;
+      map["createdAt"] = DateTime.now().toString();
+      map["platform"] = DeviceService.device.platform.toString();
+
+      // Log Event
       FirebaseAnalytics().logEvent(
         name: name,
-        parameters: parameters,
+        parameters: map,
       );
     }
   }

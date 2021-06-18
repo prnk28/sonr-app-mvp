@@ -136,14 +136,25 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
               ),
 
               // Foreground Gradient
-              Container(
+              AnimatedContainer(
                 alignment: Alignment.center,
                 width: _calculateWidth(progress.value),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
+                duration: 150.milliseconds,
               ),
+
+              // Progress of Transfer
               Align(
                 alignment: Alignment.center,
-                child: _calculateText(progress.value).subheading(fontSize: 16, color: _calculateTextColor(progress.value)),
+                child: AnimatedSlideSwitcher.slideDown(
+                  child: Container(
+                    key: ValueKey<double>(progress.value),
+                    child: _calculateText(progress.value).subheading(
+                      fontSize: 16,
+                      color: _calculateTextColor(progress.value),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
