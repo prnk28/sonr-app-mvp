@@ -121,16 +121,47 @@ class FormPanel extends StatelessWidget {
 }
 
 class PagePanel extends StatelessWidget {
+  final RegisterTitleBar titleBar;
+  final List<Widget> buttons;
+  final List<Widget> children;
+
+  const PagePanel({Key? key, required this.titleBar, required this.buttons, required this.children}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
+      bottomSheet: _buildButtonSheet(),
+      appBar: titleBar,
       body: Container(
         padding: EdgeInsets.all(16),
         width: Get.width,
         height: Get.height,
-        child: Column(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: children,
+        ),
       ),
     );
+  }
+
+  Widget _buildButtonSheet() {
+    if (buttons.length > 0) {
+      return Container(
+          decoration: BoxDecoration(
+              boxShadow: SonrTheme.boxShadow,
+              color: SonrTheme.backgroundColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(37),
+                topRight: Radius.circular(37),
+              )),
+          padding: EdgeInsets.all(8),
+          height: 106,
+          child: Row(
+            children: buttons,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+          ));
+    }
+    return Container();
   }
 }
 

@@ -16,7 +16,6 @@ class ProfileSetupView extends GetView<RegisterController> {
               title: 'Profile',
             ),
             children: [
-              Divider(color: Get.theme.hintColor.withOpacity(0.6), indent: 8, endIndent: 8),
               Padding(padding: EdgeInsets.all(8)),
               CircleContainer(
                 alignment: Alignment.center,

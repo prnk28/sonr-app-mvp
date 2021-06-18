@@ -86,8 +86,9 @@ class DeviceService extends GetxService {
 
         // Analytics
         Logger.event(
-          name: '[DeviceService]: Find-Location',
+          name: 'findLocation',
           parameters: {
+            'controller': 'DeviceService',
             'createdAt': DateTime.now().toString(),
             'platform': platform.toString(),
             'isMobile': platform.isMobile,

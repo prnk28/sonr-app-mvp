@@ -222,8 +222,38 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Checks to User Permissions View
   bool get isPermissions => this == RegisterPageType.Location || this == RegisterPageType.Gallery;
 
+  /// Checks if Page is First in Grouped List
+  bool get isFirst {
+    if (this.isPermissions) {
+      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) == 0;
+    } else if (this.isSetup) {
+      return RegisterPageTypeUtils.setupPageTypes.indexOf(this) == 0;
+    }
+    return false;
+  }
+
+  /// Checks if Page is First in Grouped List
+  bool get isLast {
+    if (this.isPermissions) {
+      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == RegisterPageTypeUtils.permissionsPageTypes.length;
+    } else if (this.isSetup) {
+      return RegisterPageTypeUtils.setupPageTypes.indexOf(this) + 1 == RegisterPageTypeUtils.setupPageTypes.length;
+    }
+    return false;
+  }
+
   /// Return Index of this Page
   int get index => RegisterPageType.values.indexOf(this);
+
+  /// Return Index Within Group
+  int get indexGroup {
+    if (this.isPermissions) {
+      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this);
+    } else if (this.isSetup) {
+      return RegisterPageTypeUtils.setupPageTypes.indexOf(this);
+    }
+    return -1;
+  }
 
   /// Returns Intro Pages
   static List<RegisterPageType> get introPageTypes => [RegisterPageType.Intro];

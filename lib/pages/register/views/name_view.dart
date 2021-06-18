@@ -43,6 +43,9 @@ class NamePage extends GetView<RegisterController> {
               child: ObxValue<RxDouble>(
                   (leftPadding) => Stack(children: [
                         TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                          ],
                           style: DisplayTextStyle.Paragraph.style(color: SonrTheme.itemColor, fontSize: 24),
                           autofocus: true,
                           textInputAction: TextInputAction.go,

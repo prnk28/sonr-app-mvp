@@ -79,10 +79,6 @@ class RegisterController extends GetxController {
     }
   }
 
-  bool isInfoPanelDisplayed(int i) {
-    return panelNotifier.value.toInt() == i;
-  }
-
   Future<void> setName() async {
     // Refresh Records
     refreshRecords();
@@ -106,20 +102,21 @@ class RegisterController extends GetxController {
 
           // Analytics
           Logger.event(
-            name: '[AuthService]: Create-Username',
+            name: 'createUsername',
             parameters: {
               'createdAt': DateTime.now().toString(),
               'platform': DeviceService.platform.toString(),
               'new-username': sName.value,
+              'controller': 'RegisterController',
             },
           );
 
           // Update Status
           mnemonic(genMnemomic);
-          status(RegisterPageType.Backup);
+          nextPage(RegisterPageType.Backup);
         }
       } else {
-        status(RegisterPageType.Location);
+        nextPage(RegisterPageType.Location);
       }
     }
   }
@@ -138,6 +135,30 @@ class RegisterController extends GetxController {
   void nextPage(RegisterPageType type) {
     status(type);
     status.refresh();
+
+    // Setup Page
+    if (type.isSetup) {
+      // Validate Not Last
+      if (!type.isLast) {
+        setupPageController.animateToPage(
+          type.indexGroup,
+          duration: 400.milliseconds,
+          curve: Curves.easeIn,
+        );
+      }
+    }
+
+    // Permissions Page
+    if (type.isPermissions) {
+      // Validate Not Last
+      if (!type.isLast) {
+        permissionsPageController.animateToPage(
+          type.indexGroup,
+          duration: 400.milliseconds,
+          curve: Curves.easeIn,
+        );
+      }
+    }
   }
 
   /// @ Submits Contact
@@ -163,7 +184,7 @@ class RegisterController extends GetxController {
         }
 
         // Change Status
-        status(RegisterPageType.Location);
+        nextPage(RegisterPageType.Location);
       }
     }
 

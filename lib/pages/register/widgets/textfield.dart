@@ -13,6 +13,8 @@ class RegisterTextField extends GetView<RegisterController> {
   final TextInputAction textInputAction;
   final Rx<TextInputValidStatus> status;
   final void Function()? onEditingComplete;
+  final TextInputType? textInputType;
+  final List<TextInputFormatter>? inputFormatters;
 
   factory RegisterTextField.firstName({
     required String hint,
@@ -24,8 +26,12 @@ class RegisterTextField extends GetView<RegisterController> {
         hint: hint,
         label: "",
         focusNode: focusNode,
+        textInputType: TextInputType.name,
         autoFocus: true,
         autoCorrect: false,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+        ],
         textInputAction: TextInputAction.next,
         status: Get.find<RegisterController>().firstNameStatus);
   }
@@ -40,11 +46,54 @@ class RegisterTextField extends GetView<RegisterController> {
       hint: hint,
       label: "",
       focusNode: focusNode,
+      textInputType: TextInputType.name,
       autoFocus: true,
       autoCorrect: false,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+      ],
       textInputAction: TextInputAction.done,
       status: Get.find<RegisterController>().lastNameStatus,
     );
+  }
+
+  factory RegisterTextField.email({
+    required String hint,
+    required void Function() onEditingComplete,
+    required FocusNode focusNode,
+  }) {
+    return RegisterTextField(
+      value: Get.find<RegisterController>().lastName,
+      hint: hint,
+      label: "",
+      focusNode: focusNode,
+      textInputType: TextInputType.emailAddress,
+      autoFocus: true,
+      autoCorrect: false,
+      inputFormatters: [],
+      textInputAction: TextInputAction.done,
+      status: Get.find<RegisterController>().lastNameStatus,
+    );
+  }
+
+  factory RegisterTextField.phoneNumber({
+    required String hint,
+    required void Function() onEditingComplete,
+    required FocusNode focusNode,
+  }) {
+    return RegisterTextField(
+        value: Get.find<RegisterController>().lastName,
+        hint: hint,
+        label: "",
+        focusNode: focusNode,
+        textInputType: TextInputType.phone,
+        autoFocus: true,
+        autoCorrect: false,
+        textInputAction: TextInputAction.done,
+        status: Get.find<RegisterController>().lastNameStatus,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+        ]);
   }
 
   RegisterTextField({
@@ -53,10 +102,12 @@ class RegisterTextField extends GetView<RegisterController> {
     required this.label,
     required this.focusNode,
     required this.status,
+    required this.inputFormatters,
     this.onEditingComplete,
     this.textInputAction = TextInputAction.next,
     this.autoFocus = false,
-    this.autoCorrect = true,
+    this.autoCorrect = false,
+    this.textInputType,
   });
 
   @override
@@ -95,9 +146,11 @@ class RegisterTextField extends GetView<RegisterController> {
           padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
           child: TextField(
             style: DisplayTextStyle.Paragraph.style(color: SonrTheme.itemColor, fontSize: 20),
+            keyboardType: textInputType,
             autofocus: autoFocus,
             textInputAction: textInputAction,
             autocorrect: autoCorrect,
+            inputFormatters: inputFormatters,
             textCapitalization: TextCapitalization.words,
             focusNode: focusNode,
             onEditingComplete: onEditingComplete,
