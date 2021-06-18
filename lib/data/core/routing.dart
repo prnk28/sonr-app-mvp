@@ -242,6 +242,7 @@ extension AppRoute on AppPage {
         buttonText,
         () {
           completer.complete();
+          Future.delayed(300.milliseconds, () => Get.back());
         },
       )),
       transitionDuration: 0.seconds,
@@ -276,7 +277,6 @@ extension AppRoute on AppPage {
             offset: offset,
           )),
       transitionDuration: 0.seconds,
-      barrierDismissible: false,
       barrierColor: Colors.transparent,
       useSafeArea: !ignoreSafeArea,
     );

@@ -17,8 +17,8 @@ class AlertOverlay extends StatelessWidget {
               isDisplayed: !hasDecided.value,
               direction: BigDirection.Up,
               child: BoxContainer(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 256),
+                padding: EdgeInsets.symmetric(vertical: 12),
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 220),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   title.heading(),
                   Padding(
@@ -29,16 +29,13 @@ class AlertOverlay extends StatelessWidget {
                   Divider(),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                     // Accept Button
-                    Container(
-                      width: Get.width / 3,
-                      child: ColorButton.primary(
-                        onPressed: () {
-                          hasDecided(true);
-                          Future.delayed(250.milliseconds, () => onPressed());
-                        },
-                        icon: SonrIcons.Check,
-                        text: buttonText,
-                      ),
+                    ColorButton.primary(
+                      onPressed: () {
+                        hasDecided(true);
+                        Future.delayed(250.milliseconds, () => onPressed());
+                      },
+                      icon: SonrIcons.Check,
+                      text: buttonText,
                     ),
                   ]),
                 ]),

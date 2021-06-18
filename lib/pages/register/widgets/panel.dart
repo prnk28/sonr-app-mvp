@@ -127,7 +127,6 @@ class PagePanel extends StatelessWidget {
       width: Width.full,
       height: Height.full,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: children,
       ),

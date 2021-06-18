@@ -31,7 +31,7 @@ class NamePage extends GetView<RegisterController> {
             ],
           )),
       Container(
-          decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(22)),
+          decoration: BoxDecoration(color: SonrTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
           margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
           padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
           child: ObxValue<RxDouble>(

@@ -42,10 +42,12 @@ class RegisterPage extends GetView<RegisterController> {
           instruction: status.instruction,
           isGradient: status.isGradient,
         ),
-        bottomSheet: RegisterBottomSheet(
-          leftButton: status.leftButton(),
-          rightButton: status.rightButton(),
-        ),
+        bottomSheet: status != RegisterPageType.Name
+            ? RegisterBottomSheet(
+                leftButton: status.leftButton(),
+                rightButton: status.rightButton(),
+              )
+            : null,
       );
     } else {
       return _StartView(key: RegisterPageType.Intro.key);
