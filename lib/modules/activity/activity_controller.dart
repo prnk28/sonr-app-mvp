@@ -1,4 +1,9 @@
 import 'package:sonr_app/style.dart';
+export 'activity_controller.dart';
+export 'widgets/current_item.dart';
+export 'widgets/past_item.dart';
+export 'views/activity_view.dart';
+export 'models/arguments.dart';
 
 class ActivityController extends GetxController {
   /// Current Page Index

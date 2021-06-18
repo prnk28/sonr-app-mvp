@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/database/database.dart';
-import 'package:sonr_app/modules/peer/profile_view.dart';
+import 'package:sonr_app/modules/peer/profile_utility.dart';
 import 'package:sonr_app/data/database/service.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';

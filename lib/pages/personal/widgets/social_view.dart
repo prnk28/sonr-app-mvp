@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 
 class SocialView extends StatelessWidget {
   final TileController controller;
@@ -149,7 +149,8 @@ class _TweetItem extends StatelessWidget {
             Container(
               width: 55,
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.paragraph()]),
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [ClipOval(child: Image.network(user!.profilePicUrl!)), user.username!.paragraph()]),
             ),
             Container(
               width: 265,

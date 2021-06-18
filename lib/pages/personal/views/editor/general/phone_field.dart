@@ -1,8 +1,8 @@
-import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/style.dart';
 
 /// @ Edit Profile Details View
-class EditPhoneView extends GetView<ProfileController> {
+class EditPhoneView extends GetView<PersonalController> {
   EditPhoneView({Key? key}) : super(key: key);
   final FocusNode _primaryNumberFocus = FocusNode();
   final scrollController = ScrollController();

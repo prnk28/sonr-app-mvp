@@ -1,8 +1,6 @@
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
-import 'activity_controller.dart';
-import 'current_item.dart';
-import 'past_item.dart';
+import '../activity_controller.dart';
 
 /// @ Activity View
 class ActivityPopup extends GetView<ActivityController> {

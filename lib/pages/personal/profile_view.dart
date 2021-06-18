@@ -2,9 +2,9 @@ import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/pages/personal/widgets/tile_item.dart';
 import 'package:sonr_app/style.dart';
 import 'views/editor/general/fields.dart';
-import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 
-class ProfileView extends GetView<ProfileController> {
+class ProfileView extends GetView<PersonalController> {
   ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ProfileView extends GetView<ProfileController> {
   }
 }
 
-class _DefaultProfileView extends GetView<ProfileController> {
+class _DefaultProfileView extends GetView<PersonalController> {
   _DefaultProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _DefaultProfileView extends GetView<ProfileController> {
         SliverPadding(padding: EdgeInsets.all(14)),
 
         // @ Builds List of Social Tile
-        GetBuilder<ProfileController>(
+        GetBuilder<PersonalController>(
             id: 'social-grid',
             builder: (_) {
               return SliverGrid(
@@ -62,7 +62,7 @@ class _DefaultProfileView extends GetView<ProfileController> {
   }
 }
 
-class _ProfileInfoView extends GetView<ProfileController> {
+class _ProfileInfoView extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -128,7 +128,7 @@ class _ProfileInfoView extends GetView<ProfileController> {
   }
 }
 
-class _ProfileContactButtons extends GetView<ProfileController> {
+class _ProfileContactButtons extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Container(

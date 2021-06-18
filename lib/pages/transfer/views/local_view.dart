@@ -1,5 +1,6 @@
 import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/modules/peer/item_view.dart';
+import 'package:sonr_app/pages/transfer/models/status.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
 import '../transfer_controller.dart';

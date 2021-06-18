@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style.dart';
 import 'package:feedback/feedback.dart';
 

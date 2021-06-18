@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import '../../controllers/editor_controller.dart';
 import 'package:sonr_app/style.dart';
 import 'general/fields.dart';
-import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 
 class EditorView extends GetView<EditorController> {
   @override

@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:sonr_app/modules/peer/profile_view.dart';
 import 'package:sonr_app/style.dart';
-import 'activity_controller.dart';
+import '../activity_controller.dart';
 
 class CurrentActivityItem extends GetView<ActivityController> {
   final Session session;

@@ -1,9 +1,8 @@
 import 'package:camerawesome/camerawesome_plugin.dart';
-import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/style.dart';
 
-
-class ProfileAvatarField extends GetView<ProfileController> {
+class ProfileAvatarField extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -54,12 +53,12 @@ class ProfileAvatarField extends GetView<ProfileController> {
 }
 
 /// @ Edit Profile Picture View
-class EditPictureView extends GetView<ProfileController> {
+class EditPictureView extends GetView<PersonalController> {
   final String headerText;
   EditPictureView({this.headerText = "Edit Picture", Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Get.find<ProfileController>().status.value == PersonalViewStatus.NeedCameraPermissions
+    return Obx(() => Get.find<PersonalController>().status.value == PersonalViewStatus.NeedCameraPermissions
         ? _CameraPermissionsView()
         : Container(
             margin: EdgeInsets.only(left: 10, right: 10),
@@ -87,7 +86,7 @@ class EditPictureView extends GetView<ProfileController> {
 }
 
 /// @ Circular Camera View
-class _ProfilePictureCameraView extends GetView<ProfileController> {
+class _ProfilePictureCameraView extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
@@ -135,7 +134,7 @@ class _ProfilePictureCameraView extends GetView<ProfileController> {
   }
 }
 
-class _CameraPermissionsView extends GetView<ProfileController> {
+class _CameraPermissionsView extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -3,14 +3,20 @@ import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/pages/register/register_data.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
 export 'widgets/notifier.dart';
 export 'widgets/panel.dart';
-export 'register_data.dart';
+export 'models/field.dart';
+export 'models/info.dart';
+export 'models/status.dart';
+export 'models/type.dart';
+import 'models/info.dart';
+import 'models/status.dart';
+import 'models/type.dart';
 
 class RegisterController extends GetxController {
   // Properties

@@ -1,5 +1,4 @@
 export '../views/add/add_social.dart';
-export 'profile_controller.dart';
 export '../profile_view.dart';
 export '../models/options.dart';
 export '../models/status.dart';
@@ -15,7 +14,7 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 import '../models/status.dart';
 import '../views/add/add_social.dart';
 
-class ProfileController extends GetxController {
+class PersonalController extends GetxController {
   // Properties
   final status = PersonalViewStatus.Viewing.obs;
   // final focused = FocusedTile(-1, false).obs;

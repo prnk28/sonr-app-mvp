@@ -1,4 +1,4 @@
-import 'package:sonr_app/pages/personal/controllers/profile_controller.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/style.dart';
 
 /// ** Builds Add Social Form Dialog ** //
@@ -51,7 +51,7 @@ class AddTileView extends StatelessWidget {
 }
 
 /// @ Step 1 Select Provider
-class DropdownAddView extends GetView<ProfileController> {
+class DropdownAddView extends GetView<PersonalController> {
   // Build View As Stateless
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class DropdownAddView extends GetView<ProfileController> {
 }
 
 /// @ Step 2 Connect to the provider API
-class SetInfoView extends GetView<ProfileController> {
+class SetInfoView extends GetView<PersonalController> {
   SetInfoView();
 
   @override
@@ -107,7 +107,7 @@ class SetInfoView extends GetView<ProfileController> {
 }
 
 /// @ Step 3 Set the Social Tile type
-class SetTypeView extends GetView<ProfileController> {
+class SetTypeView extends GetView<PersonalController> {
   const SetTypeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -156,7 +156,7 @@ class _SocialAddController extends GetxController {
   /// Exits from Social View to Viewing
   void exitToViewing() {
     Get.back();
-    Get.find<ProfileController>().exitToViewing();
+    Get.find<PersonalController>().exitToViewing();
   }
 
   // // -- Set Privacy -- //

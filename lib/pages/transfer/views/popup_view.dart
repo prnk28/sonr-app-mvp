@@ -22,7 +22,7 @@ class EditPayloadPopup extends StatelessWidget {
               child: DetailAppBar(onPressed: () => Get.back(), title: item.prettyType(), isClose: true),
               height: 64,
             ),
-            _EditPayloadPopupInfo(item: item),
+            PayloadItemInfo(item: item),
           ],
         ),
       ),
@@ -30,10 +30,10 @@ class EditPayloadPopup extends StatelessWidget {
   }
 }
 
-class _EditPayloadPopupInfo extends StatelessWidget {
+class PayloadItemInfo extends StatelessWidget {
   final SonrFile_Item item;
 
-  const _EditPayloadPopupInfo({Key? key, required this.item}) : super(key: key);
+  const PayloadItemInfo({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

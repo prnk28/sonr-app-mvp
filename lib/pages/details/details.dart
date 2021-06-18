@@ -11,3 +11,4 @@ export 'widgets/url/card_item.dart';
 export 'widgets/url/link_view.dart';
 export 'widgets/url/list_item.dart';
 export 'widgets/post/views.dart';
+export 'models/arguments.dart';

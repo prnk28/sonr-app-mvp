@@ -1,7 +1,9 @@
 import 'package:sonr_app/pages/register/widgets/notifier.dart';
 import 'package:sonr_app/style.dart';
-import 'views/views.dart';
 import 'register_controller.dart';
+import 'views/backup_view.dart';
+import 'views/contact_view.dart';
+import 'views/name_view.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   @override
