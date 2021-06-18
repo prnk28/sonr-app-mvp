@@ -48,6 +48,7 @@ export 'style/elements/image.dart';
 // Form Styles
 export 'style/form/checklist.dart';
 export 'style/form/dropdown.dart';
+export 'style/form/infolist.dart';
 export 'style/form/textfield.dart';
 export 'style/form/tabs.dart';
 

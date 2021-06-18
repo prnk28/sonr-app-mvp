@@ -92,7 +92,7 @@ class FormPanel extends StatelessWidget {
   factory FormPanel.contact({required List<Widget> children}) {
     return FormPanel(
       children: children,
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.only(left: 16, right: 16),
       margin: EdgeInsets.zero,
     );
   }
@@ -100,17 +100,12 @@ class FormPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: Width.full,
-      height: Height.full,
       margin: margin,
       padding: padding,
       child: Column(
-        children: <Widget>[
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          ),
-        ],
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
       ),
     );
   }
@@ -154,8 +149,8 @@ class RegisterTitleBar extends StatelessWidget implements PreferredSizeWidget {
             crossAxisAlignment: instruction != null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              instruction != null ? instruction!.light(fontSize: 48) : Container(),
-              isGradient ? title.gradient(value: SonrGradient.Theme(radius: 2), size: 48) : title.heading(fontSize: 48),
+              instruction != null ? instruction!.light(fontSize: 42) : Container(),
+              isGradient ? title.gradient(value: SonrGradient.Theme(radius: 2), size: 48) : title.heading(fontSize: 42),
             ],
           ),
         ),
@@ -164,7 +159,7 @@ class RegisterTitleBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(Width.full, instruction != null ? 150 : 60);
+  Size get preferredSize => Size(Width.full, instruction != null ? 142 : 60);
 }
 
 class RegisterBottomSheet extends StatelessWidget {

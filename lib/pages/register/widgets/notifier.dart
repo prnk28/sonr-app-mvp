@@ -40,6 +40,7 @@ class _NotifyingIntroViewState extends State<NotifyingIntroView> {
   Widget build(BuildContext context) {
     return Container(
       child: PageView(
+        physics: NeverScrollableScrollPhysics(),
         scrollDirection: Axis.horizontal,
         children: _pages,
         controller: Get.find<RegisterController>().introPageController,
@@ -81,12 +82,14 @@ class _NotifyingSetupViewState extends State<NotifyingSetupView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBody: true,
+        resizeToAvoidBottomInset: false,
         backgroundColor: SonrTheme.foregroundColor,
         appBar: widget.titleBar,
         body: Stack(
           children: [
             PageView(
-              //physics: NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               children: _pages,
               controller: Get.find<RegisterController>().setupPageController,
@@ -138,6 +141,7 @@ class _NotifyingPermissionsViewState extends State<NotifyingPermissionsView> {
   Widget build(BuildContext context) {
     return Container(
       child: PageView(
+        physics: NeverScrollableScrollPhysics(),
         scrollDirection: Axis.horizontal,
         children: _pages,
         controller: Get.find<RegisterController>().permissionsPageController,

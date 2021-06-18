@@ -68,7 +68,8 @@ class NamePage extends GetView<RegisterController> {
                   ]),
               (hint.item1.length * 12.0).obs)),
       Padding(padding: EdgeInsets.all(8)),
-      _NameStatus()
+      _NameStatus(),
+      Padding(padding: EdgeInsets.all(200))
     ]);
   }
 }

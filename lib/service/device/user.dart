@@ -59,18 +59,19 @@ class UserService extends GetxService {
         // Set Contact Values
         _contact(contact);
         _isNewUser(false);
+
+        Logger.info("Returning User");
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
         _hasUser(false);
         _isNewUser(true);
 
-        // Clear Database
-        CardService.deleteAllCards();
-        CardService.clearAllActivity();
+        Logger.warn("RESET: Contact and User");
       }
     } else {
       _isNewUser(true);
+      Logger.info("New User!");
     }
 
     // Handle Contact Updates

@@ -139,7 +139,7 @@ class RegisterController extends GetxController {
     // Setup Page
     if (type.isSetup) {
       // Validate Not Last
-      if (!type.isLast) {
+      if (!type.isFirst) {
         setupPageController.animateToPage(
           type.indexGroup,
           duration: 400.milliseconds,
@@ -151,7 +151,7 @@ class RegisterController extends GetxController {
     // Permissions Page
     if (type.isPermissions) {
       // Validate Not Last
-      if (!type.isLast) {
+      if (!type.isFirst) {
         permissionsPageController.animateToPage(
           type.indexGroup,
           duration: 400.milliseconds,
@@ -163,7 +163,6 @@ class RegisterController extends GetxController {
 
   /// @ Submits Contact
   setContact() async {
-    if (validateContact()) {
       // Get Contact from Values
       var contact = Contact(
           profile: Profile(
@@ -185,7 +184,6 @@ class RegisterController extends GetxController {
 
         // Change Status
         nextPage(RegisterPageType.Location);
-      }
     }
 
     // Check Desktop
@@ -204,20 +202,6 @@ class RegisterController extends GetxController {
       SonrService.to.connect();
       AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
     }
-  }
-
-  /// @ Validates Fields
-  bool validateContact() {
-    // Check Valid
-    bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
-    bool lastNameValid = GetUtils.isAlphabetOnly(lastName.value);
-
-    // Update Reactive Properties
-    firstNameStatus(TextInputValidStatusUtils.fromValidBool(firstNameValid));
-    lastNameStatus(TextInputValidStatusUtils.fromValidBool(lastNameValid));
-
-    // Return Result
-    return firstNameValid && lastNameValid;
   }
 
   /// @ Validates SName as Valid characters

@@ -299,15 +299,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
     return isPermissions ? "Grant $value" : "";
   }
 
-  /// Returns Function for Permissions Button
-  Function get permissionsButtonOnPressed {
-    if (isPermissions) {
-      return this == RegisterPageType.Location ? Get.find<RegisterController>().requestLocation : Get.find<RegisterController>().requestGallery;
-    } else {
-      return print;
-    }
-  }
-
+  /// Returns Button Text Color for Permissions
   Color permissionsButtonColor() {
     if (this.indexGroup == 0) {
       return SonrColor.Black;
@@ -324,8 +316,10 @@ extension RegisterPageTypeUtils on RegisterPageType {
     }
   }
 
+  /// Returns Checks for Title Bar Gradient Text
   bool get isGradient => this == RegisterPageType.Name;
 
+  /// Returns Setup Title
   String get title {
     switch (this) {
       case RegisterPageType.Name:
@@ -339,6 +333,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
     }
   }
 
+  /// Returns Setup Instruction
   String get instruction {
     switch (this) {
       case RegisterPageType.Name:
@@ -349,6 +344,84 @@ extension RegisterPageTypeUtils on RegisterPageType {
         return "Edit Your";
       default:
         return "";
+    }
+  }
+}
+
+enum RegisterTextFieldType { FirstName, LastName }
+
+extension RegisterTextFieldTypeUtils on RegisterTextFieldType {
+  bool get autoCorrect {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return false;
+      case RegisterTextFieldType.LastName:
+        return false;
+    }
+  }
+
+  bool get autoFocus {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return true;
+      case RegisterTextFieldType.LastName:
+        return false;
+    }
+  }
+
+  TextInputType get textInputType {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return TextInputType.name;
+      case RegisterTextFieldType.LastName:
+        return TextInputType.name;
+    }
+  }
+
+  RxString get value {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return Get.find<RegisterController>().firstName;
+      case RegisterTextFieldType.LastName:
+        return Get.find<RegisterController>().lastName;
+    }
+  }
+
+  String get label {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return "FIRST NAME";
+      case RegisterTextFieldType.LastName:
+        return "LAST NAME";
+    }
+  }
+
+  Rx<TextInputValidStatus> get status {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return Get.find<RegisterController>().firstNameStatus;
+      case RegisterTextFieldType.LastName:
+        return Get.find<RegisterController>().lastNameStatus;
+    }
+  }
+
+  List<TextInputFormatter> get inputFormatters => [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))];
+
+  TextInputAction get textInputAction {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return TextInputAction.next;
+      case RegisterTextFieldType.LastName:
+        return TextInputAction.done;
+    }
+  }
+
+  TextCapitalization get textCapitalization {
+    switch (this) {
+      case RegisterTextFieldType.FirstName:
+        return TextCapitalization.words;
+      case RegisterTextFieldType.LastName:
+        return TextCapitalization.words;
     }
   }
 }
