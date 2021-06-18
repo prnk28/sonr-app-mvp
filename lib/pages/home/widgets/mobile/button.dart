@@ -9,7 +9,7 @@ class HomeActionButton extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlideSwitcher.fade(
+    return Obx(() => AnimatedSlider.fade(
           child: _buildView(controller.view.value),
           duration: const Duration(milliseconds: 2500),
         ));

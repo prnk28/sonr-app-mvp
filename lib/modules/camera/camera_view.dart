@@ -28,7 +28,7 @@ class CameraView extends StatelessWidget {
         builder: (controller) => Stack(
               children: [
                 // Camera Window
-                AnimatedSlideSwitcher.fade(child: _buildWindowView(controller.status.value, controller)),
+                AnimatedSlider.fade(child: _buildWindowView(controller.status.value, controller)),
 
                 // Button Tools View
                 CameraToolsView(controller: controller),

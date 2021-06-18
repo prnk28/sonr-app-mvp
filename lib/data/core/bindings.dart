@@ -13,6 +13,7 @@ import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/database/service.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
+
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {
   @override
@@ -22,7 +23,7 @@ class InitialBinding implements Bindings {
 
   // Get Rive File for Peer Bubble
   Future<RiveFile> _getRiveDataFile() async {
-    var data = await rootBundle.load('assets/animations/peer_border.riv');
+    var data = await RiveBoard.Bubble.load();
     return RiveFile.import(data);
   }
 }

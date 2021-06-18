@@ -46,7 +46,7 @@ class PeerCard extends GetWidget<PeerController> {
                   padding: EdgeInsets.all(8),
                   child: GestureDetector(
                     onTap: controller.invite,
-                    child: AnimatedSlideSwitcher.fade(
+                    child: AnimatedSlider.fade(
                       child: controller.isFlipped.value
                           ? _PeerDetailsCard(
                               controller: controller,

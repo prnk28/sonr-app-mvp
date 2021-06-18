@@ -146,7 +146,7 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
               // Progress of Transfer
               Align(
                 alignment: Alignment.center,
-                child: AnimatedSlideSwitcher.slideDown(
+                child: AnimatedSlider.slideDown(
                   duration: 100.milliseconds,
                   child: Container(
                     key: ValueKey<double>(progress.value),

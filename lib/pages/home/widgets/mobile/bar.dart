@@ -6,7 +6,7 @@ import 'mobile.dart';
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlideSwitcher.fade(
+    return Obx(() => AnimatedSlider.fade(
           duration: 2.seconds,
           child: PageAppBar(
             centerTitle: controller.view.value.isMain,
@@ -28,7 +28,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
 class _HomeAppBarTitle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlideSwitcher.fade(
+    return Obx(() => AnimatedSlider.fade(
           duration: 2.seconds,
           child: controller.title.value.heading(
             color: Get.theme.focusColor,

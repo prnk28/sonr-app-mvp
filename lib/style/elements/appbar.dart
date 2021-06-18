@@ -33,7 +33,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
           centerMiddle: centerTitle,
           leading: leading,
           trailing: _buildTrailing(),
-          middle: AnimatedSlideSwitcher.fade(
+          middle: AnimatedSlider.fade(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,

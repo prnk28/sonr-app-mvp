@@ -10,7 +10,39 @@ import 'package:sonr_app/style.dart';
 import 'bindings.dart';
 
 /// @ Enum Values for App Page
-enum AppPage { Home, Register, Transfer, Share, Activity, Error, Detail, Posts }
+enum AppPage {
+  /// #### Home
+  /// Dashboard, Search, Personal
+  Home,
+
+  /// #### Register
+  /// New User
+  Register,
+
+  /// #### Transfer
+  /// Looking for Peers to Share
+  Transfer,
+
+  /// #### Share
+  /// Select File, Contact, URL
+  Share,
+
+  /// #### Activity
+  /// Current Sessions, Past Cards
+  Activity,
+
+  /// #### Error
+  /// Empty Items, No Connection, No Permission
+  Error,
+
+  /// #### Detail
+  /// TransferCard Detail View
+  Detail,
+
+  /// #### Posts
+  /// Transfer Card Collection View
+  Posts,
+}
 
 extension AppRoute on AppPage {
   // ^ Static Accessors ^

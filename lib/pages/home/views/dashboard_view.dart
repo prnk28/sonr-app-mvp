@@ -23,7 +23,7 @@ class DashboardView extends GetView<HomeController> {
             Obx(() => SliverToBoxAdapter(
                 child: Container(
                     height: Height.ratio(0.4) + 125,
-                    child: AnimatedSlideSwitcher.fade(
+                    child: AnimatedSlider.fade(
                       child: _buildView(controller.recentsView.value),
                     )))),
             SliverPadding(padding: EdgeInsets.all(8)),

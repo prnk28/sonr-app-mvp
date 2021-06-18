@@ -24,7 +24,7 @@ class RegisterPage extends GetView<RegisterController> {
     return Material(
       type: MaterialType.transparency,
       child: Obx(
-        () => AnimatedSlideSwitcher.slideRight(
+        () => AnimatedSlider.slideRight(
           child: _buildView(controller.status.value),
           duration: const Duration(milliseconds: 2500),
         ),

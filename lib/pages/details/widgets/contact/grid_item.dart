@@ -19,7 +19,7 @@ class ContactGridItemView extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(8),
                   child: GestureDetector(
-                    child: AnimatedSlideSwitcher.fade(
+                    child: AnimatedSlider.fade(
                       child: isFlipped.value
                           ? _ContactGridItemDetailsView(
                               key: ValueKey<bool>(true),
