@@ -1,25 +1,14 @@
+// Exports
+export 'models/type.dart';
+export 'views/button_view.dart';
+export 'views/external_sheet.dart';
+export 'views/share_view.dart';
+
+// Imports
 import 'package:get/get.dart';
 import 'package:sonr_app/style.dart';
 import 'package:photo_manager/photo_manager.dart';
-
-enum ShareViewType {
-  /// For Default State
-  None,
-
-  /// For when ShareView Presented from Home Screen.
-  Popup,
-
-  /// For when ShareView Presented from Transfer Screen
-  Dialog
-}
-
-extension ShareViewTypeUtils on ShareViewType {
-  /// Checks for Popup Type - Popup is for when in HomeScreen
-  bool get isViewPopup => this == ShareViewType.Popup;
-
-  /// Checks for Dialog Type - Dialog is for when in TransferScreen
-  bool get isViewDialog => this == ShareViewType.Dialog;
-}
+import 'models/type.dart';
 
 class ShareController extends GetxController {
   // Properties
@@ -188,5 +177,38 @@ class ShareController extends GetxController {
         Get.back(closeOverlays: true);
       }
     }
+  }
+}
+
+/// Button that opens share View
+class ShareButton extends StatelessWidget {
+  ShareButton() : super(key: GlobalKey());
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: ObxValue<RxBool>(
+          (isPressed) => AnimatedScale(
+              duration: Duration(milliseconds: 150),
+              scale: isPressed.value ? 1.1 : 1,
+              child: Container(
+                width: 95,
+                height: 95,
+                child: GestureDetector(
+                  onTapDown: (details) => isPressed(true),
+                  onTapUp: (details) {
+                    isPressed(false);
+                    Future.delayed(150.milliseconds, () => AppPage.Share.to(init: ShareController.initPopup));
+                  },
+                  child: PolyContainer(
+                    radius: 24,
+                    rotate: 30,
+                    sides: 6,
+                    child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
+                  ),
+                ),
+              )),
+          false.obs),
+    );
   }
 }

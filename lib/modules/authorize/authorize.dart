@@ -1,8 +1,14 @@
+// Exports
+export 'views/contact_auth.dart';
+export 'views/file_auth.dart';
+export 'views/url_auth.dart';
+
+// Imports
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
-import 'contact_auth.dart';
-import 'file_auth.dart';
-import 'url_auth.dart';
+import 'views/contact_auth.dart';
+import 'views/file_auth.dart';
+import 'views/url_auth.dart';
 
 class Authorize {
   /// Invite Received

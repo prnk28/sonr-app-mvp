@@ -1,7 +1,4 @@
-import '../../style.dart';
-
-/// Rive Board Options
-enum RiveBoard { SplashPortrait, SplashLandscape, Documents }
+import 'package:sonr_app/style.dart';
 
 /// Animated Bounce In Direction
 enum BounceDirection { Left, Right, Up, Down }

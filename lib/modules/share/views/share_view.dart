@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'button_view.dart';
-import '../share_controller.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style.dart';
 
 class SharePopupView extends GetView<ShareController> {

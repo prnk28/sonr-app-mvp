@@ -5,7 +5,7 @@ export '../views/editor/social_editor.dart';
 import 'package:sonr_app/style.dart';
 
 import '../views/editor/editor_view.dart';
-import 'personal_controller.dart';
+import 'package:sonr_app/pages/personal/personal.dart';
 
 
 class EditorController extends GetxController {

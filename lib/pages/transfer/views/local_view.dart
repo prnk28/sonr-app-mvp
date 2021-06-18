@@ -3,7 +3,7 @@ import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/pages/transfer/models/status.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
-import '../transfer_controller.dart';
+import '../transfer.dart';
 
 class LocalView extends GetView<TransferController> {
   @override

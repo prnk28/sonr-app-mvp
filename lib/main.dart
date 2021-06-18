@@ -83,7 +83,7 @@ class App extends StatelessWidget {
           children: [
             // @ Rive Animation
             RiveContainer(
-              type: RiveBoard.SplashPortrait,
+              type: RiveBoard.Splash,
               width: Get.width,
               height: Get.height,
               placeholder: SizedBox(child: HourglassIndicator()),

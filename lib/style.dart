@@ -37,6 +37,10 @@ export 'style/components/overlay.dart';
 export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
+// Theme Models
+export 'style/models/direction.dart';
+export 'style/models/type.dart';
+
 // Custom Theme Elements
 export 'style/elements/shape.dart';
 export 'style/elements/painter.dart';

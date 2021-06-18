@@ -1,6 +1,6 @@
 import 'package:sonr_app/pages/register/widgets/textfield.dart';
 import 'package:sonr_app/style.dart';
-import '../register_controller.dart';
+import 'package:sonr_app/pages/register/register.dart';
 
 class ProfileSetupView extends GetView<RegisterController> {
   final hintName = SonrTextField.hintName();

@@ -1,41 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style.dart';
 
-const K_ROW_BUTTON_SIZE = 75.0;
-const K_ROW_CIRCLE_SIZE = 95.0;
-
-class ShareButton extends StatelessWidget {
-  ShareButton() : super(key: GlobalKey());
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0),
-      child: ObxValue<RxBool>(
-          (isPressed) => AnimatedScale(
-              duration: Duration(milliseconds: 150),
-              scale: isPressed.value ? 1.1 : 1,
-              child: Container(
-                width: 95,
-                height: 95,
-                child: GestureDetector(
-                  onTapDown: (details) => isPressed(true),
-                  onTapUp: (details) {
-                    isPressed(false);
-                    Future.delayed(150.milliseconds, () => AppPage.Share.to(init: ShareController.initPopup));
-                  },
-                  child: PolyContainer(
-                    radius: 24,
-                    rotate: 30,
-                    sides: 6,
-                    child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
-                  ),
-                ),
-              )),
-          false.obs),
-    );
-  }
-}
 
 class ShareOptionsRow extends StatelessWidget {
   @override

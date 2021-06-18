@@ -1,6 +1,6 @@
 import 'package:sonr_app/style.dart';
 import 'social_view.dart';
-import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
+import 'package:sonr_app/pages/personal/personal.dart';
 
 /// ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {

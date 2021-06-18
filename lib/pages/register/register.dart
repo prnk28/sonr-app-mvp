@@ -1,9 +1,22 @@
+// Exports
+export 'register_controller.dart';
+export 'widgets/notifier.dart';
+export 'widgets/panel.dart';
+export 'models/field.dart';
+export 'models/info.dart';
+export 'models/status.dart';
+export 'models/type.dart';
+
+// Imports
 import 'package:sonr_app/pages/register/widgets/notifier.dart';
 import 'package:sonr_app/style.dart';
+import 'models/info.dart';
+import 'models/type.dart';
 import 'register_controller.dart';
 import 'views/backup_view.dart';
 import 'views/contact_view.dart';
 import 'views/name_view.dart';
+import 'widgets/panel.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   @override

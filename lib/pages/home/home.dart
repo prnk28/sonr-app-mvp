@@ -1,4 +1,4 @@
-import 'package:sonr_app/pages/personal/profile_view.dart';
+import 'package:sonr_app/pages/personal/personal.dart';
 import 'home_controller.dart';
 import 'widgets/desktop/desktop.dart';
 import 'package:sonr_app/style.dart';

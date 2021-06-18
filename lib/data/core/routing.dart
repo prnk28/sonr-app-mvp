@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/activity/activity_controller.dart';
+import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/share_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
-import 'package:sonr_app/pages/register/register_page.dart';
-import 'package:sonr_app/pages/transfer/transfer_page.dart';
+import 'package:sonr_app/pages/register/register.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 import 'bindings.dart';
 

@@ -2,6 +2,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/utility.dart';
+import 'package:sonr_app/pages/register/register.dart';
 
 enum InfoPanelType {
   Welcome,

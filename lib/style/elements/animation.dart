@@ -275,24 +275,8 @@ class _RiveContainer extends State<RiveContainer> {
   @override
   void initState() {
     // Load the RiveFile from the binary data.
-    if (widget.type == RiveBoard.SplashPortrait) {
+    if (widget.type == RiveBoard.Splash) {
       rootBundle.load('assets/animations/splash_portrait.riv').then(
-        (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
-
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
-            setState(() => _riveArtboard = artboard);
-          }
-        },
-      );
-    } else if (widget.type == RiveBoard.SplashLandscape) {
-      rootBundle.load('assets/animations/splash_landscape.riv').then(
         (data) async {
           // Load the RiveFile from the binary data.
           final file = RiveFile.import(data);

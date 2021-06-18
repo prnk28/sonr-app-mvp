@@ -1,10 +1,3 @@
-export '../views/add/add_social.dart';
-export '../profile_view.dart';
-export '../models/options.dart';
-export '../models/status.dart';
-export 'editor_controller.dart';
-export 'tile_controller.dart';
-
 import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';

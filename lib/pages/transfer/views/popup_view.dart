@@ -1,4 +1,4 @@
-import 'package:sonr_app/pages/transfer/widgets/item/item.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 
 class EditPayloadPopup extends StatelessWidget {

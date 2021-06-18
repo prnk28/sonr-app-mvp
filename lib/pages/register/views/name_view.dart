@@ -1,5 +1,5 @@
 import 'package:sonr_app/style.dart';
-import '../register_controller.dart';
+import 'package:sonr_app/pages/register/register.dart';
 
 class NamePage extends GetView<RegisterController> {
   NamePage({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
-import '../activity_controller.dart';
+import '../activity.dart';
 
 /// @ Activity View
 class ActivityPopup extends GetView<ActivityController> {

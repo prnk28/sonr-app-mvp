@@ -1,11 +1,21 @@
+// Exports
+export 'views/flat_view.dart';
+export 'controllers/peer_controller.dart';
+export 'controllers/transfer_controller.dart';
+export 'widgets/payload/item.dart';
+export 'widgets/peer/peer.dart';
+export 'models/mode.dart';
+export 'models/animation.dart';
+export 'controllers/flat_controller.dart';
+
+// Imports
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style.dart';
-import 'transfer_controller.dart';
+import 'controllers/transfer_controller.dart';
 import 'views/local_view.dart';
-import 'widgets/item/item.dart';
-export 'views/flat_view.dart';
+import 'widgets/payload/item.dart';
 
 /// @ Transfer Screen Entry Point
 class TransferPage extends GetView<TransferController> {

@@ -1,5 +1,5 @@
 import 'package:sonr_app/style.dart';
-import '../register_controller.dart';
+import 'package:sonr_app/pages/register/register.dart';
 
 /// @ Builds Neumorphic Text Field
 class RegisterTextField extends GetView<RegisterController> {

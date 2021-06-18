@@ -2,17 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/modules/activity/activity_controller.dart';
+import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/service/client/session.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/database/service.dart';
-
+import 'package:sonr_app/pages/personal/personal.dart';
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {
   @override
