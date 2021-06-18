@@ -19,7 +19,7 @@ class EditPayloadPopup extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              child: DetailAppBar(onPressed: () => SonrOverlay.closeAll(), title: item.prettyType(), isClose: true),
+              child: DetailAppBar(onPressed: () => Get.back(), title: item.prettyType(), isClose: true),
               height: 64,
             ),
             _EditPayloadPopupInfo(item: item),

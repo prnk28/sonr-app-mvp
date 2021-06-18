@@ -257,13 +257,9 @@ class MobileService extends GetxService {
           declineTitle: "Decline")) {
         if (await Permission.camera.request().isGranted) {
           updatePermissionsStatus();
-          SonrOverlay.back();
-          SonrOverlay.back();
           return true;
         } else {
           updatePermissionsStatus();
-          SonrOverlay.back();
-          SonrOverlay.back();
           return false;
         }
       } else {
@@ -282,34 +278,26 @@ class MobileService extends GetxService {
         if (DeviceService.isAndroid) {
           if (await Permission.storage.request().isGranted) {
             updatePermissionsStatus();
-            SonrOverlay.back();
             return true;
           } else {
             updatePermissionsStatus();
-            SonrOverlay.back();
             return false;
           }
         } else {
           if (await Permission.photos.request().isGranted) {
             updatePermissionsStatus();
-            SonrOverlay.back();
             return true;
           } else {
             updatePermissionsStatus();
-            SonrOverlay.back();
             return false;
           }
         }
       } else {
         updatePermissionsStatus();
-        SonrOverlay.back();
-        SonrOverlay.back();
         return false;
       }
     } else {
       updatePermissionsStatus();
-      SonrOverlay.back();
-      SonrOverlay.back();
       return false;
     }
   }
@@ -325,21 +313,17 @@ class MobileService extends GetxService {
           declineTitle: "Decline")) {
         if (await Permission.location.request().isGranted) {
           updatePermissionsStatus();
-          SonrOverlay.back();
           return true;
         } else {
           updatePermissionsStatus();
-          SonrOverlay.back();
           return false;
         }
       } else {
         updatePermissionsStatus();
-        SonrOverlay.back();
         return false;
       }
     } else {
       updatePermissionsStatus();
-      SonrOverlay.back();
       return false;
     }
   }
@@ -355,21 +339,17 @@ class MobileService extends GetxService {
           declineTitle: "Decline")) {
         if (await Permission.microphone.request().isGranted) {
           updatePermissionsStatus();
-          SonrOverlay.back();
           return true;
         } else {
           updatePermissionsStatus();
-          SonrOverlay.back();
           return false;
         }
       } else {
         updatePermissionsStatus();
-        SonrOverlay.back();
         return false;
       }
     } else {
       updatePermissionsStatus();
-      SonrOverlay.back();
       return false;
     }
   }
@@ -385,7 +365,6 @@ class MobileService extends GetxService {
           declineTitle: "Decline")) {
         if (await Permission.notification.request().isGranted) {
           updatePermissionsStatus();
-          SonrOverlay.back();
           return true;
         } else {
           return false;

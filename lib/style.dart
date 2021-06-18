@@ -47,14 +47,12 @@ export 'style/elements/image.dart';
 
 // Form Styles
 export 'style/form/checklist.dart';
-export 'style/form/dropdown.dart';
 export 'style/form/infolist.dart';
 export 'style/form/textfield.dart';
 export 'style/form/tabs.dart';
 
 // Global UI Widgets
-export 'pages/overlay/overlay.dart';
-export 'pages/overlay/controllers/flat_overlay.dart';
+export 'modules/peer/flat_overlay.dart';
 
 // UI Packages
 import 'package:flutter/material.dart';

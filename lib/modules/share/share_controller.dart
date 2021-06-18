@@ -107,7 +107,6 @@ class ShareController extends GetxController {
     } else {
       // Request Permissions
       var status = await Get.find<MobileService>().requestGallery();
-      SonrOverlay.back();
 
       // Check Status
       if (status) {

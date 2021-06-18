@@ -53,7 +53,7 @@ class URLAuthView extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
+            ColorButton.neutral(onPressed: () => Get.back(), text: "Dismiss"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
               onPressed: () => _launchURL(),

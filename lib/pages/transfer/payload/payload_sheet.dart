@@ -121,7 +121,7 @@ class _SonrFileListItem extends StatelessWidget {
           alignment: Alignment.topRight,
           child: ActionButton(
             onPressed: () {
-              SonrOverlay.show(EditPayloadPopup(
+              AppRoute.popup(EditPayloadPopup(
                 index: index,
                 item: item,
               ));

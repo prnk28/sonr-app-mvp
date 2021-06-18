@@ -161,11 +161,6 @@ class SonrService extends GetxService {
     if (data.severity != ErrorMessage_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
     } else {
-      // Reset Views
-      if (SonrOverlay.isOpen) {
-        SonrOverlay.closeAll();
-      }
-
       // Reset Payload
       TransferService.resetPayload();
 
