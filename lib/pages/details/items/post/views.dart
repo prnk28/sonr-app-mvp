@@ -97,7 +97,7 @@ class MetaImageBox extends StatelessWidget {
                 return Container(
                   width: width,
                   height: height,
-                  child: CircularProgressIndicator(),
+                  child: HourglassIndicator(),
                 );
               }
             })
@@ -143,7 +143,7 @@ class MetaVideo extends StatelessWidget {
                 return Container(
                   width: width ?? orientation.defaultWidth,
                   height: height ?? orientation.defaultHeight,
-                  child: CircularProgressIndicator(),
+                  child: HourglassIndicator(),
                 );
               }
             })

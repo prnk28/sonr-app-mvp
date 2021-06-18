@@ -86,8 +86,9 @@ class DeviceService extends GetxService {
 
         // Analytics
         Logger.event(
-          name: '[DeviceService]: Find-Location',
+          name: 'findLocation',
           parameters: {
+            'controller': 'DeviceService',
             'createdAt': DateTime.now().toString(),
             'platform': platform.toString(),
             'isMobile': platform.isMobile,
@@ -125,6 +126,9 @@ class DeviceService extends GetxService {
       throw Exception('Failed to Fetch Geolocation IP');
     }
   }
+
+  /// @ Method Hides Keyboard
+  static void hideKeyboard() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.hide') : print("");
 
   /// @ Method Plays a UI Sound
   static void playSound({required UISoundType type}) async {

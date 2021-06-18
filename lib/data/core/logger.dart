@@ -49,7 +49,7 @@ class Logger extends GetxService {
   /// @ Logs a Firebase Analytics Event
   static void event({required String name, Map<String, Object?>? parameters}) async {
     if (isRegistered && DeviceService.isMobile) {
-      Logger.event(
+      FirebaseAnalytics().logEvent(
         name: name,
         parameters: parameters,
       );

@@ -89,14 +89,14 @@ class SonrService extends GetxService {
 
   /// @ Send Position Update for Node
   static void update(Position position) {
-    if (status.value.isConnected) {
+    if (status.value.isConnected && isRegistered) {
       to.node.update(Request.newUpdatePosition(position));
     }
   }
 
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
-    if (status.value.isConnected) {
+    if (status.value.isConnected && isRegistered) {
       if (to._properties.value.isFlatMode != isFlatMode) {
         to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
         to.node.update(Request.newUpdateProperties(to._properties.value));
@@ -106,14 +106,14 @@ class SonrService extends GetxService {
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
-    if (status.value.isConnected) {
+    if (status.value.isConnected && isRegistered) {
       to.node.update(Request.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
   static Session? invite(InviteRequest request) {
-    if (status.value.isConnected) {
+    if (status.value.isConnected && isRegistered) {
       // Send Invite
       to.node.invite(request);
       SessionService.setOutgoing(request);
@@ -123,14 +123,15 @@ class SonrService extends GetxService {
 
   /// @ Respond-Peer Event
   static void respond(InviteResponse request) async {
-    if (status.value.isConnected) {
+    if (status.value.isConnected && isRegistered) {
+      print(request.toString());
       to.node.respond(request);
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
-    if (status.value.isConnected) {
+    if (status.value.isConnected && isRegistered) {
       to.node.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
     }
   }
@@ -160,11 +161,6 @@ class SonrService extends GetxService {
     if (data.severity != ErrorMessage_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
     } else {
-      // Reset Views
-      if (SonrOverlay.isOpen) {
-        SonrOverlay.closeAll();
-      }
-
       // Reset Payload
       TransferService.resetPayload();
 

@@ -133,6 +133,9 @@ extension AppRoute on AppPage {
     bool condition = true,
     bool closeCurrent = false,
   }) async {
+    // Hide Keyboard Before Route
+    DeviceService.hideKeyboard();
+
     // Init Function
     if (init != null) {
       init();
@@ -162,6 +165,9 @@ extension AppRoute on AppPage {
     bool condition = true,
     bool closeCurrent = false,
   }) async {
+    // Hide Keyboard Before Route
+    DeviceService.hideKeyboard();
+
     // Init Function
     if (init != null) {
       init();
@@ -196,9 +202,15 @@ extension AppRoute on AppPage {
     Duration? delay,
   }) async {
     if (isPopupClosed) {
+      // Hide Keyboard Before Route
+      DeviceService.hideKeyboard();
+
+      // Init Function
       if (init != null) {
         init();
       }
+
+      // Push Dialog
       Get.dialog(
         BlurredBackground(child: child),
         barrierDismissible: dismissible,
@@ -217,6 +229,9 @@ extension AppRoute on AppPage {
     bool ignoreSafeArea = false,
     bool dismissible = true,
   }) async {
+    // Hide Keyboard Before Route
+    DeviceService.hideKeyboard();
+
     // Create Future Completer
     var completer = Completer<bool>();
     Get.dialog(
@@ -227,6 +242,7 @@ extension AppRoute on AppPage {
         buttonText,
         () {
           completer.complete();
+          Future.delayed(300.milliseconds, () => Get.back());
         },
       )),
       transitionDuration: 0.seconds,
@@ -244,6 +260,9 @@ extension AppRoute on AppPage {
     bool ignoreSafeArea = false,
     Offset? offset,
   }) async {
+    // Hide Keyboard Before Route
+    DeviceService.hideKeyboard();
+
     final RxBool hasDismissed = false.obs;
     Get.dialog(
       BlurredBackground(
@@ -258,7 +277,6 @@ extension AppRoute on AppPage {
             offset: offset,
           )),
       transitionDuration: 0.seconds,
-      barrierDismissible: false,
       barrierColor: Colors.transparent,
       useSafeArea: !ignoreSafeArea,
     );
@@ -274,8 +292,13 @@ extension AppRoute on AppPage {
     bool ignoreSafeArea = false,
     bool dismissible = true,
   }) async {
+    // Hide Keyboard Before Route
+    DeviceService.hideKeyboard();
+
     // Create Future Completer
     var completer = Completer<bool>();
+
+    // Push Dialog
     Get.dialog(
       BlurredBackground(
           child: QuestionOverlay(
@@ -310,11 +333,15 @@ extension AppRoute on AppPage {
     void Function()? init,
     Duration? delay,
   }) async {
+    // Hide Keyboard Before Route
+    DeviceService.hideKeyboard();
+
     // Check if Forced Open
     if (forced) {
       closeSheet();
     }
 
+    // Init Method
     if (init != null) {
       init();
     }
@@ -343,6 +370,10 @@ extension AppRoute on AppPage {
   /// Display snackbar on bottom of current page
   static Future<void> snack(SnackArgs args) async {
     if (isSnackClosed) {
+      // Hide Keyboard Before Route
+      DeviceService.hideKeyboard();
+
+      // Push Snackbar
       Get.snackbar(
         args.title!,
         args.message,

@@ -64,11 +64,11 @@ class ContactAuthView extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Decline"),
+            ColorButton.neutral(onPressed: () => Get.back(), text: "Decline"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
               onPressed: () async {
-                SonrOverlay.back();
+                Get.back();
                 if (!isReply) {
                   var result = await AppRoute.question(title: "Send Back", description: "Would you like to send your contact back?");
                   SessionService.decisionForInvite(true, sendBackContact: result);

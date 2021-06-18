@@ -9,14 +9,13 @@ class CurrentActivityItem extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: 110,
+      height: 150,
       margin: EdgeInsets.symmetric(horizontal: 24),
-      padding: EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.symmetric(vertical: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            height: 80,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -54,20 +53,23 @@ class _CurrentActivityPeer extends GetView<ActivityController> {
   _CurrentActivityPeer({required this.profile, required this.payload});
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        ProfileAvatar(profile: profile, size: 52),
-        Padding(
-          padding: const EdgeInsets.only(left: 24, top: 24),
-          child: CircleContainer(
-            alignment: Alignment.center,
-            width: 28,
-            height: 28,
-            child: payload.icon(color: SonrTheme.backgroundColor, size: 18),
-          ),
-        )
-      ],
+    return Container(
+      height: 50,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          ProfileAvatar(profile: profile, size: 52),
+          Padding(
+            padding: const EdgeInsets.only(left: 24, top: 24),
+            child: CircleContainer(
+              alignment: Alignment.center,
+              width: 28,
+              height: 28,
+              child: payload.icon(color: SonrColor.AccentBlue, size: 18),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -85,13 +87,13 @@ class _CurrentActivityContent extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 42,
+      height: 50,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Rich Text
-          ["${payload.toString()} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
+          ["${payload.toString().capitalizeFirst} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
 
           // Date Time Text
           _buildDateTime().paragraph(fontSize: 16),
@@ -116,13 +118,16 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-          clipBehavior: Clip.antiAlias,
-          height: 14,
+          padding: EdgeInsets.only(top: 8),
+          margin: EdgeInsets.symmetric(horizontal: 42),
+          alignment: Alignment.center,
+          height: 32,
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
               // Bottom Layer
               Container(
+                alignment: Alignment.center,
                 width: maxWidth,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
@@ -132,19 +137,25 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
 
               // Foreground Gradient
               Container(
+                alignment: Alignment.center,
                 width: _calculateWidth(progress.value),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  gradient: SonrGradient.Theme(radius: 2),
-                ),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
               ),
               Align(
                 alignment: Alignment.center,
-                child: _calculateText(progress.value).heading(fontSize: 12),
+                child: _calculateText(progress.value).subheading(fontSize: 16, color: _calculateTextColor(progress.value)),
               ),
             ],
           ),
         ));
+  }
+
+  Gradient _calculateGradient(double current) {
+    int adjusted = (current * 100).round();
+    if (adjusted != 100) {
+      return SonrGradients.SeaShore;
+    }
+    return SonrGradient.Tertiary;
   }
 
   double _calculateWidth(double current) {
@@ -153,6 +164,18 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
 
   String _calculateText(double current) {
     int adjusted = (current * 100).round();
-    return "$adjusted %";
+    if (adjusted != 100) {
+      return "$adjusted %";
+    } else {
+      return "Complete!";
+    }
+  }
+
+  Color _calculateTextColor(double current) {
+    int adjusted = (current * 100).round();
+    if (adjusted < 60) {
+      return SonrColor.Black;
+    }
+    return SonrColor.White;
   }
 }

@@ -3,34 +3,23 @@ import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
+import 'package:sonr_app/pages/register/register_data.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
-
-enum RegisterNameStatus { Default, Returning, TooShort, Available, Unavailable, Blocked, Restricted, DeviceRegistered }
-
-extension RegisterNameStatusUtil on RegisterNameStatus {
-  bool get isValid {
-    switch (this) {
-      case RegisterNameStatus.Available:
-        return true;
-      default:
-        return false;
-    }
-  }
-}
-
-enum RegisterStatus { Name, Backup, Contact, Location, Gallery, Linker }
+export 'widgets/notifier.dart';
+export 'widgets/panel.dart';
+export 'register_data.dart';
 
 class RegisterController extends GetxController {
   // Properties
-  final nameStatus = RegisterNameStatus.Default.obs;
+  final nameStatus = NewSNameStatus.Default.obs;
   final mnemonic = "".obs;
   final sName = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
-  final status = Rx<RegisterStatus>(RegisterStatus.Name);
+  final status = Rx<RegisterPageType>(RegisterPageType.Intro);
   final auth = Rx<HSRecord>(HSRecord.blank());
   final result = Rx<NamebaseResult>(NamebaseResult.blank());
 
@@ -41,23 +30,43 @@ class RegisterController extends GetxController {
 
   // References
   final _nbClient = NamebaseClient(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
+  late ValueNotifier<double> panelNotifier;
+  late PageController introPageController;
+  late PageController setupPageController;
+  late PageController permissionsPageController;
 
   // * Constructer * //
+  @override
   onInit() {
+    // Initialize Intro View
+    panelNotifier = ValueNotifier<double>(0);
+    introPageController = PageController(
+      initialPage: 0,
+      viewportFraction: 0.9,
+    )..addListener(_onPanelScroll);
+
+    // Initialize Setup View
+    setupPageController = PageController(
+      initialPage: 0,
+      viewportFraction: 1.0,
+    );
+
+    // Initialize Permissions View
+    permissionsPageController = PageController(
+      initialPage: 0,
+      viewportFraction: 1.0,
+    );
+
     // Get Records
     refreshRecords();
-
-    // Check Platform
-    if (DeviceService.isDesktop) {
-      status(RegisterStatus.Linker);
-      status.refresh();
-    }
     super.onInit();
   }
 
-  void checkName(String name) {
+  double checkName(String name) {
     sName(name);
     validateName();
+    final size = name.size(DisplayTextStyle.Paragraph, fontSize: 24);
+    return size.width;
   }
 
   void exportCode() async {
@@ -76,7 +85,7 @@ class RegisterController extends GetxController {
 
     // Validate
     if (await validateName()) {
-      if (nameStatus.value != RegisterNameStatus.Returning) {
+      if (nameStatus.value != NewSNameStatus.Returning) {
         // Check Valid
         if (result.value.isValidName(sName.value)) {
           var genMnemomic = bip39.generateMnemonic();
@@ -84,7 +93,8 @@ class RegisterController extends GetxController {
 
           // Logging
           Logger.info(
-              "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicIdentity}");
+            "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicIdentity}",
+          );
 
           // Add UserRecord Domain
           await _nbClient.addRecord(
@@ -92,31 +102,67 @@ class RegisterController extends GetxController {
 
           // Analytics
           Logger.event(
-            name: '[AuthService]: Create-Username',
+            name: 'createUsername',
             parameters: {
               'createdAt': DateTime.now().toString(),
               'platform': DeviceService.platform.toString(),
               'new-username': sName.value,
+              'controller': 'RegisterController',
             },
           );
 
           // Update Status
           mnemonic(genMnemomic);
-          status(RegisterStatus.Backup);
+          nextPage(RegisterPageType.Backup);
         }
       } else {
-        status(RegisterStatus.Location);
+        nextPage(RegisterPageType.Location);
       }
     }
   }
 
-  void nextFromBackup() async {
-    status(RegisterStatus.Contact);
+  /// @ Next Info Panel
+  void nextPanel(InfoPanelType type) {
+    panelNotifier.value = type.page;
+    introPageController.animateToPage(
+      type.index,
+      duration: 400.milliseconds,
+      curve: Curves.easeIn,
+    );
+  }
+
+  /// @ Next Page
+  void nextPage(RegisterPageType type) {
+    status(type);
+    status.refresh();
+
+    // Setup Page
+    if (type.isSetup) {
+      // Validate Not Last
+      if (!type.isFirst) {
+        setupPageController.animateToPage(
+          type.indexGroup,
+          duration: 400.milliseconds,
+          curve: Curves.easeIn,
+        );
+      }
+    }
+
+    // Permissions Page
+    if (type.isPermissions) {
+      // Validate Not Last
+      if (!type.isFirst) {
+        permissionsPageController.animateToPage(
+          type.indexGroup,
+          duration: 400.milliseconds,
+          curve: Curves.easeIn,
+        );
+      }
+    }
   }
 
   /// @ Submits Contact
   setContact() async {
-    if (validateContact()) {
       // Get Contact from Values
       var contact = Contact(
           profile: Profile(
@@ -137,8 +183,7 @@ class RegisterController extends GetxController {
         }
 
         // Change Status
-        status(RegisterStatus.Location);
-      }
+        nextPage(RegisterPageType.Location);
     }
 
     // Check Desktop
@@ -159,56 +204,49 @@ class RegisterController extends GetxController {
     }
   }
 
-  /// @ Validates Fields
-  bool validateContact() {
-    // Check Valid
-    bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
-    bool lastNameValid = GetUtils.isAlphabetOnly(lastName.value);
-
-    // Update Reactive Properties
-    firstNameStatus(TextInputValidStatusUtils.fromValidBool(firstNameValid));
-    lastNameStatus(TextInputValidStatusUtils.fromValidBool(lastNameValid));
-
-    // Return Result
-    return firstNameValid && lastNameValid;
-  }
-
+  /// @ Validates SName as Valid characters
   Future<bool> validateName() async {
-    // Update Status
-    if (sName.value.length > 3 && !sName.value.contains(" ")) {
-      // Check Available
-      if (result.value.checkName(
-        NameCheckType.Unavailable,
-        sName.value,
-      )) {
-        nameStatus(RegisterNameStatus.Unavailable);
-        return false;
-      }
-      // Check Unblocked
-      else if (result.value.checkName(
-        NameCheckType.Blocked,
-        sName.value,
-      )) {
-        nameStatus(RegisterNameStatus.Blocked);
-        return false;
-      }
-      // Check Unrestricted
-      else if (result.value.checkName(
-        NameCheckType.Restricted,
-        sName.value,
-      )) {
-        nameStatus(RegisterNameStatus.Restricted);
-        return false;
-      }
-      // Check Valid
-      else {
-        // Update Values
-        nameStatus(RegisterNameStatus.Available);
-        return true;
-      }
-    } else {
-      nameStatus(RegisterNameStatus.TooShort);
+    // Check Alphabet Only
+    if (!sName.value.isAlphabetOnly) {
+      nameStatus(NewSNameStatus.InvalidCharacters);
       return false;
+    } else {
+      // Update Status
+      if (sName.value.length > 3) {
+        // Check Available
+        if (result.value.checkName(
+          NameCheckType.Unavailable,
+          sName.value,
+        )) {
+          nameStatus(NewSNameStatus.Unavailable);
+          return false;
+        }
+        // Check Unblocked
+        else if (result.value.checkName(
+          NameCheckType.Blocked,
+          sName.value,
+        )) {
+          nameStatus(NewSNameStatus.Blocked);
+          return false;
+        }
+        // Check Unrestricted
+        else if (result.value.checkName(
+          NameCheckType.Restricted,
+          sName.value,
+        )) {
+          nameStatus(NewSNameStatus.Restricted);
+          return false;
+        }
+        // Check Valid
+        else {
+          // Update Values
+          nameStatus(NewSNameStatus.Available);
+          return true;
+        }
+      } else {
+        nameStatus(NewSNameStatus.TooShort);
+        return false;
+      }
     }
   }
 
@@ -216,7 +254,7 @@ class RegisterController extends GetxController {
   Future<bool> requestLocation() async {
     if (await Permission.location.request().isGranted) {
       Get.find<MobileService>().updatePermissionsStatus();
-      status(RegisterStatus.Gallery);
+      nextPage(RegisterPageType.Gallery);
       return true;
     } else {
       Get.find<MobileService>().updatePermissionsStatus();
@@ -273,5 +311,11 @@ class RegisterController extends GetxController {
 
     // Check Result
     return response;
+  }
+
+  // @ Helper: Handle Scroll
+  void _onPanelScroll() {
+    if (introPageController.page!.toInt() == introPageController.page) {}
+    panelNotifier.value = introPageController.page!.toDouble();
   }
 }

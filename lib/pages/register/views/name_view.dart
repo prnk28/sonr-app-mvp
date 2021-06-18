@@ -6,134 +6,96 @@ class NamePage extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     final hint = SonrTextField.hintName();
-    return SonrScaffold(
-        body: Container(
-      width: Get.width,
-      height: Get.height,
-      margin: EdgeInsets.only(bottom: 8, top: 72),
-      child: Column(children: <Widget>[
-        Form(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _NameStatus(),
-              Padding(padding: EdgeInsets.all(8)),
-              BoxContainer(
-                  margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
-                  padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-                  child: Stack(children: [
+    return FormPanel.sName(children: [
+      Container(
+          width: Get.width,
+          margin: EdgeInsets.only(left: 24),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              "Sonr Name".toUpperCase().light(
+                    color: SonrTheme.greyColor,
+                    fontSize: 20,
+                  ),
+              Obx(() => Container(
+                    child: controller.sName.value.length > 0
+                        ? ActionButton(
+                            onPressed: () {
+                              controller.sName("");
+                              controller.sName.refresh();
+                            },
+                            iconData: SonrIcons.Clear)
+                        : Container(),
+                  ))
+            ],
+          )),
+      Container(
+          decoration: BoxDecoration(color: SonrTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
+          margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
+          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+          child: ObxValue<RxDouble>(
+              (leftPadding) => Stack(children: [
                     TextField(
-                      style: TextStyle(
-                          fontFamily: 'Manrope',
-                          fontWeight: FontWeight.w400,
-                          color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
-                          fontSize: 24),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                      ],
+                      style: DisplayTextStyle.Paragraph.style(color: SonrTheme.itemColor, fontSize: 24),
                       autofocus: true,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.go,
                       autocorrect: false,
+                      showCursor: false,
                       textCapitalization: TextCapitalization.none,
                       onEditingComplete: controller.setName,
-                      onChanged: controller.checkName,
-                      decoration: InputDecoration.collapsed(
-                          hintText: hint.item1,
-                          hintStyle: TextStyle(
-                              fontFamily: 'Manrope', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                      onChanged: (val) {
+                        final length = controller.checkName(val);
+                        if (length > 0) {
+                          leftPadding(length);
+                        } else {
+                          leftPadding(hint.item1.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
+                        }
+                      },
+                      decoration: InputDecoration.collapsed(hintText: hint.item1),
                     ),
                     Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(right: 36),
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(left: leftPadding.value),
                       child: Text(
                         ".snr/",
-                        style: TextStyle(
-                            fontFamily: 'Manrope',
-                            fontWeight: FontWeight.w400,
-                            color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
-                            fontSize: 24),
+                        style: DisplayTextStyle.Subheading.style(color: SonrTheme.itemColor, fontSize: 24),
                       ),
                     ),
-                  ])),
-            ],
-          ),
-        )
-      ]),
-    ));
+                  ]),
+              (hint.item1.length * 12.0).obs)),
+      Padding(padding: EdgeInsets.all(8)),
+      _NameStatus(),
+      Padding(padding: EdgeInsets.all(200))
+    ]);
   }
 }
 
 class _NameStatus extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.nameStatus.value == RegisterNameStatus.Default
+    return Obx(() => controller.nameStatus.value == NewSNameStatus.Default || controller.sName.value.length == 0
         ? Container()
         : Container(
-            width: 200,
+            padding: EdgeInsets.all(12),
+            constraints: BoxConstraints(minWidth: 140, maxWidth: 285),
             child: Container(
-                padding: EdgeInsets.all(12),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  Stack(
-                    children: <Widget>[
-                      Positioned(
-                        top: 2.0,
-                        child: Icon(_buildIconData(controller.nameStatus.value), color: SonrColor.Black.withOpacity(0.5), size: 20),
-                      ),
-                      Icon(_buildIconData(controller.nameStatus.value), color: Colors.white, size: 20),
-                    ],
-                  ),
-                  Padding(padding: EdgeInsets.all(4)),
-                  _buildLabel(controller.nameStatus.value).paragraph(color: SonrColor.White)
-                ])),
-            decoration: BoxDecoration(
-              gradient: _buildGradient(controller.nameStatus.value),
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: SonrTheme.boxShadow,
+              child: DashedRect(
+                strokeWidth: 1,
+                color: SonrTheme.greyColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                    controller.nameStatus.value.icon(),
+                    Padding(padding: EdgeInsets.only(left: 4)),
+                    controller.nameStatus.value.label(),
+                  ]),
+                ),
+              ),
             ),
           ));
-  }
-
-  String _buildLabel(RegisterNameStatus status) {
-    switch (status) {
-      case RegisterNameStatus.Default:
-        return "Pick Name";
-      case RegisterNameStatus.Available:
-        return "Available!";
-      case RegisterNameStatus.TooShort:
-        return "Too Short";
-      case RegisterNameStatus.Unavailable:
-        return "Unavailable";
-      case RegisterNameStatus.Blocked:
-        return "Blocked";
-      case RegisterNameStatus.Restricted:
-        return "Restricted";
-      case RegisterNameStatus.DeviceRegistered:
-        return "Invalid";
-      case RegisterNameStatus.Returning:
-        return "Welcome Back!";
-    }
-  }
-
-  Gradient _buildGradient(RegisterNameStatus status) {
-    switch (status) {
-      case RegisterNameStatus.Default:
-        return SonrGradient.Primary;
-      case RegisterNameStatus.Available:
-        return SonrGradient.Tertiary;
-      case RegisterNameStatus.Returning:
-        return SonrGradient.Secondary;
-      default:
-        return SonrGradient.Critical;
-    }
-  }
-
-  IconData _buildIconData(RegisterNameStatus status) {
-    switch (status) {
-      case RegisterNameStatus.Default:
-        return SonrIcons.ATSign;
-      case RegisterNameStatus.Available:
-        return SonrIcons.Check;
-      case RegisterNameStatus.Returning:
-        return SonrIcons.Zap;
-      default:
-        return SonrIcons.Warning;
-    }
   }
 }

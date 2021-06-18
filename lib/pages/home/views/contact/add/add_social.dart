@@ -66,12 +66,12 @@ class DropdownAddView extends GetView<ProfileController> {
           Padding(padding: EdgeInsets.all(20)),
 
           // @ Drop Down
-          SonrDropdown.social(
-            controller.options,
-            index: controller.dropdownIndex,
-            width: Get.width - 80,
-            margin: EdgeInsets.only(left: 12, right: 12),
-          ),
+          // SonrDropdown.social(
+          //   controller.options,
+          //   index: controller.dropdownIndex,
+          //   width: Get.width - 80,
+          //   margin: EdgeInsets.only(left: 12, right: 12),
+          // ),
 
           // @ Public/Private Checker
           // Obx(() => controller.step.value.provider.allowsVisibility

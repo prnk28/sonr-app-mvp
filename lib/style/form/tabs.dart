@@ -11,10 +11,10 @@ class GradientTabs extends StatelessWidget {
         (currentIdx) => Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(32), color: Color(0xffF8F8F9)),
             height: 64,
-            width: Width.full,
             margin: EdgeInsets.symmetric(horizontal: 24),
             padding: EdgeInsets.all(8),
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: _buildTabs(currentIdx),
             )),
@@ -31,7 +31,7 @@ class GradientTabs extends StatelessWidget {
                 onTabChanged(index);
               },
               child: AnimatedContainer(
-                constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
+                constraints: BoxConstraints(maxWidth: 150, minWidth: 40),
                 height: 48,
                 alignment: Alignment.center,
                 child: AnimatedScale(

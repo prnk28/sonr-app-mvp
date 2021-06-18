@@ -101,10 +101,6 @@ class AppServices {
     await Get.putAsync(() => LocalService().init());
     await Get.putAsync(() => SessionService().init());
     await Get.putAsync(() => SonrService().init(), permanent: true);
-
-    // Fourth: UI Services
-    await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-    await Get.putAsync(() => PosOverlay().init(), permanent: true);
   }
 
   /// @ Method Validates Required Services Registered

@@ -123,7 +123,7 @@ class _MediaItemState extends State<_MediaItem> {
         return widget.item.icon();
       }
     } else {
-      return CircularProgressIndicator();
+      return HourglassIndicator();
     }
   }
 

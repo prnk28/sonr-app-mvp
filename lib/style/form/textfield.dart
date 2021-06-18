@@ -39,7 +39,6 @@ class SonrTextField extends StatelessWidget {
   final Rx<TextInputValidStatus>? status;
   final ValueChanged<String>? onChanged;
   final void Function()? onEditingComplete;
-  final Iterable<String>? autofillHints;
 
   /// @ Returns Random Hint Name
   static Tuple<String, String> hintName() {
@@ -60,20 +59,20 @@ class SonrTextField extends StatelessWidget {
     return list.random();
   }
 
-  SonrTextField(
-      {required this.hint,
-      required this.value,
-      this.label,
-      this.status,
-      this.controller,
-      this.onChanged,
-      this.focusNode,
-      this.onEditingComplete,
-      this.textInputAction = TextInputAction.done,
-      this.autoFocus = false,
-      this.autoCorrect = true,
-      this.textCapitalization = TextCapitalization.none,
-      this.autofillHints});
+  SonrTextField({
+    required this.hint,
+    required this.value,
+    this.label,
+    this.status,
+    this.controller,
+    this.onChanged,
+    this.focusNode,
+    this.onEditingComplete,
+    this.textInputAction = TextInputAction.done,
+    this.autoFocus = false,
+    this.autoCorrect = true,
+    this.textCapitalization = TextCapitalization.none,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +113,17 @@ class SonrTextField extends StatelessWidget {
           margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
-            style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+            style: TextStyle(
+              fontFamily: 'R-Flex',
+              fontWeight: FontWeight.w500,
+              color: SonrTheme.itemColor,
+            ),
             controller: controller,
             autofocus: autoFocus,
             textInputAction: textInputAction,
             autocorrect: autoCorrect,
             textCapitalization: textCapitalization,
             focusNode: focusNode,
-            autofillHints: autofillHints,
             onEditingComplete: onEditingComplete,
             onChanged: onChanged,
             decoration: decoration != null
@@ -129,7 +131,10 @@ class SonrTextField extends StatelessWidget {
                 : InputDecoration.collapsed(
                     hintText: hint,
                     hintStyle: TextStyle(
-                        fontFamily: 'Manrope', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                      fontFamily: 'R-Flex',
+                      fontWeight: FontWeight.w300,
+                      color: SonrTheme.itemColor,
+                    )),
           ),
         )
       ],
@@ -148,10 +153,17 @@ class SonrTextField extends StatelessWidget {
       child: buildDefault(context,
           isError: true,
           decoration: InputDecoration.collapsed(
-              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrColor.Critical, width: 4)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                color: SonrColor.Critical,
+                width: 2,
+              )),
               hintText: hint,
-              hintStyle:
-                  TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
+              hintStyle: TextStyle(
+                fontFamily: 'R-Flex',
+                fontWeight: FontWeight.w300,
+                color: SonrTheme.itemColor,
+              ))),
     );
   }
 

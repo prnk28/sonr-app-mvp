@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../style.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
+import 'package:lottie/lottie.dart';
 
 /// @ Animated Down Big/ Up Big
 class AnimatedBounce extends StatefulWidget {
@@ -222,6 +223,32 @@ class AnimatedSlideSwitcher extends StatelessWidget {
         ),
       );
     };
+  }
+}
+
+/// @ Lottie Based Progress Indicator
+class HourglassIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 24,
+      height: 24,
+      child: Lottie.asset(
+        _assetPath,
+        fit: BoxFit.fitHeight,
+        animate: true,
+        repeat: true,
+      ),
+    );
+  }
+
+  // Returns Animation Asset Path by Dark Mode
+  String get _assetPath {
+    if (UserService.isDarkMode) {
+      return 'assets/animations/loader-white.json';
+    } else {
+      return 'assets/animations/loader-black.json';
+    }
   }
 }
 

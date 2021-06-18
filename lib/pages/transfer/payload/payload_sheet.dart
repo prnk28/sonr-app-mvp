@@ -121,7 +121,7 @@ class _SonrFileListItem extends StatelessWidget {
           alignment: Alignment.topRight,
           child: ActionButton(
             onPressed: () {
-              SonrOverlay.show(EditPayloadPopup(
+              AppRoute.popup(EditPayloadPopup(
                 index: index,
                 item: item,
               ));
@@ -160,7 +160,7 @@ class _PayloadSingleItem extends StatelessWidget {
   Widget _buildLeading() {
     // # Undefined Type
     if (TransferService.payload.value == Payload.NONE) {
-      return CircularProgressIndicator();
+      return HourglassIndicator();
     }
 
     // # Check for Media File Type
