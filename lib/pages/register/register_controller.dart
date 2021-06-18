@@ -48,13 +48,13 @@ class RegisterController extends GetxController {
     // Initialize Setup View
     setupPageController = PageController(
       initialPage: 0,
-      viewportFraction: 0.9,
+      viewportFraction: 1.0,
     );
 
     // Initialize Permissions View
     permissionsPageController = PageController(
       initialPage: 0,
-      viewportFraction: 0.9,
+      viewportFraction: 1.0,
     );
 
     // Get Records
@@ -270,7 +270,7 @@ class RegisterController extends GetxController {
   Future<bool> requestLocation() async {
     if (await Permission.location.request().isGranted) {
       Get.find<MobileService>().updatePermissionsStatus();
-      status(RegisterPageType.Gallery);
+      nextPage(RegisterPageType.Gallery);
       return true;
     } else {
       Get.find<MobileService>().updatePermissionsStatus();

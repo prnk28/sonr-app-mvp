@@ -6,9 +6,8 @@ import 'register_controller.dart';
 class RegisterPage extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-    return BoxContainer(
-      width: Get.width,
-      height: Get.height,
+    return Material(
+      type: MaterialType.transparency,
       child: Obx(
         () => AnimatedSlideSwitcher.slideRight(
           child: _buildView(controller.status.value),
@@ -32,13 +31,24 @@ class RegisterPage extends GetView<RegisterController> {
         );
       }));
     } else if (status.isSetup) {
-      return NotifyingSetupView(pages: [
-        NamePage(key: ValueKey<RegisterPageType>(RegisterPageType.Name)),
-        BackupCodeView(key: ValueKey<RegisterPageType>(RegisterPageType.Backup)),
-        ProfileSetupView(key: ValueKey<RegisterPageType>(RegisterPageType.Contact)),
-      ]);
+      return NotifyingSetupView(
+        pages: [
+          NamePage(key: RegisterPageType.Name.key),
+          BackupCodeView(key: RegisterPageType.Backup.key),
+          ProfileSetupView(key: RegisterPageType.Contact.key),
+        ],
+        titleBar: RegisterTitleBar(
+          title: status.title,
+          instruction: status.instruction,
+          isGradient: status.isGradient,
+        ),
+        bottomSheet: RegisterBottomSheet(
+          leftButton: status.leftButton(),
+          rightButton: status.rightButton(),
+        ),
+      );
     } else {
-      return _StartView(key: ValueKey<RegisterPageType>(RegisterPageType.Intro));
+      return _StartView(key: RegisterPageType.Intro.key);
     }
   }
 }
@@ -47,31 +57,28 @@ class _StartView extends GetView<RegisterController> {
   const _StartView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: Stack(children: [
-        AnimatedBuilder(
-          animation: controller.panelNotifier,
-          builder: (context, _) {
-            return Container(
-              child: SlidingImage(
-                notifier: controller.panelNotifier,
-                screenCount: InfoPanelType.values.length,
-                image: AssetImage("assets/illustrations/$_imageAsset"),
-              ),
-            );
-          },
-        ),
-        // Scrollable Page View
-        NotifyingIntroView(
-          pages: List<Widget>.generate(
-              InfoPanelType.values.length,
-              (index) => InfoPanel(
-                    type: InfoPanelType.values[index],
-                  )),
-        ),
-      ]),
-    );
+    return Stack(children: [
+      AnimatedBuilder(
+        animation: controller.panelNotifier,
+        builder: (context, _) {
+          return Container(
+            child: SlidingImage(
+              notifier: controller.panelNotifier,
+              screenCount: InfoPanelType.values.length,
+              image: AssetImage("assets/illustrations/$_imageAsset"),
+            ),
+          );
+        },
+      ),
+      // Scrollable Page View
+      NotifyingIntroView(
+        pages: List<Widget>.generate(
+            InfoPanelType.values.length,
+            (index) => InfoPanel(
+                  type: InfoPanelType.values[index],
+                )),
+      ),
+    ]);
   }
 
   String get _imageAsset {

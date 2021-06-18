@@ -127,6 +127,9 @@ class DeviceService extends GetxService {
     }
   }
 
+  /// @ Method Hides Keyboard
+  static void hideKeyboard() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.hide') : print("");
+
   /// @ Method Plays a UI Sound
   static void playSound({required UISoundType type}) async {
     if (isMobile) {

@@ -271,6 +271,28 @@ extension RegisterPageTypeUtils on RegisterPageType {
         RegisterPageType.Gallery,
       ];
 
+  /// Returns Left Button for Setup Page
+  Widget leftButton() {
+    if (this == RegisterPageType.Backup) {
+      return ColorButton.neutral(onPressed: Get.find<RegisterController>().exportCode, text: "Save");
+    } else if (this == RegisterPageType.Contact) {
+      return ColorButton.neutral(onPressed: () => Get.find<RegisterController>().nextPage(RegisterPageType.Location), text: "Later");
+    } else {
+      return Container();
+    }
+  }
+
+  /// Returns Right Button for Setup Page
+  Widget rightButton() {
+    if (this == RegisterPageType.Backup) {
+      return ColorButton.primary(onPressed: () => Get.find<RegisterController>().nextPage(RegisterPageType.Contact), text: "Next");
+    } else if (this == RegisterPageType.Contact) {
+      return ColorButton.primary(onPressed: () => Get.find<RegisterController>().nextPage(RegisterPageType.Location), text: "Confirm");
+    } else {
+      return Container();
+    }
+  }
+
   /// Returns Permissions Button Text
   String permissionsButtonText() {
     final value = this.toString().substring(this.toString().indexOf(".") + 1);
@@ -292,6 +314,34 @@ extension RegisterPageTypeUtils on RegisterPageType {
       return this == RegisterPageType.Location ? "assets/illustrations/LocationPerm.png" : "assets/illustrations/MediaPerm.png";
     } else {
       return "";
+    }
+  }
+
+  bool get isGradient => this == RegisterPageType.Name;
+
+  String get title {
+    switch (this) {
+      case RegisterPageType.Name:
+        return "SName";
+      case RegisterPageType.Backup:
+        return "Backup Code";
+      case RegisterPageType.Contact:
+        return "Profile";
+      default:
+        return "";
+    }
+  }
+
+  String get instruction {
+    switch (this) {
+      case RegisterPageType.Name:
+        return "Choose Your";
+      case RegisterPageType.Backup:
+        return "Secure Your";
+      case RegisterPageType.Contact:
+        return "Edit Your";
+      default:
+        return "";
     }
   }
 }

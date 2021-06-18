@@ -26,7 +26,7 @@ class App extends StatelessWidget {
   const App({Key? key, required this.isDesktop}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    DeviceService.hideKeyboard();
     return GetMaterialApp(
       onInit: () => _checkInitialPage(),
       themeMode: ThemeMode.system,

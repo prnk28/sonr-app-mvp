@@ -53,9 +53,10 @@ class PermPanel extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingAction: ColorButton.neutral(
+      floatingActionButton: ColorButton.neutral(
         onPressed: onPressed,
         text: buttonText,
       ),
@@ -77,91 +78,60 @@ class FormPanel extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsets margin;
   final EdgeInsets padding;
-  final RegisterTitleBar titleBar;
-  const FormPanel({Key? key, required this.children, required this.margin, required this.padding, required this.titleBar}) : super(key: key);
+  const FormPanel({Key? key, required this.children, required this.margin, required this.padding}) : super(key: key);
   @override
-  factory FormPanel.sName({required List<Widget> children, required RegisterTitleBar titleBar}) {
+  factory FormPanel.sName({required List<Widget> children}) {
     return FormPanel(
       children: children,
       margin: EdgeInsets.only(bottom: 8, top: 72),
       padding: EdgeInsets.zero,
-      titleBar: titleBar,
     );
   }
 
-  factory FormPanel.contact({required List<Widget> children, required RegisterTitleBar titleBar}) {
+  factory FormPanel.contact({required List<Widget> children}) {
     return FormPanel(
       children: children,
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.zero,
-      titleBar: titleBar,
     );
   }
 
   Widget build(BuildContext context) {
-    return SonrScaffold(
-        appBar: titleBar,
-        body: Container(
-          width: Get.width,
-          height: Get.height,
-          margin: margin,
-          padding: padding,
-          child: Column(
-            children: <Widget>[
-              Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                ),
-              ),
-            ],
+    return Container(
+      width: Width.full,
+      height: Height.full,
+      margin: margin,
+      padding: padding,
+      child: Column(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
           ),
-        ));
+        ],
+      ),
+    );
   }
 }
 
 class PagePanel extends StatelessWidget {
-  final RegisterTitleBar titleBar;
-  final List<Widget> buttons;
   final List<Widget> children;
 
-  const PagePanel({Key? key, required this.titleBar, required this.buttons, required this.children}) : super(key: key);
+  const PagePanel({Key? key, required this.children}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-      bottomSheet: _buildButtonSheet(),
-      appBar: titleBar,
-      body: Container(
-        padding: EdgeInsets.all(16),
-        width: Get.width,
-        height: Get.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: children,
-        ),
+    return Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.zero,
+      width: Width.full,
+      height: Height.full,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
       ),
     );
-  }
-
-  Widget _buildButtonSheet() {
-    if (buttons.length > 0) {
-      return Container(
-          decoration: BoxDecoration(
-              boxShadow: SonrTheme.boxShadow,
-              color: SonrTheme.backgroundColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(37),
-                topRight: Radius.circular(37),
-              )),
-          padding: EdgeInsets.all(8),
-          height: 106,
-          child: Row(
-            children: buttons,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-          ));
-    }
-    return Container();
   }
 }
 
@@ -195,4 +165,36 @@ class RegisterTitleBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size(Width.full, instruction != null ? 150 : 60);
+}
+
+class RegisterBottomSheet extends StatelessWidget {
+  final Widget? leftButton;
+  final Widget? rightButton;
+
+  const RegisterBottomSheet({Key? key, this.leftButton, this.rightButton}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (leftButton != null && rightButton != null) {
+      return Container(
+        padding: EdgeInsets.all(8),
+        width: Get.width,
+        height: 106,
+        decoration: BoxDecoration(
+            boxShadow: SonrTheme.boxShadow,
+            color: SonrTheme.backgroundColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(37),
+              topRight: Radius.circular(37),
+            )),
+        child: Row(
+          children: [leftButton!, rightButton!],
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+        ),
+      );
+    }
+    return Container();
+  }
 }

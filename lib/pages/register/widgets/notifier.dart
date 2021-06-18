@@ -50,8 +50,9 @@ class _NotifyingIntroViewState extends State<NotifyingIntroView> {
 
 class NotifyingSetupView extends StatefulWidget {
   final List<Widget> pages;
-
-  const NotifyingSetupView({Key? key, required this.pages}) : super(key: key);
+  final RegisterTitleBar titleBar;
+  final RegisterBottomSheet bottomSheet;
+  const NotifyingSetupView({Key? key, required this.pages, required this.titleBar, required this.bottomSheet}) : super(key: key);
   @override
   _NotifyingSetupViewState createState() => _NotifyingSetupViewState(pages);
 }
@@ -79,8 +80,11 @@ class _NotifyingSetupViewState extends State<NotifyingSetupView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: PageView(
+    return SonrScaffold(
+      appBar: widget.titleBar,
+      bottomSheet: widget.bottomSheet,
+      body: PageView(
+        //physics: NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         children: _pages,
         controller: Get.find<RegisterController>().setupPageController,
