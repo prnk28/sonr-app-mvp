@@ -64,7 +64,7 @@ class App extends StatelessWidget {
             children: [
               // @ Rive Animation
               Center(
-                child: CircularProgressIndicator(),
+                child: HourglassIndicator(),
               ),
 
               // @ Fade Animation of Text
@@ -85,7 +85,7 @@ class App extends StatelessWidget {
               type: RiveBoard.SplashPortrait,
               width: Get.width,
               height: Get.height,
-              placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+              placeholder: SizedBox(child: HourglassIndicator()),
             ),
 
             // @ Fade Animation of Text

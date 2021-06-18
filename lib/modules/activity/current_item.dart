@@ -11,12 +11,11 @@ class CurrentActivityItem extends GetView<ActivityController> {
     return BoxContainer(
       height: 150,
       margin: EdgeInsets.symmetric(horizontal: 24),
-      padding: EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.symmetric(vertical: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            height: 96,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -94,7 +93,7 @@ class _CurrentActivityContent extends GetView<ActivityController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Rich Text
-          ["${payload.toString()} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
+          ["${payload.toString().capitalizeFirst} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
 
           // Date Time Text
           _buildDateTime().paragraph(fontSize: 16),
@@ -119,9 +118,10 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
+          padding: EdgeInsets.only(top: 8),
           margin: EdgeInsets.symmetric(horizontal: 42),
           alignment: Alignment.center,
-          height: 20,
+          height: 32,
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
@@ -139,15 +139,23 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
               Container(
                 alignment: Alignment.center,
                 width: _calculateWidth(progress.value),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: SonrGradients.SeaShore),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
               ),
               Align(
                 alignment: Alignment.center,
-                child: _calculateText(progress.value).heading(fontSize: 12, color: SonrColor.White),
+                child: _calculateText(progress.value).subheading(fontSize: 16, color: _calculateTextColor(progress.value)),
               ),
             ],
           ),
         ));
+  }
+
+  Gradient _calculateGradient(double current) {
+    int adjusted = (current * 100).round();
+    if (adjusted != 100) {
+      return SonrGradients.SeaShore;
+    }
+    return SonrGradient.Tertiary;
   }
 
   double _calculateWidth(double current) {
@@ -156,6 +164,18 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
 
   String _calculateText(double current) {
     int adjusted = (current * 100).round();
-    return "$adjusted %";
+    if (adjusted != 100) {
+      return "$adjusted %";
+    } else {
+      return "Complete!";
+    }
+  }
+
+  Color _calculateTextColor(double current) {
+    int adjusted = (current * 100).round();
+    if (adjusted < 60) {
+      return SonrColor.Black;
+    }
+    return SonrColor.White;
   }
 }

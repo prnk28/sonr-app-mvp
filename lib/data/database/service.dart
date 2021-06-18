@@ -20,7 +20,6 @@ class CardService extends GetxService {
   final _links = RxList<TransferCard>();
   final _files = RxList<TransferCard>();
   final _media = RxList<TransferCard>();
-  final _categoryCount = RxInt(1);
 
   // File Count
   final _documentCount = 0.obs;
@@ -69,13 +68,6 @@ class CardService extends GetxService {
       _contacts.bindStream(_database.watchContacts());
       _files.bindStream(_database.watchFiles());
       _links.bindStream(_database.watchUrls());
-
-      // Set Initial Counter
-      int counter = 1;
-      _contacts.length > 0 ? counter += 1 : counter += 0;
-      _files.length > 0 ? counter += 1 : counter += 0;
-      _links.length > 0 ? counter += 1 : counter += 0;
-      _categoryCount(counter);
     }
     return this;
   }
@@ -217,13 +209,6 @@ class CardService extends GetxService {
   // @ Helper: Refresh Category Count
   static void _refreshCount() {
     if (DeviceService.isMobile && isRegistered) {
-      // Set Category Count
-      int counter = 1;
-      hasContacts ? counter += 1 : counter += 0;
-      hasFiles ? counter += 1 : counter += 0;
-      hasLinks ? counter += 1 : counter += 0;
-      to._categoryCount(counter);
-
       // Set Individual File Count
       if (hasFiles) {
         to._documentCount(to._files.count((i) => i.mime == MIME_Type.TEXT));

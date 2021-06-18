@@ -1,5 +1,4 @@
 import 'package:sonr_app/data/database/service.dart';
-import 'package:sonr_app/modules/activity/activity_controller.dart';
 import 'package:sonr_app/modules/authorize/auth_sheet.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/style.dart';
@@ -47,11 +46,14 @@ class SessionService extends GetxService {
       // # File Transfer
       else if (to._session.payload.isTransfer) {
         // Prepare for Transfer
+        to._hasActiveSession(decision);
+
+        // Check Decision
         if (decision) {
           // Check for Remote
           SonrService.respond(to._session.buildReply(decision: true));
           AppRoute.closeSheet();
-          AppPage.Activity.to(init: ActivityController.initSession);
+          AppPage.Activity.to();
         }
         // Send Declined
         else {
@@ -162,6 +164,7 @@ class SessionService extends GetxService {
 
     // Logging
     Logger.info("Node(Callback) Transmitted: " + data.toString());
+    _hasActiveSession(false);
     _session.reset();
   }
 }

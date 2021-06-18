@@ -25,7 +25,7 @@ class ActivityPopup extends GetView<ActivityController> {
         Expanded(
           child: Obx(
             () => _buildExpandedChild(
-              controller.hasActiveSession.value,
+              SessionService.hasActiveSession.value,
               controller.currentPageIndex.value,
             ),
           ),
@@ -47,7 +47,7 @@ class ActivityPopup extends GetView<ActivityController> {
 class _ActivityHeader extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.hasActiveSession.value
+    return Obx(() => SessionService.hasActiveSession.value
         ? GradientTabs(
             tabs: ["Active", "Past"],
             onTabChanged: (index) => controller.setView(index),
@@ -60,30 +60,30 @@ class _PastActivityView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 24),
+        padding: EdgeInsets.only(top: 24),
         child: Obx(
-      () => CardService.activity.length > 0
-          ? ListView.builder(
-              itemCount: CardService.activity.length,
-              itemBuilder: (context, index) {
-                return PastActivityItem(item: controller.pastActivities[index]);
-              })
-          : Center(
-              child: Container(
-                child: [
-                  Padding(padding: EdgeInsets.all(24)),
-                  Image.asset(
-                    'assets/illustrations/EmptyNotif.png',
-                    height: Height.ratio(0.4),
-                    fit: BoxFit.fitHeight,
+          () => CardService.activity.length > 0
+              ? ListView.builder(
+                  itemCount: CardService.activity.length,
+                  itemBuilder: (context, index) {
+                    return PastActivityItem(item: controller.pastActivities[index]);
+                  })
+              : Center(
+                  child: Container(
+                    child: [
+                      Padding(padding: EdgeInsets.all(24)),
+                      Image.asset(
+                        'assets/illustrations/EmptyNotif.png',
+                        height: Height.ratio(0.4),
+                        fit: BoxFit.fitHeight,
+                      ),
+                      Padding(padding: EdgeInsets.all(8)),
+                      "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
+                    ].column(),
+                    padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
                   ),
-                  Padding(padding: EdgeInsets.all(8)),
-                  "All Caught Up!".subheading(color: Get.theme.hintColor, fontSize: 20)
-                ].column(),
-                padding: DeviceService.isDesktop ? EdgeInsets.all(64) : EdgeInsets.zero,
-              ),
-            ),
-    ));
+                ),
+        ));
   }
 }
 

@@ -160,7 +160,7 @@ class _PayloadSingleItem extends StatelessWidget {
   Widget _buildLeading() {
     // # Undefined Type
     if (TransferService.payload.value == Payload.NONE) {
-      return CircularProgressIndicator();
+      return HourglassIndicator();
     }
 
     // # Check for Media File Type

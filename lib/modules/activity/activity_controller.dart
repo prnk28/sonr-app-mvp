@@ -4,9 +4,6 @@ class ActivityController extends GetxController {
   /// Current Page Index
   final currentPageIndex = 0.obs;
 
-  /// Has Session Active
-  final hasActiveSession = false.obs;
-
   /// Past Activities
   final pastActivities = CardService.activity;
 
@@ -16,12 +13,6 @@ class ActivityController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-  }
-
-  /// Init View for Session
-  static void initSession() {
-    Get.find<ActivityController>().hasActiveSession(true);
-    Get.find<ActivityController>().hasActiveSession.refresh();
   }
 
   /// Clear All Activity from Table
