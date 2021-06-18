@@ -125,7 +125,7 @@ class SnackArgs {
   }
 
   /// @ Invalid Operation
-  factory SnackArgs.invalid(String message) {
+  factory SnackArgs.invalid(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
       "Uh Oh!",
       message,
@@ -133,20 +133,27 @@ class SnackArgs {
       Colors.orange[900],
       2600,
       false,
-      SnackPosition.BOTTOM,
+      position,
     );
   }
 
   /// @ Missing Data
-  factory SnackArgs.missing(String message, {bool isLast = false}) {
+  factory SnackArgs.missing(String message, {bool isLast = false, SnackPosition position = SnackPosition.BOTTOM}) {
     // Get Missing Title
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
     return SnackArgs(
-        isLast ? "Almost There!" : list.random(), message, SonrIcons.Warning.white, SonrColor.Critical, 2600, false, SnackPosition.BOTTOM);
+      isLast ? "Almost There!" : list.random(),
+      message,
+      SonrIcons.Warning.white,
+      SonrColor.Critical,
+      2600,
+      false,
+      position,
+    );
   }
 
   /// @ Succesful Operation
-  factory SnackArgs.success(String message) {
+  factory SnackArgs.success(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
       "Success!!",
       message,
@@ -154,7 +161,7 @@ class SnackArgs {
       Colors.green,
       2600,
       true,
-      SnackPosition.BOTTOM,
+      position,
     );
   }
 }
