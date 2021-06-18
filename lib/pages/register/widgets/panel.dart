@@ -18,6 +18,8 @@ class InfoPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FadeInUpBig(
+      duration: 600.milliseconds,
+      delay: 100.milliseconds,
       child: Container(
         alignment: Alignment.bottomCenter,
         decoration: BoxDecoration(color: SonrColor.Black.withOpacity(0.7), borderRadius: BorderRadius.circular(22)),

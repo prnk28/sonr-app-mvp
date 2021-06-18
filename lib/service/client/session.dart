@@ -50,6 +50,7 @@ class SessionService extends GetxService {
         if (decision) {
           // Check for Remote
           SonrService.respond(to._session.buildReply(decision: true));
+          AppRoute.closeSheet();
           AppPage.Activity.to(init: ActivityController.initSession);
         }
         // Send Declined

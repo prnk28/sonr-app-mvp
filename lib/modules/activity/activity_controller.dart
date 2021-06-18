@@ -1,9 +1,6 @@
 import 'package:sonr_app/style.dart';
 
 class ActivityController extends GetxController {
-  /// Current List Length
-  final activityLength = 0.obs;
-
   /// Current Page Index
   final currentPageIndex = 0.obs;
 
@@ -18,7 +15,6 @@ class ActivityController extends GetxController {
 
   @override
   void onInit() {
-    activityLength(CardService.activity.length);
     super.onInit();
   }
 
@@ -30,7 +26,7 @@ class ActivityController extends GetxController {
 
   /// Clear All Activity from Table
   Future<void> clearAllActivity() async {
-    if (activityLength > 0) {
+    if (CardService.activity.length > 0) {
       var decision =
           await AppRoute.question(title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
       if (decision) {

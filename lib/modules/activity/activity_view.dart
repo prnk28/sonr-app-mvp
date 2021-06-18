@@ -60,10 +60,11 @@ class _PastActivityView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(top: 24),
         child: Obx(
       () => CardService.activity.length > 0
           ? ListView.builder(
-              itemCount: controller.activityLength.value,
+              itemCount: CardService.activity.length,
               itemBuilder: (context, index) {
                 return PastActivityItem(item: controller.pastActivities[index]);
               })
@@ -89,7 +90,9 @@ class _PastActivityView extends GetView<ActivityController> {
 class _CurrentActivityView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      alignment: Alignment.topCenter,
+      padding: EdgeInsets.only(top: 24),
       child: CurrentActivityItem(session: SessionService.session),
     );
   }

@@ -11,19 +11,10 @@ class PastActivityItem extends GetView<ActivityController> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.only(bottom: 24),
-      child: Dismissible(
-        key: ValueKey(item),
-        onDismissed: (direction) => CardService.clearActivity(item),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          color: SonrColor.Critical,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: SonrIcons.Cancel.whiteWith(size: 28),
-          ),
-        ),
-        child: BoxContainer(
-          child: ListTile(title: item.messageText()),
+      child: BoxContainer(
+        child: ListTile(
+          title: item.messageText(),
+          trailing: ActionButton(onPressed: () => CardService.clearActivity(item), iconData: SonrIcons.Close),
         ),
       ),
     );
