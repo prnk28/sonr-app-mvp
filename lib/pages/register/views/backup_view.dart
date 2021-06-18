@@ -21,7 +21,10 @@ class BackupCodeView extends GetView<RegisterController> {
               padding: EdgeInsets.all(24),
               child: Stack(
                 children: [
-                  Container(padding: EdgeWith.top(24),child: controller.mnemonic.value.gradient(value: SonrGradient.Theme(radius: 2), size: 36)),
+                  Container(
+                    padding: EdgeWith.top(24),
+                    child: controller.mnemonic.value.gradient(value: SonrGradient.Theme(radius: 2), size: 32),
+                  ),
                   Align(
                     alignment: Alignment.topRight,
                     child: ActionButton(
