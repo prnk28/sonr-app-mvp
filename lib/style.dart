@@ -51,9 +51,6 @@ export 'style/form/infolist.dart';
 export 'style/form/textfield.dart';
 export 'style/form/tabs.dart';
 
-// Global UI Widgets
-export 'modules/peer/flat_overlay.dart';
-
 // UI Packages
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

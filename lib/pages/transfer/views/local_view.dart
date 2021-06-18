@@ -1,23 +1,9 @@
-import 'package:sonr_app/modules/peer/card_view.dart';
-import 'package:sonr_app/modules/peer/item_view.dart';
+import 'package:sonr_app/pages/transfer/models/filter.dart';
+import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/pages/transfer/models/status.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
 import '../transfer_controller.dart';
-
-enum LobbyFilter { All, Phones, Desktops }
-
-extension LobbyFilterUtils on LobbyFilter {
-  static LobbyFilter fromEnabled(bool phones, bool desktops) {
-    if (phones && !desktops) {
-      return LobbyFilter.Phones;
-    } else if (desktops && !phones) {
-      return LobbyFilter.Desktops;
-    } else {
-      return LobbyFilter.All;
-    }
-  }
-}
 
 class LocalView extends GetView<TransferController> {
   @override

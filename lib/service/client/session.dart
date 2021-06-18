@@ -1,5 +1,6 @@
 import 'package:sonr_app/data/database/service.dart';
 import 'package:sonr_app/modules/authorize/auth_sheet.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/style.dart';
 

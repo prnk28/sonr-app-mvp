@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
+import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/style.dart';
 
 class NearbyListView extends GetView<HomeController> {

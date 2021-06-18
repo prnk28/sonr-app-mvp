@@ -5,6 +5,7 @@ import 'package:sonr_app/style.dart';
 import 'transfer_controller.dart';
 import 'views/local_view.dart';
 import 'widgets/item/item.dart';
+export 'views/flat_view.dart';
 
 /// @ Transfer Screen Entry Point
 class TransferPage extends GetView<TransferController> {

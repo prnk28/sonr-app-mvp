@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity_controller.dart';
-import 'package:sonr_app/modules/peer/peer_controller.dart';
+import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';

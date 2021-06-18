@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:sonr_app/modules/peer/profile_view.dart';
+import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/style.dart';
 import '../activity_controller.dart';
 
