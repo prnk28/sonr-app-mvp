@@ -4,7 +4,7 @@ export 'views/file_auth.dart';
 export 'views/url_auth.dart';
 
 // Imports
-import 'package:sonr_app/service/transfer/receiver.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'views/contact_auth.dart';
 import 'views/file_auth.dart';

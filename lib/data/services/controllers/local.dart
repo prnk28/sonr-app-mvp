@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/pages/transfer/models/status.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 

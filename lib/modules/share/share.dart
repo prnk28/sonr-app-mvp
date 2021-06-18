@@ -7,10 +7,9 @@ export 'views/share_view.dart';
 // Imports
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/transfer/models/arguments.dart';
-import 'package:sonr_app/service/transfer/sender.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'models/log.dart';
 import 'models/type.dart';
 
 class ShareController extends GetxController {

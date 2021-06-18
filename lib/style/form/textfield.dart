@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/data/services/services.dart';
 import '../../style.dart';
 import 'utility.dart';
 

@@ -9,40 +9,23 @@ class PayloadSingleItem extends StatelessWidget {
     final file = TransferController.invite.file;
     final invite = TransferController.invite;
     return Container(
-        child: Obx(() => Row(children: [
-              _buildLeading(invite),
-              _buildTitle(invite),
-              Container(
-                padding: EdgeInsets.only(left: 24),
-                alignment: Alignment.topRight,
-                child: ActionButton(
-                  onPressed: () {
-                    AppRoute.popup(EditPayloadPopup(
-                      index: 0,
-                      item: file.single,
-                    ));
-                  },
-                  iconData: SonrIcons.MoreVertical,
-                ),
-              ),
-            ])));
-  }
-
-  Widget _buildLeading(InviteRequest invite) {
-    // # Undefined Type
-    if (invite.payload == Payload.NONE) {
-      return HourglassIndicator();
-    }
-
-    // # Check for Media File Type
-    else if (invite.payload == Payload.MEDIA) {
-      return PayloadItemThumbnail();
-    }
-
-    // # Other Types
-    else {
-      return invite.payload.gradient(size: Height.ratio(0.125));
-    }
+        child: Row(children: [
+      PayloadItemThumbnail(),
+      _buildTitle(invite),
+      Container(
+        padding: EdgeInsets.only(left: 24),
+        alignment: Alignment.topRight,
+        child: ActionButton(
+          onPressed: () {
+            AppRoute.popup(EditPayloadPopup(
+              index: 0,
+              item: file.single,
+            ));
+          },
+          iconData: SonrIcons.MoreVertical,
+        ),
+      ),
+    ]));
   }
 
   Widget _buildTitle(InviteRequest invite) {

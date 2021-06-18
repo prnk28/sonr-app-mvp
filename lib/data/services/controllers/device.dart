@@ -1,12 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style.dart';
-import '../../env.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
+import 'package:sonr_app/data/services/services.dart';
 
 class DeviceService extends GetxService {
   // Accessors

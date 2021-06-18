@@ -11,7 +11,7 @@ import 'package:sonr_app/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/data/services/services.dart';
 
 // @ Enum defines Type of Permission
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;

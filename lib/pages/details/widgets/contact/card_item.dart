@@ -1,6 +1,4 @@
-import 'package:sonr_app/data/database/database.dart';
 import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
-import 'package:sonr_app/data/database/service.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
 

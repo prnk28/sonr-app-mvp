@@ -1,5 +1,4 @@
 import 'package:sonr_app/style.dart';
-import 'package:sonr_app/data/database/service.dart';
 
 enum PostItemType { Media, Files, Contacts, Links }
 

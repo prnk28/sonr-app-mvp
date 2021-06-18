@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/data/database/database.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
-export 'package:sonr_app/data/database/database.dart';
 
 class CardService extends GetxService {
   // Service Accessors

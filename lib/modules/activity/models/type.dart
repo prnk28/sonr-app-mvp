@@ -1,5 +1,4 @@
 import 'package:sonr_app/style.dart';
-import 'package:sonr_app/data/database/service.dart';
 
 extension TransferActivityUtils on TransferActivity {
   /// Builds Message Text for This Past Activity

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:sonr_app/service/client/sonr.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
 

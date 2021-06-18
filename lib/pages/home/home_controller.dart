@@ -2,7 +2,7 @@ export 'models/arguments.dart';
 export 'models/home_status.dart';
 export 'models/recent_status.dart';
 import 'dart:async';
-import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'models/arguments.dart';
 import 'models/home_status.dart';

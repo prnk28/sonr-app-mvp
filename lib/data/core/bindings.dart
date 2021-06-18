@@ -9,10 +9,8 @@ import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/service/transfer/receiver.dart';
-import 'package:sonr_app/service/transfer/sender.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sonr_app/data/database/service.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
 
 /// @ Initial Controller Bindings

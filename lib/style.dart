@@ -1,10 +1,3 @@
-export 'service/device/device.dart';
-export 'service/device/desktop.dart';
-export 'service/device/mobile.dart';
-export 'service/client/transfer.dart';
-export 'service/client/local.dart';
-export 'service/client/sonr.dart';
-export 'service/device/user.dart';
 export 'data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
@@ -59,8 +52,7 @@ export 'style/form/tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/service/device/user.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/elements/painter.dart';
 import 'style/components/color.dart';
 

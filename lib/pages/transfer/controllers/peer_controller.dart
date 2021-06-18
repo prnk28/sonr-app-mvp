@@ -1,8 +1,7 @@
 import 'package:rive/rive.dart';
-import 'package:sonr_app/service/transfer/sender.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'dart:async';
 import 'package:sonr_app/style.dart';
-
 import 'transfer_controller.dart';
 
 /// @ Reactive Controller for Peer Bubble
