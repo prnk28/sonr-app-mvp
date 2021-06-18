@@ -25,9 +25,10 @@ class RegisterPage extends GetView<RegisterController> {
         final item = RegisterPageTypeUtils.permissionsPageTypes[index];
         return PermPanel(
           buttonText: item.permissionsButtonText(),
-          onPressed: item.permissionsButtonOnPressed(),
+          onPressed:
+              item == RegisterPageType.Location ? Get.find<RegisterController>().requestLocation : Get.find<RegisterController>().requestGallery,
           imagePath: item.permissionsImagePath(),
-          buttonTextColor: Colors.white,
+          buttonTextColor: item.permissionsButtonColor(),
         );
       }));
     } else if (status.isSetup) {

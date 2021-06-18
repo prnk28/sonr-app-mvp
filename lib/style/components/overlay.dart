@@ -32,7 +32,7 @@ class AlertOverlay extends StatelessWidget {
                     ColorButton.primary(
                       onPressed: () {
                         hasDecided(true);
-                        Future.delayed(250.milliseconds, () => onPressed());
+                        Future.delayed(250.milliseconds, () => Get.back());
                       },
                       icon: SonrIcons.Check,
                       text: buttonText,

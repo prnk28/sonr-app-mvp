@@ -57,8 +57,9 @@ class PermPanel extends StatelessWidget {
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: ColorButton.neutral(
-        onPressed: onPressed,
+        onPressed: () => onPressed(),
         text: buttonText,
+        textColor: buttonTextColor,
       ),
       body: Container(
         width: Get.width,
@@ -178,7 +179,7 @@ class RegisterBottomSheet extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(8),
         width: Get.width,
-        height: 106,
+        height: 120,
         decoration: BoxDecoration(
             boxShadow: SonrTheme.boxShadow,
             color: SonrTheme.backgroundColor,

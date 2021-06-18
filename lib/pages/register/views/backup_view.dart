@@ -8,9 +8,6 @@ class BackupCodeView extends GetView<RegisterController> {
     DeviceService.hideKeyboard();
     return PagePanel(
       children: [
-        Divider(
-          color: SonrTheme.separatorColor,
-        ),
         GestureDetector(
             onLongPress: () {
               Clipboard.setData(ClipboardData(text: controller.mnemonic.value));
@@ -19,28 +16,31 @@ class BackupCodeView extends GetView<RegisterController> {
             },
             child: BoxContainer(
               padding: EdgeInsets.all(24),
-              child: Stack(
+              child: Column(
                 children: [
-                  Container(
-                    padding: EdgeWith.top(24),
-                    child: controller.mnemonic.value.gradient(value: SonrGradient.Theme(radius: 2), size: 32),
-                  ),
                   Align(
                     alignment: Alignment.topRight,
                     child: ActionButton(
                       iconData: SonrIcons.Info,
                       onPressed: () {
                         AppRoute.alert(
-                            title: "About",
+                            title: "About Code",
                             description:
                                 "This is your Backup Code if you ever erase your Profile from this device. Back this code in a Safe Location in order to recover your Account.");
                       },
                     ),
-                  )
+                  ),
+                  Divider(
+                    color: SonrTheme.separatorColor,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 24),
+                    child: controller.mnemonic.value.gradient(value: SonrGradients.CrystalRiver, size: 32),
+                  ),
                 ],
               ),
             )),
-        Padding(padding: EdgeInsets.all(64)),
+        Padding(padding: EdgeInsets.all(96)),
       ],
     );
   }

@@ -235,9 +235,9 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Checks if Page is First in Grouped List
   bool get isLast {
     if (this.isPermissions) {
-      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == RegisterPageTypeUtils.permissionsPageTypes.length;
+      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == 2;
     } else if (this.isSetup) {
-      return RegisterPageTypeUtils.setupPageTypes.indexOf(this) + 1 == RegisterPageTypeUtils.setupPageTypes.length;
+      return RegisterPageTypeUtils.setupPageTypes.indexOf(this) + 1 == 3;
     }
     return false;
   }
@@ -300,12 +300,19 @@ extension RegisterPageTypeUtils on RegisterPageType {
   }
 
   /// Returns Function for Permissions Button
-  Function permissionsButtonOnPressed() {
+  Function get permissionsButtonOnPressed {
     if (isPermissions) {
       return this == RegisterPageType.Location ? Get.find<RegisterController>().requestLocation : Get.find<RegisterController>().requestGallery;
     } else {
       return print;
     }
+  }
+
+  Color permissionsButtonColor() {
+    if (this.indexGroup == 0) {
+      return SonrColor.Black;
+    }
+    return SonrColor.White;
   }
 
   /// Returns Image Path for Permissions

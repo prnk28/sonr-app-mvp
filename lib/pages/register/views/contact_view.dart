@@ -10,7 +10,7 @@ class ProfileSetupView extends GetView<RegisterController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => FormPanel.contact(children: [
+    return FormPanel.contact(children: [
           Padding(padding: EdgeInsets.all(8)),
           CircleContainer(
             alignment: Alignment.center,
@@ -42,6 +42,6 @@ class ProfileSetupView extends GetView<RegisterController> {
               }
             },
           ),
-        ]));
+        ]);
   }
 }
