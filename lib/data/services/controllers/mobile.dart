@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -150,15 +149,6 @@ class MobileService extends GetxService {
         // Reset Incoming
         to._incomingText("");
         to._incomingText.refresh();
-      }
-    }
-  }
-
-  /// @ Method Closes Keyboard if Active
-  static void closeKeyboard({required BuildContext context}) async {
-    if (DeviceService.isMobile && isRegistered) {
-      if (to._keyboardVisible.value) {
-        FocusScope.of(context).unfocus();
       }
     }
   }

@@ -7,6 +7,7 @@ import 'package:sonr_app/style.dart';
 import 'models/arguments.dart';
 import 'models/home_status.dart';
 import 'models/recent_status.dart';
+
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final isTitleVisible = true.obs;
@@ -98,9 +99,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   /// Sets View for Searching
   void closeSearch(BuildContext context) {
-    if (DeviceService.isMobile) {
-      MobileService.closeKeyboard(context: context);
-    }
+    DeviceService.hideKeyboard();
     query("");
     recentsView(RecentsViewStatus.Default);
     recentsView.refresh();
