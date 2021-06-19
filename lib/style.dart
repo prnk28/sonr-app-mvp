@@ -30,6 +30,9 @@ export 'style/components/overlay.dart';
 export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
+// Common Widgets
+export 'style/common/sname_field.dart';
+
 // Theme Models
 export 'style/models/direction.dart';
 export 'style/models/type.dart';
@@ -228,7 +231,7 @@ class SonrTheme {
   /// Returns Current Text Color
   static Color get backgroundColor => UserService.isDarkMode ? Colors.black : Colors.white;
 
-  static Color get separatorColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
+  static Color get dividerColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
   static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 

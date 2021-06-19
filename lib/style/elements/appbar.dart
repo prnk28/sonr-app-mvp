@@ -10,6 +10,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? subtitle;
   final Widget? leading;
   final Widget? action;
+  final Widget? secondAction;
   final bool centerTitle;
   PageAppBar({
     required this.title,
@@ -18,6 +19,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.subtitle,
     Key? key,
     this.centerTitle = false,
+    this.secondAction,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,18 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
   Widget _buildTrailing() {
-    return action != null ? action! : Container(width: 32, height: 32);
+    if (action != null && secondAction != null) {
+      return Container(
+          width: 94,
+          child: Row(
+            children: [action!, secondAction!],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ));
+    } else if (action != null && secondAction == null) {
+      return action!;
+    } else {
+      return Container(width: 32, height: 32);
+    }
   }
 }
 

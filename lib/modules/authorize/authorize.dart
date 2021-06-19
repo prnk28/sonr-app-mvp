@@ -58,7 +58,7 @@ class _InviteRequestSheet extends StatelessWidget {
               ),
               _buildView(),
               Divider(
-                color: SonrTheme.separatorColor,
+                color: SonrTheme.dividerColor,
               ),
               ColorButton.primary(
                 onPressed: () {

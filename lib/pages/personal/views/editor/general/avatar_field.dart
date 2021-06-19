@@ -17,14 +17,14 @@ class ProfileAvatarField extends GetView<PersonalController> {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 100,
+                  height: 100,
                   child: UserService.contact.value.hasPicture()
                       ? CircleAvatar(
                           backgroundColor: SonrTheme.foregroundColor,
                           foregroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
                         )
-                      : SonrIcons.Avatar.greyWith(size: 120),
+                      : SonrIcons.Avatar.greyWith(size: 100),
                 )),
           ),
         );

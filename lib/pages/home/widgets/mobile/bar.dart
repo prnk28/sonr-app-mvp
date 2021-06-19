@@ -13,39 +13,22 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
             key: ValueKey(false),
             subtitle: Padding(
               padding: controller.view.value.isMain ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
-              child: _HomeAppBarSubtitle(),
+              child: controller.view.value == HomeView.Dashboard
+                  ? "Hi ${UserService.contact.value.firstName},".subheading(
+                      color: Get.theme.focusColor.withOpacity(0.8),
+                      align: TextAlign.start,
+                    )
+                  : Container(),
             ),
             action: HomeActionButton(),
-            title: _HomeAppBarTitle(),
+            title: controller.title.value.heading(
+              color: Get.theme.focusColor,
+              align: TextAlign.start,
+            ),
           ),
         ));
   }
 
   @override
   Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
-}
-
-class _HomeAppBarTitle extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlider.fade(
-          duration: 2.seconds,
-          child: controller.title.value.heading(
-            color: Get.theme.focusColor,
-            align: TextAlign.start,
-          ),
-        ));
-  }
-}
-
-class _HomeAppBarSubtitle extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => controller.view.value == HomeView.Dashboard
-        ? "Hi ${UserService.contact.value.firstName},".subheading(
-            color: Get.theme.focusColor.withOpacity(0.8),
-            align: TextAlign.start,
-          )
-        : Container());
-  }
 }

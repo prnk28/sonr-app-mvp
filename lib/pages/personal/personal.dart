@@ -10,34 +10,16 @@ import 'package:sonr_app/modules/search/social_search.dart';
 import 'package:sonr_app/pages/personal/widgets/tile_item.dart';
 import 'package:sonr_app/style.dart';
 import 'models/status.dart';
-import 'views/add/add_social.dart';
 import 'views/editor/general/fields.dart';
 import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 
-class ProfileView extends GetView<PersonalController> {
-  ProfileView({Key? key}) : super(key: key);
+class PersonalView extends GetView<PersonalController> {
+  PersonalView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => BoxContainer(
-        padding: EdgeInsets.all(8), margin: EdgeInsets.only(left: 24, right: 24, bottom: 136), child: _buildView(controller.status.value)));
-  }
-
-  // @ Build Page View by Navigation Item
-  Widget _buildView(PersonalViewStatus status) {
-    // Edit Profile Picture
-    if (status == PersonalViewStatus.AddPicture || status == PersonalViewStatus.ViewPicture) {
-      return EditPictureView(key: ValueKey<PersonalViewStatus>(PersonalViewStatus.AddPicture));
-    }
-
-    // Add Social Tile
-    else if (status == PersonalViewStatus.AddSocial) {
-      return AddTileView(key: ValueKey<PersonalViewStatus>(PersonalViewStatus.AddSocial));
-    }
-
-    // Default View
-    else {
-      return _DefaultProfileView(key: ValueKey<PersonalViewStatus>(PersonalViewStatus.Viewing));
-    }
+    return Container(
+      child: _DefaultProfileView(key: ValueKey<PersonalViewStatus>(PersonalViewStatus.Viewing)),
+    );
   }
 }
 
@@ -50,6 +32,7 @@ class _DefaultProfileView extends GetView<PersonalController> {
       slivers: [
         // @ Builds Profile Header
         SliverToBoxAdapter(child: Center(child: ProfileAvatarField())),
+        SliverToBoxAdapter(child: _ProfileContactButtons()),
         SliverToBoxAdapter(child: _ProfileInfoView()),
         SliverPadding(padding: EdgeInsets.all(14)),
 
@@ -76,29 +59,26 @@ class _ProfileInfoView extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 14),
-      padding: EdgeInsets.only(top: 8),
+      margin: EdgeInsets.symmetric(horizontal: 24),
       width: Get.width,
       height: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(padding: EdgeInsets.only(top: 12)),
+          Divider(color: SonrTheme.dividerColor, indent: 16, endIndent: 16),
+          Padding(padding: EdgeInsets.only(top: 12)),
+
           // First/Last Name
-          UserService.contact.value.fullName.subheading(color: SonrTheme.itemColor),
+          UserService.contact.value.fullName.subheading(color: SonrTheme.itemColor, fontSize: 32),
 
           // Username
-          [
-            "${UserService.contact.value.sName}".light(color: SonrTheme.itemColor),
-            ".snr/".light(color: SonrTheme.greyColor),
-            Spacer(),
-            _ProfileContactButtons(),
-          ].row(),
-
+          SNameField(),
           Padding(padding: EdgeInsets.all(12)),
+
           // Bio/ LastTweet
           _buildBio(),
-          // TODO: _buildLastTweet(),
         ],
       ),
     );
@@ -141,16 +121,34 @@ class _ProfileInfoView extends GetView<PersonalController> {
 class _ProfileContactButtons extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(children: [
-        PlainIconButton(onPressed: () {}, icon: SonrIcons.Call.gradient(value: SonrGradient.Secondary, size: 22)),
-        Padding(padding: EdgeInsets.only(right: 4)),
-        PlainIconButton(onPressed: () {}, icon: SonrIcons.Message.gradient(value: SonrGradient.Secondary, size: 22)),
-        Padding(padding: EdgeInsets.only(right: 4)),
-        PlainIconButton(onPressed: () {}, icon: SonrIcons.Video.gradient(value: SonrGradient.Secondary, size: 22)),
-        Padding(padding: EdgeInsets.only(right: 4)),
-        PlainIconButton(onPressed: () {}, icon: SonrIcons.ATSign.gradient(value: SonrGradient.Secondary, size: 22)),
-      ]),
+    return Center(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 48),
+        padding: EdgeInsets.only(top: 24),
+        height: 86,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          ActionButton(
+            onPressed: () {},
+            iconData: SonrIcons.Call,
+            label: "Call",
+          ),
+          ActionButton(
+            onPressed: () {},
+            iconData: SonrIcons.Message,
+            label: "SMS",
+          ),
+          ActionButton(
+            onPressed: () {},
+            iconData: SonrIcons.Video,
+            label: "Video",
+          ),
+          ActionButton(
+            onPressed: () {},
+            iconData: SonrIcons.ATSign,
+            label: "Me",
+          ),
+        ]),
+      ),
     );
   }
 }

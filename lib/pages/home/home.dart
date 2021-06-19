@@ -16,7 +16,7 @@ class HomePage extends GetView<HomeController> {
       body: Container(
           child: TabBarView(controller: controller.tabController, children: [
         DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-        ProfileView(key: ValueKey<HomeView>(HomeView.Contact)),
+        PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
       ])),
     );
   }

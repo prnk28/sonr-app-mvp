@@ -31,7 +31,7 @@ class BackupCodeView extends GetView<RegisterController> {
                     ),
                   ),
                   Divider(
-                    color: SonrTheme.separatorColor,
+                    color: SonrTheme.dividerColor,
                   ),
                   Container(
                     padding: EdgeInsets.only(bottom: 24),

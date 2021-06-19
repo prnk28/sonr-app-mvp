@@ -20,13 +20,13 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (label != null) {
       return Container(
-        constraints: BoxConstraints(maxHeight: 40, maxWidth: 40),
+        constraints: BoxConstraints(maxHeight: 62, maxWidth: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _ActionIconButton(onPressed, iconData),
-            label!.light(color: Get.theme.hintColor),
+            label!.light(color: Get.theme.hintColor, fontSize: 16),
           ],
         ),
       );

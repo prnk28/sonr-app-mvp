@@ -7,7 +7,6 @@ import 'package:sonr_app/style.dart';
 import 'models/arguments.dart';
 import 'models/home_status.dart';
 import 'models/recent_status.dart';
-
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final isTitleVisible = true.obs;
