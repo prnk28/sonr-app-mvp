@@ -5,9 +5,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-enum MediaOrientation { Portrait, Landscape }
-enum ThumbnailStatus { None, Loading, Complete }
-
 extension TransferCardUtils on TransferCard {
   /// Checks if Provided Query Matches Date of Transfer
   bool matchesDate(String q) {
@@ -26,35 +23,6 @@ extension TransferCardUtils on TransferCard {
   /// Checks if Provided Query Matches Payload
   bool matchesPayload(String q) {
     return this.payload.toString().contains(q);
-  }
-}
-
-extension MediaOrientationUtils on MediaOrientation {
-  double get aspectRatio {
-    switch (this) {
-      case MediaOrientation.Landscape:
-        return 16 / 9;
-      default:
-        return 9 / 16;
-    }
-  }
-
-  double get defaultHeight {
-    switch (this) {
-      case MediaOrientation.Landscape:
-        return 180;
-      default:
-        return 320;
-    }
-  }
-
-  double get defaultWidth {
-    switch (this) {
-      case MediaOrientation.Landscape:
-        return 320;
-      default:
-        return 180;
-    }
   }
 }
 
@@ -214,8 +182,4 @@ class AssetPathAlbum {
   }
 
   double get offsetX => this.name.size(DisplayTextStyle.Subheading, fontSize: 20).width;
-}
-
-extension StringUtils on String {
-  bool isAny(List<String> opts) => opts.any((element) => element == this);
 }

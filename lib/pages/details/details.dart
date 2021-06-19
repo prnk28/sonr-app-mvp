@@ -12,4 +12,5 @@ export 'widgets/url/link_view.dart';
 export 'widgets/url/list_item.dart';
 export 'widgets/post/views.dart';
 export 'models/arguments.dart';
+export 'models/orientation.dart';
 export 'models/type.dart';
