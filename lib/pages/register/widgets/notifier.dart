@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sonr_app/pages/register/register_controller.dart';
+import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/style.dart';
 
 /// A simple scrollable widget

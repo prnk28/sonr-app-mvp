@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style.dart';
 import 'package:feedback/feedback.dart';
 
@@ -82,7 +83,7 @@ class App extends StatelessWidget {
           children: [
             // @ Rive Animation
             RiveContainer(
-              type: RiveBoard.SplashPortrait,
+              type: RiveBoard.Splash,
               width: Get.width,
               height: Get.height,
               placeholder: SizedBox(child: HourglassIndicator()),
@@ -115,7 +116,7 @@ class App extends StatelessWidget {
         await UserService.newContact(contact);
 
         // Connect to Network
-        AppPage.Home.off(init: SonrService.to.connect, args: HomePageArgs(isFirstLoad: true));
+        AppPage.Home.off(init: NodeService.to.connect, args: HomePageArgs(isFirstLoad: true));
       }
       // Register Mobile
       else {

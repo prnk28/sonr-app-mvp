@@ -2,20 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/modules/activity/activity_controller.dart';
-import 'package:sonr_app/modules/peer/peer_controller.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/pages/details/items/contact/tile/tile_controller.dart';
-import 'package:sonr_app/pages/home/views/contact/editor/editor_controller.dart';
-import 'package:sonr_app/pages/home/views/dashboard/dashboard_controller.dart';
+import 'package:sonr_app/modules/activity/activity.dart';
+import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
+import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/views/contact/profile_controller.dart';
-import 'package:sonr_app/pages/explorer/explorer_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
-import 'package:sonr_app/service/client/session.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
-import 'package:sonr_app/data/database/service.dart';
+import 'package:sonr_app/pages/personal/personal.dart';
 
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {
@@ -26,7 +22,7 @@ class InitialBinding implements Bindings {
 
   // Get Rive File for Peer Bubble
   Future<RiveFile> _getRiveDataFile() async {
-    var data = await rootBundle.load('assets/animations/peer_border.riv');
+    var data = await RiveBoard.Bubble.load();
     return RiveFile.import(data);
   }
 }
@@ -37,19 +33,15 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<HomeController>(HomeController(), permanent: true);
     // Subsidary Controllers
-    Get.put(ShareController(), permanent: true);
     Get.put(ActivityController());
-    Get.put<DashboardController>(DashboardController(), permanent: true);
-    Get.put<ProfileController>(ProfileController(), permanent: true);
-    Get.put<EditorController>(EditorController(), permanent: true);
-    Get.create<TileController>(() => TileController());
-  }
-}
 
-class ExplorerBinding implements Bindings {
-  @override
-  void dependencies() {
-    Get.put<ExplorerController>(ExplorerController(), permanent: true);
+    // Place Device Specific Controllers
+    if (DeviceService.isMobile) {
+      Get.put(ShareController(), permanent: true);
+      Get.put<PersonalController>(PersonalController(), permanent: true);
+      Get.put<EditorController>(EditorController(), permanent: true);
+      Get.create<TileController>(() => TileController());
+    }
   }
 }
 
@@ -96,11 +88,12 @@ class AppServices {
     await Get.putAsync(() => UserService().init(), permanent: true);
 
     // Third: Initialize Data/Networking Services
-    await Get.putAsync(() => TransferService().init());
+    await Get.putAsync(() => SenderService().init());
+    await Get.putAsync(() => ReceiverService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LocalService().init());
-    await Get.putAsync(() => SessionService().init());
-    await Get.putAsync(() => SonrService().init(), permanent: true);
+
+    await Get.putAsync(() => NodeService().init(), permanent: true);
   }
 
   /// @ Method Validates Required Services Registered

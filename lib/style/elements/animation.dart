@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../style.dart';
-import 'package:flutter/services.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 import 'package:lottie/lottie.dart';
 
@@ -149,80 +148,52 @@ class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateM
   }
 }
 
-/// @ Animated Slide Switch
-enum _SwitchType { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-
-class AnimatedSlideSwitcher extends StatelessWidget {
-  final _SwitchType _animation;
+class AnimatedSlider extends StatelessWidget {
+  final SwitchType type;
   final Widget child;
   final Duration duration;
 
   // * Constructer * //
-  const AnimatedSlideSwitcher(this._animation, this.child, this.duration);
+  const AnimatedSlider(this.type, this.child, this.duration);
 
   // * Factory Fade * //
-  factory AnimatedSlideSwitcher.fade({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(_SwitchType.Fade, child, duration);
+  factory AnimatedSlider.fade({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlider(SwitchType.Fade, child, duration);
   }
 
   // * Factory Slide Up * //
-  factory AnimatedSlideSwitcher.slideUp({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(_SwitchType.SlideUp, child, duration);
+  factory AnimatedSlider.slideUp({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlider(SwitchType.SlideUp, child, duration);
   }
 
   // * Factory Slide Down * //
-  factory AnimatedSlideSwitcher.slideDown({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(_SwitchType.SlideDown, child, duration);
+  factory AnimatedSlider.slideDown({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlider(SwitchType.SlideDown, child, duration);
   }
 
   // * Factory Slide Left * //
-  factory AnimatedSlideSwitcher.slideLeft({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(_SwitchType.SlideLeft, child, duration);
+  factory AnimatedSlider.slideLeft({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlider(SwitchType.SlideLeft, child, duration);
   }
 
   // * Factory Slide Right * //
-  factory AnimatedSlideSwitcher.slideRight({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(_SwitchType.SlideRight, child, duration);
+  factory AnimatedSlider.slideRight({required Widget child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlider(SwitchType.SlideRight, child, duration);
   }
 
   /// @ Build View Method
   @override
   Widget build(BuildContext context) {
-    // Initialize Transition Map
-    Map<_SwitchType, Widget Function(Widget, Animation<double>)> transitionMap = {
-      _SwitchType.Fade: AnimatedSwitcher.defaultTransitionBuilder,
-      _SwitchType.SlideDown: _slideTransition(0, -1),
-      _SwitchType.SlideUp: _slideTransition(0, 1),
-      _SwitchType.SlideLeft: _slideTransition(-1, 0),
-      _SwitchType.SlideRight: _slideTransition(1, 0),
-    };
-
     // Return Switcher
     return AnimatedSwitcher(
         duration: duration,
         switchOutCurve: Curves.easeInOutSine,
         switchInCurve: Curves.fastLinearToSlowEaseIn,
-        transitionBuilder: transitionMap[_animation]!,
+        transitionBuilder: type.transition,
         layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
           return currentChild!;
         },
         child: child);
-  }
-
-  /// @ Method Builds Slide Transition
-  Widget Function(Widget, Animation<double>) _slideTransition(double x, double y) {
-    return (Widget child, Animation<double> animation) {
-      final offsetAnimation = TweenSequence([
-        TweenSequenceItem(tween: Tween<Offset>(begin: Offset(x, y), end: Offset(0.0, 0.0)), weight: 1),
-        TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
-      ]).animate(animation);
-      return ClipRect(
-        child: SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        ),
-      );
-    };
   }
 }
 
@@ -234,21 +205,12 @@ class HourglassIndicator extends StatelessWidget {
       width: 24,
       height: 24,
       child: Lottie.asset(
-        _assetPath,
+        LottieFile.Loader.path,
         fit: BoxFit.fitHeight,
         animate: true,
         repeat: true,
       ),
     );
-  }
-
-  // Returns Animation Asset Path by Dark Mode
-  String get _assetPath {
-    if (UserService.isDarkMode) {
-      return 'assets/animations/loader-white.json';
-    } else {
-      return 'assets/animations/loader-black.json';
-    }
   }
 }
 
@@ -265,9 +227,6 @@ class RiveContainer extends StatefulWidget {
 }
 
 class _RiveContainer extends State<RiveContainer> {
-  // References
-  final String _documentsPath = 'assets/animations/documents.riv';
-
   // Properties
   Artboard? _riveArtboard;
 
@@ -275,54 +234,21 @@ class _RiveContainer extends State<RiveContainer> {
   @override
   void initState() {
     // Load the RiveFile from the binary data.
-    if (widget.type == RiveBoard.SplashPortrait) {
-      rootBundle.load('assets/animations/splash_portrait.riv').then(
-        (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
+    widget.type.load().then(
+      (data) async {
+        // Load the RiveFile from the binary data.
+        final file = RiveFile.import(data);
 
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
+        // Retreive Artboard
+        final artboard = file.mainArtboard;
 
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
-            setState(() => _riveArtboard = artboard);
-          }
-        },
-      );
-    } else if (widget.type == RiveBoard.SplashLandscape) {
-      rootBundle.load('assets/animations/splash_landscape.riv').then(
-        (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
-
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
-            setState(() => _riveArtboard = artboard);
-          }
-        },
-      );
-    } else {
-      rootBundle.load(_documentsPath).then(
-        (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
-            setState(() => _riveArtboard = artboard);
-          }
-        },
-      );
-    }
+        // Determine Animation by Tile Type
+        artboard.addController(SimpleAnimation('Default'));
+        if (mounted) {
+          setState(() => _riveArtboard = artboard);
+        }
+      },
+    );
     super.initState();
   }
 

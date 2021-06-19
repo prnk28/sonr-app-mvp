@@ -1,10 +1,3 @@
-export 'service/device/device.dart';
-export 'service/device/desktop.dart';
-export 'service/device/mobile.dart';
-export 'service/client/transfer.dart';
-export 'service/client/local.dart';
-export 'service/client/sonr.dart';
-export 'service/device/user.dart';
 export 'data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
@@ -16,7 +9,7 @@ export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
-export 'package:sonr_app/style/elements/clipper.dart';
+export 'package:sonr_app/style/elements/painter.dart';
 export 'package:animate_do/animate_do.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 export 'package:sonr_app/data/data.dart';
@@ -37,6 +30,13 @@ export 'style/components/overlay.dart';
 export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
+// Common Widgets
+export 'style/common/sname_field.dart';
+
+// Theme Models
+export 'style/models/direction.dart';
+export 'style/models/type.dart';
+
 // Custom Theme Elements
 export 'style/elements/shape.dart';
 export 'style/elements/painter.dart';
@@ -51,17 +51,13 @@ export 'style/form/infolist.dart';
 export 'style/form/textfield.dart';
 export 'style/form/tabs.dart';
 
-// Global UI Widgets
-export 'modules/peer/flat_overlay.dart';
-
 // UI Packages
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/service/device/user.dart';
+import 'package:sonr_app/data/services/services.dart';
+import 'package:sonr_app/style/elements/painter.dart';
 import 'style/components/color.dart';
-import 'style/elements/clipper.dart';
 
 /// * Widget Position Enum * //
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -235,7 +231,7 @@ class SonrTheme {
   /// Returns Current Text Color
   static Color get backgroundColor => UserService.isDarkMode ? Colors.black : Colors.white;
 
-  static Color get separatorColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
+  static Color get dividerColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
   static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 

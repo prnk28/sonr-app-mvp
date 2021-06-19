@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/data/services/services.dart';
 import '../../style.dart';
 import 'utility.dart';
 
@@ -173,7 +173,7 @@ class ConfirmButton extends StatelessWidget {
               decoration: _buildDecoration(controller.status.value),
               margin: margin ?? const EdgeInsets.symmetric(horizontal: 32),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: AnimatedSlideSwitcher.slideUp(child: _buildChild(controller.status.value)),
+              child: AnimatedSlider.slideUp(child: _buildChild(controller.status.value)),
             ),
           ),
         );

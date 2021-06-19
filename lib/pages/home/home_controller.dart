@@ -1,9 +1,12 @@
+export 'models/arguments.dart';
+export 'models/home_status.dart';
+export 'models/recent_status.dart';
 import 'dart:async';
-import 'package:sonr_app/data/core/arguments.dart';
-import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
-
-enum HomeView { Dashboard, Contact, Explorer }
+import 'models/arguments.dart';
+import 'models/home_status.dart';
+import 'models/recent_status.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -16,15 +19,20 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final pageIndex = 0.obs;
   final bottomIndex = 0.obs;
   final view = HomeView.Dashboard.obs;
-  final sonrStatus = Rx<Status>(SonrService.status.value);
+  final sonrStatus = Rx<Status>(NodeService.status.value);
+
+  // Propeties
+  final query = "".obs;
+  final results = RxList<TransferCard>();
+  final recentsView = RecentsViewStatus.Default.obs;
 
   // Controllers
   late final TabController tabController;
-  late final ScrollController scrollController;
 
   // References
   late StreamSubscription<Lobby?> _lobbyStream;
   late StreamSubscription<Status> _statusStream;
+  late ScrollController scrollController;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
@@ -35,7 +43,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (DeviceService.isMobile) {
       // Handle Tab Controller
       tabController = TabController(vsync: this, length: 2);
-      scrollController = ScrollController();
+      scrollController = ScrollController(keepScrollOffset: false);
+
+      // Handle Search Query
+      query.listen(_handleQuery);
 
       // Listen for Updates
       tabController.addListener(() {
@@ -58,7 +69,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Handle Streams
     _lobbyStream = LocalService.lobby.listen(_handleLobbyStream);
-    _statusStream = SonrService.status.listen(_handleStatus);
+    _statusStream = NodeService.status.listen(_handleStatus);
   }
 
   @override
@@ -84,6 +95,20 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void changeView(HomeView newView) {
     view(newView);
     view.refresh();
+  }
+
+  /// Sets View for Searching
+  void closeSearch(BuildContext context) {
+    DeviceService.hideKeyboard();
+    query("");
+    recentsView(RecentsViewStatus.Default);
+    recentsView.refresh();
+  }
+
+  /// Sets View for Default
+  void exitToDefault() {
+    recentsView(RecentsViewStatus.Default);
+    recentsView.refresh();
   }
 
   /// @ Handle Title Tap
@@ -161,69 +186,31 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       });
     }
   }
-}
 
-/// @ Home View Enum Extension
-extension HomeViewUtils on HomeView {
-  bool get isMain => this == HomeView.Dashboard;
-
-  // # Returns IconData for Type
-  IconData iconData(bool isSelected) {
-    switch (this) {
-      case HomeView.Dashboard:
-        return isSelected ? SonrIcons.HomeActive : SonrIcons.HomeInactive;
-      case HomeView.Contact:
-        return isSelected ? SonrIcons.PersonalActive : SonrIcons.PersonalInactive;
-      default:
-        return Icons.deck;
-    }
-  }
-
-  // # Returns Icon Size
-  double get iconSize {
-    switch (this) {
-      case HomeView.Dashboard:
-        return 32;
-      case HomeView.Contact:
-        return 32;
-      default:
-        return 32;
-    }
-  }
-
-  String get title {
-    if (this == HomeView.Dashboard) {
-      if (UserService.isNewUser.value) {
-        return "Nice to meet you.";
+  // # Handles Query Update
+  _handleQuery(String newVal) {
+    if (newVal.length > 0) {
+      // Swap View to Searching if not Set
+      if (recentsView.value.isDefault) {
+        recentsView(RecentsViewStatus.Search);
       }
-      return "Welcome Back";
+
+      // Fetch Results
+      var dateResults = CardService.all.where((e) => e.matchesDate(newVal)).toList();
+      var nameResults = CardService.all.where((e) => e.matchesName(newVal)).toList();
+      var payloadResults = CardService.all.where((e) => e.matchesPayload(newVal)).toList();
+
+      // Update Results
+      results.addAll(dateResults);
+      results.addAll(nameResults);
+      results.addAll(payloadResults);
+      results.toSet();
+      results.refresh();
     } else {
-      return this.toString().substring(this.toString().indexOf('.') + 1);
+      // Swap View to Searching if not Set
+      if (recentsView.value.isSearching) {
+        recentsView(RecentsViewStatus.Default);
+      }
     }
-  }
-
-  bool get isNotFirst {
-    var i = HomeView.values.indexOf(this);
-    return i != 0;
-  }
-
-  bool get isNotLast {
-    var i = HomeView.values.indexOf(this);
-    return i != HomeView.values.length - 1;
-  }
-
-  HomeView get pageBefore {
-    var i = HomeView.values.indexOf(this);
-    return this.isNotFirst ? HomeView.values[i - 1] : this;
-  }
-
-  HomeView get pageNext {
-    var i = HomeView.values.indexOf(this);
-    return this.isNotLast ? HomeView.values[i + 1] : this;
-  }
-
-  // # Return State for Int
-  static HomeView fromIndex(int i) {
-    return HomeView.values[i];
   }
 }

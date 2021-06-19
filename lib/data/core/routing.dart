@@ -1,18 +1,48 @@
 import 'dart:async';
-
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/activity/activity_view.dart';
-import 'package:sonr_app/modules/share/share_view.dart';
-import 'package:sonr_app/pages/details/pages.dart';
-import 'package:sonr_app/pages/explorer/explorer_page.dart';
-import 'package:sonr_app/pages/home/home_page.dart';
-import 'package:sonr_app/pages/register/register_page.dart';
-import 'package:sonr_app/pages/transfer/transfer_page.dart';
+import 'package:sonr_app/modules/activity/activity.dart';
+import 'package:sonr_app/modules/share/views/share_view.dart';
+import 'package:sonr_app/pages/details/details.dart';
+import 'package:sonr_app/pages/home/home.dart';
+import 'package:sonr_app/pages/register/register.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 import 'bindings.dart';
 
 /// @ Enum Values for App Page
-enum AppPage { Home, Register, Transfer, Share, Activity, Error, Detail, Posts }
+enum AppPage {
+  /// #### Home
+  /// Dashboard, Search, Personal
+  Home,
+
+  /// #### Register
+  /// New User
+  Register,
+
+  /// #### Transfer
+  /// Looking for Peers to Share
+  Transfer,
+
+  /// #### Share
+  /// Select File, Contact, URL
+  Share,
+
+  /// #### Activity
+  /// Current Sessions, Past Cards
+  Activity,
+
+  /// #### Error
+  /// Empty Items, No Connection, No Permission
+  Error,
+
+  /// #### Detail
+  /// TransferCard Detail View
+  Detail,
+
+  /// #### Posts
+  /// Transfer Card Collection View
+  Posts,
+}
 
 extension AppRoute on AppPage {
   // ^ Static Accessors ^
@@ -64,7 +94,7 @@ extension AppRoute on AppPage {
       case AppPage.Transfer:
         return TransferBinding();
       default:
-        return DeviceService.isMobile ? HomeBinding() : ExplorerBinding();
+        return HomeBinding();
     }
   }
 
@@ -104,7 +134,7 @@ extension AppRoute on AppPage {
       default:
         return () {
           if (DeviceService.isMobile) {
-            Get.find<SonrService>().connect();
+            Get.find<NodeService>().connect();
             return HomePage();
           } else {
             return ExplorerPage();

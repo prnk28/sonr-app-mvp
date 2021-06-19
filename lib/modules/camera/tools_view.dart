@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'camera_controller.dart';
 
@@ -13,8 +14,7 @@ class CameraToolsView extends StatelessWidget {
     return Container(
         alignment: Alignment.bottomCenter,
         child: BoxContainer(
-            padding: EdgeInsets.only(top: 20, bottom: 40),
-            child: AnimatedSlideSwitcher.slideUp(child: _buildToolsView(controller.status.value))));
+            padding: EdgeInsets.only(top: 20, bottom: 40), child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
   }
 
   Widget _buildToolsView(CameraViewStatus status) {
@@ -70,7 +70,7 @@ class _DefaultToolsView extends StatelessWidget {
         Obx(() {
           var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
           return GestureDetector(
-              child: AnimatedSlideSwitcher.slideUp(
+              child: AnimatedSlider.slideUp(
                   child: Container(
                       key: ValueKey<IconData>(iconData),
                       child: iconData.gradient(
@@ -95,7 +95,7 @@ class _DefaultToolsView extends StatelessWidget {
             onTap: () async {
               await HapticFeedback.heavyImpact();
               // Check for Permssions
-              await TransferService.chooseMedia();
+              await SenderService.choose(ChooseOption.Media);
             }),
       ]),
     );

@@ -3,14 +3,13 @@ import 'package:share/share.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/pages/register/register_data.dart';
-import 'package:sonr_app/service/device/device.dart';
-import 'package:sonr_app/service/device/mobile.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
-export 'widgets/notifier.dart';
-export 'widgets/panel.dart';
-export 'register_data.dart';
+import 'models/info.dart';
+import 'models/status.dart';
+import 'models/type.dart';
 
 class RegisterController extends GetxController {
   // Properties
@@ -103,11 +102,9 @@ class RegisterController extends GetxController {
           // Analytics
           Logger.event(
             name: 'createUsername',
+            controller: 'RegisterController',
             parameters: {
-              'createdAt': DateTime.now().toString(),
-              'platform': DeviceService.platform.toString(),
-              'new-username': sName.value,
-              'controller': 'RegisterController',
+              'username': sName.value,
             },
           );
 
@@ -163,27 +160,27 @@ class RegisterController extends GetxController {
 
   /// @ Submits Contact
   setContact() async {
-      // Get Contact from Values
-      var contact = Contact(
-          profile: Profile(
-        firstName: firstName.value,
-        lastName: lastName.value,
-        sName: sName.value,
-      ));
+    // Get Contact from Values
+    var contact = Contact(
+        profile: Profile(
+      firstName: firstName.value,
+      lastName: lastName.value,
+      sName: sName.value,
+    ));
 
-      // Create User
-      await UserService.newContact(contact);
+    // Create User
+    await UserService.newContact(contact);
 
-      // Process data
-      if (DeviceService.isMobile) {
-        // Remove Textfield Focus
-        FocusScopeNode currentFocus = FocusScope.of(Get.context!);
-        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus!.unfocus();
-        }
+    // Process data
+    if (DeviceService.isMobile) {
+      // Remove Textfield Focus
+      FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        FocusManager.instance.primaryFocus!.unfocus();
+      }
 
-        // Change Status
-        nextPage(RegisterPageType.Location);
+      // Change Status
+      nextPage(RegisterPageType.Location);
     }
 
     // Check Desktop
@@ -199,7 +196,7 @@ class RegisterController extends GetxController {
       await UserService.newContact(contact);
 
       // Connect to Network
-      SonrService.to.connect();
+      NodeService.to.connect();
       AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
     }
   }
@@ -298,7 +295,7 @@ class RegisterController extends GetxController {
   /// #### Checks if Username matches device id and prefix from records
   static Future<bool> validateUser(String n, String mnemonic) async {
     var request = Request.newVerifyText(original: mnemonic, signature: mnemonic);
-    var response = await SonrService.verify(request);
+    var response = await NodeService.verify(request);
     return response.isVerified;
   }
 
@@ -306,7 +303,7 @@ class RegisterController extends GetxController {
   static Future<AuthResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
     var request = Request.newSignature(username, mnemonic);
-    var response = await SonrService.sign(request);
+    var response = await NodeService.sign(request);
     Logger.info(response.toString());
 
     // Check Result

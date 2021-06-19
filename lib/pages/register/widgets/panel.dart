@@ -1,4 +1,4 @@
-import 'package:sonr_app/pages/register/register_controller.dart';
+import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/style.dart';
 export 'package:sonr_app/pages/register/widgets/textfield.dart';
 
@@ -145,7 +145,7 @@ class RegisterTitleBar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.only(left: 14.0, right: 14, top: 64.0),
       child: NavigationToolbar(
         centerMiddle: instruction != null,
-        middle: AnimatedSlideSwitcher.fade(
+        middle: AnimatedSlider.fade(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: instruction != null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
