@@ -1,10 +1,12 @@
 // Exports
+export 'models/asset.dart';
 export 'models/type.dart';
 export 'views/button_view.dart';
 export 'views/external_sheet.dart';
-export 'views/share_view.dart';
+export 'views/popup_view.dart';
 
 // Imports
+import 'models/asset.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/transfer/models/arguments.dart';
 import 'package:sonr_app/data/services/services.dart';
@@ -18,8 +20,10 @@ class ShareController extends GetxController {
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
   final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
   final hasSelected = false.obs;
-
   final type = ShareViewType.None.obs;
+
+  // References
+  final albumArrowKey = GlobalKey();
 
   // References
   final ScrollController tagsScrollController = ScrollController();
@@ -127,6 +131,8 @@ class ShareController extends GetxController {
     }
   }
 
+  Future<void> onAlbumArrowPressed() async {}
+
   /// Changes Album to New Album
   Future<void> setAlbum(int index) async {
     currentAlbum(await AssetPathAlbum.init(index, gallery[index]));
@@ -143,7 +149,11 @@ class ShareController extends GetxController {
       currentAlbum(await AssetPathAlbum.init(0, gallery[0]));
     }
     currentAlbum.refresh();
-    tagsScrollController.animateTo(currentAlbum.value.index * currentAlbum.value.nameOffset, duration: 100.milliseconds, curve: Curves.easeIn);
+    tagsScrollController.animateTo(
+      currentAlbum.value.index * currentAlbum.value.offsetX,
+      duration: 100.milliseconds,
+      curve: Curves.easeIn,
+    );
   }
 
   /// Changes Album to Previous Album

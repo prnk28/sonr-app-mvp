@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/modules/share/widgets/albums_row.dart';
 import 'package:sonr_app/style.dart';
 
 class SharePopupView extends GetView<ShareController> {
@@ -26,7 +27,7 @@ class SharePopupView extends GetView<ShareController> {
               SliverPadding(padding: EdgeInsets.only(top: 8)),
               SliverToBoxAdapter(
                   child: Container(padding: EdgeInsets.only(left: 24), child: "Media".section(align: TextAlign.start, color: Get.theme.focusColor))),
-              SliverToBoxAdapter(child: _TagsView()),
+              SliverToBoxAdapter(child: AlbumsRow()),
               SliverPadding(padding: EdgeInsets.all(4)),
               // @ Builds List of Social Tile
               _MediaView()
@@ -150,35 +151,5 @@ class _MediaItemState extends State<_MediaItem> {
       Get.find<ShareController>().removeMediaItem(widget.item, thumbnail!);
     }
     setState(() {});
-  }
-}
-
-/// @ Card Tags View for Album Names
-class _TagsView extends GetView<ShareController> {
-  const _TagsView({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => Container(
-        width: Get.width,
-        height: 60,
-        child: SingleChildScrollView(
-          controller: controller.tagsScrollController,
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List<Widget>.generate(
-                  controller.gallery.length,
-                  (index) => Obx(
-                        () => GestureDetector(
-                            onTap: () {
-                              controller.setAlbum(index);
-                            },
-                            child: controller.gallery[index].tag(isSelected: controller.isCurrent(index))),
-                      ))),
-        ),
-      ),
-    );
   }
 }

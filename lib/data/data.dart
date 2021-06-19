@@ -11,7 +11,7 @@ export 'services/database/database.dart';
 export 'services/database/service.dart';
 
 // Models
-export 'models/model_meta.dart';
+export '../modules/share/share.dart';
 export 'models/model_result.dart';
 export 'package:sonr_app/pages/details/details.dart';
 export 'package:sonr_app/data/services/services.dart';

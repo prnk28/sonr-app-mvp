@@ -4,7 +4,6 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import '../data.dart';
 
 enum MediaOrientation { Portrait, Landscape }
 enum ThumbnailStatus { None, Loading, Complete }
@@ -149,18 +148,7 @@ extension AssetEntityUtils on AssetEntity {
 }
 
 extension AssetPathEntityUtils on AssetPathEntity {
-  Widget tag({required bool isSelected}) {
-    return AnimatedContainer(
-        decoration: isSelected ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.Primary.withOpacity(0.9)) : BoxDecoration(),
-        constraints: BoxConstraints(maxHeight: 50),
-        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-        duration: 150.milliseconds,
-        child: isSelected
-            ? this.label().subheading(color: SonrColor.White, fontSize: 20)
-            : this.label().subheading(color: Get.theme.hintColor, fontSize: 20));
-  }
-
-  String label() {
+  String get name {
     if (this.isAll) {
       return "All";
     } else {
@@ -179,6 +167,16 @@ extension AssetPathEntityListUtils on List<AssetPathEntity> {
       return null;
     }
   }
+
+  Future<List<AssetPathAlbum>> systemAlbums() async {
+    /// Get Albums
+    final albums = this.where((e) => (e.name.isAny(SYSTEM_ALBUM_NAMES))).toList();
+
+    // Return Asset Path Album
+    final list = List<AssetPathAlbum>.generate(albums.length, (index) => AssetPathAlbum(index, albums[index]));
+    list.forEach((element) async => await element.initialize());
+    return list;
+  }
 }
 
 class AssetPathAlbum {
@@ -190,7 +188,6 @@ class AssetPathAlbum {
   bool get isNotAll => !isAll;
   int get length => assets.length;
   String get name => entity.name;
-  double get nameOffset => entity.name.length * 4;
 
   AssetPathAlbum(this.index, this.entity);
 
@@ -204,6 +201,10 @@ class AssetPathAlbum {
     return AssetPathAlbum(-1, AssetPathEntity());
   }
 
+  Future<void> initialize() async {
+    this.assets = await entity.assetList;
+  }
+
   bool isIndex(int i) {
     return index == i;
   }
@@ -211,4 +212,10 @@ class AssetPathAlbum {
   AssetEntity entityAtIndex(int i) {
     return this.assets[i];
   }
+
+  double get offsetX => this.name.size(DisplayTextStyle.Subheading, fontSize: 20).width;
+}
+
+extension StringUtils on String {
+  bool isAny(List<String> opts) => opts.any((element) => element == this);
 }

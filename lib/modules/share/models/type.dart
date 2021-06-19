@@ -1,4 +1,3 @@
-
 enum ShareViewType {
   /// For Default State
   None,
@@ -23,3 +22,6 @@ const K_ROW_BUTTON_SIZE = 75.0;
 
 /// Row Circle Size
 const K_ROW_CIRCLE_SIZE = 95.0;
+
+/// System Generated Albums
+const SYSTEM_ALBUM_NAMES = ["panoramas", "videos", "favorites", "downloads"];
