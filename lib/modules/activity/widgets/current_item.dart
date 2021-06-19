@@ -146,8 +146,8 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
               // Progress of Transfer
               Align(
                 alignment: Alignment.center,
-                child: AnimatedSlider.slideDown(
-                  duration: 100.milliseconds,
+                child: AnimatedSlider.fade(
+                  duration: 200.milliseconds,
                   child: Container(
                     key: ValueKey<double>(progress.value),
                     child: _calculateText(progress.value).subheading(

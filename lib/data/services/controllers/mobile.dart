@@ -1,20 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/share/views/external_sheet.dart';
 import 'package:sonr_app/style.dart';
-import 'package:motion_sensors/motion_sensors.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/services/services.dart';
 
 // @ Enum defines Type of Permission
-const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
-
 class MobileService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<MobileService>();
@@ -31,15 +26,12 @@ class MobileService extends GetxService {
 
   // Mobile Platform Controllers/Properties
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
-  final _keyboardVisibleController = KeyboardVisibilityController();
-  final _keyboardVisible = false.obs;
-  final _position = Rx<Position>(Position());
+  final _position = RxPosition();
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
 
   // Getters for Device/Location References
-  static RxBool get keyboardVisible => to._keyboardVisible;
-  static Rx<Position> get position => to._position;
+  static RxPosition get position => to._position;
   static RxBool get hasCamera => to._hasCamera;
   static RxBool get hasLocation => to._hasLocation;
   static RxBool get hasLocalNetwork => to._hasLocalNetwork;
@@ -59,9 +51,6 @@ class MobileService extends GetxService {
   // References
   late StreamSubscription _externalMediaStream;
   late StreamSubscription _externalTextStream;
-  late StreamSubscription<AccelerometerEvent> _accelStream;
-  late StreamSubscription<CompassEvent> _compassStream;
-  late StreamSubscription<OrientationEvent> _orienStream;
 
   // References
 
@@ -75,18 +64,8 @@ class MobileService extends GetxService {
 
   // * Device Service Initialization * //
   Future<MobileService> init() async {
-    // Handle Keyboard Visibility
-    _keyboardVisible.bindStream(_keyboardVisibleController.onChange);
-
     // @ Bind Sensors for Mobile
-    // Bind Direction and Set Intervals
-    motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
-    motionSensors.orientationUpdateInterval = K_SENSOR_INTERVAL;
 
-    // Bind Sensor Streams
-    _accelStream = motionSensors.accelerometer.listen(_handleAccelerometer);
-    _compassStream = FlutterCompass.events!.listen(_handleCompass);
-    _orienStream = motionSensors.orientation.listen(_handleOrientation);
 
     // Audio Player
     await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
@@ -119,9 +98,7 @@ class MobileService extends GetxService {
   // * Close Streams * //
   @override
   void onClose() {
-    _accelStream.cancel();
-    _compassStream.cancel();
-    _orienStream.cancel();
+    _position.cancel();
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
     super.onClose();
@@ -380,28 +357,6 @@ class MobileService extends GetxService {
       updatePermissionsStatus();
     }
     return true;
-  }
-
-  // # Handle Accelerometer
-  void _handleAccelerometer(AccelerometerEvent event) {
-    _position.update((val) {
-      val!.accelerometer = Position_Accelerometer(x: event.x, y: event.y, z: event.z);
-    });
-  }
-
-  // # Handle Compass
-  void _handleCompass(CompassEvent event) {
-    _position.update((val) {
-      val!.heading = Position_Compass(direction: event.heading);
-      val.facing = Position_Compass(direction: event.headingForCameraMode);
-    });
-  }
-
-  // # Handle Orientation
-  void _handleOrientation(OrientationEvent event) {
-    _position.update((val) {
-      val!.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
-    });
   }
 
   // # Saves Received Media to Gallery

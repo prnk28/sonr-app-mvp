@@ -55,7 +55,6 @@ class CardsDatabase extends _$CardsDatabase {
   /// Adds Contact/URL card to Database
   Future<int> addCard(Transfer card) async => into(transferCards).insert(TransferCardsCompanion(
       owner: Value(card.owner),
-      mime: Value.absent(),
       payload: Value(card.payload),
       contact: card.hasContact() ? Value(card.contact) : Value.absent(),
       file: card.hasFile() ? Value(card.file) : Value.absent(),
@@ -67,9 +66,7 @@ class CardsDatabase extends _$CardsDatabase {
       owner: Value(card.owner),
       mime: Value(file.single.mime.type),
       payload: Value(card.payload),
-      contact: Value.absent(),
       file: Value(file),
-      url: Value.absent(),
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
   /// Returns all Transfer Card Items

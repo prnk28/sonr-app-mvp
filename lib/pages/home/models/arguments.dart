@@ -10,4 +10,6 @@ class HomePageArgs {
   final Transfer? newCard;
 
   HomePageArgs({this.isFirstLoad = false, this.hasNewCard = false, this.firstNewCard = false, this.newCard});
+
+  static HomePageArgs get FirstLoad => HomePageArgs(isFirstLoad: true);
 }

@@ -16,7 +16,7 @@ class EditNameView extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-          height: MobileService.keyboardVisible.value ? Height.ratio(0.4) : Height.full,
+          height: Height.full,
           child: SingleChildScrollView(
             controller: scrollController,
             child: Column(children: [
