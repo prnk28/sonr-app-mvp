@@ -27,10 +27,7 @@ class NodeService extends GetxService {
     // Initialize
     _properties(Peer_Properties(enabledPointShare: ContactService.pointShareEnabled));
     // Create Node
-    node = await SonrCore.initialize(InitializeRequest(
-      apiKeys: AppServices.apiKeys,
-      device: DeviceService.device,
-    ));
+    node = await SonrCore.initialize(RequestBuilder.initialize);
 
     // Set Handlers
     node.onStatus = _handleStatus;
@@ -49,13 +46,10 @@ class NodeService extends GetxService {
     // Check for User
     if (ContactService.hasUser.value) {
       // Connect Node
-      node.connect(ConnectionRequest(
-        contact: ContactService.contact.value,
-        location: await DeviceService.location,
-      ));
+      node.connect(await RequestBuilder.connection);
 
       // Send Initial Position Update
-      node.update(Request.newUpdatePosition(DeviceService.isMobile ? MobileService.position.value : DesktopService.position));
+      node.update(RequestBuilder.positionUpdate);
       return true;
     } else {
       return false;

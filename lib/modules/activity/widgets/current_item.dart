@@ -9,7 +9,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: session.count > 1 ? 175 : 150,
+      height: session.total.value > 1 ? 175 : 150,
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.symmetric(vertical: 24),
       child: Column(
@@ -40,7 +40,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
           _CurrentActivityProgress(progress: session.progress),
           _CurrentActivityIndexLabel(
             current: session.current,
-            total: session.count,
+            total: session.total.value,
           )
         ],
       ),

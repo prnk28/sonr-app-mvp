@@ -33,6 +33,7 @@ class DeviceService extends GetxService {
   static Platform get platform => to._device.value.platform;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
+  static Rx<ConnectivityResult> get connectivity => to._connectivity;
 
   // Connection Requirements
   static bool get isReadyToConnect {
