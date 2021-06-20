@@ -24,22 +24,25 @@ class TransferPage extends GetView<TransferController> {
     controller.initialize();
     // Build View
     return SonrScaffold(
-      appBar: DetailAppBar(
-        onPressed: () => controller.closeToHome(),
-        title: "Transfer",
-        isClose: true,
-      ),
-      bottomSheet: PayloadSheetView(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            LocalView(),
-            //DevicesView(),
-          ],
+        appBar: DetailAppBar(
+          onPressed: () => controller.closeToHome(),
+          title: "Transfer",
+          isClose: true,
         ),
-      ),
-    );
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  LocalView(),
+                  //DevicesView(),
+                ],
+              ),
+            ),
+            Align(alignment: Alignment.bottomCenter, child: PayloadSheetView()),
+          ],
+        ));
   }
 }
 
@@ -58,19 +61,33 @@ class PayloadSheetView extends GetView<TransferController> {
                 builder: (BuildContext context, ScrollController scrollController) {
                   final file = controller.inviteRequest.file;
                   return Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    foregroundDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    child: ListView.builder(
-                        controller: scrollController,
-                        itemCount: file.items.length + 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return index == 0
-                              ? SonrFileListHeader()
-                              : SonrFileListItem(
-                                  item: file.items[index - 1],
-                                  index: index - 1,
-                                );
-                        }),
+                    padding: EdgeInsets.only(top: 24),
+                    decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
+                    child: CustomScrollView(
+                      controller: scrollController,
+                      slivers: [
+                        SliverAppBar(
+                          title: SonrFileListHeader(),
+                          pinned: true,
+                          floating: false,
+                          automaticallyImplyLeading: false,
+                          backgroundColor: SonrTheme.foregroundColor,
+                          toolbarHeight: 80,
+                          forceElevated: false,
+                          shadowColor: SonrTheme.shadowColor,
+                        ),
+                        SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return SonrFileListItem(
+                              item: file.items[index],
+                              index: index,
+                            );
+                          },
+                          childCount: file.items.length,
+                        ))
+                      ],
+                    ),
                   );
                 })
             :

@@ -9,7 +9,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: 150,
+      height: session.count > 1 ? 150 : 175,
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.symmetric(vertical: 24),
       child: Column(
@@ -37,8 +37,11 @@ class CurrentActivityItem extends GetView<ActivityController> {
               ],
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 8)),
           _CurrentActivityProgress(progress: session.progress),
+          _CurrentActivityIndexLabel(
+            current: session.current,
+            total: session.count,
+          )
         ],
       ),
     );
@@ -118,7 +121,7 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-          padding: EdgeInsets.only(top: 8),
+          padding: EdgeInsets.only(top: 16),
           margin: EdgeInsets.symmetric(horizontal: 42),
           alignment: Alignment.center,
           height: 32,
@@ -189,5 +192,27 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
       return SonrColor.Black;
     }
     return SonrColor.White;
+  }
+}
+
+class _CurrentActivityIndexLabel extends StatelessWidget {
+  final RxInt current;
+  final int total;
+
+  const _CurrentActivityIndexLabel({Key? key, required this.current, required this.total}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (total != 1) {
+      return Container(padding: EdgeInsets.only(top: 8), alignment: Alignment.center, child: Obx(() => _buildLabel(current.value, total)));
+    }
+    return Container();
+  }
+
+  Widget _buildLabel(int current, int total) {
+    return "($current / $total)".light(
+      fontSize: 14,
+      color: SonrTheme.greyColor,
+    );
   }
 }

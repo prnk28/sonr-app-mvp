@@ -241,6 +241,9 @@ class SonrTheme {
   /// Returns Current Text Color
   static Color get itemColorInversed => ContactService.isDarkMode ? SonrColor.Black : SonrColor.White;
 
+  /// Returns Current Shadow Color
+  static Color get shadowColor => ContactService.isDarkMode ? Colors.black.withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
+
   /// Return Current Box Shadow
   static List<BoxShadow> get boxShadow => ContactService.isDarkMode
       ? [

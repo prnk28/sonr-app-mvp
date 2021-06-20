@@ -160,7 +160,7 @@ class ShareController extends GetxController {
       if (this.type.value.isViewPopup) {
         AppPage.Transfer.off(args: TransferArguments(request));
       } else {
-        Get.back(closeOverlays: true);
+        Get.back();
       }
       // Reset Share Items
       selectedItems.clear();

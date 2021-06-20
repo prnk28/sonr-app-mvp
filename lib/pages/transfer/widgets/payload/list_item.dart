@@ -1,5 +1,31 @@
+import 'package:sonr_app/pages/transfer/controllers/transfer_controller.dart';
 import 'package:sonr_app/pages/transfer/views/popup_view.dart';
 import 'package:sonr_app/style.dart';
+
+class SonrFileListHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final file = TransferController.invite.file;
+    return Container(
+      decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
+      width: Get.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: file.prettyName().subheading(color: SonrTheme.itemColor),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: file.prettySize().light(color: SonrTheme.itemColor),
+          )
+        ],
+      ),
+    );
+  }
+}
 
 class SonrFileListItem extends StatelessWidget {
   final SonrFile_Item item;
@@ -9,13 +35,15 @@ class SonrFileListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
+      padding: EdgeInsets.only(top: 8),
       margin: EdgeInsets.all(8),
       child: Row(children: [
         item.hasThumbnail()
             ? Container(
-                height: Height.ratio(0.125),
-                width: Height.ratio(0.125),
                 clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
+                height: Height.ratio(0.125),
+                width: Width.ratio(0.3),
                 child: Image.memory(
                   Uint8List.fromList(item.thumbBuffer),
                   fit: BoxFit.cover,
@@ -42,7 +70,6 @@ class SonrFileListItem extends StatelessWidget {
             ])),
         // Button
         Container(
-          padding: EdgeInsets.only(left: 24),
           alignment: Alignment.topRight,
           child: ActionButton(
             onPressed: () {
