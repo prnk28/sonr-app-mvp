@@ -82,7 +82,7 @@ class ReceiverService extends GetxService {
 
   // * ------------------- Callbacks ----------------------------
   /// Session Has Updated Progress
-  void handleProgress(double data) {
+  void handleProgress(ProgressUpdate data) {
     _session.onProgress(data);
 
     // Logging

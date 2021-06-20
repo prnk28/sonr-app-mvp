@@ -14,6 +14,3 @@ export 'user/desktop.dart';
 export 'user/device.dart';
 export 'user/mobile.dart';
 export 'user/contact.dart';
-
-// Models
-export 'models/option.dart';
