@@ -32,7 +32,7 @@ extension HomeViewUtils on HomeView {
 
   String get title {
     if (this == HomeView.Dashboard) {
-      if (UserService.isNewUser.value) {
+      if (ContactService.isNewUser.value) {
         return "Nice to meet you.";
       }
       return "Welcome Back";

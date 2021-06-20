@@ -101,9 +101,9 @@ class CardService extends GetxService {
   }) async {
     if (DeviceService.isMobile && isRegistered) {
       if (file != null && file.exists) {
-        await to._database.addActivity(type, payload, UserService.contact.value.profile, mime: file.single.mime.type);
+        await to._database.addActivity(type, payload, ContactService.contact.value.profile, mime: file.single.mime.type);
       } else {
-        await to._database.addActivity(type, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
+        await to._database.addActivity(type, payload, ContactService.contact.value.profile, mime: MIME_Type.OTHER);
       }
     }
   }

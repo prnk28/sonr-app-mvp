@@ -14,7 +14,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
             subtitle: Padding(
               padding: controller.view.value.isMain ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
               child: controller.view.value == HomeView.Dashboard
-                  ? "Hi ${UserService.contact.value.firstName},".subheading(
+                  ? "Hi ${ContactService.contact.value.firstName},".subheading(
                       color: Get.theme.focusColor.withOpacity(0.8),
                       align: TextAlign.start,
                     )

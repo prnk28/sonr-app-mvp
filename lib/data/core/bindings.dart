@@ -85,7 +85,7 @@ class AppServices {
     }
 
     // Second: User Services
-    await Get.putAsync(() => UserService().init(), permanent: true);
+    await Get.putAsync(() => ContactService().init(), permanent: true);
 
     // Third: Initialize Data/Networking Services
     await Get.putAsync(() => SenderService().init());
@@ -98,7 +98,7 @@ class AppServices {
 
   /// @ Method Validates Required Services Registered
   static bool get areServicesRegistered {
-    return DeviceService.isRegistered && UserService.isRegistered && LocalService.isRegistered;
+    return DeviceService.isRegistered && ContactService.isRegistered && LocalService.isRegistered;
   }
 
   /// @ Returns Excluded Sentry Modules

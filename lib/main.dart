@@ -102,7 +102,7 @@ class App extends StatelessWidget {
     await Future.delayed(3500.milliseconds);
 
     // # Check for User
-    if (!UserService.hasUser.value) {
+    if (!ContactService.hasUser.value) {
       // Anonymous Desktop
       if (isDesktop) {
         // Get Contact from Values
@@ -113,7 +113,7 @@ class App extends StatelessWidget {
         ));
 
         // Create User
-        await UserService.newContact(contact);
+        await ContactService.newContact(contact);
 
         // Connect to Network
         AppPage.Home.off(init: NodeService.to.connect, args: HomePageArgs(isFirstLoad: true));

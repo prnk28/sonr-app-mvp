@@ -229,20 +229,20 @@ class SonrTheme {
       );
 
   /// Returns Current Text Color
-  static Color get backgroundColor => UserService.isDarkMode ? Colors.black : Colors.white;
+  static Color get backgroundColor => ContactService.isDarkMode ? Colors.black : Colors.white;
 
-  static Color get dividerColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
+  static Color get dividerColor => ContactService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
-  static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
-
-  /// Returns Current Text Color
-  static Color get itemColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+  static Color get foregroundColor => ContactService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
-  static Color get itemColorInversed => UserService.isDarkMode ? SonrColor.Black : SonrColor.White;
+  static Color get itemColor => ContactService.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Returns Current Text Color
+  static Color get itemColorInversed => ContactService.isDarkMode ? SonrColor.Black : SonrColor.White;
 
   /// Return Current Box Shadow
-  static List<BoxShadow> get boxShadow => UserService.isDarkMode
+  static List<BoxShadow> get boxShadow => ContactService.isDarkMode
       ? [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
@@ -267,7 +267,7 @@ class SonrTheme {
       ];
 
   /// Return Current Box Shadow
-  static List<PolygonBoxShadow> get polyBoxShadow => UserService.isDarkMode
+  static List<PolygonBoxShadow> get polyBoxShadow => ContactService.isDarkMode
       ? [
           PolygonBoxShadow(
             color: Colors.black.withOpacity(0.4),

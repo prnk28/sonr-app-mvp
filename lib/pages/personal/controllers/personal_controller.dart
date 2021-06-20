@@ -15,8 +15,8 @@ class PersonalController extends GetxController {
   final dropdownIndex = (-1).obs;
 
   // Edited Values
-  final editedFirstName = RxString(UserService.contact.value.firstName);
-  final editedLastName = RxString(UserService.contact.value.lastName);
+  final editedFirstName = RxString(ContactService.contact.value.firstName);
+  final editedLastName = RxString(ContactService.contact.value.lastName);
   final editedPhone = RxString("");
 
   // Tile Management
@@ -56,7 +56,7 @@ class PersonalController extends GetxController {
   /// @ Method to Confirm New Picture
   confirmAvatar() async {
     if (result.value != null) {
-      UserService.contact.setPicture(result.value!.readAsBytesSync());
+      ContactService.contact.setPicture(result.value!.readAsBytesSync());
     }
     exitToViewing();
   }
@@ -83,9 +83,9 @@ class PersonalController extends GetxController {
   /// @ Completed Editing Details
   void saveEditedDetails() {
     // Update Values in Profile Controller
-    UserService.contact.setFirstName(editedFirstName.value);
-    UserService.contact.setLastName(editedLastName.value);
-    UserService.contact.addPhone(editedPhone.value);
+    ContactService.contact.setFirstName(editedFirstName.value);
+    ContactService.contact.setLastName(editedLastName.value);
+    ContactService.contact.addPhone(editedPhone.value);
     status(PersonalViewStatus.Viewing);
   }
 

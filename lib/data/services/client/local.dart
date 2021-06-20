@@ -136,7 +136,7 @@ class LocalService extends GetxService {
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {
     // Initialize
-    bool flatModeEnabled = !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
+    bool flatModeEnabled = !_flatModeCancelled.value && ContactService.flatModeEnabled && Get.currentRoute != "/transfer";
 
     // Update Orientation
     if (flatModeEnabled && _localFlatPeers.length > 0) {

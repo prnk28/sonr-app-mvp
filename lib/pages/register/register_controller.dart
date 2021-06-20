@@ -169,7 +169,7 @@ class RegisterController extends GetxController {
     ));
 
     // Create User
-    await UserService.newContact(contact);
+    await ContactService.newContact(contact);
 
     // Process data
     if (DeviceService.isMobile) {
@@ -193,7 +193,7 @@ class RegisterController extends GetxController {
       ));
 
       // Create User
-      await UserService.newContact(contact);
+      await ContactService.newContact(contact);
 
       // Connect to Network
       NodeService.to.connect();

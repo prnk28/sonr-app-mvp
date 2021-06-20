@@ -58,12 +58,12 @@ class _FlatModeView extends StatelessWidget {
     } else if (controller.isPending) {
       return Container(key: ValueKey<FlatModeState>(controller.status.value));
     } else if (controller.isReceiving) {
-      return ContactFlatCard(UserService.contact.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+      return ContactFlatCard(ContactService.contact.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
     } else {
       return Draggable(
         key: ValueKey<FlatModeState>(controller.status.value),
-        child: ContactFlatCard(UserService.contact.value, scale: 0.9),
-        feedback: ContactFlatCard(UserService.contact.value, scale: 0.9),
+        child: ContactFlatCard(ContactService.contact.value, scale: 0.9),
+        feedback: ContactFlatCard(ContactService.contact.value, scale: 0.9),
         childWhenDragging: Container(),
         axis: Axis.vertical,
         onDragUpdate: (details) {

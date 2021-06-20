@@ -96,14 +96,14 @@ class _PostFileOwnerRow extends StatelessWidget {
         TextSpan(
             text: profile.sName,
             style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
+                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: ContactService.isDarkMode ? SonrColor.White : SonrColor.Black)),
         TextSpan(
             text: ".snr/",
             style: TextStyle(
                 fontFamily: "RFlex",
                 fontWeight: FontWeight.w100,
                 fontSize: 20,
-                color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
+                color: ContactService.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
       ]),
     );
   }

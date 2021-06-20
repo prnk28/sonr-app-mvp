@@ -7,10 +7,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/services/services.dart';
 
-class UserService extends GetxService {
+class ContactService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<UserService>();
-  static UserService get to => Get.find<UserService>();
+  static bool get isRegistered => Get.isRegistered<ContactService>();
+  static ContactService get to => Get.find<ContactService>();
 
   /// ** User Status Properties **
   final _hasUser = false.obs;
@@ -39,7 +39,7 @@ class UserService extends GetxService {
   final _userBox = GetStorage('User');
 
   /// @ Open SharedPreferences on Init
-  Future<UserService> init() async {
+  Future<ContactService> init() async {
     // @ Init Shared Preferences
     await GetStorage.init('User');
     await GetStorage.init('Preferences');
@@ -167,16 +167,16 @@ class UserService extends GetxService {
     // Check for Link
     if (link != null) {
       docRef.update({
-        "firstname": UserService.contact.value.profile.firstName,
-        "lastname": UserService.contact.value.profile.lastName,
+        "firstname": ContactService.contact.value.profile.firstName,
+        "lastname": ContactService.contact.value.profile.lastName,
         "message": message,
         "screenshot": link,
         "hasScreenshot": true,
       });
     } else {
       docRef.update({
-        "firstname": UserService.contact.value.profile.firstName,
-        "lastname": UserService.contact.value.profile.lastName,
+        "firstname": ContactService.contact.value.profile.firstName,
+        "lastname": ContactService.contact.value.profile.lastName,
         "message": message,
         "hasScreenshot": false,
       });

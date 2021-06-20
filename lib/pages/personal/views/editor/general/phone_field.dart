@@ -19,7 +19,7 @@ class EditPhoneView extends GetView<PersonalController> {
               hint: "+1-555-555-5555",
               label: "Primary",
               textInputAction: TextInputAction.done,
-              controller: TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary : ""),
+              controller: TextEditingController(text: ContactService.contact.value.hasPhone() ? ContactService.contact.value.phonePrimary : ""),
               value: controller.editedLastName.value,
               focusNode: _primaryNumberFocus,
               onEditingComplete: () {

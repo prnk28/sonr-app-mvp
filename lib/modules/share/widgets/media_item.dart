@@ -56,7 +56,7 @@ class _MediaItemState extends State<MediaItem> {
                       alignment: Alignment.bottomLeft,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
+                            color: ContactService.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
                             borderRadius: BorderRadius.circular(16)),
                         padding: EdgeInsets.all(4),
                         child: SonrIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),

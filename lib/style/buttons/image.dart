@@ -92,7 +92,7 @@ class ImageButton extends StatelessWidget {
               false.obs),
 
           // Build Label
-          UserService.isDarkMode
+          ContactService.isDarkMode
               ? label.light(
                   color: textColor ?? SonrColor.White.withOpacity(0.8),
                   fontSize: fontSize,

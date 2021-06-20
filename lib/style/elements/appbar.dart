@@ -26,7 +26,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
     return GestureDetector(
       onLongPress: () {
         if (DeviceService.isMobile) {
-          BetterFeedback.of(context)?.show(UserService.sendFeedback);
+          BetterFeedback.of(context)?.show(ContactService.sendFeedback);
         }
       },
       child: Container(
@@ -92,7 +92,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: GestureDetector(
         onLongPress: () {
           if (DeviceService.isMobile) {
-            BetterFeedback.of(context)?.show(UserService.sendFeedback);
+            BetterFeedback.of(context)?.show(ContactService.sendFeedback);
           }
         },
         child: Container(

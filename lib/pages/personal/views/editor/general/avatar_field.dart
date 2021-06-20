@@ -6,7 +6,7 @@ class ProfileAvatarField extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (UserService.contact.value.hasPicture()) {
+      if (ContactService.contact.value.hasPicture()) {
         return GestureDetector(
           onLongPress: () async {
             controller.setAddPicture();
@@ -19,10 +19,10 @@ class ProfileAvatarField extends GetView<PersonalController> {
                 child: Container(
                   width: 100,
                   height: 100,
-                  child: UserService.contact.value.hasPicture()
+                  child: ContactService.contact.value.hasPicture()
                       ? CircleAvatar(
                           backgroundColor: SonrTheme.foregroundColor,
-                          foregroundImage: MemoryImage(Uint8List.fromList(UserService.contact.value.picture)),
+                          foregroundImage: MemoryImage(Uint8List.fromList(ContactService.contact.value.picture)),
                         )
                       : SonrIcons.Avatar.greyWith(size: 100),
                 )),

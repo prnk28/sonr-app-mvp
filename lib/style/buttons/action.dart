@@ -87,7 +87,7 @@ class _ActionIconButton extends StatelessWidget {
                   height: 40,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: UserService.isDarkMode ? SonrTheme.foregroundColor : Color(0xffEAEAEA),
+                    color: ContactService.isDarkMode ? SonrTheme.foregroundColor : Color(0xffEAEAEA),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
@@ -117,12 +117,12 @@ class ActionBanner {
 
   /// Build Alert Style Banner
   factory ActionBanner.alert(int count) {
-    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
+    return ActionBanner(count, ContactService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
   }
 
   /// Build Selected Items Banner
   factory ActionBanner.selected(int count) {
-    return ActionBanner(count, UserService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
+    return ActionBanner(count, ContactService.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
   }
 
   /// Helper: Builds BoxDecoration from Banner Data

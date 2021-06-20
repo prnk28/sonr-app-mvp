@@ -18,7 +18,7 @@ class SNameField extends StatelessWidget {
               child: AnimatedScale(
                   scale: isPressed.value ? 1.1 : 1.0,
                   child: Container(
-                    constraints: BoxConstraints(maxWidth: UserService.contact.value.sName.size(DisplayTextStyle.Light, fontSize: 24).width + 75),
+                    constraints: BoxConstraints(maxWidth: ContactService.contact.value.sName.size(DisplayTextStyle.Light, fontSize: 24).width + 75),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -39,7 +39,7 @@ class SNameField extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(left: 4, bottom: 4),
                           child: [
-                            "${UserService.contact.value.sName}".lightSpan(color: SonrTheme.itemColor, fontSize: 24),
+                            "${ContactService.contact.value.sName}".lightSpan(color: SonrTheme.itemColor, fontSize: 24),
                             ".snr/".lightSpan(color: SonrTheme.greyColor, fontSize: 24),
                           ].rich(),
                         ),

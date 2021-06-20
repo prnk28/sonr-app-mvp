@@ -106,9 +106,9 @@ class _EditOptionsButton extends GetView<EditorController> {
       child: BoxContainer(
         margin: EdgeInsets.all(24),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          UserService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
+          ContactService.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),
-          UserService.isDarkMode ? option.name.light(color: SonrTheme.itemColor) : option.name.light(color: SonrTheme.itemColor),
+          ContactService.isDarkMode ? option.name.light(color: SonrTheme.itemColor) : option.name.light(color: SonrTheme.itemColor),
         ]),
       ),
     );

@@ -37,9 +37,9 @@ class DeviceService extends GetxService {
   // Connection Requirements
   static bool get isReadyToConnect {
     if (isMobile) {
-      return MobileService.hasLocation.value && MobileService.hasLocalNetwork.value && UserService.hasUser.value;
+      return MobileService.hasLocation.value && MobileService.hasLocalNetwork.value && ContactService.hasUser.value;
     } else {
-      return UserService.hasUser.value;
+      return ContactService.hasUser.value;
     }
   }
 

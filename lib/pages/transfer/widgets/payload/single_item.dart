@@ -39,9 +39,9 @@ class PayloadSingleItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: [
-                UserService.contact.value.firstName.paragraph(color: SonrTheme.itemColor),
+                ContactService.contact.value.firstName.paragraph(color: SonrTheme.itemColor),
                 " ".paragraph(color: SonrTheme.itemColor),
-                UserService.contact.value.lastName.light(color: SonrTheme.itemColor)
+                ContactService.contact.value.lastName.light(color: SonrTheme.itemColor)
               ].row(),
             ),
             Padding(

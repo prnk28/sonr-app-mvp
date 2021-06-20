@@ -25,7 +25,7 @@ class NodeService extends GetxService {
   /// @ Initialize Service Method
   Future<NodeService> init() async {
     // Initialize
-    _properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled));
+    _properties(Peer_Properties(enabledPointShare: ContactService.pointShareEnabled));
     // Create Node
     node = await SonrCore.initialize(InitializeRequest(
       apiKeys: AppServices.apiKeys,
@@ -47,10 +47,10 @@ class NodeService extends GetxService {
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
-    if (UserService.hasUser.value) {
+    if (ContactService.hasUser.value) {
       // Connect Node
       node.connect(ConnectionRequest(
-        contact: UserService.contact.value,
+        contact: ContactService.contact.value,
         location: await DeviceService.location,
       ));
 
@@ -95,7 +95,7 @@ class NodeService extends GetxService {
   static void setFlatMode(bool isFlatMode) async {
     if (status.value.isConnected && isRegistered) {
       if (to._properties.value.isFlatMode != isFlatMode) {
-        to._properties(Peer_Properties(enabledPointShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
+        to._properties(Peer_Properties(enabledPointShare: ContactService.pointShareEnabled, isFlatMode: isFlatMode));
         to.node.update(Request.newUpdateProperties(to._properties.value));
       }
     }
@@ -119,7 +119,7 @@ class NodeService extends GetxService {
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to.node.invite(InviteRequest(to: peer!)..setContact(UserService.contact.value, isFlat: true));
+      to.node.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
     }
   }
 

@@ -215,7 +215,7 @@ class SenderService extends GetxService {
       ChooseOption.Contact.logShared();
 
       // Initialize Contact
-      invite.setContact(UserService.contact.value);
+      invite.setContact(ContactService.contact.value);
     }
     // Check for URL
     else if (payload == Payload.URL) {
