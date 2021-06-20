@@ -11,7 +11,7 @@ export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
 export 'package:sonr_app/style/elements/painter.dart';
 export 'package:animate_do/animate_do.dart';
-export 'package:sonr_app/modules/camera/camera_view.dart';
+export 'package:sonr_app/modules/camera/camera.dart';
 export 'package:sonr_app/data/data.dart';
 
 // Custom Theme Buttons
