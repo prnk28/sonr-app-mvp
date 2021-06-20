@@ -1,9 +1,10 @@
 // Exports
 export 'models/asset.dart';
 export 'models/type.dart';
-export 'views/button_view.dart';
+export 'views/options_view.dart';
 export 'views/external_sheet.dart';
 export 'views/popup_view.dart';
+export 'widgets/share_button.dart';
 
 // Imports
 import 'models/asset.dart';
@@ -20,13 +21,11 @@ class ShareController extends GetxController {
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
   final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
   final hasSelected = false.obs;
+  final status = ShareViewStatus.Default.obs;
   final type = ShareViewType.None.obs;
 
   // References
   final albumArrowKey = GlobalKey();
-
-  // References
-  final ScrollController tagsScrollController = ScrollController();
 
   @override
   void onInit() {
@@ -41,7 +40,7 @@ class ShareController extends GetxController {
 
   /// Initializes Controller for Dialog - Dialog is for when in TransferScreen
   static void initAlert() {
-    Get.find<ShareController>().type(ShareViewType.Dialog);
+    Get.find<ShareController>().type(ShareViewType.Alert);
   }
 
   /// Closes Current Window
@@ -58,12 +57,19 @@ class ShareController extends GetxController {
 
   /// Initializes Gallery
   Future<void> initGallery() async {
+    // Set Loading
+    status(ShareViewStatus.Loading);
+
+    // Setup Gallery
     var list = await PhotoManager.getAssetPathList();
     gallery(list.where((e) => e.assetCount > 0 && e.name.isNotEmpty).toList());
     var all = await gallery.allAlbum();
     if (all != null) {
       currentAlbum(all);
     }
+
+    // Set Loading
+    status(ShareViewStatus.Ready);
   }
 
   /// Open Camera and Take Picture for Share
@@ -131,41 +137,13 @@ class ShareController extends GetxController {
     }
   }
 
-  Future<void> onAlbumArrowPressed() async {}
-
   /// Changes Album to New Album
   Future<void> setAlbum(int index) async {
+    status(ShareViewStatus.Loading);
+    currentAlbum.call();
     currentAlbum(await AssetPathAlbum.init(index, gallery[index]));
     currentAlbum.refresh();
-    tagsScrollController.animateTo(currentAlbum.value.index * 40, duration: 100.milliseconds, curve: Curves.easeIn);
-  }
-
-  /// Changes Album to Previous Album
-  Future<void> shiftPrevAlbum() async {
-    if (currentAlbum.value.index > 0) {
-      var newIndex = currentAlbum.value.index - 1;
-      currentAlbum(await AssetPathAlbum.init(newIndex, gallery[newIndex]));
-    } else {
-      currentAlbum(await AssetPathAlbum.init(0, gallery[0]));
-    }
-    currentAlbum.refresh();
-    tagsScrollController.animateTo(
-      currentAlbum.value.index * currentAlbum.value.offsetX,
-      duration: 100.milliseconds,
-      curve: Curves.easeIn,
-    );
-  }
-
-  /// Changes Album to Previous Album
-  Future<void> shiftNextAlbum() async {
-    if (currentAlbum.value.index < gallery.length - 1) {
-      var newIndex = currentAlbum.value.index + 1;
-      currentAlbum(await AssetPathAlbum.init(newIndex, gallery[newIndex]));
-    } else {
-      currentAlbum(await AssetPathAlbum.init(gallery.length - 1, gallery[gallery.length - 1]));
-    }
-    currentAlbum.refresh();
-    tagsScrollController.animateTo(currentAlbum.value.index * 40, duration: 100.milliseconds, curve: Curves.easeIn);
+    status(ShareViewStatus.Ready);
   }
 
   /// Removes Item from Selected Items List
@@ -178,49 +156,15 @@ class ShareController extends GetxController {
   void _handleConfirmation(InviteRequest? request) {
     // Check Result Success
     if (request != null) {
-      // Reset Share Items
-      selectedItems.clear();
-      hasSelected(false);
-
       // Check View Type
       if (this.type.value.isViewPopup) {
         AppPage.Transfer.off(args: TransferArguments(request));
       } else {
         Get.back(closeOverlays: true);
       }
+      // Reset Share Items
+      selectedItems.clear();
+      hasSelected(false);
     }
-  }
-}
-
-/// Button that opens share View
-class ShareButton extends StatelessWidget {
-  ShareButton() : super(key: GlobalKey());
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0),
-      child: ObxValue<RxBool>(
-          (isPressed) => AnimatedScale(
-              duration: Duration(milliseconds: 150),
-              scale: isPressed.value ? 1.1 : 1,
-              child: Container(
-                width: 95,
-                height: 95,
-                child: GestureDetector(
-                  onTapDown: (details) => isPressed(true),
-                  onTapUp: (details) {
-                    isPressed(false);
-                    Future.delayed(150.milliseconds, () => AppPage.Share.to(init: ShareController.initPopup));
-                  },
-                  child: PolyContainer(
-                    radius: 24,
-                    rotate: 30,
-                    sides: 6,
-                    child: SonrIcons.Share.gradient(size: 34, value: SonrGradients.PremiumWhite),
-                  ),
-                ),
-              )),
-          false.obs),
-    );
   }
 }

@@ -119,10 +119,16 @@ extension AssetPathEntityUtils on AssetPathEntity {
   String get name {
     if (this.isAll) {
       return "All";
+    } else if (this.name.toLowerCase() == "recent") {
+      return "Recents";
     } else {
       return this.name;
     }
   }
+
+  // IconData get iconData {
+
+  // }
 }
 
 extension AssetPathEntityListUtils on List<AssetPathEntity> {

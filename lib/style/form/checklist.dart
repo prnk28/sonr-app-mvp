@@ -6,9 +6,13 @@ class ChecklistOption {
   final RxBool isEnabled;
   ChecklistOption(this.title, this.isEnabled);
 
+  /// Method Toggles Attached RxBool
   void toggle() {
     isEnabled(!isEnabled.value);
   }
+
+  /// Returns this Widgets Size
+  Size get size => this.title.size(DisplayTextStyle.Light, fontSize: 24);
 
   /// Returns Icon for Checklist Option based on State
   Widget icon() {
@@ -42,7 +46,11 @@ class ChecklistOption {
 class Checklist extends StatelessWidget {
   final List<ChecklistOption> options;
   final Function(int idx) onSelectedOption;
-  const Checklist({Key? key, required this.options, required this.onSelectedOption}) : super(key: key);
+  const Checklist({
+    Key? key,
+    required this.options,
+    required this.onSelectedOption,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxInt>(
@@ -54,41 +62,54 @@ class Checklist extends StatelessWidget {
                   color: SonrTheme.foregroundColor,
                   width: 1.5,
                 )),
-            width: 160,
+            constraints: options.boxConstraints,
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _buildOptions(),
+              children: List<Widget>.generate(
+                  options.length,
+                  (index) => GestureDetector(
+                        onTap: () => options[index].toggle(),
+                        child: Container(
+                          constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
+                          child: Column(children: [
+                            Padding(padding: EdgeWith.top(4)),
+                            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              options[index].icon(),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: options[index].text(),
+                              ),
+                            ]),
+                            index + 1 != options.length
+                                ? Divider(
+                                    color: SonrTheme.greyColor.withOpacity(0.25),
+                                    endIndent: 8,
+                                    indent: 8,
+                                  )
+                                : Container(),
+                          ]),
+                        ),
+                      )),
             )),
         0.obs);
   }
+}
 
-  List<Widget> _buildOptions() {
-    return List<Widget>.generate(
-        options.length,
-        (index) => GestureDetector(
-              onTap: () => options[index].toggle(),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
-                child: Column(children: [
-                  Padding(padding: EdgeWith.top(4)),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    options[index].icon(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: options[index].text(),
-                    ),
-                  ]),
-                  index + 1 != options.length
-                      ? Divider(
-                          color: SonrTheme.greyColor.withOpacity(0.25),
-                          endIndent: 8,
-                          indent: 8,
-                        )
-                      : Container(),
-                ]),
-              ),
-            ));
+extension ChecklistOptionUtils on List<ChecklistOption> {
+  /// Return BoxConstraints based on List of InfolistOptions
+  BoxConstraints get boxConstraints {
+    // Initialize
+    double maxTextWidth = 0;
+    double maxIconWidth = this.length * 24;
+    double adjustedPaddingWidth = this.length * 8;
+
+    // Iterate Over Text
+    this.forEach((o) {
+      maxTextWidth += o.size.width;
+    });
+
+    return BoxConstraints(maxWidth: maxTextWidth + maxIconWidth + adjustedPaddingWidth);
   }
 }

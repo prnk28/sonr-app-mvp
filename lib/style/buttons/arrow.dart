@@ -3,23 +3,76 @@ import 'package:sonr_app/style.dart';
 import 'utility.dart';
 
 class ArrowButton extends StatelessWidget {
+  /// Button Title to Display
   final String title;
+
+  /// Action on Pressed
   final Function() onPressed;
 
+  /// ### ArrowButton
+  /// Displays TextButton with Arrow to Left
   const ArrowButton({
     Key? key,
     required this.title,
     required this.onPressed,
   }) : super(key: key);
+
+  /// ### ArrowButton (CheckList)
+  /// Creates ArrowButton which Displays CheckList on Press
+  factory ArrowButton.checkList({
+    required List<ChecklistOption> options,
+    required String title,
+    required dynamic Function(int) onSelectedOption,
+    Offset? offset,
+  }) {
+    final key = GlobalKey();
+    return ArrowButton(
+        title: title,
+        key: key,
+        onPressed: () {
+          AppRoute.positioned(
+            Checklist(
+              options: options,
+              onSelectedOption: onSelectedOption,
+            ),
+            offset: offset,
+            parentKey: key,
+          );
+        });
+  }
+
+  /// ### ArrowButton (InfoList)
+  /// Creates ArrowButton which Displays InfoList on Press
+  factory ArrowButton.infoList({
+    required List<InfolistOption> options,
+    required String title,
+    Offset? offset,
+  }) {
+    final key = GlobalKey();
+    return ArrowButton(
+        title: title,
+        key: key,
+        onPressed: () {
+          AppRoute.positioned(
+            Infolist(options: options),
+            offset: offset,
+            parentKey: key,
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
         (isPressed) => GestureDetector(
-              onTapDown: (details) => isPressed(true),
+              onTapDown: (details) {
+                HapticFeedback.lightImpact();
+                isPressed(true);
+              },
               onTapCancel: () => isPressed(false),
               onTapUp: (details) async {
                 isPressed(false);
-                await HapticFeedback.mediumImpact();
+                HapticFeedback.heavyImpact();
                 Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
                   onPressed();
                 });

@@ -9,7 +9,7 @@ export 'controllers/node.dart';
 export 'controllers/user.dart';
 
 // Models
-export 'models/share_option.dart';
+export 'models/option.dart';
 
 // Database
 export 'database/converter.dart';

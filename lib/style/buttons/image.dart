@@ -24,16 +24,24 @@ class ImageButton extends StatelessWidget {
   /// Circle Size
   final double circleSize;
 
-  const ImageButton(
-      {Key? key,
-      required this.onPressed,
-      required this.path,
-      required this.label,
-      this.circleSize = 110,
-      this.imageFit = BoxFit.contain,
-      this.imageWidth = 100,
-      this.imageHeight = 100})
-      : super(key: key);
+  /// Text Label Size
+  final double fontSize;
+
+  /// Text Label Color
+  final Color? textColor;
+
+  const ImageButton({
+    Key? key,
+    required this.onPressed,
+    required this.path,
+    required this.label,
+    this.circleSize = 110,
+    this.imageFit = BoxFit.contain,
+    this.imageWidth = 100,
+    this.imageHeight = 100,
+    this.fontSize = 20,
+    this.textColor,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,7 +92,15 @@ class ImageButton extends StatelessWidget {
               false.obs),
 
           // Build Label
-          UserService.isDarkMode ? label.light(color: SonrColor.White.withOpacity(0.8)) : label.light(color: SonrColor.Black.withOpacity(0.8)),
+          UserService.isDarkMode
+              ? label.light(
+                  color: textColor ?? SonrColor.White.withOpacity(0.8),
+                  fontSize: fontSize,
+                )
+              : label.light(
+                  color: textColor ?? SonrColor.Black.withOpacity(0.8),
+                  fontSize: fontSize,
+                ),
         ],
       ),
     );

@@ -1,13 +1,17 @@
 import 'package:get/get.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/modules/share/widgets/albums_row.dart';
+import 'package:sonr_app/modules/share/widgets/media_item.dart';
 import 'package:sonr_app/style.dart';
 
 class SharePopupView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SonrScaffold(
+    return Obx(() => Scaffold(
+        extendBodyBehindAppBar: false,
+        extendBody: true,
+        resizeToAvoidBottomInset: false,
+        backgroundColor: SonrTheme.backgroundColor,
         appBar: DetailAppBar(
           title: "Share",
           onPressed: () => controller.close(),
@@ -20,136 +24,45 @@ class SharePopupView extends GetView<ShareController> {
               )),
         ),
         body: Stack(children: [
-          CustomScrollView(
-            slivers: [
-              // @ Builds Profile Header
-              SliverToBoxAdapter(child: ShareOptionsRow()),
-              SliverPadding(padding: EdgeInsets.only(top: 8)),
-              SliverToBoxAdapter(
-                  child: Container(padding: EdgeInsets.only(left: 24), child: "Media".section(align: TextAlign.start, color: Get.theme.focusColor))),
-              SliverToBoxAdapter(child: AlbumsRow()),
-              SliverPadding(padding: EdgeInsets.all(4)),
-              // @ Builds List of Social Tile
-              _MediaView()
-            ],
-          ),
-          GestureDetector(
-            onHorizontalDragUpdate: (details) {
-              if (details.delta.dx > 8) {
-                Get.find<ShareController>().shiftPrevAlbum();
-              } else if (details.delta.dx < -8) {
-                Get.find<ShareController>().shiftNextAlbum();
+          CustomScrollView(slivers: [
+            // @ Builds Profile Header
+            SliverToBoxAdapter(child: ShareOptionsRow()),
+
+            SliverAppBar(
+              title: AlbumHeader(),
+              pinned: true,
+              floating: true,
+              automaticallyImplyLeading: false,
+              backgroundColor: SonrTheme.backgroundColor,
+              forceElevated: false,
+            ),
+            SliverPadding(padding: EdgeInsets.only(top: 24)),
+            // @ Builds List of Social Tile
+            Obx(() {
+              if (controller.status.value.isReady) {
+                return SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return MediaItem(
+                          item: controller.currentAlbum.value.entityAtIndex(index),
+                        );
+                      },
+                      childCount: controller.currentAlbum.value.length,
+                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 4.0,
+                      crossAxisSpacing: 4.0,
+                    ));
+              } else {
+                return SliverToBoxAdapter(child: Center(child: HourglassIndicator()));
               }
-            },
-          )
+            })
+          ]),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: ShareConfirmSheet(),
+          // )
         ])));
-  }
-}
-
-class _MediaView extends GetView<ShareController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => SliverGrid(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return _MediaItem(
-              item: controller.currentAlbum.value.entityAtIndex(index),
-            );
-          },
-          childCount: controller.currentAlbum.value.length,
-        ),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 4.0, crossAxisSpacing: 4.0)));
-  }
-}
-
-class _MediaItem extends StatefulWidget {
-  final AssetEntity item;
-
-  const _MediaItem({Key? key, required this.item}) : super(key: key);
-
-  @override
-  _MediaItemState createState() => _MediaItemState();
-}
-
-class _MediaItemState extends State<_MediaItem> {
-  bool hasLoaded = false;
-  bool isSelected = false;
-  Uint8List? thumbnail;
-  @override
-  void initState() {
-    _setThumbnail();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (hasLoaded) {
-      if (thumbnail != null) {
-        return GestureDetector(
-          onTap: _toggleImage,
-          onLongPress: _openMedia,
-          child: Container(
-            alignment: Alignment.center,
-            child: Stack(children: [
-              // Thumbnail
-              Container(
-                  foregroundDecoration: isSelected ? BoxDecoration(color: Colors.black54) : null,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: MemoryImage(thumbnail!),
-                    fit: BoxFit.fitWidth,
-                  ))),
-
-              // Video Icon
-              widget.item.type == AssetType.video
-                  ? Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
-                            borderRadius: BorderRadius.circular(16)),
-                        padding: EdgeInsets.all(4),
-                        child: SonrIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
-                      ),
-                    )
-                  : Container(),
-
-              // Select Icon
-              isSelected ? Center(child: SonrIcons.Check.whiteWith(size: 42)) : Container(),
-            ]),
-          ),
-        );
-      } else {
-        return widget.item.icon();
-      }
-    } else {
-      return HourglassIndicator();
-    }
-  }
-
-  Future<void> _openMedia() async {
-    var file = await widget.item.file;
-    if (file != null) {
-      OpenFile.open(file.path);
-    }
-  }
-
-  Future<void> _setThumbnail() async {
-    var data = await widget.item.thumbData;
-    if (data != null) {
-      thumbnail = data;
-    }
-    hasLoaded = true;
-    setState(() {});
-  }
-
-  void _toggleImage() {
-    isSelected = !isSelected;
-    if (isSelected) {
-      Get.find<ShareController>().chooseMediaItem(widget.item, thumbnail!);
-    } else {
-      Get.find<ShareController>().removeMediaItem(widget.item, thumbnail!);
-    }
-    setState(() {});
   }
 }

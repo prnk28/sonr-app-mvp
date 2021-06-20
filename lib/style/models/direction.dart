@@ -19,7 +19,7 @@ extension BounceDirectionUtils on BounceDirection {
   /// Returns In Animation for Widget based On Direction
   Widget inAnimation({required Widget child}) {
     // Initialize Parameters
-    final duration = 350.milliseconds;
+    final duration = 300.milliseconds;
     final animate = true;
     final delay = 200.milliseconds;
 
