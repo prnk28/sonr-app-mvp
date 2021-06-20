@@ -9,7 +9,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: session.count > 1 ? 150 : 175,
+      height: session.count > 1 ? 175 : 150,
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.symmetric(vertical: 24),
       child: Column(
@@ -120,47 +120,49 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   _CurrentActivityProgress({required this.progress});
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          padding: EdgeInsets.only(top: 16),
-          margin: EdgeInsets.symmetric(horizontal: 42),
-          alignment: Alignment.center,
-          height: 32,
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              // Bottom Layer
-              Container(
-                alignment: Alignment.center,
-                width: maxWidth,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: SonrTheme.foregroundColor,
+    return Obx(() => Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 42),
+            alignment: Alignment.center,
+            height: 32,
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                // Bottom Layer
+                Container(
+                  alignment: Alignment.center,
+                  width: maxWidth,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: SonrTheme.foregroundColor,
+                  ),
                 ),
-              ),
 
-              // Foreground Gradient
-              AnimatedContainer(
-                alignment: Alignment.center,
-                width: _calculateWidth(progress.value),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
-                duration: 100.milliseconds,
-              ),
+                // Foreground Gradient
+                AnimatedContainer(
+                  alignment: Alignment.center,
+                  width: _calculateWidth(progress.value),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
+                  duration: 100.milliseconds,
+                ),
 
-              // Progress of Transfer
-              Align(
-                alignment: Alignment.center,
-                child: AnimatedSlider.fade(
-                  duration: 200.milliseconds,
-                  child: Container(
-                    key: ValueKey<double>(progress.value),
-                    child: _calculateText(progress.value).subheading(
-                      fontSize: 16,
-                      color: _calculateTextColor(progress.value),
+                // Progress of Transfer
+                Align(
+                  alignment: Alignment.center,
+                  child: AnimatedSlider.fade(
+                    duration: 200.milliseconds,
+                    child: Container(
+                      key: ValueKey<double>(progress.value),
+                      child: _calculateText(progress.value).subheading(
+                        fontSize: 16,
+                        color: _calculateTextColor(progress.value),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
@@ -204,7 +206,7 @@ class _CurrentActivityIndexLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (total != 1) {
-      return Container(padding: EdgeInsets.only(top: 8), alignment: Alignment.center, child: Obx(() => _buildLabel(current.value, total)));
+      return Obx(() => Container(padding: EdgeInsets.only(top: 8), alignment: Alignment.center, child: _buildLabel(current.value, total)));
     }
     return Container();
   }
