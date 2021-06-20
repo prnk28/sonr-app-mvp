@@ -6,7 +6,6 @@ export 'widgets/payload/item.dart';
 export 'widgets/peer/peer.dart';
 export 'models/mode.dart';
 export 'models/animation.dart';
-export 'controllers/flat_controller.dart';
 
 // Imports
 import 'package:flutter/material.dart';

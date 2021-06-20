@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/style.dart';
 import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -92,9 +91,7 @@ class PersonalController extends GetxController {
   // @ Method to Request Camera Permissions
   requestCamera() async {
     if (DeviceService.isMobile) {
-      var granted = await Permission.camera.request().isGranted;
-      Get.find<MobileService>().updatePermissionsStatus();
-      status(PersonalViewStatusUtils.statusFromPermissions(granted));
+      status(PersonalViewStatusUtils.statusFromPermissions(await Permissions.Camera.request()));
     }
   }
 }

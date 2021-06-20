@@ -34,7 +34,7 @@ class CaptureButton extends StatelessWidget {
                   () => Container(
                       child: Center(
                           child: SonrIcons.Camera.gradient(
-                        value: ContactService.isDarkMode ? SonrGradients.PremiumWhite : SonrGradients.PremiumDark,
+                        value: Preferences.isDarkMode ? SonrGradients.PremiumWhite : SonrGradients.PremiumDark,
                         size: 40,
                       )),
                       decoration: BoxDecoration(

@@ -7,14 +7,13 @@ import 'package:sonr_app/style.dart';
 import '../views/editor/editor_view.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
 
-
 class EditorController extends GetxController {
   // Properties
   final status = EditorFieldStatus.Default.obs;
   final title = "Edit Contact".obs;
-  final isDarkModeEnabled = ContactService.isDarkMode.obs;
-  final isFlatModeEnabled = ContactService.flatModeEnabled.obs;
-  final isPointToShareEnabled = ContactService.pointShareEnabled.obs;
+  final isDarkModeEnabled = Preferences.isDarkMode.obs;
+  final isFlatModeEnabled = Preferences.flatModeEnabled.obs;
+  final isPointToShareEnabled = Preferences.pointShareEnabled.obs;
 
   void handleLeading() {
     HapticFeedback.heavyImpact();
@@ -29,12 +28,12 @@ class EditorController extends GetxController {
 
   setDarkMode(bool val) {
     isDarkModeEnabled(val);
-    ContactService.toggleDarkMode();
+    Preferences.toggleDarkMode();
   }
 
   setFlatMode(bool val) {
     isFlatModeEnabled(val);
-    ContactService.toggleFlatMode();
+    Preferences.toggleFlatMode();
   }
 
   setPointShare(bool val) {
@@ -50,13 +49,13 @@ class EditorController extends GetxController {
         // Check Result
         if (value) {
           isPointToShareEnabled(true);
-          ContactService.togglePointToShare();
+          Preferences.togglePointToShare();
         } else {
           Get.back();
         }
       });
     } else {
-      ContactService.togglePointToShare();
+      Preferences.togglePointToShare();
     }
   }
 

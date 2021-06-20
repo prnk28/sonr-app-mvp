@@ -96,7 +96,7 @@ class RegisterTextField extends GetView<RegisterController> {
               border: UnderlineInputBorder(borderSide: BorderSide(color: SonrColor.Critical, width: 4)),
               hintText: hint,
               hintStyle:
-                  TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: ContactService.isDarkMode ? Colors.white38 : Colors.black38))),
+                  TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),
     );
   }
 

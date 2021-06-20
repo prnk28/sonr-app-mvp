@@ -10,9 +10,9 @@ class NodeService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<NodeService>();
   static NodeService get to => Get.find<NodeService>();
+  static bool get isReady => isRegistered && to._status.value.isConnected;
 
   // @ Set Properties
-  final _properties = Peer_Properties().obs;
   final _status = Rx<Status>(Status.IDLE);
 
   // @ Static Accessors
@@ -24,8 +24,6 @@ class NodeService extends GetxService {
   // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
   Future<NodeService> init() async {
-    // Initialize
-    _properties(Peer_Properties(enabledPointShare: ContactService.pointShareEnabled));
     // Create Node
     node = await SonrCore.initialize(RequestBuilder.initialize);
 
@@ -85,28 +83,10 @@ class NodeService extends GetxService {
     }
   }
 
-  /// @ Sets Properties for Node
-  static void setFlatMode(bool isFlatMode) async {
-    if (status.value.isConnected && isRegistered) {
-      if (to._properties.value.isFlatMode != isFlatMode) {
-        to._properties(Peer_Properties(enabledPointShare: ContactService.pointShareEnabled, isFlatMode: isFlatMode));
-        to.node.update(Request.newUpdateProperties(to._properties.value));
-      }
-    }
-  }
-
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
       to.node.update(Request.newUpdateContact(contact));
-    }
-  }
-
-  /// @ Respond-Peer Event
-  static void respond(InviteResponse request) async {
-    if (status.value.isConnected && isRegistered) {
-      print(request.toString());
-      to.node.respond(request);
     }
   }
 
@@ -122,12 +102,10 @@ class NodeService extends GetxService {
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
     if (data.value == Status.AVAILABLE) {
-      DeviceService.playSound(type: UISoundType.Connected);
+      DeviceService.playSound(type: Sounds.Connected);
 
       // Handle Available
-      if (DeviceService.isMobile) {
-        node.update(Request.newUpdatePosition(MobileService.position.value));
-      }
+      node.update(Request.newUpdatePosition(DeviceService.position.value));
     }
 
     // Update Status

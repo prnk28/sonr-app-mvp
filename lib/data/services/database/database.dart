@@ -61,14 +61,6 @@ class CardsDatabase extends _$CardsDatabase {
       url: card.hasUrl() ? Value(card.url) : Value.absent(),
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
-  /// Add File card to Database
-  Future<int> addFileCard(Transfer card, SonrFile file) async => into(transferCards).insert(TransferCardsCompanion(
-      owner: Value(card.owner),
-      mime: Value(file.single.mime.type),
-      payload: Value(card.payload),
-      file: Value(file),
-      received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
-
   /// Returns all Transfer Card Items
   Future<List<TransferCard>> get allCardEntries => select(transferCards).get();
 

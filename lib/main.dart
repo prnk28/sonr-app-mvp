@@ -103,17 +103,13 @@ class App extends StatelessWidget {
 
     // # Check for User
     if (!ContactService.hasUser.value) {
-      // Anonymous Desktop
       if (isDesktop) {
-        // Get Contact from Values
-        var contact = Contact(
+        // Create User
+        await ContactService.newContact(Contact(
             profile: Profile(
           firstName: "Anonymous",
           lastName: DeviceService.platform.toString(),
-        ));
-
-        // Create User
-        await ContactService.newContact(contact);
+        )));
 
         // Connect to Network
         AppPage.Home.off(init: NodeService.to.connect, args: HomePageArgs(isFirstLoad: true));
@@ -128,20 +124,20 @@ class App extends StatelessWidget {
       // Check Platform
       if (!isDesktop) {
         // All Valid
-        if (MobileService.hasLocation.value) {
-          AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
+        if (await Permissions.Location.isGranted) {
+          AppPage.Home.off(args: HomePageArgs.FirstLoad);
         }
 
         // No Location
         else {
-          MobileService.to.requestLocation().then((value) {
+          Permissions.Location.request().then((value) {
             if (value) {
-              AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
+              AppPage.Home.off(args: HomePageArgs.FirstLoad);
             }
           });
         }
       } else {
-        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
+        AppPage.Home.off(args: HomePageArgs.FirstLoad);
       }
     }
   }

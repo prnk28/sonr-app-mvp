@@ -81,18 +81,6 @@ class CardService extends GetxService {
     }
   }
 
-  // @ Add New File Card to Database
-  static addFileCard(Transfer card, SonrFile file, ActivityType activityType) async {
-    // Update Database
-    if (DeviceService.isMobile && isRegistered) {
-      // Store in Database
-      await to._database.addFileCard(card, file);
-
-      await to._database.addActivity(activityType, card.payload, card.owner, mime: file.single.mime.type);
-      _refreshCount();
-    }
-  }
-
   /// @ Add New Activity for deleted card
   static addActivity({
     required ActivityType type,

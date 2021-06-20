@@ -24,7 +24,7 @@ class DashboardView extends GetView<HomeController> {
                 child: Container(
                     height: Height.ratio(0.4) + 125,
                     child: AnimatedSlider.fade(
-                      child: _buildView(controller.recentsView.value),
+                      child: _buildView(controller.view.value),
                     )))),
             SliverPadding(padding: EdgeInsets.all(8)),
           ])),
@@ -32,12 +32,12 @@ class DashboardView extends GetView<HomeController> {
   }
 
   // # Builds Subview from Controller Status
-  Widget _buildView(RecentsViewStatus status) {
-    if (status == RecentsViewStatus.Default) {
+  Widget _buildView(HomeView status) {
+    if (status == HomeView.Dashboard) {
       return Container(
         height: Height.ratio(0.46),
         width: Width.full,
-        key: ValueKey(RecentsViewStatus.Default),
+        key: ValueKey(HomeView.Dashboard),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(padding: EdgeInsets.only(top: 8)),
           "My Stuff".section(align: TextAlign.start, color: Get.theme.focusColor),
@@ -124,7 +124,7 @@ class DashboardView extends GetView<HomeController> {
         ]),
       );
     } else {
-      return SearchResultsView(key: ValueKey(RecentsViewStatus.Search));
+      return SearchResultsView(key: ValueKey(HomeView.Search));
     }
   }
 

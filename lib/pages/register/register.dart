@@ -40,8 +40,13 @@ class RegisterPage extends GetView<RegisterController> {
         final item = RegisterPageTypeUtils.permissionsPageTypes[index];
         return PermPanel(
           buttonText: item.permissionsButtonText(),
-          onPressed:
-              item == RegisterPageType.Location ? Get.find<RegisterController>().requestLocation : Get.find<RegisterController>().requestGallery,
+          onPressed: () async {
+            if (item == RegisterPageType.Location) {
+              await Permissions.Location.request();
+            } else if (item == RegisterPageType.Gallery) {
+              await Permissions.Gallery.request();
+            }
+          },
           imagePath: item.permissionsImagePath(),
           buttonTextColor: item.permissionsButtonColor(),
         );

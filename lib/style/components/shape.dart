@@ -103,7 +103,7 @@ class CircleContainer extends StatelessWidget {
       child: child,
       decoration: BoxDecoration(
         border: Border.all(color: SonrTheme.foregroundColor, width: 1),
-        color: ContactService.isDarkMode ? SonrColor.Black : SonrColor.White,
+        color: Preferences.isDarkMode ? SonrColor.Black : SonrColor.White,
         shape: BoxShape.circle,
         boxShadow: SonrTheme.circleBoxShadow,
       ),

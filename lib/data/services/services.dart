@@ -10,7 +10,6 @@ export 'database/database.dart';
 export 'database/service.dart';
 
 // User Services
-export 'user/desktop.dart';
 export 'user/device.dart';
-export 'user/mobile.dart';
 export 'user/contact.dart';
+export 'user/preference.dart';

@@ -19,10 +19,7 @@ class ContactService extends GetxService {
   /// ** User Reactive Properties **
   final _contact = Contact().obs;
 
-  // Preferences
-  final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
-  final _hasFlatMode = true.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
-  final _hasPointToShare = true.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
+
 
   /// **  Getter Methods for Contact Properties **
   static RxBool get hasUser => to._hasUser;
@@ -30,9 +27,7 @@ class ContactService extends GetxService {
   static Rx<Contact> get contact => to._contact;
 
   // Getters for Preferences
-  static bool get isDarkMode => to._isDarkMode.val;
-  static bool get flatModeEnabled => to._hasFlatMode.val;
-  static bool get pointShareEnabled => to._hasPointToShare.val;
+
   static String get sName => to._hasUser.value ? to._contact.value.sName : "";
 
   /// ** References **
@@ -42,7 +37,6 @@ class ContactService extends GetxService {
   Future<ContactService> init() async {
     // @ Init Shared Preferences
     await GetStorage.init('User');
-    await GetStorage.init('Preferences');
 
     // Check User Status
     _hasUser(_userBox.hasData("contact"));
@@ -78,8 +72,6 @@ class ContactService extends GetxService {
     // Handle Contact Updates
     _contact.listen(_handleContact);
 
-    // Set Theme
-    SonrTheme.setDarkMode(isDark: _isDarkMode.val);
     return this;
   }
 
@@ -132,14 +124,6 @@ class ContactService extends GetxService {
     }
   }
 
-  /// @ Trigger iOS Local Network with Alert
-  static toggleDarkMode() => SonrTheme.setDarkMode(isDark: to._isDarkMode.val = !to._isDarkMode.val);
-
-  /// @ Trigger iOS Local Network with Alert
-  static toggleFlatMode() => to._hasFlatMode.val = !to._hasFlatMode.val;
-
-  /// @ Trigger iOS Local Network with Alert
-  static togglePointToShare() => to._hasPointToShare.val = !to._hasPointToShare.val;
 
   // # Helper Method to Handle Contact Updates
   void _handleContact(Contact data) async {

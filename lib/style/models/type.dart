@@ -32,7 +32,7 @@ extension LottieFileUtils on LottieFile {
   String get path {
     switch (this) {
       case LottieFile.Loader:
-        if (ContactService.isDarkMode) {
+        if (Preferences.isDarkMode) {
           return 'assets/animations/loader-white.json';
         } else {
           return 'assets/animations/loader-black.json';

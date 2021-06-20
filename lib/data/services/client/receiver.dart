@@ -1,5 +1,4 @@
 import 'package:sonr_app/modules/authorize/authorize.dart';
-import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 
@@ -27,12 +26,12 @@ class ReceiverService extends GetxService {
     to._session.incoming(data);
 
     // Handle Feedback
-    DeviceService.playSound(type: UISoundType.Swipe);
-    DeviceService.feedback();
+    DeviceService.playSound(type: Sounds.Swipe);
+    HapticFeedback.heavyImpact();
 
     // Check for Flat
     if (data.flatMode && data.payload == Payload.CONTACT) {
-      FlatMode.invite(data.contact);
+      AppPage.Flat.invite(data.contact);
     } else {
       Authorize.invite(data);
     }
@@ -53,7 +52,9 @@ class ReceiverService extends GetxService {
 
           // Check if Send Back
           if (sendBackContact) {
-            NodeService.respond(to._session.buildReply(decision: true));
+            if (NodeService.isReady) {
+              NodeService.to.node.respond(to._session.buildReply(decision: true));
+            }
           }
 
           // Present Home Controller
@@ -68,13 +69,17 @@ class ReceiverService extends GetxService {
         // Check Decision
         if (decision) {
           // Check for Remote
-          NodeService.respond(to._session.buildReply(decision: true));
+          if (NodeService.isReady) {
+            NodeService.to.node.respond(to._session.buildReply(decision: true));
+          }
           AppRoute.closeSheet();
           AppPage.Activity.to();
         }
         // Send Declined
         else {
-          NodeService.respond(to._session.buildReply(decision: false));
+          if (NodeService.isReady) {
+            NodeService.to.node.respond(to._session.buildReply(decision: false));
+          }
         }
       }
     }
@@ -96,18 +101,13 @@ class ReceiverService extends GetxService {
 
     // Save Card to Gallery
     if (data.payload.isTransfer) {
-      // Save File to Disk
-      SonrFile file = data.file;
-      var result = await DeviceService.saveTransfer(file);
-      file = result.copyAssetIds(file);
-      await CardService.addFileCard(data, file, ActivityType.Received);
-    } else {
-      await CardService.addCard(data, ActivityType.Received);
+      await data.save();
     }
+    await data.addCard();
 
     // Present Feedback
     await HapticFeedback.heavyImpact();
-    DeviceService.playSound(type: UISoundType.Received);
+    DeviceService.playSound(type: Sounds.Received);
 
     // Logging
     Logger.info("Node(Callback) Received: " + data.toString());

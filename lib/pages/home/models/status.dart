@@ -1,12 +1,16 @@
 import 'package:sonr_app/style.dart';
 
-enum HomeView { Dashboard, Contact, Explorer }
+enum HomeView { Dashboard, Contact, Explorer, Search }
 
 /// @ Home View Enum Extension
 extension HomeViewUtils on HomeView {
-  bool get isMain => this == HomeView.Dashboard;
+  /// ### Default View
+  bool get isDefault => this == HomeView.Dashboard;
 
-  // # Returns IconData for Type
+  /// ### Search View
+  bool get isSearch => this == HomeView.Search;
+
+  /// ### Returns IconData for Type
   IconData iconData(bool isSelected) {
     switch (this) {
       case HomeView.Dashboard:
@@ -18,7 +22,7 @@ extension HomeViewUtils on HomeView {
     }
   }
 
-  // # Returns Icon Size
+  /// ### Returns Icon Size
   double get iconSize {
     switch (this) {
       case HomeView.Dashboard:

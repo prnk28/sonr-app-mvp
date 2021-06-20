@@ -14,6 +14,15 @@ enum FlatModeState {
   Done,
 }
 
+extension FlatModeStateUtils on FlatModeState {
+  bool get isStandby => this == FlatModeState.Standby;
+  bool get isDragging => this == FlatModeState.Dragging;
+  bool get isPending => this == FlatModeState.Pending;
+  bool get isReceiving => this == FlatModeState.Receiving;
+  bool get isIncoming => this == FlatModeState.Incoming;
+  bool get isDone => this == FlatModeState.Done;
+}
+
 // Flat Mode Transition
 enum FlatModeTransition {
   Standby,

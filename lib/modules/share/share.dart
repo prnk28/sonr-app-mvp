@@ -75,15 +75,14 @@ class ShareController extends GetxController {
   /// Open Camera and Take Picture for Share
   Future<void> chooseCamera() async {
     // Check for Permissions
-    if (MobileService.hasCamera.value) {
+    if (await Permissions.Camera.isGranted) {
       // Check Done
       var done = await SenderService.choose(ChooseOption.Camera);
       _handleConfirmation(done);
     }
     // Request Permissions
     else {
-      var result = await Get.find<MobileService>().requestCamera();
-      if (result) {
+      if (await Permissions.Camera.request()) {
         // Check Done
         var done = await SenderService.choose(ChooseOption.Camera);
         _handleConfirmation(done);
@@ -102,12 +101,12 @@ class ShareController extends GetxController {
   /// Open File Manager and Select File for Share
   Future<void> chooseFile() async {
     // Check Permissions
-    if (MobileService.hasGallery.value) {
+    if (await Permissions.Gallery.isGranted) {
       var done = await SenderService.choose(ChooseOption.File);
       _handleConfirmation(done);
     } else {
       // Request Permissions
-      var status = await Get.find<MobileService>().requestGallery();
+      var status = await Permissions.Gallery.request();
 
       // Check Status
       if (status) {

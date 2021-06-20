@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/pages/transfer/models/status.dart';
-import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -22,7 +21,6 @@ class LocalService extends GetxService {
 
   // References
   final counter = 0.0.obs;
-  final flatOverlayIndex = (-1).obs;
 
   // Reactive Accessors
   static RxBool get isFlatMode => to._isFlatMode;
@@ -37,7 +35,7 @@ class LocalService extends GetxService {
   // # Initialize Service Method
   Future<LocalService> init() async {
     if (DeviceService.isMobile) {
-      _positionStream = MobileService.position.listen(_handlePosition);
+      _positionStream = DeviceService.position.listen(_handlePosition);
     }
     return this;
   }
@@ -136,7 +134,7 @@ class LocalService extends GetxService {
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {
     // Initialize
-    bool flatModeEnabled = !_flatModeCancelled.value && ContactService.flatModeEnabled && Get.currentRoute != "/transfer";
+    bool flatModeEnabled = !_flatModeCancelled.value && Preferences.flatModeEnabled && Get.currentRoute != "/transfer";
 
     // Update Orientation
     if (flatModeEnabled && _localFlatPeers.length > 0) {
@@ -166,11 +164,11 @@ class LocalService extends GetxService {
         if (_lastIsFacingFlat.value) {
           // Update Refs
           _isFlatMode(true);
-          NodeService.setFlatMode(true);
+          Preferences.setFlatMode(true);
 
           // Present View
           if (_localFlatPeers.length == 0 && !_flatModeCancelled.value) {
-            FlatMode.outgoing();
+            AppPage.Flat.outgoing();
           } else {
             _resetTimer();
           }
@@ -184,7 +182,7 @@ class LocalService extends GetxService {
   // # Stop Timer for Facing Check
   void _resetTimer() {
     _isFlatMode(false);
-    NodeService.setFlatMode(false);
+    Preferences.setFlatMode(false);
     if (_timer != null) {
       _timer!.cancel();
       _timer = null;

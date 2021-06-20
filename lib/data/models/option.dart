@@ -99,3 +99,30 @@ extension ChooseOptionUtils on ChooseOption {
     }
   }
 }
+
+/// @ Asset Sound Types
+enum Sounds {
+  Confirmed,
+  Connected,
+  Critical,
+  Deleted,
+  Fatal,
+  Joined,
+  Linked,
+  Received,
+  Swipe,
+  Transmitted,
+  Warning,
+}
+
+// @ Asset Sound Type Utility
+extension SoundsUtil on Sounds {
+  String get file {
+    return '${this.value.toLowerCase()}.wav';
+  }
+
+  // @ Returns Value Name of Enum Type //
+  String get value {
+    return this.toString().substring(this.toString().indexOf('.') + 1);
+  }
+}

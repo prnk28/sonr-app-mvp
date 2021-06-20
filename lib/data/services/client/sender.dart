@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:file_picker/file_picker.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/authorize/authorize.dart';
-import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 
@@ -11,19 +11,77 @@ class SenderService extends GetxService {
   static SenderService get to => Get.find<SenderService>();
 
   // @ Properties
-  final Session _session = Session();
   final _hasSession = false.obs;
+  final _incomingMedia = <SharedMediaFile>[].obs;
+  final _incomingText = "".obs;
+  final Session _session = Session();
 
   /// Returns Current Session
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasSession;
 
+  // References
+  late StreamSubscription _externalMediaStream;
+  late StreamSubscription _externalTextStream;
+
   // ^ Constructer ^ //
   Future<SenderService> init() async {
+    // @ Setup Mobile
+    if (DeviceService.isMobile) {
+      ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile>? data) {
+        if (data != null) {
+          _incomingMedia(data);
+          _incomingMedia.refresh();
+        }
+      });
+      ReceiveSharingIntent.getInitialText().then((String? text) {
+        if (text != null) {
+          _incomingText(text);
+          _incomingText.refresh();
+        }
+      });
+
+      // Listen to Incoming Text/File
+      _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
+      _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
+    }
     return this;
   }
 
+  @override
+  void onClose() {
+    _externalMediaStream.cancel();
+    _externalTextStream.cancel();
+    super.onClose();
+  }
+
   // * ------------------- Methods ----------------------------
+  /// @ Checks for Initial Media/Text to Share
+  static checkInitialShare() async {
+    if (DeviceService.isMobile && isRegistered) {
+      // @ Check for Media
+      if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen!) {
+        // Open Sheet
+        await Get.bottomSheet(ShareSheet.media(to._incomingMedia), isDismissible: false);
+
+        // Reset Incoming
+        to._incomingMedia.clear();
+        to._incomingMedia.refresh();
+      }
+
+      // @ Check for Text
+      if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
+        var data = await NodeService.getURL(to._incomingText.value);
+        // Open Sheet
+        await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
+
+        // Reset Incoming
+        to._incomingText("");
+        to._incomingText.refresh();
+      }
+    }
+  }
+
   /// Method to Choose Option to Share
   static Future<InviteRequest?> choose(ChooseOption option, {SonrFile? file}) async {
     if (isRegistered) {
@@ -83,7 +141,7 @@ class SenderService extends GetxService {
       await HapticFeedback.heavyImpact();
 
       // Check if Flat Mode
-      data.flatMode ? FlatMode.response(data.transfer.contact) : Authorize.reply(data);
+      data.flatMode ? AppPage.Flat.response(data.transfer.contact) : Authorize.reply(data);
     }
 
     // For Cancel
@@ -100,7 +158,7 @@ class SenderService extends GetxService {
     _session.onComplete(data);
 
     // Feedback
-    DeviceService.playSound(type: UISoundType.Transmitted);
+    DeviceService.playSound(type: Sounds.Transmitted);
     await HapticFeedback.heavyImpact();
 
     // Logging Activity
@@ -233,5 +291,23 @@ class SenderService extends GetxService {
       invite.setUrl(url!);
     }
     return invite;
+  }
+
+  // # Saves Received Media to Gallery
+  _handleSharedFiles(List<SharedMediaFile> data) async {
+    if (!Get.isBottomSheetOpen!) {
+      await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
+    }
+  }
+
+  // # Saves Received Media to Gallery
+  _handleSharedText(String text) async {
+    if (!Get.isBottomSheetOpen! && GetUtils.isURL(text)) {
+      // Get Data
+      var data = await NodeService.getURL(text);
+
+      // Open Sheet
+      await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
+    }
   }
 }

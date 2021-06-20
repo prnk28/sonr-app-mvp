@@ -229,23 +229,23 @@ class SonrTheme {
       );
 
   /// Returns Current Text Color
-  static Color get backgroundColor => ContactService.isDarkMode ? Colors.black : Colors.white;
+  static Color get backgroundColor => Preferences.isDarkMode ? Colors.black : Colors.white;
 
-  static Color get dividerColor => ContactService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
+  static Color get dividerColor => Preferences.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
-  static Color get foregroundColor => ContactService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
-
-  /// Returns Current Text Color
-  static Color get itemColor => ContactService.isDarkMode ? SonrColor.White : SonrColor.Black;
+  static Color get foregroundColor => Preferences.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
-  static Color get itemColorInversed => ContactService.isDarkMode ? SonrColor.Black : SonrColor.White;
+  static Color get itemColor => Preferences.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Returns Current Text Color
+  static Color get itemColorInversed => Preferences.isDarkMode ? SonrColor.Black : SonrColor.White;
 
   /// Returns Current Shadow Color
-  static Color get shadowColor => ContactService.isDarkMode ? Colors.black.withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
+  static Color get shadowColor => Preferences.isDarkMode ? Colors.black.withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
 
   /// Return Current Box Shadow
-  static List<BoxShadow> get boxShadow => ContactService.isDarkMode
+  static List<BoxShadow> get boxShadow => Preferences.isDarkMode
       ? [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
@@ -270,7 +270,7 @@ class SonrTheme {
       ];
 
   /// Return Current Box Shadow
-  static List<PolygonBoxShadow> get polyBoxShadow => ContactService.isDarkMode
+  static List<PolygonBoxShadow> get polyBoxShadow => Preferences.isDarkMode
       ? [
           PolygonBoxShadow(
             color: Colors.black.withOpacity(0.4),
