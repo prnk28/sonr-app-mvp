@@ -1,4 +1,3 @@
-import 'package:sonr_app/modules/authorize/authorize.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 
@@ -33,7 +32,7 @@ class ReceiverService extends GetxService {
     if (data.flatMode && data.payload == Payload.CONTACT) {
       AppPage.Flat.invite(data.contact);
     } else {
-      Authorize.invite(data);
+      data.show();
     }
   }
 

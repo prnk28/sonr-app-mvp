@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:sonr_app/modules/activity/views/completed_view.dart';
 import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/style.dart';
 import '../activity.dart';
@@ -30,7 +31,9 @@ class CurrentActivityItem extends GetView<ActivityController> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: ActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AppRoute.popup(CompletedPopup());
+                    },
                     iconData: SonrIcons.Category,
                   ),
                 ),

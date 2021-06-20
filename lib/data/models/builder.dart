@@ -1,4 +1,5 @@
 import 'package:photo_manager/photo_manager.dart';
+import 'package:sonr_app/modules/authorize/authorize.dart';
 import 'package:sonr_app/style.dart';
 
 class RequestBuilder {
@@ -113,5 +114,37 @@ extension SonrFileItemUtils on SonrFile_Item {
       }
     }
     return false;
+  }
+}
+
+extension InviteRequestDisplayUtils on InviteRequest {
+  /// Display Invite Request as a Bottom Sheet
+  void show() {
+    // Place Controller
+    if (this.payload == Payload.CONTACT) {
+      AppRoute.popup(ContactAuthView(false, invite: this), dismissible: false);
+    } else {
+      AppRoute.sheet(InviteRequestSheet(invite: this), key: ValueKey(this), dismissible: true, onDismissed: (direction) {
+        if (NodeService.isReady) {
+          NodeService.to.node.respond(this.newDeclineResponse());
+        }
+        AppRoute.closeSheet();
+      });
+    }
+  }
+}
+
+extension InviteResponseDisplayUtils on InviteResponse {
+  /// Display Invite Request as a Bottom Sheet
+  void show() {
+    if (this.type == InviteResponse_Type.Contact) {
+      // Open Sheet
+      AppRoute.popup(
+        Container(
+          child: ContactAuthView(true, reply: this),
+        ),
+        dismissible: false,
+      );
+    }
   }
 }

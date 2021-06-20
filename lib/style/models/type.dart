@@ -1,3 +1,4 @@
+import 'package:lottie/lottie.dart';
 import 'package:sonr_app/style.dart';
 
 /// Rive Board Options
@@ -40,6 +41,48 @@ extension LottieFileUtils on LottieFile {
       case LottieFile.Celebrate:
         return 'assets/animations/celebrate.json';
     }
+  }
+
+  /// Create LottieBuilder for this Asset
+  LottieBuilder lottie(
+      {Animation<double>? controller,
+      bool? animate,
+      FrameRate? frameRate,
+      bool? repeat,
+      bool? reverse,
+      LottieDelegates? delegates,
+      LottieOptions? options,
+      void Function(LottieComposition)? onLoaded,
+      ImageProvider<Object>? Function(LottieImageAsset)? imageProviderFactory,
+      Key? key,
+      AssetBundle? bundle,
+      Widget Function(BuildContext, Widget, LottieComposition?)? frameBuilder,
+      double? width,
+      double? height,
+      BoxFit? fit,
+      Alignment? alignment,
+      String? package,
+      bool? addRepaintBoundary}) {
+    return Lottie.asset(
+      this.path,
+      controller: controller,
+      animate: animate,
+      frameRate: frameRate,
+      repeat: repeat,
+      reverse: reverse,
+      delegates: delegates,
+      options: options,
+      onLoaded: onLoaded,
+      imageProviderFactory: imageProviderFactory,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      width: width,
+      height: height,
+      fit: fit,
+      package: package,
+      addRepaintBoundary: addRepaintBoundary,
+    );
   }
 }
 

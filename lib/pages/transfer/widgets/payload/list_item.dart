@@ -35,7 +35,7 @@ class SonrFileListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      padding: EdgeInsets.only(top: 8),
+      padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(8),
       child: Row(children: [
         item.hasThumbnail()
