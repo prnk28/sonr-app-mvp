@@ -112,7 +112,7 @@ class App extends StatelessWidget {
         )));
 
         // Connect to Network
-        AppPage.Home.off(init: NodeService.to.connect, args: HomePageArgs(isFirstLoad: true));
+        AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
       }
       // Register Mobile
       else {
@@ -125,19 +125,19 @@ class App extends StatelessWidget {
       if (!isDesktop) {
         // All Valid
         if (await Permissions.Location.isGranted) {
-          AppPage.Home.off(args: HomePageArgs.FirstLoad);
+          AppPage.Home.off(args: HomeArguments.FirstLoad);
         }
 
         // No Location
         else {
           Permissions.Location.request().then((value) {
             if (value) {
-              AppPage.Home.off(args: HomePageArgs.FirstLoad);
+              AppPage.Home.off(args: HomeArguments.FirstLoad);
             }
           });
         }
       } else {
-        AppPage.Home.off(args: HomePageArgs.FirstLoad);
+        AppPage.Home.off(args: HomeArguments.FirstLoad);
       }
     }
   }

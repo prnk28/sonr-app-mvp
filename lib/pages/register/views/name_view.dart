@@ -45,6 +45,7 @@ class NamePage extends GetView<RegisterController> {
                       textInputAction: TextInputAction.go,
                       autocorrect: false,
                       showCursor: false,
+                    
                       textCapitalization: TextCapitalization.none,
                       onEditingComplete: controller.setName,
                       onChanged: (val) {
@@ -78,7 +79,24 @@ class _NameStatus extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.nameStatus.value == NewSNameStatus.Default || controller.sName.value.length == 0
-        ? Container()
+        ? Container(
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              "- Must be more than 3 characters".light(
+                fontSize: 14,
+                color: SonrTheme.greyColor,
+              ),
+              "- No Numbers, Spaces, and Special Characters.".light(
+                fontSize: 14,
+                color: SonrTheme.greyColor,
+              ),
+              "- Ideally a Combo of First & Last Name.".light(
+                fontSize: 14,
+                color: SonrTheme.greyColor,
+              ),
+            ],
+          ))
         : Container(
             padding: EdgeInsets.all(12),
             constraints: BoxConstraints(minWidth: 140, maxWidth: 285),

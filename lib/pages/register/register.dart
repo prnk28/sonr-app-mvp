@@ -8,6 +8,7 @@ export 'models/status.dart';
 export 'models/type.dart';
 
 // Imports
+import 'package:sonr_app/pages/home/models/arguments.dart';
 import 'package:sonr_app/pages/register/widgets/notifier.dart';
 import 'package:sonr_app/style.dart';
 import 'models/info.dart';
@@ -41,10 +42,20 @@ class RegisterPage extends GetView<RegisterController> {
         return PermPanel(
           buttonText: item.permissionsButtonText(),
           onPressed: () async {
+            // Location Perms
             if (item == RegisterPageType.Location) {
-              await Permissions.Location.request();
-            } else if (item == RegisterPageType.Gallery) {
-              await Permissions.Gallery.request();
+              final result = await Permissions.Location.request();
+              if (result) {
+                controller.nextPage(RegisterPageType.Gallery);
+              }
+            }
+
+            // Gallery Perms
+            else if (item == RegisterPageType.Gallery) {
+              final result = await Permissions.Gallery.request();
+              if (result) {
+                AppPage.Home.off(args: HomeArguments.FirstLoad);
+              }
             }
           },
           imagePath: item.permissionsImagePath(),

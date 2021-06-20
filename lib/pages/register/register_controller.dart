@@ -196,7 +196,7 @@ class RegisterController extends GetxController {
 
       // Connect to Network
       NodeService.to.connect();
-      AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
+      AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
     }
   }
 

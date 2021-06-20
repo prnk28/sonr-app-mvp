@@ -65,7 +65,6 @@ class PermPanel extends StatelessWidget {
       ),
       body: Container(
         width: Get.width,
-        height: Get.height,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(imagePath),
