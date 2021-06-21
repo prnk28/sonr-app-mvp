@@ -5,7 +5,7 @@ import 'package:moor/moor.dart';
 import 'dart:io';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'converter.dart';
-part 'cards_db.g.dart';
+part 'database.g.dart';
 
 enum ActivityType { Deleted, Shared, Received }
 
@@ -19,7 +19,6 @@ extension ActivityTypeUtils on ActivityType? {
 class TransferActivities extends Table {
   IntColumn? get id => integer().autoIncrement()();
   TextColumn? get owner => text().map(const ProfileConverter())();
-  IntColumn? get mime => integer().map(const MimeConverter())();
   IntColumn? get payload => integer().map(const PayloadConverter())();
   IntColumn? get activity => integer().map(const ActivityConverter())();
 }
@@ -46,7 +45,6 @@ class CardsDatabase extends _$CardsDatabase {
     return into(transferActivities).insert(TransferActivitiesCompanion(
       payload: Value(payload),
       owner: Value(owner),
-      mime: Value(mime),
       activity: Value(type),
     ));
   }

@@ -66,6 +66,63 @@ class CardService extends GetxService {
       _contacts.bindStream(_database.watchContacts());
       _files.bindStream(_database.watchFiles());
       _links.bindStream(_database.watchUrls());
+
+      // Set Individual File Count
+      if (hasFiles) {
+        // Check Mime Count
+        int docsCount = 0;
+        int pdfsCount = 0;
+        int presentationCount = 0;
+        int spreadsheetCount = 0;
+        int otherCount = 0;
+        int photosCount = 0;
+        int videosCount = 0;
+
+        // Check File Types
+        _files.forEach((i) {
+          if (i.file != null) {
+            i.file!.items.forEach((i) {
+              // Text/Docs
+              if (i.mime.isText || i.mime.isDoc) {
+                docsCount += 1;
+              }
+              // PDFs
+              else if (i.mime.isPDF) {
+                pdfsCount += 1;
+              }
+              // Presentations
+              else if (i.mime.isPresentation) {
+                presentationCount += 1;
+              }
+              // Spreadsheets
+              else if (i.mime.isSpreadsheet) {
+                spreadsheetCount += 1;
+              }
+              // Images
+              else if (i.mime.isImage) {
+                photosCount += 1;
+              }
+              // Videos
+              else if (i.mime.isVideo) {
+                videosCount += 1;
+              }
+              // Other
+              else if (i.mime.isOther) {
+                otherCount += 1;
+              }
+            });
+          }
+        });
+
+        // Set Counts
+        _documentCount(docsCount);
+        _pdfCount(pdfsCount);
+        _presentationCount(presentationCount);
+        _spreadsheetCount(spreadsheetCount);
+        _otherCount(otherCount);
+        _photosCount(photosCount);
+        _videosCount(videosCount);
+      }
     }
     return this;
   }
@@ -197,13 +254,59 @@ class CardService extends GetxService {
     if (DeviceService.isMobile && isRegistered) {
       // Set Individual File Count
       if (hasFiles) {
-        to._documentCount(to._files.count((i) => i.mime == MIME_Type.TEXT));
-        to._pdfCount(to._files.count((i) => i.mime == MIME_Type.PDF));
-        to._presentationCount(to._files.count((i) => i.mime == MIME_Type.PRESENTATION));
-        to._spreadsheetCount(to._files.count((i) => i.mime == MIME_Type.SPREADSHEET));
-        to._otherCount(to._files.count((i) => i.mime == MIME_Type.OTHER));
-        to._photosCount(to._files.count((i) => i.mime == MIME_Type.IMAGE));
-        to._videosCount(to._files.count((i) => i.mime == MIME_Type.VIDEO));
+        // Check Mime Count
+        int docsCount = 0;
+        int pdfsCount = 0;
+        int presentationCount = 0;
+        int spreadsheetCount = 0;
+        int otherCount = 0;
+        int photosCount = 0;
+        int videosCount = 0;
+
+        // Check File Types
+        to._files.forEach((i) {
+          if (i.file != null) {
+            i.file!.items.forEach((i) {
+              // Text/Docs
+              if (i.mime.isText || i.mime.isDoc) {
+                docsCount += 1;
+              }
+              // PDFs
+              else if (i.mime.isPDF) {
+                pdfsCount += 1;
+              }
+              // Presentations
+              else if (i.mime.isPresentation) {
+                presentationCount += 1;
+              }
+              // Spreadsheets
+              else if (i.mime.isSpreadsheet) {
+                spreadsheetCount += 1;
+              }
+              // Images
+              else if (i.mime.isImage) {
+                photosCount += 1;
+              }
+              // Videos
+              else if (i.mime.isVideo) {
+                videosCount += 1;
+              }
+              // Other
+              else if (i.mime.isOther) {
+                otherCount += 1;
+              }
+            });
+          }
+        });
+
+        // Set Counts
+        to._documentCount(docsCount);
+        to._pdfCount(pdfsCount);
+        to._presentationCount(presentationCount);
+        to._spreadsheetCount(spreadsheetCount);
+        to._otherCount(otherCount);
+        to._photosCount(photosCount);
+        to._videosCount(videosCount);
       }
     }
   }

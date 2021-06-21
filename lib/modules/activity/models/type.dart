@@ -40,7 +40,7 @@ extension TransferActivityUtils on TransferActivity {
     if (this.payload == Payload.FILES) {
       return " some Files"; //+ " from ${card.owner.firstName}";
     } else if (this.payload == Payload.FILE || this.payload == Payload.MEDIA) {
-      return " a " + this.mime.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";
+      return " a " + this.payload.toString().capitalizeFirst!; //+ " from ${card.owner.firstName}";
     } else {
       if (this.payload == Payload.CONTACT) {
         return " a Contact"; // + " from ${card.owner.firstName}";
