@@ -19,15 +19,12 @@ class ContactService extends GetxService {
   /// ** User Reactive Properties **
   final _contact = Contact().obs;
 
-
-
-  /// **  Getter Methods for Contact Properties **
+  //
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
   static Rx<Contact> get contact => to._contact;
 
   // Getters for Preferences
-
   static String get sName => to._hasUser.value ? to._contact.value.sName : "";
 
   /// ** References **

@@ -298,7 +298,11 @@ extension AppRoute on AppPage {
 
       // Push Dialog
       Get.dialog(
-        BlurredBackground(child: child),
+        BlurredBackground(
+            child: child,
+            onTapped: () {
+              Future.delayed(300.milliseconds, () => Get.back());
+            }),
         barrierDismissible: dismissible,
         barrierColor: Colors.transparent,
         useSafeArea: !ignoreSafeArea,

@@ -70,7 +70,7 @@ class _PostFileOwnerRow extends StatelessWidget {
                       ? CircleAvatar(
                           backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                         )
-                      : SonrIcons.User.gradient(size: 32),
+                      : SonrIcons.User.gradient(size: 24),
                 )),
             Padding(child: sNameText(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),

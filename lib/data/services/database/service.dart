@@ -66,65 +66,70 @@ class CardService extends GetxService {
       _contacts.bindStream(_database.watchContacts());
       _files.bindStream(_database.watchFiles());
       _links.bindStream(_database.watchUrls());
-
-      // Set Individual File Count
-      if (hasFiles) {
-        // Check Mime Count
-        int docsCount = 0;
-        int pdfsCount = 0;
-        int presentationCount = 0;
-        int spreadsheetCount = 0;
-        int otherCount = 0;
-        int photosCount = 0;
-        int videosCount = 0;
-
-        // Check File Types
-        _files.forEach((i) {
-          if (i.file != null) {
-            i.file!.items.forEach((i) {
-              // Text/Docs
-              if (i.mime.isText || i.mime.isDoc) {
-                docsCount += 1;
-              }
-              // PDFs
-              else if (i.mime.isPDF) {
-                pdfsCount += 1;
-              }
-              // Presentations
-              else if (i.mime.isPresentation) {
-                presentationCount += 1;
-              }
-              // Spreadsheets
-              else if (i.mime.isSpreadsheet) {
-                spreadsheetCount += 1;
-              }
-              // Images
-              else if (i.mime.isImage) {
-                photosCount += 1;
-              }
-              // Videos
-              else if (i.mime.isVideo) {
-                videosCount += 1;
-              }
-              // Other
-              else if (i.mime.isOther) {
-                otherCount += 1;
-              }
-            });
-          }
-        });
-
-        // Set Counts
-        _documentCount(docsCount);
-        _pdfCount(pdfsCount);
-        _presentationCount(presentationCount);
-        _spreadsheetCount(spreadsheetCount);
-        _otherCount(otherCount);
-        _photosCount(photosCount);
-        _videosCount(videosCount);
-      }
     }
     return this;
+  }
+
+  // * Initializer * //
+  @override
+  onInit() {
+    // Set Individual File Count
+    if (_files.length > 0) {
+      // Check Mime Count
+      int docsCount = 0;
+      int pdfsCount = 0;
+      int presentationCount = 0;
+      int spreadsheetCount = 0;
+      int otherCount = 0;
+      int photosCount = 0;
+      int videosCount = 0;
+
+      // Check File Types
+      _files.forEach((i) {
+        if (i.file != null) {
+          i.file!.items.forEach((i) {
+            // Text/Docs
+            if (i.mime.isText || i.mime.isDoc) {
+              docsCount += 1;
+            }
+            // PDFs
+            else if (i.mime.isPDF) {
+              pdfsCount += 1;
+            }
+            // Presentations
+            else if (i.mime.isPresentation) {
+              presentationCount += 1;
+            }
+            // Spreadsheets
+            else if (i.mime.isSpreadsheet) {
+              spreadsheetCount += 1;
+            }
+            // Images
+            else if (i.mime.isImage) {
+              photosCount += 1;
+            }
+            // Videos
+            else if (i.mime.isVideo) {
+              videosCount += 1;
+            }
+            // Other
+            else if (i.mime.isOther) {
+              otherCount += 1;
+            }
+          });
+        }
+      });
+
+      // Set Counts
+      _documentCount(docsCount);
+      _pdfCount(pdfsCount);
+      _presentationCount(presentationCount);
+      _spreadsheetCount(spreadsheetCount);
+      _otherCount(otherCount);
+      _photosCount(photosCount);
+      _videosCount(videosCount);
+    }
+    super.onInit();
   }
 
   /// @ Add New Card to Database

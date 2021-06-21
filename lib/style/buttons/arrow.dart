@@ -110,7 +110,7 @@ class InfoButton extends StatelessWidget {
   final Offset? offset;
   final GlobalKey key;
 
-  const InfoButton({required this.key, required this.options, this.offset}) : super(key: key);
+  const InfoButton({required this.key, required this.options, this.offset});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +138,7 @@ class InfoButton extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(12)),
-                  child: SonrIcons.Info.icon(size: 28, color: SonrTheme.greyColor),
+                  child: SonrIcons.Menu.icon(size: 28, color: SonrTheme.greyColor),
                 ),
               ),
             ),

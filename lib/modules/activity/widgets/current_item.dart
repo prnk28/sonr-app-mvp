@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:sonr_app/style.dart';
 import '../activity.dart';
 
@@ -98,16 +97,10 @@ class _CurrentActivityContent extends GetView<ActivityController> {
           ["${payload.toString().capitalizeFirst} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
 
           // Date Time Text
-          _buildDateTime().paragraph(fontSize: 16),
+          DateText(date: DateTime.now(), fontSize: 16)
         ],
       ),
     );
-  }
-
-  String _buildDateTime() {
-    final now = DateTime.now();
-    final dateFormatter = DateFormat.yMMMd('en_US').add_jm();
-    return dateFormatter.format(now);
   }
 }
 

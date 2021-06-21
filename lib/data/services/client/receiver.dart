@@ -108,8 +108,12 @@ class ReceiverService extends GetxService {
     // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: Sounds.Received);
-    AppRoute.popup(CompletedPopup(transfer: data));
-    
+
+    // Display Released Card
+    Future.delayed(2.seconds, () {
+      AppRoute.popup(CompletedPopup(transfer: data));
+    });
+
     // Logging
     Logger.info("Node(Callback) Received: " + data.toString());
     _session.reset();

@@ -51,8 +51,8 @@ class _PostTransferItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  transfer.payload.toString().capitalizeFirst!.subheading(color: SonrTheme.itemColor, fontSize: 20),
-                  transfer.received.toString().subheading(color: SonrTheme.greyColor, fontSize: 16),
+                  PayloadText(payload: transfer.payload, file: transfer.file),
+                  DateText.fromMilliseconds(transfer.received * 1000),
                 ],
               ),
             ),
@@ -79,13 +79,13 @@ class _PostFileOwnerRow extends StatelessWidget {
                 decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
                   BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
                 ]),
-                padding: EdgeInsets.all(4),
+                padding: EdgeInsets.all(8),
                 child: Container(
                   child: profile.hasPicture()
                       ? CircleAvatar(
                           backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                         )
-                      : SonrIcons.User.gradient(size: 32),
+                      : SonrIcons.User.gradient(size: 24),
                 )),
             Padding(child: sNameText(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),
@@ -97,7 +97,7 @@ class _PostFileOwnerRow extends StatelessWidget {
                 padding: EdgeInsets.only(right: 4)),
             ActionButton(
               onPressed: () {},
-              iconData: SonrIcons.Menu,
+              iconData: SonrIcons.Close,
             ),
           ],
         ));

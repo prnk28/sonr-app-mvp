@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:intl/intl.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:video_player/video_player.dart';
 import 'package:sonr_app/style.dart';
@@ -154,40 +153,44 @@ class MetaVideo extends StatelessWidget {
   }
 }
 
-/// Received DateTime Text Widget
-class ReceivedText extends StatelessWidget {
-  final bool isDateTime;
-  final DateTime received;
+class PayloadText extends StatelessWidget {
+  final Payload payload;
+  final SonrFile? file;
+  final Color? color;
+  final double fontSize;
+  final FontStyle fontStyle;
+  final DisplayTextStyle textStyle;
 
-  /// Create Received Date Time Text with only Date
-  factory ReceivedText.date({required DateTime received}) {
-    return ReceivedText(isDateTime: false, received: received);
-  }
+  const PayloadText({
+    Key? key,
+    required this.payload,
+    this.file,
+    this.color,
+    this.fontSize = 20,
+    this.fontStyle = FontStyle.normal,
+    this.textStyle = DisplayTextStyle.Subheading,
+  }) : super(key: key);
 
-  /// Create Received Date Time Text with Date AND Time
-  factory ReceivedText.dateTime({required DateTime received}) {
-    return ReceivedText(isDateTime: true, received: received);
-  }
-
-  const ReceivedText({Key? key, required this.isDateTime, required this.received}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (isDateTime) {
-      // Formatters
-      final dateFormat = DateFormat.yMd();
-      final timeFormat = DateFormat.jm();
+    return Text(
+      _buildType(),
+      style: textStyle.style(
+        color: color ?? SonrTheme.itemColor,
+        fontSize: fontSize,
+        fontStyle: fontStyle,
+      ),
+    );
+  }
 
-      // Get String
-      String dateText = dateFormat.format(this.received);
-      String timeText = timeFormat.format(this.received);
-      return Row(children: [dateText.paragraph(color: SonrColor.White), timeText.paragraph(color: SonrColor.White)]);
-    } else {
-      // Formatters
-      final dateFormat = DateFormat.yMd();
-
-      // Get String
-      return dateFormat.format(this.received).paragraph(color: SonrColor.White);
+  String _buildType() {
+    if (file != null && payload.isTransfer) {
+      // Return Mime for Single
+      if (file!.count == 1 || file!.isAllSingleType) {
+        return file!.single.mime.value.toString().capitalizeFirst!;
+      }
     }
+    return payload.toString().capitalizeFirst!;
   }
 }
 
