@@ -5,7 +5,7 @@ import 'thumbnail.dart';
 class PayloadSingleItem extends StatelessWidget {
   final GlobalKey key;
 
-  const PayloadSingleItem({required this.key}) : super(key: key);
+  const PayloadSingleItem({required this.key});
   @override
   Widget build(BuildContext context) {
     final invite = TransferController.invite;
@@ -17,12 +17,16 @@ class PayloadSingleItem extends StatelessWidget {
       Container(
         alignment: Alignment.topRight,
         child: InfoButton(
-          options: [
-            InfolistOption("Replace", SonrIcons.Reload, () {}),
-            InfolistOption("Remove", SonrIcons.Trash, () {}),
-            InfolistOption("Cancel", SonrIcons.Cancel, () {}),
-          ],
-          key: key,
+          onPressed: () {
+            AppRoute.positioned(
+              Infolist(options: [
+                InfolistOption("Replace", SonrIcons.Reload, () {}),
+                InfolistOption("Remove", SonrIcons.Trash, () {}),
+                InfolistOption("Cancel", SonrIcons.Cancel, () {}),
+              ]),
+              parentKey: key,
+            );
+          },
         ),
       ),
     ]));

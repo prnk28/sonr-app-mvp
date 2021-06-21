@@ -106,11 +106,10 @@ class ArrowButton extends StatelessWidget {
 /// Text Button That Displays Info Icon Next to It
 /// Used for [InfoList] Modals.
 class InfoButton extends StatelessWidget {
-  final List<InfolistOption> options;
-  final Offset? offset;
-  final GlobalKey key;
+  /// Action on Pressed
+  final Function() onPressed;
 
-  const InfoButton({required this.key, required this.options, this.offset});
+  const InfoButton({required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +124,7 @@ class InfoButton extends StatelessWidget {
                 isPressed(false);
                 HapticFeedback.heavyImpact();
                 Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
-                  AppRoute.positioned(
-                    Infolist(options: options),
-                    offset: offset,
-                    parentKey: key,
-                  );
+                  onPressed();
                 });
               },
               child: AnimatedScale(

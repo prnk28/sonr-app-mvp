@@ -60,17 +60,16 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 8, left: 8),
-        decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-          BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
-        ]),
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(4),
         child: Container(
+          width: size,
+          height: size,
           child: profile.hasPicture()
               ? CircleAvatar(
-                  backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                  backgroundColor: SonrTheme.foregroundColor,
+                  foregroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                 )
-              : SonrIcons.User.gradient(size: size),
+              : SonrIcons.User.gradient(size: size * 0.7),
         ));
   }
 }

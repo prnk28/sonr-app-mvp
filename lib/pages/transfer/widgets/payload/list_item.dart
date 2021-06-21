@@ -31,7 +31,7 @@ class SonrFileListItem extends StatelessWidget {
   final int index;
   final GlobalKey key;
 
-  SonrFileListItem({required this.key, required this.item, required this.index}) : super(key: key);
+  SonrFileListItem({required this.key, required this.item, required this.index});
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
@@ -73,18 +73,16 @@ class SonrFileListItem extends StatelessWidget {
           key: key,
           alignment: Alignment.topRight,
           child: InfoButton(
-            options: [
-              InfolistOption("Replace", SonrIcons.Reload, () {
-                Get.back();
-              }),
-              InfolistOption("Remove", SonrIcons.Trash, () {
-                Get.back();
-              }),
-              InfolistOption("Cancel", SonrIcons.Cancel, () {
-                Get.back();
-              }),
-            ],
-            key: key,
+            onPressed: () {
+              AppRoute.positioned(
+                Infolist(options: [
+                  InfolistOption("Replace", SonrIcons.Reload, () {}),
+                  InfolistOption("Remove", SonrIcons.Trash, () {}),
+                  InfolistOption("Cancel", SonrIcons.Cancel, () {}),
+                ]),
+                parentKey: key,
+              );
+            },
           ),
         ),
       ]),

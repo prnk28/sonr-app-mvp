@@ -36,8 +36,8 @@ class PostFileItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  item.payload.toString().capitalizeFirst!.subheading(color: SonrTheme.itemColor, fontSize: 20),
-                  item.received.toString().subheading(color: SonrTheme.greyColor, fontSize: 16),
+                  PayloadText(payload: item.payload, file: item.file),
+                  DateText(date: item.received),
                 ],
               ),
             ),
@@ -72,7 +72,7 @@ class _PostFileOwnerRow extends StatelessWidget {
                         )
                       : SonrIcons.User.gradient(size: 24),
                 )),
-            Padding(child: sNameText(profile: profile), padding: EdgeInsets.only(left: 4)),
+            Padding(child: ProfileSName(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),
             Padding(
                 child: ActionButton(
@@ -86,25 +86,6 @@ class _PostFileOwnerRow extends StatelessWidget {
             ),
           ],
         ));
-  }
-
-  /// Returns Widget Text of SName
-  Widget sNameText({required Profile profile}) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: profile.sName,
-            style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: Preferences.isDarkMode ? SonrColor.White : SonrColor.Black)),
-        TextSpan(
-            text: ".snr/",
-            style: TextStyle(
-                fontFamily: "RFlex",
-                fontWeight: FontWeight.w100,
-                fontSize: 20,
-                color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-      ]),
-    );
   }
 }
 
@@ -129,6 +110,13 @@ class _PostFileContentView extends StatelessWidget {
       else {
         return MetaIcon(iconSize: Height.ratio(0.125), metadata: file.single);
       }
+    } else if (file.isMultiple) {
+      return MetaAlbumBox(
+        file: file,
+        width: Get.width,
+        height: 100,
+        fit: BoxFit.fitHeight,
+      );
     }
 
     // # Other File

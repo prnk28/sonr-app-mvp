@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:video_player/video_player.dart';
 import 'package:sonr_app/style.dart';
@@ -71,6 +72,87 @@ class MetaIcon extends StatelessWidget {
 }
 
 ///  Builds Container With Image as SizedBox
+class MetaAlbumBox extends StatelessWidget {
+  /// Transfer Metadata Protobuf
+  final SonrFile file;
+  final double width;
+  final double height;
+  final BoxFit fit;
+
+  const MetaAlbumBox({Key? key, required this.file, this.width = 150, this.height = 150, this.fit = BoxFit.contain}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final isVisible = true.obs;
+    final currentIndex = 0.0.obs;
+    Future.delayed(1500.milliseconds, () {
+      isVisible(false);
+    });
+
+    return Obx(
+      () => Container(
+        width: width,
+        height: height,
+        child: Stack(
+          children: [
+            PageView.builder(
+              onPageChanged: (value) {
+                isVisible(true);
+                currentIndex(value.toDouble());
+                Future.delayed(1500.milliseconds, () {
+                  isVisible(false);
+                });
+              },
+              itemBuilder: (context, index) {
+                final item = file.items[index];
+                if (item.mime.isImage) {
+                  return MetaImageBox(metadata: item, width: width, height: height, fit: fit);
+                } else if (item.mime.isVideo) {
+                  return MetaVideo(
+                    metadata: item,
+                    width: width,
+                    height: height,
+                    autoPlay: true,
+                    looping: false,
+                  );
+                } else {
+                  return MetaIcon(
+                    metadata: item,
+                    width: width,
+                    height: height,
+                  );
+                }
+              },
+              itemCount: file.count,
+            ),
+            IgnorePointer(
+              child: AnimatedOpacity(
+                duration: 200.milliseconds,
+                opacity: isVisible.value ? 1.0 : 0.0,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.only(bottom: 24),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: SonrColor.Black.withOpacity(0.75),
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: DotsIndicator(
+                      dotsCount: file.count,
+                      position: currentIndex.value,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+///  Builds Container With Image as SizedBox
 class MetaImageBox extends StatelessWidget {
   /// Transfer Metadata Protobuf
   final SonrFile_Item metadata;
@@ -87,10 +169,13 @@ class MetaImageBox extends StatelessWidget {
             future: CardService.loadFileFromItem(metadata),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return SizedBox(
-                  width: width,
-                  height: height,
-                  child: Image.file(snapshot.data!, fit: BoxFit.cover),
+                return GestureDetector(
+                  onTap: () => metadata.open(),
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Image.file(snapshot.data!, fit: BoxFit.cover),
+                  ),
                 );
               } else {
                 return Container(
@@ -133,10 +218,16 @@ class MetaVideo extends StatelessWidget {
             future: CardService.loadFileFromItem(metadata),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Container(
-                  width: width ?? orientation.defaultWidth,
-                  height: height ?? orientation.defaultHeight,
-                  child: VideoPlayerView.file(snapshot.data!, false),
+                return GestureDetector(
+                  onLongPress: () => metadata.open(),
+                  child: Container(
+                    width: width ?? orientation.defaultWidth,
+                    height: height ?? orientation.defaultHeight,
+                    child: VideoPlayerView.file(
+                      snapshot.data!,
+                      autoPlay,
+                    ),
+                  ),
                 );
               } else {
                 return Container(
@@ -160,12 +251,14 @@ class PayloadText extends StatelessWidget {
   final double fontSize;
   final FontStyle fontStyle;
   final DisplayTextStyle textStyle;
+  final bool withCount;
 
   const PayloadText({
     Key? key,
     required this.payload,
     this.file,
     this.color,
+    this.withCount = true,
     this.fontSize = 20,
     this.fontStyle = FontStyle.normal,
     this.textStyle = DisplayTextStyle.Subheading,
@@ -187,7 +280,11 @@ class PayloadText extends StatelessWidget {
     if (file != null && payload.isTransfer) {
       // Return Mime for Single
       if (file!.count == 1 || file!.isAllSingleType) {
-        return file!.single.mime.value.toString().capitalizeFirst!;
+        return withCount
+            ? file!.single.mime.value.toString().capitalizeFirst! + " (${file!.count})"
+            : file!.single.mime.value.toString().capitalizeFirst!;
+      } else if (file!.count > 1) {
+        return withCount ? payload.toString().capitalizeFirst! + " - ${file!.count}" : payload.toString().capitalizeFirst!;
       }
     }
     return payload.toString().capitalizeFirst!;

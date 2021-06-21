@@ -13,7 +13,7 @@ class CompletedPopup extends GetView<ActivityController> {
       LottieFile.Celebrate.lottie(width: Get.width, height: Get.height, repeat: false, fit: BoxFit.fitHeight),
 
       // Scaffold Box
-      AnimatedBounce(direction: BounceDirection.Up, isDisplayed: true, child: _PostTransferItem(transfer: transfer)),
+      _PostTransferItem(transfer: transfer),
     ]);
   }
 }
@@ -89,14 +89,8 @@ class _PostFileOwnerRow extends StatelessWidget {
                 )),
             Padding(child: ProfileSName(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),
-            Padding(
-                child: ActionButton(
-                  onPressed: () {},
-                  iconData: SonrIcons.Statistic,
-                ),
-                padding: EdgeInsets.only(right: 4)),
             ActionButton(
-              onPressed: () {},
+              onPressed: () => Get.back(),
               iconData: SonrIcons.Close,
             ),
           ],
@@ -125,6 +119,13 @@ class _PostFileContentView extends StatelessWidget {
       else {
         return MetaIcon(iconSize: Height.ratio(0.125), metadata: file.single);
       }
+    } else if (file.isMultiple) {
+      return MetaAlbumBox(
+        file: file,
+        width: Get.width,
+        height: 100,
+        fit: BoxFit.fitHeight,
+      );
     }
 
     // # Other File
