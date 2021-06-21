@@ -8,10 +8,7 @@ import 'models/status.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
-  final isTitleVisible = true.obs;
-  final isTransferVisible = false.obs;
-
-  // Elements
+  final appbarOpacity = 1.0.obs;
   final title = "Home".obs;
   final subtitle = "".obs;
   final pageIndex = 0.obs;
@@ -90,22 +87,25 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   /// @ Change View
   void changeView(HomeView newView) {
-    view(newView);
-    view.refresh();
-  }
+    if (newView == HomeView.Search) {
+      // Handle Keyboard/Opacity
+      appbarOpacity(0);
+      DeviceService.keyboardShow();
 
-  /// Sets View for Searching
-  void closeSearch() {
-    DeviceService.hideKeyboard();
-    query("");
-    view(HomeView.Dashboard);
-    view.refresh();
-  }
+      // Set New View with Delay
+      Future.delayed(200.milliseconds, () {
+        view(newView);
+        view.refresh();
+      });
+    } else {
+      // Handle Keyboard/Opacity
+      appbarOpacity(1);
+      DeviceService.keyboardHide();
 
-  /// Sets View for Default
-  void exitToDefault() {
-    view(HomeView.Dashboard);
-    view.refresh();
+      // Set New View
+      view(newView);
+      view.refresh();
+    }
   }
 
   /// @ Handle Title Tap
@@ -134,7 +134,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // @ Swaps Title when Lobby Size Changes
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
     // Check Valid
-    if (!_timeoutActive && !isClosed && isTitleVisible.value) {
+    if (!_timeoutActive && !isClosed) {
       // Swap Text
       title(val);
       HapticFeedback.mediumImpact();
@@ -206,7 +206,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     } else {
       // Swap View to Searching if not Set
       if (view.value.isSearch) {
-        view(HomeView.Dashboard);
+        changeView(HomeView.Dashboard);
       }
     }
   }

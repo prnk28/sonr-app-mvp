@@ -5,7 +5,7 @@ class BackupCodeView extends GetView<RegisterController> {
   BackupCodeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
     return PagePanel(
       children: [
         GestureDetector(

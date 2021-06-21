@@ -320,9 +320,7 @@ class FilePayloadText extends StatelessWidget {
     if (file != null && payload.isTransfer) {
       // Return Mime for Single
       if (file!.count == 1 || file!.isAllSingleType) {
-        return withCount
-            ? file!.single.mime.value.toString().capitalizeFirst! + " (${file!.count})"
-            : file!.single.mime.value.toString().capitalizeFirst!;
+        return file!.single.mime.value.toString().capitalizeFirst!;
       } else if (file!.count > 1) {
         return withCount ? payload.toString().capitalizeFirst! + " - ${file!.count}" : payload.toString().capitalizeFirst!;
       }

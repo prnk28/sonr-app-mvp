@@ -9,7 +9,7 @@ class CompletedPopup extends GetView<ActivityController> {
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
       // Lotte Animation
-      LottieFile.Celebrate.lottie(width: Get.width, height: Get.height, repeat: false, fit: BoxFit.fitHeight),
+      IgnorePointer(child: LottieFile.Celebrate.lottie(width: Get.width, height: Get.height, repeat: false, fit: BoxFit.fitHeight)),
 
       // Scaffold Box
       _PostTransferItem(transfer: transfer),

@@ -4,11 +4,11 @@ import 'package:sonr_app/data/data.dart';
 /// @ Transfer Contact Item Details
 class ContactItemView extends StatelessWidget {
   final TransferCard item;
-  ContactItemView( {Key? key, required this.item}) : super(key: key);
+  ContactItemView({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: 420,
+      height: 400,
       child: Hero(
         tag: item.id,
         child: Container(

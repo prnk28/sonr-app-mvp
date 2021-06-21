@@ -169,8 +169,8 @@ class SenderService extends GetxService {
 
     // Logging
     Logger.info("Node(Callback) Transmitted: " + data.toString());
-    _hasSession(false);
     _session.reset();
+    _hasSession(false);
   }
 
   // * ------------------- Helpers ----------------------------

@@ -118,5 +118,6 @@ class ReceiverService extends GetxService {
     // Logging
     Logger.info("Node(Callback) Received: " + data.toString());
     _session.reset();
+    _hasActiveSession(false);
   }
 }

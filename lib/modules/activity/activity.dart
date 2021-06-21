@@ -27,8 +27,8 @@ class ActivityController extends GetxController {
   /// Clear All Activity from Table
   Future<void> clearAllActivity() async {
     if (CardService.activity.length > 0) {
-      var decision =
-          await AppRoute.question(title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
+      var decision = await AppRoute.question(
+          title: "Clear All", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
       if (decision) {
         CardService.clearAllActivity();
       }
