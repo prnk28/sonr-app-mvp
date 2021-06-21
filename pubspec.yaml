@@ -75,7 +75,7 @@ dependencies:
 
   # -- Network --
   cloud_firestore: ^2.2.2
-  feedback: ^1.2.2
+  feedback: ^2.0.0
   mime: ^1.0.0
   moor: ^4.3.2
   moor_flutter: ^4.0.0
