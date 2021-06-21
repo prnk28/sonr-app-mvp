@@ -8,9 +8,7 @@ class ContactSName extends StatelessWidget {
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
         (isPressed) => GestureDetector(
-              onTapDown: (details) => isPressed(true),
-              onTapCancel: () => isPressed(false),
-              onTapUp: (details) async {
+              onLongPress: () async {
                 isPressed(false);
                 await HapticFeedback.mediumImpact();
                 Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {

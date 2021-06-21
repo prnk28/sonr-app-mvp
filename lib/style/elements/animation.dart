@@ -201,14 +201,19 @@ class AnimatedSlider extends StatelessWidget {
 class HourglassIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 24,
-      height: 24,
-      child: Lottie.asset(
-        LottieFile.Loader.path,
-        fit: BoxFit.fitHeight,
-        animate: true,
-        repeat: true,
+    return Transform.scale(
+      scale: 0.2,
+      child: SizedBox(
+        width: 24,
+        height: 24,
+        child: Lottie.asset(
+          LottieFile.Loader.path,
+          fit: BoxFit.contain,
+          width: 42,
+          height: 42,
+          animate: true,
+          repeat: true,
+        ),
       ),
     );
   }

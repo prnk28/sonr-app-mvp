@@ -1,4 +1,5 @@
 import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/buttons/utility.dart';
 
 /// Builds Header Style text from [Profile] data
 class ProfileFullName extends StatelessWidget {
@@ -25,20 +26,29 @@ class ProfileSName extends StatelessWidget {
   const ProfileSName({Key? key, required this.profile}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: profile.sName,
-            style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: Preferences.isDarkMode ? SonrColor.White : SonrColor.Black)),
-        TextSpan(
-            text: ".snr/",
-            style: TextStyle(
-                fontFamily: "RFlex",
-                fontWeight: FontWeight.w100,
-                fontSize: 20,
-                color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-      ]),
+    return GestureDetector(
+      onLongPress: () async {
+        await HapticFeedback.mediumImpact();
+        Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+          Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
+          AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
+        });
+      },
+      child: RichText(
+        text: TextSpan(children: [
+          TextSpan(
+              text: profile.sName,
+              style: TextStyle(
+                  fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: Preferences.isDarkMode ? SonrColor.White : SonrColor.Black)),
+          TextSpan(
+              text: ".snr/",
+              style: TextStyle(
+                  fontFamily: "RFlex",
+                  fontWeight: FontWeight.w100,
+                  fontSize: 20,
+                  color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
+        ]),
+      ),
     );
   }
 }
