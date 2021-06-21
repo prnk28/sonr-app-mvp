@@ -108,6 +108,7 @@ class ReceiverService extends GetxService {
     // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: Sounds.Received);
+    Get.back();
 
     // Display Released Card
     Future.delayed(2.seconds, () {
