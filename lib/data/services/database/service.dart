@@ -70,6 +70,68 @@ class CardService extends GetxService {
     return this;
   }
 
+  // * Initializer * //
+  @override
+  onInit() {
+    // Set Individual File Count
+    if (_files.length > 0) {
+      // Check Mime Count
+      int docsCount = 0;
+      int pdfsCount = 0;
+      int presentationCount = 0;
+      int spreadsheetCount = 0;
+      int otherCount = 0;
+      int photosCount = 0;
+      int videosCount = 0;
+
+      // Check File Types
+      _files.forEach((i) {
+        if (i.file != null) {
+          i.file!.items.forEach((i) {
+            // Text/Docs
+            if (i.mime.isText || i.mime.isDoc) {
+              docsCount += 1;
+            }
+            // PDFs
+            else if (i.mime.isPDF) {
+              pdfsCount += 1;
+            }
+            // Presentations
+            else if (i.mime.isPresentation) {
+              presentationCount += 1;
+            }
+            // Spreadsheets
+            else if (i.mime.isSpreadsheet) {
+              spreadsheetCount += 1;
+            }
+            // Images
+            else if (i.mime.isImage) {
+              photosCount += 1;
+            }
+            // Videos
+            else if (i.mime.isVideo) {
+              videosCount += 1;
+            }
+            // Other
+            else if (i.mime.isOther) {
+              otherCount += 1;
+            }
+          });
+        }
+      });
+
+      // Set Counts
+      _documentCount(docsCount);
+      _pdfCount(pdfsCount);
+      _presentationCount(presentationCount);
+      _spreadsheetCount(spreadsheetCount);
+      _otherCount(otherCount);
+      _photosCount(photosCount);
+      _videosCount(videosCount);
+    }
+    super.onInit();
+  }
+
   /// @ Add New Card to Database
   static addCard(Transfer card, ActivityType activityType) async {
     // Update Database
@@ -77,18 +139,6 @@ class CardService extends GetxService {
       // Store in Database
       await to._database.addCard(card);
       await to._database.addActivity(activityType, card.payload, card.owner);
-      _refreshCount();
-    }
-  }
-
-  // @ Add New File Card to Database
-  static addFileCard(Transfer card, SonrFile file, ActivityType activityType) async {
-    // Update Database
-    if (DeviceService.isMobile && isRegistered) {
-      // Store in Database
-      await to._database.addFileCard(card, file);
-
-      await to._database.addActivity(activityType, card.payload, card.owner, mime: file.single.mime.type);
       _refreshCount();
     }
   }
@@ -101,9 +151,9 @@ class CardService extends GetxService {
   }) async {
     if (DeviceService.isMobile && isRegistered) {
       if (file != null && file.exists) {
-        await to._database.addActivity(type, payload, UserService.contact.value.profile, mime: file.single.mime.type);
+        await to._database.addActivity(type, payload, ContactService.contact.value.profile, mime: file.single.mime.type);
       } else {
-        await to._database.addActivity(type, payload, UserService.contact.value.profile, mime: MIME_Type.OTHER);
+        await to._database.addActivity(type, payload, ContactService.contact.value.profile, mime: MIME_Type.OTHER);
       }
     }
   }
@@ -209,13 +259,59 @@ class CardService extends GetxService {
     if (DeviceService.isMobile && isRegistered) {
       // Set Individual File Count
       if (hasFiles) {
-        to._documentCount(to._files.count((i) => i.mime == MIME_Type.TEXT));
-        to._pdfCount(to._files.count((i) => i.mime == MIME_Type.PDF));
-        to._presentationCount(to._files.count((i) => i.mime == MIME_Type.PRESENTATION));
-        to._spreadsheetCount(to._files.count((i) => i.mime == MIME_Type.SPREADSHEET));
-        to._otherCount(to._files.count((i) => i.mime == MIME_Type.OTHER));
-        to._photosCount(to._files.count((i) => i.mime == MIME_Type.IMAGE));
-        to._videosCount(to._files.count((i) => i.mime == MIME_Type.VIDEO));
+        // Check Mime Count
+        int docsCount = 0;
+        int pdfsCount = 0;
+        int presentationCount = 0;
+        int spreadsheetCount = 0;
+        int otherCount = 0;
+        int photosCount = 0;
+        int videosCount = 0;
+
+        // Check File Types
+        to._files.forEach((i) {
+          if (i.file != null) {
+            i.file!.items.forEach((i) {
+              // Text/Docs
+              if (i.mime.isText || i.mime.isDoc) {
+                docsCount += 1;
+              }
+              // PDFs
+              else if (i.mime.isPDF) {
+                pdfsCount += 1;
+              }
+              // Presentations
+              else if (i.mime.isPresentation) {
+                presentationCount += 1;
+              }
+              // Spreadsheets
+              else if (i.mime.isSpreadsheet) {
+                spreadsheetCount += 1;
+              }
+              // Images
+              else if (i.mime.isImage) {
+                photosCount += 1;
+              }
+              // Videos
+              else if (i.mime.isVideo) {
+                videosCount += 1;
+              }
+              // Other
+              else if (i.mime.isOther) {
+                otherCount += 1;
+              }
+            });
+          }
+        });
+
+        // Set Counts
+        to._documentCount(docsCount);
+        to._pdfCount(pdfsCount);
+        to._presentationCount(presentationCount);
+        to._spreadsheetCount(spreadsheetCount);
+        to._otherCount(otherCount);
+        to._photosCount(photosCount);
+        to._videosCount(videosCount);
       }
     }
   }

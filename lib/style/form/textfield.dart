@@ -229,7 +229,7 @@ class SonrSearchField extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    UserService.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
+                    Preferences.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 14.0),
@@ -238,7 +238,7 @@ class SonrSearchField extends StatelessWidget {
                                 fontFamily: 'RFlex',
                                 fontSize: 24,
                                 fontWeight: FontWeight.w400,
-                                color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                                color: Preferences.isDarkMode ? Colors.white : SonrColor.Black),
                             autofillHints: autofillHints,
                             showCursor: false,
                             autofocus: false,
@@ -250,7 +250,7 @@ class SonrSearchField extends StatelessWidget {
                                     fontFamily: 'RFlex',
                                     fontSize: 24,
                                     fontWeight: FontWeight.w400,
-                                    color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
+                                    color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),
                       ),
                     ),
                   ])),

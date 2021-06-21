@@ -19,6 +19,9 @@ class InfolistOption {
     );
   }
 
+  /// Returns this Widgets Size
+  Size get size => this.title.size(DisplayTextStyle.Light, fontSize: 24);
+
   /// Returns Text for Checklist Option based on State
   Widget text() {
     return title.light(color: SonrTheme.itemColor, fontSize: 24);
@@ -28,36 +31,25 @@ class InfolistOption {
 /// Form Field to Display List of Strings as Gradient Tab View
 class Infolist extends StatelessWidget {
   final List<InfolistOption> options;
-  final Function(int idx) onSelectedOption;
-  const Infolist({Key? key, required this.options, required this.onSelectedOption}) : super(key: key);
+  const Infolist({Key? key, required this.options}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ObxValue<RxInt>(
-        (currentIdx) => Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                color: Colors.white,
-                border: Border.all(
-                  color: SonrTheme.foregroundColor,
-                  width: 1.5,
-                )),
-            width: 160,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _buildOptions(),
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            color: Colors.white,
+            border: Border.all(
+              color: SonrTheme.foregroundColor,
+              width: 1.5,
             )),
-        0.obs);
-  }
-
-  List<Widget> _buildOptions() {
-    return List<Widget>.generate(
-        options.length,
-        (index) => GestureDetector(
+        constraints: options.boxConstraints,
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (context, index) => GestureDetector(
               onTap: () => options[index].onPressed(),
               child: Container(
-                constraints: BoxConstraints(maxWidth: 160, minWidth: 40),
+                constraints: options.boxConstraints,
                 child: Column(children: [
                   Padding(padding: EdgeWith.top(4)),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -75,7 +67,25 @@ class Infolist extends StatelessWidget {
                         )
                       : Container(),
                 ]),
-              ),
-            ));
+              )),
+          itemCount: options.length,
+        ));
+  }
+}
+
+extension InfolistOptionUtils on List<InfolistOption> {
+  /// Return BoxConstraints based on List of InfolistOptions
+  BoxConstraints get boxConstraints {
+    // Initialize Width
+    double maxTextWidth = 0;
+    double maxIconWidth = this.length * 24;
+    double adjustedPaddingWidth = this.length * 8;
+
+    // Iterate Over Text
+    this.forEach((o) {
+      maxTextWidth += o.size.width;
+    });
+
+    return BoxConstraints(maxWidth: maxTextWidth + maxIconWidth + adjustedPaddingWidth);
   }
 }

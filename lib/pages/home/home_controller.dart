@@ -1,12 +1,10 @@
 export 'models/arguments.dart';
-export 'models/home_status.dart';
-export 'models/recent_status.dart';
+export 'models/status.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'models/arguments.dart';
-import 'models/home_status.dart';
-import 'models/recent_status.dart';
+import 'models/status.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -24,7 +22,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Propeties
   final query = "".obs;
   final results = RxList<TransferCard>();
-  final recentsView = RecentsViewStatus.Default.obs;
 
   // Controllers
   late final TabController tabController;
@@ -75,9 +72,9 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onReady() {
     // Check Entry Arguments
-    HomePageArgs args = Get.arguments;
+    HomeArguments args = Get.arguments;
     if (args.isFirstLoad && DeviceService.isMobile) {
-      MobileService.checkInitialShare();
+      SenderService.checkInitialShare();
     }
     super.onReady();
   }
@@ -98,17 +95,17 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   /// Sets View for Searching
-  void closeSearch(BuildContext context) {
+  void closeSearch() {
     DeviceService.hideKeyboard();
     query("");
-    recentsView(RecentsViewStatus.Default);
-    recentsView.refresh();
+    view(HomeView.Dashboard);
+    view.refresh();
   }
 
   /// Sets View for Default
   void exitToDefault() {
-    recentsView(RecentsViewStatus.Default);
-    recentsView.refresh();
+    view(HomeView.Dashboard);
+    view.refresh();
   }
 
   /// @ Handle Title Tap
@@ -159,7 +156,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData!.count > _lobbySizeRef) {
       var diff = onData.count - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      DeviceService.playSound(type: UISoundType.Joined);
+      DeviceService.playSound(type: Sounds.Joined);
     }
     // Peer Left
     else if (onData.count < _lobbySizeRef) {
@@ -191,8 +188,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   _handleQuery(String newVal) {
     if (newVal.length > 0) {
       // Swap View to Searching if not Set
-      if (recentsView.value.isDefault) {
-        recentsView(RecentsViewStatus.Search);
+      if (view.value.isDefault) {
+        view(HomeView.Search);
       }
 
       // Fetch Results
@@ -208,8 +205,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       results.refresh();
     } else {
       // Swap View to Searching if not Set
-      if (recentsView.value.isSearching) {
-        recentsView(RecentsViewStatus.Default);
+      if (view.value.isSearch) {
+        view(HomeView.Dashboard);
       }
     }
   }

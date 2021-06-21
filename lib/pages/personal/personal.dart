@@ -6,7 +6,7 @@ export 'controllers/editor_controller.dart';
 export 'controllers/personal_controller.dart';
 export 'controllers/tile_controller.dart';
 
-import 'package:sonr_app/modules/search/social_search.dart';
+import 'package:sonr_app/pages/personal/views/social_search.dart';
 import 'package:sonr_app/pages/personal/widgets/tile_item.dart';
 import 'package:sonr_app/style.dart';
 import 'models/status.dart';
@@ -43,10 +43,10 @@ class _DefaultProfileView extends GetView<PersonalController> {
               return SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      var socialsList = UserService.contact.value.socials.values.toList();
+                      var socialsList = ContactService.contact.value.socials.values.toList();
                       return SocialTileItem(socialsList[index], index);
                     },
-                    childCount: UserService.contact.value.socials.length,
+                    childCount: ContactService.contact.value.socials.length,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12.0, crossAxisSpacing: 6.0));
             })
@@ -71,10 +71,10 @@ class _ProfileInfoView extends GetView<PersonalController> {
           Padding(padding: EdgeInsets.only(top: 12)),
 
           // First/Last Name
-          UserService.contact.value.fullName.subheading(color: SonrTheme.itemColor, fontSize: 32),
+          ContactService.contact.value.fullName.subheading(color: SonrTheme.itemColor, fontSize: 32),
 
           // Username
-          SNameField(),
+          ContactSName(),
           Padding(padding: EdgeInsets.all(12)),
 
           // Bio/ LastTweet
@@ -85,8 +85,8 @@ class _ProfileInfoView extends GetView<PersonalController> {
   }
 
   Widget _buildBio() {
-    if (UserService.contact.value.hasBio()) {
-      return '"${UserService.contact.value.bio}"'.paragraph();
+    if (ContactService.contact.value.hasBio()) {
+      return '"${ContactService.contact.value.bio}"'.paragraph();
     }
     return Container();
   }
@@ -100,7 +100,7 @@ class _ProfileInfoView extends GetView<PersonalController> {
         return Container(
           width: Get.width,
           height: 72,
-          child: UserService.contact.value.hasSocialMedia(Contact_Social_Media.Twitter)
+          child: ContactService.contact.value.hasSocialMedia(Contact_Social_Media.Twitter)
               ? Text("Last Tweet")
               : GestureDetector(
                   onTap: () => isLinkingTwitter(true),

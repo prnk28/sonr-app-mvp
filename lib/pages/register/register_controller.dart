@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:share/share.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
@@ -169,7 +168,7 @@ class RegisterController extends GetxController {
     ));
 
     // Create User
-    await UserService.newContact(contact);
+    await ContactService.newContact(contact);
 
     // Process data
     if (DeviceService.isMobile) {
@@ -193,11 +192,11 @@ class RegisterController extends GetxController {
       ));
 
       // Create User
-      await UserService.newContact(contact);
+      await ContactService.newContact(contact);
 
       // Connect to Network
       NodeService.to.connect();
-      AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
+      AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
     }
   }
 
@@ -242,41 +241,6 @@ class RegisterController extends GetxController {
         }
       } else {
         nameStatus(NewSNameStatus.TooShort);
-        return false;
-      }
-    }
-  }
-
-  /// @ Request Location Permissions
-  Future<bool> requestLocation() async {
-    if (await Permission.location.request().isGranted) {
-      Get.find<MobileService>().updatePermissionsStatus();
-      nextPage(RegisterPageType.Gallery);
-      return true;
-    } else {
-      Get.find<MobileService>().updatePermissionsStatus();
-      return false;
-    }
-  }
-
-  /// @ Request Gallery Permissions
-  Future<bool> requestGallery() async {
-    if (DeviceService.isAndroid) {
-      if (await Permission.storage.request().isGranted) {
-        Get.find<MobileService>().updatePermissionsStatus();
-        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
-        return true;
-      } else {
-        Get.find<MobileService>().updatePermissionsStatus();
-        return false;
-      }
-    } else {
-      if (await Permission.photos.request().isGranted) {
-        Get.find<MobileService>().updatePermissionsStatus();
-        AppPage.Home.off(args: HomePageArgs(isFirstLoad: true));
-        return true;
-      } else {
-        Get.find<MobileService>().updatePermissionsStatus();
         return false;
       }
     }

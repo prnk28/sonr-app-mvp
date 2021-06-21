@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
-import 'package:sonr_app/modules/share/views/share_view.dart';
+import 'package:sonr_app/modules/share/views/popup_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/pages/register/register.dart';
@@ -11,37 +11,41 @@ import 'bindings.dart';
 
 /// @ Enum Values for App Page
 enum AppPage {
-  /// #### Home
+  /// ### Home `Off`
   /// Dashboard, Search, Personal
   Home,
 
-  /// #### Register
+  /// ### Register `Off`
   /// New User
   Register,
 
-  /// #### Transfer
+  /// ### Transfer `Off`
   /// Looking for Peers to Share
   Transfer,
 
-  /// #### Share
+  /// ### Share `To`
   /// Select File, Contact, URL
   Share,
 
-  /// #### Activity
+  /// ### Activity `To`
   /// Current Sessions, Past Cards
   Activity,
 
-  /// #### Error
+  /// ### Error `To`
   /// Empty Items, No Connection, No Permission
   Error,
 
-  /// #### Detail
+  /// ### Detail `To`
   /// TransferCard Detail View
   Detail,
 
-  /// #### Posts
+  /// ### Posts List `To`
   /// Transfer Card Collection View
   Posts,
+
+  /// ### FlatMode Overlay `Dialog`
+  /// Transfer Subpage For FlatMode
+  Flat,
 }
 
 extension AppRoute on AppPage {
@@ -130,7 +134,8 @@ extension AppRoute on AppPage {
         return () => SharePopupView();
       case AppPage.Activity:
         return () => ActivityPopup();
-
+      case AppPage.Flat:
+        return () => FlatModeOverlay();
       default:
         return () {
           if (DeviceService.isMobile) {
@@ -154,6 +159,11 @@ extension AppRoute on AppPage {
         page: this.page,
         transition: this.transition,
       );
+
+  /// Received FlatMode Invite
+  Future<void> invite(Contact data) async {
+    Get.find<TransferController>().animateFlatSwap(data);
+  }
 
   /// Pop the current named [page] in the stack and push a new one in its place
   Future<void> off({
@@ -187,6 +197,22 @@ extension AppRoute on AppPage {
     }
   }
 
+  /// Flat Mode Outgoing
+  Future<void> outgoing() async {
+    if (this == AppPage.Flat && isPopupClosed) {
+      Get.dialog(
+        this.page(),
+        barrierColor: Colors.transparent,
+        useSafeArea: false,
+      );
+    }
+  }
+
+  /// Received FlatMode Response
+  Future<void> response(Contact data) async {
+    Get.find<TransferController>().animateFlatIn(data, delayModifier: 2);
+  }
+
   /// Pushes a new named [page] to the stack.
   Future<void> to({
     dynamic args,
@@ -210,43 +236,12 @@ extension AppRoute on AppPage {
 
     // Check for Condition
     if (condition) {
-      // Push Screen
-      if (this.isDialog) {
-        // Check Delay
-        if (delay != null) {
-          Future.delayed(delay, () => Get.to(this.page(), transition: this.transition, arguments: args));
-        } else {
-          Get.to(this.page(), transition: this.transition, arguments: args);
-        }
+      // Check Delay
+      if (delay != null) {
+        Future.delayed(delay, () => Get.to(this.page(), transition: this.transition, arguments: args));
+      } else {
+        Get.to(this.page(), transition: this.transition, arguments: args);
       }
-    }
-  }
-
-  /// Pushes a Popup Modal
-  static Future<void> popup(
-    Widget child, {
-    bool ignoreSafeArea = false,
-    bool dismissible = true,
-    dynamic args,
-    void Function()? init,
-    Duration? delay,
-  }) async {
-    if (isPopupClosed) {
-      // Hide Keyboard Before Route
-      DeviceService.hideKeyboard();
-
-      // Init Function
-      if (init != null) {
-        init();
-      }
-
-      // Push Dialog
-      Get.dialog(
-        BlurredBackground(child: child),
-        barrierDismissible: dismissible,
-        barrierColor: Colors.transparent,
-        useSafeArea: !ignoreSafeArea,
-      );
     }
   }
 
@@ -281,6 +276,38 @@ extension AppRoute on AppPage {
       useSafeArea: !ignoreSafeArea,
     );
     return completer.future;
+  }
+
+  /// Pushes a Popup Modal
+  static Future<void> popup(
+    Widget child, {
+    bool ignoreSafeArea = false,
+    bool dismissible = true,
+    dynamic args,
+    void Function()? init,
+    Duration? delay,
+  }) async {
+    if (isPopupClosed) {
+      // Hide Keyboard Before Route
+      DeviceService.hideKeyboard();
+
+      // Init Function
+      if (init != null) {
+        init();
+      }
+
+      // Push Dialog
+      Get.dialog(
+        BlurredBackground(
+            child: child,
+            onTapped: () {
+              Future.delayed(300.milliseconds, () => Get.back());
+            }),
+        barrierDismissible: dismissible,
+        barrierColor: Colors.transparent,
+        useSafeArea: !ignoreSafeArea,
+      );
+    }
   }
 
   /// Pushes Postioned Modal relative to Parent Key
@@ -426,14 +453,14 @@ extension AppRoute on AppPage {
   /// Closes Active Popup
   static void closePopup() {
     if (isPopupOpen) {
-      Get.back(closeOverlays: true);
+      Get.back();
     }
   }
 
   /// Closes Active Popup
   static void closeSheet() {
     if (isSheetOpen) {
-      Get.back(closeOverlays: true);
+      Get.back();
     }
   }
 }

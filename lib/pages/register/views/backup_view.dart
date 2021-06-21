@@ -12,7 +12,7 @@ class BackupCodeView extends GetView<RegisterController> {
             onLongPress: () {
               Clipboard.setData(ClipboardData(text: controller.mnemonic.value));
               AppRoute.snack(
-                  SnackArgs.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
+                  SnackArgs.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
             },
             child: BoxContainer(
               padding: EdgeInsets.all(24),

@@ -5,7 +5,7 @@ import 'package:moor/moor.dart';
 import 'dart:io';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'converter.dart';
-part 'cards_db.g.dart';
+part 'database.g.dart';
 
 enum ActivityType { Deleted, Shared, Received }
 
@@ -19,7 +19,6 @@ extension ActivityTypeUtils on ActivityType? {
 class TransferActivities extends Table {
   IntColumn? get id => integer().autoIncrement()();
   TextColumn? get owner => text().map(const ProfileConverter())();
-  IntColumn? get mime => integer().map(const MimeConverter())();
   IntColumn? get payload => integer().map(const PayloadConverter())();
   IntColumn? get activity => integer().map(const ActivityConverter())();
 }
@@ -27,7 +26,6 @@ class TransferActivities extends Table {
 class TransferCards extends Table {
   IntColumn? get id => integer().autoIncrement()();
   TextColumn? get owner => text().map(const ProfileConverter())();
-  IntColumn? get mime => integer().map(const MimeConverter())();
   IntColumn? get payload => integer().map(const PayloadConverter())();
   TextColumn? get contact => text().map(const ContactConverter()).nullable()();
   TextColumn? get file => text().map(const FileConverter()).nullable()();
@@ -47,7 +45,6 @@ class CardsDatabase extends _$CardsDatabase {
     return into(transferActivities).insert(TransferActivitiesCompanion(
       payload: Value(payload),
       owner: Value(owner),
-      mime: Value(mime),
       activity: Value(type),
     ));
   }
@@ -59,14 +56,6 @@ class CardsDatabase extends _$CardsDatabase {
       contact: card.hasContact() ? Value(card.contact) : Value.absent(),
       file: card.hasFile() ? Value(card.file) : Value.absent(),
       url: card.hasUrl() ? Value(card.url) : Value.absent(),
-      received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
-
-  /// Add File card to Database
-  Future<int> addFileCard(Transfer card, SonrFile file) async => into(transferCards).insert(TransferCardsCompanion(
-      owner: Value(card.owner),
-      mime: Value(file.single.mime.type),
-      payload: Value(card.payload),
-      file: Value(file),
       received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
 
   /// Returns all Transfer Card Items
@@ -113,7 +102,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'sonr-cards.sqlite'));
+    final file = File(p.join(dbFolder.path, 'sonr-cards2.sqlite'));
     return VmDatabase(file);
   });
 }

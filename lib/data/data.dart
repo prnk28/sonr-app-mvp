@@ -11,7 +11,14 @@ export 'services/database/database.dart';
 export 'services/database/service.dart';
 
 // Models
-export 'models/model_meta.dart';
-export 'models/model_result.dart';
+export '../modules/share/share.dart';
+export 'models/builder.dart';
+export 'models/option.dart';
+export 'models/result.dart';
+export 'models/status.dart';
 export 'package:sonr_app/pages/details/details.dart';
 export 'package:sonr_app/data/services/services.dart';
+
+// Theme Models
+export 'models/direction.dart';
+export 'models/type.dart';

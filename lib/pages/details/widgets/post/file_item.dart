@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/pages/details/widgets/post/views.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
@@ -37,8 +36,8 @@ class PostFileItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  item.payload.toString().capitalizeFirst!.subheading(color: SonrTheme.itemColor, fontSize: 20),
-                  item.received.toString().subheading(color: SonrTheme.greyColor, fontSize: 16),
+                  PayloadText(payload: item.payload, file: item.file),
+                  DateText(date: item.received),
                 ],
               ),
             ),
@@ -71,9 +70,9 @@ class _PostFileOwnerRow extends StatelessWidget {
                       ? CircleAvatar(
                           backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                         )
-                      : SonrIcons.User.gradient(size: 32),
+                      : SonrIcons.User.gradient(size: 24),
                 )),
-            Padding(child: sNameText(profile: profile), padding: EdgeInsets.only(left: 4)),
+            Padding(child: ProfileSName(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),
             Padding(
                 child: ActionButton(
@@ -88,25 +87,6 @@ class _PostFileOwnerRow extends StatelessWidget {
           ],
         ));
   }
-
-  /// Returns Widget Text of SName
-  Widget sNameText({required Profile profile}) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: profile.sName,
-            style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black)),
-        TextSpan(
-            text: ".snr/",
-            style: TextStyle(
-                fontFamily: "RFlex",
-                fontWeight: FontWeight.w100,
-                fontSize: 20,
-                color: UserService.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-      ]),
-    );
-  }
 }
 
 /// @ Post Content for File
@@ -119,8 +99,16 @@ class _PostFileContentView extends StatelessWidget {
     // # Check for Media File Type
     if (file.isMedia) {
       // Image
-      if (file.single.mime.type == MIME_Type.IMAGE) {
+      if (file.single.mime.isImage) {
         return MetaImageBox(
+          metadata: file.single,
+          width: Get.width,
+        );
+      }
+
+      // Video
+      else if (file.single.mime.isVideo) {
+        return MetaVideo(
           metadata: file.single,
           width: Get.width,
         );
@@ -130,6 +118,13 @@ class _PostFileContentView extends StatelessWidget {
       else {
         return MetaIcon(iconSize: Height.ratio(0.125), metadata: file.single);
       }
+    } else if (file.isMultiple) {
+      return MetaAlbumBox(
+        file: file,
+        width: Get.width,
+        height: 100,
+        fit: BoxFit.fitHeight,
+      );
     }
 
     // # Other File

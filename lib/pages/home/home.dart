@@ -2,7 +2,7 @@ import 'package:sonr_app/pages/personal/personal.dart';
 import 'home_controller.dart';
 import 'widgets/desktop/desktop.dart';
 import 'package:sonr_app/style.dart';
-import 'models/home_status.dart';
+import 'models/status.dart';
 import 'views/dashboard_view.dart';
 import 'widgets/mobile/mobile.dart';
 

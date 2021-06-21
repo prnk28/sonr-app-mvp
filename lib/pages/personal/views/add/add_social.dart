@@ -135,7 +135,7 @@ class _InfoText extends StatelessWidget {
       Padding(padding: EdgeInsets.all(14)),
       Text(index.toString(),
           style: TextStyle(
-              fontFamily: 'Manrope', fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+              fontFamily: 'Manrope', fontSize: 108, fontWeight: FontWeight.w900, color: Preferences.isDarkMode ? Colors.white38 : Colors.black38)),
       Padding(padding: EdgeInsets.all(8)),
       Expanded(
         child: Text(text,
@@ -143,7 +143,7 @@ class _InfoText extends StatelessWidget {
               fontFamily: 'Manrope',
               fontSize: 34,
               fontWeight: FontWeight.bold,
-              color: UserService.isDarkMode ? Colors.white : SonrColor.Black,
+              color: Preferences.isDarkMode ? Colors.white : SonrColor.Black,
             )),
       ),
     ]);

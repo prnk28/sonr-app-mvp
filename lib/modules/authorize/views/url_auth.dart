@@ -1,4 +1,3 @@
-import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -32,7 +31,7 @@ class URLAuthView extends StatelessWidget {
 
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
-            ProfileName(profile: invite.from.profile, isHeader: true),
+            ProfileFullName(profile: invite.from.profile, isHeader: true),
             Center(child: "Website Link".gradient(value: SonrGradients.PlumBath, size: 22)),
           ]),
         ]),

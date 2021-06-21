@@ -255,9 +255,9 @@ class _ConfirmButtonController extends GetxController {
           await HapticFeedback.heavyImpact();
           // Play Sound
           if (type == ConfirmButtonType.Save) {
-            DeviceService.playSound(type: UISoundType.Confirmed);
+            DeviceService.playSound(type: Sounds.Confirmed);
           } else if (type == ConfirmButtonType.Delete) {
-            DeviceService.playSound(type: UISoundType.Deleted);
+            DeviceService.playSound(type: Sounds.Deleted);
           }
           await Future.delayed(ButtonUtility.K_CONFIRM_DURATION); //wait until animation finished
           onConfirmed();

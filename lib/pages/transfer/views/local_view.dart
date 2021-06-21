@@ -15,10 +15,16 @@ class LocalView extends GetView<TransferController> {
           margin: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             "Local".section(align: TextAlign.start, color: SonrTheme.itemColor),
-            Obx(() => ArrowButton(
-                  key: controller.localArrowButtonKey,
-                  onPressed: () => controller.onLocalArrowPressed(),
+            Obx(() => ArrowButton.checkList(
                   title: _buildArrowTitle(controller.phonesEnabled.value, controller.desktopsEnabled.value),
+                  onSelectedOption: (index) {
+                    print(index);
+                  },
+                  options: [
+                    ChecklistOption("Phones", controller.phonesEnabled),
+                    ChecklistOption("Desktops", controller.desktopsEnabled),
+                  ],
+                  offset: Offset(-80, -10),
                 ))
           ]),
         ),

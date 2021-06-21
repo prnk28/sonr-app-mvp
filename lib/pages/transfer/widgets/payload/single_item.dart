@@ -1,28 +1,32 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/pages/transfer/views/popup_view.dart';
 import 'package:sonr_app/style.dart';
 import 'thumbnail.dart';
 
-class PayloadSingleItem extends StatelessWidget {
+class PayloadSingleItem extends GetView<ItemController> {
+  final GlobalKey key;
+
+  const PayloadSingleItem({required this.key});
   @override
   Widget build(BuildContext context) {
-    final file = TransferController.invite.file;
     final invite = TransferController.invite;
+
     return Container(
         child: Row(children: [
       PayloadItemThumbnail(),
       _buildTitle(invite),
       Container(
-        padding: EdgeInsets.only(left: 24),
         alignment: Alignment.topRight,
-        child: ActionButton(
+        child: InfoButton(
           onPressed: () {
-            AppRoute.popup(EditPayloadPopup(
-              index: 0,
-              item: file.single,
-            ));
+            AppRoute.positioned(
+              Infolist(options: [
+                InfolistOption("Replace", SonrIcons.Reload, controller.replace),
+                InfolistOption("Remove", SonrIcons.Trash, controller.delete),
+                InfolistOption("Cancel", SonrIcons.Cancel, controller.cancel),
+              ]),
+              parentKey: key,
+            );
           },
-          iconData: SonrIcons.MoreVertical,
         ),
       ),
     ]));
@@ -39,9 +43,9 @@ class PayloadSingleItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: [
-                UserService.contact.value.firstName.paragraph(color: SonrTheme.itemColor),
+                ContactService.contact.value.firstName.paragraph(color: SonrTheme.itemColor),
                 " ".paragraph(color: SonrTheme.itemColor),
-                UserService.contact.value.lastName.light(color: SonrTheme.itemColor)
+                ContactService.contact.value.lastName.light(color: SonrTheme.itemColor)
               ].row(),
             ),
             Padding(

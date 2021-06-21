@@ -1,4 +1,4 @@
-export 'camera_view.dart';
+export 'camera.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';

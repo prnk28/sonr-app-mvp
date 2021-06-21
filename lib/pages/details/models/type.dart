@@ -34,7 +34,7 @@ extension PostItemTypeUtils on PostItemType {
 
   /// Returns `name()` for Button Label
   Widget label() {
-    if (UserService.isDarkMode) {
+    if (Preferences.isDarkMode) {
       return this.name().light(color: SonrColor.White.withOpacity(0.8));
     } else {
       return this.name().light(color: SonrColor.Black.withOpacity(0.8));

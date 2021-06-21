@@ -59,7 +59,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Requried for the App</string>
 	<key>NSContactsUsageDescription</key>
-	<string>No Clue Ignore</string>
+	<string>Required for exporting contacts to your device.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Saves User Data in Secure Location</string>
 	<key>NSLocalNetworkUsageDescription</key>

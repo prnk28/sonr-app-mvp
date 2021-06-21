@@ -9,12 +9,12 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
     return Obx(() => AnimatedSlider.fade(
           duration: 2.seconds,
           child: PageAppBar(
-            centerTitle: controller.view.value.isMain,
+            centerTitle: controller.view.value.isDefault,
             key: ValueKey(false),
             subtitle: Padding(
-              padding: controller.view.value.isMain ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
+              padding: controller.view.value.isDefault ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
               child: controller.view.value == HomeView.Dashboard
-                  ? "Hi ${UserService.contact.value.firstName},".subheading(
+                  ? "Hi ${ContactService.contact.value.firstName},".subheading(
                       color: Get.theme.focusColor.withOpacity(0.8),
                       align: TextAlign.start,
                     )

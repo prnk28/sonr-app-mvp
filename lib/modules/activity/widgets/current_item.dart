@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/style.dart';
 import '../activity.dart';
 
@@ -9,7 +7,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: 150,
+      height: session.total.value > 1 ? 175 : 150,
       margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.symmetric(vertical: 24),
       child: Column(
@@ -37,8 +35,11 @@ class CurrentActivityItem extends GetView<ActivityController> {
               ],
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 8)),
           _CurrentActivityProgress(progress: session.progress),
+          _CurrentActivityIndexLabel(
+            current: session.current,
+            total: session.total.value,
+          )
         ],
       ),
     );
@@ -96,16 +97,10 @@ class _CurrentActivityContent extends GetView<ActivityController> {
           ["${payload.toString().capitalizeFirst} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
 
           // Date Time Text
-          _buildDateTime().paragraph(fontSize: 16),
+          DateText(date: DateTime.now(), fontSize: 16)
         ],
       ),
     );
-  }
-
-  String _buildDateTime() {
-    final now = DateTime.now();
-    final dateFormatter = DateFormat.yMMMd('en_US').add_jm();
-    return dateFormatter.format(now);
   }
 }
 
@@ -117,47 +112,49 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   _CurrentActivityProgress({required this.progress});
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          padding: EdgeInsets.only(top: 8),
-          margin: EdgeInsets.symmetric(horizontal: 42),
-          alignment: Alignment.center,
-          height: 32,
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              // Bottom Layer
-              Container(
-                alignment: Alignment.center,
-                width: maxWidth,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: SonrTheme.foregroundColor,
+    return Obx(() => Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 42),
+            alignment: Alignment.center,
+            height: 32,
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                // Bottom Layer
+                Container(
+                  alignment: Alignment.center,
+                  width: maxWidth,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: SonrTheme.foregroundColor,
+                  ),
                 ),
-              ),
 
-              // Foreground Gradient
-              AnimatedContainer(
-                alignment: Alignment.center,
-                width: _calculateWidth(progress.value),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
-                duration: 100.milliseconds,
-              ),
+                // Foreground Gradient
+                AnimatedContainer(
+                  alignment: Alignment.center,
+                  width: _calculateWidth(progress.value),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(22), gradient: _calculateGradient(progress.value)),
+                  duration: 100.milliseconds,
+                ),
 
-              // Progress of Transfer
-              Align(
-                alignment: Alignment.center,
-                child: AnimatedSlider.fade(
-                  duration: 200.milliseconds,
-                  child: Container(
-                    key: ValueKey<double>(progress.value),
-                    child: _calculateText(progress.value).subheading(
-                      fontSize: 16,
-                      color: _calculateTextColor(progress.value),
+                // Progress of Transfer
+                Align(
+                  alignment: Alignment.center,
+                  child: AnimatedSlider.fade(
+                    duration: 200.milliseconds,
+                    child: Container(
+                      key: ValueKey<double>(progress.value),
+                      child: _calculateText(progress.value).subheading(
+                        fontSize: 16,
+                        color: _calculateTextColor(progress.value),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
@@ -189,5 +186,27 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
       return SonrColor.Black;
     }
     return SonrColor.White;
+  }
+}
+
+class _CurrentActivityIndexLabel extends StatelessWidget {
+  final RxInt current;
+  final int total;
+
+  const _CurrentActivityIndexLabel({Key? key, required this.current, required this.total}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (total != 1) {
+      return Obx(() => Container(padding: EdgeInsets.only(top: 8), alignment: Alignment.center, child: _buildLabel(current.value, total)));
+    }
+    return Container();
+  }
+
+  Widget _buildLabel(int current, int total) {
+    return "($current / $total)".light(
+      fontSize: 14,
+      color: SonrTheme.greyColor,
+    );
   }
 }

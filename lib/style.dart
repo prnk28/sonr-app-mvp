@@ -11,7 +11,7 @@ export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
 export 'package:sonr_app/style/elements/painter.dart';
 export 'package:animate_do/animate_do.dart';
-export 'package:sonr_app/modules/camera/camera_view.dart';
+export 'package:sonr_app/modules/camera/camera.dart';
 export 'package:sonr_app/data/data.dart';
 
 // Custom Theme Buttons
@@ -31,11 +31,12 @@ export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
 // Common Widgets
-export 'style/common/sname_field.dart';
+export 'modules/common/contact_utils.dart';
+export 'modules/common/date_utils.dart';
+export 'modules/common/fileItem_utils.dart';
+export 'modules/common/profile_utils.dart';
 
-// Theme Models
-export 'style/models/direction.dart';
-export 'style/models/type.dart';
+
 
 // Custom Theme Elements
 export 'style/elements/shape.dart';
@@ -229,20 +230,23 @@ class SonrTheme {
       );
 
   /// Returns Current Text Color
-  static Color get backgroundColor => UserService.isDarkMode ? Colors.black : Colors.white;
+  static Color get backgroundColor => Preferences.isDarkMode ? Colors.black : Colors.white;
 
-  static Color get dividerColor => UserService.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
+  static Color get dividerColor => Preferences.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
-  static Color get foregroundColor => UserService.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
-
-  /// Returns Current Text Color
-  static Color get itemColor => UserService.isDarkMode ? SonrColor.White : SonrColor.Black;
+  static Color get foregroundColor => Preferences.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
-  static Color get itemColorInversed => UserService.isDarkMode ? SonrColor.Black : SonrColor.White;
+  static Color get itemColor => Preferences.isDarkMode ? SonrColor.White : SonrColor.Black;
+
+  /// Returns Current Text Color
+  static Color get itemColorInversed => Preferences.isDarkMode ? SonrColor.Black : SonrColor.White;
+
+  /// Returns Current Shadow Color
+  static Color get shadowColor => Preferences.isDarkMode ? Colors.black.withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
 
   /// Return Current Box Shadow
-  static List<BoxShadow> get boxShadow => UserService.isDarkMode
+  static List<BoxShadow> get boxShadow => Preferences.isDarkMode
       ? [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
@@ -267,7 +271,7 @@ class SonrTheme {
       ];
 
   /// Return Current Box Shadow
-  static List<PolygonBoxShadow> get polyBoxShadow => UserService.isDarkMode
+  static List<PolygonBoxShadow> get polyBoxShadow => Preferences.isDarkMode
       ? [
           PolygonBoxShadow(
             color: Colors.black.withOpacity(0.4),

@@ -6,41 +6,13 @@ export 'views/url_auth.dart';
 // Imports
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
-import 'views/contact_auth.dart';
 import 'views/file_auth.dart';
 import 'views/url_auth.dart';
-
-class Authorize {
-  /// Invite Received
-  static void invite(InviteRequest invite) {
-    // Place Controller
-    if (invite.payload == Payload.CONTACT) {
-      AppRoute.popup(ContactAuthView(false, invite: invite), dismissible: false);
-    } else {
-      AppRoute.sheet(_InviteRequestSheet(invite: invite), key: ValueKey(invite), dismissible: true, onDismissed: (direction) {
-        NodeService.respond(invite.newDeclineResponse());
-        AppRoute.closeSheet();
-      });
-    }
-  }
-
-  /// Reply Contact Received
-  static void reply(InviteResponse reply) {
-    // Open Sheet
-    AppRoute.popup(
-      Container(
-        child: ContactAuthView(true, reply: reply),
-      ),
-      dismissible: false,
-    );
-  }
-}
-
 /// @ TransferView: Builds Invite View based on InviteRequest Payload Type
-class _InviteRequestSheet extends StatelessWidget {
+class InviteRequestSheet extends StatelessWidget {
   final InviteRequest invite;
 
-  const _InviteRequestSheet({Key? key, required this.invite}) : super(key: key);
+  const InviteRequestSheet({Key? key, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return FadeInUpBig(

@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -21,7 +20,7 @@ class FileAuthView extends StatelessWidget {
           Padding(padding: EdgeInsets.all(6)),
           // From Information
           Column(children: [
-            ProfileName(profile: invite.from.profile, isHeader: true),
+            ProfileFullName(profile: invite.from.profile, isHeader: true),
             Row(children: [
               invite.payload.toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
               "   ${invite.file.prettySize()}".paragraph()

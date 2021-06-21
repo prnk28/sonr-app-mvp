@@ -29,7 +29,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   late final AnimationController visibilityController;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
-  bool get isHittingValid => peer.value.isHitFrom(MobileService.position.value) && status.value.isIdle;
+  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isIdle;
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -67,7 +67,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
     // Check for Mobile
     if (DeviceService.isMobile) {
-      _userStream = MobileService.position.listen(_handlePosition);
+      _userStream = DeviceService.position.listen(_handlePosition);
     }
 
     // Set If Animated

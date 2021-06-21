@@ -26,7 +26,7 @@ class EditNameView extends GetView<PersonalController> {
                   autoFocus: true,
                   focusNode: _prefixNameFocus,
                   textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.contact.value.general.name.prefix),
+                  controller: TextEditingController(text: ContactService.contact.value.general.name.prefix),
                   onEditingComplete: () {
                     _firstNameFocus.requestFocus();
                     scrollController.animateTo(40, duration: 250.milliseconds, curve: Curves.easeOut);
@@ -38,7 +38,7 @@ class EditNameView extends GetView<PersonalController> {
                   label: "First Name",
                   focusNode: _firstNameFocus,
                   textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.contact.value.firstName),
+                  controller: TextEditingController(text: ContactService.contact.value.firstName),
                   onEditingComplete: () {
                     _middleNameFocus.requestFocus();
                     scrollController.animateTo(80, duration: 250.milliseconds, curve: Curves.easeOut);
@@ -50,7 +50,7 @@ class EditNameView extends GetView<PersonalController> {
                   label: "Middle Name",
                   focusNode: _middleNameFocus,
                   textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.contact.value.general.name.middleName),
+                  controller: TextEditingController(text: ContactService.contact.value.general.name.middleName),
                   onEditingComplete: () {
                     _lastNameFocus.requestFocus();
                     scrollController.animateTo(120, duration: 250.milliseconds, curve: Curves.easeOut);
@@ -61,7 +61,7 @@ class EditNameView extends GetView<PersonalController> {
                   hint: hintName.item2,
                   label: "Last Name",
                   textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.contact.value.lastName),
+                  controller: TextEditingController(text: ContactService.contact.value.lastName),
                   focusNode: _lastNameFocus,
                   value: controller.editedLastName.value,
                   onEditingComplete: () {
@@ -73,7 +73,7 @@ class EditNameView extends GetView<PersonalController> {
                   hint: "Jr.",
                   label: "Suffix",
                   textInputAction: TextInputAction.next,
-                  controller: TextEditingController(text: UserService.contact.value.hasPhone() ? UserService.contact.value.phonePrimary : ""),
+                  controller: TextEditingController(text: ContactService.contact.value.hasPhone() ? ContactService.contact.value.phonePrimary : ""),
                   value: controller.editedLastName.value,
                   focusNode: _suffixNameFocus,
                   onEditingComplete: () {

@@ -1,4 +1,7 @@
+import 'package:share/share.dart';
 import 'package:sonr_app/style.dart';
+import 'package:flutter_contacts/flutter_contacts.dart' as pub;
+
 export 'activity.dart';
 export 'widgets/current_item.dart';
 export 'widgets/past_item.dart';
@@ -28,6 +31,27 @@ class ActivityController extends GetxController {
           await AppRoute.question(title: "Clear?", description: "Would you like to clear all activity?", acceptTitle: "Yes", declineTitle: "Cancel");
       if (decision) {
         CardService.clearAllActivity();
+      }
+    }
+  }
+
+  /// Method Exports Transfer based on Payload
+  Future<void> exportTransfer(Transfer transfer) async {
+    if (transfer.payload.isTransfer) {
+      Share.shareFiles(transfer.file.items.map<String>((e) => e.path).toList());
+    } else {
+      if (transfer.payload.isUrl) {
+        Share.share(transfer.url.url, subject: transfer.url.siteName);
+      } else if (transfer.payload.isContact) {
+        // Request contact permission
+        if (await pub.FlutterContacts.requestPermission()) {
+          // Insert new contact
+          final newContact = pub.Contact()
+            ..name.first = 'John'
+            ..name.last = 'Smith'
+            ..phones = [pub.Phone('555-123-4567')];
+          await newContact.insert();
+        }
       }
     }
   }

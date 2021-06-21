@@ -1,4 +1,3 @@
-import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -41,7 +40,7 @@ class ContactAuthView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              ProfileName(profile: card.profile, isHeader: false),
+              ProfileFullName(profile: card.profile, isHeader: false),
 
               // Phone/ Website
               Row(children: [

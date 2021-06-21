@@ -29,13 +29,28 @@ class SonrScaffold extends StatelessWidget {
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
-      body: SafeArea(child: body ?? Container()),
       appBar: appBar,
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingAction,
-      bottomSheet: bottomSheet,
+      body: Stack(children: [
+        SafeArea(child: body ?? Container()),
+        SafeArea(
+          top: false,
+          left: false,
+          bottom: false,
+          right: false,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: bottomSheet,
+          ),
+        )
+      ]),
     );
   }
+}
+
+extension FloatingActionButtonLocations on FloatingActionButtonLocation {
+  static FloatingActionButtonLocation get fixedCenterDocked => _FixedCenterDockedFabLocation();
 }
 
 /// @ Fixed Location for Center Docked

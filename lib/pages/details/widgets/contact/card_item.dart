@@ -1,4 +1,3 @@
-import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
 
@@ -26,7 +25,7 @@ class ContactCardItemView extends StatelessWidget {
             ),
 
             // Build Name
-            ProfileName(profile: card.contact!.profile, isHeader: false),
+            ProfileFullName(profile: card.contact!.profile, isHeader: false),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 
