@@ -1,5 +1,6 @@
 // Exports
 export 'views/flat_view.dart';
+export 'controllers/item_controller.dart';
 export 'controllers/peer_controller.dart';
 export 'controllers/transfer_controller.dart';
 export 'widgets/payload/item.dart';

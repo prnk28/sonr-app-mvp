@@ -67,13 +67,20 @@ class TransferController extends GetxController {
   }
 
   /// @ First Method Called
-  void initialize() {
-    final args = Get.arguments;
-    if (args is TransferArguments) {
-      inviteRequest = args.request;
+  void initialize({InviteRequest? request}) {
+    // Manual Injection
+    if (request != null) {
+      inviteRequest = request;
       hasInvite(true);
     } else {
-      hasInvite(false);
+      // Fetch from Arguments
+      final args = Get.arguments;
+      if (args is TransferArguments) {
+        inviteRequest = args.request;
+        hasInvite(true);
+      } else {
+        hasInvite(false);
+      }
     }
   }
 

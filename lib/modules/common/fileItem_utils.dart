@@ -215,7 +215,7 @@ class MetaVideo extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return GestureDetector(
-                  onLongPress: () => metadata.open(),
+                  onTap: () => metadata.open(),
                   child: Container(
                     width: width ?? orientation.defaultWidth,
                     height: height ?? orientation.defaultHeight,

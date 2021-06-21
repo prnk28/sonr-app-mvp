@@ -99,8 +99,16 @@ class _PostFileContentView extends StatelessWidget {
     // # Check for Media File Type
     if (file.isMedia) {
       // Image
-      if (file.single.mime.type == MIME_Type.IMAGE) {
+      if (file.single.mime.isImage) {
         return MetaImageBox(
+          metadata: file.single,
+          width: Get.width,
+        );
+      }
+
+      // Video
+      else if (file.single.mime.isVideo) {
+        return MetaVideo(
           metadata: file.single,
           width: Get.width,
         );

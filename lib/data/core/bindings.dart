@@ -59,6 +59,7 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
+    Get.create<ItemController>(() => ItemController());
   }
 }
 

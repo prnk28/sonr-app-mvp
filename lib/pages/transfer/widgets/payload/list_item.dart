@@ -1,7 +1,8 @@
 import 'package:sonr_app/pages/transfer/controllers/transfer_controller.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 
-class SonrFileListHeader extends StatelessWidget {
+class SonrFileListHeader extends GetView<ItemController> {
   @override
   Widget build(BuildContext context) {
     final file = TransferController.invite.file;
@@ -26,7 +27,7 @@ class SonrFileListHeader extends StatelessWidget {
   }
 }
 
-class SonrFileListItem extends StatelessWidget {
+class SonrFileListItem extends GetView<ItemController> {
   final SonrFile_Item item;
   final int index;
   final GlobalKey key;
@@ -76,9 +77,9 @@ class SonrFileListItem extends StatelessWidget {
             onPressed: () {
               AppRoute.positioned(
                 Infolist(options: [
-                  InfolistOption("Replace", SonrIcons.Reload, () {}),
-                  InfolistOption("Remove", SonrIcons.Trash, () {}),
-                  InfolistOption("Cancel", SonrIcons.Cancel, () {}),
+                  InfolistOption("Replace", SonrIcons.Reload, controller.replace),
+                  InfolistOption("Remove", SonrIcons.Trash, controller.delete),
+                  InfolistOption("Cancel", SonrIcons.Cancel, controller.cancel),
                 ]),
                 parentKey: key,
               );

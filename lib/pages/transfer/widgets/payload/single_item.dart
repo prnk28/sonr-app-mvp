@@ -2,7 +2,7 @@ import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 import 'thumbnail.dart';
 
-class PayloadSingleItem extends StatelessWidget {
+class PayloadSingleItem extends GetView<ItemController> {
   final GlobalKey key;
 
   const PayloadSingleItem({required this.key});
@@ -20,9 +20,9 @@ class PayloadSingleItem extends StatelessWidget {
           onPressed: () {
             AppRoute.positioned(
               Infolist(options: [
-                InfolistOption("Replace", SonrIcons.Reload, () {}),
-                InfolistOption("Remove", SonrIcons.Trash, () {}),
-                InfolistOption("Cancel", SonrIcons.Cancel, () {}),
+                InfolistOption("Replace", SonrIcons.Reload, controller.replace),
+                InfolistOption("Remove", SonrIcons.Trash, controller.delete),
+                InfolistOption("Cancel", SonrIcons.Cancel, controller.cancel),
               ]),
               parentKey: key,
             );

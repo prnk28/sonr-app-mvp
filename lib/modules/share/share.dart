@@ -7,6 +7,8 @@ export 'views/popup_view.dart';
 export 'widgets/share_button.dart';
 
 // Imports
+import 'package:sonr_app/pages/transfer/controllers/transfer_controller.dart';
+
 import 'models/asset.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/transfer/models/arguments.dart';
@@ -159,6 +161,7 @@ class ShareController extends GetxController {
       if (this.type.value.isViewPopup) {
         AppPage.Transfer.off(args: TransferArguments(request));
       } else {
+        Get.find<TransferController>().initialize(request: request);
         Get.back();
       }
       // Reset Share Items
