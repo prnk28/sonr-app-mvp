@@ -87,40 +87,30 @@ class ContactService extends GetxService {
   }
 
   /// @ Method Collects user Feedback and Sends Email
-  static void sendFeedback(String message, Uint8List? screenshot) async {
+  static void sendFeedback(UserFeedback data) async {
     var screenshotPath = "";
-    bool hasScreenshot = false;
 
     // Save Image
-    if (screenshot != null) {
-      final Directory output = await getTemporaryDirectory();
-      final String screenshotFilePath = '${output.path}/feedback.png';
-      final File screenshotFile = File(screenshotFilePath);
-      await screenshotFile.writeAsBytes(screenshot);
-      screenshotPath = screenshotFilePath;
-      hasScreenshot = true;
-    }
+    final Directory output = await getTemporaryDirectory();
+    final String screenshotFilePath = '${output.path}/feedback.png';
+    final File screenshotFile = File(screenshotFilePath);
+    await screenshotFile.writeAsBytes(data.screenshot);
+    screenshotPath = screenshotFilePath;
 
     // Check if Has Screenshot
-    if (hasScreenshot) {
-      // Create Instance
-      Reference ref = FirebaseStorage.instance.ref().child('screenshots').child(screenshotPath);
+    // Create Instance
+    Reference ref = FirebaseStorage.instance.ref().child('screenshots').child(screenshotPath);
 
-      // Set Metadata
-      final feedback = SettableMetadata(
-        contentType: 'image/jpeg',
-        customMetadata: {'path': screenshotPath},
-      );
+    // Set Metadata
+    final feedback = SettableMetadata(
+      contentType: 'image/jpeg',
+      customMetadata: {'path': screenshotPath},
+    );
 
-      // Upload to Firebase
-      UploadTask uploadTask = ref.putFile(File(screenshotPath), feedback);
-      await uploadTask.whenComplete(() => to._handleUploadScreenshot(ref, message));
-    } else {
-      // Post Only Message
-      to._handlePostFeedback(message);
-    }
+    // Upload to Firebase
+    UploadTask uploadTask = ref.putFile(File(screenshotPath), feedback);
+    await uploadTask.whenComplete(() => to._handleUploadScreenshot(ref, data.text));
   }
-
 
   // # Helper Method to Handle Contact Updates
   void _handleContact(Contact data) async {
