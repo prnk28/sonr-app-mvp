@@ -74,7 +74,7 @@ class _ProfileInfoView extends GetView<PersonalController> {
           ContactService.contact.value.fullName.subheading(color: SonrTheme.itemColor, fontSize: 32),
 
           // Username
-          SNameField(),
+          ContactSName(),
           Padding(padding: EdgeInsets.all(12)),
 
           // Bio/ LastTweet

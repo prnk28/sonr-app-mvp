@@ -57,7 +57,7 @@ class PermPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocations.fixedCenterDocked,
       floatingActionButton: ColorButton.neutral(
         onPressed: () => onPressed(),
         text: buttonText,

@@ -49,6 +49,10 @@ class SonrScaffold extends StatelessWidget {
   }
 }
 
+extension FloatingActionButtonLocations on FloatingActionButtonLocation {
+  static FloatingActionButtonLocation get fixedCenterDocked => _FixedCenterDockedFabLocation();
+}
+
 /// @ Fixed Location for Center Docked
 class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
   const _FixedCenterDockedFabLocation();

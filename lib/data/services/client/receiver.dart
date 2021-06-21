@@ -1,4 +1,5 @@
 import 'package:sonr_app/data/services/services.dart';
+import 'package:sonr_app/modules/activity/views/completed_view.dart';
 import 'package:sonr_app/style.dart';
 
 class ReceiverService extends GetxService {
@@ -107,7 +108,8 @@ class ReceiverService extends GetxService {
     // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: Sounds.Received);
-
+    AppRoute.popup(CompletedPopup(transfer: data));
+    
     // Logging
     Logger.info("Node(Callback) Received: " + data.toString());
     _session.reset();

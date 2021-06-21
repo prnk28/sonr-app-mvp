@@ -31,7 +31,7 @@ export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
 // Common Widgets
-export 'style/common/sname_field.dart';
+export 'style/common/contact_utils.dart';
 
 // Theme Models
 export 'style/models/direction.dart';

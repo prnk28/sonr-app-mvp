@@ -1,9 +1,9 @@
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/utility.dart';
 
-class SNameField extends StatelessWidget {
+class ContactSName extends StatelessWidget {
   /// Widget for Action Icon: Max Size 32
-  const SNameField({Key? key}) : super(key: key);
+  const ContactSName({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -13,7 +13,11 @@ class SNameField extends StatelessWidget {
               onTapUp: (details) async {
                 isPressed(false);
                 await HapticFeedback.mediumImpact();
-                Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {});
+                Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                  Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
+                  AppRoute.snack(
+                      SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
+                });
               },
               child: AnimatedScale(
                   scale: isPressed.value ? 1.1 : 1.0,

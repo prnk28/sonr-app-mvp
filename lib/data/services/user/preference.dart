@@ -17,6 +17,7 @@ class Preferences extends GetxService {
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
+  static Rx<Peer_Properties> get properties => to._properties;
 
   Future<Preferences> init() async {
     await GetStorage.init('Preferences');

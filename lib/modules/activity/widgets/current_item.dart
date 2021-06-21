@@ -32,7 +32,7 @@ class CurrentActivityItem extends GetView<ActivityController> {
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: ActionButton(
                     onPressed: () {
-                      AppRoute.popup(CompletedPopup());
+              
                     },
                     iconData: SonrIcons.Category,
                   ),

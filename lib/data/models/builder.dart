@@ -25,9 +25,19 @@ class RequestBuilder {
     );
   }
 
+  /// Returns New Contact Update Request
+  static UpdateRequest get updateContact {
+    return Request.newUpdateContact(contact);
+  }
+
   /// Returns New Position Update Request
-  static UpdateRequest get positionUpdate {
+  static UpdateRequest get updatePosition {
     return Request.newUpdatePosition(DeviceService.position.value);
+  }
+
+  /// Returns New Properties Update Request
+  static UpdateRequest get updateProperties {
+    return Request.newUpdateProperties(Preferences.properties.value);
   }
 }
 

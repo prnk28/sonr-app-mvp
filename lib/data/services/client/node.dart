@@ -47,7 +47,7 @@ class NodeService extends GetxService {
       node.connect(await RequestBuilder.connection);
 
       // Send Initial Position Update
-      node.update(RequestBuilder.positionUpdate);
+      node.update(RequestBuilder.updatePosition);
       return true;
     } else {
       return false;
