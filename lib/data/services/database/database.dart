@@ -27,7 +27,6 @@ class TransferActivities extends Table {
 class TransferCards extends Table {
   IntColumn? get id => integer().autoIncrement()();
   TextColumn? get owner => text().map(const ProfileConverter())();
-  IntColumn? get mime => integer().map(const MimeConverter())();
   IntColumn? get payload => integer().map(const PayloadConverter())();
   TextColumn? get contact => text().map(const ContactConverter()).nullable()();
   TextColumn? get file => text().map(const FileConverter()).nullable()();
@@ -105,7 +104,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'sonr-cards.sqlite'));
+    final file = File(p.join(dbFolder.path, 'sonr-cards2.sqlite'));
     return VmDatabase(file);
   });
 }

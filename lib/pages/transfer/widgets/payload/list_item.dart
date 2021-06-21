@@ -1,5 +1,4 @@
 import 'package:sonr_app/pages/transfer/controllers/transfer_controller.dart';
-import 'package:sonr_app/pages/transfer/views/popup_view.dart';
 import 'package:sonr_app/style.dart';
 
 class SonrFileListHeader extends StatelessWidget {
@@ -34,7 +33,9 @@ class SonrFileListItem extends StatelessWidget {
   const SonrFileListItem({Key? key, required this.item, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final key = GlobalKey();
     return BoxContainer(
+      key: key,
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(8),
       child: Row(children: [
@@ -71,14 +72,19 @@ class SonrFileListItem extends StatelessWidget {
         // Button
         Container(
           alignment: Alignment.topRight,
-          child: ActionButton(
-            onPressed: () {
-              AppRoute.popup(EditPayloadPopup(
-                index: index,
-                item: item,
-              ));
-            },
-            iconData: SonrIcons.MoreVertical,
+          child: InfoButton(
+            options: [
+              InfolistOption("Replace", SonrIcons.Reload, () {
+                Get.back();
+              }),
+              InfolistOption("Remove", SonrIcons.Trash, () {
+                Get.back();
+              }),
+              InfolistOption("Cancel", SonrIcons.Cancel, () {
+                Get.back();
+              }),
+            ],
+            key: key,
           ),
         ),
       ]),

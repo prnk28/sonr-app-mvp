@@ -2,6 +2,9 @@ import 'package:sonr_app/style.dart';
 
 import 'utility.dart';
 
+/// ### ArrowButton
+/// Text Button That Displays Arrow Next to It
+/// Used for [InfoList] and [CheckList] Modals.
 class ArrowButton extends StatelessWidget {
   /// Button Title to Display
   final String title;
@@ -92,6 +95,50 @@ class ArrowButton extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+        false.obs);
+  }
+}
+
+/// ### InfoButton
+/// Text Button That Displays Info Icon Next to It
+/// Used for [InfoList] Modals.
+class InfoButton extends StatelessWidget {
+  final List<InfolistOption> options;
+  final Offset? offset;
+  final GlobalKey key;
+
+  const InfoButton({required this.key, required this.options, this.offset}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ObxValue<RxBool>(
+        (isPressed) => GestureDetector(
+              onTapDown: (details) {
+                HapticFeedback.lightImpact();
+                isPressed(true);
+              },
+              onTapCancel: () => isPressed(false),
+              onTapUp: (details) async {
+                isPressed(false);
+                HapticFeedback.heavyImpact();
+                Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                  AppRoute.positioned(
+                    Infolist(options: options),
+                    offset: offset,
+                    parentKey: key,
+                  );
+                });
+              },
+              child: AnimatedScale(
+                scale: isPressed.value ? 0.9 : 1.0,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(12)),
+                  child: SonrIcons.Info.icon(size: 28, color: SonrTheme.greyColor),
                 ),
               ),
             ),

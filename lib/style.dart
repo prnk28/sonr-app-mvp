@@ -31,9 +31,9 @@ export 'style/components/shape.dart';
 export 'style/components/text.dart';
 
 // Common Widgets
-export 'style/common/contact_utils.dart';
-export 'style/common/fileItem_utils.dart';
-export 'style/common/profile_utils.dart';
+export 'modules/common/contact_utils.dart';
+export 'modules/common/fileItem_utils.dart';
+export 'modules/common/profile_utils.dart';
 
 // Theme Models
 export 'style/models/direction.dart';

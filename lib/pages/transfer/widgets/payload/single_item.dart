@@ -1,31 +1,29 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/pages/transfer/views/popup_view.dart';
 import 'package:sonr_app/style.dart';
 import 'thumbnail.dart';
 
 class PayloadSingleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final file = TransferController.invite.file;
     final invite = TransferController.invite;
+    final key = GlobalKey();
     return Container(
+        key: key,
         child: Row(children: [
-      PayloadItemThumbnail(),
-      _buildTitle(invite),
-      Container(
-        padding: EdgeInsets.only(left: 24),
-        alignment: Alignment.topRight,
-        child: ActionButton(
-          onPressed: () {
-            AppRoute.popup(EditPayloadPopup(
-              index: 0,
-              item: file.single,
-            ));
-          },
-          iconData: SonrIcons.MoreVertical,
-        ),
-      ),
-    ]));
+          PayloadItemThumbnail(),
+          _buildTitle(invite),
+          Container(
+            alignment: Alignment.topRight,
+            child: InfoButton(
+              options: [
+                InfolistOption("Replace", SonrIcons.Reload, () {}),
+                InfolistOption("Remove", SonrIcons.Trash, () {}),
+                InfolistOption("Cancel", SonrIcons.Cancel, () {}),
+              ],
+              key: key,
+            ),
+          ),
+        ]));
   }
 
   Widget _buildTitle(InviteRequest invite) {

@@ -45,6 +45,7 @@ class Infolist extends StatelessWidget {
         constraints: options.boxConstraints,
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
         child: ListView.builder(
+          shrinkWrap: true,
           itemBuilder: (context, index) => GestureDetector(
               onTap: () => options[index].onPressed(),
               child: Container(
