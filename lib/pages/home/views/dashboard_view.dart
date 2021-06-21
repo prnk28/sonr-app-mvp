@@ -13,7 +13,7 @@ class DashboardView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => controller.closeSearch(context),
+      onTap: () => controller.closeSearch(),
       child: Container(
           padding: EdgeInsets.all(8),
           margin: _getMargin(context),

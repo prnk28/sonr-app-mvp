@@ -95,7 +95,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   /// Sets View for Searching
-  void closeSearch(BuildContext context) {
+  void closeSearch() {
     DeviceService.hideKeyboard();
     query("");
     view(HomeView.Dashboard);
