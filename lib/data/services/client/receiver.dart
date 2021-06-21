@@ -98,6 +98,7 @@ class ReceiverService extends GetxService {
   void handleReceived(Transfer data) async {
     // Check for Callback
     _session.onComplete(data);
+    Get.back();
 
     // Save Card to Gallery
     if (data.payload.isTransfer) {
@@ -108,7 +109,6 @@ class ReceiverService extends GetxService {
     // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: Sounds.Received);
-    Get.back();
 
     // Display Released Card
     Future.delayed(2.seconds, () {

@@ -84,10 +84,6 @@ class MetaAlbumBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final isVisible = true.obs;
     final currentIndex = 0.0.obs;
-    Future.delayed(1500.milliseconds, () {
-      isVisible(false);
-    });
-
     return Obx(
       () => Container(
         width: width,
