@@ -107,7 +107,7 @@ class LocalService extends GetxService {
     if (data.type == Lobby_Type.LOCAL) {
       // Update Status
       _status(LocalStatusUtils.localStatusFromCount(data.count));
-
+      //_handleLog(data);
       // Set Lobby
       _lobby(data);
 
@@ -118,6 +118,7 @@ class LocalService extends GetxService {
       _handleFlatPeers(data);
     }
   }
+
 
   // # Handle Lobby Flat Peers
   void _handleFlatPeers(Lobby data) {

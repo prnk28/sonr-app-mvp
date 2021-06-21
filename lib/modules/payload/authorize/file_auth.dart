@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+import 'package:get/get.dart';
 
 /// @ File Invite Builds from Invite Protobuf
 class FileAuthView extends StatelessWidget {

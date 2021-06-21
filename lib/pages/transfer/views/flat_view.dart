@@ -1,4 +1,3 @@
-import 'package:sonr_app/modules/authorize/authorize.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style.dart';
 
@@ -28,16 +27,16 @@ class _FlatModeCard extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     if (controller.status.value.isIncoming) {
-      return ContactFlatCard(controller.received.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+      return ContactContent(controller.received.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
     } else if (controller.status.value.isPending) {
       return Container(key: ValueKey<FlatModeState>(controller.status.value));
     } else if (controller.status.value.isReceiving) {
-      return ContactFlatCard(ContactService.contact.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+      return ContactContent(ContactService.contact.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
     } else {
       return Draggable(
         key: ValueKey<FlatModeState>(controller.status.value),
-        child: ContactFlatCard(ContactService.contact.value, scale: 0.9),
-        feedback: ContactFlatCard(ContactService.contact.value, scale: 0.9),
+        child: ContactContent(ContactService.contact.value, scale: 0.9),
+        feedback: ContactContent(ContactService.contact.value, scale: 0.9),
         childWhenDragging: Container(),
         axis: Axis.vertical,
         onDragUpdate: (details) {

@@ -1,6 +1,7 @@
-import 'package:sonr_app/pages/details/details.dart';
+import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// @ URL Invite from InviteRequest Proftobuf
@@ -42,7 +43,7 @@ class URLAuthView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(child: Container(child: URLLinkView(data: invite.url))),
+            Expanded(child: Container(child: URLContent(link: invite.url))),
           ],
         ),
 

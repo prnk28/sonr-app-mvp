@@ -2,9 +2,10 @@ import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class URLLinkView extends StatelessWidget {
+
+class URLContent extends StatelessWidget {
   /// URLLink Data
-  final URLLink data;
+  final URLLink link;
 
   /// Enable lanching website `onTap`
   final bool enableLaunch;
@@ -13,21 +14,21 @@ class URLLinkView extends StatelessWidget {
   final bool enableCopy;
 
   /// Fetches URLLink Data from String and Creates URLLinkView
-  static Future<URLLinkView> fromString(String url, {bool enableLaunch = false, bool enableCopy = true}) async {
+  static Future<URLContent> fromString(String url, {bool enableLaunch = false, bool enableCopy = true}) async {
     URLLink data = await NodeService.getURL(url);
-    return URLLinkView(data: data, enableCopy: enableCopy, enableLaunch: enableLaunch);
+    return URLContent(link: data, enableCopy: enableCopy, enableLaunch: enableLaunch);
   }
 
-  const URLLinkView({Key? key, required this.data, this.enableLaunch = false, this.enableCopy = true}) : super(key: key);
+  const URLContent({Key? key, required this.link, this.enableLaunch = false, this.enableCopy = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       // Social Image
-      _URLLinkImage(data: data),
+      _URLLinkImage(data: link),
 
       // URL Info
-      _URLLinkInfo(data: data),
+      _URLLinkInfo(data: link),
 
       //  Link Preview
       GestureDetector(
@@ -44,7 +45,7 @@ class URLLinkView extends StatelessWidget {
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: data.url.url,
+                  child: link.url.url,
                 ),
               )
             ])),
@@ -54,17 +55,17 @@ class URLLinkView extends StatelessWidget {
 
   /// Launch URL from URLLink
   void _copyURL() async {
-    if (enableCopy && data.url.isURL) {
-      Clipboard.setData(ClipboardData(text: data.url));
+    if (enableCopy && link.url.isURL) {
+      Clipboard.setData(ClipboardData(text: link.url));
       AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white)));
     }
   }
 
   /// Launch URL from URLLink
   Future<void> _launchURL() async {
-    if (enableLaunch && data.url.isURL) {
-      if (await canLaunch(data.url)) {
-        await launch(data.url);
+    if (enableLaunch && link.url.isURL) {
+      if (await canLaunch(link.url)) {
+        await launch(link.url);
       } else {
         AppRoute.snack(SnackArgs.error("Could not launch the URL."));
       }

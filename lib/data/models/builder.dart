@@ -1,5 +1,4 @@
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/modules/authorize/authorize.dart';
 import 'package:sonr_app/style.dart';
 
 class RequestBuilder {

@@ -16,7 +16,6 @@ class PostsPage extends StatelessWidget {
             itemCount: args.type.itemCount,
             itemBuilder: (BuildContext context, int index) => PostItem(
               args.type.transferItemAtIndex(index),
-              type: PostDisplayType.ListItem,
             ),
           ),
         ));

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/style.dart';
 
@@ -224,6 +225,56 @@ extension DisplayTextUtils on String {
 
   /// URL Style Text
   URLText get url => URLText(this);
+}
+
+class DateText extends StatelessWidget {
+  final DateTime date;
+  final Color? color;
+  final double fontSize;
+  final FontStyle fontStyle;
+  final DisplayTextStyle textStyle;
+
+  factory DateText.fromMilliseconds(
+    int date, {
+    Color? color,
+    double fontSize = 16,
+    FontStyle fontStyle = FontStyle.normal,
+    DisplayTextStyle textStyle = DisplayTextStyle.Paragraph,
+  }) {
+    return DateText(
+      date: DateTime.fromMillisecondsSinceEpoch(date),
+      color: color,
+      fontSize: fontSize,
+      fontStyle: fontStyle,
+      textStyle: textStyle,
+    );
+  }
+
+  const DateText({
+    Key? key,
+    required this.date,
+    this.color,
+    this.fontSize = 16,
+    this.fontStyle = FontStyle.normal,
+    this.textStyle = DisplayTextStyle.Paragraph,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _buildDateTime(),
+      style: textStyle.style(
+        color: color,
+        fontSize: fontSize,
+        fontStyle: fontStyle,
+      ),
+    );
+  }
+
+  String _buildDateTime() {
+    final dateFormatter = intl.DateFormat.yMMMd('en_US').add_jm();
+    return dateFormatter.format(date);
+  }
 }
 
 class DisplayText extends StatelessWidget {

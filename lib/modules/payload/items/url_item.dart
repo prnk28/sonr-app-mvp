@@ -1,10 +1,12 @@
 import 'package:sonr_app/style.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// @ Widget for Expanded Media View
-class URLCardItemView extends StatelessWidget {
+/// @ Transfer Contact Item Details
+class URLItemView extends StatelessWidget {
   final TransferCard item;
-  const URLCardItemView(this.item);
+  const URLItemView({Key? key, required this.item}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

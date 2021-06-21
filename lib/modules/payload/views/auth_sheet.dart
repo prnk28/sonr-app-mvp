@@ -1,13 +1,9 @@
-// Exports
-export 'views/contact_auth.dart';
-export 'views/file_auth.dart';
-export 'views/url_auth.dart';
 
 // Imports
 import 'package:sonr_app/data/services/services.dart';
+import 'package:sonr_app/modules/payload/payload.dart';
 import 'package:sonr_app/style.dart';
-import 'views/file_auth.dart';
-import 'views/url_auth.dart';
+
 /// @ TransferView: Builds Invite View based on InviteRequest Payload Type
 class InviteRequestSheet extends StatelessWidget {
   final InviteRequest invite;
