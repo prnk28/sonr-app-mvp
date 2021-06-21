@@ -18,7 +18,7 @@ class DashboardView extends GetView<HomeController> {
           padding: EdgeInsets.all(8),
           margin: _getMargin(context),
           child: CustomScrollView(controller: controller.scrollController, slivers: [
-            SliverToBoxAdapter(child: _CardSearchView()),
+            SliverToBoxAdapter(child: CardSearchField()),
             SliverPadding(padding: EdgeInsets.only(top: 14)),
             Obx(() => SliverToBoxAdapter(
                 child: Container(
@@ -132,63 +132,5 @@ class DashboardView extends GetView<HomeController> {
   EdgeInsets _getMargin(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return EdgeInsets.only(left: width * 0.05, right: width * 0.05);
-  }
-}
-
-/// @ Card Search View - Displays Search View
-class _CardSearchView extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(8),
-      height: 108,
-      width: Width.ratio(0.4),
-      alignment: Alignment.center,
-      duration: 100.milliseconds,
-      child: GestureDetector(
-          onTap: () => controller.changeView(HomeView.Search),
-          child: Container(
-              child: Obx(() => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      BoxContainer(
-                          margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                          child: Stack(children: [
-                            Padding(
-                                padding: EdgeInsets.only(top: 8),
-                                child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                  Preferences.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 14.0),
-                                      child: TextField(
-                                          style: TextStyle(
-                                            fontFamily: 'RFlex',
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w400,
-                                            color: SonrTheme.itemColor,
-                                          ),
-                                          showCursor: false,
-                                          autofocus: false,
-                                          onChanged: (val) {
-                                            controller.query(val);
-                                            controller.query.refresh();
-                                          },
-                                          decoration: InputDecoration.collapsed(
-                                              hintText: "Search...",
-                                              hintStyle: TextStyle(
-                                                  fontFamily: 'RFlex',
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),
-                                    ),
-                                  ),
-                                ])),
-                          ]))
-                    ],
-                  )))),
-    );
   }
 }
