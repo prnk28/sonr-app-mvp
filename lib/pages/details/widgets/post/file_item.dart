@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/pages/details/widgets/post/views.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 

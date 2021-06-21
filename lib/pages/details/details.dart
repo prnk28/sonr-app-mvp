@@ -10,7 +10,6 @@ export 'package:sonr_app/pages/details/widgets/post/item.dart';
 export 'widgets/url/card_item.dart';
 export 'widgets/url/link_view.dart';
 export 'widgets/url/list_item.dart';
-export 'widgets/post/views.dart';
 export 'models/arguments.dart';
 export 'models/orientation.dart';
 export 'models/type.dart';
