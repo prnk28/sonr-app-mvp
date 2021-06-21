@@ -9,11 +9,11 @@ class CompletedPopup extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
-      // Scaffold Box
-      _PostTransferItem(transfer: transfer),
-
       // Lotte Animation
       LottieFile.Celebrate.lottie(width: Get.width, height: Get.height, repeat: false, fit: BoxFit.fitHeight),
+
+      // Scaffold Box
+      AnimatedBounce(direction: BounceDirection.Up, isDisplayed: true, child: _PostTransferItem(transfer: transfer)),
     ]);
   }
 }
@@ -87,7 +87,7 @@ class _PostFileOwnerRow extends StatelessWidget {
                         )
                       : SonrIcons.User.gradient(size: 24),
                 )),
-            Padding(child: sNameText(profile: profile), padding: EdgeInsets.only(left: 4)),
+            Padding(child: ProfileSName(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),
             Padding(
                 child: ActionButton(
@@ -101,25 +101,6 @@ class _PostFileOwnerRow extends StatelessWidget {
             ),
           ],
         ));
-  }
-
-  /// Returns Widget Text of SName
-  Widget sNameText({required Profile profile}) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: profile.sName,
-            style: TextStyle(
-                fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: Preferences.isDarkMode ? SonrColor.White : SonrColor.Black)),
-        TextSpan(
-            text: ".snr/",
-            style: TextStyle(
-                fontFamily: "RFlex",
-                fontWeight: FontWeight.w100,
-                fontSize: 20,
-                color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-      ]),
-    );
   }
 }
 

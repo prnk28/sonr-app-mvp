@@ -29,11 +29,11 @@ class SonrFileListHeader extends StatelessWidget {
 class SonrFileListItem extends StatelessWidget {
   final SonrFile_Item item;
   final int index;
+  final GlobalKey key;
 
-  SonrFileListItem({Key? key, required this.item, required this.index}) : super(key: key);
+  SonrFileListItem({required this.key, required this.item, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final key = GlobalKey(debugLabel: "InfoButton-$index");
     return BoxContainer(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(8),

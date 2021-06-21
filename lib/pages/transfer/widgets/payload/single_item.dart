@@ -3,27 +3,29 @@ import 'package:sonr_app/style.dart';
 import 'thumbnail.dart';
 
 class PayloadSingleItem extends StatelessWidget {
+  final GlobalKey key;
+
+  const PayloadSingleItem({required this.key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final invite = TransferController.invite;
-    final key = GlobalKey();
+
     return Container(
-        key: key,
         child: Row(children: [
-          PayloadItemThumbnail(),
-          _buildTitle(invite),
-          Container(
-            alignment: Alignment.topRight,
-            child: InfoButton(
-              options: [
-                InfolistOption("Replace", SonrIcons.Reload, () {}),
-                InfolistOption("Remove", SonrIcons.Trash, () {}),
-                InfolistOption("Cancel", SonrIcons.Cancel, () {}),
-              ],
-              key: key,
-            ),
-          ),
-        ]));
+      PayloadItemThumbnail(),
+      _buildTitle(invite),
+      Container(
+        alignment: Alignment.topRight,
+        child: InfoButton(
+          options: [
+            InfolistOption("Replace", SonrIcons.Reload, () {}),
+            InfolistOption("Remove", SonrIcons.Trash, () {}),
+            InfolistOption("Cancel", SonrIcons.Cancel, () {}),
+          ],
+          key: key,
+        ),
+      ),
+    ]));
   }
 
   Widget _buildTitle(InviteRequest invite) {

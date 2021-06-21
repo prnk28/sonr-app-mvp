@@ -81,6 +81,7 @@ class PayloadSheetView extends GetView<TransferController> {
                             return SonrFileListItem(
                               item: file.items[index],
                               index: index,
+                              key: GlobalKey(debugLabel: "InfoButton-$index"),
                             );
                           },
                           childCount: file.items.length,
@@ -91,7 +92,15 @@ class PayloadSheetView extends GetView<TransferController> {
                 })
             :
             // Build Single Item
-            BoxContainer(padding: EdgeInsets.all(8), child: Container(height: Height.ratio(0.15), child: PayloadSingleItem()));
+            BoxContainer(
+                padding: EdgeInsets.all(8),
+                child: Container(
+                    height: Height.ratio(0.15),
+                    child: PayloadSingleItem(
+                      key: GlobalKey(
+                        debugLabel: "InfoButton-SingleItem",
+                      ),
+                    )));
       } else {
         return Container(
           alignment: Alignment.center,

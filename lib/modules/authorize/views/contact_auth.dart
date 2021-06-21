@@ -40,7 +40,7 @@ class ContactAuthView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              ProfileName(profile: card.profile, isHeader: false),
+              ProfileFullName(profile: card.profile, isHeader: false),
 
               // Phone/ Website
               Row(children: [

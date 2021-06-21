@@ -25,7 +25,7 @@ class ContactCardItemView extends StatelessWidget {
             ),
 
             // Build Name
-            ProfileName(profile: card.contact!.profile, isHeader: false),
+            ProfileFullName(profile: card.contact!.profile, isHeader: false),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 
