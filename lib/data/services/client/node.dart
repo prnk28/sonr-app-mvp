@@ -31,7 +31,6 @@ class Sonr extends GetxService {
     // Set Handlers
     _node.onStatus = _handleStatus;
     _node.onError = _handleError;
-    _node.onRefreshed = LobbyService.to.handleRefresh;
     _node.onEvent = LobbyService.to.handleEvent;
     _node.onInvite = ReceiverService.to.handleInvite;
     _node.onReply = SenderService.to.handleReply;
