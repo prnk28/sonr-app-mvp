@@ -107,7 +107,7 @@ extension PermissionsUtil on Permissions {
           return await Permission.notification.request().isGranted;
 
         case Permissions.LocalNetwork:
-          NodeService.to.node.requestLocalNetwork();
+          Sonr.node.requestLocalNetwork();
           return true;
 
         case Permissions.Gallery:

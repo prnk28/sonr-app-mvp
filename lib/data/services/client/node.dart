@@ -6,11 +6,12 @@ import 'local.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-class NodeService extends GetxService {
+class Sonr extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<NodeService>();
-  static NodeService get to => Get.find<NodeService>();
+  static bool get isRegistered => Get.isRegistered<Sonr>();
+  static Sonr get to => Get.find<Sonr>();
   static bool get isReady => isRegistered && to._status.value.isConnected;
+  static Node get node => to._node;
 
   // @ Set Properties
   final _status = Rx<Status>(Status.IDLE);
@@ -19,23 +20,23 @@ class NodeService extends GetxService {
   static Rx<Status> get status => to._status;
 
   // @ Set References
-  late Node node;
+  late Node _node;
 
   // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
-  Future<NodeService> init() async {
+  Future<Sonr> init() async {
     // Create Node
-    node = await SonrCore.initialize(RequestBuilder.initialize);
+    _node = await SonrCore.initialize(RequestBuilder.initialize);
 
     // Set Handlers
-    node.onStatus = _handleStatus;
-    node.onError = _handleError;
-    node.onRefreshed = LocalService.to.handleRefresh;
-    node.onInvited = ReceiverService.to.handleInvite;
-    node.onReplied = SenderService.to.handleReply;
-    node.onProgressed = ReceiverService.to.handleProgress;
-    node.onReceived = ReceiverService.to.handleReceived;
-    node.onTransmitted = SenderService.to.handleTransmitted;
+    _node.onStatus.listen(_handleStatus);
+    _node.onError.listen(_handleError);
+    _node.onRefreshed.listen(LocalService.to.handleRefresh);
+    _node.onInvited.listen(ReceiverService.to.handleInvite);
+    _node.onReplied.listen(SenderService.to.handleReply);
+    _node.onProgress.listen(ReceiverService.to.handleProgress);
+    _node.onReceived.listen(ReceiverService.to.handleReceived);
+    _node.onTransmitted.listen(SenderService.to.handleTransmitted);
     return this;
   }
 
@@ -57,43 +58,42 @@ class NodeService extends GetxService {
   // * ------------------- Methods ----------------------------
   /// @ Sign Provided Data with Private Key
   static Future<AuthResponse> sign(AuthRequest request) async {
-    return await to.node.sign(request);
+    return await to._node.sign(request);
   }
 
   /// @ Store Property in Memory Store
   static Future<StoreResponse> store(StoreRequest request) async {
-    return await to.node.store(request);
+    return await to._node.store(request);
   }
 
   /// @ Verify Provided Data with Private Key
   static Future<VerifyResponse> verify(VerifyRequest request) async {
-    return await to.node.verify(request);
+    return await to._node.verify(request);
   }
 
   /// @ Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
-    var link = await SonrCore.getUrlLink(url);
-    return link ?? URLLink(url: url);
+    return await SonrCore.getUrlLink(url);
   }
 
   /// @ Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
-      to.node.update(Request.newUpdatePosition(position));
+      to._node.update(Request.newUpdatePosition(position));
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
-      to.node.update(Request.newUpdateContact(contact));
+      to._node.update(Request.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to.node.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
+      to._node.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
     }
   }
 

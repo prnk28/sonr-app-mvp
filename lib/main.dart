@@ -14,17 +14,17 @@ Future<void> main() async {
   // Check Platform
   if (DeviceService.isMobile) {
     runZonedGuarded(() {
-      runApp(BetterFeedback(child: App(isDesktop: false)));
+      runApp(BetterFeedback(child: SplashPage(isDesktop: false)));
     }, FirebaseCrashlytics.instance.recordError);
   } else {
-    runApp(App(isDesktop: true));
+    runApp(SplashPage(isDesktop: true));
   }
 }
 
 /// @ Root App Widget
-class App extends StatelessWidget {
+class SplashPage extends StatelessWidget {
   final bool isDesktop;
-  const App({Key? key, required this.isDesktop}) : super(key: key);
+  const SplashPage({Key? key, required this.isDesktop}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     DeviceService.keyboardHide();
@@ -112,7 +112,7 @@ class App extends StatelessWidget {
         )));
 
         // Connect to Network
-        AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(init: Sonr.to.connect, args: HomeArguments(isFirstLoad: true));
       }
       // Register Mobile
       else {

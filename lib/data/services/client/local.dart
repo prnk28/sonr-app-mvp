@@ -79,7 +79,7 @@ class LocalService extends GetxService {
   /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
-    NodeService.sendFlat(peer);
+    Sonr.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);
@@ -104,7 +104,7 @@ class LocalService extends GetxService {
     });
 
     // @ Update Local Topics
-    if (data.type == Lobby_Type.LOCAL) {
+    if (data.type == TopicType.LOCAL) {
       // Update Status
       _status(LocalStatusUtils.localStatusFromCount(data.count));
       //_handleLog(data);
