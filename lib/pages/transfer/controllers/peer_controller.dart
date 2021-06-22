@@ -49,7 +49,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   /// ** Dispose on Close ** //
   @override
   void onClose() {
-    LocalService.unregisterPeerCallback(peer.value);
+    LobbyService.unregisterPeerCallback(peer.value);
     if (_userStream != null) {
       _userStream!.cancel();
     }
@@ -63,7 +63,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     isVisible(true);
 
     // Add Stream Handlers
-    LocalService.registerPeerCallback(peer.value, _handlePeerUpdate);
+    LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
 
     // Check for Mobile
     if (DeviceService.isMobile) {

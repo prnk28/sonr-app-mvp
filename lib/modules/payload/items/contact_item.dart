@@ -2,15 +2,15 @@ import 'package:sonr_app/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 /// @ Transfer Contact Item Details
-class ContactCardItemView extends StatelessWidget {
-  final TransferCard card;
-  ContactCardItemView(this.card, {Key? key}) : super(key: key);
+class ContactItemView extends StatelessWidget {
+  final TransferCard item;
+  ContactItemView({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BoxContainer(
-      height: 420,
+      height: 400,
       child: Hero(
-        tag: card.id,
+        tag: item.id,
         child: Container(
           height: 75,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -20,12 +20,12 @@ class ContactCardItemView extends StatelessWidget {
               padding: const EdgeInsets.only(top: 4.0),
               child: CircleContainer(
                 padding: EdgeInsets.all(10),
-                child: ProfileAvatar.fromContact(card.contact!),
+                child: ProfileAvatar.fromContact(item.contact!),
               ),
             ),
 
             // Build Name
-            ProfileFullName(profile: card.contact!.profile, isHeader: false),
+            ProfileFullName(profile: item.contact!.profile, isHeader: false),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 
@@ -56,7 +56,7 @@ class ContactCardItemView extends StatelessWidget {
             // Brief Contact Card Info
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: card.contact!.mapSocials((social) => social.media.gradient(size: 35)) as List<Widget>)
+                children: item.contact!.mapSocials((social) => social.media.gradient(size: 35)) as List<Widget>)
           ]),
         ),
       ),

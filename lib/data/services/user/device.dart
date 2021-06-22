@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/env.dart';
@@ -51,8 +51,8 @@ class DeviceService extends GetxService {
 
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (AppServices.areServicesRegistered && isRegistered && NodeService.isRegistered) {
-        NodeService.update(_position.value);
+      if (AppServices.areServicesRegistered && isRegistered && Sonr.isRegistered) {
+        Sonr.update(_position.value);
       }
     });
   }
@@ -175,7 +175,10 @@ class DeviceService extends GetxService {
   }
 
   /// @ Method Hides Keyboard
-  static void hideKeyboard() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.hide') : print("");
+  static void keyboardHide() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.hide') : print("");
+
+  /// @ Method Shows Keyboard
+  static void keyboardShow() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.show') : print("");
 
   /// @ Method Plays a UI Sound
   static void playSound({required Sounds type}) async {

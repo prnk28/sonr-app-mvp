@@ -83,3 +83,45 @@ class ProfileAvatar extends StatelessWidget {
         ));
   }
 }
+
+
+/// @ View for Post View owner of File Received
+class ProfileOwnerRow extends StatelessWidget {
+  final Profile profile;
+  const ProfileOwnerRow({Key? key, required this.profile}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 50,
+        child: Row(
+          children: [
+            Container(
+                margin: EdgeInsets.only(top: 8, left: 8),
+                decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
+                  BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
+                ]),
+                padding: EdgeInsets.all(4),
+                child: Container(
+                  child: profile.hasPicture()
+                      ? CircleAvatar(
+                          backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                        )
+                      : SonrIcons.User.gradient(size: 24),
+                )),
+            Padding(child: ProfileSName(profile: profile), padding: EdgeInsets.only(left: 4)),
+            Spacer(),
+            Padding(
+                child: ActionButton(
+                  onPressed: () {},
+                  iconData: SonrIcons.Statistic,
+                ),
+                padding: EdgeInsets.only(right: 4)),
+            ActionButton(
+              onPressed: () {},
+              iconData: SonrIcons.Menu,
+            ),
+          ],
+        ));
+  }
+}

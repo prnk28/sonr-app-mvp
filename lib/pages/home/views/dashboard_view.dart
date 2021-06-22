@@ -13,12 +13,12 @@ class DashboardView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => controller.closeSearch(),
+      onTap: () => controller.changeView(HomeView.Dashboard),
       child: Container(
           padding: EdgeInsets.all(8),
           margin: _getMargin(context),
           child: CustomScrollView(controller: controller.scrollController, slivers: [
-            SliverToBoxAdapter(child: _CardSearchView()),
+            SliverToBoxAdapter(child: CardSearchField()),
             SliverPadding(padding: EdgeInsets.only(top: 14)),
             Obx(() => SliverToBoxAdapter(
                 child: Container(
@@ -132,27 +132,5 @@ class DashboardView extends GetView<HomeController> {
   EdgeInsets _getMargin(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return EdgeInsets.only(left: width * 0.05, right: width * 0.05);
-  }
-}
-
-/// @ Card Search View - Displays Search View
-class _CardSearchView extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(8),
-      height: 108,
-      width: Width.ratio(0.4),
-      alignment: Alignment.center,
-      child: Container(
-          child: Obx(() => SonrSearchField.forCards(
-                value: controller.query.value,
-                onChanged: (val) {
-                  controller.query(val);
-                  controller.query.refresh();
-                },
-              ))),
-    );
   }
 }

@@ -12,9 +12,8 @@ class PreviewView extends StatelessWidget {
             margin: EdgeInsets.only(left: 10, right: 10),
             child: AspectRatio(
                 aspectRatio: 9 / 16,
-                child: VideoPlayerView.file(
-                  controller.result.value.single.file,
-                  true,
+                child: FileItemVideoBox(
+                  fileItem: controller.result.value.single,
                 )))
 
         // Photo View

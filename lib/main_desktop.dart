@@ -6,5 +6,5 @@ import 'main.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppServices.init(isDesktop: true);
-  runApp(App(isDesktop: true));
+  runApp(SplashPage(isDesktop: true));
 }

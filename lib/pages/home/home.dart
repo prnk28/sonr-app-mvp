@@ -1,24 +1,31 @@
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'home_controller.dart';
-import 'widgets/desktop/desktop.dart';
 import 'package:sonr_app/style.dart';
 import 'models/status.dart';
 import 'views/dashboard_view.dart';
-import 'widgets/mobile/mobile.dart';
-
+import 'widgets/navigation.dart';
+import 'widgets/panels.dart';
 class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-      resizeToAvoidBottomInset: false,
-      floatingAction: HomeFloatingBar(),
-      appBar: HomeAppBar(),
-      body: Container(
-          child: TabBarView(controller: controller.tabController, children: [
-        DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-        PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
-      ])),
-    );
+    return Obx(() => SonrScaffold(
+          resizeToAvoidBottomInset: false,
+          floatingAction: HomeFloatingBar(),
+          appBar: _buildAppBar(controller.view.value),
+          body: Container(
+              child: TabBarView(controller: controller.tabController, children: [
+            DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
+            PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
+          ])),
+        ));
+  }
+
+  PreferredSizeWidget? _buildAppBar(HomeView view) {
+    if (view == HomeView.Search) {
+      return null;
+    } else {
+      return HomeAppBar();
+    }
   }
 }
 

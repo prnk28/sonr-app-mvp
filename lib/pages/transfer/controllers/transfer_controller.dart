@@ -47,12 +47,12 @@ class TransferController extends GetxController {
   void onInit() {
     // Set Initial Value
     _handlePositionUpdate(DeviceService.position.value);
-    _handleLobbyUpdate(LocalService.lobby.value);
+    _handleLobbyUpdate(LobbyService.lobby.value);
 
     // Add Stream Handlers
     _positionStream = DeviceService.position.listen(_handlePositionUpdate);
-    _lobbySizeStream = LocalService.lobby.listen(_handleLobbyUpdate);
-    _isFlatStream = LocalService.isFlatMode.listen(_handleFlatMode);
+    _lobbySizeStream = LobbyService.lobby.listen(_handleLobbyUpdate);
+    _isFlatStream = LobbyService.isFlatMode.listen(_handleFlatMode);
     super.onInit();
   }
 
@@ -156,11 +156,11 @@ class TransferController extends GetxController {
         transition(FlatModeTransition.SlideOut);
         animation(FlatModeAnimation(transition.value));
         // No Peers
-        if (LocalService.lobby.value.flatPeerCount() == 0) {
+        if (LobbyService.lobby.value.flatPeerCount() == 0) {
           Get.back();
           AppRoute.snack(SnackArgs.error("No Peers in Flat Mode"));
-        } else if (LocalService.lobby.value.flatPeerCount() == 1) {
-          if (Get.find<LocalService>().sendFlatMode(LocalService.lobby.value.flatFirst())) {
+        } else if (LobbyService.lobby.value.flatPeerCount() == 1) {
+          if (Get.find<LobbyService>().sendFlatMode(LobbyService.lobby.value.flatFirst())) {
             Future.delayed(K_TRANSLATE_DURATION, () {
               status(FlatModeState.Pending);
             });

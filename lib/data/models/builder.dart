@@ -1,5 +1,4 @@
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/modules/authorize/authorize.dart';
 import 'package:sonr_app/style.dart';
 
 class RequestBuilder {
@@ -135,8 +134,8 @@ extension InviteRequestDisplayUtils on InviteRequest {
       AppRoute.popup(ContactAuthView(false, invite: this), dismissible: false);
     } else {
       AppRoute.sheet(InviteRequestSheet(invite: this), key: ValueKey(this), dismissible: true, onDismissed: (direction) {
-        if (NodeService.isReady) {
-          NodeService.to.node.respond(this.newDeclineResponse());
+        if (Sonr.isReady) {
+          Sonr.node.respond(this.newDeclineResponse());
         }
         AppRoute.closeSheet();
       });

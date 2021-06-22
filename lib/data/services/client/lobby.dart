@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/pages/transfer/models/status.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-class LocalService extends GetxService {
+class LobbyService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<LocalService>();
-  static LocalService get to => Get.find<LocalService>();
+  static bool get isRegistered => Get.isRegistered<LobbyService>();
+  static LobbyService get to => Get.find<LobbyService>();
 
   // Properties
   final _flatModeCancelled = false.obs;
@@ -17,7 +16,7 @@ class LocalService extends GetxService {
   final _lobby = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
   final _position = Position().obs;
-  final _status = Rx<LocalStatus>(LocalStatus.Empty);
+  final _status = Rx<Lobby_Status>(Lobby_Status.Empty);
 
   // References
   final counter = 0.0.obs;
@@ -25,18 +24,20 @@ class LocalService extends GetxService {
   // Reactive Accessors
   static RxBool get isFlatMode => to._isFlatMode;
   static Rx<Lobby> get lobby => to._lobby;
-  static Rx<LocalStatus> get status => to._status;
+  static Rx<Lobby_Status> get status => to._status;
 
   // @ References
-  StreamSubscription<Position>? _positionStream;
-  Timer? _timer;
+  late StreamSubscription<Position>? _positionStream;
+  late StreamSubscription<Lobby> _lobbyStream;
+  late Timer? _timer;
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // # Initialize Service Method
-  Future<LocalService> init() async {
+  Future<LobbyService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
     }
+    _lobbyStream = _lobby.listen(_lobbyListener);
     return this;
   }
 
@@ -46,6 +47,7 @@ class LocalService extends GetxService {
     if (_positionStream != null) {
       _positionStream!.cancel();
     }
+    _lobbyStream.cancel();
     super.onClose();
   }
 
@@ -79,7 +81,7 @@ class LocalService extends GetxService {
   /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
-    NodeService.sendFlat(peer);
+    Sonr.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);
@@ -87,54 +89,19 @@ class LocalService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-    var flatPeer = LocalService.lobby.value.flatFirst()!;
+    var flatPeer = LobbyService.lobby.value.flatFirst()!;
     AppRoute.snack(SnackArgs.success("Sent Contact to ${flatPeer.profile.firstName}"));
     Get.back();
     return true;
   }
 
-  // # Handle Lobby Update //
-  void handleRefresh(Lobby data) {
-    // Handle Peer Callbacks
-    data.peers.forEach((id, peer) {
-      if (_peerCallbacks.containsKey(peer)) {
-        var call = _peerCallbacks[peer]!;
-        call(peer);
-      }
-    });
-
-    // @ Update Local Topics
-    if (data.type == Lobby_Type.LOCAL) {
-      // Update Status
-      _status(LocalStatusUtils.localStatusFromCount(data.count));
-
-      // Set Lobby
-      _lobby(data);
-
-      // Refresh Values
-      _lobby.refresh();
-
-      // Update Flat Peers
-      _handleFlatPeers(data);
-    }
-  }
-
-  // # Handle Lobby Flat Peers
-  void _handleFlatPeers(Lobby data) {
-    var flatPeers = <String, Peer>{};
-    data.peers.forEach((id, peer) {
-      if (peer.properties.isFlatMode) {
-        flatPeers[id] = peer;
-      }
-    });
-    _localFlatPeers(flatPeers);
-    _localFlatPeers.refresh();
-  }
+  // # Handle Individual user event
+  void handleEvent(LobbyEvent data) => _lobby.handleEvent(data);
 
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {
     // Initialize
-    bool flatModeEnabled = !_flatModeCancelled.value && Preferences.flatModeEnabled && Get.currentRoute != "/transfer";
+    bool flatModeEnabled = !_flatModeCancelled.value && Preferences.flatModeEnabled && AppRoute.isNotCurrent(AppPage.Transfer);
 
     // Update Orientation
     if (flatModeEnabled && _localFlatPeers.length > 0) {
@@ -188,6 +155,34 @@ class LocalService extends GetxService {
       _timer = null;
       _lastIsFacingFlat(false);
       counter(0);
+    }
+  }
+
+  // # Handle Lobby Update //
+  void _lobbyListener(Lobby data) {
+    // Handle Peer Callbacks
+    data.peers.forEach((id, peer) {
+      if (_peerCallbacks.containsKey(peer)) {
+        var call = _peerCallbacks[peer]!;
+        call(peer);
+      }
+    });
+
+    // @ Update Local Topics
+    if (data.type == TopicType.LOCAL) {
+      // Update Status
+      _status(LobbyStatusUtils.localStatusFromCount(data.count));
+      
+      // Update Flat Peers
+      var flatPeers = <String, Peer>{};
+      data.peers.forEach((id, peer) {
+        if (peer.properties.isFlatMode) {
+          flatPeers[id] = peer;
+        }
+      });
+      _localFlatPeers(flatPeers);
+      _localFlatPeers.refresh();
+      ;
     }
   }
 }

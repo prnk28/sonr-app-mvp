@@ -139,7 +139,7 @@ extension AppRoute on AppPage {
       default:
         return () {
           if (DeviceService.isMobile) {
-            Get.find<NodeService>().connect();
+            Get.find<Sonr>().connect();
             return HomePage();
           } else {
             return ExplorerPage();
@@ -174,7 +174,7 @@ extension AppRoute on AppPage {
     bool closeCurrent = false,
   }) async {
     // Hide Keyboard Before Route
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
 
     // Init Function
     if (init != null) {
@@ -222,7 +222,7 @@ extension AppRoute on AppPage {
     bool closeCurrent = false,
   }) async {
     // Hide Keyboard Before Route
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
 
     // Init Function
     if (init != null) {
@@ -255,7 +255,7 @@ extension AppRoute on AppPage {
     bool dismissible = true,
   }) async {
     // Hide Keyboard Before Route
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
 
     // Create Future Completer
     var completer = Completer<bool>();
@@ -289,7 +289,7 @@ extension AppRoute on AppPage {
   }) async {
     if (isPopupClosed) {
       // Hide Keyboard Before Route
-      DeviceService.hideKeyboard();
+      DeviceService.keyboardHide();
 
       // Init Function
       if (init != null) {
@@ -318,7 +318,7 @@ extension AppRoute on AppPage {
     Offset? offset,
   }) async {
     // Hide Keyboard Before Route
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
 
     final RxBool hasDismissed = false.obs;
     Get.dialog(
@@ -350,7 +350,7 @@ extension AppRoute on AppPage {
     bool dismissible = true,
   }) async {
     // Hide Keyboard Before Route
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
 
     // Create Future Completer
     var completer = Completer<bool>();
@@ -391,7 +391,7 @@ extension AppRoute on AppPage {
     Duration? delay,
   }) async {
     // Hide Keyboard Before Route
-    DeviceService.hideKeyboard();
+    DeviceService.keyboardHide();
 
     // Check if Forced Open
     if (forced) {
@@ -428,7 +428,7 @@ extension AppRoute on AppPage {
   static Future<void> snack(SnackArgs args) async {
     if (isSnackClosed) {
       // Hide Keyboard Before Route
-      DeviceService.hideKeyboard();
+      DeviceService.keyboardHide();
 
       // Push Snackbar
       Get.snackbar(
