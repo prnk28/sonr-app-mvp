@@ -15,46 +15,46 @@ class CardSearchField extends GetView<HomeController> {
       child: GestureDetector(
           onTap: () => controller.changeView(HomeView.Search),
           child: Container(
-              child: Obx(() => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      BoxContainer(
-                          margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                          child: Stack(children: [
-                            Padding(
-                                padding: EdgeInsets.only(top: 8),
-                                child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                  Preferences.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 14.0),
-                                      child: TextField(
-                                          style: TextStyle(
-                                            fontFamily: 'RFlex',
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w400,
-                                            color: SonrTheme.itemColor,
-                                          ),
-                                          showCursor: false,
-                                          autofocus: false,
-                                          onChanged: (val) {
-                                            controller.query(val);
-                                            controller.query.refresh();
-                                          },
-                                          decoration: InputDecoration.collapsed(
-                                              hintText: "Search...",
-                                              hintStyle: TextStyle(
-                                                  fontFamily: 'RFlex',
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),
-                                    ),
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              BoxContainer(
+                  margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+                  padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                  child: Stack(children: [
+                    Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                          Preferences.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 14.0),
+                              child: TextField(
+                                  style: TextStyle(
+                                    fontFamily: 'RFlex',
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w400,
+                                    color: SonrTheme.itemColor,
                                   ),
-                                ])),
-                          ]))
-                    ],
-                  )))),
+                                  showCursor: false,
+                                  autofocus: false,
+                                  onChanged: (val) {
+                                    controller.query(val);
+                                    controller.query.refresh();
+                                  },
+                                  decoration: InputDecoration.collapsed(
+                                      hintText: "Search...",
+                                      hintStyle: TextStyle(
+                                          fontFamily: 'RFlex',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w400,
+                                          color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),
+                            ),
+                          ),
+                        ])),
+                  ]))
+            ],
+          ))),
     );
   }
 }

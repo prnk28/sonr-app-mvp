@@ -117,9 +117,16 @@ class Sonr extends GetxService {
 
   /// @ An Error Has Occurred
   void _handleError(ErrorMessage data) async {
+    // Check for Peer Error
+    if (data.type == ErrorMessage_Type.PEER_NOT_FOUND_INVITE) {
+      final removeEvent = LobbyEvent(id: data.data, subject: LobbyEvent_Subject.EXIT);
+      LobbyService.to.handleEvent(removeEvent);
+    }
+
+    // Check Severity
     if (data.severity != ErrorMessage_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
-    } else {}
+    }
 
     // Logging
     Logger.sError(data);
