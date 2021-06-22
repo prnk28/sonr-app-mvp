@@ -39,12 +39,13 @@ class ActionButton extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             _ActionIconButton(onPressed, iconData),
-            Positioned(
-              right: 28,
-              top: 28,
+            Positioned.directional(
+              start: banner!.start,
+              top: banner!.top,
+              textDirection: banner!.textDirection,
               child: Container(
-                width: 20,
-                height: 20,
+                width: banner!.width,
+                height: banner!.height,
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(bottom: 28),
                 decoration: banner!.decoration(),
@@ -106,32 +107,40 @@ class _ActionIconButton extends StatelessWidget {
 class ActionBanner {
   /// Count for Banner
   final int count;
+  ActionBanner(this.count);
 
-  /// Color of Banner Background
-  final Color bannerColor;
+  /// Return Banner Width
+  double get width => count != -1 ? 18 : 8;
 
-  /// Color of Banner Text
-  final Color textColor;
+  /// Return Banner Height
+  double get height => count != -1 ? 18 : 8;
 
-  ActionBanner(this.count, this.bannerColor, this.textColor);
+  /// Return Banner Position Top
+  double get top => count != -1 ? 28 : 4;
+
+  /// Return Banner Position Start
+  double get start => count != -1 ? 28 : 4;
+
+  /// Return Banner Position TextDirection
+  TextDirection get textDirection => count != -1 ? TextDirection.rtl : TextDirection.ltr;
 
   /// Build Alert Style Banner
-  factory ActionBanner.alert(int count) {
-    return ActionBanner(count, Preferences.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
+  factory ActionBanner.alert() {
+    return ActionBanner(-1);
   }
 
   /// Build Selected Items Banner
   factory ActionBanner.selected(int count) {
-    return ActionBanner(count, Preferences.isDarkMode ? SonrColor.AccentPink : SonrColor.AccentBlue, SonrTheme.itemColor);
+    return ActionBanner(count);
   }
 
   /// Helper: Builds BoxDecoration from Banner Data
   BoxDecoration decoration() {
-    return BoxDecoration(shape: BoxShape.circle, color: bannerColor);
+    return BoxDecoration(shape: BoxShape.circle, color: Color(0xffFF0057));
   }
 
   /// Helper: Builds Text from Banner Data
   Widget text() {
-    return count.toString().section(fontSize: 16, color: textColor);
+    return count.toString().subheading(fontSize: 14, color: Colors.white, align: TextAlign.center);
   }
 }

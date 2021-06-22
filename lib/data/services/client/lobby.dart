@@ -172,13 +172,7 @@ class LobbyService extends GetxService {
     if (data.type == TopicType.LOCAL) {
       // Update Status
       _status(LobbyStatusUtils.localStatusFromCount(data.count));
-
-      // Set Lobby
-      _lobby(data);
-
-      // Refresh Values
-      _lobby.refresh();
-
+      
       // Update Flat Peers
       var flatPeers = <String, Peer>{};
       data.peers.forEach((id, peer) {

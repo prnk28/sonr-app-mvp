@@ -28,8 +28,8 @@ class SonrColor {
   // ** Palette Colors ** //
   static const Color Primary = Color(0xff1792ff);
   static const Color Secondary = Color(0xff7f30ff);
-  static const Color Tertiary = Color(0xffB9FFE5);
-  static const Color Critical = Color(0xffFF0057);
+  static const Color Tertiary = Color(0xff14B69A);
+  static const Color Critical = Color(0xffFF2866);
 
   static const Color AccentPink = Color(0xffFF84B1);
   static const Color AccentBlue = Color(0xffC8E9FF);
