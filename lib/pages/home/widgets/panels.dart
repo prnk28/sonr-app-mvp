@@ -122,7 +122,7 @@ class NearbyListView extends GetView<HomeController> {
           Padding(
             padding: EdgeInsets.only(top: 8),
             child: Obx(
-              () => LocalService.lobby.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
+              () => LobbyService.lobby.value.isEmpty ? _LocalEmptyView() : _LocalLobbyView(),
             ),
           ),
         ],
@@ -141,9 +141,9 @@ class _LocalLobbyView extends GetView<HomeController> {
             width: Get.width,
             height: 400,
             child: ListView.builder(
-                itemCount: LocalService.lobby.value.peers.length,
+                itemCount: LobbyService.lobby.value.peers.length,
                 itemBuilder: (context, index) {
-                  return PeerListItem(peer: LocalService.lobby.value.peerAtIndex(index), index: index);
+                  return PeerListItem(peer: LobbyService.lobby.value.peerAtIndex(index), index: index);
                 })));
   }
 }

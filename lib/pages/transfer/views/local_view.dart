@@ -1,6 +1,6 @@
 import 'package:sonr_app/pages/transfer/models/filter.dart';
 import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
-import 'package:sonr_app/pages/transfer/models/status.dart';
+
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
 import '../transfer.dart';
@@ -31,12 +31,12 @@ class LocalView extends GetView<TransferController> {
         Padding(padding: EdgeInsets.only(top: 4)),
 
         // Scroll View
-        Obx(() => _buildView(LocalService.status.value, controller.phonesEnabled.value, controller.desktopsEnabled.value)),
+        Obx(() => _buildView(LobbyService.status.value, controller.phonesEnabled.value, controller.desktopsEnabled.value)),
       ],
     );
   }
 
-  Widget _buildView(LocalStatus status, bool phones, bool desktops) {
+  Widget _buildView(Lobby_Status status, bool phones, bool desktops) {
     if (status.isEmpty || !phones && !desktops) {
       return _LocalEmptyView();
     } else if (status.isFew) {
@@ -97,7 +97,7 @@ class _LocalFewView extends GetView<TransferController> {
                 scrollDirection: Axis.horizontal,
                 controller: controller.scrollController,
                 anchor: 0.225,
-                slivers: _buildSlivers(LocalService.lobby.value),
+                slivers: _buildSlivers(LobbyService.lobby.value),
               ),
             ));
   }
@@ -142,11 +142,11 @@ class _LocalManyView extends GetView<TransferController> {
               child: ListView.builder(itemBuilder: (context, index) {
                 switch (filter) {
                   case LobbyFilter.All:
-                    return PeerListItem(index: index, peer: LocalService.lobby.value.peerAtIndex(index));
+                    return PeerListItem(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
                   case LobbyFilter.Phones:
-                    return PeerListItem(index: index, peer: LocalService.lobby.value.peerAtIndex(index));
+                    return PeerListItem(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
                   case LobbyFilter.Desktops:
-                    return PeerListItem(index: index, peer: LocalService.lobby.value.peerAtIndex(index));
+                    return PeerListItem(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
                 }
               }),
             ));

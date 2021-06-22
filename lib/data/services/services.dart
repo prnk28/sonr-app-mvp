@@ -1,5 +1,5 @@
 // Client Services
-export 'client/local.dart';
+export 'client/lobby.dart';
 export 'client/receiver.dart';
 export 'client/sender.dart';
 export 'client/node.dart';

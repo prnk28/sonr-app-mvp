@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style.dart';
-import 'local.dart';
+import 'lobby.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
@@ -31,8 +31,8 @@ class Sonr extends GetxService {
     // Set Handlers
     _node.onStatus = _handleStatus;
     _node.onError = _handleError;
-    _node.onRefreshed = LocalService.to.handleRefresh;
-    _node.onEvent = LocalService.to.handleEvent;
+    _node.onRefreshed = LobbyService.to.handleRefresh;
+    _node.onEvent = LobbyService.to.handleEvent;
     _node.onInvite = ReceiverService.to.handleInvite;
     _node.onReply = SenderService.to.handleReply;
     _node.onProgress = ReceiverService.to.handleProgress;

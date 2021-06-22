@@ -6,7 +6,7 @@ class FlatModeOverlay extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => GestureDetector(
-          onTap: () => Get.find<LocalService>().cancelFlatMode(),
+          onTap: () => Get.find<LobbyService>().cancelFlatMode(),
           child: Container(
               width: Get.width,
               height: Get.height,

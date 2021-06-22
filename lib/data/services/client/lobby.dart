@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/pages/transfer/models/status.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-class LocalService extends GetxService {
+class LobbyService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<LocalService>();
-  static LocalService get to => Get.find<LocalService>();
+  static bool get isRegistered => Get.isRegistered<LobbyService>();
+  static LobbyService get to => Get.find<LobbyService>();
 
   // Properties
   final _flatModeCancelled = false.obs;
@@ -17,7 +16,7 @@ class LocalService extends GetxService {
   final _lobby = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
   final _position = Position().obs;
-  final _status = Rx<LocalStatus>(LocalStatus.Empty);
+  final _status = Rx<Lobby_Status>(Lobby_Status.Empty);
 
   // References
   final counter = 0.0.obs;
@@ -25,7 +24,7 @@ class LocalService extends GetxService {
   // Reactive Accessors
   static RxBool get isFlatMode => to._isFlatMode;
   static Rx<Lobby> get lobby => to._lobby;
-  static Rx<LocalStatus> get status => to._status;
+  static Rx<Lobby_Status> get status => to._status;
 
   // @ References
   StreamSubscription<Position>? _positionStream;
@@ -33,7 +32,7 @@ class LocalService extends GetxService {
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // # Initialize Service Method
-  Future<LocalService> init() async {
+  Future<LobbyService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
     }
@@ -87,7 +86,7 @@ class LocalService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-    var flatPeer = LocalService.lobby.value.flatFirst()!;
+    var flatPeer = LobbyService.lobby.value.flatFirst()!;
     AppRoute.snack(SnackArgs.success("Sent Contact to ${flatPeer.profile.firstName}"));
     Get.back();
     return true;
@@ -95,6 +94,7 @@ class LocalService extends GetxService {
 
   // # Handle Individual user event
   void handleEvent(LobbyEvent data) {
+    _lobby.handleEvent(data);
     print(data.toString());
   }
 
@@ -111,7 +111,7 @@ class LocalService extends GetxService {
     // @ Update Local Topics
     if (data.type == TopicType.LOCAL) {
       // Update Status
-      _status(LocalStatusUtils.localStatusFromCount(data.count));
+      _status(LobbyStatusUtils.localStatusFromCount(data.count));
       //_handleLog(data);
       // Set Lobby
       _lobby(data);

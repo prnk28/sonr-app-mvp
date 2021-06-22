@@ -79,13 +79,13 @@ class AppServices {
     await Get.putAsync(() => SenderService().init());
     await Get.putAsync(() => ReceiverService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
-    await Get.putAsync(() => LocalService().init(), permanent: true);
+    await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => Sonr().init(), permanent: true);
   }
 
   /// @ Method Validates Required Services Registered
   static bool get areServicesRegistered {
-    return DeviceService.isRegistered && ContactService.isRegistered && LocalService.isRegistered;
+    return DeviceService.isRegistered && ContactService.isRegistered && LobbyService.isRegistered;
   }
 
   /// @ Returns Excluded Sentry Modules
