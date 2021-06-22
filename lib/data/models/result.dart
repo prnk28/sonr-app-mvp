@@ -1,4 +1,4 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/style.dart';
 
 extension ConnectivityResultUtils on ConnectivityResult {

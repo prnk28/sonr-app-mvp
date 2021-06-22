@@ -93,6 +93,11 @@ class LocalService extends GetxService {
     return true;
   }
 
+  // # Handle Individual user event
+  void handleEvent(LobbyEvent data) {
+    print(data.toString());
+  }
+
   // # Handle Lobby Update //
   void handleRefresh(Lobby data) {
     // Handle Peer Callbacks
@@ -118,7 +123,6 @@ class LocalService extends GetxService {
       _handleFlatPeers(data);
     }
   }
-
 
   // # Handle Lobby Flat Peers
   void _handleFlatPeers(Lobby data) {

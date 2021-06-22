@@ -29,14 +29,15 @@ class Sonr extends GetxService {
     _node = await SonrCore.initialize(RequestBuilder.initialize);
 
     // Set Handlers
-    _node.onStatus.listen(_handleStatus);
-    _node.onError.listen(_handleError);
-    _node.onRefreshed.listen(LocalService.to.handleRefresh);
-    _node.onInvited.listen(ReceiverService.to.handleInvite);
-    _node.onReplied.listen(SenderService.to.handleReply);
-    _node.onProgress.listen(ReceiverService.to.handleProgress);
-    _node.onReceived.listen(ReceiverService.to.handleReceived);
-    _node.onTransmitted.listen(SenderService.to.handleTransmitted);
+    _node.onStatus = _handleStatus;
+    _node.onError = _handleError;
+    _node.onRefreshed = LocalService.to.handleRefresh;
+    _node.onEvent = LocalService.to.handleEvent;
+    _node.onInvite = ReceiverService.to.handleInvite;
+    _node.onReply = SenderService.to.handleReply;
+    _node.onProgress = ReceiverService.to.handleProgress;
+    _node.onReceived = ReceiverService.to.handleReceived;
+    _node.onTransmitted = SenderService.to.handleTransmitted;
     return this;
   }
 
