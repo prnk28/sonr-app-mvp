@@ -6,14 +6,12 @@ class ReceiverService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<ReceiverService>();
   static ReceiverService get to => Get.find<ReceiverService>();
-
-  // @ Properties
-  final Session _session = Session();
-  final _hasActiveSession = false.obs;
-
-  /// Global Reactive Accessors
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasActiveSession;
+
+  // Properties
+  final _session = Session();
+  final _hasActiveSession = false.obs;
 
   // ^ Constructer ^ //
   Future<ReceiverService> init() async {

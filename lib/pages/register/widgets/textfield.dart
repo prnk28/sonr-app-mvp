@@ -54,7 +54,7 @@ class RegisterTextField extends GetView<RegisterController> {
             ),
             margin: EdgeInsets.only(left: 16, right: 16, top: 8),
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            child: TextField(
+            child: TextFormField(
               style: DisplayTextStyle.Paragraph.style(color: SonrTheme.itemColor, fontSize: 20),
               keyboardType: type.textInputType,
               autofocus: type.autoFocus,

@@ -12,18 +12,15 @@ class NodeService extends GetxService {
   static NodeService get to => Get.find<NodeService>();
   static bool get isReady => isRegistered && to._status.value.isConnected;
   static Node get instance => to._instance;
-
-  // @ Set Properties
-  final _status = Rx<Status>(Status.IDLE);
-
-  // @ Static Accessors
   static Rx<Status> get status => to._status;
 
-  // @ Set References
+  // Properties
+  final _status = Rx<Status>(Status.IDLE);
+
+  // References
   late Node _instance;
 
-  // * ------------------- Constructers ----------------------------
-  /// @ Initialize Service Method
+  // ^ Constructer ^ //
   Future<NodeService> init() async {
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
@@ -40,6 +37,7 @@ class NodeService extends GetxService {
     return this;
   }
 
+  // * ------------------- Methods ----------------------------
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
@@ -55,7 +53,6 @@ class NodeService extends GetxService {
     }
   }
 
-  // * ------------------- Methods ----------------------------
   /// @ Sign Provided Data with Private Key
   static Future<AuthResponse> sign(AuthRequest request) async {
     return await to._instance.sign(request);

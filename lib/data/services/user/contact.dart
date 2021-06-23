@@ -12,30 +12,23 @@ class ContactService extends GetxService {
   static bool get isRegistered => Get.isRegistered<ContactService>();
   static ContactService get to => Get.find<ContactService>();
 
-  /// ** User Status Properties **
+  // User Status Properties
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-
-  /// ** User Reactive Properties **
   final _contact = Contact().obs;
 
-  //
+  // User Reactive Properties
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
   static Rx<Contact> get contact => to._contact;
-
-  // Getters for Preferences
   static String get sName => to._hasUser.value ? to._contact.value.sName : "";
 
-  /// ** References **
+  // References
   final _userBox = GetStorage('User');
 
-  /// @ Open SharedPreferences on Init
+  // ^ Constructer ^ //
   Future<ContactService> init() async {
-    // @ Init Shared Preferences
     await GetStorage.init('User');
-
-    // Check User Status
     _hasUser(_userBox.hasData("contact"));
 
     // Check if Exists
@@ -68,10 +61,10 @@ class ContactService extends GetxService {
 
     // Handle Contact Updates
     _contact.listen(_handleContact);
-
     return this;
   }
 
+// * ------------------- Methods ----------------------------
   /// @ Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
     // Set Valuse
@@ -112,7 +105,7 @@ class ContactService extends GetxService {
     await uploadTask.whenComplete(() => to._handleUploadScreenshot(ref, data.text));
   }
 
-  // # Helper Method to Handle Contact Updates
+  // # Helper: Method to Handle Contact Updates
   void _handleContact(Contact data) async {
     // Save Updated User to Disk
     await to._userBox.write("contact", data.writeToJson());
@@ -123,13 +116,7 @@ class ContactService extends GetxService {
     }
   }
 
-  /// @ Helper: Uploads User Screenshot
-  FutureOr<dynamic> _handleUploadScreenshot(Reference ref, String message) async {
-    // Fetch Link
-    String link = await ref.getDownloadURL();
-    await _handlePostFeedback(message, link: link);
-  }
-
+// * ------------------- Callbacks ----------------------------
   /// @ Helper: Posts User Feedback
   Future<void> _handlePostFeedback(String message, {String? link}) async {
     // Update Firestore
@@ -152,7 +139,12 @@ class ContactService extends GetxService {
         "hasScreenshot": false,
       });
     }
+  }
 
-    // Log Feedback Event
+  // # Helper: Uploads User Screenshot
+  FutureOr<dynamic> _handleUploadScreenshot(Reference ref, String message) async {
+    // Fetch Link
+    String link = await ref.getDownloadURL();
+    await _handlePostFeedback(message, link: link);
   }
 }

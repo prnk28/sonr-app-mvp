@@ -8,16 +8,14 @@ class SenderService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<SenderService>();
   static SenderService get to => Get.find<SenderService>();
+  static Session get session => to._session;
+  static Rx<bool> get hasSession => to._hasSession;
 
-  // @ Properties
+  // Properties
   final _hasSession = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final Session _session = Session();
-
-  /// Returns Current Session
-  static Session get session => to._session;
-  static Rx<bool> get hasSession => to._hasSession;
 
   // References
   late StreamSubscription _externalMediaStream;
@@ -47,6 +45,7 @@ class SenderService extends GetxService {
     return this;
   }
 
+  // ^ Dispose Closer ^ //
   @override
   void onClose() {
     _externalMediaStream.cancel();

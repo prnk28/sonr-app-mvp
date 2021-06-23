@@ -8,6 +8,9 @@ class LobbyService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<LobbyService>();
   static LobbyService get to => Get.find<LobbyService>();
+  static RxBool get isFlatMode => to._isFlatMode;
+  static Rx<Lobby> get lobby => to._lobby;
+  static Rx<Lobby_Status> get status => to._status;
 
   // Properties
   final _flatModeCancelled = false.obs;
@@ -20,19 +23,12 @@ class LobbyService extends GetxService {
 
   // References
   final counter = 0.0.obs;
-
-  // Reactive Accessors
-  static RxBool get isFlatMode => to._isFlatMode;
-  static Rx<Lobby> get lobby => to._lobby;
-  static Rx<Lobby_Status> get status => to._status;
-
-  // @ References
   late StreamSubscription<Position>? _positionStream;
   late StreamSubscription<Lobby> _lobbyStream;
   late Timer? _timer;
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
-  // # Initialize Service Method
+  // ^ Constructer ^ //
   Future<LobbyService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
@@ -41,7 +37,7 @@ class LobbyService extends GetxService {
     return this;
   }
 
-  // # On Service Close //
+  // ^ Dispose Closer ^ //
   @override
   void onClose() {
     if (_positionStream != null) {
@@ -51,6 +47,7 @@ class LobbyService extends GetxService {
     super.onClose();
   }
 
+// * ------------------- Methods ----------------------------
   /// @ Method to Cancel Flat Mode
   void cancelFlatMode() {
     // Reset Timers
@@ -120,6 +117,7 @@ class LobbyService extends GetxService {
     _position(data);
   }
 
+// * ------------------- Helpers ----------------------------
   // # Begin Facing Invite Check
   void _startTimer() {
     _timer = Timer.periodic(500.milliseconds, (_) {
@@ -158,6 +156,7 @@ class LobbyService extends GetxService {
     }
   }
 
+// * ------------------- Callbacks ----------------------------
   // # Handle Lobby Update //
   void _lobbyListener(Lobby data) {
     // Handle Peer Callbacks
