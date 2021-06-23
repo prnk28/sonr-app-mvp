@@ -27,6 +27,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // References
   late final AnimationController visibilityController;
+  late final Session session;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
   bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isNone;
@@ -109,18 +110,44 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Handle User Invitation
   void invite() {
     // Check Animated
-    if (isReady.value && DeviceService.isMobile) {
-      // Check not already Pending
-      if (!_isPending!.value) {
-        // Perform Invite
-        var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
+    if (isReady.value) {
+      // Handle Mobile Invite - Payload Set
+      if (DeviceService.isMobile) {
+        // Check not already Pending
+        if (!_isPending!.value) {
+          // Perform Invite
+          var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
 
-        var session = SenderService.invite(invite);
+          // Create Session
+          var newSession = SenderService.invite(invite);
+          if (newSession != null) {
+            // Set Session
+            session = newSession;
 
-        // Listen to Session
-        if (session != null) {
-          session.status.listen(_handleTransferStatus);
+            // Listen to Session
+            session.status.listen(_handleTransferStatus);
+          }
         }
+      }
+      // Handle Other Invite - Payload NOT Set
+      else {
+        // Choose File then Set Session
+        SenderService.choose(ChooseOption.File).then((value) {
+          if (value != null) {
+            // Set Peer for Invite
+            value.setPeer(this.peer.value);
+
+            // Create Session
+            var newSession = SenderService.invite(value);
+            if (newSession != null) {
+              // Set Session
+              session = newSession;
+
+              // Listen to Session
+              session.status.listen(_handleTransferStatus);
+            }
+          }
+        });
       }
     }
   }
