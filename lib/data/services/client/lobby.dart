@@ -23,7 +23,6 @@ class LobbyService extends GetxService {
   final _status = Rx<Lobby_Status>(Lobby_Status.Empty);
 
   // References
-  late final Lobby_Info _localInfo;
   late StreamSubscription<Position>? _positionStream;
   late StreamSubscription<Lobby> _lobbyStream;
   late Timer? _timer;
@@ -49,13 +48,6 @@ class LobbyService extends GetxService {
   }
 
 // * ------------------- Methods ----------------------------
-  /// @ Attaches Lobby Local Info to Invite Request
-  static void attachLocalInfo(InviteRequest req) {
-    if (isRegistered) {
-      req.info = to._localInfo;
-    }
-  }
-
   /// @ Method to Cancel Flat Mode
   void cancelFlatMode() {
     // Reset Timers
@@ -83,12 +75,6 @@ class LobbyService extends GetxService {
     }
   }
 
-  /// @ Set Local Lobby Info
-  static void setLocalInfo(Lobby_Info info) {
-    if (isRegistered) {
-      to._localInfo = info;
-    }
-  }
 
   /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {

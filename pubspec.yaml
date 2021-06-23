@@ -89,6 +89,7 @@ dependencies:
 
   # -- UI/UX --
   animate_do: ^2.0.0
+  card_settings: ^2.0.3
   dots_indicator: ^2.0.0
   lottie: ^1.0.1
   rive: ^0.7.7

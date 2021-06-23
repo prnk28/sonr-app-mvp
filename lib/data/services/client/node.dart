@@ -107,9 +107,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleConnected(ConnectionResponse data) {
     // Log Result
     Logger.info(data.toString());
-
-    // Set Local Info
-    LobbyService.setLocalInfo(data.localInfo);
   }
 
   /// @ Handle Bootstrap Result

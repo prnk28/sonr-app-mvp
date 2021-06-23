@@ -13,57 +13,56 @@ class PeerCard extends GetWidget<PeerController> {
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer);
-    return Obx(
-      () => Padding(
-          padding: EdgeInsets.symmetric(vertical: 70),
-          child: BoxContainer(
-              width: K_CARD_WIDTH,
-              height: K_CARD_HEIGHT,
-              clipBehavior: Clip.antiAlias,
-              margin: EdgeInsets.all(24),
-              child: ObxValue<RxBool>(
-                  (isFlipped) => Stack(
-                        children: [
-                          // Rive Board
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 34),
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 96,
-                                width: 96,
-                                child: controller.board.value == null || isFlipped.value
-                                    ? Container()
-                                    : Rive(
-                                        artboard: controller.board.value!,
-                                      ),
-                              ),
-                            ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 150),
+      child: BoxContainer(
+          width: K_CARD_WIDTH,
+          height: K_CARD_HEIGHT,
+          clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.all(24),
+          child: ObxValue<RxBool>(
+              (isFlipped) => Stack(
+                    children: [
+                      // Rive Board
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 34),
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 96,
+                            width: 96,
+                            child: controller.board.value == null || isFlipped.value
+                                ? Container()
+                                : Rive(
+                                    artboard: controller.board.value!,
+                                  ),
                           ),
-
-                          // Content
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: GestureDetector(
-                              onTap: controller.invite,
-                              child: AnimatedSlider.fade(
-                                child: isFlipped.value
-                                    ? _PeerDetailsCard(
-                                        isFlipped: isFlipped,
-                                        peer: controller.peer,
-                                        key: ValueKey<bool>(true),
-                                      )
-                                    : _PeerMainCard(
-                                        isFlipped: isFlipped,
-                                        peer: controller.peer,
-                                        key: ValueKey<bool>(false),
-                                      ),
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                  false.obs))),
+
+                      // Content
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        child: GestureDetector(
+                          onTap: controller.invite,
+                          child: AnimatedSlider.fade(
+                            child: isFlipped.value
+                                ? _PeerDetailsCard(
+                                    isFlipped: isFlipped,
+                                    peer: controller.peer,
+                                    key: ValueKey<bool>(true),
+                                  )
+                                : _PeerMainCard(
+                                    isFlipped: isFlipped,
+                                    peer: controller.peer,
+                                    key: ValueKey<bool>(false),
+                                  ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+              false.obs)),
     );
   }
 }

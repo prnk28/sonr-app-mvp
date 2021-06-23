@@ -120,11 +120,6 @@ class SenderService extends GetxService {
         },
       );
 
-      // Attach Info
-      if (isLocal) {
-        LobbyService.attachLocalInfo(request);
-      }
-
       // Send Invite
       NodeService.instance.invite(request);
       to._session.outgoing(request);
