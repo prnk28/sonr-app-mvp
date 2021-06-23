@@ -6,8 +6,6 @@ import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
@@ -35,6 +33,7 @@ class DeviceService extends GetxService {
   // Properties
   final _device = Device().obs;
   final _location = Location().obs;
+
   final _connectivity = ConnectivityResult.none.obs;
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _position = RxPosition();
@@ -42,6 +41,11 @@ class DeviceService extends GetxService {
   // References
   late MainEntry _main;
   late Systray _systemTray;
+  final _locationApi = LocationApi(
+    ip_key: Env.ip_key,
+    rapid_host: Env.rapid_host,
+    rapid_key: Env.rapid_key,
+  );
 
   // ^ Initialization ^ //
   DeviceService() {
@@ -137,37 +141,7 @@ class DeviceService extends GetxService {
         return Location(longitude: pos.longitude, latitude: pos.latitude);
       }
     }
-
-    // # IP Based Location for ALL Devices
-    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${Env.ip_key}");
-
-    final response = await http.get(url, headers: {'x-rapidapi-key': Env.rapid_key, 'x-rapidapi-host': Env.rapid_host});
-
-    if (response.statusCode == 200) {
-      // Analytics
-      Logger.event(
-        controller: 'DeviceService',
-        name: '[DeviceService]: Find-Location',
-        parameters: {
-          'createdAt': DateTime.now().toString(),
-          'platform': platform.toString(),
-          'isMobile': platform.isMobile,
-          'type': 'IP-Location',
-        },
-      );
-
-      // Decode Json
-      var json = jsonDecode(response.body);
-      return Location(
-        state: json["state"],
-        continent: json["continent"],
-        country: json["country"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-      );
-    } else {
-      throw Exception('Failed to Fetch Geolocation IP');
-    }
+    return to._locationApi.fetchIP();
   }
 
   /// @ Method Hides Keyboard

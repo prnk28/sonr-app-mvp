@@ -27,7 +27,7 @@ class RegisterController extends GetxController {
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
   // References
-  final _nbClient = NamebaseClient(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
+  final _nbClient = NamebaseApi(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
   late ValueNotifier<double> panelNotifier;
   late PageController introPageController;
   late PageController setupPageController;
