@@ -118,8 +118,8 @@ class ContactService extends GetxService {
     await to._userBox.write("contact", data.writeToJson());
 
     // Send Update to Node
-    if (Sonr.status.value.isConnected) {
-      Sonr.setProfile(data);
+    if (NodeService.status.value.isConnected) {
+      NodeService.setProfile(data);
     }
   }
 

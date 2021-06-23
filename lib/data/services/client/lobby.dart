@@ -81,7 +81,7 @@ class LobbyService extends GetxService {
   /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
-    Sonr.sendFlat(peer);
+    NodeService.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);
@@ -172,7 +172,7 @@ class LobbyService extends GetxService {
     if (data.type == TopicType.LOCAL) {
       // Update Status
       _status(LobbyStatusUtils.localStatusFromCount(data.count));
-      
+
       // Update Flat Peers
       var flatPeers = <String, Peer>{};
       data.peers.forEach((id, peer) {

@@ -70,7 +70,7 @@ class SenderService extends GetxService {
 
       // @ Check for Text
       if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
-        var data = await Sonr.getURL(to._incomingText.value);
+        var data = await NodeService.getURL(to._incomingText.value);
         // Open Sheet
         await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
 
@@ -122,7 +122,7 @@ class SenderService extends GetxService {
       );
 
       // Send Invite
-      Sonr.node.invite(request);
+      NodeService.instance.invite(request);
       to._session.outgoing(request);
       return to._session;
     }
@@ -211,7 +211,7 @@ class SenderService extends GetxService {
         var file = result.toSonrFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
-        var filePath = await Sonr.node.pickFile();
+        var filePath = await NodeService.instance.pickFile();
         var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
           return await _handlePayload(file.payload, file: file);
@@ -303,7 +303,7 @@ class SenderService extends GetxService {
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen! && GetUtils.isURL(text)) {
       // Get Data
-      var data = await Sonr.getURL(text);
+      var data = await NodeService.getURL(text);
 
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);

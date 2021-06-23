@@ -134,8 +134,8 @@ extension InviteRequestDisplayUtils on InviteRequest {
       AppRoute.popup(ContactAuthView(false, invite: this), dismissible: false);
     } else {
       AppRoute.sheet(InviteRequestSheet(invite: this), key: ValueKey(this), dismissible: true, onDismissed: (direction) {
-        if (Sonr.isReady) {
-          Sonr.node.respond(this.newDeclineResponse());
+        if (NodeService.isReady) {
+          NodeService.instance.respond(this.newDeclineResponse());
         }
         AppRoute.closeSheet();
       });

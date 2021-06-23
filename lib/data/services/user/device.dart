@@ -51,8 +51,8 @@ class DeviceService extends GetxService {
 
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (AppServices.areServicesRegistered && isRegistered && Sonr.isRegistered) {
-        Sonr.update(_position.value);
+      if (AppServices.areServicesRegistered && isRegistered && NodeService.isRegistered) {
+        NodeService.update(_position.value);
       }
     });
   }

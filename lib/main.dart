@@ -112,7 +112,7 @@ class SplashPage extends StatelessWidget {
         )));
 
         // Connect to Network
-        AppPage.Home.off(init: Sonr.to.connect, args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
       }
       // Register Mobile
       else {

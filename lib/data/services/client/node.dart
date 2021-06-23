@@ -6,12 +6,12 @@ import 'lobby.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-class Sonr extends GetxService {
+class NodeService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<Sonr>();
-  static Sonr get to => Get.find<Sonr>();
+  static bool get isRegistered => Get.isRegistered<NodeService>();
+  static NodeService get to => Get.find<NodeService>();
   static bool get isReady => isRegistered && to._status.value.isConnected;
-  static Node get node => to._node;
+  static Node get instance => to._instance;
 
   // @ Set Properties
   final _status = Rx<Status>(Status.IDLE);
@@ -20,23 +20,23 @@ class Sonr extends GetxService {
   static Rx<Status> get status => to._status;
 
   // @ Set References
-  late Node _node;
+  late Node _instance;
 
   // * ------------------- Constructers ----------------------------
   /// @ Initialize Service Method
-  Future<Sonr> init() async {
+  Future<NodeService> init() async {
     // Create Node
-    _node = await SonrCore.initialize(RequestBuilder.initialize);
+    _instance = await SonrCore.initialize(RequestBuilder.initialize);
 
     // Set Handlers
-    _node.onStatus = _handleStatus;
-    _node.onError = _handleError;
-    _node.onEvent = LobbyService.to.handleEvent;
-    _node.onInvite = ReceiverService.to.handleInvite;
-    _node.onReply = SenderService.to.handleReply;
-    _node.onProgress = ReceiverService.to.handleProgress;
-    _node.onReceived = ReceiverService.to.handleReceived;
-    _node.onTransmitted = SenderService.to.handleTransmitted;
+    _instance.onStatus = _handleStatus;
+    _instance.onError = _handleError;
+    _instance.onEvent = LobbyService.to.handleEvent;
+    _instance.onInvite = ReceiverService.to.handleInvite;
+    _instance.onReply = SenderService.to.handleReply;
+    _instance.onProgress = ReceiverService.to.handleProgress;
+    _instance.onReceived = ReceiverService.to.handleReceived;
+    _instance.onTransmitted = SenderService.to.handleTransmitted;
     return this;
   }
 
@@ -45,10 +45,10 @@ class Sonr extends GetxService {
     // Check for User
     if (ContactService.hasUser.value) {
       // Connect Node
-      node.connect(await RequestBuilder.connection);
+      instance.connect(await RequestBuilder.connection);
 
       // Send Initial Position Update
-      node.update(RequestBuilder.updatePosition);
+      instance.update(RequestBuilder.updatePosition);
       return true;
     } else {
       return false;
@@ -58,17 +58,17 @@ class Sonr extends GetxService {
   // * ------------------- Methods ----------------------------
   /// @ Sign Provided Data with Private Key
   static Future<AuthResponse> sign(AuthRequest request) async {
-    return await to._node.sign(request);
+    return await to._instance.sign(request);
   }
 
   /// @ Store Property in Memory Store
   static Future<StoreResponse> store(StoreRequest request) async {
-    return await to._node.store(request);
+    return await to._instance.store(request);
   }
 
   /// @ Verify Provided Data with Private Key
   static Future<VerifyResponse> verify(VerifyRequest request) async {
-    return await to._node.verify(request);
+    return await to._instance.verify(request);
   }
 
   /// @ Retreive URLLink Metadata
@@ -79,21 +79,21 @@ class Sonr extends GetxService {
   /// @ Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
-      to._node.update(Request.newUpdatePosition(position));
+      to._instance.update(Request.newUpdatePosition(position));
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
-      to._node.update(Request.newUpdateContact(contact));
+      to._instance.update(Request.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to._node.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
+      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
     }
   }
 
@@ -105,7 +105,7 @@ class Sonr extends GetxService {
       DeviceService.playSound(type: Sounds.Connected);
 
       // Handle Available
-      node.update(Request.newUpdatePosition(DeviceService.position.value));
+      instance.update(Request.newUpdatePosition(DeviceService.position.value));
     }
 
     // Update Status
