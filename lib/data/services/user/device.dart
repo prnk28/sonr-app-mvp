@@ -41,11 +41,7 @@ class DeviceService extends GetxService {
   // References
   late MainEntry _main;
   late Systray _systemTray;
-  final _locationApi = LocationApi(
-    ip_key: Env.ip_key,
-    rapid_host: Env.rapid_host,
-    rapid_key: Env.rapid_key,
-  );
+  final _locationApi = LocationApi(ip_key: Env.ip_key, rapid_host: Env.rapid_host, rapid_key: Env.rapid_key);
 
   // ^ Initialization ^ //
   DeviceService() {

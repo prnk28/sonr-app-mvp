@@ -102,7 +102,7 @@ class SplashPage extends StatelessWidget {
     await Future.delayed(3500.milliseconds);
 
     // # Check for User
-    if (!ContactService.hasUser.value) {
+    if (ContactService.status.value.isNew) {
       if (isDesktop) {
         // Create User
         await ContactService.newContact(Contact(

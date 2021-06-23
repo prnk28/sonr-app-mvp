@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style.dart';
@@ -6,15 +7,19 @@ import 'lobby.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-class NodeService extends GetxService {
+class NodeService extends GetxService with WidgetsBindingObserver {
   // Accessors
   static bool get isRegistered => Get.isRegistered<NodeService>();
   static NodeService get to => Get.find<NodeService>();
-  static bool get isReady => isRegistered && to._status.value.isConnected;
+  static bool get isReady => _checkReady();
   static Node get instance => to._instance;
   static Rx<Status> get status => to._status;
+  static Rx<ConnectivityResult> get connectivity => to._connectivity;
+  static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
 
   // Properties
+  final _connectivity = ConnectivityResult.none.obs;
+  final _lifecycle = AppLifecycleState.resumed.obs;
   final _status = Rx<Status>(Status.IDLE);
 
   // References
@@ -22,10 +27,13 @@ class NodeService extends GetxService {
 
   // ^ Constructer ^ //
   Future<NodeService> init() async {
+    // Bind Observers
+    WidgetsBinding.instance!.addObserver(this);
+    _connectivity.bindStream(Connectivity().onConnectivityChanged);
+
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
-
-    // Set Handlers
+    _instance.onConnected = _handleConnected;
     _instance.onStatus = _handleStatus;
     _instance.onError = _handleError;
     _instance.onEvent = LobbyService.to.handleEvent;
@@ -41,7 +49,7 @@ class NodeService extends GetxService {
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
-    if (ContactService.hasUser.value) {
+    if (ContactService.status.value.hasUser) {
       // Connect Node
       instance.connect(await RequestBuilder.connection);
 
@@ -95,6 +103,11 @@ class NodeService extends GetxService {
   }
 
   // * ------------------- Callbacks ----------------------------
+  /// @ Handle Connection Result
+  void _handleConnected(ConnectionResponse data) {
+    Logger.info(data.toString());
+  }
+
   /// @ Handle Bootstrap Result
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
@@ -127,5 +140,17 @@ class NodeService extends GetxService {
 
     // Logging
     Logger.sError(data);
+  }
+
+  // * ------------------- Helpers ----------------------------
+  static bool _checkReady() {
+    return isRegistered && to._status.value.isConnected;
+  }
+
+  // * ------------------- Observers ----------------------------
+  // ^ Extension: Updates Lifecycle ^ //
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    this._lifecycle(state);
   }
 }

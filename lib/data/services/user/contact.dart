@@ -13,15 +13,13 @@ class ContactService extends GetxService {
   static ContactService get to => Get.find<ContactService>();
 
   // User Status Properties
-  final _hasUser = false.obs;
-  final _isNewUser = false.obs;
   final _contact = Contact().obs;
+  final _status = UserStatus.Default.obs;
 
   // User Reactive Properties
-  static RxBool get hasUser => to._hasUser;
-  static RxBool get isNewUser => to._isNewUser;
+  static Rx<UserStatus> get status => to._status;
   static Rx<Contact> get contact => to._contact;
-  static String get sName => to._hasUser.value ? to._contact.value.sName : "";
+  static String get sName => to._status.value.hasUser ? to._contact.value.sName : "";
 
   // References
   final _userBox = GetStorage('User');
@@ -29,10 +27,10 @@ class ContactService extends GetxService {
   // ^ Constructer ^ //
   Future<ContactService> init() async {
     await GetStorage.init('User');
-    _hasUser(_userBox.hasData("contact"));
+    _status(UserStatusUtils.fromBox(_userBox.hasData("contact")));
 
     // Check if Exists
-    if (_hasUser.value) {
+    if (_status.value.hasUser) {
       try {
         // Get ContactJSOn
         var profileJson = _userBox.read("contact");
@@ -43,19 +41,14 @@ class ContactService extends GetxService {
 
         // Set Contact Values
         _contact(contact);
-        _isNewUser(false);
-
-        Logger.info("Returning User");
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
-        _hasUser(false);
-        _isNewUser(true);
-
+        _status(UserStatus.New);
         Logger.warn("RESET: Contact and User");
       }
     } else {
-      _isNewUser(true);
+      _status(UserStatus.New);
       Logger.info("New User!");
     }
 
@@ -67,16 +60,13 @@ class ContactService extends GetxService {
 // * ------------------- Methods ----------------------------
   /// @ Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
-    // Set Valuse
-    to._isNewUser(true);
-
     // Set Contact for User
     to._contact(newContact);
     to._contact.refresh();
 
     // Save User/Contact to Disk
     await to._userBox.write("contact", newContact.writeToJson());
-    to._hasUser(true);
+    to._status(UserStatus.Existing);
   }
 
   /// @ Method Collects user Feedback and Sends Email
