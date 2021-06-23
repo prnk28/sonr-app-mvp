@@ -5,10 +5,6 @@ PROJECT_DIR=/Users/prad/Sonr/app
 ANDROID_DIR=/Users/prad/Sonr/app/android
 IOS_DIR=/Users/prad/Sonr/app/ios
 
-# Plugin Dirs
-PLUGIN_DIR=/Users/prad/Sonr/plugin
-PLUGIN_EXAMPLE_DIR=/Users/prad/Sonr/plugin/example
-
 # Mobile Actions
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
@@ -25,10 +21,11 @@ SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
 
 # Lists Options
 all: Makefile
-	@figlet -f larry3d "Sonr Mobile"
+	@figlet -f larry3d "Sonr App"
+	@echo ""
 	@sed -n 's/^##//p' $<
 
-## build         :   Builds IPA and APB for Flutter Frontend Module
+## build         :   Builds IPA and APB for Sonr App
 build: build.ios build.android
 	@cd /System/Library/Sounds && afplay Hero.aiff
 	@echo ""
@@ -54,120 +51,17 @@ build.android:
 	@echo '--------------------------------------------------'
 	@echo "Finished Building Android ➡ " && date
 
-## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
-deploy: deploy.ios deploy.android
-	@echo 'Cleaning Builds'
-	cd $(PROJECT_DIR) && rm -rf build
-	cd $(PROJECT_DIR) && $(CLEAN)
-	@echo 'Cleaning iOS Fastlane Cache'
-	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
-	@cd $(PROJECT_DIR)/ios/fastlane && find . -name "report.xml" -type f -delete
-	@cd $(PROJECT_DIR)/android/fastlane && find . -name "report.xml" -type f -delete
-	@cd $(PROJECT_DIR) && flutter pub get
-	@cd /System/Library/Sounds && afplay Hero.aiff
-	@echo ""
-	@echo ""
-	@echo "--------------------------------------------------------------"
-	@echo "-------- ✅ ✅ ✅   FINISHED DEPLOYING  ✅ ✅ ✅  --------------"
-	@echo "--------------------------------------------------------------"
-
-## └─ ios             - IPA for AppStore Connect
-deploy.ios:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
-	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane internal
-	@cd /System/Library/Sounds && afplay Glass.aiff
-	@echo '--------------------------------------------------'
-	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
-
-## └─ android         - APB for PlayStore
-deploy.android:
-	cd $(PROJECT_DIR) && cider bump build
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
-	@echo "Finished Building Sonr Android ➡ " && date
-	cd $(ANDROID_DIR) && fastlane android internal
-	@cd /System/Library/Sounds && afplay Glass.aiff
-	@echo '--------------------------------------------------'
-	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
-
-## debug         :   Run Mobile App in Debug Mode
-debug:
-	cd $(PROJECT_DIR) && $(RUN)
-
-## └─ clean           - Clean before running in Debug Mode
-debug.clean: plugin.clean clean
-	cd $(PROJECT_DIR) && $(RUN)
-
-
-## plugin        :   Lists Options for Binded Proxy Plugin
-plugin: Makefile
-	@echo 'Plugin Options'
-	@sed -n 's/^##//p' $<
-
-## └─ run             - Runs the Plugin Example App in Debug Mode
-plugin.run:
-	cd $(PLUGIN_EXAMPLE_DIR) && $(CLEAN)
-	cd $(PLUGIN_EXAMPLE_DIR) && $(RUN)
-
-## └─ xcode           - Opens iOS Project in Xcode
-plugin.xcode:
-	cd /Users/prad/Sonr/plugin/example/ios && xed .
-
-## └─ clean           - Cleans Plugin Project Directory
-plugin.clean:
-	cd $(PLUGIN_DIR) && $(CLEAN)
-	cd $(PLUGIN_EXAMPLE_DIR) && $(CLEAN)
-	cd $(PLUGIN_DIR) && flutter pub get
-	cd $(PLUGIN_EXAMPLE_DIR) && flutter pub get
-
-
-## push          :   Push Mobile and Plugin SubModule to Remote Repo
-push: push.plugin push.mobile
-	cd $(PROJECT_DIR) && git submodule update --remote
-	@cd /System/Library/Sounds && afplay Hero.aiff
-
-## └─ mobile          - Push Mobile App Repo to Git Remote
-push.mobile:
-	cd $(PROJECT_DIR) && flutter clean
-	cd $(PROJECT_DIR) && git add . && git commit -m 'Updated Plugin Project' && git push
-	cd $(PROJECT_DIR) && flutter pub get
-	@cd /System/Library/Sounds && afplay Glass.aiff
-	@echo '--------------------------------------------------'
-	@echo "Finished Pushing Mobile ➡ " && date
-
-## └─ plugin          - Push Plugin Repo to Git Remote
-push.plugin:
-	cd $(PLUGIN_DIR) && flutter clean
-	cd $(PLUGIN_DIR) && git add . && git commit -m 'Updated Plugin Project' && git push
-	cd $(PLUGIN_DIR) && flutter pub get
-	@cd /System/Library/Sounds && afplay Glass.aiff
-	@echo '--------------------------------------------------'
-	@echo "Finished Pushing Plugin ➡ " && date
-
 ##
-## [profile]     :   Run Mobile App for Profile Mode
+## [profile]     :   Run App for Profiling and Save SKSL File
 profile:
-	cd $(PROJECT_DIR) && cider bump build
-	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl --write-sksl-on-exit $(SKL_FILE)
+	@echo 'Hit Shift+M during Run to Save Profiling Result'
+	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl
 
-## [release]     :   Run Mobile App for Release Mode
-release:
+## [update]      :   Fetch Plugin Submodule, and Upgrade Dependencies
+update:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
+	cd %(PROJECT_DIR) && git submodule update --remote plugin
 	cd $(PROJECT_DIR) && flutter pub get
+	cd $(PROJECT_DIR) && flutter pub upgrade
 	cd $(PROJECT_DIR) && $(RUN) --release
-
-## [clean]       :   Cleans Project Cache and Build Folder
-clean:
-	@echo 'Cleaning Builds'
-	cd $(PROJECT_DIR) && rm -rf build
-	cd $(PROJECT_DIR) && $(CLEAN)
-	@echo 'Cleaning iOS Fastlane Cache'
-	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
-	@cd $(PROJECT_DIR)/ios/fastlane && find . -name "report.xml" -type f -delete
-	@cd $(PROJECT_DIR)/android/fastlane && find . -name "report.xml" -type f -delete
-	cd $(PROJECT_DIR) && flutter pub get
-	@cd /System/Library/Sounds && afplay Glass.aiff
-	@echo '--------------------------------------------------'
-	@echo "Finished Cleaning Sonr Mobile Frontend ➡ " && date
-
