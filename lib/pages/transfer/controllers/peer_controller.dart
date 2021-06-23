@@ -12,12 +12,11 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   // Reactive Elements
   final board = Rx<Artboard?>(null);
   final counter = 0.0.obs;
-  final isFlipped = false.obs;
   final isReady = false.obs;
   final isVisible = true.obs;
-
+  final isComplete = false.obs;
   final peer = Rx<Peer>(Peer());
-  final status = PeerStatus.Default.obs;
+  final status = SessionStatus.Default.obs;
 
   // Vector Properties
   final isHitting = false.obs;
@@ -30,7 +29,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   late final AnimationController visibilityController;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
-  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isIdle;
+  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isNone;
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -38,23 +37,12 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   SMIInput<bool>? _hasAccepted;
   SMIInput<bool>? _hasDenied;
   SMIInput<bool>? _isComplete;
-
   PeerController(this.riveFile);
 
   @override
   void onInit() {
     visibilityController = AnimationController(vsync: this);
     super.onInit();
-  }
-
-  /// ** Dispose on Close ** //
-  @override
-  void onClose() {
-    LobbyService.unregisterPeerCallback(peer.value);
-    if (_userStream != null) {
-      _userStream!.cancel();
-    }
-    super.onClose();
   }
 
   /// @ Method that Initializes Peer and Streams
@@ -108,11 +96,14 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  /// @ Toggle Expanded View
-  void flipView(bool value) {
-    isFlipped(value);
-    isFlipped.refresh();
-    HapticFeedback.heavyImpact();
+  /// ** Dispose on Close ** //
+  @override
+  void onClose() {
+    LobbyService.unregisterPeerCallback(peer.value);
+    if (_userStream != null) {
+      _userStream!.cancel();
+    }
+    super.onClose();
   }
 
   /// @ Handle User Invitation
@@ -130,71 +121,13 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         if (session != null) {
           session.status.listen(_handleTransferStatus);
         }
-
-        // Check for File
-        if (invite.payload.isTransfer) {
-          updateStatus(PeerStatus.Pending);
-        }
-        // Contact/URL
-        else {
-          updateStatus(PeerStatus.Complete);
-        }
       }
-    }
-  }
-
-  /// @ Handle Updated Bubble Status
-  void updateStatus(PeerStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
-    // @ Update Status
-    status(newStatus);
-
-    // @ Check Animated
-    if (isReady.value) {
-      // Handle Delay
-      Future.delayed(delay, () {
-        // Set Animation
-        switch (status.value) {
-          case PeerStatus.Default:
-            isVisible(true);
-            _isComplete!.value = false;
-            _isPending!.value = false;
-            _hasAccepted!.value = false;
-            _hasDenied!.value = false;
-            _isIdle!.value = true;
-            buttonData(DynamicSolidButtonData.invite());
-            break;
-          case PeerStatus.Pending:
-            isVisible(true);
-            _isPending!.value = true;
-            buttonData(DynamicSolidButtonData.pending());
-            buttonData.refresh();
-            break;
-          case PeerStatus.Accepted:
-            isVisible(false);
-            _hasAccepted!.value = true;
-            buttonData(DynamicSolidButtonData.inProgress());
-            buttonData.refresh();
-            break;
-          case PeerStatus.Declined:
-            isVisible(false);
-            _hasDenied!.value = true;
-            break;
-          case PeerStatus.Complete:
-            isVisible(false);
-            _isComplete!.value = true;
-            buttonData(DynamicSolidButtonData.complete());
-            buttonData.refresh();
-            // Reset Status
-            updateStatus(PeerStatus.Default, delay: 1200.milliseconds);
-            break;
-        }
-      });
     }
   }
 
   /// @ Handle Peer Position
   void _handlePeerUpdate(Peer data) {
-    if (!isClosed && !status.value.isComplete) {
+    if (!isClosed && !isComplete.value) {
       // Update Direction
       if (data.id.peer == peer.value.id.peer && !_isPending!.value) {
         peer(data);
@@ -204,18 +137,56 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Handle Peer Response
   _handleTransferStatus(SessionStatus data) {
-    if (data == SessionStatus.Accepted) {
-      updateStatus(PeerStatus.Accepted);
-    } else if (data == SessionStatus.Denied) {
-      updateStatus(PeerStatus.Declined);
-    } else {
-      updateStatus(PeerStatus.Complete);
+    switch (data) {
+      case SessionStatus.Pending:
+        isVisible(true);
+        _isPending!.value = true;
+        buttonData(DynamicSolidButtonData.pending());
+        buttonData.refresh();
+        break;
+      case SessionStatus.Accepted:
+        isVisible(false);
+        _hasAccepted!.value = true;
+        buttonData(DynamicSolidButtonData.inProgress());
+        buttonData.refresh();
+        break;
+      case SessionStatus.Denied:
+        isVisible(false);
+        _hasDenied!.value = true;
+        break;
+      case SessionStatus.InProgress:
+        break;
+      case SessionStatus.Completed:
+        isVisible(false);
+        _isComplete!.value = true;
+        buttonData(DynamicSolidButtonData.complete());
+        buttonData.refresh();
+        // Reset Status
+        Future.delayed(1200.milliseconds, () {
+          isComplete(true);
+          isVisible(true);
+          _isComplete!.value = false;
+          _isPending!.value = false;
+          _hasAccepted!.value = false;
+          _hasDenied!.value = false;
+          _isIdle!.value = true;
+        });
+        break;
+      default:
+        isVisible(true);
+        _isComplete!.value = false;
+        _isPending!.value = false;
+        _hasAccepted!.value = false;
+        _hasDenied!.value = false;
+        _isIdle!.value = true;
+        buttonData(DynamicSolidButtonData.invite());
+        break;
     }
   }
 
   // @ Handle User Position
   void _handlePosition(Position data) async {
-    if (!isClosed && !status.value.isComplete) {
+    if (!isClosed && !isComplete.value) {
       // Find Offset
       if (peer.value.platform.isMobile) {
         isHitting(data.hasHitSphere(peer.value.position));
@@ -224,7 +195,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       }
 
       // Feedback
-      if (status.value.isIdle) {
+      if (status.value.isNone) {
         // Vibration
         if (isHitting.value) {
           HapticFeedback.lightImpact();

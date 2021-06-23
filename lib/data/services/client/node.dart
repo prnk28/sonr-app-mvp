@@ -20,7 +20,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // Properties
   final _connectivity = ConnectivityResult.none.obs;
   final _lifecycle = AppLifecycleState.resumed.obs;
-  final _status = Rx<Status>(Status.IDLE);
+  final _status = Rx<Status>(Status.DEFAULT);
 
   // References
   late Node _instance;
@@ -105,7 +105,11 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // * ------------------- Callbacks ----------------------------
   /// @ Handle Connection Result
   void _handleConnected(ConnectionResponse data) {
+    // Log Result
     Logger.info(data.toString());
+
+    // Set Local Info
+    LobbyService.setLocalInfo(data.localInfo);
   }
 
   /// @ Handle Bootstrap Result
@@ -143,14 +147,28 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   // * ------------------- Helpers ----------------------------
+  // Verifies if Node is Ready to communicate
   static bool _checkReady() {
-    return isRegistered && to._status.value.isConnected;
+    return isRegistered && to._status.value.isConnected && ContactService.status.value.hasUser;
   }
 
   // * ------------------- Observers ----------------------------
   // ^ Extension: Updates Lifecycle ^ //
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Update RX Property
     this._lifecycle(state);
+
+    // Check Updated State
+    switch (state) {
+      case AppLifecycleState.resumed:
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
   }
 }

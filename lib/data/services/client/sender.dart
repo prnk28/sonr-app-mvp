@@ -108,7 +108,7 @@ class SenderService extends GetxService {
   }
 
   /// @ Send Invite with Peer
-  static Session? invite(InviteRequest request) {
+  static Session? invite(InviteRequest request, {bool isLocal = true}) {
     // Verify Request
     if (!request.payload.isNone && request.hasTo()) {
       // Analytics
@@ -119,6 +119,11 @@ class SenderService extends GetxService {
           'peerPlatform': request.to.platform.toString(),
         },
       );
+
+      // Attach Info
+      if (isLocal) {
+        LobbyService.attachLocalInfo(request);
+      }
 
       // Send Invite
       NodeService.instance.invite(request);
