@@ -160,11 +160,6 @@ class DeviceService extends GetxService {
     _systemTray.registerEventHandler(handlerKey, handler);
   }
 
-  /// @ Method Updates Tray Items
-  void updateSystray(List<SystrayAction> actions) async {
-    await Systray.updateMenu(actions);
-  }
-
   /// @ Saves Photo to Gallery
   static Future<bool> saveCapture(String path, bool isVideo) async {
     if (DeviceService.isMobile && isRegistered) {
@@ -198,6 +193,11 @@ class DeviceService extends GetxService {
       }
     }
     return false;
+  }
+
+  /// @ Method Updates Tray Items
+  void updateSystray(List<SystrayAction> actions) async {
+    await Systray.updateMenu(actions);
   }
 
 // * ------------------- Helpers ----------------------------
