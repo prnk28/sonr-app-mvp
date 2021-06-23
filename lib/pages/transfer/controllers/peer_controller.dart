@@ -24,6 +24,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final relative = 0.0.obs;
   final relativePosition = RelativePosition.Center.obs;
   final borderWidth = 0.0.obs;
+  final buttonData = DynamicSolidButtonData.invite().obs;
 
   // References
   late final AnimationController visibilityController;
@@ -160,14 +161,19 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
             _hasAccepted!.value = false;
             _hasDenied!.value = false;
             _isIdle!.value = true;
+            buttonData(DynamicSolidButtonData.invite());
             break;
           case PeerStatus.Pending:
             isVisible(true);
             _isPending!.value = true;
+            buttonData(DynamicSolidButtonData.pending());
+            buttonData.refresh();
             break;
           case PeerStatus.Accepted:
             isVisible(false);
             _hasAccepted!.value = true;
+            buttonData(DynamicSolidButtonData.inProgress());
+            buttonData.refresh();
             break;
           case PeerStatus.Declined:
             isVisible(false);
@@ -176,7 +182,8 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
           case PeerStatus.Complete:
             isVisible(false);
             _isComplete!.value = true;
-
+            buttonData(DynamicSolidButtonData.complete());
+            buttonData.refresh();
             // Reset Status
             updateStatus(PeerStatus.Default, delay: 1200.milliseconds);
             break;

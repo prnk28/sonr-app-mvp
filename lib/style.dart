@@ -21,6 +21,7 @@ export 'style/buttons/color.dart';
 export 'style/buttons/plain.dart';
 export 'style/buttons/confirm.dart';
 export 'style/buttons/image.dart';
+export 'style/buttons/solid.dart';
 
 // Theme Components
 export 'style/components/color.dart';

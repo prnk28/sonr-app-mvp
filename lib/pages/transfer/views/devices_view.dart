@@ -40,7 +40,7 @@ class _DevicesLobbyView extends GetView<TransferController> {
                 anchor: 0.225,
                 slivers: LobbyService.lobby.value
                     .mapAll((i) => Builder(builder: (context) {
-                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                          return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
                         }))
                     .toList(),
               ),

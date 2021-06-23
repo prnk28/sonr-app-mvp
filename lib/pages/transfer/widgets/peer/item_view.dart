@@ -12,50 +12,64 @@ class PeerListItem extends GetWidget<PeerController> {
     controller.initalize(peer, setAnimated: false);
     return Padding(
         padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            BoxContainer(
-              margin: EdgeWith.horizontal(8),
-              child: ListTile(
-                leading: ProfileAvatar.fromPeer(peer, size: 50),
-                title: _buildTitle(),
-                subtitle: _buildContent(),
+        child: Column(children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: _buildAvatar(),
               ),
-            ),
-          ],
-        ));
+              Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: _buildTitle(),
+              ),
+              Spacer(),
+              DynamicSolidButton(
+                  data: controller.buttonData,
+                  onPressed: () {
+                    SenderService.choose(ChooseOption.File).then((value) {
+                      if (value != null) {
+                        value.setPeer(peer);
+                        SenderService.invite(value);
+                      }
+                    });
+                  })
+            ],
+          ),
+          Divider(
+            indent: 8,
+            endIndent: 8,
+            color: SonrTheme.dividerColor,
+          ),
+        ]));
   }
 
   Widget _buildTitle() {
-    return Column(
-      children: [
-        "${peer.profile.fullName}".section(),
-        [
-          peer.platform.toString().lightSpan(fontSize: 20),
-          " ${peer.model}".paragraphSpan(fontSize: 20),
-        ].rich()
-      ],
-    );
+    return [
+      "${peer.profile.fullName} \n".subheadingSpan(fontSize: 20),
+      " ${peer.sName}.snr/".paragraphSpan(fontSize: 16),
+    ].rich();
   }
 
-  Widget _buildContent() {
-    return Padding(
-      padding: EdgeInsets.only(right: 16, top: 24, bottom: 8),
-      child: Container(
-        alignment: Alignment.center,
-        child: ColorButton.primary(
-          onPressed: () {
-            SenderService.choose(ChooseOption.File).then((value) {
-              if (value != null) {
-                value.setPeer(peer);
-                SenderService.invite(value);
-              }
-            });
-          },
-          text: "Invite",
-          icon: SonrIcons.Share,
+  Widget _buildAvatar() {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: ProfileAvatar.fromPeer(
+            peer,
+            size: 64,
+            backgroundColor: Color(0xff8E8E93).withOpacity(0.3),
+          ),
         ),
-      ),
+        Positioned.directional(
+          textDirection: TextDirection.rtl,
+          child: peer.platform.icon(color: SonrTheme.itemColor.withOpacity(0.75), size: 26),
+          start: 14,
+          bottom: 4,
+        )
+      ],
     );
   }
 }

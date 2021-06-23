@@ -57,33 +57,49 @@ class ProfileSName extends StatelessWidget {
 class ProfileAvatar extends StatelessWidget {
   final Profile profile;
   final double size;
-  const ProfileAvatar({Key? key, required this.profile, this.size = 100}) : super(key: key);
+  final Color? backgroundColor;
+  const ProfileAvatar({Key? key, required this.profile, this.size = 100, this.backgroundColor}) : super(key: key);
 
-  factory ProfileAvatar.fromContact(Contact contact, {double size = 100}) {
-    return ProfileAvatar(profile: contact.profile, size: size);
+  factory ProfileAvatar.fromContact(Contact contact, {double size = 100, Color? backgroundColor}) {
+    return ProfileAvatar(
+      profile: contact.profile,
+      size: size,
+      backgroundColor: backgroundColor,
+    );
   }
 
-  factory ProfileAvatar.fromPeer(Peer peer, {double size = 100}) {
-    return ProfileAvatar(profile: peer.profile, size: size);
+  factory ProfileAvatar.fromPeer(Peer peer, {double size = 100, Color? backgroundColor}) {
+    return ProfileAvatar(
+      profile: peer.profile,
+      size: size,
+      backgroundColor: backgroundColor,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(4),
-        child: Container(
-          width: size,
-          height: size,
-          child: profile.hasPicture()
-              ? CircleAvatar(
-                  backgroundColor: SonrTheme.foregroundColor,
-                  foregroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
-                )
-              : SonrIcons.User.gradient(size: size * 0.7),
-        ));
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        width: size,
+        height: size,
+        margin: EdgeInsets.all(8),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: backgroundColor ?? SonrTheme.foregroundColor,
+          shape: BoxShape.circle,
+        ),
+        child: profile.hasPicture()
+            ? Image.memory(
+                Uint8List.fromList(profile.picture),
+                width: size * 0.7,
+                height: size * 0.7,
+              )
+            : SonrIcons.User.gradient(size: size * 0.7),
+      ),
+    );
   }
 }
-
 
 /// @ View for Post View owner of File Received
 class ProfileOwnerRow extends StatelessWidget {
