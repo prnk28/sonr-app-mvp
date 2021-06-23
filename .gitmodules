@@ -1,7 +1,3 @@
 [submodule "plugin"]
 	path = plugin
-	url = https://github.com/sonr-io/plugin
-
-[submodule "systray"]
-	path = systray
-	url = https://github.com/sonr-io/systray
+	url = git@github.com:sonr-io/plugin.git

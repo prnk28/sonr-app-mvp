@@ -92,7 +92,7 @@ class _LocalFewView extends GetView<TransferController> {
         // Scroll View
         Obx(() => Container(
               width: Get.width,
-              height: 400,
+              height: Height.ratio(0.7),
               child: CustomScrollView(
                 scrollDirection: Axis.horizontal,
                 controller: controller.scrollController,
@@ -108,19 +108,19 @@ class _LocalFewView extends GetView<TransferController> {
       case LobbyFilter.All:
         return lobby
             .mapAll((i) => Builder(builder: (context) {
-                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
                 }))
             .toList();
       case LobbyFilter.Phones:
         return lobby
             .mapMobile((i) => Builder(builder: (context) {
-                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
                 }))
             .toList();
       case LobbyFilter.Desktops:
         return lobby
             .mapDesktop((i) => Builder(builder: (context) {
-                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerCard(i));
+                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
                 }))
             .toList();
     }
@@ -137,18 +137,27 @@ class _LocalManyView extends GetView<TransferController> {
     return
         // Scroll View
         Obx(() => Container(
+              margin: EdgeInsets.all(8),
+              padding: EdgeInsets.all(8),
               width: Get.width,
-              height: 400,
-              child: ListView.builder(itemBuilder: (context, index) {
-                switch (filter) {
-                  case LobbyFilter.All:
-                    return PeerListItem(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
-                  case LobbyFilter.Phones:
-                    return PeerListItem(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
-                  case LobbyFilter.Desktops:
-                    return PeerListItem(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
-                }
-              }),
+              height: Height.ratio(0.7),
+              decoration: BoxDecoration(
+                color: Color(0xffF8F8F9),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  switch (filter) {
+                    case LobbyFilter.All:
+                      return PeerItem.list(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
+                    case LobbyFilter.Phones:
+                      return PeerItem.list(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
+                    case LobbyFilter.Desktops:
+                      return PeerItem.list(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
+                  }
+                },
+                itemCount: LobbyService.lobby.value.count,
+              ),
             ));
   }
 }

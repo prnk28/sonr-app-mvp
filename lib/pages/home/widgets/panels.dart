@@ -143,7 +143,7 @@ class _LocalLobbyView extends GetView<HomeController> {
             child: ListView.builder(
                 itemCount: LobbyService.lobby.value.peers.length,
                 itemBuilder: (context, index) {
-                  return PeerListItem(peer: LobbyService.lobby.value.peerAtIndex(index), index: index);
+                  return PeerItem.list(peer: LobbyService.lobby.value.peerAtIndex(index), index: index);
                 })));
   }
 }
