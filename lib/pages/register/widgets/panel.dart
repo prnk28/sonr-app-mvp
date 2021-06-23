@@ -99,10 +99,7 @@ class FormPanel extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    return Container(
-      width: Width.full,
-      margin: margin,
-      padding: padding,
+    return Form(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,

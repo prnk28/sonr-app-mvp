@@ -27,10 +27,16 @@ extension InfoPanelTypeUtils on InfoPanelType {
   /// Return Previous Info Panel
   InfoPanelType get previous => InfoPanelType.values[this.index - 1];
 
+  /// Checks if this Panel is First Panel
+  bool get isFirst => this.index == 0;
+
+  /// Checks if this Panel is NOT First Panel
+  bool get isNotFirst => this.index != 0;
+
   /// Checks if this Panel is Last Panel
   bool get isLast => this.index + 1 == this.total;
 
-  /// Checks if this Panel is Last Panel
+  /// Checks if this Panel is NOT Last Panel
   bool get isNotLast => this.index + 1 != this.total;
 
   /// Returns this Panels Title as Heading Widget

@@ -25,7 +25,7 @@ class ProfileSetupView extends GetView<RegisterController> {
         focusNode: firstNameFocus,
         hint: hintName.item1,
         onEditingComplete: () {
-          firstNameFocus.requestFocus();
+          firstNameFocus.unfocus();
           lastNameFocus.requestFocus();
         },
       ),
