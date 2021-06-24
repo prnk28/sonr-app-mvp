@@ -104,11 +104,26 @@ class _InviteRequestFileHeader extends StatelessWidget {
         Container(
             width: Width.ratio(0.6),
             child: [
-              profile.firstName.headingSpan(fontSize: 20),
-              " wants to share an ".lightSpan(fontSize: 19),
-              file.prettyType().headingSpan(fontSize: 20),
-              " of size ".lightSpan(fontSize: 19),
-              file.prettySize().headingSpan(fontSize: 20)
+              profile.firstName.headingSpan(
+                fontSize: 20,
+                color: SonrTheme.itemColor,
+              ),
+              " wants to share an ".lightSpan(
+                fontSize: 19,
+                color: SonrTheme.itemColor,
+              ),
+              file.prettyType().headingSpan(
+                    fontSize: 20,
+                    color: SonrTheme.itemColor,
+                  ),
+              " of size ".lightSpan(
+                fontSize: 19,
+                color: SonrTheme.itemColor,
+              ),
+              file.prettySize().headingSpan(
+                    fontSize: 20,
+                    color: SonrTheme.itemColor,
+                  )
             ].rich())
       ]),
     );

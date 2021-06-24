@@ -10,11 +10,14 @@ class RequestBuilder {
   /// Returns New Connection Request
   static Future<ConnectionRequest> get connection async {
     return ConnectionRequest(
-      apiKeys: apiKeys,
-      location: await DeviceService.location,
-      contact: contact,
-      type: internetType,
-    );
+        apiKeys: apiKeys,
+        location: await DeviceService.location,
+        contact: contact,
+        type: internetType,
+        textileOptions: ConnectionRequest_TextileOptions(
+          enabled: true,
+          threads: true,
+        ));
   }
 
   /// Returns New Initialize Request

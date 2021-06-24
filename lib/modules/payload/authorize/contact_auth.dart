@@ -54,10 +54,10 @@ class ContactAuthView extends StatelessWidget {
           ),
         ]),
         // Social Media
-        Container(
-          margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
-          child: Row(children: card.mapSocials((social) => social.media.gradient(size: 32)) as List<Widget>),
-        ),
+        // Container(
+        //   margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
+        //   child: Row(children: card.mapSocials((social) => social.media.gradient(size: 32)) as List<Widget>),
+        // ),
         Divider(),
         Padding(padding: EdgeInsets.all(4)),
         Row(

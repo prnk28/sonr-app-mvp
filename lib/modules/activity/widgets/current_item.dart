@@ -94,10 +94,23 @@ class _CurrentActivityContent extends GetView<ActivityController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Rich Text
-          ["${payload.toString().capitalizeFirst} from ".lightSpan(fontSize: 18), firstName.subheadingSpan(fontSize: 18)].rich(),
+          [
+            "${payload.toString().capitalizeFirst} from ".lightSpan(
+              fontSize: 18,
+              color: SonrTheme.itemColor,
+            ),
+            firstName.subheadingSpan(
+              fontSize: 18,
+              color: SonrTheme.itemColor,
+            )
+          ].rich(),
 
           // Date Time Text
-          DateText(date: DateTime.now(), fontSize: 16)
+          DateText(
+            date: DateTime.now(),
+            fontSize: 16,
+            color: SonrTheme.itemColor,
+          )
         ],
       ),
     );
