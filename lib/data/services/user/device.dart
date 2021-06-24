@@ -33,7 +33,6 @@ class DeviceService extends GetxService {
   // Properties
   final _device = Device().obs;
   final _location = Location().obs;
-
   final _connectivity = ConnectivityResult.none.obs;
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _position = RxPosition();

@@ -31,9 +31,11 @@ class Logger extends GetxService {
 
   // * Initializes Logger * //
   Future<Logger> init() async {
-    // Configure Firebase Scope
-    FirebaseAnalytics().setUserId(DeviceService.device.id);
-    FirebaseAnalytics().setUserProperty(name: "platform", value: DeviceService.device.platform.toString());
+    if (DeviceService.isMobile) {
+      // Configure Firebase Scope
+      FirebaseAnalytics().setUserId(DeviceService.device.id);
+      FirebaseAnalytics().setUserProperty(name: "platform", value: DeviceService.device.platform.toString());
+    }
     return this;
   }
 
