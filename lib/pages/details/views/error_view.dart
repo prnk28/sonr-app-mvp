@@ -22,8 +22,8 @@ class ErrorPage extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 32),
             alignment: Alignment.bottomCenter,
             child: ColorButton.neutral(
-              onPressed: () => AppRoute.close(),
-              text: "Return Home",
+              onPressed: () => args.action(),
+              text: args.buttonText,
               textColor: args.textColor,
             ),
           ),

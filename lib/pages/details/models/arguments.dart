@@ -68,13 +68,12 @@ class DetailPageArgs {
   String get title => this.type.toString().substring(this.type.toString().indexOf('.'));
 }
 
-enum ErrorPageType {
-  EmptyContacts,
-  EmptyFiles,
-  EmptyLinks,
-  EmptyMedia,
-  PermLocation,
-  PermMedia,
+enum ErrorPageType { EmptyContacts, EmptyFiles, EmptyLinks, EmptyMedia, PermLocation, PermMedia, NoNetwork }
+
+extension ErrorPageTypeUtils on ErrorPageType {
+  bool get isEmpty => this.toString().contains("Empty");
+  bool get isPermission => this.toString().contains("Perm");
+  bool get isNetwork => this.toString().contains('Network');
 }
 
 class ErrorPageArgs {
@@ -87,6 +86,7 @@ class ErrorPageArgs {
   factory ErrorPageArgs.emptyMedia() => ErrorPageArgs(ErrorPageType.EmptyMedia);
   factory ErrorPageArgs.permLocation() => ErrorPageArgs(ErrorPageType.PermLocation);
   factory ErrorPageArgs.permMedia() => ErrorPageArgs(ErrorPageType.PermMedia);
+  factory ErrorPageArgs.noNetwork() => ErrorPageArgs(ErrorPageType.NoNetwork);
 
   Color get backgroundColor {
     switch (type) {
@@ -121,12 +121,35 @@ class ErrorPageArgs {
         return basePath + "LocationPerm.png";
       case ErrorPageType.PermMedia:
         return basePath + "MediaPerm.png";
+      case ErrorPageType.NoNetwork:
+        return basePath + "ErrorNetwork.png";
       default:
         return "";
     }
   }
 
+  String get buttonText {
+    if (type.isEmpty) {
+      return "Return Home";
+    } else if (type.isPermission) {
+      return "Grant";
+    } else {
+      return "Retry";
+    }
+  }
+
   Color get textColor => type == ErrorPageType.EmptyLinks ? SonrColor.White : SonrColor.Black;
+
+  Future<void> action() async {
+    if (type == ErrorPageType.PermLocation) {
+      await Permissions.Location.request();
+    } else if (type == ErrorPageType.PermMedia) {
+      await Permissions.Gallery.request();
+    } else if (type == ErrorPageType.NoNetwork) {
+    } else {
+      AppRoute.close();
+    }
+  }
 }
 
 class PostsPageArgs {

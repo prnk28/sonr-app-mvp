@@ -10,6 +10,7 @@ class PostsPage extends StatelessWidget {
           appBar: DetailAppBar(
             onPressed: () => Get.back(closeOverlays: true),
             title: args.type.name(),
+            isClose: true,
           ),
           body: ListView.builder(
             controller: args.scrollController,

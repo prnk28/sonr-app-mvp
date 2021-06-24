@@ -120,7 +120,11 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// @ Handle Device Updated Connectivity Result
   void _handleDeviceConnection(ConnectivityResult result) {
     if (result != _lastConnectivity) {
-      _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
+      if (_lastConnectivity != ConnectivityResult.none) {
+        _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
+      }else{
+        
+      }
     }
   }
 
