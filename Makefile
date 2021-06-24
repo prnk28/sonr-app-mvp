@@ -77,3 +77,15 @@ clean:
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && hover clean-cache
 	cd $(PROJECT_DIR) && flutter pub get
+
+##
+##
+## Shortcuts   : (b) => build                |      (p) => profile
+##               └─ (bi) => build.ios        |      (u) => update
+##               └─ (ba) => build.android    |      (c) => clean
+b:build
+bi:build.ios
+ba:build.android
+p:profile
+u:update
+c:clean
