@@ -3,8 +3,7 @@ export 'views/flat_view.dart';
 export 'controllers/item_controller.dart';
 export 'controllers/peer_controller.dart';
 export 'controllers/transfer_controller.dart';
-export 'widgets/payload/item.dart';
-export 'widgets/peer/peer.dart';
+export 'peer/peer.dart';
 export 'models/mode.dart';
 export 'models/animation.dart';
 
@@ -15,7 +14,6 @@ import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style.dart';
 import 'controllers/transfer_controller.dart';
 import 'views/local_view.dart';
-import 'widgets/payload/item.dart';
 
 /// @ Transfer Screen Entry Point
 class TransferPage extends GetView<TransferController> {
@@ -67,7 +65,7 @@ class PayloadSheetView extends GetView<TransferController> {
                       controller: scrollController,
                       slivers: [
                         SliverAppBar(
-                          title: SonrFileListHeader(),
+                          title: PayloadListItemHeader(),
                           pinned: true,
                           floating: false,
                           automaticallyImplyLeading: false,
@@ -79,7 +77,7 @@ class PayloadSheetView extends GetView<TransferController> {
                         SliverList(
                             delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            return SonrFileListItem(
+                            return PayloadListItem.multi(
                               item: file.items[index],
                               index: index,
                               key: GlobalKey(debugLabel: "InfoButton-$index"),
@@ -97,7 +95,7 @@ class PayloadSheetView extends GetView<TransferController> {
                 padding: EdgeInsets.all(8),
                 child: Container(
                     height: Height.ratio(0.15),
-                    child: PayloadSingleItem(
+                    child: PayloadListItem.single(
                       key: GlobalKey(
                         debugLabel: "InfoButton-SingleItem",
                       ),

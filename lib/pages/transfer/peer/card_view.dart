@@ -72,9 +72,7 @@ class _PeerAvatar extends StatelessWidget {
                   height: 96,
                   width: 96,
                   child: Obx(
-                    () => Rive(
-                      artboard: controller.board.value!,
-                    ),
+                    () => Rive(artboard: controller.board.value),
                   )),
             ),
           ),

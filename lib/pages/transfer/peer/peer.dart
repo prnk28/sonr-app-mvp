@@ -1,4 +1,4 @@
-export '../../controllers/peer_controller.dart';
+export '../controllers/peer_controller.dart';
 import 'package:sonr_app/style.dart';
 
 import 'card_view.dart';

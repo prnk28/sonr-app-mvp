@@ -1,6 +1,4 @@
 import 'package:sonr_app/pages/transfer/models/filter.dart';
-import 'package:sonr_app/pages/transfer/widgets/peer/peer.dart';
-
 import 'package:sonr_app/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
 import '../transfer.dart';
