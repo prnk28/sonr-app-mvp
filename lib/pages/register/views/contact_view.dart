@@ -6,15 +6,17 @@ class ProfileSetupView extends GetView<RegisterController> {
   final hintName = SonrTextField.hintName();
   final firstNameFocus = FocusNode();
   final lastNameFocus = FocusNode();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ProfileSetupView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
         primary: true,
         reverse: true,
-        child: Form(
-          child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(padding: EdgeInsets.all(8)),
             CircleContainer(
               alignment: Alignment.center,
@@ -43,6 +45,7 @@ class ProfileSetupView extends GetView<RegisterController> {
             ),
             Padding(padding: EdgeInsets.all(200))
           ]),
-        ));
+      ),
+    );
   }
 }

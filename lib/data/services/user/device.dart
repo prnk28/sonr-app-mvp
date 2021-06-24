@@ -88,7 +88,7 @@ class DeviceService extends GetxService {
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",
-        iconPath: await _getIconPath(),
+        iconPath: await _getIconPath(platform),
       );
 
       // @ 2. Init SystemTray
@@ -198,13 +198,13 @@ class DeviceService extends GetxService {
 
 // * ------------------- Helpers ----------------------------
   // # Returns Icon Path
-  Future<String> _getIconPath() async {
+  Future<String> _getIconPath(Platform platform) async {
     // Set Temporary Directory
     Directory directory = await getApplicationDocumentsDirectory();
     String name = "";
 
     // Get File Name
-    if (DeviceService.isWindows) {
+    if (platform.isWindows) {
       name = "tray.ico";
     } else {
       name = "tray.png";

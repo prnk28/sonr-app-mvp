@@ -13,8 +13,8 @@ class PeerCard extends GetWidget<PeerController> {
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer);
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 150),
+    return Container(
+      padding: EdgeInsets.only(top: 50, bottom: 250),
       child: BoxContainer(
           width: K_CARD_WIDTH,
           height: K_CARD_HEIGHT,
@@ -97,7 +97,7 @@ class _PeerMainCard extends StatelessWidget {
 
           // Avatar
           Obx(() => Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 12.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: SonrTheme.foregroundColor.withOpacity(0.8),

@@ -109,6 +109,8 @@ flutter_test:
 # **   FLUTTER BUILD    **
 # ** ================== **
 flutter:
+  uses-material-design: true
+
   fonts:
   - family: AlongSans
     fonts:
