@@ -57,7 +57,7 @@ class Checklist extends StatelessWidget {
         (currentIdx) => Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: Colors.white,
+                color: SonrTheme.backgroundColor,
                 border: Border.all(
                   color: SonrTheme.foregroundColor,
                   width: 1.5,

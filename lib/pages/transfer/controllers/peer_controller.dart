@@ -15,6 +15,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final isReady = false.obs;
   final isVisible = true.obs;
   final isComplete = false.obs;
+  final opacity = 0.85.obs;
   final peer = Rx<Peer>(Peer());
   final status = SessionStatus.Default.obs;
 
@@ -26,7 +27,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final buttonData = DynamicSolidButtonData.invite().obs;
 
   // References
-  late final AnimationController visibilityController;
   late final Session session;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
@@ -42,7 +42,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onInit() {
-    visibilityController = AnimationController(vsync: this);
     super.onInit();
   }
 
@@ -164,6 +163,10 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Handle Peer Response
   _handleTransferStatus(SessionStatus data) {
+    // Update Opacity
+    opacity(data.opacity());
+    
+    // Set Animation
     switch (data) {
       case SessionStatus.Pending:
         isVisible(true);
@@ -249,5 +252,27 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       }
     }
     _handlingHit = false;
+  }
+}
+
+extension SessionStatusOpacityUtil on SessionStatus {
+  /// Returns Opacity Value By Peer Status
+  double opacity() {
+    switch (this) {
+      case SessionStatus.Default:
+        return 0.85;
+      case SessionStatus.Pending:
+        return 0.55;
+      case SessionStatus.Invited:
+        return 0.85;
+      case SessionStatus.Accepted:
+        return 0.35;
+      case SessionStatus.Denied:
+        return 0.0;
+      case SessionStatus.InProgress:
+        return 0.15;
+      case SessionStatus.Completed:
+        return 0.0;
+    }
   }
 }

@@ -13,56 +13,82 @@ class PeerCard extends GetWidget<PeerController> {
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer);
-    return Container(
-      padding: EdgeInsets.only(top: 50, bottom: 250),
-      child: BoxContainer(
-          width: K_CARD_WIDTH,
-          height: K_CARD_HEIGHT,
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.all(24),
-          child: ObxValue<RxBool>(
-              (isFlipped) => Stack(
-                    children: [
-                      // Rive Board
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 34),
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 96,
-                            width: 96,
-                            child: controller.board.value == null || isFlipped.value
-                                ? Container()
-                                : Rive(
-                                    artboard: controller.board.value!,
-                                  ),
-                          ),
+    return BoxContainer(
+        constraints: BoxConstraints.tight(Size(K_CARD_WIDTH, K_CARD_HEIGHT)),
+        clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.all(24),
+        child: ObxValue<RxBool>(
+            (isFlipped) => Stack(
+                  children: [
+                    // Rive Board
+                    _PeerAvatar(
+                      controller: controller,
+                    ),
+                    // Content
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: GestureDetector(
+                        onTap: controller.invite,
+                        child: AnimatedSlider.fade(
+                          child: isFlipped.value
+                              ? _PeerDetailsCard(
+                                  isFlipped: isFlipped,
+                                  peer: controller.peer,
+                                  key: ValueKey<bool>(true),
+                                )
+                              : _PeerMainCard(
+                                  isFlipped: isFlipped,
+                                  peer: controller.peer,
+                                  key: ValueKey<bool>(false),
+                                ),
                         ),
                       ),
+                    )
+                  ],
+                ),
+            false.obs));
+  }
+}
 
-                      // Content
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        child: GestureDetector(
-                          onTap: controller.invite,
-                          child: AnimatedSlider.fade(
-                            child: isFlipped.value
-                                ? _PeerDetailsCard(
-                                    isFlipped: isFlipped,
-                                    peer: controller.peer,
-                                    key: ValueKey<bool>(true),
-                                  )
-                                : _PeerMainCard(
-                                    isFlipped: isFlipped,
-                                    peer: controller.peer,
-                                    key: ValueKey<bool>(false),
-                                  ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-              false.obs)),
+/// @ Peer Avatar with Rive Board Border
+class _PeerAvatar extends StatelessWidget {
+  final PeerController controller;
+
+  const _PeerAvatar({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Center(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 34),
+              child: Container(
+                  alignment: Alignment.center,
+                  height: 96,
+                  width: 96,
+                  child: Obx(
+                    () => Rive(
+                      artboard: controller.board.value!,
+                    ),
+                  )),
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.only(bottom: 32.0),
+              child: Obx(
+                () => AnimatedOpacity(
+                    opacity: controller.opacity.value,
+                    duration: 150.milliseconds,
+                    child: ProfileAvatar.fromPeer(
+                      controller.peer.value,
+                      size: 80,
+                    )),
+              )),
+        ],
+      ),
     );
   }
 }
@@ -76,8 +102,6 @@ class _PeerMainCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: context.widthTransformer(reducedBy: 0.8),
-        height: context.heightTransformer(reducedBy: 0.6),
         alignment: Alignment.center,
         child: [
           // Align Platform
@@ -91,45 +115,31 @@ class _PeerMainCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.About.gradient(value: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.MoreVertical.icon(color: SonrTheme.greyColor, size: 24),
                 ),
               )),
 
-          // Avatar
-          Obx(() => Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: SonrTheme.foregroundColor.withOpacity(0.8),
-                    shape: BoxShape.circle,
-                  ),
-                  child: ProfileAvatar.fromPeer(peer.value, size: 72),
-                ),
-              )),
           Spacer(),
 
           // Device Icon and Full Name
           _buildName(),
 
           // Username
-          _buildSName(),
-        ].column());
+          _buildModel(),
+          Padding(padding: EdgeInsets.all(4))
+        ].column(mainAxisSize: MainAxisSize.min));
   }
 
   Widget _buildName() {
     if (peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
       return "${peer.value.profile.firstName}".subheading(color: SonrTheme.itemColor);
     } else {
-      return "${peer.value.profile.fullName}".subheading(color: SonrTheme.itemColor);
+      return "${peer.value.profile.firstName}".subheading(color: SonrTheme.itemColor);
     }
   }
 
-  Widget _buildSName() {
-    if (peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
-      return "${peer.value.profile.lastName}".paragraph(color: SonrTheme.greyColor);
-    } else {
-      return "${peer.value.profile.sName}.snr/".paragraph(color: SonrTheme.greyColor);
-    }
+  Widget _buildModel() {
+    return "${peer.value.platform}".paragraph(color: SonrTheme.greyColor);
   }
 }
 
@@ -142,8 +152,6 @@ class _PeerDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: context.widthTransformer(reducedBy: 0.8),
-        height: context.heightTransformer(reducedBy: 0.6),
         alignment: Alignment.center,
         child: [
           [
@@ -176,6 +184,6 @@ class _PeerDetailsCard extends StatelessWidget {
 
           // Device Icon and Full Name
           "${peer.value.model}".paragraph(),
-        ].column());
+        ].column(mainAxisSize: MainAxisSize.min));
   }
 }

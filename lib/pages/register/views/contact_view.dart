@@ -18,14 +18,14 @@ class ProfileSetupView extends GetView<RegisterController> {
         reverse: true,
         child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(padding: EdgeInsets.all(8)),
-            CircleContainer(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(4),
-              child: Container(
-                alignment: Alignment.center,
-                child: SonrIcons.Avatar.greyWith(size: 100),
-              ),
-            ),
+            // CircleContainer(
+            //   alignment: Alignment.center,
+            //   padding: EdgeInsets.all(4),
+            //   child: Container(
+            //     alignment: Alignment.center,
+            //     child: SonrIcons.Avatar.greyWith(size: 100),
+            //   ),
+            // ),
             RegisterTextField(
               type: RegisterTextFieldType.FirstName,
               focusNode: firstNameFocus,

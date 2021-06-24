@@ -203,7 +203,7 @@ class SonrTheme {
         errorColor: SonrColor.Critical,
         accentColor: SonrColor.Secondary,
         focusColor: SonrColor.Black,
-        hintColor: SonrColor.Grey,
+        hintColor: Color(0xff8E8E93),
         cardColor: Color(0xfff0f6fa).withOpacity(0.85),
         canvasColor: Color(0xffffffff).withOpacity(0.75),
         shadowColor: Color(0xffc7ccd0),
@@ -220,7 +220,7 @@ class SonrTheme {
         errorColor: SonrColor.Critical,
         accentColor: SonrColor.AccentPurple,
         focusColor: SonrColor.White,
-        hintColor: SonrColor.LightGrey,
+        hintColor: Color(0xffBFBFC3),
         cardColor: Color(0xff2f2a2a).withOpacity(0.75),
         canvasColor: Color(0xff3e3737),
         shadowColor: Color(0xff2f2a2a),
@@ -240,15 +240,15 @@ class SonrTheme {
   static Color get itemColorInversed => Preferences.isDarkMode ? SonrColor.Black : SonrColor.White;
 
   /// Returns Current Shadow Color
-  static Color get shadowColor => Preferences.isDarkMode ? Colors.black.withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
+  static Color get shadowColor => Preferences.isDarkMode ? Color(0xff2A2B37).withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
 
   /// Return Current Box Shadow
   static List<BoxShadow> get boxShadow => Preferences.isDarkMode
       ? [
           BoxShadow(
-            color: Colors.black.withOpacity(0.6),
-            offset: Offset(0, 20),
-            blurRadius: 30,
+            color: Color(0xff2C2C2C).withOpacity(0.6),
+            offset: Offset(0, 10),
+            blurRadius: 15,
           )
         ]
       : [

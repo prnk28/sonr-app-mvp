@@ -88,7 +88,7 @@ class ArrowButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      title.toUpperCase().light(fontSize: 20),
+                      title.toUpperCase().light(fontSize: 20, color: SonrTheme.itemColor),
                       Padding(
                         padding: const EdgeInsets.only(top: 6.0, left: 4),
                         child: SonrIcons.Down.icon(size: 16, color: SonrTheme.itemColor),
