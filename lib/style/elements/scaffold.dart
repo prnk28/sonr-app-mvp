@@ -10,12 +10,14 @@ class SonrScaffold extends StatelessWidget {
   final Widget? floatingAction;
   final PreferredSizeWidget? appBar;
   final bool? resizeToAvoidBottomInset;
+  final bool? extendBodyBehindAppBar;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   SonrScaffold({
     Key? key,
     this.body,
     this.appBar,
+    this.extendBodyBehindAppBar,
     this.resizeToAvoidBottomInset,
     this.bottomNavigationBar,
     this.bottomSheet,
@@ -26,8 +28,8 @@ class SonrScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SonrTheme.backgroundColor,
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: extendBodyBehindAppBar ?? true,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
       appBar: appBar,
       bottomNavigationBar: bottomNavigationBar,

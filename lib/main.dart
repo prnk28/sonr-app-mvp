@@ -102,7 +102,7 @@ class SplashPage extends StatelessWidget {
     await Future.delayed(3500.milliseconds);
 
     // # Check for User
-    if (!ContactService.hasUser.value) {
+    if (ContactService.status.value.isNew) {
       if (isDesktop) {
         // Create User
         await ContactService.newContact(Contact(
@@ -112,7 +112,7 @@ class SplashPage extends StatelessWidget {
         )));
 
         // Connect to Network
-        AppPage.Home.off(init: Sonr.to.connect, args: HomeArguments(isFirstLoad: true));
+        AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
       }
       // Register Mobile
       else {

@@ -4,7 +4,7 @@ import 'package:sonr_app/pages/register/register.dart';
 /// @ Builds Neumorphic Text Field
 class RegisterTextField extends GetView<RegisterController> {
   final FocusNode focusNode;
-  final void Function()? onEditingComplete;
+  final void Function() onEditingComplete;
   final RegisterTextFieldType type;
   final String hint;
 
@@ -63,7 +63,7 @@ class RegisterTextField extends GetView<RegisterController> {
               inputFormatters: type.inputFormatters,
               textCapitalization: type.textCapitalization,
               focusNode: focusNode,
-              onEditingComplete: onEditingComplete,
+              onEditingComplete: () => onEditingComplete(),
               onChanged: (val) {
                 type.value(val);
                 type.value.refresh();

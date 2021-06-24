@@ -34,7 +34,7 @@ class ContactSName extends StatelessWidget {
                           ),
                           child: Icon(
                             SonrIcons.ATSign,
-                            color: SonrTheme.itemColorInversed,
+                            color: Colors.white,
                             size: 18,
                           ),
                         ),

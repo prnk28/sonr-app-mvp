@@ -24,6 +24,7 @@ class PayloadSingleItem extends GetView<ItemController> {
                 InfolistOption("Remove", SonrIcons.Trash, controller.delete),
                 InfolistOption("Cancel", SonrIcons.Cancel, controller.cancel),
               ]),
+              offset: Offset(35, 0),
               parentKey: key,
             );
           },

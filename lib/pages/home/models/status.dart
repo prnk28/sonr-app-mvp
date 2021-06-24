@@ -36,10 +36,7 @@ extension HomeViewUtils on HomeView {
 
   String get title {
     if (this == HomeView.Dashboard) {
-      if (ContactService.isNewUser.value) {
-        return "Nice to meet you.";
-      }
-      return "Welcome Back";
+      return "Welcome";
     } else {
       return this.toString().substring(this.toString().indexOf('.') + 1);
     }

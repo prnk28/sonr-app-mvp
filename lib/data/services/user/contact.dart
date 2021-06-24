@@ -12,34 +12,25 @@ class ContactService extends GetxService {
   static bool get isRegistered => Get.isRegistered<ContactService>();
   static ContactService get to => Get.find<ContactService>();
 
-  /// ** User Status Properties **
-  final _hasUser = false.obs;
-  final _isNewUser = false.obs;
-
-  /// ** User Reactive Properties **
+  // User Status Properties
   final _contact = Contact().obs;
+  final _status = UserStatus.Default.obs;
 
-  //
-  static RxBool get hasUser => to._hasUser;
-  static RxBool get isNewUser => to._isNewUser;
+  // User Reactive Properties
+  static Rx<UserStatus> get status => to._status;
   static Rx<Contact> get contact => to._contact;
+  static String get sName => to._status.value.hasUser ? to._contact.value.sName : "";
 
-  // Getters for Preferences
-  static String get sName => to._hasUser.value ? to._contact.value.sName : "";
-
-  /// ** References **
+  // References
   final _userBox = GetStorage('User');
 
-  /// @ Open SharedPreferences on Init
+  // ^ Constructer ^ //
   Future<ContactService> init() async {
-    // @ Init Shared Preferences
     await GetStorage.init('User');
-
-    // Check User Status
-    _hasUser(_userBox.hasData("contact"));
+    _status(UserStatusUtils.fromBox(_userBox.hasData("contact")));
 
     // Check if Exists
-    if (_hasUser.value) {
+    if (_status.value.hasUser) {
       try {
         // Get ContactJSOn
         var profileJson = _userBox.read("contact");
@@ -50,40 +41,32 @@ class ContactService extends GetxService {
 
         // Set Contact Values
         _contact(contact);
-        _isNewUser(false);
-
-        Logger.info("Returning User");
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
-        _hasUser(false);
-        _isNewUser(true);
-
+        _status(UserStatus.New);
         Logger.warn("RESET: Contact and User");
       }
     } else {
-      _isNewUser(true);
+      _status(UserStatus.New);
       Logger.info("New User!");
     }
 
     // Handle Contact Updates
     _contact.listen(_handleContact);
-
     return this;
   }
 
+// * ------------------- Methods ----------------------------
   /// @ Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
-    // Set Valuse
-    to._isNewUser(true);
-
     // Set Contact for User
     to._contact(newContact);
     to._contact.refresh();
 
     // Save User/Contact to Disk
     await to._userBox.write("contact", newContact.writeToJson());
-    to._hasUser(true);
+    to._status(UserStatus.Existing);
   }
 
   /// @ Method Collects user Feedback and Sends Email
@@ -112,24 +95,18 @@ class ContactService extends GetxService {
     await uploadTask.whenComplete(() => to._handleUploadScreenshot(ref, data.text));
   }
 
-  // # Helper Method to Handle Contact Updates
+  // # Helper: Method to Handle Contact Updates
   void _handleContact(Contact data) async {
     // Save Updated User to Disk
     await to._userBox.write("contact", data.writeToJson());
 
     // Send Update to Node
-    if (Sonr.status.value.isConnected) {
-      Sonr.setProfile(data);
+    if (NodeService.status.value.isConnected) {
+      NodeService.setProfile(data);
     }
   }
 
-  /// @ Helper: Uploads User Screenshot
-  FutureOr<dynamic> _handleUploadScreenshot(Reference ref, String message) async {
-    // Fetch Link
-    String link = await ref.getDownloadURL();
-    await _handlePostFeedback(message, link: link);
-  }
-
+// * ------------------- Callbacks ----------------------------
   /// @ Helper: Posts User Feedback
   Future<void> _handlePostFeedback(String message, {String? link}) async {
     // Update Firestore
@@ -152,7 +129,12 @@ class ContactService extends GetxService {
         "hasScreenshot": false,
       });
     }
+  }
 
-    // Log Feedback Event
+  // # Helper: Uploads User Screenshot
+  FutureOr<dynamic> _handleUploadScreenshot(Reference ref, String message) async {
+    // Fetch Link
+    String link = await ref.getDownloadURL();
+    await _handlePostFeedback(message, link: link);
   }
 }

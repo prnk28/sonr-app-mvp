@@ -31,10 +31,10 @@ class Preferences extends GetxService {
 
   /// @ Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
-    if (Sonr.isReady) {
+    if (NodeService.isReady) {
       if (to._properties.value.isFlatMode != isFlatMode) {
         to._properties(Peer_Properties(enabledPointShare: Preferences.pointShareEnabled, isFlatMode: isFlatMode));
-        Sonr.node.update(
+        NodeService.instance.update(
           Request.newUpdateProperties(to._properties.value),
         );
       }

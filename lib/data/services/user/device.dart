@@ -6,8 +6,6 @@ import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
@@ -18,17 +16,6 @@ class DeviceService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-
-  // Properties
-  final _device = Device().obs;
-  final _location = Location().obs;
-  final _connectivity = ConnectivityResult.none.obs;
-
-  // Mobile Platform Controllers/Properties
-  final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
-  final _position = RxPosition();
-
-  // Platform Checkers
   static bool get hasInternet => to._connectivity.value != ConnectivityResult.none;
   static bool get isDesktop => to._device.value.platform.isDesktop;
   static bool get isMobile => to._device.value.platform.isMobile;
@@ -37,27 +24,34 @@ class DeviceService extends GetxService {
   static bool get isLinux => to._device.value.platform.isLinux;
   static bool get isMacOS => to._device.value.platform.isMacOS;
   static bool get isWindows => to._device.value.platform.isWindows;
-
-  // Property Accessors
   static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
   static Platform get platform => to._device.value.platform;
   static RxPosition get position => to._position;
 
+  // Properties
+  final _device = Device().obs;
+  final _location = Location().obs;
+  final _connectivity = ConnectivityResult.none.obs;
+  final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
+  final _position = RxPosition();
+
   // References
   late MainEntry _main;
   late Systray _systemTray;
+  final _locationApi = LocationApi(ip_key: Env.ip_key, rapid_host: Env.rapid_host, rapid_key: Env.rapid_key);
 
+  // ^ Initialization ^ //
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (AppServices.areServicesRegistered && isRegistered && Sonr.isRegistered) {
-        Sonr.update(_position.value);
+      if (AppServices.areServicesRegistered && isRegistered && NodeService.isRegistered) {
+        NodeService.update(_position.value);
       }
     });
   }
 
-  // * Device Service Initialization * //
+  // ^ Constructer ^ //
   Future<DeviceService> init() async {
     // Set Properties
     var platform = PlatformUtils.find();
@@ -93,7 +87,7 @@ class DeviceService extends GetxService {
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",
-        iconPath: await _getIconPath(),
+        iconPath: await _getIconPath(platform),
       );
 
       // @ 2. Init SystemTray
@@ -109,13 +103,14 @@ class DeviceService extends GetxService {
     return this;
   }
 
-  // * Close Streams * //
+  // ^ Dispose Closer ^ //
   @override
   void onClose() {
     _position.cancel();
     super.onClose();
   }
 
+// * ------------------- Methods ----------------------------
   /// @ Retreive Location by IP Address
   static Future<Location> findLocation(Platform platform) async {
     // # Check Platform
@@ -141,37 +136,7 @@ class DeviceService extends GetxService {
         return Location(longitude: pos.longitude, latitude: pos.latitude);
       }
     }
-
-    // # IP Based Location for ALL Devices
-    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${Env.ip_key}");
-
-    final response = await http.get(url, headers: {'x-rapidapi-key': Env.rapid_key, 'x-rapidapi-host': Env.rapid_host});
-
-    if (response.statusCode == 200) {
-      // Analytics
-      Logger.event(
-        controller: 'DeviceService',
-        name: '[DeviceService]: Find-Location',
-        parameters: {
-          'createdAt': DateTime.now().toString(),
-          'platform': platform.toString(),
-          'isMobile': platform.isMobile,
-          'type': 'IP-Location',
-        },
-      );
-
-      // Decode Json
-      var json = jsonDecode(response.body);
-      return Location(
-        state: json["state"],
-        continent: json["continent"],
-        country: json["country"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-      );
-    } else {
-      throw Exception('Failed to Fetch Geolocation IP');
-    }
+    return to._locationApi.fetchIP();
   }
 
   /// @ Method Hides Keyboard
@@ -188,11 +153,6 @@ class DeviceService extends GetxService {
   /// @ Add Event Handler to Tray Action
   void registerEventHandler(String handlerKey, Function handler) {
     _systemTray.registerEventHandler(handlerKey, handler);
-  }
-
-  /// @ Method Updates Tray Items
-  void updateSystray(List<SystrayAction> actions) async {
-    await Systray.updateMenu(actions);
   }
 
   /// @ Saves Photo to Gallery
@@ -230,14 +190,20 @@ class DeviceService extends GetxService {
     return false;
   }
 
+  /// @ Method Updates Tray Items
+  void updateSystray(List<SystrayAction> actions) async {
+    await Systray.updateMenu(actions);
+  }
+
+// * ------------------- Helpers ----------------------------
   // # Returns Icon Path
-  Future<String> _getIconPath() async {
+  Future<String> _getIconPath(Platform platform) async {
     // Set Temporary Directory
     Directory directory = await getApplicationDocumentsDirectory();
     String name = "";
 
     // Get File Name
-    if (DeviceService.isWindows) {
+    if (platform.isWindows) {
       name = "tray.ico";
     } else {
       name = "tray.png";

@@ -85,11 +85,11 @@ dependencies:
 
   # -- Plugins --
   sonr_plugin:
-    #git: git@github.com:sonr-io/plugin.git
-    path: plugin/ #-- Uncomment for Local Development
+    path: plugin/
 
   # -- UI/UX --
   animate_do: ^2.0.0
+  card_settings: ^2.0.3
   dots_indicator: ^2.0.0
   lottie: ^1.0.1
   rive: ^0.7.7
@@ -109,7 +109,6 @@ flutter_test:
 # **   FLUTTER BUILD    **
 # ** ================== **
 flutter:
-  # -- Theme/Colors --
   uses-material-design: true
 
   fonts:

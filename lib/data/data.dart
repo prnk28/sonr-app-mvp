@@ -20,5 +20,4 @@ export 'package:sonr_app/pages/details/details.dart';
 export 'package:sonr_app/data/services/services.dart';
 
 // Theme Models
-export 'models/direction.dart';
 export 'models/type.dart';

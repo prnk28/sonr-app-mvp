@@ -75,7 +75,7 @@ extension PermissionsUtil on Permissions {
 
   // Permissions Connection Requirements for Sonr Node
   static Future<bool> get isReadyToConnect async {
-    final hasUser = ContactService.hasUser.value;
+    final hasUser = ContactService.status.value.hasUser;
     if (DeviceService.isMobile) {
       final hasLocation = await Permissions.Location.isGranted;
       return hasUser && hasLocation;
@@ -107,7 +107,7 @@ extension PermissionsUtil on Permissions {
           return await Permission.notification.request().isGranted;
 
         case Permissions.LocalNetwork:
-          Sonr.node.requestLocalNetwork();
+          NodeService.instance.requestLocalNetwork();
           return true;
 
         case Permissions.Gallery:
@@ -135,4 +135,28 @@ extension PermissionsUtil on Permissions {
   }
 }
 
-//
+/// Current User Existence Status
+enum UserStatus {
+  Default, // Initial Status
+  New, // Brand New User
+  Existing, // Returning User
+}
+
+extension UserStatusUtils on UserStatus {
+  /// User Status Not Determined Yet
+  bool get isUnknown => this == UserStatus.Default;
+
+  /// Is New User on App
+  bool get isNew => this == UserStatus.New;
+
+  /// Is Existing User on App
+  bool get hasUser => this == UserStatus.Existing;
+
+  /// Utility to Determine User Status
+  static UserStatus fromBox(bool hasContact) {
+    if (hasContact) {
+      return UserStatus.Existing;
+    }
+    return UserStatus.New;
+  }
+}

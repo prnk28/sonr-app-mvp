@@ -1,4 +1,3 @@
-
 // Imports
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/modules/payload/payload.dart';
@@ -15,7 +14,7 @@ class InviteRequestSheet extends StatelessWidget {
       duration: 500.milliseconds,
       child: BoxContainer(
           padding: EdgeInsets.only(left: 8, right: 8),
-          height: 460,
+          height: 475,
           margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
           child: Column(
             children: [
@@ -25,16 +24,16 @@ class InviteRequestSheet extends StatelessWidget {
                 profile: invite.from.profile,
               ),
               _buildView(),
-              Divider(
-                color: SonrTheme.dividerColor,
-              ),
-              ColorButton.primary(
-                onPressed: () {
-                  ReceiverService.decide(true);
-                },
-                text: "Accept",
-                icon: SonrIcons.Check,
-                margin: EdgeInsets.symmetric(horizontal: 54),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ColorButton.primary(
+                  onPressed: () {
+                    ReceiverService.decide(true);
+                  },
+                  text: "Accept",
+                  icon: SonrIcons.Check,
+                  margin: EdgeInsets.symmetric(horizontal: 54),
+                ),
               ),
             ],
           )),
@@ -62,35 +61,57 @@ class _InviteRequestFileHeader extends StatelessWidget {
   const _InviteRequestFileHeader({Key? key, required this.payload, required this.profile, required this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return // @ Header
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      [
-        CircleContainer(
-            margin: EdgeInsets.only(top: 8, left: 8),
-            padding: EdgeInsets.all(4),
-            child: Container(
-              width: 64,
-              height: 64,
-              child: profile.hasPicture()
-                  ? CircleAvatar(
-                      backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
-                    )
-                  : SonrIcons.User.gradient(size: 42),
-            )),
-        [profile.sName.lightSpan(), ".snr/".paragraphSpan()].rich(),
-      ].column(),
+    return Container(
+      width: Get.width,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Center(
+                child: CircleContainer(
+                    margin: EdgeInsets.only(top: 8, left: 8),
+                    padding: EdgeInsets.all(4),
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      child: profile.hasPicture()
+                          ? CircleAvatar(
+                              backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                            )
+                          : SonrIcons.User.gradient(size: 42),
+                    )),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 4, left: 4),
+                child: Tooltip(
+                  message: profile.sName + ".snr/",
+                  child: "View SName".light(fontSize: 16, color: SonrColor.Primary),
+                  height: 50,
+                  decoration: BoxDecoration(color: SonrTheme.itemColor.withOpacity(0.9), borderRadius: BorderRadius.circular(22)),
+                  padding: const EdgeInsets.all(16.0),
+                  preferBelow: false,
+                  textStyle: DisplayTextStyle.Light.style(color: SonrTheme.itemColorInversed, fontSize: 24),
+                  showDuration: 1800.milliseconds,
+                  waitDuration: 0.milliseconds,
+                ),
+              )
+            ],
+          ),
+        ),
 
-      // From Information
-      Container(
-          width: Width.ratio(0.6),
-          child: [
-            profile.firstName.headingSpan(fontSize: 20),
-            " wants to share an ".lightSpan(fontSize: 19),
-            file.prettyType().headingSpan(fontSize: 20),
-            " of size ".lightSpan(fontSize: 19),
-            file.prettySize().headingSpan(fontSize: 20)
-          ].rich())
-    ]);
+        // From Information
+        Container(
+            width: Width.ratio(0.6),
+            child: [
+              profile.firstName.headingSpan(fontSize: 20),
+              " wants to share an ".lightSpan(fontSize: 19),
+              file.prettyType().headingSpan(fontSize: 20),
+              " of size ".lightSpan(fontSize: 19),
+              file.prettySize().headingSpan(fontSize: 20)
+            ].rich())
+      ]),
+    );
   }
 }
 

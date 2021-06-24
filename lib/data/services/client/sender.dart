@@ -8,16 +8,14 @@ class SenderService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<SenderService>();
   static SenderService get to => Get.find<SenderService>();
+  static Session get session => to._session;
+  static Rx<bool> get hasSession => to._hasSession;
 
-  // @ Properties
+  // Properties
   final _hasSession = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final Session _session = Session();
-
-  /// Returns Current Session
-  static Session get session => to._session;
-  static Rx<bool> get hasSession => to._hasSession;
 
   // References
   late StreamSubscription _externalMediaStream;
@@ -47,6 +45,7 @@ class SenderService extends GetxService {
     return this;
   }
 
+  // ^ Dispose Closer ^ //
   @override
   void onClose() {
     _externalMediaStream.cancel();
@@ -70,7 +69,7 @@ class SenderService extends GetxService {
 
       // @ Check for Text
       if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen!) {
-        var data = await Sonr.getURL(to._incomingText.value);
+        var data = await NodeService.getURL(to._incomingText.value);
         // Open Sheet
         await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
 
@@ -109,7 +108,7 @@ class SenderService extends GetxService {
   }
 
   /// @ Send Invite with Peer
-  static Session? invite(InviteRequest request) {
+  static Session? invite(InviteRequest request, {bool isLocal = true}) {
     // Verify Request
     if (!request.payload.isNone && request.hasTo()) {
       // Analytics
@@ -122,7 +121,7 @@ class SenderService extends GetxService {
       );
 
       // Send Invite
-      Sonr.node.invite(request);
+      NodeService.instance.invite(request);
       to._session.outgoing(request);
       return to._session;
     }
@@ -211,7 +210,7 @@ class SenderService extends GetxService {
         var file = result.toSonrFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
-        var filePath = await Sonr.node.pickFile();
+        var filePath = await NodeService.instance.pickFile();
         var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
           return await _handlePayload(file.payload, file: file);
@@ -303,7 +302,7 @@ class SenderService extends GetxService {
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen! && GetUtils.isURL(text)) {
       // Get Data
-      var data = await Sonr.getURL(text);
+      var data = await NodeService.getURL(text);
 
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);

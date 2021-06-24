@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style.dart';
@@ -6,69 +7,81 @@ import 'lobby.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
-class Sonr extends GetxService {
+class NodeService extends GetxService with WidgetsBindingObserver {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<Sonr>();
-  static Sonr get to => Get.find<Sonr>();
-  static bool get isReady => isRegistered && to._status.value.isConnected;
-  static Node get node => to._node;
-
-  // @ Set Properties
-  final _status = Rx<Status>(Status.IDLE);
-
-  // @ Static Accessors
+  static bool get isRegistered => Get.isRegistered<NodeService>();
+  static NodeService get to => Get.find<NodeService>();
+  static bool get isReady => _checkReady();
+  static Node get instance => to._instance;
   static Rx<Status> get status => to._status;
+  static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
 
-  // @ Set References
-  late Node _node;
+  // Properties
 
-  // * ------------------- Constructers ----------------------------
-  /// @ Initialize Service Method
-  Future<Sonr> init() async {
+  final _lifecycle = AppLifecycleState.resumed.obs;
+  final _status = Rx<Status>(Status.DEFAULT);
+
+  // References
+  late Node _instance;
+  late ConnectivityResult _lastConnectivity;
+  late StreamSubscription<ConnectivityResult> _connectionStream;
+
+  // ^ Constructer ^ //
+  Future<NodeService> init() async {
+    // Bind Observers
+    WidgetsBinding.instance!.addObserver(this);
+    _connectionStream = DeviceService.connectivity.listen(_handleDeviceConnection);
+    _lastConnectivity = DeviceService.connectivity.value;
+
     // Create Node
-    _node = await SonrCore.initialize(RequestBuilder.initialize);
-
-    // Set Handlers
-    _node.onStatus = _handleStatus;
-    _node.onError = _handleError;
-    _node.onEvent = LobbyService.to.handleEvent;
-    _node.onInvite = ReceiverService.to.handleInvite;
-    _node.onReply = SenderService.to.handleReply;
-    _node.onProgress = ReceiverService.to.handleProgress;
-    _node.onReceived = ReceiverService.to.handleReceived;
-    _node.onTransmitted = SenderService.to.handleTransmitted;
+    _instance = await SonrCore.initialize(RequestBuilder.initialize);
+    _instance.onConnected = _handleConnected;
+    _instance.onStatus = _handleStatus;
+    _instance.onError = _handleError;
+    _instance.onEvent = LobbyService.to.handleEvent;
+    _instance.onInvite = ReceiverService.to.handleInvite;
+    _instance.onReply = SenderService.to.handleReply;
+    _instance.onProgress = ReceiverService.to.handleProgress;
+    _instance.onReceived = ReceiverService.to.handleReceived;
+    _instance.onTransmitted = SenderService.to.handleTransmitted;
     return this;
   }
 
+  @override
+  onClose() {
+    _connectionStream.cancel();
+    super.onClose();
+  }
+
+  // * ------------------- Methods ----------------------------
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
-    if (ContactService.hasUser.value) {
+    if (ContactService.status.value.hasUser) {
       // Connect Node
-      node.connect(await RequestBuilder.connection);
+      instance.connect(await RequestBuilder.connection);
 
       // Send Initial Position Update
-      node.update(RequestBuilder.updatePosition);
+      instance.update(RequestBuilder.updatePosition);
       return true;
     } else {
       return false;
     }
   }
 
-  // * ------------------- Methods ----------------------------
   /// @ Sign Provided Data with Private Key
   static Future<AuthResponse> sign(AuthRequest request) async {
-    return await to._node.sign(request);
+    return await to._instance.sign(request);
   }
 
   /// @ Store Property in Memory Store
   static Future<StoreResponse> store(StoreRequest request) async {
-    return await to._node.store(request);
+    return await to._instance.store(request);
   }
 
   /// @ Verify Provided Data with Private Key
   static Future<VerifyResponse> verify(VerifyRequest request) async {
-    return await to._node.verify(request);
+    return await to._instance.verify(request);
   }
 
   /// @ Retreive URLLink Metadata
@@ -79,25 +92,42 @@ class Sonr extends GetxService {
   /// @ Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
-      to._node.update(Request.newUpdatePosition(position));
+      to._instance.update(Request.newUpdatePosition(position));
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
-      to._node.update(Request.newUpdateContact(contact));
+      to._instance.update(Request.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to._node.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
+      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
     }
   }
 
   // * ------------------- Callbacks ----------------------------
+  /// @ Handle Connection Result
+  void _handleConnected(ConnectionResponse data) {
+    // Log Result
+    Logger.info(data.toString());
+  }
+
+  /// @ Handle Device Updated Connectivity Result
+  void _handleDeviceConnection(ConnectivityResult result) {
+    if (result != _lastConnectivity) {
+      if (_lastConnectivity != ConnectivityResult.none) {
+        _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
+      }else{
+        
+      }
+    }
+  }
+
   /// @ Handle Bootstrap Result
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
@@ -105,7 +135,7 @@ class Sonr extends GetxService {
       DeviceService.playSound(type: Sounds.Connected);
 
       // Handle Available
-      node.update(Request.newUpdatePosition(DeviceService.position.value));
+      instance.update(Request.newUpdatePosition(DeviceService.position.value));
     }
 
     // Update Status
@@ -130,5 +160,31 @@ class Sonr extends GetxService {
 
     // Logging
     Logger.sError(data);
+  }
+
+  // * ------------------- Helpers ----------------------------
+  // Verifies if Node is Ready to communicate
+  static bool _checkReady() {
+    return isRegistered && to._status.value.isConnected && ContactService.status.value.hasUser;
+  }
+
+  // * ------------------- Observers ----------------------------
+  // ^ Extension: Updates Lifecycle ^ //
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Update RX Property
+    this._lifecycle(state);
+
+    // Check Updated State
+    switch (state) {
+      case AppLifecycleState.resumed:
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
   }
 }

@@ -12,12 +12,12 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   // Reactive Elements
   final board = Rx<Artboard?>(null);
   final counter = 0.0.obs;
-  final isFlipped = false.obs;
   final isReady = false.obs;
-  final isVisible = true.obs;
 
+  final isComplete = false.obs;
+  final opacity = 0.85.obs;
   final peer = Rx<Peer>(Peer());
-  final status = PeerStatus.Default.obs;
+  final status = SessionStatus.Default.obs;
 
   // Vector Properties
   final isHitting = false.obs;
@@ -27,10 +27,10 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final buttonData = DynamicSolidButtonData.invite().obs;
 
   // References
-  late final AnimationController visibilityController;
+  late final Session session;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
-  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isIdle;
+  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isNone;
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -38,30 +38,17 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   SMIInput<bool>? _hasAccepted;
   SMIInput<bool>? _hasDenied;
   SMIInput<bool>? _isComplete;
-
   PeerController(this.riveFile);
 
   @override
   void onInit() {
-    visibilityController = AnimationController(vsync: this);
     super.onInit();
-  }
-
-  /// ** Dispose on Close ** //
-  @override
-  void onClose() {
-    LobbyService.unregisterPeerCallback(peer.value);
-    if (_userStream != null) {
-      _userStream!.cancel();
-    }
-    super.onClose();
   }
 
   /// @ Method that Initializes Peer and Streams
   void initalize(Peer data, {bool setAnimated = true}) async {
     // Set Initial
     peer(data);
-    isVisible(true);
 
     // Add Stream Handlers
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
@@ -108,93 +95,64 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  /// @ Toggle Expanded View
-  void flipView(bool value) {
-    isFlipped(value);
-    isFlipped.refresh();
-    HapticFeedback.heavyImpact();
+  /// ** Dispose on Close ** //
+  @override
+  void onClose() {
+    LobbyService.unregisterPeerCallback(peer.value);
+    if (_userStream != null) {
+      _userStream!.cancel();
+    }
+    super.onClose();
   }
 
   /// @ Handle User Invitation
   void invite() {
     // Check Animated
-    if (isReady.value && DeviceService.isMobile) {
-      // Check not already Pending
-      if (!_isPending!.value) {
-        // Perform Invite
-        var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
+    if (isReady.value) {
+      // Handle Mobile Invite - Payload Set
+      if (DeviceService.isMobile) {
+        // Check not already Pending
+        if (!_isPending!.value) {
+          // Perform Invite
+          var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
 
-        var session = SenderService.invite(invite);
+          // Create Session
+          var newSession = SenderService.invite(invite);
+          if (newSession != null) {
+            // Set Session
+            session = newSession;
 
-        // Listen to Session
-        if (session != null) {
-          session.status.listen(_handleTransferStatus);
-        }
-
-        // Check for File
-        if (invite.payload.isTransfer) {
-          updateStatus(PeerStatus.Pending);
-        }
-        // Contact/URL
-        else {
-          updateStatus(PeerStatus.Complete);
+            // Listen to Session
+            session.status.listen(_handleTransferStatus);
+          }
         }
       }
-    }
-  }
+      // Handle Other Invite - Payload NOT Set
+      else {
+        // Choose File then Set Session
+        SenderService.choose(ChooseOption.File).then((value) {
+          if (value != null) {
+            // Set Peer for Invite
+            value.setPeer(this.peer.value);
 
-  /// @ Handle Updated Bubble Status
-  void updateStatus(PeerStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
-    // @ Update Status
-    status(newStatus);
+            // Create Session
+            var newSession = SenderService.invite(value);
+            if (newSession != null) {
+              // Set Session
+              session = newSession;
 
-    // @ Check Animated
-    if (isReady.value) {
-      // Handle Delay
-      Future.delayed(delay, () {
-        // Set Animation
-        switch (status.value) {
-          case PeerStatus.Default:
-            isVisible(true);
-            _isComplete!.value = false;
-            _isPending!.value = false;
-            _hasAccepted!.value = false;
-            _hasDenied!.value = false;
-            _isIdle!.value = true;
-            buttonData(DynamicSolidButtonData.invite());
-            break;
-          case PeerStatus.Pending:
-            isVisible(true);
-            _isPending!.value = true;
-            buttonData(DynamicSolidButtonData.pending());
-            buttonData.refresh();
-            break;
-          case PeerStatus.Accepted:
-            isVisible(false);
-            _hasAccepted!.value = true;
-            buttonData(DynamicSolidButtonData.inProgress());
-            buttonData.refresh();
-            break;
-          case PeerStatus.Declined:
-            isVisible(false);
-            _hasDenied!.value = true;
-            break;
-          case PeerStatus.Complete:
-            isVisible(false);
-            _isComplete!.value = true;
-            buttonData(DynamicSolidButtonData.complete());
-            buttonData.refresh();
-            // Reset Status
-            updateStatus(PeerStatus.Default, delay: 1200.milliseconds);
-            break;
-        }
-      });
+              // Listen to Session
+              session.status.listen(_handleTransferStatus);
+            }
+          }
+        });
+      }
     }
   }
 
   /// @ Handle Peer Position
   void _handlePeerUpdate(Peer data) {
-    if (!isClosed && !status.value.isComplete) {
+    if (!isClosed && !isComplete.value) {
       // Update Direction
       if (data.id.peer == peer.value.id.peer && !_isPending!.value) {
         peer(data);
@@ -204,18 +162,54 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Handle Peer Response
   _handleTransferStatus(SessionStatus data) {
-    if (data == SessionStatus.Accepted) {
-      updateStatus(PeerStatus.Accepted);
-    } else if (data == SessionStatus.Denied) {
-      updateStatus(PeerStatus.Declined);
-    } else {
-      updateStatus(PeerStatus.Complete);
+    // Update Opacity
+    opacity(data.opacity());
+
+    // Set Animation
+    switch (data) {
+      case SessionStatus.Pending:
+        _isPending!.value = true;
+        buttonData(DynamicSolidButtonData.pending());
+        buttonData.refresh();
+        break;
+      case SessionStatus.Accepted:
+        _hasAccepted!.value = true;
+        buttonData(DynamicSolidButtonData.inProgress());
+        buttonData.refresh();
+        break;
+      case SessionStatus.Denied:
+        _hasDenied!.value = true;
+        break;
+      case SessionStatus.InProgress:
+        break;
+      case SessionStatus.Completed:
+        _isComplete!.value = true;
+        buttonData(DynamicSolidButtonData.complete());
+        buttonData.refresh();
+        // Reset Status
+        Future.delayed(1200.milliseconds, () {
+          isComplete(true);
+          _isComplete!.value = false;
+          _isPending!.value = false;
+          _hasAccepted!.value = false;
+          _hasDenied!.value = false;
+          _isIdle!.value = true;
+        });
+        break;
+      default:
+        _isComplete!.value = false;
+        _isPending!.value = false;
+        _hasAccepted!.value = false;
+        _hasDenied!.value = false;
+        _isIdle!.value = true;
+        buttonData(DynamicSolidButtonData.invite());
+        break;
     }
   }
 
   // @ Handle User Position
   void _handlePosition(Position data) async {
-    if (!isClosed && !status.value.isComplete) {
+    if (!isClosed && !isComplete.value) {
       // Find Offset
       if (peer.value.platform.isMobile) {
         isHitting(data.hasHitSphere(peer.value.position));
@@ -224,7 +218,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       }
 
       // Feedback
-      if (status.value.isIdle) {
+      if (status.value.isNone) {
         // Vibration
         if (isHitting.value) {
           HapticFeedback.lightImpact();
@@ -251,5 +245,27 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       }
     }
     _handlingHit = false;
+  }
+}
+
+extension SessionStatusOpacityUtil on SessionStatus {
+  /// Returns Opacity Value By Peer Status
+  double opacity() {
+    switch (this) {
+      case SessionStatus.Default:
+        return 0.85;
+      case SessionStatus.Pending:
+        return 0.55;
+      case SessionStatus.Invited:
+        return 0.85;
+      case SessionStatus.Accepted:
+        return 0.35;
+      case SessionStatus.Denied:
+        return 0.0;
+      case SessionStatus.InProgress:
+        return 0.15;
+      case SessionStatus.Completed:
+        return 0.0;
+    }
   }
 }

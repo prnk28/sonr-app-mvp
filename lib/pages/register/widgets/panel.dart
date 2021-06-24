@@ -58,10 +58,13 @@ class PermPanel extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocations.fixedCenterDocked,
-      floatingActionButton: ColorButton.neutral(
-        onPressed: () => onPressed(),
-        text: buttonText,
-        textColor: buttonTextColor,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 32.0),
+        child: ColorButton.neutral(
+          onPressed: () => onPressed(),
+          text: buttonText,
+          textColor: buttonTextColor,
+        ),
       ),
       body: Container(
         width: Get.width,
@@ -99,10 +102,7 @@ class FormPanel extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    return Container(
-      width: Width.full,
-      margin: margin,
-      padding: padding,
+    return Form(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,

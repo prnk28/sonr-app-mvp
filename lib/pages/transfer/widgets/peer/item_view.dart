@@ -25,15 +25,9 @@ class PeerListItem extends GetWidget<PeerController> {
               ),
               Spacer(),
               DynamicSolidButton(
-                  data: controller.buttonData,
-                  onPressed: () {
-                    SenderService.choose(ChooseOption.File).then((value) {
-                      if (value != null) {
-                        value.setPeer(peer);
-                        SenderService.invite(value);
-                      }
-                    });
-                  })
+                data: controller.buttonData,
+                onPressed: () => controller.invite(),
+              )
             ],
           ),
           Divider(

@@ -6,38 +6,46 @@ class ProfileSetupView extends GetView<RegisterController> {
   final hintName = SonrTextField.hintName();
   final firstNameFocus = FocusNode();
   final lastNameFocus = FocusNode();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ProfileSetupView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FormPanel.contact(children: [
-      Padding(padding: EdgeInsets.all(8)),
-      CircleContainer(
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(4),
-        child: Container(
-          alignment: Alignment.center,
-          child: SonrIcons.Avatar.greyWith(size: 100),
-        ),
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        primary: true,
+        reverse: true,
+        child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(padding: EdgeInsets.all(8)),
+            // CircleContainer(
+            //   alignment: Alignment.center,
+            //   padding: EdgeInsets.all(4),
+            //   child: Container(
+            //     alignment: Alignment.center,
+            //     child: SonrIcons.Avatar.greyWith(size: 100),
+            //   ),
+            // ),
+            RegisterTextField(
+              type: RegisterTextFieldType.FirstName,
+              focusNode: firstNameFocus,
+              hint: hintName.item1,
+              onEditingComplete: () {
+                firstNameFocus.unfocus();
+                lastNameFocus.requestFocus();
+              },
+            ),
+            RegisterTextField(
+              type: RegisterTextFieldType.LastName,
+              focusNode: lastNameFocus,
+              hint: hintName.item2,
+              onEditingComplete: () {
+                controller.setContact();
+              },
+            ),
+            Padding(padding: EdgeInsets.all(200))
+          ]),
       ),
-      RegisterTextField(
-        type: RegisterTextFieldType.FirstName,
-        focusNode: firstNameFocus,
-        hint: hintName.item1,
-        onEditingComplete: () {
-          firstNameFocus.requestFocus();
-          lastNameFocus.requestFocus();
-        },
-      ),
-      RegisterTextField(
-        type: RegisterTextFieldType.LastName,
-        focusNode: lastNameFocus,
-        hint: hintName.item2,
-        onEditingComplete: () {
-          controller.setContact();
-        },
-      ),
-      Padding(padding: EdgeInsets.all(200))
-    ]);
+    );
   }
 }

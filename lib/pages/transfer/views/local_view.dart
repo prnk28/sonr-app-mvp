@@ -92,12 +92,12 @@ class _LocalFewView extends GetView<TransferController> {
         // Scroll View
         Obx(() => Container(
               width: Get.width,
-              height: Height.ratio(0.7),
-              child: CustomScrollView(
+              height: Height.ratio(0.35),
+              child: ListView(
+
                 scrollDirection: Axis.horizontal,
                 controller: controller.scrollController,
-                anchor: 0.225,
-                slivers: _buildSlivers(LobbyService.lobby.value),
+                children: _buildSlivers(LobbyService.lobby.value),
               ),
             ));
   }
@@ -108,19 +108,19 @@ class _LocalFewView extends GetView<TransferController> {
       case LobbyFilter.All:
         return lobby
             .mapAll((i) => Builder(builder: (context) {
-                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
+                  return PeerItem.card(i);
                 }))
             .toList();
       case LobbyFilter.Phones:
         return lobby
             .mapMobile((i) => Builder(builder: (context) {
-                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
+                  return PeerItem.card(i);
                 }))
             .toList();
       case LobbyFilter.Desktops:
         return lobby
             .mapDesktop((i) => Builder(builder: (context) {
-                  return SliverToBoxAdapter(key: ValueKey(i.id.peer), child: PeerItem.card(i));
+                  return PeerItem.card(i);
                 }))
             .toList();
     }

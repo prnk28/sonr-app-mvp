@@ -8,8 +8,12 @@ class LobbyService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<LobbyService>();
   static LobbyService get to => Get.find<LobbyService>();
+  static RxBool get isFlatMode => to._isFlatMode;
+  static Rx<Lobby> get lobby => to._lobby;
+  static Rx<Lobby_Status> get status => to._status;
 
   // Properties
+  final counter = 0.0.obs;
   final _flatModeCancelled = false.obs;
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
@@ -19,20 +23,12 @@ class LobbyService extends GetxService {
   final _status = Rx<Lobby_Status>(Lobby_Status.Empty);
 
   // References
-  final counter = 0.0.obs;
-
-  // Reactive Accessors
-  static RxBool get isFlatMode => to._isFlatMode;
-  static Rx<Lobby> get lobby => to._lobby;
-  static Rx<Lobby_Status> get status => to._status;
-
-  // @ References
   late StreamSubscription<Position>? _positionStream;
   late StreamSubscription<Lobby> _lobbyStream;
   late Timer? _timer;
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
-  // # Initialize Service Method
+  // ^ Constructer ^ //
   Future<LobbyService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
@@ -41,7 +37,7 @@ class LobbyService extends GetxService {
     return this;
   }
 
-  // # On Service Close //
+  // ^ Dispose Closer ^ //
   @override
   void onClose() {
     if (_positionStream != null) {
@@ -51,6 +47,7 @@ class LobbyService extends GetxService {
     super.onClose();
   }
 
+// * ------------------- Methods ----------------------------
   /// @ Method to Cancel Flat Mode
   void cancelFlatMode() {
     // Reset Timers
@@ -78,10 +75,11 @@ class LobbyService extends GetxService {
     }
   }
 
+
   /// @ Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
-    Sonr.sendFlat(peer);
+    NodeService.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);
@@ -120,6 +118,7 @@ class LobbyService extends GetxService {
     _position(data);
   }
 
+// * ------------------- Helpers ----------------------------
   // # Begin Facing Invite Check
   void _startTimer() {
     _timer = Timer.periodic(500.milliseconds, (_) {
@@ -158,6 +157,7 @@ class LobbyService extends GetxService {
     }
   }
 
+// * ------------------- Callbacks ----------------------------
   // # Handle Lobby Update //
   void _lobbyListener(Lobby data) {
     // Handle Peer Callbacks
@@ -172,7 +172,7 @@ class LobbyService extends GetxService {
     if (data.type == TopicType.LOCAL) {
       // Update Status
       _status(LobbyStatusUtils.localStatusFromCount(data.count));
-      
+
       // Update Flat Peers
       var flatPeers = <String, Peer>{};
       data.peers.forEach((id, peer) {

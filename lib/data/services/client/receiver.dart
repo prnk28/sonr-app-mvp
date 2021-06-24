@@ -6,14 +6,12 @@ class ReceiverService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<ReceiverService>();
   static ReceiverService get to => Get.find<ReceiverService>();
-
-  // @ Properties
-  final Session _session = Session();
-  final _hasActiveSession = false.obs;
-
-  /// Global Reactive Accessors
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasActiveSession;
+
+  // Properties
+  final _session = Session();
+  final _hasActiveSession = false.obs;
 
   // ^ Constructer ^ //
   Future<ReceiverService> init() async {
@@ -52,8 +50,8 @@ class ReceiverService extends GetxService {
 
           // Check if Send Back
           if (sendBackContact) {
-            if (Sonr.isReady) {
-              Sonr.node.respond(to._session.buildReply(decision: true));
+            if (NodeService.isReady) {
+              NodeService.instance.respond(to._session.buildReply(decision: true));
             }
           }
 
@@ -69,16 +67,16 @@ class ReceiverService extends GetxService {
         // Check Decision
         if (decision) {
           // Check for Remote
-          if (Sonr.isReady) {
-            Sonr.node.respond(to._session.buildReply(decision: true));
+          if (NodeService.isReady) {
+            NodeService.instance.respond(to._session.buildReply(decision: true));
           }
           AppRoute.closeSheet();
           AppPage.Activity.to();
         }
         // Send Declined
         else {
-          if (Sonr.isReady) {
-            Sonr.node.respond(to._session.buildReply(decision: false));
+          if (NodeService.isReady) {
+            NodeService.instance.respond(to._session.buildReply(decision: false));
           }
         }
       }

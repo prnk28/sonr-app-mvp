@@ -27,11 +27,12 @@ class RegisterController extends GetxController {
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
   // References
-  final _nbClient = NamebaseClient(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
+  final _nbClient = NamebaseApi(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
   late ValueNotifier<double> panelNotifier;
   late PageController introPageController;
   late PageController setupPageController;
   late PageController permissionsPageController;
+  final ScrollController contactScrollController = ScrollController();
 
   // * Constructer * //
   @override
@@ -195,7 +196,7 @@ class RegisterController extends GetxController {
       await ContactService.newContact(contact);
 
       // Connect to Network
-      Sonr.to.connect();
+      NodeService.to.connect();
       AppPage.Home.off(args: HomeArguments(isFirstLoad: true));
     }
   }
@@ -259,7 +260,7 @@ class RegisterController extends GetxController {
   /// #### Checks if Username matches device id and prefix from records
   static Future<bool> validateUser(String n, String mnemonic) async {
     var request = Request.newVerifyText(original: mnemonic, signature: mnemonic);
-    var response = await Sonr.verify(request);
+    var response = await NodeService.verify(request);
     return response.isVerified;
   }
 
@@ -267,7 +268,7 @@ class RegisterController extends GetxController {
   static Future<AuthResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
     var request = Request.newSignature(username, mnemonic);
-    var response = await Sonr.sign(request);
+    var response = await NodeService.sign(request);
     Logger.info(response.toString());
 
     // Check Result
