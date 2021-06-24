@@ -231,7 +231,7 @@ class SonrTheme {
 
   static Color get dividerColor => Preferences.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
-  static Color get foregroundColor => Preferences.isDarkMode ? Color(0xff212121) : Color(0xffF6F6F6);
+  static Color get foregroundColor => Preferences.isDarkMode ? Color(0xff2A2B37) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
   static Color get itemColor => Preferences.isDarkMode ? SonrColor.White : SonrColor.Black;

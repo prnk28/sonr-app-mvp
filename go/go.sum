@@ -1399,8 +1399,8 @@ github.com/miekg/dns v1.1.4/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nr
 github.com/miekg/dns v1.1.12/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
 github.com/miekg/dns v1.1.28/go.mod h1:KNUDUusw/aVsxyTYZM1oqvCicbwhgbNgztCETuNZ7xM=
 github.com/miekg/dns v1.1.31/go.mod h1:KNUDUusw/aVsxyTYZM1oqvCicbwhgbNgztCETuNZ7xM=
-github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210401125244-74289af412c2 h1:eFm78dqPS1zndE0iiksTvDYiuyzUeCIvj9WDnhLE9yw=
-github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210401125244-74289af412c2/go.mod h1:csuW+TFyYKtiUwNvcvhcpyX4quPI7Pvv0SUogdqCW4I=
+github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210622152105-9f0a811028a0 h1:hXl9AMW20Php3xWlWZr2Acw50tqeblLgtLfLoRCACmA=
+github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210622152105-9f0a811028a0/go.mod h1:csuW+TFyYKtiUwNvcvhcpyX4quPI7Pvv0SUogdqCW4I=
 github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 h1:lYpkrQH5ajf0OXOcUbGjvZxxijuBwbbmlSxLiuofa+g=
 github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1/go.mod h1:pD8RvIylQ358TN4wwqatJ8rNavkEINozVn9DtGI3dfQ=
 github.com/minio/sha256-simd v0.0.0-20190131020904-2d45a736cd16/go.mod h1:2FMWW+8GMoPweT6+pI63m9YE3Lmw4J71hV56Chs1E/U=
@@ -1756,8 +1756,8 @@ github.com/smola/gocompat v0.2.0/go.mod h1:1B0MlxbmoZNo3h8guHp8HztB3BSYR5itql9qt
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sonr-io/core v0.9.30 h1:vmv/woZm4w80eQO0j9+9k2dJPhEmTrQfAmHh4To0ZyY=
 github.com/sonr-io/core v0.9.30/go.mod h1:lwzRsNSGsB4K2r5RM2sw3iAu0+dqmbPp5kFL08Nuxf8=
-github.com/sonr-io/plugin/go v0.9.33 h1:+eSMXoBcKaKTAO8+cfrHj422/zQFQqy8xw1SU8cZKaU=
-github.com/sonr-io/plugin/go v0.9.33/go.mod h1:1VZqPWiFuflkmztyH4Lv/GcXwsd8awlbQAEjQmpLd9o=
+github.com/sonr-io/plugin/go v0.9.92 h1:ooMJDvsKop9jYKFwb3O1KcyLz1ls5GcoUDEEO1lj0IE=
+github.com/sonr-io/plugin/go v0.9.92/go.mod h1:1VZqPWiFuflkmztyH4Lv/GcXwsd8awlbQAEjQmpLd9o=
 github.com/sonr-io/systray/go v0.5.1 h1:YTy87VE5e5V6x/50efwqJUpVElFB/AvQxwkgPGdNHnQ=
 github.com/sonr-io/systray/go v0.5.1/go.mod h1:o3KU3MsfKILozJFDcgxfpbI3OO8GYN9bPxvMFJf9heI=
 github.com/sony/gobreaker v0.4.1/go.mod h1:ZKptC7FHNvhBz7dN2LGjPVBz2sZJmc0/PkyDJOjmxWY=
