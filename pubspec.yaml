@@ -28,8 +28,6 @@ environment_config:
       env_var: hub_key
     hub_secret:
       env_var: hub_secret
-    sentry_dsn:
-      env_var: sentry_dsn
 
 # ** ================== **
 # **    DEPENDENCIES    **

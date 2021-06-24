@@ -169,7 +169,7 @@ class LobbyService extends GetxService {
     });
 
     // @ Update Local Topics
-    if (data.type == TopicType.LOCAL) {
+    if (data.topic.type == Topic_Type.LOCAL) {
       // Update Status
       _status(LobbyStatusUtils.localStatusFromCount(data.count));
 
