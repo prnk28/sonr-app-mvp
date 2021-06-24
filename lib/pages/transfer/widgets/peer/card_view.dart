@@ -13,22 +13,24 @@ class PeerCard extends GetWidget<PeerController> {
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer);
-    return BoxContainer(
-        constraints: BoxConstraints.tight(Size(K_CARD_WIDTH, K_CARD_HEIGHT)),
-        clipBehavior: Clip.antiAlias,
-        margin: EdgeInsets.all(24),
-        child: ObxValue<RxBool>(
-            (isFlipped) => Stack(
-                  children: [
-                    // Rive Board
-                    _PeerAvatar(
-                      controller: controller,
-                    ),
-                    // Content
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      child: GestureDetector(
-                        onTap: controller.invite,
+    return GestureDetector(
+      onTap: controller.invite,
+      child: BoxContainer(
+          constraints: BoxConstraints.tight(Size(K_CARD_WIDTH, K_CARD_HEIGHT)),
+          clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.all(24),
+          child: ObxValue<RxBool>(
+              (isFlipped) => Stack(
+                    children: [
+                      // Rive Board
+                      IgnorePointer(
+                        child: _PeerAvatar(
+                          controller: controller,
+                        ),
+                      ),
+                      // Content
+                      Container(
+                        padding: EdgeInsets.all(8),
                         child: AnimatedSlider.fade(
                           child: isFlipped.value
                               ? _PeerDetailsCard(
@@ -42,11 +44,11 @@ class PeerCard extends GetWidget<PeerController> {
                                   key: ValueKey<bool>(false),
                                 ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-            false.obs));
+                      )
+                    ],
+                  ),
+              false.obs)),
+    );
   }
 }
 
