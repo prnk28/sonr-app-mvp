@@ -17,7 +17,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
 
   // Properties
-
   final _lifecycle = AppLifecycleState.resumed.obs;
   final _status = Rx<Status>(Status.DEFAULT);
 
