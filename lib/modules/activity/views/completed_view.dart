@@ -14,8 +14,7 @@ class CompletedPopup extends GetView<ActivityController> {
       // Scaffold Box
       _PostTransferItem(transfer: transfer),
       Container(
-        alignment: Alignment.bottomCenter,
-        margin: EdgeInsets.only(bottom: 150),
+        margin: EdgeInsets.only(top: 356),
         child: ColorButton.primary(
           onPressed: () => controller.exportTransfer(transfer),
           text: "Export",

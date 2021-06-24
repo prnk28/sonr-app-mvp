@@ -14,22 +14,24 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   static bool get isReady => _checkReady();
   static Node get instance => to._instance;
   static Rx<Status> get status => to._status;
-  static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
 
   // Properties
-  final _connectivity = ConnectivityResult.none.obs;
+
   final _lifecycle = AppLifecycleState.resumed.obs;
   final _status = Rx<Status>(Status.DEFAULT);
 
   // References
   late Node _instance;
+  late ConnectivityResult _lastConnectivity;
+  late StreamSubscription<ConnectivityResult> _connectionStream;
 
   // ^ Constructer ^ //
   Future<NodeService> init() async {
     // Bind Observers
     WidgetsBinding.instance!.addObserver(this);
-    _connectivity.bindStream(Connectivity().onConnectivityChanged);
+    _connectionStream = DeviceService.connectivity.listen(_handleDeviceConnection);
+    _lastConnectivity = DeviceService.connectivity.value;
 
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
@@ -43,6 +45,12 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _instance.onReceived = ReceiverService.to.handleReceived;
     _instance.onTransmitted = SenderService.to.handleTransmitted;
     return this;
+  }
+
+  @override
+  onClose() {
+    _connectionStream.cancel();
+    super.onClose();
   }
 
   // * ------------------- Methods ----------------------------
@@ -107,6 +115,13 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleConnected(ConnectionResponse data) {
     // Log Result
     Logger.info(data.toString());
+  }
+
+  /// @ Handle Device Updated Connectivity Result
+  void _handleDeviceConnection(ConnectivityResult result) {
+    if (result != _lastConnectivity) {
+      _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
+    }
   }
 
   /// @ Handle Bootstrap Result

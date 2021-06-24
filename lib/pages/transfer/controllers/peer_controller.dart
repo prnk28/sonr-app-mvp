@@ -13,7 +13,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final board = Rx<Artboard?>(null);
   final counter = 0.0.obs;
   final isReady = false.obs;
-  final isVisible = true.obs;
+
   final isComplete = false.obs;
   final opacity = 0.85.obs;
   final peer = Rx<Peer>(Peer());
@@ -49,7 +49,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   void initalize(Peer data, {bool setAnimated = true}) async {
     // Set Initial
     peer(data);
-    isVisible(true);
 
     // Add Stream Handlers
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
@@ -165,36 +164,31 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   _handleTransferStatus(SessionStatus data) {
     // Update Opacity
     opacity(data.opacity());
-    
+
     // Set Animation
     switch (data) {
       case SessionStatus.Pending:
-        isVisible(true);
         _isPending!.value = true;
         buttonData(DynamicSolidButtonData.pending());
         buttonData.refresh();
         break;
       case SessionStatus.Accepted:
-        isVisible(false);
         _hasAccepted!.value = true;
         buttonData(DynamicSolidButtonData.inProgress());
         buttonData.refresh();
         break;
       case SessionStatus.Denied:
-        isVisible(false);
         _hasDenied!.value = true;
         break;
       case SessionStatus.InProgress:
         break;
       case SessionStatus.Completed:
-        isVisible(false);
         _isComplete!.value = true;
         buttonData(DynamicSolidButtonData.complete());
         buttonData.refresh();
         // Reset Status
         Future.delayed(1200.milliseconds, () {
           isComplete(true);
-          isVisible(true);
           _isComplete!.value = false;
           _isPending!.value = false;
           _hasAccepted!.value = false;
@@ -203,7 +197,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
         });
         break;
       default:
-        isVisible(true);
         _isComplete!.value = false;
         _isPending!.value = false;
         _hasAccepted!.value = false;

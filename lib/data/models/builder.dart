@@ -13,6 +13,7 @@ class RequestBuilder {
       apiKeys: apiKeys,
       location: await DeviceService.location,
       contact: contact,
+      type: internetType,
     );
   }
 

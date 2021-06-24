@@ -9,7 +9,7 @@ class GradientTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return ObxValue<RxInt>(
         (currentIdx) => Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(32), color: Color(0xffF8F8F9)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(32), color: Get.isDarkMode ? SonrTheme.foregroundColor : Color(0xffF8F8F9)),
             height: 64,
             margin: EdgeInsets.symmetric(horizontal: 24),
             padding: EdgeInsets.all(8),

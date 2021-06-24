@@ -227,7 +227,7 @@ class SonrTheme {
       );
 
   /// Returns Current Text Color
-  static Color get backgroundColor => Preferences.isDarkMode ? Colors.black : Colors.white;
+  static Color get backgroundColor => Preferences.isDarkMode ? Color(0xff151515) : Colors.white;
 
   static Color get dividerColor => Preferences.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
@@ -240,13 +240,13 @@ class SonrTheme {
   static Color get itemColorInversed => Preferences.isDarkMode ? SonrColor.Black : SonrColor.White;
 
   /// Returns Current Shadow Color
-  static Color get shadowColor => Preferences.isDarkMode ? Color(0xff2A2B37).withOpacity(0.6) : Color(0xffD4D7E0).withOpacity(0.75);
+  static Color get shadowColor => Preferences.isDarkMode ? Colors.black.withOpacity(0.4) : Color(0xffD4D7E0).withOpacity(0.75);
 
   /// Return Current Box Shadow
   static List<BoxShadow> get boxShadow => Preferences.isDarkMode
       ? [
           BoxShadow(
-            color: Color(0xff2C2C2C).withOpacity(0.6),
+            color: Colors.black.withOpacity(0.4),
             offset: Offset(0, 10),
             blurRadius: 15,
           )
