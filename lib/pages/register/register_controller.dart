@@ -32,6 +32,7 @@ class RegisterController extends GetxController {
   late PageController introPageController;
   late PageController setupPageController;
   late PageController permissionsPageController;
+  final ScrollController contactScrollController = ScrollController();
 
   // * Constructer * //
   @override
