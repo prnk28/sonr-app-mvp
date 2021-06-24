@@ -4,6 +4,7 @@ SONR_ROOT_DIR=/Users/prad/Sonr # Set this to Folder of Sonr
 PROJECT_DIR=/Users/prad/Sonr/app
 ANDROID_DIR=/Users/prad/Sonr/app/android
 IOS_DIR=/Users/prad/Sonr/app/ios
+DESK_BUILD_DIR=/Users/prad/Sonr/app/go/build
 
 # Mobile Actions
 FLUTTER=flutter
@@ -65,3 +66,14 @@ update:
 	cd $(PROJECT_DIR) && flutter pub get
 	cd $(PROJECT_DIR) && flutter pub upgrade
 	cd $(PROJECT_DIR) && $(RUN) --release
+
+## [clean]       :   Cleans App Build Cache
+clean:
+	@echo '-- Removing Build Folders --'
+	cd $(PROJECT_DIR) && rm -rf build
+	cd $(DESK_BUILD_DIR) && rm -rf outputs
+	cd $(DESK_BUILD_DIR) && rm -rf intermediates
+	@echo '-- Cleaning Flutter --'
+	cd $(PROJECT_DIR) && $(CLEAN)
+	cd $(PROJECT_DIR) && hover clean-cache
+	cd $(PROJECT_DIR) && flutter pub get
