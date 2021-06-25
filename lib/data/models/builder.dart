@@ -17,6 +17,7 @@ class RequestBuilder {
         textileOptions: ConnectionRequest_TextileOptions(
           enabled: true,
           threads: true,
+          mailbox: true,
         ));
   }
 
