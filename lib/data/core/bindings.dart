@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/data/services/user/help.dart';
 import 'package:sonr_app/data/services/user/preference.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
@@ -74,7 +73,7 @@ class AppServices {
       await Firebase.initializeApp();
     }
     await Get.putAsync(() => DeviceService().init(), permanent: true);
-    await Get.putAsync(() => HelpService().init());
+    // await Get.putAsync(() => HelperService().init());
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);
     await Get.putAsync(() => Preferences().init(), permanent: true);

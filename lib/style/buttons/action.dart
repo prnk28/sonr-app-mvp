@@ -21,7 +21,7 @@ class ActionButton extends StatelessWidget {
     if (label != null) {
       return SizedBox(
         width: 40,
-        height: 40,
+        height: 65,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

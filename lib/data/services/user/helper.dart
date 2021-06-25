@@ -4,19 +4,19 @@ import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style.dart';
 import 'dart:async';
 
-class HelpService extends GetxService {
-  static bool get isRegistered => Get.isRegistered<HelpService>();
-  static HelpService get to => Get.find<HelpService>();
+class HelperService extends GetxService {
+  static bool get isRegistered => Get.isRegistered<HelperService>();
+  static HelperService get to => Get.find<HelperService>();
 
   final isFirebaseReady = false.obs;
   final isIntercomReady = false.obs;
 
-  Future<HelpService> init() async {
+  Future<HelperService> init() async {
     return this;
   }
 
   static Future<void> openIntercom() async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile && isRegistered) {
       if (await Permissions.Notifications.isGranted) {
         await Intercom.displayMessenger();
       } else {
