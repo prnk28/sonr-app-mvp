@@ -1,7 +1,5 @@
 export '../views/editor/editor_view.dart';
-export '../views/editor/design_editor.dart';
 export '../views/editor/general_editor.dart';
-export '../views/editor/social_editor.dart';
 import 'package:sonr_app/style.dart';
 
 import '../views/editor/editor_view.dart';
