@@ -132,7 +132,7 @@ class HomeFloatingBar extends GetView<HomeController> {
       child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: AppTheme.backgroundColor, width: 1),
+            border: Get.isDarkMode ? null : Border.all(color: AppTheme.backgroundColor, width: 1),
             color: AppTheme.foregroundColor,
             borderRadius: BorderRadius.circular(28.13),
             boxShadow: AppTheme.boxShadow,

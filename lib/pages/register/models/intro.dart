@@ -39,7 +39,7 @@ extension IntroPanelTypeUtils on IntroPageType {
   /// Return Page Decoration for Type
   PageDecoration get pageDecoration {
     return PageDecoration(
-      titlePadding: EdgeInsets.only(top: 72.0, bottom: 24.0),
+      titlePadding: EdgeInsets.only(top: 64.0, bottom: 24.0),
     );
   }
 
@@ -58,27 +58,64 @@ extension IntroPanelTypeUtils on IntroPageType {
     }
   }
 
+  /// Returns Decoration for Container Around Image
+  BoxDecoration get imageDecoration {
+    switch (this) {
+      case IntroPageType.Welcome:
+        return BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: SonrColor.Black,
+              width: 2,
+            ));
+      case IntroPageType.Universal:
+        return BoxDecoration();
+      case IntroPageType.Secure:
+        return BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: SonrColor.Black,
+              width: 2,
+            ));
+      case IntroPageType.Start:
+        return BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: SonrColor.Black.withOpacity(0.4),
+              width: 2,
+            ));
+    }
+  }
+
   /// Returns This Panels Page View Model
   PageViewModel pageViewModel() {
     return PageViewModel(
       decoration: this.pageDecoration,
-      titleWidget: this.title(),
+      titleWidget: SlideInUp(
+        animate: this.isFirst,
+        child: this.title(),
+        delay: 50.milliseconds,
+        duration: 300.milliseconds,
+      ),
       bodyWidget: Padding(
         padding: const EdgeInsets.only(left: 16.0),
-        child: this.description(),
-      ),
-      image: Center(
-        child: Container(
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: SonrColor.Black,
-                width: 2,
-              )),
-          child: Image.asset(this.imagePath, height: 175.0, fit: BoxFit.fitHeight),
-          padding: EdgeInsets.all(24),
+        child: SlideInUp(
+          animate: this.isFirst,
+          child: this.description(),
+          duration: 300.milliseconds,
+          delay: 250.milliseconds,
         ),
       ),
+      image: Center(
+          child: FadeIn(
+        delay: 150.milliseconds,
+        child: Container(
+          margin: EdgeInsets.only(top: 72),
+          decoration: this.imageDecoration,
+          child: Image.asset(this.imagePath, height: 200.0, fit: BoxFit.fitHeight),
+          padding: EdgeInsets.all(42),
+        ),
+      )),
     );
   }
 
