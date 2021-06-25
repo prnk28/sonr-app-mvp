@@ -1,6 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 import '../activity.dart';
-
+import 'package:sonr_app/modules/peer/peer.dart';
 class CurrentActivityItem extends GetView<ActivityController> {
   final Session session;
   const CurrentActivityItem({required this.session, Key? key}) : super(key: key);
@@ -155,8 +155,7 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
                 // Progress of Transfer
                 Align(
                   alignment: Alignment.center,
-                  child: AnimatedSlider.fade(
-                    duration: 200.milliseconds,
+                  child: AnimatedSlider.slideUp(
                     child: Container(
                       key: ValueKey<double>(progress.value),
                       child: _calculateText(progress.value).subheading(

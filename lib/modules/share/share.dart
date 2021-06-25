@@ -7,11 +7,11 @@ export 'views/popup_view.dart';
 export 'widgets/share_button.dart';
 
 // Imports
-import 'package:sonr_app/pages/transfer/controllers/transfer_controller.dart';
+import 'package:sonr_app/pages/transfer/data/arguments.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 
 import 'models/asset.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/transfer/models/arguments.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:photo_manager/photo_manager.dart';

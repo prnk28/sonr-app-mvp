@@ -1,18 +1,16 @@
 // Exports
 export 'views/flat_view.dart';
-export 'controllers/item_controller.dart';
-export 'controllers/peer_controller.dart';
-export 'controllers/transfer_controller.dart';
-export 'peer/peer.dart';
-export 'models/mode.dart';
-export 'models/animation.dart';
+export 'transfer_controller.dart';
+export 'data/mode.dart';
+export 'data/animation.dart';
+export 'package:sonr_app/pages/transfer/data/filter.dart';
 
 // Imports
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style/style.dart';
-import 'controllers/transfer_controller.dart';
+import 'transfer_controller.dart';
 import 'views/local_view.dart';
 
 /// @ Transfer Screen Entry Point

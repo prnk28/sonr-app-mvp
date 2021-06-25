@@ -34,6 +34,8 @@ environment_config:
       env_var: icom_iosKey
     icom_androidKey:
       env_var: icom_androidKey
+    thread_db:
+      env_var: thread_db
 
 # ** ================== **
 # **    DEPENDENCIES    **
@@ -63,7 +65,6 @@ dependencies:
   # -- Device --
   camerawesome: ^0.3.0+1
   connectivity: ^3.0.6
-  flutter_nearby_connections: ^1.1.1
   geolocator: ^7.0.3
   permission_handler: ^8.0.1
   platform_device_id: ^1.0.1

@@ -1,7 +1,9 @@
-import 'package:sonr_app/pages/transfer/models/filter.dart';
+
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
 import '../transfer.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
 
 class LocalView extends GetView<TransferController> {
   @override
@@ -92,7 +94,6 @@ class _LocalFewView extends GetView<TransferController> {
               width: Get.width,
               height: Height.ratio(0.35),
               child: ListView(
-
                 scrollDirection: Axis.horizontal,
                 controller: controller.scrollController,
                 children: _buildSlivers(LobbyService.lobby.value),

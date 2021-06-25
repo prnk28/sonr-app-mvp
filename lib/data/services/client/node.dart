@@ -109,6 +109,11 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleConnected(ConnectionResponse data) {
     // Log Result
     Logger.info(data.toString());
+    print("Textile Threads");
+    data.threads.forEach((key, value) {
+      print(key);
+      print(value.toString());
+    });
   }
 
   /// @ Handle Device Updated Connectivity Result
@@ -170,12 +175,16 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Check Updated State
     switch (state) {
       case AppLifecycleState.resumed:
+        //this._instance.resume();
         break;
       case AppLifecycleState.inactive:
+        this._instance.pause();
         break;
       case AppLifecycleState.paused:
+        this._instance.pause();
         break;
       case AppLifecycleState.detached:
+        this._instance.stop();
         break;
     }
   }

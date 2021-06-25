@@ -4,6 +4,7 @@ import 'package:rive/rive.dart';
 import 'package:sonr_app/data/services/user/preference.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';

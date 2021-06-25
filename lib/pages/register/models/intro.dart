@@ -157,3 +157,9 @@ extension IntroPanelTypeUtils on IntroPageType {
     }
   }
 }
+
+enum PermsPageType {
+  Location,
+  Gallery,
+  Notifications,
+}

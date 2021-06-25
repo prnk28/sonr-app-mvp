@@ -196,16 +196,16 @@ class AppTheme {
   static ThemeData get LightTheme => ThemeData(
         brightness: Brightness.light,
         primaryColor: SonrColor.Primary,
-        backgroundColor: SonrColor.White,
-        dividerColor: Colors.white.withOpacity(0.65),
+        backgroundColor: Colors.white,
+        dividerColor: Color(0xffEBEBEB),
         scaffoldBackgroundColor: SonrColor.White.withOpacity(0.75),
-        splashColor: SonrColor.Primary.withOpacity(0.2),
+        splashColor: Colors.transparent,
         errorColor: SonrColor.Critical,
         accentColor: SonrColor.Secondary,
         focusColor: SonrColor.Black,
         hintColor: Color(0xff8E8E93),
-        cardColor: Color(0xfff0f6fa).withOpacity(0.85),
-        canvasColor: Color(0xffffffff).withOpacity(0.75),
+        cardColor: Color(0xffF6F6F6),
+        canvasColor: Color(0xffF6F6F6),
         shadowColor: Color(0xffc7ccd0),
         splashFactory: const NoSplashFactory(),
       );
@@ -213,27 +213,27 @@ class AppTheme {
   /// Returns Dark Theme for App
   static ThemeData get DarkTheme => ThemeData(
         brightness: Brightness.dark,
-        dividerColor: SonrColor.Black.withOpacity(0.65),
+        dividerColor: Color(0xff4E4949),
         primaryColor: SonrColor.Primary,
-        backgroundColor: SonrColor.Black,
+        backgroundColor: Color(0xff15162D),
         scaffoldBackgroundColor: SonrColor.Black.withOpacity(0.85),
-        splashColor: SonrColor.Primary.withOpacity(0.2),
+        splashColor: Colors.transparent,
         errorColor: SonrColor.Critical,
         accentColor: SonrColor.AccentPurple,
         focusColor: SonrColor.White,
         hintColor: Color(0xffBFBFC3),
         cardColor: Color(0xff2f2a2a).withOpacity(0.75),
-        canvasColor: Color(0xff3e3737),
+        canvasColor: Color(0xff212244),
         shadowColor: Color(0xff2f2a2a),
         splashFactory: const NoSplashFactory(),
       );
 
   /// Returns Current Text Color
-  static Color get backgroundColor => Preferences.isDarkMode ? Color(0xff151515) : Colors.white;
+  static Color get backgroundColor => Preferences.isDarkMode ? Color(0xff15162D) : Colors.white;
 
   static Color get dividerColor => Preferences.isDarkMode ? Color(0xff4E4949) : Color(0xffEBEBEB);
 
-  static Color get foregroundColor => Preferences.isDarkMode ? Color(0xff2A2B37) : Color(0xffF6F6F6);
+  static Color get foregroundColor => Preferences.isDarkMode ? Color(0xff212244) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
   static Color get itemColor => Preferences.isDarkMode ? SonrColor.White : SonrColor.Black;

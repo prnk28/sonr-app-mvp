@@ -1,4 +1,5 @@
 import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
 
 /// @ TransferCard as List item View
 class FileItemView extends StatelessWidget {

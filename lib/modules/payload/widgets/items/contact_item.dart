@@ -1,6 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
-
+import 'package:sonr_app/modules/peer/peer.dart';
 /// @ Transfer Contact Item Details
 class ContactItemView extends StatelessWidget {
   final TransferCard item;

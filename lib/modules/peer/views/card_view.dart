@@ -1,6 +1,6 @@
 import 'package:rive/rive.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/style/style.dart';
-import 'peer.dart';
 
 const double K_CARD_WIDTH = 160;
 const double K_CARD_HEIGHT = 190;
