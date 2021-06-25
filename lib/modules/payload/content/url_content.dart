@@ -205,3 +205,19 @@ class _URLLinkInfo extends StatelessWidget {
     return Container();
   }
 }
+
+/// @ Transfer Contact Item Details
+class URLItemView extends StatelessWidget {
+  final TransferCard item;
+  const URLItemView({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BoxContainer(
+      child: Hero(
+        tag: item.id,
+        child: URLContent(link: item.url!),
+      ),
+    );
+  }
+}

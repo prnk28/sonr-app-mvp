@@ -1,4 +1,3 @@
-import 'package:sonr_app/modules/payload/widgets/content/item_thumbnail.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 
@@ -204,5 +203,50 @@ class _PayloadListItemTitle extends StatelessWidget {
             child: item!.prettySize().paragraph(color: Get.theme.hintColor),
           )
         ]));
+  }
+}
+
+//// @ TransferView: Builds View based on TransferItem Payload Type
+class PostItem extends StatelessWidget {
+  /// TransferItem: SQL Reference to Protobuf
+  final TransferCard item;
+
+  /// Size/Shape of Transfer View
+  const PostItem(this.item, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // @ Build Contact Card by Size
+    if (item.payload == Payload.CONTACT) {
+      return ContactItemView(item: item);
+    }
+
+    // @ Build URL Card by Size
+    else if (item.payload == Payload.URL) {
+      return URLItemView(item: item);
+    }
+
+    // @ Build Media/File Card by Size
+    else {
+      return FileItemView(item: item);
+    }
+  }
+}
+
+/// @ Item Controller to Manage Payload
+class ItemController extends GetxController {
+  late final SonrFile_Item item;
+  late final int index;
+
+  void replace() {
+    Get.back();
+  }
+
+  void delete() {
+    Get.back();
+  }
+
+  void cancel() {
+    Get.back();
   }
 }

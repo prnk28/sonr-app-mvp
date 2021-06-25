@@ -66,8 +66,8 @@ class SearchResultsView extends GetView<HomeController> {
     return BlurredBackground(
       child: ListView.builder(
           itemCount: controller.results.length,
-          itemBuilder: (context, index) => SearchItem(
-                item: controller.results[index],
+          itemBuilder: (context, index) => PostItem(
+                controller.results[index],
               )),
     );
   }
