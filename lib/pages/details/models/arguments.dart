@@ -1,6 +1,6 @@
 import 'package:sonr_app/pages/details/details.dart';
 import 'dart:io';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ** ─── Details Arguments ────────────────────────────────────────────────────────

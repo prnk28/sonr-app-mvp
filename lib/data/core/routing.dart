@@ -6,7 +6,7 @@ import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
 /// @ Enum Values for App Page

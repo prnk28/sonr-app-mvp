@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 class CardService extends GetxService {

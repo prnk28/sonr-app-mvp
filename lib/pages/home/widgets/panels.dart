@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class AccessView extends GetView<HomeController> {
   AccessView({Key? key}) : super(key: key);

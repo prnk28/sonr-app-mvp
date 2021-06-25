@@ -5,7 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';

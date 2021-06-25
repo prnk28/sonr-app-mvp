@@ -1,6 +1,6 @@
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/modules/activity/views/completed_view.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ReceiverService extends GetxService {
   // Accessors

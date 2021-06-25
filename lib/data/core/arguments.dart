@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ** ─── BuildMode Arguments ────────────────────────────────────────────────────────

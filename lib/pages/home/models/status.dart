@@ -1,4 +1,4 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum HomeView { Dashboard, Contact, Explorer, Search }
 

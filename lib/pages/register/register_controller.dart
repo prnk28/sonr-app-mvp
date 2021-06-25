@@ -4,7 +4,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'models/intro.dart';
 import 'models/status.dart';

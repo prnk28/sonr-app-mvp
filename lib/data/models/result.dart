@@ -1,5 +1,5 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 extension ConnectivityResultUtils on ConnectivityResult {
   /// Convert Package Enum to ConnectionRequest_InternetType enum

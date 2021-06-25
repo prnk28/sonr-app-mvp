@@ -4,7 +4,7 @@ import 'package:sonr_app/modules/camera/views/capture.dart';
 import 'package:sonr_app/modules/camera/views/preview.dart';
 import 'package:sonr_app/modules/camera/views/tools.dart';
 import 'package:sonr_app/modules/camera/widgets/video_duration.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'camera_controller.dart';
 
 class CameraView extends StatelessWidget {

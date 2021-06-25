@@ -1,5 +1,5 @@
 export '../controllers/peer_controller.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 import 'card_view.dart';
 import 'item_view.dart';

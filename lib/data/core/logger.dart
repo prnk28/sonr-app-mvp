@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
 import 'package:firebase_analytics/firebase_analytics.dart';
 

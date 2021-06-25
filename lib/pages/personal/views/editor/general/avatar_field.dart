@@ -1,6 +1,6 @@
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ProfileAvatarField extends GetView<PersonalController> {
   @override

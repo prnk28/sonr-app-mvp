@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// ### Builds Thumbnail from Future
 class PayloadThumbnail extends StatelessWidget {

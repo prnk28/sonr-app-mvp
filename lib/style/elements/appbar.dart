@@ -1,5 +1,5 @@
 import 'dart:ui';
-import '../../style.dart';
+import '../style.dart';
 
 /// @ Home Screen Header
 class PageAppBar extends StatelessWidget implements PreferredSizeWidget {

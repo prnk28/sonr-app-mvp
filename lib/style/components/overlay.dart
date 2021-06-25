@@ -1,4 +1,4 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ Class Builds Alert View Widget for Overlay ** //
 class AlertOverlay extends StatelessWidget {

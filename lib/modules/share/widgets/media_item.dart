@@ -1,6 +1,6 @@
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class MediaItem extends StatefulWidget {
   final AssetEntity item;

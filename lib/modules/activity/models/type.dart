@@ -1,4 +1,4 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 extension TransferActivityUtils on TransferActivity {
   /// Builds Message Text for This Past Activity

@@ -1,4 +1,4 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 export 'package:sonr_app/pages/register/widgets/textfield.dart';
 
 class RegisterSetupTitleBar extends StatelessWidget implements PreferredSizeWidget {

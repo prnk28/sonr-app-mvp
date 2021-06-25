@@ -9,9 +9,8 @@ import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {

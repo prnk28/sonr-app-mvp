@@ -1,6 +1,6 @@
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'home_controller.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'models/status.dart';
 import 'views/dashboard_view.dart';
 import 'widgets/navigation.dart';

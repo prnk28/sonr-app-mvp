@@ -1,5 +1,5 @@
 // @ PeerStatus Enum
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum PersonalViewStatus {
   Viewing,

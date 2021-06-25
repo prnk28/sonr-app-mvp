@@ -1,7 +1,7 @@
 // Imports
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/modules/payload/payload.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ TransferView: Builds Invite View based on InviteRequest Payload Type
 class InviteRequestSheet extends StatelessWidget {

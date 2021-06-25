@@ -1,5 +1,5 @@
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum IntroPageType {
   Welcome,

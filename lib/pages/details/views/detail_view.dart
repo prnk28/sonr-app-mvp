@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ QuickAccessScreen from Home
 class DetailPage extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class AlbumItem extends StatelessWidget {
   final bool isSelected;

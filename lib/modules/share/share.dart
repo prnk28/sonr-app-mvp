@@ -13,7 +13,7 @@ import 'models/asset.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/transfer/models/arguments.dart';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'models/type.dart';
 

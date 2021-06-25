@@ -1,4 +1,4 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import '../transfer.dart';
 
 class DevicesView extends GetView<TransferController> {

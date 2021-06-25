@@ -1,4 +1,4 @@
-export 'data/core/logger.dart';
+export '../data/core/logger.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
 export 'package:flutter/material.dart' hide Route;
@@ -15,39 +15,39 @@ export 'package:sonr_app/modules/camera/camera.dart';
 export 'package:sonr_app/data/data.dart';
 
 // Custom Theme Buttons
-export 'style/buttons/action.dart';
-export 'style/buttons/arrow.dart';
-export 'style/buttons/color.dart';
-export 'style/buttons/plain.dart';
-export 'style/buttons/confirm.dart';
-export 'style/buttons/image.dart';
-export 'style/buttons/solid.dart';
+export 'buttons/action.dart';
+export 'buttons/arrow.dart';
+export 'buttons/color.dart';
+export 'buttons/plain.dart';
+export 'buttons/confirm.dart';
+export 'buttons/image.dart';
+export 'buttons/solid.dart';
 
 // Theme Components
-export 'style/components/color.dart';
-export 'style/components/gradient.dart';
-export 'style/components/icon.dart';
-export 'style/components/overlay.dart';
-export 'style/components/shape.dart';
-export 'style/components/text.dart';
+export 'components/color.dart' hide NoSplash;
+export 'components/gradient.dart';
+export 'components/icon.dart';
+export 'components/overlay.dart';
+export 'components/shape.dart';
+export 'components/text.dart';
 
 // Common Widgets
-export 'modules/payload/payload.dart';
+export '../modules/payload/payload.dart';
 
 // Custom Theme Elements
-export 'style/elements/shape.dart';
-export 'style/elements/painter.dart';
-export 'style/elements/scaffold.dart';
-export 'style/elements/appbar.dart';
-export 'style/elements/animation.dart';
-export 'style/elements/image.dart';
+export 'elements/shape.dart';
+export 'elements/painter.dart';
+export 'elements/scaffold.dart';
+export 'elements/appbar.dart';
+export 'elements/animation.dart';
+export 'elements/image.dart';
 
 // Form Styles
-export 'style/form/checklist.dart';
-export 'style/form/focus.dart';
-export 'style/form/infolist.dart';
-export 'style/form/textfield.dart';
-export 'style/form/tabs.dart';
+export 'form/checklist.dart';
+export 'form/focus.dart';
+export 'form/infolist.dart';
+export 'form/textfield.dart';
+export 'form/tabs.dart';
 
 // UI Packages
 import 'package:flutter/material.dart';
@@ -55,7 +55,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/elements/painter.dart';
-import 'style/components/color.dart';
+import 'components/color.dart';
 
 /// * Widget Position Enum * //
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -207,6 +207,7 @@ class AppTheme {
         cardColor: Color(0xfff0f6fa).withOpacity(0.85),
         canvasColor: Color(0xffffffff).withOpacity(0.75),
         shadowColor: Color(0xffc7ccd0),
+        splashFactory: const NoSplashFactory(),
       );
 
   /// Returns Dark Theme for App
@@ -224,6 +225,7 @@ class AppTheme {
         cardColor: Color(0xff2f2a2a).withOpacity(0.75),
         canvasColor: Color(0xff3e3737),
         shadowColor: Color(0xff2f2a2a),
+        splashFactory: const NoSplashFactory(),
       );
 
   /// Returns Current Text Color

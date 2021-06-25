@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import '../../controllers/editor_controller.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'general/fields.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
 

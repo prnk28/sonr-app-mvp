@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/payload/content/item_thumbnail.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 
 class PayloadItemInfo extends StatelessWidget {

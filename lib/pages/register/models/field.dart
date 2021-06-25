@@ -1,6 +1,6 @@
 
 import 'package:sonr_app/pages/register/register_controller.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum RegisterTextFieldType { FirstName, LastName }
 

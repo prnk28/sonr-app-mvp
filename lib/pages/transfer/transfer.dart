@@ -11,7 +11,7 @@ export 'models/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'controllers/transfer_controller.dart';
 import 'views/local_view.dart';
 

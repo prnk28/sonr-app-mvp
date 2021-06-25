@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ItemController extends GetxController {
   late final SonrFile_Item item;

@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intercom_flutter/intercom_flutter.dart';
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'dart:async';
 
 class HelperService extends GetxService {

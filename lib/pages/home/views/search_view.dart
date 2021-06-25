@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ Card Search View - Displays Search View
 class CardSearchField extends GetView<HomeController> {

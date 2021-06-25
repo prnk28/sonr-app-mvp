@@ -1,4 +1,4 @@
-import '../../style.dart';
+import '../style.dart';
 import 'utility.dart';
 
 class ColorButton extends StatelessWidget {
