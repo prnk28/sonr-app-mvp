@@ -1,4 +1,3 @@
-import 'package:sonr_app/pages/register/widgets/textfield.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/register/register.dart';
 
