@@ -36,35 +36,48 @@ extension IntroPanelTypeUtils on IntroPageType {
   /// Checks if this Panel is NOT Last Panel
   bool get isNotLast => this.index + 1 != this.total;
 
-  /// Return Padding for Content
-  EdgeInsets get padding {
-    if (this.isLast) {
-      return EdgeInsets.only(top: 72.0, bottom: 24.0);
-    } else {
-      return EdgeInsets.only(top: 72.0, bottom: 24.0);
-    }
-  }
-
+  /// Return Page Decoration for Type
   PageDecoration get pageDecoration {
     return PageDecoration(
       titlePadding: EdgeInsets.only(top: 72.0, bottom: 24.0),
-
     );
+  }
+
+  /// Return Image Path for Type
+  String get imagePath {
+    final basePath = "assets/illustrations/";
+    switch (this) {
+      case IntroPageType.Welcome:
+        return basePath + "Welcome.png";
+      case IntroPageType.Universal:
+        return basePath + "Universal.png";
+      case IntroPageType.Secure:
+        return basePath + "Secure.png";
+      case IntroPageType.Start:
+        return basePath + "Start.png";
+    }
   }
 
   /// Returns This Panels Page View Model
   PageViewModel pageViewModel() {
     return PageViewModel(
-      decoration: PageDecoration(
-        titlePadding: padding,
-      ),
+      decoration: this.pageDecoration,
       titleWidget: this.title(),
       bodyWidget: Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: this.description(),
       ),
       image: Center(
-        child: Image.network("https://domaine.com/image.png", height: 175.0),
+        child: Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: SonrColor.Black,
+                width: 2,
+              )),
+          child: Image.asset(this.imagePath, height: 175.0, fit: BoxFit.fitHeight),
+          padding: EdgeInsets.all(24),
+        ),
       ),
     );
   }
