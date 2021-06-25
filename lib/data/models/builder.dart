@@ -16,8 +16,8 @@ class RequestBuilder {
         type: internetType,
         textileOptions: ConnectionRequest_TextileOptions(
           enabled: true,
-          threads: false,
-          mailbox: false,
+          threads: true,
+          mailbox: true,
         ),
         hostOptions: ConnectionRequest_HostOptions(
           mdnsDiscovery: true,
