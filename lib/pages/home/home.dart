@@ -82,7 +82,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                     : Container(),
               ),
               action: HomeActionButton(),
-              // leading: controller.view.value != HomeView.Contact ? _buildHomeLeading() : null,
+              leading: controller.view.value != HomeView.Contact ? _buildHomeLeading() : null,
               title: controller.title.value.heading(
                 color: Get.theme.focusColor,
                 align: TextAlign.start,
@@ -92,15 +92,15 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
         ));
   }
 
-  /// TODO: Implement Intercom Button
-  Widget buildHomeLeading() {
+  // Build Leading Button
+  Widget _buildHomeLeading() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 32.0, left: 8),
       child: Container(
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Dashboard),
           iconData: SonrIcons.Help,
-          onPressed: () async => await HelperService.openIntercom(),
+          onPressed: () async => await Logger.openIntercom(),
         ),
       ),
     );

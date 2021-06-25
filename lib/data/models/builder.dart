@@ -17,7 +17,13 @@ class RequestBuilder {
         textileOptions: ConnectionRequest_TextileOptions(
           enabled: true,
           threads: false,
-          mailbox: true,
+          mailbox: false,
+        ),
+        hostOptions: ConnectionRequest_HostOptions(
+          mdnsDiscovery: true,
+        ),
+        pubsubOptions: ConnectionRequest_PubsubOptions(
+          relay: true,
         ));
   }
 

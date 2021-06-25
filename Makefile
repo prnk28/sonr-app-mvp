@@ -76,6 +76,7 @@ clean:
 	cd $(DESK_BUILD_DIR) && rm -rf outputs
 	cd $(DESK_BUILD_DIR) && rm -rf intermediates
 	@echo '-- Cleaning Flutter --'
+	cd $(PROJECT_DIR) && git submodule foreach --recursive git reset --hard
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && hover clean-cache
 	cd $(PROJECT_DIR) && flutter pub get

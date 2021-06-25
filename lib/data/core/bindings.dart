@@ -73,7 +73,6 @@ class AppServices {
       await Firebase.initializeApp();
     }
     await Get.putAsync(() => DeviceService().init(), permanent: true);
-    // await Get.putAsync(() => HelperService().init());
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);
     await Get.putAsync(() => Preferences().init(), permanent: true);

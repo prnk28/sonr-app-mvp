@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -15,6 +17,10 @@ class Logger extends GetxService {
   static FirebaseAnalyticsObserver get Observer => FirebaseAnalyticsObserver(analytics: analytics);
 
   // Properties
+  final _hasIntercom = false.obs;
+
+  // References
+  static final BuildMode buildMode = BuildModeUtil.current();
   final util.Logger _log = util.Logger(
     printer: util.PrettyPrinter(
       methodCount: 2,
@@ -26,15 +32,19 @@ class Logger extends GetxService {
     ),
   );
 
-  // References
-  static final BuildMode buildMode = BuildModeUtil.current();
-
   // * Initializes Logger * //
   Future<Logger> init() async {
     if (DeviceService.isMobile) {
       // Configure Firebase Scope
       FirebaseAnalytics().setUserId(DeviceService.device.id);
       FirebaseAnalytics().setUserProperty(name: "platform", value: DeviceService.device.platform.toString());
+
+      // Configure Intercom
+      await Intercom.initialize(
+        Env.icom_appID,
+        iosApiKey: Env.icom_iosKey,
+        androidApiKey: Env.icom_androidKey,
+      );
     }
     return this;
   }
@@ -45,6 +55,8 @@ class Logger extends GetxService {
       // Set User Properties
       FirebaseAnalytics().setUserProperty(name: "firstname", value: profile.firstName);
       FirebaseAnalytics().setUserProperty(name: "lastName", value: profile.lastName);
+      Intercom.registerIdentifiedUser(userId: profile.sName);
+      to._hasIntercom(true);
     }
   }
 
@@ -107,6 +119,13 @@ class Logger extends GetxService {
   static void sError(ErrorMessage m) {
     if (buildMode.isDebug && isRegistered) {
       to._log.wtf("Node(Callback) Error: " + m.message);
+    }
+  }
+
+  /// @ Opens Intercom Messenger
+  static Future<void> openIntercom() async {
+    if (isRegistered && to._hasIntercom.value && DeviceService.isMobile) {
+      await Intercom.displayMessenger();
     }
   }
 }
