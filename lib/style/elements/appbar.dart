@@ -33,7 +33,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
         child: NavigationToolbar(
           centerMiddle: centerTitle,
-          leading: leading,
+          leading: _buildLeading(),
           trailing: _buildTrailing(),
           middle: AnimatedSlider.fade(
             child: Column(
@@ -53,6 +53,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+
   Widget _buildTrailing() {
     if (action != null && secondAction != null) {
       return Container(
@@ -62,7 +63,27 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ));
     } else if (action != null && secondAction == null) {
-      return action!;
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          action!,
+        ],
+      );
+    } else {
+      return Container(width: 32, height: 32);
+    }
+  }
+
+  Widget _buildLeading() {
+    if (leading != null) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          leading!,
+        ],
+      );
     } else {
       return Container(width: 32, height: 32);
     }

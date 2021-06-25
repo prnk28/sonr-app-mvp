@@ -36,12 +36,9 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
   }
 
   Widget _buildHomeLeading() {
-    final height = kToolbarHeight + 64;
-    final diff = height - 40;
     return Padding(
       padding: const EdgeInsets.only(bottom: 32.0, left: 8),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: diff),
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Dashboard),
           iconData: SonrIcons.Show,

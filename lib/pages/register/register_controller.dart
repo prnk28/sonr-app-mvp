@@ -6,7 +6,7 @@ import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'models/info.dart';
+import 'models/intro.dart';
 import 'models/status.dart';
 import 'models/type.dart';
 
@@ -119,7 +119,7 @@ class RegisterController extends GetxController {
   }
 
   /// @ Next Info Panel
-  void nextPanel(InfoPanelType type) {
+  void nextPanel(IntroPageType type) {
     panelNotifier.value = type.page;
     introPageController.animateToPage(
       type.index,

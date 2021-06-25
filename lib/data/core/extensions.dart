@@ -22,3 +22,15 @@ extension StringUtils on String {
   /// Check if this String is any of the Given list of Strings
   bool isAny(List<String> opts) => opts.any((element) => element == this);
 }
+
+extension NumUtils on int {
+  bool isOneOf(List<int> options) {
+    bool contains = false;
+    options.forEach((i) {
+      if (this == i) {
+        contains = true;
+      }
+    });
+    return contains;
+  }
+}
