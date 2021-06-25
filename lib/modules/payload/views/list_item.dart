@@ -15,11 +15,11 @@ class PayloadItemInfo extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: item.prettyName().subheading(color: SonrTheme.itemColor),
+            child: item.prettyName().subheading(color: AppTheme.itemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: item.prettySize().light(color: SonrTheme.itemColor),
+            child: item.prettySize().light(color: AppTheme.itemColor),
           )
         ],
       ),
@@ -32,7 +32,7 @@ class PayloadListItemHeader extends GetView<ItemController> {
   Widget build(BuildContext context) {
     final file = TransferController.invite.file;
     return Container(
-      decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
+      decoration: BoxDecoration(color: AppTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
       width: Get.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,11 +40,11 @@ class PayloadListItemHeader extends GetView<ItemController> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: file.prettyName().subheading(color: SonrTheme.itemColor),
+            child: file.prettyName().subheading(color: AppTheme.itemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: file.prettySize().light(color: SonrTheme.itemColor),
+            child: file.prettySize().light(color: AppTheme.itemColor),
           )
         ],
       ),
@@ -139,9 +139,9 @@ class _PayloadListItemTitle extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: [
-                ContactService.contact.value.firstName.paragraph(color: SonrTheme.itemColor),
-                " ".paragraph(color: SonrTheme.itemColor),
-                ContactService.contact.value.lastName.light(color: SonrTheme.itemColor)
+                ContactService.contact.value.firstName.paragraph(color: AppTheme.itemColor),
+                " ".paragraph(color: AppTheme.itemColor),
+                ContactService.contact.value.lastName.light(color: AppTheme.itemColor)
               ].row(),
             ),
             Padding(
@@ -158,7 +158,7 @@ class _PayloadListItemTitle extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: invite!.file.prettyName().paragraph(color: SonrTheme.itemColor),
+              child: invite!.file.prettyName().paragraph(color: AppTheme.itemColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -172,7 +172,7 @@ class _PayloadListItemTitle extends StatelessWidget {
           height: Height.ratio(0.15),
           padding: EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 8),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-            Padding(padding: const EdgeInsets.only(top: 16.0), child: invite!.file.prettyType().subheading(color: SonrTheme.itemColor)),
+            Padding(padding: const EdgeInsets.only(top: 16.0), child: invite!.file.prettyType().subheading(color: AppTheme.itemColor)),
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: invite!.file.prettyName().light(color: Get.theme.hintColor),
@@ -193,7 +193,7 @@ class _PayloadListItemTitle extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: item!.prettyType().subheading(color: SonrTheme.itemColor),
+            child: item!.prettyType().subheading(color: AppTheme.itemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4.0),

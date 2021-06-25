@@ -99,7 +99,7 @@ class ErrorPageArgs {
       case ErrorPageType.EmptyMedia:
         return Color.fromRGBO(240, 244, 244, 1.0);
       default:
-        return SonrTheme.backgroundColor;
+        return AppTheme.backgroundColor;
     }
   }
 

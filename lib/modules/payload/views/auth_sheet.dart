@@ -88,10 +88,10 @@ class _InviteRequestFileHeader extends StatelessWidget {
                   message: profile.sName + ".snr/",
                   child: "View SName".light(fontSize: 16, color: SonrColor.Primary),
                   height: 50,
-                  decoration: BoxDecoration(color: SonrTheme.itemColor.withOpacity(0.9), borderRadius: BorderRadius.circular(22)),
+                  decoration: BoxDecoration(color: AppTheme.itemColor.withOpacity(0.9), borderRadius: BorderRadius.circular(22)),
                   padding: const EdgeInsets.all(16.0),
                   preferBelow: false,
-                  textStyle: DisplayTextStyle.Light.style(color: SonrTheme.itemColorInversed, fontSize: 24),
+                  textStyle: DisplayTextStyle.Light.style(color: AppTheme.itemColorInversed, fontSize: 24),
                   showDuration: 1800.milliseconds,
                   waitDuration: 0.milliseconds,
                 ),
@@ -106,23 +106,23 @@ class _InviteRequestFileHeader extends StatelessWidget {
             child: [
               profile.firstName.headingSpan(
                 fontSize: 20,
-                color: SonrTheme.itemColor,
+                color: AppTheme.itemColor,
               ),
               " wants to share an ".lightSpan(
                 fontSize: 19,
-                color: SonrTheme.itemColor,
+                color: AppTheme.itemColor,
               ),
               file.prettyType().headingSpan(
                     fontSize: 20,
-                    color: SonrTheme.itemColor,
+                    color: AppTheme.itemColor,
                   ),
               " of size ".lightSpan(
                 fontSize: 19,
-                color: SonrTheme.itemColor,
+                color: AppTheme.itemColor,
               ),
               file.prettySize().headingSpan(
                     fontSize: 20,
-                    color: SonrTheme.itemColor,
+                    color: AppTheme.itemColor,
                   )
             ].rich())
       ]),
@@ -140,7 +140,7 @@ class _InviteRequestFileContent extends StatelessWidget {
     return Container(
       height: Height.ratio(0.275),
       width: Get.width,
-      decoration: BoxDecoration(color: SonrTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
+      decoration: BoxDecoration(color: AppTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
       padding: EdgeInsets.all(8),
       child: _buildView(Width.ratio(0.8), Height.ratio(0.3)),
     );

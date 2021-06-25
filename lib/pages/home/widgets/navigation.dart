@@ -115,8 +115,8 @@ class HomeBottomTabButton extends GetView<HomeController> {
                     child: Container(
                         key: ValueKey(idx.value == view.index),
                         child: idx.value == view.index
-                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.itemColor)
-                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: SonrTheme.itemColor)),
+                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: AppTheme.itemColor)
+                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: AppTheme.itemColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),
@@ -132,10 +132,10 @@ class HomeFloatingBar extends GetView<HomeController> {
       child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: SonrTheme.backgroundColor, width: 1),
-            color: SonrTheme.foregroundColor,
+            border: Border.all(color: AppTheme.backgroundColor, width: 1),
+            color: AppTheme.foregroundColor,
             borderRadius: BorderRadius.circular(28.13),
-            boxShadow: SonrTheme.boxShadow,
+            boxShadow: AppTheme.boxShadow,
           ),
           margin: EdgeInsets.symmetric(horizontal: 72),
           height: 72,

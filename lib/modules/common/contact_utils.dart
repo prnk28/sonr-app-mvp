@@ -41,8 +41,8 @@ class ContactSName extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(left: 4, bottom: 4),
                           child: [
-                            "${ContactService.contact.value.sName}".lightSpan(color: SonrTheme.itemColor, fontSize: 24),
-                            ".snr/".lightSpan(color: SonrTheme.greyColor, fontSize: 24),
+                            "${ContactService.contact.value.sName}".lightSpan(color: AppTheme.itemColor, fontSize: 24),
+                            ".snr/".lightSpan(color: AppTheme.greyColor, fontSize: 24),
                           ].rich(),
                         ),
                       ],

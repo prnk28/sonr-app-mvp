@@ -25,12 +25,12 @@ class StartView extends GetView<RegisterController> {
                 height: 40,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Preferences.isDarkMode ? SonrTheme.foregroundColor : Color(0xffEAEAEA),
+                  color: Preferences.isDarkMode ? AppTheme.foregroundColor : Color(0xffEAEAEA),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
                   SonrIcons.Forward,
-                  color: SonrTheme.itemColor,
+                  color: AppTheme.itemColor,
                   size: 24,
                 ),
               ),
@@ -77,7 +77,7 @@ class StartView extends GetView<RegisterController> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ColorButton.neutral(
-              borderColor: SonrTheme.greyColor.withOpacity(0.9),
+              borderColor: AppTheme.greyColor.withOpacity(0.9),
               onPressed: () {
                 Get.find<RegisterController>().nextPage(RegisterPageType.Name);
               },

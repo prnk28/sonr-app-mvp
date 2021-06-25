@@ -37,14 +37,6 @@
                 <data android:scheme="sonr" />
             </intent-filter>
         </activity>
-    <service
-        android:name="io.maido.intercom.PushInterceptService"
-        android:enabled="true"
-        android:exported="true">
-        <intent-filter>
-          <action android:name="com.google.firebase.MESSAGING_EVENT" />
-        </intent-filter>
-    </service>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
 

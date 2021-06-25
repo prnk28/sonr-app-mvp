@@ -47,8 +47,8 @@ class RegisterBottomSheet extends StatelessWidget {
         width: Get.width,
         height: 120,
         decoration: BoxDecoration(
-            boxShadow: SonrTheme.boxShadow,
-            color: SonrTheme.backgroundColor,
+            boxShadow: AppTheme.boxShadow,
+            color: AppTheme.backgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(37),
               topRight: Radius.circular(37),

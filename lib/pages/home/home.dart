@@ -34,7 +34,7 @@ class ExplorerPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageAppBar(title: "Welcome".heading()),
-      backgroundColor: SonrTheme.backgroundColor,
+      backgroundColor: AppTheme.backgroundColor,
       body: Center(
         child: Container(
           width: 1280,

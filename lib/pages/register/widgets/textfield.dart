@@ -37,7 +37,7 @@ class RegisterTextField extends GetView<RegisterController> {
               alignment: Alignment.centerLeft,
               child: [
                 type.label.toUpperCase().lightSpan(
-                      color: SonrTheme.greyColor,
+                      color: AppTheme.greyColor,
                       fontSize: 20,
                     ),
                 isError
@@ -49,13 +49,13 @@ class RegisterTextField extends GetView<RegisterController> {
               ].rich()),
           Container(
             decoration: BoxDecoration(
-              color: SonrTheme.backgroundColor,
+              color: AppTheme.backgroundColor,
               borderRadius: BorderRadius.circular(22),
             ),
             margin: EdgeInsets.only(left: 16, right: 16, top: 8),
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: TextField(
-              style: DisplayTextStyle.Paragraph.style(color: SonrTheme.itemColor, fontSize: 20),
+              style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 20),
               keyboardType: type.textInputType,
               autofocus: type.autoFocus,
               textInputAction: type.textInputAction,
@@ -72,7 +72,7 @@ class RegisterTextField extends GetView<RegisterController> {
                   ? decoration
                   : InputDecoration.collapsed(
                       hintText: hint,
-                      hintStyle: DisplayTextStyle.Subheading.style(color: SonrTheme.greyColor, fontSize: 20),
+                      hintStyle: DisplayTextStyle.Subheading.style(color: AppTheme.greyColor, fontSize: 20),
                     ),
             ),
           )

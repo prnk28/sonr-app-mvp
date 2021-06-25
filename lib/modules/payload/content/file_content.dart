@@ -309,7 +309,7 @@ class FilePayloadText extends StatelessWidget {
     return Text(
       _buildType(),
       style: textStyle.style(
-        color: color ?? SonrTheme.itemColor,
+        color: color ?? AppTheme.itemColor,
         fontSize: fontSize,
         fontStyle: fontStyle,
       ),

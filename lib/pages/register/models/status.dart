@@ -28,7 +28,7 @@ extension NewSNameStatusUtil on NewSNameStatus {
     final size = 28.0;
     switch (this) {
       case NewSNameStatus.Default:
-        return SonrIcons.ATSign.icon(color: SonrTheme.itemColorInversed, size: size);
+        return SonrIcons.ATSign.icon(color: AppTheme.itemColorInversed, size: size);
       case NewSNameStatus.Available:
         return SonrIcons.Check.icon(color: SonrColor.Tertiary, size: size);
       case NewSNameStatus.Returning:
@@ -40,7 +40,7 @@ extension NewSNameStatusUtil on NewSNameStatus {
 
   /// Returns Label for Status
   Widget label() {
-    final color = SonrTheme.greyColor;
+    final color = AppTheme.greyColor;
     switch (this) {
       case NewSNameStatus.Default:
         return "Pick Name".light(color: color);

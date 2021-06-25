@@ -86,7 +86,7 @@ class ProfileAvatar extends StatelessWidget {
         margin: EdgeInsets.all(8),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: backgroundColor ?? SonrTheme.foregroundColor,
+          color: backgroundColor ?? AppTheme.foregroundColor,
           shape: BoxShape.circle,
         ),
         child: profile.hasPicture()

@@ -63,7 +63,7 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
         fontFamily: this.fontFamily,
         fontWeight: this.fontWeight,
         fontSize: fontSize ?? this.fontSize,
-        color: color ?? SonrTheme.itemColor,
+        color: color ?? AppTheme.itemColor,
         fontFeatures: [
           FontFeature.tabularFigures(),
         ],

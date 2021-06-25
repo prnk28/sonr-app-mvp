@@ -11,9 +11,9 @@ class ShareOptionsRow extends StatelessWidget {
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         const _ShareCameraButtonItem(),
-        VerticalDivider(color: SonrTheme.dividerColor),
+        VerticalDivider(color: AppTheme.dividerColor),
         const _ShareContactButtonItem(),
-        VerticalDivider(color: SonrTheme.dividerColor),
+        VerticalDivider(color: AppTheme.dividerColor),
         const _ShareFileButtonItem(),
       ]),
     );

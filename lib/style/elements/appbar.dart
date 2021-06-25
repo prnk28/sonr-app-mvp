@@ -126,7 +126,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
               iconData: isClose ? SonrIcons.Close : SonrIcons.Back,
             ),
             trailing: _buildTrailing(),
-            middle: title.toUpperCase().light(color: SonrTheme.itemColor, fontSize: 24),
+            middle: title.toUpperCase().light(color: AppTheme.itemColor, fontSize: 24),
           ),
         ),
       ),

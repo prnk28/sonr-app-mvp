@@ -116,7 +116,7 @@ class SonrTextField extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'R-Flex',
               fontWeight: FontWeight.w500,
-              color: SonrTheme.itemColor,
+              color: AppTheme.itemColor,
             ),
             controller: controller,
             autofocus: autoFocus,
@@ -133,7 +133,7 @@ class SonrTextField extends StatelessWidget {
                     hintStyle: TextStyle(
                       fontFamily: 'R-Flex',
                       fontWeight: FontWeight.w300,
-                      color: SonrTheme.itemColor,
+                      color: AppTheme.itemColor,
                     )),
           ),
         )
@@ -162,7 +162,7 @@ class SonrTextField extends StatelessWidget {
               hintStyle: TextStyle(
                 fontFamily: 'R-Flex',
                 fontWeight: FontWeight.w300,
-                color: SonrTheme.itemColor,
+                color: AppTheme.itemColor,
               ))),
     );
   }

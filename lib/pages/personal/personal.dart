@@ -67,11 +67,11 @@ class _ProfileInfoView extends GetView<PersonalController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(padding: EdgeInsets.only(top: 12)),
-          Divider(color: SonrTheme.dividerColor, indent: 16, endIndent: 16),
+          Divider(color: AppTheme.dividerColor, indent: 16, endIndent: 16),
           Padding(padding: EdgeInsets.only(top: 12)),
 
           // First/Last Name
-          ContactService.contact.value.fullName.subheading(color: SonrTheme.itemColor, fontSize: 32),
+          ContactService.contact.value.fullName.subheading(color: AppTheme.itemColor, fontSize: 32),
 
           // Username
           ContactSName(),

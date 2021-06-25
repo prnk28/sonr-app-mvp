@@ -60,7 +60,7 @@ class PayloadSheetView extends GetView<TransferController> {
                   final file = controller.inviteRequest.file;
                   return Container(
                     padding: EdgeInsets.only(top: 24),
-                    decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
+                    decoration: BoxDecoration(color: AppTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
                     child: CustomScrollView(
                       controller: scrollController,
                       slivers: [
@@ -69,10 +69,10 @@ class PayloadSheetView extends GetView<TransferController> {
                           pinned: true,
                           floating: false,
                           automaticallyImplyLeading: false,
-                          backgroundColor: SonrTheme.foregroundColor,
+                          backgroundColor: AppTheme.foregroundColor,
                           toolbarHeight: 80,
                           forceElevated: false,
-                          shadowColor: SonrTheme.shadowColor,
+                          shadowColor: AppTheme.shadowColor,
                         ),
                         SliverList(
                             delegate: SliverChildBuilderDelegate(
