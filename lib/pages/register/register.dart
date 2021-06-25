@@ -1,23 +1,18 @@
 // Exports
 export 'register_controller.dart';
-export 'widgets/notifier.dart';
 export 'widgets/panel.dart';
 export 'models/field.dart';
-export 'models/info.dart';
+export 'models/intro.dart';
 export 'models/status.dart';
 export 'models/type.dart';
 
 // Imports
-import 'package:sonr_app/pages/home/models/arguments.dart';
-import 'package:sonr_app/pages/register/widgets/notifier.dart';
+import 'package:sonr_app/pages/register/views/perm_view.dart';
+import 'package:sonr_app/pages/register/views/start_view.dart';
 import 'package:sonr_app/style.dart';
-import 'models/info.dart';
 import 'models/type.dart';
 import 'register_controller.dart';
-import 'views/backup_view.dart';
-import 'views/contact_view.dart';
-import 'views/name_view.dart';
-import 'widgets/panel.dart';
+import 'views/setup_view.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   @override
@@ -36,110 +31,11 @@ class RegisterPage extends GetView<RegisterController> {
   Widget _buildView(RegisterPageType status) {
     // Return View
     if (status.isPermissions) {
-      return NotifyingPermissionsView(
-          pages: List<Widget>.generate(RegisterPageTypeUtils.permissionsPageTypes.length, (index) {
-        final item = RegisterPageTypeUtils.permissionsPageTypes[index];
-        return PermPanel(
-          buttonText: item.permissionsButtonText(),
-          onPressed: () async {
-            // Location Perms
-            if (item == RegisterPageType.Location) {
-              final result = await Permissions.Location.request();
-              if (result) {
-                controller.nextPage(RegisterPageType.Gallery);
-              }
-            }
-
-            // Gallery Perms
-            else if (item == RegisterPageType.Gallery) {
-              final result = await Permissions.Gallery.request();
-              if (result) {
-                AppPage.Home.off(args: HomeArguments.FirstLoad);
-              }
-            }
-          },
-          imagePath: item.permissionsImagePath(),
-          buttonTextColor: item.permissionsButtonColor(),
-        );
-      }));
+      return PermissionsView();
     } else if (status.isSetup) {
-      return NotifyingSetupView(
-        pages: [
-          NamePage(key: RegisterPageType.Name.key),
-          BackupCodeView(key: RegisterPageType.Backup.key),
-          ProfileSetupView(key: RegisterPageType.Contact.key),
-        ],
-        titleBar: RegisterTitleBar(
-          title: status.title,
-          instruction: status.instruction,
-          isGradient: status.isGradient,
-        ),
-        bottomSheet: status != RegisterPageType.Name
-            ? RegisterBottomSheet(
-                leftButton: status.leftButton(),
-                rightButton: status.rightButton(),
-              )
-            : null,
-      );
+      return SetupView();
     } else {
-      return _StartView(key: RegisterPageType.Intro.key);
+      return StartView(key: RegisterPageType.Intro.key);
     }
-  }
-}
-
-class _StartView extends GetView<RegisterController> {
-  const _StartView({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      AnimatedBuilder(
-        animation: controller.panelNotifier,
-        builder: (context, _) {
-          return Container(
-            child: SlidingImage(
-              notifier: controller.panelNotifier,
-              screenCount: InfoPanelType.values.length,
-              image: AssetImage("assets/illustrations/$_imageAsset"),
-            ),
-          );
-        },
-      ),
-      // Scrollable Page View
-      NotifyingIntroView(
-        pages: List<Widget>.generate(
-            InfoPanelType.values.length,
-            (index) => InfoPanel(
-                  type: InfoPanelType.values[index],
-                )),
-      ),
-    ]);
-  }
-
-  String get _imageAsset {
-    // Get Quarter from Date
-    final date = DateTime.now();
-
-    // Determine Month from Quarter
-    if (date.month.isOneOf([3, 4, 5])) {
-      return "Spring.png";
-    } else if (date.month.isOneOf([6, 7, 8])) {
-      return "Summer.png";
-    } else if (date.month.isOneOf([9, 10, 11])) {
-      return "Fall.png";
-    } else {
-      return "Winter.png";
-    }
-  }
-}
-
-extension NumUtils on int {
-  bool isOneOf(List<int> options) {
-    bool contains = false;
-    options.forEach((i) {
-      if (this == i) {
-        contains = true;
-      }
-    });
-    return contains;
   }
 }

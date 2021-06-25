@@ -5,6 +5,7 @@ PROJECT_DIR=/Users/prad/Sonr/app
 ANDROID_DIR=/Users/prad/Sonr/app/android
 IOS_DIR=/Users/prad/Sonr/app/ios
 DESK_BUILD_DIR=/Users/prad/Sonr/app/go/build
+PLUGIN_DIR=/Users/prad/Sonr/plugin
 
 # Mobile Actions
 FLUTTER=flutter
@@ -60,12 +61,13 @@ profile:
 
 ## [update]      :   Fetch Plugin Submodule, and Upgrade Dependencies
 update:
+	cd $(PLUGIN_DIR) && cider bump patch
+	cd $(PLUGIN_DIR) && git add . && git commit -m "Updated Core Binary" && git push
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
-	cd %(PROJECT_DIR) && git submodule update --remote plugin
+	cd $(PROJECT_DIR) && git submodule update --remote plugin
 	cd $(PROJECT_DIR) && flutter pub get
 	cd $(PROJECT_DIR) && flutter pub upgrade
-	cd $(PROJECT_DIR) && $(RUN) --release
 
 ## [clean]       :   Cleans App Build Cache
 clean:
@@ -77,6 +79,8 @@ clean:
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && hover clean-cache
 	cd $(PROJECT_DIR) && flutter pub get
+	pub global activate cider
+	pub global activate protoc_plugin
 
 ##
 ##

@@ -97,11 +97,11 @@ class _CurrentActivityContent extends GetView<ActivityController> {
           [
             "${payload.toString().capitalizeFirst} from ".lightSpan(
               fontSize: 18,
-              color: SonrTheme.itemColor,
+              color: AppTheme.itemColor,
             ),
             firstName.subheadingSpan(
               fontSize: 18,
-              color: SonrTheme.itemColor,
+              color: AppTheme.itemColor,
             )
           ].rich(),
 
@@ -109,7 +109,7 @@ class _CurrentActivityContent extends GetView<ActivityController> {
           DateText(
             date: DateTime.now(),
             fontSize: 16,
-            color: SonrTheme.itemColor,
+            color: AppTheme.itemColor,
           )
         ],
       ),
@@ -140,7 +140,7 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
                   width: maxWidth,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22),
-                    color: SonrTheme.foregroundColor,
+                    color: AppTheme.foregroundColor,
                   ),
                 ),
 
@@ -196,9 +196,9 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   Color _calculateTextColor(double current) {
     int adjusted = (current * 100).round();
     if (adjusted < 60) {
-      return SonrColor.Black;
+      return AppTheme.itemColor;
     }
-    return SonrColor.White;
+    return AppTheme.itemColorInversed;
   }
 }
 
@@ -219,7 +219,7 @@ class _CurrentActivityIndexLabel extends StatelessWidget {
   Widget _buildLabel(int current, int total) {
     return "($current / $total)".light(
       fontSize: 14,
-      color: SonrTheme.greyColor,
+      color: AppTheme.greyColor,
     );
   }
 }

@@ -34,7 +34,7 @@ class CardSearchField extends GetView<HomeController> {
                                     fontFamily: 'RFlex',
                                     fontSize: 24,
                                     fontWeight: FontWeight.w400,
-                                    color: SonrTheme.itemColor,
+                                    color: AppTheme.itemColor,
                                   ),
                                   showCursor: false,
                                   autofocus: false,

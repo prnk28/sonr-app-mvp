@@ -15,13 +15,13 @@ class ProfileAvatarField extends GetView<PersonalController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
+                decoration: BoxDecoration(color: AppTheme.foregroundColor, shape: BoxShape.circle, boxShadow: AppTheme.boxShadow),
                 child: Container(
                   width: 100,
                   height: 100,
                   child: ContactService.contact.value.hasPicture()
                       ? CircleAvatar(
-                          backgroundColor: SonrTheme.foregroundColor,
+                          backgroundColor: AppTheme.foregroundColor,
                           foregroundImage: MemoryImage(Uint8List.fromList(ContactService.contact.value.picture)),
                         )
                       : SonrIcons.Avatar.greyWith(size: 100),
@@ -37,13 +37,13 @@ class ProfileAvatarField extends GetView<PersonalController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(color: SonrTheme.foregroundColor, shape: BoxShape.circle, boxShadow: SonrTheme.boxShadow),
+                decoration: BoxDecoration(color: AppTheme.foregroundColor, shape: BoxShape.circle, boxShadow: AppTheme.boxShadow),
                 child: Container(
                     width: 100,
                     height: 100,
                     child: CircleAvatar(
                       child: SonrIcons.Avatar.greyWith(size: 80),
-                      backgroundColor: SonrTheme.foregroundColor,
+                      backgroundColor: AppTheme.foregroundColor,
                     ))),
           ),
         );

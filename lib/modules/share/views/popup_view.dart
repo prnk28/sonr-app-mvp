@@ -11,7 +11,7 @@ class SharePopupView extends GetView<ShareController> {
         extendBodyBehindAppBar: false,
         extendBody: true,
         resizeToAvoidBottomInset: false,
-        backgroundColor: SonrTheme.backgroundColor,
+        backgroundColor: AppTheme.backgroundColor,
         appBar: DetailAppBar(
           title: "Share",
           onPressed: () => controller.close(),
@@ -33,7 +33,7 @@ class SharePopupView extends GetView<ShareController> {
               pinned: true,
               floating: true,
               automaticallyImplyLeading: false,
-              backgroundColor: SonrTheme.backgroundColor,
+              backgroundColor: AppTheme.backgroundColor,
               forceElevated: false,
             ),
             SliverPadding(padding: EdgeInsets.only(top: 24)),

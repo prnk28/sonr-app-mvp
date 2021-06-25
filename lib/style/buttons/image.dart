@@ -70,7 +70,7 @@ class ImageButton extends StatelessWidget {
                           width: circleSize,
                           height: circleSize,
                           decoration: BoxDecoration(
-                            color: SonrTheme.foregroundColor,
+                            color: AppTheme.foregroundColor,
                             shape: BoxShape.circle,
                           ),
                           padding: EdgeInsets.all(24),

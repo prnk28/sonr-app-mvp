@@ -17,7 +17,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
 
   // Properties
-
   final _lifecycle = AppLifecycleState.resumed.obs;
   final _status = Rx<Status>(Status.DEFAULT);
 
@@ -74,11 +73,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     return await to._instance.sign(request);
   }
 
-  /// @ Store Property in Memory Store
-  static Future<StoreResponse> store(StoreRequest request) async {
-    return await to._instance.store(request);
-  }
-
   /// @ Verify Provided Data with Private Key
   static Future<VerifyResponse> verify(VerifyRequest request) async {
     return await to._instance.verify(request);
@@ -122,9 +116,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     if (result != _lastConnectivity) {
       if (_lastConnectivity != ConnectivityResult.none) {
         _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
-      }else{
-        
-      }
+      } else {}
     }
   }
 

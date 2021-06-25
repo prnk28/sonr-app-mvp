@@ -72,9 +72,7 @@ class _PeerAvatar extends StatelessWidget {
                   height: 96,
                   width: 96,
                   child: Obx(
-                    () => Rive(
-                      artboard: controller.board.value!,
-                    ),
+                    () => Rive(artboard: controller.board.value),
                   )),
             ),
           ),
@@ -117,7 +115,7 @@ class _PeerMainCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.MoreVertical.icon(color: SonrTheme.greyColor, size: 24),
+                  child: SonrIcons.MoreVertical.icon(color: AppTheme.greyColor, size: 24),
                 ),
               )),
 
@@ -134,14 +132,14 @@ class _PeerMainCard extends StatelessWidget {
 
   Widget _buildName() {
     if (peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
-      return "${peer.value.profile.firstName}".subheading(color: SonrTheme.itemColor);
+      return "${peer.value.profile.firstName}".subheading(color: AppTheme.itemColor);
     } else {
-      return "${peer.value.profile.firstName}".subheading(color: SonrTheme.itemColor);
+      return "${peer.value.profile.firstName}".subheading(color: AppTheme.itemColor);
     }
   }
 
   Widget _buildModel() {
-    return "${peer.value.platform}".paragraph(color: SonrTheme.greyColor);
+    return "${peer.value.platform}".paragraph(color: AppTheme.greyColor);
   }
 }
 

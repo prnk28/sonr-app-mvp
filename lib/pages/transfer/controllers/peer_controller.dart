@@ -10,7 +10,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final Future<RiveFile> riveFile;
 
   // Reactive Elements
-  final board = Rx<Artboard?>(null);
+  final board = Rx<Artboard>(Artboard());
   final counter = 0.0.obs;
   final isReady = false.obs;
 

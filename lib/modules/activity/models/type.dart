@@ -7,30 +7,30 @@ extension TransferActivityUtils on TransferActivity {
       case ActivityType.Deleted:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(color: SonrTheme.itemColor),
+          " You ".paragraph(color: AppTheme.itemColor),
           this.activity.value.paragraph(color: SonrColor.Critical),
-          _description().paragraph(color: SonrTheme.itemColor)
+          _description().paragraph(color: AppTheme.itemColor)
         ].row();
       case ActivityType.Shared:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(color: SonrTheme.itemColor),
+          " You ".paragraph(color: AppTheme.itemColor),
           this.activity.value.light(color: SonrColor.Primary),
-          _description().paragraph(color: SonrTheme.itemColor)
+          _description().paragraph(color: AppTheme.itemColor)
         ].row();
       case ActivityType.Received:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(color: SonrTheme.itemColor),
+          " You ".paragraph(color: AppTheme.itemColor),
           this.activity.value.paragraph(color: SonrColor.Secondary),
-          _description().paragraph(color: SonrTheme.itemColor)
+          _description().paragraph(color: AppTheme.itemColor)
         ].row();
       default:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
-          " You ".paragraph(color: SonrTheme.itemColor),
+          " You ".paragraph(color: AppTheme.itemColor),
           this.activity.value.paragraph(color: SonrColor.Grey),
-          _description().paragraph(color: SonrTheme.itemColor)
+          _description().paragraph(color: AppTheme.itemColor)
         ].row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }
   }

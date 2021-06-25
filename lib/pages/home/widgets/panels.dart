@@ -116,7 +116,7 @@ class NearbyListView extends GetView<HomeController> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 8),
-              child: "Nearby Devices".subheading(align: TextAlign.start, color: SonrTheme.itemColor),
+              child: "Nearby Devices".subheading(align: TextAlign.start, color: AppTheme.itemColor),
             ),
           ),
           Padding(

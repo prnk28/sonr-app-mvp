@@ -62,21 +62,21 @@ class ConfirmButton extends StatelessWidget {
     BoxDecoration defaultDecoration = BoxDecoration(
       gradient: SonrGradient.Neutral,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: SonrTheme.boxShadow,
+      boxShadow: AppTheme.boxShadow,
     );
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
       gradient: SonrGradient.Primary,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: SonrTheme.boxShadow,
+      boxShadow: AppTheme.boxShadow,
     );
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
       gradient: SonrGradient.Tertiary,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: SonrTheme.boxShadow,
+      boxShadow: AppTheme.boxShadow,
     );
 
     // Build Child
@@ -124,21 +124,21 @@ class ConfirmButton extends StatelessWidget {
     BoxDecoration defaultDecoration = BoxDecoration(
       gradient: SonrGradient.Neutral,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: SonrTheme.boxShadow,
+      boxShadow: AppTheme.boxShadow,
     );
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
       gradient: SonrGradient.Primary,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: SonrTheme.boxShadow,
+      boxShadow: AppTheme.boxShadow,
     );
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
       gradient: SonrGradient.Critical,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: SonrTheme.boxShadow,
+      boxShadow: AppTheme.boxShadow,
     );
 
     // Build Child

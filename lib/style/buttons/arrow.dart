@@ -88,10 +88,10 @@ class ArrowButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      title.toUpperCase().light(fontSize: 20, color: SonrTheme.itemColor),
+                      title.toUpperCase().light(fontSize: 20, color: AppTheme.itemColor),
                       Padding(
                         padding: const EdgeInsets.only(top: 6.0, left: 4),
-                        child: SonrIcons.Down.icon(size: 16, color: SonrTheme.itemColor),
+                        child: SonrIcons.Down.icon(size: 16, color: AppTheme.itemColor),
                       ),
                     ],
                   ),
@@ -132,8 +132,8 @@ class InfoButton extends StatelessWidget {
                 child: Container(
                   height: 40,
                   width: 40,
-                  decoration: BoxDecoration(color: SonrTheme.foregroundColor, borderRadius: BorderRadius.circular(12)),
-                  child: SonrIcons.Menu.icon(size: 28, color: SonrTheme.greyColor),
+                  decoration: BoxDecoration(color: AppTheme.foregroundColor, borderRadius: BorderRadius.circular(12)),
+                  child: SonrIcons.Menu.icon(size: 28, color: AppTheme.greyColor),
                 ),
               ),
             ),

@@ -172,7 +172,7 @@ class Margin {
 }
 
 /// Class Handles Theme Data and General Dark Mode Features
-class SonrTheme {
+class AppTheme {
   /// Method sets [DarkMode] for Device and Updates [ThemeData]
   static void setDarkMode({required bool isDark}) {
     // Dark Mode

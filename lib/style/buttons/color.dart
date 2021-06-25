@@ -48,7 +48,7 @@ class ColorButton extends StatelessWidget {
         decoration: BoxDecoration(
             gradient: SonrGradient.Theme(radius: 2),
             borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-            boxShadow: SonrTheme.boxShadow),
+            boxShadow: AppTheme.boxShadow),
         onPressed: onPressed,
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
@@ -94,6 +94,7 @@ class ColorButton extends StatelessWidget {
     Function? onLongPressed,
     EdgeInsets? padding,
     Color? textColor,
+    Color? borderColor,
     EdgeInsets? margin,
     double? width,
     required String text,
@@ -104,7 +105,7 @@ class ColorButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-            border: Border.all(width: 2, color: Color(0xffE7E7E7))),
+            border: Border.all(width: 2, color: borderColor ?? Color(0xffE7E7E7))),
         onPressed: onPressed,
         width: width,
         child: ButtonUtility.buildNeutralText(text, textColor),

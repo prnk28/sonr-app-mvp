@@ -13,8 +13,8 @@ class ShareConfirmSheet extends GetView<ShareController> {
             width: Get.width,
             height: 160,
             decoration: BoxDecoration(
-                boxShadow: SonrTheme.boxShadow,
-                color: SonrTheme.foregroundColor,
+                boxShadow: AppTheme.boxShadow,
+                color: AppTheme.foregroundColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(37),
                   topRight: Radius.circular(37),

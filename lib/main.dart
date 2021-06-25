@@ -31,8 +31,8 @@ class SplashPage extends StatelessWidget {
     return GetMaterialApp(
       onInit: () => _checkInitialPage(),
       themeMode: ThemeMode.system,
-      theme: SonrTheme.LightTheme,
-      darkTheme: SonrTheme.DarkTheme,
+      theme: AppTheme.LightTheme,
+      darkTheme: AppTheme.DarkTheme,
       getPages: [
         AppPage.Home.config(),
         AppPage.Register.config(),

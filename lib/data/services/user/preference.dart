@@ -25,7 +25,7 @@ class Preferences extends GetxService {
       enabledPointShare: _hasPointToShare.val,
     ));
     // Set Theme
-    SonrTheme.setDarkMode(isDark: _isDarkMode.val);
+    AppTheme.setDarkMode(isDark: _isDarkMode.val);
     return this;
   }
 
@@ -42,7 +42,7 @@ class Preferences extends GetxService {
   }
 
   /// @ Trigger iOS Local Network with Alert
-  static toggleDarkMode() => SonrTheme.setDarkMode(isDark: to._isDarkMode.val = !to._isDarkMode.val);
+  static toggleDarkMode() => AppTheme.setDarkMode(isDark: to._isDarkMode.val = !to._isDarkMode.val);
 
   /// @ Trigger iOS Local Network with Alert
   static toggleFlatMode() => to._hasFlatMode.val = !to._hasFlatMode.val;

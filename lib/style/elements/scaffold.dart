@@ -27,7 +27,7 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SonrTheme.backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       extendBodyBehindAppBar: extendBodyBehindAppBar ?? true,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       floatingActionButtonLocation: _FixedCenterDockedFabLocation(),

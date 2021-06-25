@@ -21,13 +21,13 @@ class ChecklistOption {
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          SonrIcons.CheckboxActive.icon(color: SonrTheme.itemColor, size: 24),
-          SonrIcons.Check.icon(color: SonrTheme.itemColorInversed, size: 24)
+          SonrIcons.CheckboxActive.icon(color: AppTheme.itemColor, size: 24),
+          SonrIcons.Check.icon(color: AppTheme.itemColorInversed, size: 24)
         ],
       );
     } else {
       return SonrIcons.CheckboxInactive.icon(
-        color: SonrTheme.itemColor,
+        color: AppTheme.itemColor,
         size: 24,
       );
     }
@@ -37,7 +37,7 @@ class ChecklistOption {
   Widget text() {
     return AnimatedScale(
       scale: isEnabled.value ? 1.05 : 1.0,
-      child: title.light(color: SonrTheme.itemColor, fontSize: 24),
+      child: title.light(color: AppTheme.itemColor, fontSize: 24),
     );
   }
 }
@@ -57,9 +57,9 @@ class Checklist extends StatelessWidget {
         (currentIdx) => Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: SonrTheme.backgroundColor,
+                color: AppTheme.backgroundColor,
                 border: Border.all(
-                  color: SonrTheme.foregroundColor,
+                  color: AppTheme.foregroundColor,
                   width: 1.5,
                 )),
             constraints: options.boxConstraints,
@@ -84,7 +84,7 @@ class Checklist extends StatelessWidget {
                             ]),
                             index + 1 != options.length
                                 ? Divider(
-                                    color: SonrTheme.greyColor.withOpacity(0.25),
+                                    color: AppTheme.greyColor.withOpacity(0.25),
                                     endIndent: 8,
                                     indent: 8,
                                   )

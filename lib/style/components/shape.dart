@@ -48,10 +48,10 @@ class BoxContainer extends StatelessWidget {
       clipBehavior: clipBehavior,
       child: child,
       decoration: BoxDecoration(
-        border: Border.all(color: SonrTheme.backgroundColor, width: 1),
-        color: SonrTheme.foregroundColor,
+        border: Get.isDarkMode ? null : Border.all(color: AppTheme.backgroundColor, width: 1),
+        color: AppTheme.foregroundColor,
         borderRadius: BorderRadius.circular(radius),
-        boxShadow: SonrTheme.boxShadow,
+        boxShadow: AppTheme.boxShadow,
       ),
     );
   }
@@ -102,10 +102,10 @@ class CircleContainer extends StatelessWidget {
       clipBehavior: clipBehavior,
       child: child,
       decoration: BoxDecoration(
-        border: Border.all(color: SonrTheme.foregroundColor, width: 1),
+        border: Get.isDarkMode ? null : Border.all(color: AppTheme.foregroundColor, width: 1),
         color: Preferences.isDarkMode ? SonrColor.Black : SonrColor.White,
         shape: BoxShape.circle,
-        boxShadow: SonrTheme.circleBoxShadow,
+        boxShadow: AppTheme.circleBoxShadow,
       ),
     );
   }
@@ -160,13 +160,13 @@ class PolyContainer extends StatelessWidget {
     return ClipPolygon(
       borderRadius: radius,
       rotate: rotate,
-      boxShadows: SonrTheme.polyBoxShadow,
+      boxShadows: AppTheme.polyBoxShadow,
       sides: sides,
       child: Container(
         decoration: BoxDecoration(
           gradient: gradient ?? SonrGradient.Theme(),
-          boxShadow: SonrTheme.boxShadow,
-          border: Border.all(color: SonrTheme.foregroundColor, width: 1),
+          boxShadow: AppTheme.boxShadow,
+          border: Get.isDarkMode ? null : Border.all(color: AppTheme.foregroundColor, width: 1),
         ),
         key: key,
         width: width,

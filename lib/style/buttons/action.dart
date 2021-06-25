@@ -19,9 +19,11 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (label != null) {
-      return Container(
-        constraints: BoxConstraints(maxHeight: 62, maxWidth: 40),
+      return SizedBox(
+        width: 40,
+        height: 65,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -69,37 +71,39 @@ class _ActionIconButton extends StatelessWidget {
   const _ActionIconButton(this.onPressed, this.iconData, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ObxValue<RxBool>(
-        (isPressed) => GestureDetector(
-              onTapDown: (details) => isPressed(true),
-              onTapCancel: () => isPressed(false),
-              onTapUp: (details) async {
-                isPressed(false);
-                await HapticFeedback.mediumImpact();
-                Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
-                  onPressed();
-                });
-              },
-              child: AnimatedScale(
-                scale: isPressed.value ? 1.2 : 1.0,
-                child: Container(
-                  constraints: BoxConstraints.tight(Size(40, 40)),
-                  width: 40,
-                  height: 40,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Preferences.isDarkMode ? SonrTheme.foregroundColor : Color(0xffEAEAEA),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Icon(
-                    iconData,
-                    color: SonrTheme.itemColor,
-                    size: 24,
+    return Container(
+      child: ObxValue<RxBool>(
+          (isPressed) => GestureDetector(
+                onTapDown: (details) => isPressed(true),
+                onTapCancel: () => isPressed(false),
+                onTapUp: (details) async {
+                  isPressed(false);
+                  await HapticFeedback.mediumImpact();
+                  Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                    onPressed();
+                  });
+                },
+                child: AnimatedScale(
+                  scale: isPressed.value ? 1.2 : 1.0,
+                  child: Container(
+                    constraints: BoxConstraints.tight(Size(40, 40)),
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Preferences.isDarkMode ? AppTheme.foregroundColor : Color(0xffEAEAEA),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(
+                      iconData,
+                      color: AppTheme.itemColor,
+                      size: 24,
+                    ),
                   ),
                 ),
               ),
-            ),
-        false.obs);
+          false.obs),
+    );
   }
 }
 
