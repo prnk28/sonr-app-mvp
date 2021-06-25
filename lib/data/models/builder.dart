@@ -15,7 +15,7 @@ class RequestBuilder {
         contact: contact,
         type: internetType,
         textileOptions: ConnectionRequest_TextileOptions(
-          enabled: true,
+          enabled: false,
           threads: true,
           mailbox: true,
         ));
