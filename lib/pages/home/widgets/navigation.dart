@@ -41,8 +41,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
       child: Container(
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Dashboard),
-          iconData: SonrIcons.Show,
-          onPressed: () => AppPage.Activity.to(),
+          iconData: SonrIcons.Help,
+          onPressed: () async => await HelpService.openIntercom(),
         ),
       ),
     );

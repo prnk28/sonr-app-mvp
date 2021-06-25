@@ -75,7 +75,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  Widget _buildLeading() {
+  Widget? _buildLeading() {
     if (leading != null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +85,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       );
     } else {
-      return Container(width: 32, height: 32);
+      return null;
     }
   }
 }
