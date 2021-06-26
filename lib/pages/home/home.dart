@@ -97,11 +97,15 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
     return Padding(
       padding: const EdgeInsets.only(bottom: 32.0, left: 8),
       child: Container(
-        child: ActionButton(
-          pulse: !Logger.hasOpenedIntercom,
-          key: ValueKey<HomeView>(HomeView.Dashboard),
-          iconData: SonrIcons.Help,
-          onPressed: () async => await Logger.openIntercom(),
+        child: Pulse(
+          animate: !Logger.hasOpenedIntercom,
+          duration: 6.seconds,
+          child: Obx(() => ActionButton(
+                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                key: ValueKey<HomeView>(HomeView.Dashboard),
+                iconData: SonrIcons.Help,
+                onPressed: () async => await Logger.openIntercom(),
+              )),
         ),
       ),
     );

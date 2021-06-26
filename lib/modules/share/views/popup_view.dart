@@ -20,7 +20,7 @@ class SharePopupView extends GetView<ShareController> {
               child: ActionButton(
                 onPressed: () => controller.confirmMediaSelection(),
                 iconData: SonrIcons.Share,
-                banner: ActionBanner.selected(controller.selectedItems.length),
+                banner: ActionBanner.count(controller.selectedItems.length),
               )),
         ),
         body: Stack(children: [
