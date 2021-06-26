@@ -32,9 +32,13 @@ class ContactService extends GetxService {
     // Check if Exists
     if (_status.value.hasUser) {
       try {
-        // Get ContactJSOn
+        // Get Contact JSON
         var profileJson = _userBox.read("contact");
         var contact = Contact.fromJson(profileJson);
+
+        // Capitalize First and Last Name
+        contact.profile.firstName.capitalizeFirst;
+        contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
         Logger.initProfile(contact.profile);

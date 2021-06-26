@@ -14,10 +14,11 @@ class RequestBuilder {
         location: await DeviceService.location,
         contact: contact,
         type: internetType,
+        status: ContactService.status.value.toConnectionStatus(),
         textileOptions: ConnectionRequest_TextileOptions(
           enabled: true,
           threads: true,
-          mailbox: true,
+          // mailbox: true,
         ),
         hostOptions: ConnectionRequest_HostOptions(
           mdnsDiscovery: true,

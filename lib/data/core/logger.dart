@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intercom_flutter/intercom_flutter.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
@@ -11,6 +12,8 @@ class Logger extends GetxService {
   // Service Accessors
   static bool get isRegistered => Get.isRegistered<Logger>();
   static Logger get to => Get.find<Logger>();
+  static bool get hasOpenedIntercom => to._hasOpenedIntercom.val;
+  static RxInt get unreadIntercomCount => to._unreadIntercomCount;
 
   // References
   static FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -18,6 +21,8 @@ class Logger extends GetxService {
 
   // Properties
   final _hasIntercom = false.obs;
+  final _unreadIntercomCount = 0.obs;
+  final _hasOpenedIntercom = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
 
   // References
   static final BuildMode buildMode = BuildModeUtil.current();
@@ -32,9 +37,20 @@ class Logger extends GetxService {
     ),
   );
 
+  Logger() {
+    Timer.periodic(2.minutes, (timer) async {
+      if (_hasIntercom.value) {
+        _unreadIntercomCount(await Intercom.unreadConversationCount());
+      }
+    });
+  }
+
   // * Initializes Logger * //
   Future<Logger> init() async {
     if (DeviceService.isMobile) {
+      // Open Configuration Box
+      await GetStorage.init('Configuration');
+
       // Configure Firebase Scope
       FirebaseAnalytics().setUserId(DeviceService.device.id);
       FirebaseAnalytics().setUserProperty(name: "platform", value: DeviceService.device.platform.toString());
@@ -125,6 +141,9 @@ class Logger extends GetxService {
   /// @ Opens Intercom Messenger
   static Future<void> openIntercom() async {
     if (isRegistered && to._hasIntercom.value && DeviceService.isMobile) {
+      if (!to._hasOpenedIntercom.val) {
+        to._hasOpenedIntercom.val = true;
+      }
       await Intercom.displayMessenger();
     }
   }

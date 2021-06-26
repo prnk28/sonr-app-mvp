@@ -2,7 +2,7 @@ import 'package:sonr_app/style/style.dart';
 
 import 'utility.dart';
 
-class ActionButton extends StatelessWidget {
+class ActionButton extends StatefulWidget {
   /// Function called on Tap Up
   final Function onPressed;
 
@@ -15,10 +15,34 @@ class ActionButton extends StatelessWidget {
   /// Integer for Banner Label
   final ActionBanner? banner;
 
-  const ActionButton({Key? key, required this.onPressed, required this.iconData, this.label, this.banner}) : super(key: key);
+  /// Pulse the Action Button
+  final bool pulse;
+
+  const ActionButton({Key? key, required this.onPressed, required this.iconData, this.label, this.banner, this.pulse = false}) : super(key: key);
+
+  @override
+  _ActionButtonState createState() => _ActionButtonState();
+}
+
+class _ActionButtonState extends State<ActionButton> {
+  bool oldIsPulsing = false;
+
+  @override
+  void didUpdateWidget(ActionButton oldWidget) {
+    if (oldWidget.pulse != widget.pulse) {
+      oldIsPulsing = oldWidget.pulse;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (label != null) {
+    if (widget.label != null) {
       return SizedBox(
         width: 40,
         height: 65,
@@ -27,38 +51,50 @@ class ActionButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _ActionIconButton(onPressed, iconData),
-            label!.light(color: Get.theme.hintColor, fontSize: 16),
+            Pulse(
+              infinite: true,
+              animate: widget.pulse,
+              child: _ActionIconButton(widget.onPressed, widget.iconData),
+            ),
+            widget.label!.light(color: Get.theme.hintColor, fontSize: 16),
           ],
         ),
       );
     }
 
-    if (banner != null) {
-      return Container(
-        constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            _ActionIconButton(onPressed, iconData),
-            Positioned.directional(
-              start: banner!.start,
-              top: banner!.top,
-              textDirection: banner!.textDirection,
-              child: Container(
-                width: banner!.width,
-                height: banner!.height,
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(bottom: 28),
-                decoration: banner!.decoration(),
-                child: banner!.text(),
+    if (widget.banner != null) {
+      return Pulse(
+        infinite: true,
+        animate: widget.pulse,
+        child: Container(
+          constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              _ActionIconButton(widget.onPressed, widget.iconData),
+              Positioned.directional(
+                start: widget.banner!.start,
+                top: widget.banner!.top,
+                textDirection: widget.banner!.textDirection,
+                child: Container(
+                  width: widget.banner!.width,
+                  height: widget.banner!.height,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(bottom: 28),
+                  decoration: widget.banner!.decoration(),
+                  child: widget.banner!.text(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
-    return _ActionIconButton(onPressed, iconData);
+    return Pulse(
+      infinite: true,
+      animate: widget.pulse,
+      child: _ActionIconButton(widget.onPressed, widget.iconData),
+    );
   }
 }
 
