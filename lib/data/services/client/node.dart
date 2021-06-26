@@ -86,14 +86,14 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// @ Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
-      to._instance.update(Request.newUpdatePosition(position));
+      to._instance.update(API.newUpdatePosition(position));
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
-      to._instance.update(Request.newUpdateContact(contact));
+      to._instance.update(API.newUpdateContact(contact));
     }
   }
 
@@ -120,7 +120,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleDeviceConnection(ConnectivityResult result) {
     if (result != _lastConnectivity) {
       if (_lastConnectivity != ConnectivityResult.none) {
-        _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
+        _instance.update(API.newUpdateConnectivity(result.toInternetType()));
       } else {}
     }
   }
@@ -132,7 +132,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
       DeviceService.playSound(type: Sounds.Connected);
 
       // Handle Available
-      instance.update(Request.newUpdatePosition(DeviceService.position.value));
+      instance.update(API.newUpdatePosition(DeviceService.position.value));
     }
 
     // Update Status

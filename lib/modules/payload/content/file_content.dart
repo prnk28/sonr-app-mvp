@@ -61,7 +61,7 @@ class FileAuthView extends StatelessWidget {
 
 /// @ Post Content for File
 class FileContent extends StatelessWidget {
-  final SonrFile file;
+  final SFile file;
   final double iconSize;
   final double width;
   final double height;
@@ -122,7 +122,7 @@ class FileContent extends StatelessWidget {
 ///  Builds Container With Image as SizedBox
 class FileAlbumBox extends StatelessWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile file;
+  final SFile file;
   final double width;
   final double height;
   final BoxFit fit;
@@ -202,7 +202,7 @@ class FileAlbumBox extends StatelessWidget {
 /// Builds Icon View from Metadata
 class FileItemIconBox extends StatelessWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile_Item fileItem;
+  final SFile_Item fileItem;
   final double iconSize;
   final double width;
   final double height;
@@ -224,7 +224,7 @@ class FileItemIconBox extends StatelessWidget {
 ///  Builds Container With Image as SizedBox
 class FileItemImageBox extends StatefulWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile_Item fileItem;
+  final SFile_Item fileItem;
   final double width;
   final double height;
   final BoxFit fit;
@@ -272,7 +272,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
 /// Builds Metadata Video Player
 class FileItemVideoBox extends StatefulWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile_Item fileItem;
+  final SFile_Item fileItem;
   final double? width;
   final double? height;
   final bool autoplay;
@@ -338,7 +338,7 @@ class _FileItemVideoBoxState extends State<FileItemVideoBox> {
 
 class FilePayloadText extends StatelessWidget {
   final Payload payload;
-  final SonrFile? file;
+  final SFile? file;
   final Color? color;
   final double fontSize;
   final FontStyle fontStyle;

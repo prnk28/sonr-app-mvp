@@ -108,7 +108,7 @@ class SplashPage extends StatelessWidget {
         await ContactService.newContact(Contact(
             profile: Profile(
           firstName: "Anonymous",
-          lastName: DeviceService.platform.toString(),
+          lastName: DeviceService.device.platform.toString(),
         )));
 
         // Connect to Network

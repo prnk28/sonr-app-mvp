@@ -27,7 +27,7 @@ class DeviceService extends GetxService {
   static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
-  static Platform get platform => to._device.value.platform;
+ // static Platform get platform => to._device.value.platform;
   static RxPosition get position => to._position;
 
   // Properties
@@ -54,29 +54,16 @@ class DeviceService extends GetxService {
   // ^ Constructer ^ //
   Future<DeviceService> init() async {
     // Set Properties
-    var platform = PlatformUtils.find();
-    var directories = await Request.getDirectories(platform);
-    _connectivity.bindStream(Connectivity().onConnectivityChanged);
+    final device = await API.newDevice(
+      id: PlatformUtils.find().isMobile ? await PlatformDeviceId.getDeviceId : null,
+    );
 
     // Initialize Device
-    _device.update((val) async {
-      if (val != null) {
-        // Set Platform
-        val.platform = platform;
-        val.fileSystem = directories;
-
-        // Set ID
-        if (platform.isDesktop) {
-          var deviceId = await PlatformDeviceId.getDeviceId;
-          if (deviceId != null) {
-            val.id = deviceId;
-          }
-        }
-      }
-    });
+    _connectivity.bindStream(Connectivity().onConnectivityChanged);
+    _device(device);
 
     // @ Setup Mobile
-    if (platform.isMobile) {
+    if (device.platform.isMobile) {
       // @ Bind Sensors for Mobile
       // Audio Player
       await _audioPlayer.loadAll(List<String>.generate(Sounds.values.length, (index) => Sounds.values[index].file));
@@ -87,7 +74,7 @@ class DeviceService extends GetxService {
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",
-        iconPath: await _getIconPath(platform),
+        iconPath: await _getIconPath(device.platform),
       );
 
       // @ 2. Init SystemTray

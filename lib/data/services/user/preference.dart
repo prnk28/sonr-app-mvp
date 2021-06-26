@@ -35,7 +35,7 @@ class Preferences extends GetxService {
       if (to._properties.value.isFlatMode != isFlatMode) {
         to._properties(Peer_Properties(enabledPointShare: Preferences.pointShareEnabled, isFlatMode: isFlatMode));
         NodeService.instance.update(
-          Request.newUpdateProperties(to._properties.value),
+          API.newUpdateProperties(to._properties.value),
         );
       }
     }

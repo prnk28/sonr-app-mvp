@@ -2,7 +2,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 
 class PayloadItemInfo extends StatelessWidget {
-  final SonrFile_Item item;
+  final SFile_Item item;
   const PayloadItemInfo({Key? key, required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class PayloadListItemHeader extends GetView<ItemController> {
 class PayloadListItem extends GetView<ItemController> {
   final GlobalKey key;
   final bool isSingle;
-  final SonrFile_Item? fileItem;
+  final SFile_Item? fileItem;
   final int? index;
   const PayloadListItem({required this.key, required this.isSingle, this.fileItem, this.index});
 
@@ -63,7 +63,7 @@ class PayloadListItem extends GetView<ItemController> {
     return PayloadListItem(key: key, isSingle: true);
   }
 
-  factory PayloadListItem.multi({required GlobalKey key, required SonrFile_Item item, required int index}) {
+  factory PayloadListItem.multi({required GlobalKey key, required SFile_Item item, required int index}) {
     return PayloadListItem(
       isSingle: false,
       key: key,
@@ -110,12 +110,12 @@ class PayloadListItem extends GetView<ItemController> {
 
 class _PayloadListItemTitle extends StatelessWidget {
   final InviteRequest? invite;
-  final SonrFile_Item? item;
+  final SFile_Item? item;
   final bool isSingle;
 
   factory _PayloadListItemTitle.single(InviteRequest invite) => _PayloadListItemTitle(isSingle: true, invite: invite);
 
-  factory _PayloadListItemTitle.multi(SonrFile_Item item) => _PayloadListItemTitle(isSingle: false, item: item);
+  factory _PayloadListItemTitle.multi(SFile_Item item) => _PayloadListItemTitle(isSingle: false, item: item);
 
   const _PayloadListItemTitle({Key? key, this.invite, this.item, required this.isSingle}) : super(key: key);
   @override
@@ -235,7 +235,7 @@ class PostItem extends StatelessWidget {
 
 /// @ Item Controller to Manage Payload
 class ItemController extends GetxController {
-  late final SonrFile_Item item;
+  late final SFile_Item item;
   late final int index;
 
   void replace() {

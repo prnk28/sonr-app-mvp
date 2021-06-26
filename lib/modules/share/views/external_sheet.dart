@@ -13,7 +13,7 @@ class ShareSheet extends StatelessWidget {
   final Widget child;
   final Size size;
   final Payload payload;
-  final SonrFile? mediaFile;
+  final SFile? mediaFile;
   final URLLink? url;
   const ShareSheet({
     Key? key,
@@ -35,7 +35,7 @@ class ShareSheet extends StatelessWidget {
       child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
       size: window,
       payload: Payload.MEDIA,
-      mediaFile: sharedFiles.toSonrFile(),
+      mediaFile: sharedFiles.toSFile(),
     );
   }
 

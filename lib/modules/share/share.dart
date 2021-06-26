@@ -130,8 +130,8 @@ class ShareController extends GetxController {
   /// Confirms Selection for Media Items
   Future<void> confirmMediaSelection() async {
     if (hasSelected.value) {
-      var sonrFile = await selectedItems.toSonrFile();
-      var result = await SenderService.choose(ChooseOption.Media, file: sonrFile);
+      var SFile = await selectedItems.toSFile();
+      var result = await SenderService.choose(ChooseOption.Media, file: SFile);
       _handleConfirmation(result);
     } else {
       AppRoute.snack(SnackArgs.missing("No Files Selected"));

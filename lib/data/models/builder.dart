@@ -38,17 +38,17 @@ class RequestBuilder {
 
   /// Returns New Contact Update Request
   static UpdateRequest get updateContact {
-    return Request.newUpdateContact(contact);
+    return API.newUpdateContact(contact);
   }
 
   /// Returns New Position Update Request
   static UpdateRequest get updatePosition {
-    return Request.newUpdatePosition(DeviceService.position.value);
+    return API.newUpdatePosition(DeviceService.position.value);
   }
 
   /// Returns New Properties Update Request
   static UpdateRequest get updateProperties {
-    return Request.newUpdateProperties(Preferences.properties.value);
+    return API.newUpdateProperties(Preferences.properties.value);
   }
 }
 
@@ -65,7 +65,7 @@ extension TransferFileUtils on Transfer {
   }
 
   /// ### Saves Transfer to Disk
-  /// Given payload contains SonrFile, all items get stored to disk.
+  /// Given payload contains SFile, all items get stored to disk.
   Future<bool> save() async {
     if (DeviceService.isMobile) {
       // Set Count
@@ -100,7 +100,7 @@ extension TransferFileUtils on Transfer {
   }
 }
 
-extension SonrFileItemUtils on SonrFile_Item {
+extension SFileItemUtils on SFile_Item {
   /// ### Open Given File from Disk Path
   Future<void> open() async {
     await OpenFile.open(this.path);

@@ -147,7 +147,7 @@ class CardService extends GetxService {
   static addActivity({
     required ActivityType type,
     required Payload payload,
-    SonrFile? file,
+    SFile? file,
   }) async {
     if (DeviceService.isMobile && isRegistered) {
       if (file != null && file.exists) {
@@ -230,7 +230,7 @@ class CardService extends GetxService {
   }
 
   /// @ Load IO File from Metadata
-  static Future<File> loadFileFromItem(SonrFile_Item item) async {
+  static Future<File> loadFileFromItem(SFile_Item item) async {
     if (DeviceService.isMobile && isRegistered) {
       var asset = await AssetEntity.fromId(item.id);
       if (asset != null) {
@@ -245,12 +245,12 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Load SonrFile from Metadata
-  static Future<SonrFile> loadSonrFileFromItem(SonrFile_Item item) async {
+  /// @ Load SFile from Metadata
+  static Future<SFile> loadSFileFromItem(SFile_Item item) async {
     if (DeviceService.isMobile && isRegistered) {
-      return item.toSonrFile();
+      return item.toSFile();
     } else {
-      return SonrFile();
+      return SFile();
     }
   }
 

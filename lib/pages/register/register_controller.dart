@@ -189,7 +189,7 @@ class RegisterController extends GetxController {
       var contact = Contact(
           profile: Profile(
         firstName: "Anonymous",
-        lastName: DeviceService.platform.toString(),
+        lastName: DeviceService.device.platform.toString(),
       ));
 
       // Create User
@@ -259,7 +259,7 @@ class RegisterController extends GetxController {
 
   /// #### Checks if Username matches device id and prefix from records
   static Future<bool> validateUser(String n, String mnemonic) async {
-    var request = Request.newVerifyText(original: mnemonic, signature: mnemonic);
+    var request = API.newVerifyText(original: mnemonic, signature: mnemonic);
     var response = await NodeService.verify(request);
     return response.isVerified;
   }
@@ -267,7 +267,7 @@ class RegisterController extends GetxController {
   // Helper Method to Generate Prefix
   static Future<AuthResponse> signUser(String username, String mnemonic) async {
     // Create New Prefix
-    var request = Request.newSignature(username, mnemonic);
+    var request = API.newSignature(username, mnemonic);
     var response = await NodeService.sign(request);
     Logger.info(response.toString());
 
