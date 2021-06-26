@@ -39,7 +39,7 @@ extension FilePickerResultUtils on FilePickerResult {
     var items = <SFile_Item>[];
     this.paths.forEach((p) {
       if (p != null) {
-        items.add(FileItemUtils.newItem(path: p));
+        items.add(SFileItemUtil.newItem(path: p));
       }
     });
     return items;
@@ -59,7 +59,7 @@ extension SharedMediaFileUtils on List<SharedMediaFile> {
   List<SFile_Item> _toSFileItems() {
     var items = <SFile_Item>[];
     this.forEach((f) {
-      items.add(FileItemUtils.newItem(
+      items.add(SFileItemUtil.newItem(
         path: f.path,
         duration: f.duration,
         thumbPath: f.thumbnail,
@@ -92,7 +92,7 @@ extension AssetEntityListUtils on List<Tuple<AssetEntity, Uint8List>> {
 
       // Add File Item
       if (file != null) {
-        items.add(FileItemUtils.newItem(path: file.path, thumbBuffer: thumb.toList()));
+        items.add(SFileItemUtil.newItem(path: file.path, thumbBuffer: thumb.toList()));
       }
     }
 

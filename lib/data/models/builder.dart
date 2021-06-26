@@ -100,7 +100,7 @@ extension TransferFileUtils on Transfer {
   }
 }
 
-extension SFileItemUtils on SFile_Item {
+extension SFileItemHandler on SFile_Item {
   /// ### Open Given File from Disk Path
   Future<void> open() async {
     await OpenFile.open(this.path);
