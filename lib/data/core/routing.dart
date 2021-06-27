@@ -6,6 +6,7 @@ import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/popup_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
@@ -125,6 +126,29 @@ extension AppRoute on AppPage {
         return "/transfer";
       default:
         return "/home";
+    }
+  }
+
+  /// Returns Onboarding Items for This Page
+  List<GlobalKey<State<StatefulWidget>>> get onboardingItems {
+    if (this == AppPage.Home) {
+      return [
+        Get.find<HomeController>().keyOne,
+        Get.find<HomeController>().keyTwo,
+        Get.find<HomeController>().keyThree,
+        Get.find<HomeController>().keyFour,
+        Get.find<HomeController>().keyFive,
+      ];
+    } else if (this == AppPage.Share) {
+      return [
+        Get.find<ShareController>().keyOne,
+        Get.find<ShareController>().keyTwo,
+        Get.find<ShareController>().keyThree,
+        Get.find<ShareController>().keyFour,
+        Get.find<ShareController>().keyFive,
+      ];
+    } else {
+      return [];
     }
   }
 
