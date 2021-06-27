@@ -63,6 +63,7 @@ profile:
 update:
 	cd $(PLUGIN_DIR) && cider bump patch
 	cd $(PLUGIN_DIR) && git add . && git commit -m "Updated Core Binary" && git push
+	cd $(PLUGIN_DIR) && hover publish-plugin
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && git submodule update --remote plugin
