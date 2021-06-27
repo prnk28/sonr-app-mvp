@@ -17,7 +17,7 @@ class AlbumHeader extends GetView<ShareController> {
               color: Get.theme.focusColor,
             ),
             Obx(() => ShowcaseItem.fromType(
-                  type: ShowcaseItemType.AlbumDropdown,
+                  type: ShowcaseType.AlbumDropdown,
                   child: ArrowButton.infoList(
                     offset: Offset(-100, -10),
                     title: controller.currentAlbum.value.name,

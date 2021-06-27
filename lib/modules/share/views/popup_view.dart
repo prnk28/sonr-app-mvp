@@ -13,13 +13,15 @@ class _SharePopupViewState extends State<SharePopupView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
-          Get.find<ShareController>().keyOne,
-          Get.find<ShareController>().keyTwo,
-          Get.find<ShareController>().keyThree,
-          Get.find<ShareController>().keyFour,
-          Get.find<ShareController>().keyFive,
-        ]));
+    if (Logger.userAppFirstTime) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+            Get.find<ShareController>().keyOne,
+            Get.find<ShareController>().keyTwo,
+            Get.find<ShareController>().keyThree,
+            Get.find<ShareController>().keyFour,
+            Get.find<ShareController>().keyFive,
+          ]));
+    }
   }
 
   @override
@@ -36,11 +38,11 @@ class _SharePopupViewState extends State<SharePopupView> {
           action: AnimatedScale(
               scale: controller.hasSelected.value ? 1.0 : 0.0,
               child: ShowcaseItem.fromType(
-                type: ShowcaseItemType.ShareConfirm,
+                type: ShowcaseType.ShareConfirm,
                 child: ActionButton(
                   onPressed: () => controller.confirmMediaSelection(),
                   iconData: SonrIcons.Share,
-                  banner: ActionBanner.count(controller.selectedItems.length),
+                  banner: Logger.userAppFirstTime ? null : ActionBanner.count(controller.selectedItems.length),
                 ),
               )),
         ),
@@ -96,11 +98,11 @@ class ShareOptionsRow extends StatelessWidget {
       width: Get.width,
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        ShowcaseItem.fromType(type: ShowcaseItemType.CameraPick, child: const _ShareCameraButtonItem()),
+        ShowcaseItem.fromType(type: ShowcaseType.CameraPick, child: const _ShareCameraButtonItem()),
         VerticalDivider(color: AppTheme.dividerColor),
-        ShowcaseItem.fromType(type: ShowcaseItemType.ContactPick, child: const _ShareContactButtonItem()),
+        ShowcaseItem.fromType(type: ShowcaseType.ContactPick, child: const _ShareContactButtonItem()),
         VerticalDivider(color: AppTheme.dividerColor),
-        ShowcaseItem.fromType(type: ShowcaseItemType.FilePick, child: const _ShareFileButtonItem()),
+        ShowcaseItem.fromType(type: ShowcaseType.FilePick, child: const _ShareFileButtonItem()),
       ]),
     );
   }

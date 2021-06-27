@@ -2,7 +2,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-enum ShowcaseItemType {
+enum ShowcaseType {
   Dashboard,
   Personal,
   Alerts,
@@ -15,29 +15,29 @@ enum ShowcaseItemType {
   AlbumDropdown,
 }
 
-extension ShowcaseItemTypeUtils on ShowcaseItemType {
+extension ShowcaseUtil on ShowcaseType {
   /// Return Title for ShowcaseItemType
   String get title {
     switch (this) {
-      case ShowcaseItemType.Dashboard:
+      case ShowcaseType.Dashboard:
         return 'Dashboard';
-      case ShowcaseItemType.Personal:
+      case ShowcaseType.Personal:
         return 'Personal';
-      case ShowcaseItemType.Alerts:
+      case ShowcaseType.Alerts:
         return 'Alerts';
-      case ShowcaseItemType.Help:
+      case ShowcaseType.Help:
         return 'Help';
-      case ShowcaseItemType.ShareStart:
+      case ShowcaseType.ShareStart:
         return 'Share';
-      case ShowcaseItemType.ShareConfirm:
+      case ShowcaseType.ShareConfirm:
         return 'Confirm';
-      case ShowcaseItemType.CameraPick:
+      case ShowcaseType.CameraPick:
         return 'Choose Camera';
-      case ShowcaseItemType.ContactPick:
+      case ShowcaseType.ContactPick:
         return 'Choose Contact';
-      case ShowcaseItemType.FilePick:
+      case ShowcaseType.FilePick:
         return 'Choose File';
-      case ShowcaseItemType.AlbumDropdown:
+      case ShowcaseType.AlbumDropdown:
         return 'Albums';
     }
   }
@@ -45,25 +45,25 @@ extension ShowcaseItemTypeUtils on ShowcaseItemType {
   /// Return Description for ShowcaseItemType
   String get description {
     switch (this) {
-      case ShowcaseItemType.Dashboard:
+      case ShowcaseType.Dashboard:
         return 'View all your received Transfers from this page.';
-      case ShowcaseItemType.Personal:
+      case ShowcaseType.Personal:
         return 'Edit and View your Personal Contact Card.';
-      case ShowcaseItemType.Alerts:
+      case ShowcaseType.Alerts:
         return 'See Active or Past Transfers here.';
-      case ShowcaseItemType.Help:
+      case ShowcaseType.Help:
         return 'Tap for Live Help with Intercom.';
-      case ShowcaseItemType.ShareStart:
+      case ShowcaseType.ShareStart:
         return 'Tap Here to begin Sharing.';
-      case ShowcaseItemType.ShareConfirm:
+      case ShowcaseType.ShareConfirm:
         return 'Tap to confirm your choosen files.';
-      case ShowcaseItemType.CameraPick:
+      case ShowcaseType.CameraPick:
         return 'Tap to capture an image or video.';
-      case ShowcaseItemType.ContactPick:
+      case ShowcaseType.ContactPick:
         return 'Tap to choose your contact card to share.';
-      case ShowcaseItemType.FilePick:
+      case ShowcaseType.FilePick:
         return 'Tap to open file picker to select file.';
-      case ShowcaseItemType.AlbumDropdown:
+      case ShowcaseType.AlbumDropdown:
         return 'Tap to change current album.';
     }
   }
@@ -71,25 +71,25 @@ extension ShowcaseItemTypeUtils on ShowcaseItemType {
   /// Return GlobalKey for ShowcaseItemType
   GlobalKey get globalKey {
     switch (this) {
-      case ShowcaseItemType.Dashboard:
+      case ShowcaseType.Dashboard:
         return Get.find<HomeController>().keyThree;
-      case ShowcaseItemType.Personal:
+      case ShowcaseType.Personal:
         return Get.find<HomeController>().keyFour;
-      case ShowcaseItemType.Alerts:
+      case ShowcaseType.Alerts:
         return Get.find<HomeController>().keyTwo;
-      case ShowcaseItemType.Help:
+      case ShowcaseType.Help:
         return Get.find<HomeController>().keyOne;
-      case ShowcaseItemType.ShareStart:
+      case ShowcaseType.ShareStart:
         return Get.find<HomeController>().keyFive;
-      case ShowcaseItemType.ShareConfirm:
+      case ShowcaseType.ShareConfirm:
         return Get.find<ShareController>().keyFive;
-      case ShowcaseItemType.CameraPick:
+      case ShowcaseType.CameraPick:
         return Get.find<ShareController>().keyOne;
-      case ShowcaseItemType.ContactPick:
+      case ShowcaseType.ContactPick:
         return Get.find<ShareController>().keyTwo;
-      case ShowcaseItemType.FilePick:
+      case ShowcaseType.FilePick:
         return Get.find<ShareController>().keyThree;
-      case ShowcaseItemType.AlbumDropdown:
+      case ShowcaseType.AlbumDropdown:
         return Get.find<ShareController>().keyFour;
     }
   }
@@ -110,7 +110,7 @@ class ShowcaseItem extends StatelessWidget {
   });
 
   /// Return Showcase Item from Type
-  factory ShowcaseItem.fromType({required ShowcaseItemType type, required Widget child}) {
+  factory ShowcaseItem.fromType({required ShowcaseType type, required Widget child}) {
     return ShowcaseItem(
       title: type.title,
       description: type.description,

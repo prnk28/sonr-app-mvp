@@ -18,13 +18,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
-          Get.find<HomeController>().keyOne,
-          Get.find<HomeController>().keyTwo,
-          Get.find<HomeController>().keyThree,
-          Get.find<HomeController>().keyFour,
-          Get.find<HomeController>().keyFive,
-        ]));
+    if (Logger.userAppFirstTime) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+            Get.find<HomeController>().keyOne,
+            Get.find<HomeController>().keyTwo,
+            Get.find<HomeController>().keyThree,
+            Get.find<HomeController>().keyFour,
+            Get.find<HomeController>().keyFive,
+          ]));
+    }
   }
 
   @override
@@ -109,7 +111,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                       padding: const EdgeInsets.only(bottom: 32.0, left: 8),
                       child: Container(
                         child: Obx(() => ShowcaseItem.fromType(
-                              type: ShowcaseItemType.Help,
+                              type: ShowcaseType.Help,
                               child: ActionButton(
                                 banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
                                 key: ValueKey<HomeView>(HomeView.Dashboard),
@@ -161,7 +163,7 @@ class HomeActionButton extends GetView<HomeController> {
       return Padding(
         padding: const EdgeInsets.only(bottom: 32.0, right: 8),
         child: ShowcaseItem.fromType(
-          type: ShowcaseItemType.Alerts,
+          type: ShowcaseType.Alerts,
           child: ActionButton(
             key: ValueKey<HomeView>(HomeView.Dashboard),
             iconData: SonrIcons.Alerts,
@@ -233,7 +235,7 @@ class HomeFloatingBar extends GetWidget<HomeController> {
                   animate: controller.view.value == HomeView.Dashboard,
                   key: ValueKey(controller.view.value == HomeView.Dashboard),
                   child: ShowcaseItem.fromType(
-                      type: ShowcaseItemType.Dashboard,
+                      type: ShowcaseType.Dashboard,
                       child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex)))),
               Container(
                 width: Get.width * 0.20,
@@ -243,14 +245,13 @@ class HomeFloatingBar extends GetWidget<HomeController> {
                     key: ValueKey(controller.view.value == HomeView.Contact),
                     animate: controller.view.value == HomeView.Contact,
                     child: ShowcaseItem.fromType(
-                        type: ShowcaseItemType.Personal,
-                        child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex)),
+                        type: ShowcaseType.Personal, child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex)),
                   )),
             ],
           ),
         ),
         ShowcaseItem.fromType(
-          type: ShowcaseItemType.ShareStart,
+          type: ShowcaseType.ShareStart,
           child: ShareButton(),
         ),
       ]),
