@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
@@ -16,6 +17,32 @@ enum ShowcaseType {
 }
 
 extension ShowcaseUtil on ShowcaseType {
+  /// Return which page this ShowcaseType resides
+  AppPage get appPage {
+    switch (this) {
+      case ShowcaseType.Dashboard:
+        return AppPage.Home;
+      case ShowcaseType.Personal:
+        return AppPage.Home;
+      case ShowcaseType.Alerts:
+        return AppPage.Home;
+      case ShowcaseType.Help:
+        return AppPage.Home;
+      case ShowcaseType.ShareStart:
+        return AppPage.Home;
+      case ShowcaseType.ShareConfirm:
+        return AppPage.Share;
+      case ShowcaseType.CameraPick:
+        return AppPage.Share;
+      case ShowcaseType.ContactPick:
+        return AppPage.Share;
+      case ShowcaseType.FilePick:
+        return AppPage.Share;
+      case ShowcaseType.AlbumDropdown:
+        return AppPage.Share;
+    }
+  }
+
   /// Return Title for ShowcaseItemType
   String get title {
     switch (this) {
@@ -68,6 +95,15 @@ extension ShowcaseUtil on ShowcaseType {
     }
   }
 
+  /// Return ShapeBorder for ShowcaseItemType
+  ShapeBorder get shapeBorder {
+    if (this.appPage == AppPage.Home) {
+      return CircleBorder();
+    } else {
+      return RoundedRectangleBorder(borderRadius: BorderRadius.circular(22));
+    }
+  }
+
   /// Return GlobalKey for ShowcaseItemType
   GlobalKey get globalKey {
     switch (this) {
@@ -101,12 +137,14 @@ class ShowcaseItem extends StatelessWidget {
   final String title;
   final String description;
   final GlobalKey globalKey;
+  final ShapeBorder shapeBorder;
 
   const ShowcaseItem({
     required this.title,
     required this.description,
     required this.child,
     required this.globalKey,
+    required this.shapeBorder,
   });
 
   /// Return Showcase Item from Type
@@ -116,6 +154,7 @@ class ShowcaseItem extends StatelessWidget {
       description: type.description,
       child: child,
       globalKey: type.globalKey,
+      shapeBorder: type.shapeBorder,
     );
   }
 
@@ -123,7 +162,7 @@ class ShowcaseItem extends StatelessWidget {
   Widget build(BuildContext context) => Showcase(
         key: globalKey,
         showcaseBackgroundColor: SonrColor.Primary,
-        shapeBorder: CircleBorder(),
+        shapeBorder: shapeBorder,
         contentPadding: EdgeInsets.all(8),
         showArrow: true,
         disableAnimation: false,

@@ -13,15 +13,15 @@ class _SharePopupViewState extends State<SharePopupView> {
   @override
   void initState() {
     super.initState();
-    if (Logger.userAppFirstTime) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
-            Get.find<ShareController>().keyOne,
-            Get.find<ShareController>().keyTwo,
-            Get.find<ShareController>().keyThree,
-            Get.find<ShareController>().keyFour,
-            Get.find<ShareController>().keyFive,
-          ]));
-    }
+    //if (Logger.userAppFirstTime) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+          Get.find<ShareController>().keyOne,
+          Get.find<ShareController>().keyTwo,
+          Get.find<ShareController>().keyThree,
+          Get.find<ShareController>().keyFour,
+          Get.find<ShareController>().keyFive,
+        ]));
+    //}
   }
 
   @override
@@ -36,7 +36,7 @@ class _SharePopupViewState extends State<SharePopupView> {
           title: "Share",
           onPressed: () => controller.close(),
           action: AnimatedScale(
-              scale: controller.hasSelected.value ? 1.0 : 0.0,
+              scale: _buildScale(controller.hasSelected.value),
               child: ShowcaseItem.fromType(
                 type: ShowcaseType.ShareConfirm,
                 child: ActionButton(
@@ -87,6 +87,18 @@ class _SharePopupViewState extends State<SharePopupView> {
           //   child: ShareConfirmSheet(),
           // )
         ])));
+  }
+
+  double _buildScale(bool hasSelected) {
+    if (Logger.userAppFirstTime) {
+      return 1.0;
+    } else {
+      if (hasSelected) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+    }
   }
 }
 
