@@ -13,15 +13,13 @@ class _SharePopupViewState extends State<SharePopupView> {
   void initState() {
     super.initState();
     if (AppPage.Share.needsOnboarding) {
-      Future.delayed(500.milliseconds, () {
-        WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
-              Get.find<ShareController>().keyOne,
-              Get.find<ShareController>().keyTwo,
-              Get.find<ShareController>().keyThree,
-              Get.find<ShareController>().keyFour,
-              Get.find<ShareController>().keyFive,
-            ]));
-      });
+      WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+            Get.find<ShareController>().keyOne,
+            Get.find<ShareController>().keyTwo,
+            Get.find<ShareController>().keyThree,
+            Get.find<ShareController>().keyFour,
+            Get.find<ShareController>().keyFive,
+          ]));
     }
   }
 
