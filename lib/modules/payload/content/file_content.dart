@@ -1,15 +1,67 @@
 import 'dart:io';
-
+import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:video_player/video_player.dart';
 
+/// @ File Invite Builds from Invite Protobuf
+class FileAuthView extends StatelessWidget {
+  final InviteRequest invite;
+  FileAuthView(this.invite);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      key: UniqueKey(),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(children: [
+          // Create Spacing
+          Padding(padding: EdgeInsets.all(6)),
+          // From Information
+          Column(children: [
+            ProfileFullName(profile: invite.from.profile, isHeader: true),
+            Row(children: [
+              invite.payload.toString().capitalizeFirst!.gradient(value: SonrGradients.PlumBath, size: 22),
+              "   ${invite.file.prettySize()}".paragraph()
+            ]),
+          ]),
+        ]),
+        Divider(),
+        BoxContainer(
+          width: Get.width - 50,
+          height: Get.height / 3,
+          padding: EdgeInsets.all(8),
+          child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3),
+        ),
+        Divider(),
+        Padding(padding: EdgeInsets.all(4)),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ColorButton.primary(
+              onPressed: () => ReceiverService.decide(true),
+              text: "Accept",
+              gradient: SonrGradient.Tertiary,
+              icon: SonrIcons.Check,
+              margin: EdgeInsets.symmetric(horizontal: 54),
+            ),
+            Padding(padding: EdgeInsets.all(8)),
+            PlainTextButton(onPressed: () => ReceiverService.decide(false), text: "Decline".paragraph(color: Get.theme.hintColor)),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// @ Post Content for File
 class FileContent extends StatelessWidget {
-  final SonrFile file;
+  final SFile file;
   final double iconSize;
   final double width;
   final double height;
@@ -70,7 +122,7 @@ class FileContent extends StatelessWidget {
 ///  Builds Container With Image as SizedBox
 class FileAlbumBox extends StatelessWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile file;
+  final SFile file;
   final double width;
   final double height;
   final BoxFit fit;
@@ -150,7 +202,7 @@ class FileAlbumBox extends StatelessWidget {
 /// Builds Icon View from Metadata
 class FileItemIconBox extends StatelessWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile_Item fileItem;
+  final SFile_Item fileItem;
   final double iconSize;
   final double width;
   final double height;
@@ -172,7 +224,7 @@ class FileItemIconBox extends StatelessWidget {
 ///  Builds Container With Image as SizedBox
 class FileItemImageBox extends StatefulWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile_Item fileItem;
+  final SFile_Item fileItem;
   final double width;
   final double height;
   final BoxFit fit;
@@ -220,7 +272,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
 /// Builds Metadata Video Player
 class FileItemVideoBox extends StatefulWidget {
   /// Transfer Metadata Protobuf
-  final SonrFile_Item fileItem;
+  final SFile_Item fileItem;
   final double? width;
   final double? height;
   final bool autoplay;
@@ -286,7 +338,7 @@ class _FileItemVideoBoxState extends State<FileItemVideoBox> {
 
 class FilePayloadText extends StatelessWidget {
   final Payload payload;
-  final SonrFile? file;
+  final SFile? file;
   final Color? color;
   final double fontSize;
   final FontStyle fontStyle;
@@ -326,5 +378,50 @@ class FilePayloadText extends StatelessWidget {
       }
     }
     return payload.toString().capitalizeFirst!;
+  }
+}
+
+/// @ TransferCard as List item View
+class FileItemView extends StatelessWidget {
+  final TransferCard item;
+
+  const FileItemView({Key? key, required this.item}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 48.0, top: 16.0),
+      child: BoxContainer(
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.symmetric(horizontal: 12),
+        height: 400,
+        child: Column(
+          children: [
+            // Owner Info
+            ProfileOwnerRow(profile: item.owner),
+
+            // File Content
+            Container(
+                padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+                child: FileContent(
+                  file: item.file!,
+                ),
+                height: 237),
+            Padding(padding: EdgeInsets.only(top: 8)),
+            // Info of Transfer
+            Container(
+              padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+              width: Get.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FilePayloadText(payload: item.payload, file: item.file),
+                  DateText(date: item.received),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

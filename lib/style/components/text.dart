@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum DisplayTextStyle {
   /// AlongSans Hero

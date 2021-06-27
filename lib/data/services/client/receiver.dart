@@ -1,6 +1,6 @@
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/modules/activity/views/completed_view.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ReceiverService extends GetxService {
   // Accessors
@@ -28,7 +28,7 @@ class ReceiverService extends GetxService {
     HapticFeedback.heavyImpact();
 
     // Check for Flat
-    if (data.flatMode && data.payload == Payload.CONTACT) {
+    if (data.type == InviteRequest_Type.Flat && data.payload == Payload.CONTACT) {
       AppPage.Flat.invite(data.contact);
     } else {
       data.show();

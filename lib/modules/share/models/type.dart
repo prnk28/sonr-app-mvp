@@ -1,5 +1,5 @@
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/style/components/icon.dart';
 
 enum ShareViewType {

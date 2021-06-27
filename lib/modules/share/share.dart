@@ -1,19 +1,20 @@
 // Exports
 export 'models/asset.dart';
 export 'models/type.dart';
-export 'views/options_view.dart';
 export 'views/external_sheet.dart';
 export 'views/popup_view.dart';
 export 'widgets/share_button.dart';
+export 'widgets/album_item.dart';
+export 'widgets/media_item.dart';
 
 // Imports
-import 'package:sonr_app/pages/transfer/controllers/transfer_controller.dart';
+import 'package:sonr_app/pages/transfer/data/arguments.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 
 import 'models/asset.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/transfer/models/arguments.dart';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'models/type.dart';
 
@@ -27,7 +28,11 @@ class ShareController extends GetxController {
   final type = ShareViewType.None.obs;
 
   // References
-  final albumArrowKey = GlobalKey();
+  final keyOne = GlobalKey();
+  final keyTwo = GlobalKey();
+  final keyThree = GlobalKey();
+  final keyFour = GlobalKey();
+  final keyFive = GlobalKey();
 
   @override
   void onInit() {
@@ -130,8 +135,8 @@ class ShareController extends GetxController {
   /// Confirms Selection for Media Items
   Future<void> confirmMediaSelection() async {
     if (hasSelected.value) {
-      var sonrFile = await selectedItems.toSonrFile();
-      var result = await SenderService.choose(ChooseOption.Media, file: sonrFile);
+      var SFile = await selectedItems.toSFile();
+      var result = await SenderService.choose(ChooseOption.Media, file: SFile);
       _handleConfirmation(result);
     } else {
       AppRoute.snack(SnackArgs.missing("No Files Selected"));

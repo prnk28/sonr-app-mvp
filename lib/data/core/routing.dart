@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/popup_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
 /// @ Enum Values for App Page
@@ -78,6 +81,9 @@ extension AppRoute on AppPage {
   static bool get isSnackClosed => !isSnackOpen;
 
   // ^ AppPage Properties ^
+  /// Method Sets Onboarding as Complete
+  void completeOnboarding() => this.readWriteOnboarding.val = true;
+
   /// Returns Animation Curve
   Curve get curve => Curves.easeIn;
 
@@ -86,6 +92,12 @@ extension AppRoute on AppPage {
 
   /// Returns Middleware for Page
   List<GetMiddleware> get middlewares => this == AppPage.Home ? [GetMiddleware()] : [];
+
+  /// Checks if this Page Needs Onboarding
+  bool get needsOnboarding => Logger.userAppFirstTime && !readWriteOnboarding.val;
+
+  /// Instance to Determine if Page has Finished Onboarding
+  ReadWriteValue<bool> get readWriteOnboarding => false.val(this.name, getBox: () => GetStorage('Onboarding'));
 
   /// Returns Transition Animation
   Transition get transition => this.isDialog ? Transition.downToUp : Transition.fadeIn;
@@ -117,13 +129,40 @@ extension AppRoute on AppPage {
     }
   }
 
+  /// Returns Onboarding Items for This Page
+  List<GlobalKey<State<StatefulWidget>>> get onboardingItems {
+    if (this == AppPage.Home) {
+      return [
+        Get.find<HomeController>().keyOne,
+        Get.find<HomeController>().keyTwo,
+        Get.find<HomeController>().keyThree,
+        Get.find<HomeController>().keyFour,
+        Get.find<HomeController>().keyFive,
+      ];
+    } else if (this == AppPage.Share) {
+      return [
+        Get.find<ShareController>().keyOne,
+        Get.find<ShareController>().keyTwo,
+        Get.find<ShareController>().keyThree,
+        Get.find<ShareController>().keyFour,
+        Get.find<ShareController>().keyFive,
+      ];
+    } else {
+      return [];
+    }
+  }
+
   /// Returns Function to Build Page
   Widget Function() get page {
     switch (this) {
       case AppPage.Register:
         return () => RegisterPage();
       case AppPage.Transfer:
-        return () => TransferPage();
+        return () => ShowCaseWidget(
+                builder: Builder(
+              builder: (_) => TransferPage(),
+            ));
+
       case AppPage.Detail:
         return () => DetailPage();
       case AppPage.Error:
@@ -131,7 +170,10 @@ extension AppRoute on AppPage {
       case AppPage.Posts:
         return () => PostsPage();
       case AppPage.Share:
-        return () => SharePopupView();
+        return () => ShowCaseWidget(
+                builder: Builder(
+              builder: (_) => SharePopupView(),
+            ));
       case AppPage.Activity:
         return () => ActivityPopup();
       case AppPage.Flat:
@@ -140,7 +182,10 @@ extension AppRoute on AppPage {
         return () {
           if (DeviceService.isMobile) {
             Get.find<NodeService>().connect();
-            return HomePage();
+            return ShowCaseWidget(
+                builder: Builder(
+              builder: (_) => HomePage(),
+            ));
           } else {
             return ExplorerPage();
           }

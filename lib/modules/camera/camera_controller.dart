@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:path_provider/path_provider.dart';
 
 enum CameraViewStatus { Default, Preview, Permissions }
@@ -19,7 +19,7 @@ class CameraController extends GetxController {
   final videoInProgress = false.obs;
   final zoomLevel = 0.0.obs;
   final hasCaptured = false.obs;
-  final result = SonrFile().obs;
+  final result = SFile().obs;
   final status = CameraViewStatus.Default.obs;
 
   // Notifiers
@@ -33,7 +33,7 @@ class CameraController extends GetxController {
   // Controllers
   final PictureController pictureController = PictureController();
   final VideoController videoController = VideoController();
-  final Function(SonrFile file) selected;
+  final Function(SFile file) selected;
 
   // Video Duration Handling
   Stopwatch _stopwatch = Stopwatch();
@@ -59,7 +59,7 @@ class CameraController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(photoCapturePath);
-    result(MetadataUtils.newItem(path: photoCapturePath).toSonrFile());
+    result(SFileItemUtil.newItem(path: photoCapturePath).toSFile());
     hasCaptured(true);
     status(CameraViewStatus.Preview);
   }
@@ -86,7 +86,7 @@ class CameraController extends GetxController {
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
     await videoController.recordVideo(videoCapturePath);
-    result(MetadataUtils.newItem(path: videoCapturePath).toSonrFile());
+    result(SFileItemUtil.newItem(path: videoCapturePath).toSFile());
     videoInProgress(true);
 
     _stopwatch.start();

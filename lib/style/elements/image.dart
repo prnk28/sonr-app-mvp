@@ -1,5 +1,5 @@
 
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// A SlidingImage that needs to be a statefulWidget
 /// because it needs an re build every time a page is scrolled

@@ -1,7 +1,7 @@
 // Imports
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/modules/payload/payload.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ TransferView: Builds Invite View based on InviteRequest Payload Type
 class InviteRequestSheet extends StatelessWidget {
@@ -56,7 +56,7 @@ class InviteRequestSheet extends StatelessWidget {
 class _InviteRequestFileHeader extends StatelessWidget {
   final Payload payload;
   final Profile profile;
-  final SonrFile file;
+  final SFile file;
 
   const _InviteRequestFileHeader({Key? key, required this.payload, required this.profile, required this.file}) : super(key: key);
   @override
@@ -132,7 +132,7 @@ class _InviteRequestFileHeader extends StatelessWidget {
 
 /// @ Content: Auth Invite File Content
 class _InviteRequestFileContent extends StatelessWidget {
-  final SonrFile file;
+  final SFile file;
 
   const _InviteRequestFileContent({Key? key, required this.file}) : super(key: key);
   @override

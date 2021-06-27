@@ -4,12 +4,11 @@ export 'core/bindings.dart';
 export 'core/extensions.dart';
 export 'core/routing.dart';
 export 'core/logger.dart';
-export 'services/user/helper.dart';
 
 // Database
 export 'services/database/converter.dart';
 export 'services/database/database.dart';
-export 'services/database/service.dart';
+export 'services/database/cards.dart';
 
 // Models
 export '../modules/share/share.dart';

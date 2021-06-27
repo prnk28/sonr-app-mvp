@@ -1,5 +1,5 @@
 import 'package:lottie/lottie.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// Rive Board Options
 enum RiveBoard { Splash, Documents, Bubble }

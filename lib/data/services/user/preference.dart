@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class Preferences extends GetxService {
   // Accessors
@@ -35,7 +35,7 @@ class Preferences extends GetxService {
       if (to._properties.value.isFlatMode != isFlatMode) {
         to._properties(Peer_Properties(enabledPointShare: Preferences.pointShareEnabled, isFlatMode: isFlatMode));
         NodeService.instance.update(
-          Request.newUpdateProperties(to._properties.value),
+          API.newUpdateProperties(to._properties.value),
         );
       }
     }

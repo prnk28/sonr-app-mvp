@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ Card Search View - Displays Search View
 class CardSearchField extends GetView<HomeController> {
@@ -66,8 +66,8 @@ class SearchResultsView extends GetView<HomeController> {
     return BlurredBackground(
       child: ListView.builder(
           itemCount: controller.results.length,
-          itemBuilder: (context, index) => SearchItem(
-                item: controller.results[index],
+          itemBuilder: (context, index) => PostItem(
+                controller.results[index],
               )),
     );
   }

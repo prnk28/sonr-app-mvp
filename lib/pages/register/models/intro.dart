@@ -1,5 +1,5 @@
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum IntroPageType {
   Welcome,
@@ -155,5 +155,44 @@ extension IntroPanelTypeUtils on IntroPageType {
       case IntroPageType.Start:
         return ['Lets Continue by selecting your Sonr Name.'.lightSpan(fontSize: size, color: color)].rich();
     }
+  }
+}
+
+enum PermsPageType {
+  Location,
+  Gallery,
+  Notifications,
+}
+
+extension PermsPageTypeUtils on PermsPageType {
+  /// Return Image Path for Type
+  String get imagePath {
+    final basePath = "assets/illustrations/";
+    switch (this) {
+      case PermsPageType.Location:
+        return basePath + "LocationPerm.png";
+      case PermsPageType.Gallery:
+        return basePath + "MediaPerm.png";
+      case PermsPageType.Notifications:
+        return basePath + "Secure.png";
+    }
+  }
+
+  /// Returns This Panels Page View Model
+  PageViewModel pageViewModel() {
+    return PageViewModel(
+        decoration: PageDecoration(
+          fullScreen: true,
+        ),
+        titleWidget: Container(),
+        bodyWidget: Container(),
+        image: Container(
+            width: Get.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.fitHeight,
+              ),
+            )));
   }
 }

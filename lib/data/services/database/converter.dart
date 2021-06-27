@@ -60,18 +60,18 @@ class ContactConverter extends TypeConverter<Contact, String> {
   }
 }
 
-class FileConverter extends TypeConverter<SonrFile, String> {
+class FileConverter extends TypeConverter<SFile, String> {
   const FileConverter();
   @override
-  SonrFile? mapToDart(String? fromDb) {
+  SFile? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
-    return SonrFile.fromJson(fromDb);
+    return SFile.fromJson(fromDb);
   }
 
   @override
-  String? mapToSql(SonrFile? value) {
+  String? mapToSql(SFile? value) {
     if (value == null) {
       return null;
     }

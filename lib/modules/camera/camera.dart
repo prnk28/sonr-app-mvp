@@ -4,15 +4,15 @@ import 'package:sonr_app/modules/camera/views/capture.dart';
 import 'package:sonr_app/modules/camera/views/preview.dart';
 import 'package:sonr_app/modules/camera/views/tools.dart';
 import 'package:sonr_app/modules/camera/widgets/video_duration.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'camera_controller.dart';
 
 class CameraView extends StatelessWidget {
   // Properties
-  final Function(SonrFile file) onMediaSelected;
+  final Function(SFile file) onMediaSelected;
   CameraView({required this.onMediaSelected});
 
-  static void open({required Function(SonrFile file) onMediaSelected}) {
+  static void open({required Function(SFile file) onMediaSelected}) {
     Get.to(
       CameraView(onMediaSelected: onMediaSelected),
       fullscreenDialog: true,

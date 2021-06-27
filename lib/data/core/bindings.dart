@@ -4,14 +4,14 @@ import 'package:rive/rive.dart';
 import 'package:sonr_app/data/services/user/preference.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {
@@ -73,7 +73,6 @@ class AppServices {
       await Firebase.initializeApp();
     }
     await Get.putAsync(() => DeviceService().init(), permanent: true);
-    // await Get.putAsync(() => HelperService().init());
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);
     await Get.putAsync(() => Preferences().init(), permanent: true);

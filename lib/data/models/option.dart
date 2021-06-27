@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 /// Option for Share Choice
@@ -23,7 +23,7 @@ extension ChooseOptionUtils on ChooseOption {
   }
 
   /// Logs Chosen Option in Analytics -- From Set
-  void logChooseFile(SonrFile file) {
+  void logChooseFile(SFile file) {
     // Run Action
     Logger.event(
       controller: LOG_CONTROLLER,
@@ -57,7 +57,7 @@ extension ChooseOptionUtils on ChooseOption {
   }
 
   /// Logs Shared Option in Analytics
-  void logShared({SonrFile? file, String? url}) {
+  void logShared({SFile? file, String? url}) {
     // @ Run File Action
     if (file != null) {
       Logger.event(

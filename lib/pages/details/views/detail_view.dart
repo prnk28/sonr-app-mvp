@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ QuickAccessScreen from Home
 class DetailPage extends StatelessWidget {
@@ -26,7 +26,7 @@ class DetailContactView extends StatelessWidget {
 }
 
 class DetailFileView extends StatelessWidget {
-  final SonrFile file;
+  final SFile file;
 
   const DetailFileView({Key? key, required this.file}) : super(key: key);
   @override
@@ -36,7 +36,7 @@ class DetailFileView extends StatelessWidget {
 }
 
 class DetailMediaView extends StatelessWidget {
-  final SonrFile_Item item;
+  final SFile_Item item;
   final File? file;
 
   const DetailMediaView({Key? key, required this.item, this.file}) : super(key: key);

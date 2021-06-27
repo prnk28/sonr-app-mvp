@@ -2,7 +2,7 @@ export 'models/arguments.dart';
 export 'models/status.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'models/arguments.dart';
 import 'models/status.dart';
 
@@ -22,6 +22,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // Controllers
   late final TabController tabController;
+
+  // Global Keys
+  final keyOne = GlobalKey();
+  final keyTwo = GlobalKey();
+  final keyThree = GlobalKey();
+  final keyFour = GlobalKey();
+  final keyFive = GlobalKey();
 
   // References
   late StreamSubscription<Lobby?> _lobbyStream;

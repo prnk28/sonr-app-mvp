@@ -1,4 +1,4 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 import 'utility.dart';
 
@@ -110,23 +110,23 @@ class _ActionIconButton extends StatelessWidget {
 /// Class Manages ActionBanner for ActionButton
 class ActionBanner {
   /// Count for Banner
-  final int count;
-  ActionBanner(this.count);
+  final int value;
+  ActionBanner(this.value);
 
   /// Return Banner Width
-  double get width => count != -1 ? 18 : 8;
+  double get width => value != -1 ? 18 : 8;
 
   /// Return Banner Height
-  double get height => count != -1 ? 18 : 8;
+  double get height => value != -1 ? 18 : 8;
 
   /// Return Banner Position Top
-  double get top => count != -1 ? 28 : 4;
+  double get top => value != -1 ? 28 : 4;
 
   /// Return Banner Position Start
-  double get start => count != -1 ? 28 : 4;
+  double get start => value != -1 ? 28 : 4;
 
   /// Return Banner Position TextDirection
-  TextDirection get textDirection => count != -1 ? TextDirection.rtl : TextDirection.ltr;
+  TextDirection get textDirection => value != -1 ? TextDirection.rtl : TextDirection.ltr;
 
   /// Build Alert Style Banner
   factory ActionBanner.alert() {
@@ -134,7 +134,7 @@ class ActionBanner {
   }
 
   /// Build Selected Items Banner
-  factory ActionBanner.selected(int count) {
+  factory ActionBanner.count(int count) {
     return ActionBanner(count);
   }
 
@@ -145,6 +145,6 @@ class ActionBanner {
 
   /// Helper: Builds Text from Banner Data
   Widget text() {
-    return count.toString().subheading(fontSize: 14, color: Colors.white, align: TextAlign.center);
+    return value.toString().subheading(fontSize: 14, color: Colors.white, align: TextAlign.center);
   }
 }

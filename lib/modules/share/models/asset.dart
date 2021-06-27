@@ -2,7 +2,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 extension TransferCardUtils on TransferCard {
@@ -27,19 +27,19 @@ extension TransferCardUtils on TransferCard {
 }
 
 extension FilePickerResultUtils on FilePickerResult {
-  /// Converts Picker Result into SonrFile
-  SonrFile toSonrFile({required Payload payload}) {
-    var file = SonrFile(payload: this.isSinglePick ? payload : Payload.FILES, items: this._toSonrFileItems());
+  /// Converts Picker Result into SFile
+  SFile toSFile({required Payload payload}) {
+    var file = SFile(payload: this.isSinglePick ? payload : Payload.FILES, items: this._toSFileItems());
     file.update();
     return file;
   }
 
-  /// Converts Picker Items into SonrFile_Item Items
-  List<SonrFile_Item> _toSonrFileItems() {
-    var items = <SonrFile_Item>[];
+  /// Converts Picker Items into SFile_Item Items
+  List<SFile_Item> _toSFileItems() {
+    var items = <SFile_Item>[];
     this.paths.forEach((p) {
       if (p != null) {
-        items.add(MetadataUtils.newItem(path: p));
+        items.add(SFileItemUtil.newItem(path: p));
       }
     });
     return items;
@@ -50,16 +50,16 @@ extension SharedMediaFileUtils on List<SharedMediaFile> {
   /// Checks if only one SharedMediaFile is present
   bool get isSingleItem => this.length == 1;
 
-  /// Returns List of SharedMediaFile as SonrFile
-  SonrFile toSonrFile() {
-    return SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: this._toSonrFileItems());
+  /// Returns List of SharedMediaFile as SFile
+  SFile toSFile() {
+    return SFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: this._toSFileItems());
   }
 
-  /// Converts Picker Items into SonrFile_Item Items
-  List<SonrFile_Item> _toSonrFileItems() {
-    var items = <SonrFile_Item>[];
+  /// Converts Picker Items into SFile_Item Items
+  List<SFile_Item> _toSFileItems() {
+    var items = <SFile_Item>[];
     this.forEach((f) {
-      items.add(MetadataUtils.newItem(
+      items.add(SFileItemUtil.newItem(
         path: f.path,
         duration: f.duration,
         thumbPath: f.thumbnail,
@@ -73,17 +73,17 @@ extension AssetEntityListUtils on List<Tuple<AssetEntity, Uint8List>> {
   /// Checks if only one AssetEntity is present
   bool get isSingleItem => this.length == 1;
 
-  /// Returns List of AssetEntity as SonrFile
-  Future<SonrFile> toSonrFile() async {
-    var items = await this._toSonrFileItems();
-    var file = SonrFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: items);
+  /// Returns List of AssetEntity as SFile
+  Future<SFile> toSFile() async {
+    var items = await this._toSFileItems();
+    var file = SFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: items);
     file.update();
     return file;
   }
 
-  /// Converts Asset Entity Items into SonrFile_Item Items
-  Future<List<SonrFile_Item>> _toSonrFileItems() async {
-    var items = <SonrFile_Item>[];
+  /// Converts Asset Entity Items into SFile_Item Items
+  Future<List<SFile_Item>> _toSFileItems() async {
+    var items = <SFile_Item>[];
     for (var t in this) {
       AssetEntity f = t.item1;
       Uint8List thumb = t.item2;
@@ -92,7 +92,7 @@ extension AssetEntityListUtils on List<Tuple<AssetEntity, Uint8List>> {
 
       // Add File Item
       if (file != null) {
-        items.add(MetadataUtils.newItem(path: file.path, thumbBuffer: thumb.toList()));
+        items.add(SFileItemUtil.newItem(path: file.path, thumbBuffer: thumb.toList()));
       }
     }
 

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:file_picker/file_picker.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 class SenderService extends GetxService {
   // Accessors
@@ -81,7 +81,7 @@ class SenderService extends GetxService {
   }
 
   /// Method to Choose Option to Share
-  static Future<InviteRequest?> choose(ChooseOption option, {SonrFile? file}) async {
+  static Future<InviteRequest?> choose(ChooseOption option, {SFile? file}) async {
     if (isRegistered) {
       // Log Choice
       option.logChoice();
@@ -177,7 +177,7 @@ class SenderService extends GetxService {
   Future<InviteRequest?> _handleCameraChoice() async {
     if (DeviceService.isMobile) {
       // Move to View
-      CameraView.open(onMediaSelected: (SonrFile file) async {
+      CameraView.open(onMediaSelected: (SFile file) async {
         var result = await _handlePayload(Payload.MEDIA, file: file);
 
         // Analytics
@@ -207,11 +207,11 @@ class SenderService extends GetxService {
         }
 
         // Confirm File
-        var file = result.toSonrFile(payload: Payload.FILE);
+        var file = result.toSFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
         var filePath = await NodeService.instance.pickFile();
-        var file = SonrFile(payload: Payload.FILE, items: [SonrFile_Item(path: filePath)], count: 1);
+        var file = SFile(payload: Payload.FILE, items: [SFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
           return await _handlePayload(file.payload, file: file);
         }
@@ -237,14 +237,14 @@ class SenderService extends GetxService {
           ChooseOption.Media.logConfirm();
         }
         // Convert To File
-        var file = result.toSonrFile(payload: Payload.MEDIA);
+        var file = result.toSFile(payload: Payload.MEDIA);
         return await _handlePayload(file.payload, file: file);
       }
     }
   }
 
   /// @ Helper: Creates Invite Request from Payload
-  Future<InviteRequest> _handlePayload(Payload payload, {SonrFile? file, String? url}) async {
+  Future<InviteRequest> _handlePayload(Payload payload, {SFile? file, String? url}) async {
     // Initialize
     InviteRequest invite = InviteRequest();
 

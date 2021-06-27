@@ -1,5 +1,6 @@
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import '../activity.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
 
 /// @ Completed Transfer Popup View
 class CompletedPopup extends GetView<ActivityController> {

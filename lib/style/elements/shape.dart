@@ -1,4 +1,4 @@
-import '../../style.dart';
+import '../style.dart';
 
 class DashedRect extends StatelessWidget {
   final Color color;

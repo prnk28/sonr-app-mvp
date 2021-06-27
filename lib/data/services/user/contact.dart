@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/services/services.dart';
 
 class ContactService extends GetxService {
@@ -32,9 +32,13 @@ class ContactService extends GetxService {
     // Check if Exists
     if (_status.value.hasUser) {
       try {
-        // Get ContactJSOn
+        // Get Contact JSON
         var profileJson = _userBox.read("contact");
         var contact = Contact.fromJson(profileJson);
+
+        // Capitalize First and Last Name
+        contact.profile.firstName.capitalizeFirst;
+        contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
         Logger.initProfile(contact.profile);

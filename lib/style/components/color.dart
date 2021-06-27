@@ -20,7 +20,7 @@ class SonrColor {
   };
 
   // ** General Theme Color Properties ** //
-  static const Color Black = Color(0xff323232);
+  static const Color Black = Color(0xff15162D);
   static const Color White = Color(0xfff0f6fa);
   static const Color Grey = Color(0xff62666a);
   static const Color LightGrey = Color(0xffa4a4a4);
@@ -60,4 +60,41 @@ extension SonrColorUtils on Color {
       return Contact_Design_Color.Transparent;
     }
   }
+}
+
+class NoSplashFactory extends InteractiveInkFeatureFactory {
+  const NoSplashFactory();
+
+  @override
+  InteractiveInkFeature create(
+      {required MaterialInkController controller,
+      required RenderBox referenceBox,
+      required Offset position,
+      required Color color,
+      required TextDirection textDirection,
+      bool containedInkWell = false,
+      RectCallback? rectCallback,
+      BorderRadius? borderRadius,
+      ShapeBorder? customBorder,
+      double? radius,
+      VoidCallback? onRemoved}) {
+    return NoSplash(
+      controller: controller,
+      referenceBox: referenceBox,
+    );
+  }
+}
+
+class NoSplash extends InteractiveInkFeature {
+  NoSplash({
+    required MaterialInkController controller,
+    required RenderBox referenceBox,
+  }) : super(
+          color: Colors.transparent,
+          controller: controller,
+          referenceBox: referenceBox,
+        );
+
+  @override
+  void paintFeature(Canvas canvas, Matrix4 transform) {}
 }

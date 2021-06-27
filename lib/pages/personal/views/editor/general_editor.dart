@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/personal/personal.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import '../../controllers/editor_controller.dart';
 
 class GeneralEditorView extends GetView<EditorController> {

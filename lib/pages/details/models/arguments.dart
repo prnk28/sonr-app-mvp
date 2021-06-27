@@ -1,6 +1,6 @@
 import 'package:sonr_app/pages/details/details.dart';
 import 'dart:io';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ** ─── Details Arguments ────────────────────────────────────────────────────────
@@ -14,8 +14,8 @@ enum DetailPageType {
 
 class DetailPageArgs {
   final DetailPageType type;
-  final SonrFile? file;
-  final SonrFile_Item? mediaItem;
+  final SFile? file;
+  final SFile_Item? mediaItem;
   final File? mediaItemFile;
   final Contact? contact;
   final URLLink? urlLink;
@@ -34,12 +34,12 @@ class DetailPageArgs {
         contact: contact,
       );
 
-  factory DetailPageArgs.file(SonrFile file) => DetailPageArgs(
+  factory DetailPageArgs.file(SFile file) => DetailPageArgs(
         DetailPageType.File,
         file: file,
       );
 
-  factory DetailPageArgs.media(SonrFile_Item item, File? file) => DetailPageArgs(
+  factory DetailPageArgs.media(SFile_Item item, File? file) => DetailPageArgs(
         DetailPageType.Media,
         mediaItem: item,
         mediaItemFile: file,

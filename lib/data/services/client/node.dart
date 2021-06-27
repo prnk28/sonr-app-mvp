@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'lobby.dart';
 import 'package:sonr_app/data/services/services.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
@@ -86,21 +86,21 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// @ Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
-      to._instance.update(Request.newUpdatePosition(position));
+      to._instance.update(API.newUpdatePosition(position));
     }
   }
 
   /// @ Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
-      to._instance.update(Request.newUpdateContact(contact));
+      to._instance.update(API.newUpdateContact(contact));
     }
   }
 
   /// @ Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, isFlat: true));
+      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.Flat));
     }
   }
 
@@ -109,13 +109,18 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleConnected(ConnectionResponse data) {
     // Log Result
     Logger.info(data.toString());
+    print("Textile Threads");
+    data.threads.forEach((key, value) {
+      print(key);
+      print(value.toString());
+    });
   }
 
   /// @ Handle Device Updated Connectivity Result
   void _handleDeviceConnection(ConnectivityResult result) {
     if (result != _lastConnectivity) {
       if (_lastConnectivity != ConnectivityResult.none) {
-        _instance.update(Request.newUpdateConnectivity(result.toInternetType()));
+        _instance.update(API.newUpdateConnectivity(result.toInternetType()));
       } else {}
     }
   }
@@ -127,7 +132,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
       DeviceService.playSound(type: Sounds.Connected);
 
       // Handle Available
-      instance.update(Request.newUpdatePosition(DeviceService.position.value));
+      instance.update(API.newUpdatePosition(DeviceService.position.value));
     }
 
     // Update Status
@@ -170,12 +175,16 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Check Updated State
     switch (state) {
       case AppLifecycleState.resumed:
+        //this._instance.resume();
         break;
       case AppLifecycleState.inactive:
+        this._instance.pause();
         break;
       case AppLifecycleState.paused:
+        this._instance.pause();
         break;
       case AppLifecycleState.detached:
+        this._instance.stop();
         break;
     }
   }

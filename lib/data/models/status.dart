@@ -159,4 +159,9 @@ extension UserStatusUtils on UserStatus {
     }
     return UserStatus.New;
   }
+
+  /// Return User Status Into Connection User Status
+  ConnectionRequest_UserStatus toConnectionStatus() {
+    return isNew ? ConnectionRequest_UserStatus.NEW : ConnectionRequest_UserStatus.RETURNING;
+  }
 }

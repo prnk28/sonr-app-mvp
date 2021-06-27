@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../home_controller.dart';

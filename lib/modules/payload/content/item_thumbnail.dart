@@ -1,9 +1,9 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// ### Builds Thumbnail from Future
 class PayloadThumbnail extends StatelessWidget {
-  final SonrFile_Item? item;
+  final SFile_Item? item;
   const PayloadThumbnail({Key? key, this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class PayloadThumbnail extends StatelessWidget {
     );
   }
 
-  Widget _buildItemChild(SonrFile_Item item) {
+  Widget _buildItemChild(SFile_Item item) {
     if (item.hasThumbnail()) {
       return Image.memory(
         Uint8List.fromList(item.thumbBuffer),

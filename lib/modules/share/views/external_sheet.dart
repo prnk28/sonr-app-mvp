@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
@@ -13,7 +13,7 @@ class ShareSheet extends StatelessWidget {
   final Widget child;
   final Size size;
   final Payload payload;
-  final SonrFile? mediaFile;
+  final SFile? mediaFile;
   final URLLink? url;
   const ShareSheet({
     Key? key,
@@ -35,7 +35,7 @@ class ShareSheet extends StatelessWidget {
       child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
       size: window,
       payload: Payload.MEDIA,
-      mediaFile: sharedFiles.toSonrFile(),
+      mediaFile: sharedFiles.toSFile(),
     );
   }
 

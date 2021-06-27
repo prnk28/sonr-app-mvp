@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:sonr_app/style.dart';
+import 'package:sonr_app/style/style.dart';
 
 /// @ Standardized Uniform Scaffold
 class SonrScaffold extends StatelessWidget {
@@ -27,7 +27,8 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      backgroundColor: AppTheme.backgroundColor,
       extendBodyBehindAppBar: extendBodyBehindAppBar ?? true,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       floatingActionButtonLocation: _FixedCenterDockedFabLocation(),

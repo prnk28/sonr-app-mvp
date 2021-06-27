@@ -63,6 +63,7 @@ profile:
 update:
 	cd $(PLUGIN_DIR) && cider bump patch
 	cd $(PLUGIN_DIR) && git add . && git commit -m "Updated Core Binary" && git push
+	cd $(PLUGIN_DIR) && hover publish-plugin
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && git submodule update --remote plugin
@@ -76,6 +77,7 @@ clean:
 	cd $(DESK_BUILD_DIR) && rm -rf outputs
 	cd $(DESK_BUILD_DIR) && rm -rf intermediates
 	@echo '-- Cleaning Flutter --'
+	cd $(PROJECT_DIR) && git submodule foreach --recursive git reset --hard
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && hover clean-cache
 	cd $(PROJECT_DIR) && flutter pub get
