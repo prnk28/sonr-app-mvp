@@ -19,13 +19,15 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     if (AppPage.Home.needsOnboarding) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
-            Get.find<HomeController>().keyOne,
-            Get.find<HomeController>().keyTwo,
-            Get.find<HomeController>().keyThree,
-            Get.find<HomeController>().keyFour,
-            Get.find<HomeController>().keyFive,
-          ]));
+      Future.delayed(1500.milliseconds, () {
+        WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+              Get.find<HomeController>().keyOne,
+              Get.find<HomeController>().keyTwo,
+              Get.find<HomeController>().keyThree,
+              Get.find<HomeController>().keyFour,
+              Get.find<HomeController>().keyFive,
+            ]));
+      });
     }
   }
 
