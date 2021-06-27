@@ -13,7 +13,7 @@ class _SharePopupViewState extends State<SharePopupView> {
   void initState() {
     super.initState();
     if (AppPage.Share.needsOnboarding) {
-      Future.delayed(1500.milliseconds, () {
+      Future.delayed(500.milliseconds, () {
         WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
               Get.find<ShareController>().keyOne,
               Get.find<ShareController>().keyTwo,

@@ -135,10 +135,7 @@ extension AppRoute on AppPage {
         return () => RegisterPage();
       case AppPage.Transfer:
         return () => ShowCaseWidget(
-            onComplete: (idx, key) {
-              AppPage.Transfer.completeOnboarding();
-            },
-            builder: Builder(
+                builder: Builder(
               builder: (_) => TransferPage(),
             ));
 
@@ -150,10 +147,7 @@ extension AppRoute on AppPage {
         return () => PostsPage();
       case AppPage.Share:
         return () => ShowCaseWidget(
-            onComplete: (idx, key) {
-              AppPage.Share.completeOnboarding();
-            },
-            builder: Builder(
+                builder: Builder(
               builder: (_) => SharePopupView(),
             ));
       case AppPage.Activity:
@@ -165,12 +159,9 @@ extension AppRoute on AppPage {
           if (DeviceService.isMobile) {
             Get.find<NodeService>().connect();
             return ShowCaseWidget(
-                onComplete: (idx, key) {
-                  AppPage.Home.completeOnboarding();
-                },
                 builder: Builder(
-                  builder: (_) => HomePage(),
-                ));
+              builder: (_) => HomePage(),
+            ));
           } else {
             return ExplorerPage();
           }

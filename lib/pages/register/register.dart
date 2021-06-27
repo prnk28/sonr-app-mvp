@@ -159,7 +159,7 @@ class RegisterTextField extends GetView<RegisterController> {
             margin: EdgeInsets.only(left: 16, right: 16, top: 8),
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: TextField(
-              style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 20),
+              style: DisplayTextStyle.Light.style(color: AppTheme.itemColor, fontSize: 20),
               keyboardType: type.textInputType,
               autofocus: type.autoFocus,
               textInputAction: type.textInputAction,
@@ -176,7 +176,7 @@ class RegisterTextField extends GetView<RegisterController> {
                   ? decoration
                   : InputDecoration.collapsed(
                       hintText: hint,
-                      hintStyle: DisplayTextStyle.Subheading.style(color: AppTheme.greyColor, fontSize: 20),
+                      hintStyle: DisplayTextStyle.Paragraph.style(color: AppTheme.greyColor, fontSize: 20),
                     ),
             ),
           )

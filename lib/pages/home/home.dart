@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     if (AppPage.Home.needsOnboarding) {
-      Future.delayed(1500.milliseconds, () {
+      Future.delayed(500.milliseconds, () {
         WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
               Get.find<HomeController>().keyOne,
               Get.find<HomeController>().keyTwo,
