@@ -23,6 +23,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Controllers
   late final TabController tabController;
 
+  // Global Keys
+  final keyOne = GlobalKey();
+  final keyTwo = GlobalKey();
+  final keyThree = GlobalKey();
+  final keyFour = GlobalKey();
+  final keyFive = GlobalKey();
+
   // References
   late StreamSubscription<Lobby?> _lobbyStream;
   late StreamSubscription<Status> _statusStream;
@@ -73,6 +80,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (args.isFirstLoad && DeviceService.isMobile) {
       SenderService.checkInitialShare();
     }
+    startShowcase(Get.context!);
     super.onReady();
   }
 
@@ -129,6 +137,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Update Title
       title(view.value.title);
     }
+  }
+
+  /// @ Begins Showcase of Widgets
+  void startShowcase(BuildContext context) {
+
   }
 
   // @ Swaps Title when Lobby Size Changes

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -27,14 +26,13 @@ class DeviceService extends GetxService {
   static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
- // static Platform get platform => to._device.value.platform;
+  // static Platform get platform => to._device.value.platform;
   static RxPosition get position => to._position;
 
   // Properties
   final _device = Device().obs;
   final _location = Location().obs;
   final _connectivity = ConnectivityResult.none.obs;
-  final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _position = RxPosition();
 
   // References
@@ -62,15 +60,8 @@ class DeviceService extends GetxService {
     _connectivity.bindStream(Connectivity().onConnectivityChanged);
     _device(device);
 
-    // @ Setup Mobile
-    if (device.platform.isMobile) {
-      // @ Bind Sensors for Mobile
-      // Audio Player
-      await _audioPlayer.loadAll(List<String>.generate(Sounds.values.length, (index) => Sounds.values[index].file));
-    }
-
     // @ Setup Desktop
-    else {
+    if (device.platform.isDesktop) {
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",

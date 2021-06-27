@@ -4,6 +4,7 @@ export 'package:get/get.dart' hide Node;
 export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
+export 'package:showcaseview/showcaseview.dart';
 export 'package:feedback/feedback.dart';
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
@@ -48,6 +49,7 @@ export 'form/focus.dart';
 export 'form/infolist.dart';
 export 'form/textfield.dart';
 export 'form/tabs.dart';
+export 'form/showcase.dart';
 
 // UI Packages
 import 'package:flutter/material.dart';
@@ -55,6 +57,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/elements/painter.dart';
+
 import 'components/color.dart';
 
 /// * Widget Position Enum * //

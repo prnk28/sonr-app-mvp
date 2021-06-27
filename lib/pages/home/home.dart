@@ -6,12 +6,31 @@ import 'views/dashboard_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/models/status.dart';
 import 'package:sonr_app/pages/personal/controllers/editor_controller.dart';
-
+import 'package:showcaseview/showcaseview.dart';
 import 'views/panels_view.dart';
 
-class HomePage extends GetView<HomeController> {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+          Get.find<HomeController>().keyOne,
+          Get.find<HomeController>().keyTwo,
+          Get.find<HomeController>().keyThree,
+          Get.find<HomeController>().keyFour,
+          Get.find<HomeController>().keyFive,
+        ]));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
+    // Return View
     return Obx(() => SonrScaffold(
           resizeToAvoidBottomInset: false,
           floatingAction: HomeFloatingBar(),
@@ -64,6 +83,7 @@ class ExplorerPage extends GetView<HomeController> {
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
     return Obx(() => AnimatedOpacity(
           duration: 200.milliseconds,
           opacity: controller.appbarOpacity.value,
@@ -81,8 +101,25 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                       )
                     : Container(),
               ),
-              action: HomeActionButton(),
-              leading: controller.view.value != HomeView.Contact ? _buildHomeLeading() : null,
+              action: HomeActionButton(
+                dashboardKey: controller.keyTwo,
+              ),
+              leading: controller.view.value != HomeView.Contact
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 32.0, left: 8),
+                      child: Container(
+                        child: Obx(() => ShowcaseItem.fromType(
+                              type: ShowcaseItemType.Help,
+                              child: ActionButton(
+                                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                                key: ValueKey<HomeView>(HomeView.Dashboard),
+                                iconData: SonrIcons.Help,
+                                onPressed: () async => await Logger.openIntercom(),
+                              ),
+                            )),
+                      ),
+                    )
+                  : null,
               title: controller.title.value.heading(
                 color: Get.theme.focusColor,
                 align: TextAlign.start,
@@ -92,31 +129,13 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
         ));
   }
 
-  // Build Leading Button
-  Widget _buildHomeLeading() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 32.0, left: 8),
-      child: Container(
-        child: Pulse(
-          animate: !Logger.hasOpenedIntercom,
-          duration: 6.seconds,
-          child: Obx(() => ActionButton(
-                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
-                key: ValueKey<HomeView>(HomeView.Dashboard),
-                iconData: SonrIcons.Help,
-                onPressed: () async => await Logger.openIntercom(),
-              )),
-        ),
-      ),
-    );
-  }
-
   @override
   Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
 }
 
 class HomeActionButton extends GetView<HomeController> {
-  HomeActionButton();
+  final GlobalKey<State<StatefulWidget>> dashboardKey;
+  HomeActionButton({required this.dashboardKey});
 
   @override
   Widget build(BuildContext context) {
@@ -141,10 +160,13 @@ class HomeActionButton extends GetView<HomeController> {
     } else {
       return Padding(
         padding: const EdgeInsets.only(bottom: 32.0, right: 8),
-        child: ActionButton(
-          key: ValueKey<HomeView>(HomeView.Dashboard),
-          iconData: SonrIcons.Alerts,
-          onPressed: () => AppPage.Activity.to(),
+        child: ShowcaseItem.fromType(
+          type: ShowcaseItemType.Alerts,
+          child: ActionButton(
+            key: ValueKey<HomeView>(HomeView.Dashboard),
+            iconData: SonrIcons.Alerts,
+            onPressed: () => AppPage.Activity.to(),
+          ),
         ),
       );
     }
@@ -187,9 +209,10 @@ class HomeBottomTabButton extends GetView<HomeController> {
 }
 
 /// @ Home Tab Bar Navigation
-class HomeFloatingBar extends GetView<HomeController> {
+class HomeFloatingBar extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
     return Container(
       child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
         Container(
@@ -209,7 +232,9 @@ class HomeFloatingBar extends GetView<HomeController> {
                   duration: 1000.milliseconds,
                   animate: controller.view.value == HomeView.Dashboard,
                   key: ValueKey(controller.view.value == HomeView.Dashboard),
-                  child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex))),
+                  child: ShowcaseItem.fromType(
+                      type: ShowcaseItemType.Dashboard,
+                      child: HomeBottomTabButton(HomeView.Dashboard, controller.setBottomIndex, controller.bottomIndex)))),
               Container(
                 width: Get.width * 0.20,
               ),
@@ -217,12 +242,17 @@ class HomeFloatingBar extends GetView<HomeController> {
                     spins: 1,
                     key: ValueKey(controller.view.value == HomeView.Contact),
                     animate: controller.view.value == HomeView.Contact,
-                    child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex),
+                    child: ShowcaseItem.fromType(
+                        type: ShowcaseItemType.Personal,
+                        child: HomeBottomTabButton(HomeView.Contact, controller.setBottomIndex, controller.bottomIndex)),
                   )),
             ],
           ),
         ),
-        ShareButton(),
+        ShowcaseItem.fromType(
+          type: ShowcaseItemType.ShareStart,
+          child: ShareButton(),
+        ),
       ]),
     );
   }

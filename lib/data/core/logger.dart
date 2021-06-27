@@ -14,6 +14,8 @@ class Logger extends GetxService {
   static Logger get to => Get.find<Logger>();
   static bool get hasOpenedIntercom => to._hasOpenedIntercom.val;
   static RxInt get unreadIntercomCount => to._unreadIntercomCount;
+  static int get userAppOpenCount => to._userAppOpenCount.val;
+  static bool get userAppFirstTime => to._userAppOpenCount.val == 0 || to._userAppOpenCount.val == 1;
 
   // References
   static FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -23,6 +25,7 @@ class Logger extends GetxService {
   final _hasIntercom = false.obs;
   final _unreadIntercomCount = 0.obs;
   final _hasOpenedIntercom = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
+  final _userAppOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
 
   // References
   static final BuildMode buildMode = BuildModeUtil.current();
@@ -50,6 +53,9 @@ class Logger extends GetxService {
     if (DeviceService.isMobile) {
       // Open Configuration Box
       await GetStorage.init('Configuration');
+
+      // Update App Open Count
+      _userAppOpenCount.val = _userAppOpenCount.val + 1;
 
       // Configure Firebase Scope
       FirebaseAnalytics().setUserId(DeviceService.device.id);

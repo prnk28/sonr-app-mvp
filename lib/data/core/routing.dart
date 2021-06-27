@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/popup_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
@@ -123,7 +124,11 @@ extension AppRoute on AppPage {
       case AppPage.Register:
         return () => RegisterPage();
       case AppPage.Transfer:
-        return () => TransferPage();
+        return () => ShowCaseWidget(
+                builder: Builder(
+              builder: (_) => TransferPage(),
+            ));
+
       case AppPage.Detail:
         return () => DetailPage();
       case AppPage.Error:
@@ -131,7 +136,10 @@ extension AppRoute on AppPage {
       case AppPage.Posts:
         return () => PostsPage();
       case AppPage.Share:
-        return () => SharePopupView();
+        return () => ShowCaseWidget(
+                builder: Builder(
+              builder: (_) => SharePopupView(),
+            ));
       case AppPage.Activity:
         return () => ActivityPopup();
       case AppPage.Flat:
@@ -140,7 +148,10 @@ extension AppRoute on AppPage {
         return () {
           if (DeviceService.isMobile) {
             Get.find<NodeService>().connect();
-            return HomePage();
+            return ShowCaseWidget(
+                builder: Builder(
+              builder: (_) => HomePage(),
+            ));
           } else {
             return ExplorerPage();
           }

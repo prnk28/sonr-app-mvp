@@ -16,17 +16,20 @@ class AlbumHeader extends GetView<ShareController> {
               align: TextAlign.start,
               color: Get.theme.focusColor,
             ),
-            Obx(() => ArrowButton.infoList(
-                  offset: Offset(-100, -10),
-                  title: controller.currentAlbum.value.name,
-                  options: List<InfolistOption>.generate(controller.gallery.length, (index) {
-                    return DefaultAlbumUtils.buildInfolistOption(
-                        onPressed: () {
-                          controller.setAlbum(index);
-                          Get.back();
-                        },
-                        entity: controller.gallery[index]);
-                  }),
+            Obx(() => ShowcaseItem.fromType(
+                  type: ShowcaseItemType.AlbumDropdown,
+                  child: ArrowButton.infoList(
+                    offset: Offset(-100, -10),
+                    title: controller.currentAlbum.value.name,
+                    options: List<InfolistOption>.generate(controller.gallery.length, (index) {
+                      return DefaultAlbumUtils.buildInfolistOption(
+                          onPressed: () {
+                            controller.setAlbum(index);
+                            Get.back();
+                          },
+                          entity: controller.gallery[index]);
+                    }),
+                  ),
                 )),
           ],
         ));

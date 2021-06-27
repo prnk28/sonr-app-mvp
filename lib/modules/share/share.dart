@@ -1,7 +1,6 @@
 // Exports
 export 'models/asset.dart';
 export 'models/type.dart';
-export 'views/options_view.dart';
 export 'views/external_sheet.dart';
 export 'views/popup_view.dart';
 export 'widgets/share_button.dart';
@@ -27,7 +26,11 @@ class ShareController extends GetxController {
   final type = ShareViewType.None.obs;
 
   // References
-  final albumArrowKey = GlobalKey();
+  final keyOne = GlobalKey();
+  final keyTwo = GlobalKey();
+  final keyThree = GlobalKey();
+  final keyFour = GlobalKey();
+  final keyFive = GlobalKey();
 
   @override
   void onInit() {
