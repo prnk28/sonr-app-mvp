@@ -79,16 +79,10 @@ extension AppRoute on AppPage {
   /// Checks Whether Snackbar is Currently Closed
   static bool get isSnackClosed => !isSnackOpen;
 
-  /// Static instance to Determine if Page has Finished Onboarding
-  static ReadWriteValue<bool> _hasFinishedOnboarding(AppPage page) => false.val(page.name, getBox: () => GetStorage('Onboarding'));
-
-  /// Method Sets Onboarding as Complete
-  static void completeOnboarding(AppPage page) {
-    final rw = AppRoute._hasFinishedOnboarding(page);
-    rw.val = true;
-  }
-
   // ^ AppPage Properties ^
+  /// Method Sets Onboarding as Complete
+  void completeOnboarding() => this.readWriteOnboarding.val = true;
+
   /// Returns Animation Curve
   Curve get curve => Curves.easeIn;
 
@@ -99,7 +93,10 @@ extension AppRoute on AppPage {
   List<GetMiddleware> get middlewares => this == AppPage.Home ? [GetMiddleware()] : [];
 
   /// Checks if this Page Needs Onboarding
-  bool get needsOnboarding => Logger.userAppFirstTime && !AppRoute._hasFinishedOnboarding(this).val;
+  bool get needsOnboarding => Logger.userAppFirstTime && !readWriteOnboarding.val;
+
+  /// Instance to Determine if Page has Finished Onboarding
+  ReadWriteValue<bool> get readWriteOnboarding => false.val(this.name, getBox: () => GetStorage('Onboarding'));
 
   /// Returns Transition Animation
   Transition get transition => this.isDialog ? Transition.downToUp : Transition.fadeIn;
@@ -139,7 +136,7 @@ extension AppRoute on AppPage {
       case AppPage.Transfer:
         return () => ShowCaseWidget(
             onComplete: (idx, key) {
-              AppRoute.completeOnboarding(AppPage.Transfer);
+              AppPage.Transfer.completeOnboarding();
             },
             builder: Builder(
               builder: (_) => TransferPage(),
@@ -154,7 +151,7 @@ extension AppRoute on AppPage {
       case AppPage.Share:
         return () => ShowCaseWidget(
             onComplete: (idx, key) {
-              AppRoute.completeOnboarding(AppPage.Share);
+              AppPage.Share.completeOnboarding();
             },
             builder: Builder(
               builder: (_) => SharePopupView(),
@@ -169,7 +166,7 @@ extension AppRoute on AppPage {
             Get.find<NodeService>().connect();
             return ShowCaseWidget(
                 onComplete: (idx, key) {
-                  AppRoute.completeOnboarding(AppPage.Home);
+                  AppPage.Home.completeOnboarding();
                 },
                 builder: Builder(
                   builder: (_) => HomePage(),
