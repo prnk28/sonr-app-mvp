@@ -38,7 +38,7 @@ class LobbyService extends GetxService {
     }
     final result = await _nbClient.refresh();
     _records(result.records);
-    
+
     _lobbyStream = _lobby.listen(_lobbyListener);
     return this;
   }
@@ -64,6 +64,8 @@ class LobbyService extends GetxService {
       _flatModeCancelled(false);
     });
   }
+
+  
 
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {

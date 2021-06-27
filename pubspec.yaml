@@ -101,7 +101,7 @@ dependencies:
   introduction_screen: ^2.1.0
   lottie: ^1.0.1
   rive: ^0.7.7
-  styled_widget: ^0.3.1
+  showcaseview: ^1.0.0
   supercharged: ^2.0.0
   systray: ^0.5.3
 

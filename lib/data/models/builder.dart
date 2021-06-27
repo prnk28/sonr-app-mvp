@@ -14,7 +14,7 @@ class RequestBuilder {
         location: await DeviceService.location,
         contact: contact,
         type: internetType,
-        status: ContactService.status.value.toConnectionStatus(),
+        status: ConnectionRequest_UserStatus.NEW, //ContactService.status.value.toConnectionStatus(),
         textileOptions: ConnectionRequest_TextileOptions(
           enabled: true,
           threads: true,
