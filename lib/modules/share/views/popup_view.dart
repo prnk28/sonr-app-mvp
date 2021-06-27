@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/modules/share/widgets/albums_row.dart';
 import 'package:sonr_app/modules/share/widgets/media_item.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -13,15 +12,15 @@ class _SharePopupViewState extends State<SharePopupView> {
   @override
   void initState() {
     super.initState();
-    //if (Logger.userAppFirstTime) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
-          Get.find<ShareController>().keyOne,
-          Get.find<ShareController>().keyTwo,
-          Get.find<ShareController>().keyThree,
-          Get.find<ShareController>().keyFour,
-          Get.find<ShareController>().keyFive,
-        ]));
-    //}
+    if (Logger.userAppFirstTime) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
+            Get.find<ShareController>().keyOne,
+            Get.find<ShareController>().keyTwo,
+            Get.find<ShareController>().keyThree,
+            Get.find<ShareController>().keyFour,
+            Get.find<ShareController>().keyFive,
+          ]));
+    }
   }
 
   @override

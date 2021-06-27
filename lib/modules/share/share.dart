@@ -4,6 +4,8 @@ export 'models/type.dart';
 export 'views/external_sheet.dart';
 export 'views/popup_view.dart';
 export 'widgets/share_button.dart';
+export 'widgets/album_item.dart';
+export 'widgets/media_item.dart';
 
 // Imports
 import 'package:sonr_app/pages/transfer/data/arguments.dart';

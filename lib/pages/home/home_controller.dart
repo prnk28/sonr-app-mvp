@@ -80,7 +80,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (args.isFirstLoad && DeviceService.isMobile) {
       SenderService.checkInitialShare();
     }
-    startShowcase(Get.context!);
     super.onReady();
   }
 
@@ -137,11 +136,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Update Title
       title(view.value.title);
     }
-  }
-
-  /// @ Begins Showcase of Widgets
-  void startShowcase(BuildContext context) {
-
   }
 
   // @ Swaps Title when Lobby Size Changes
