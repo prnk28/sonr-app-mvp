@@ -53,6 +53,7 @@ class Logger extends GetxService {
     if (DeviceService.isMobile) {
       // Open Configuration Box
       await GetStorage.init('Configuration');
+      await GetStorage.init('Onboarding');
 
       // Update App Open Count
       _userAppOpenCount.val = _userAppOpenCount.val + 1;

@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    if (Logger.userAppFirstTime) {
+    if (AppPage.Home.needsOnboarding) {
       WidgetsBinding.instance!.addPostFrameCallback((_) => ShowCaseWidget.of(context)!.startShowCase([
             Get.find<HomeController>().keyOne,
             Get.find<HomeController>().keyTwo,

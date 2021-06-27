@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/popup_view.dart';
@@ -78,6 +79,15 @@ extension AppRoute on AppPage {
   /// Checks Whether Snackbar is Currently Closed
   static bool get isSnackClosed => !isSnackOpen;
 
+  /// Static instance to Determine if Page has Finished Onboarding
+  static ReadWriteValue<bool> _hasFinishedOnboarding(AppPage page) => false.val(page.name, getBox: () => GetStorage('Onboarding'));
+
+  /// Method Sets Onboarding as Complete
+  static void completeOnboarding(AppPage page) {
+    final rw = AppRoute._hasFinishedOnboarding(page);
+    rw.val = true;
+  }
+
   // ^ AppPage Properties ^
   /// Returns Animation Curve
   Curve get curve => Curves.easeIn;
@@ -87,6 +97,9 @@ extension AppRoute on AppPage {
 
   /// Returns Middleware for Page
   List<GetMiddleware> get middlewares => this == AppPage.Home ? [GetMiddleware()] : [];
+
+  /// Checks if this Page Needs Onboarding
+  bool get needsOnboarding => Logger.userAppFirstTime && !AppRoute._hasFinishedOnboarding(this).val;
 
   /// Returns Transition Animation
   Transition get transition => this.isDialog ? Transition.downToUp : Transition.fadeIn;
@@ -125,7 +138,10 @@ extension AppRoute on AppPage {
         return () => RegisterPage();
       case AppPage.Transfer:
         return () => ShowCaseWidget(
-                builder: Builder(
+            onComplete: (idx, key) {
+              AppRoute.completeOnboarding(AppPage.Transfer);
+            },
+            builder: Builder(
               builder: (_) => TransferPage(),
             ));
 
@@ -137,7 +153,10 @@ extension AppRoute on AppPage {
         return () => PostsPage();
       case AppPage.Share:
         return () => ShowCaseWidget(
-                builder: Builder(
+            onComplete: (idx, key) {
+              AppRoute.completeOnboarding(AppPage.Share);
+            },
+            builder: Builder(
               builder: (_) => SharePopupView(),
             ));
       case AppPage.Activity:
@@ -149,9 +168,12 @@ extension AppRoute on AppPage {
           if (DeviceService.isMobile) {
             Get.find<NodeService>().connect();
             return ShowCaseWidget(
+                onComplete: (idx, key) {
+                  AppRoute.completeOnboarding(AppPage.Home);
+                },
                 builder: Builder(
-              builder: (_) => HomePage(),
-            ));
+                  builder: (_) => HomePage(),
+                ));
           } else {
             return ExplorerPage();
           }
