@@ -57,7 +57,6 @@ class DeviceService extends GetxService {
     // Initialize Device
     _connectivity(await Connectivity().checkConnectivity());
     _connectivity.bindStream(Connectivity().onConnectivityChanged);
-    _connectivity.listen(_handleConnectivity);
 
     // @ Setup Desktop
     if (device.platform.isDesktop) {
@@ -208,18 +207,5 @@ class DeviceService extends GetxService {
 
     // Return Path
     return file.path;
-  }
-
-  // @ Helper: Handles Change in Connectivity Stream
-  void _handleConnectivity(ConnectivityResult result) {
-    // Display No Connection Error - Stop Services
-    if (result == ConnectivityResult.none) {
-      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
-    } else {
-      // Update Network Connection
-      NodeService.instance.update(
-        API.newUpdateConnectivity(result.toInternetType()),
-      );
-    }
   }
 }

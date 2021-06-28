@@ -22,7 +22,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
   // References
   late Node _instance;
-  late ConnectivityResult _lastConnectivity;
   late StreamSubscription<ConnectivityResult> _connectionStream;
 
   // ^ Constructer ^ //
@@ -30,7 +29,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Bind Observers
     WidgetsBinding.instance!.addObserver(this);
     _connectionStream = DeviceService.connectivity.listen(_handleDeviceConnection);
-    _lastConnectivity = DeviceService.connectivity.value;
 
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
@@ -118,10 +116,15 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
   /// @ Handle Device Updated Connectivity Result
   void _handleDeviceConnection(ConnectivityResult result) {
-    if (result != _lastConnectivity) {
-      if (_lastConnectivity != ConnectivityResult.none) {
-        _instance.update(API.newUpdateConnectivity(result.toInternetType()));
-      } else {}
+    // Display No Connection Error - Stop Services
+    if (result == ConnectivityResult.none) {
+      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
+      _instance.stop();
+    } else {
+      // Update Network Connection
+      NodeService.instance.update(
+        API.newUpdateConnectivity(result.toInternetType()),
+      );
     }
   }
 
