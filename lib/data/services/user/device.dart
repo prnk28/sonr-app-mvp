@@ -15,7 +15,6 @@ class DeviceService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-  static bool get hasInternet => to._connectivity.value != ConnectivityResult.none;
   static bool get isDesktop => to._device.value.platform.isDesktop;
   static bool get isMobile => to._device.value.platform.isMobile;
   static bool get isAndroid => to._device.value.platform.isAndroid;
@@ -26,11 +25,11 @@ class DeviceService extends GetxService {
   static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
-  // static Platform get platform => to._device.value.platform;
   static RxPosition get position => to._position;
 
   // Properties
   final _device = Device().obs;
+
   final _location = Location().obs;
   final _connectivity = ConnectivityResult.none.obs;
   final _position = RxPosition();
@@ -52,13 +51,14 @@ class DeviceService extends GetxService {
   // ^ Constructer ^ //
   Future<DeviceService> init() async {
     // Set Properties
-    final device = await API.newDevice(
+    _device(await API.newDevice(
       id: PlatformUtils.find().isMobile ? await PlatformDeviceId.getDeviceId : null,
-    );
+    ));
 
     // Initialize Device
+    _connectivity(await Connectivity().checkConnectivity());
     _connectivity.bindStream(Connectivity().onConnectivityChanged);
-    _device(device);
+    _connectivity.listen(_handleConnectivity);
 
     // @ Setup Desktop
     if (device.platform.isDesktop) {
@@ -114,6 +114,18 @@ class DeviceService extends GetxService {
         return Location(longitude: pos.longitude, latitude: pos.latitude);
       }
     }
+    // Analytics
+    Logger.event(
+      name: 'findLocation',
+      controller: 'DeviceService',
+      parameters: {
+        'createdAt': DateTime.now().toString(),
+        'platform': platform.toString(),
+        'isMobile': platform.isMobile,
+        'type': 'IP-Location',
+      },
+    );
+
     return to._locationApi.fetchIP();
   }
 
@@ -197,5 +209,18 @@ class DeviceService extends GetxService {
 
     // Return Path
     return file.path;
+  }
+
+  // @ Helper: Handles Change in Connectivity Stream
+  void _handleConnectivity(ConnectivityResult result) {
+    // Display No Connection Error - Stop Services
+    if (result == ConnectivityResult.none) {
+      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
+    } else {
+      // Update Network Connection
+      NodeService.instance.update(
+        API.newUpdateConnectivity(result.toInternetType()),
+      );
+    }
   }
 }

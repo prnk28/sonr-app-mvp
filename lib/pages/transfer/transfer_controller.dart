@@ -33,14 +33,16 @@ class TransferController extends GetxController {
   // @ Status Checkers
   bool get hasReceived => received.value != null;
 
-  // References
+  // Streams
   late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
   late StreamSubscription<Payload> _payloadStream;
-  late InviteRequest inviteRequest;
-  final localArrowButtonKey = GlobalKey();
-  ScrollController scrollController = ScrollController();
   late StreamSubscription<bool> _isFlatStream;
+  late InviteRequest inviteRequest;
+
+  // References
+  final localArrowButtonKey = GlobalKey();
+  final scrollController = ScrollController();
 
   /// @ Controller Constructer
   @override
