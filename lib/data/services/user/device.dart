@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -22,10 +21,10 @@ class DeviceService extends GetxService {
   static bool get isLinux => to._device.value.platform.isLinux;
   static bool get isMacOS => to._device.value.platform.isMacOS;
   static bool get isWindows => to._device.value.platform.isWindows;
-  static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
   static RxPosition get position => to._position;
+  static Rx<ConnectivityResult> get connectivity => to._connectivity;
 
   // Properties
   final _device = Device().obs;
