@@ -1,4 +1,3 @@
-
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/style/buttons/arrow.dart';
@@ -14,7 +13,7 @@ class LocalView extends GetView<TransferController> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            "Local".section(align: TextAlign.start, color: AppTheme.itemColor),
+            "Around Me".section(align: TextAlign.start, color: AppTheme.itemColor),
             Obx(() => ArrowButton.checkList(
                   title: _buildArrowTitle(controller.phonesEnabled.value, controller.desktopsEnabled.value),
                   onSelectedOption: (index) {

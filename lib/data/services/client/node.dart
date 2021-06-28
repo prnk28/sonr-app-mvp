@@ -14,10 +14,10 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   static bool get isReady => _checkReady();
   static Node get instance => to._instance;
   static Rx<Status> get status => to._status;
-  static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
+  static Rx<AppState> get lifecycle => to._lifecycle;
 
   // Properties
-  final _lifecycle = AppLifecycleState.resumed.obs;
+  final _lifecycle = AppState.Started.obs;
   final _status = Rx<Status>(Status.DEFAULT);
 
   // References
@@ -173,21 +173,20 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Update RX Property
-    this._lifecycle(state);
+    this._lifecycle(AppLifecycle.toAppState(state));
 
     // Check Updated State
-    switch (state) {
-      case AppLifecycleState.resumed:
-        //this._instance.resume();
+    switch (this._lifecycle.value) {
+      case AppState.Resumed:
+        this._instance.resume();
         break;
-      case AppLifecycleState.inactive:
+      case AppState.Paused:
         this._instance.pause();
         break;
-      case AppLifecycleState.paused:
-        this._instance.pause();
-        break;
-      case AppLifecycleState.detached:
+      case AppState.Stopped:
         this._instance.stop();
+        break;
+      case AppState.Started:
         break;
     }
   }

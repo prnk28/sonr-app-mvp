@@ -65,8 +65,6 @@ class LobbyService extends GetxService {
     });
   }
 
-  
-
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
     if (isRegistered) {
