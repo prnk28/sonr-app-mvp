@@ -13,7 +13,7 @@ class RequestBuilder {
   static ConnectionRequest_HostOptions get _hostOpts => ConnectionRequest_HostOptions(mdnsDiscovery: true);
   static ConnectionRequest_PubsubOptions get _pubsubOpts => ConnectionRequest_PubsubOptions(relay: true);
   static ConnectionRequest_TextileOptions get _textileOpts =>
-      ConnectionRequest_TextileOptions(enabled: true, threads: true, mailbox: DeviceService.isIOS);
+      ConnectionRequest_TextileOptions(enabled: true, mailbox: DeviceService.isIOS);
 
   /// Returns New Connection Request
   static Future<ConnectionRequest> get connection async {
