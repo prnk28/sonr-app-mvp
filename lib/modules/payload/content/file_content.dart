@@ -202,6 +202,8 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
                 fileLoaded = true;
               })
             });
+      } else {
+        fileLoaded = true;
       }
     });
   }
@@ -231,7 +233,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
       if (widget.fileItem.thumbnail != null) {
         return Image.memory(
           widget.fileItem.thumbnail!,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitHeight,
         );
       } else {
         return SonrIcons.Unknown.icon(color: AppTheme.itemColor);
