@@ -17,6 +17,7 @@ class MediaItemController extends GetxController with StateMixin<MediaItemData> 
   Future<void> initialize(AssetEntity item) async {
     // Get Thumbnail
     final thumb = await item.thumbData;
+    isSelected(Get.find<ShareController>().isSelected(item));
 
     // Set References
     _asset = item;
@@ -44,7 +45,7 @@ class MediaItemController extends GetxController with StateMixin<MediaItemData> 
     if (isSelected.value) {
       Get.find<ShareController>().chooseMediaItem(_asset, _thumbnail!);
     } else {
-      Get.find<ShareController>().removeMediaItem(_asset, _thumbnail!);
+      Get.find<ShareController>().removeMediaItem(_asset);
     }
   }
 }

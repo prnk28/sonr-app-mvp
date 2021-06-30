@@ -141,7 +141,7 @@ class SplashPage extends StatelessWidget {
         }
       }
     } else {
-      AppPage.Error.off(args: ErrorPageArgs.noNetwork());
+      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
     }
   }
 }

@@ -138,7 +138,16 @@ class ErrorPageArgs {
     }
   }
 
-  Color get textColor => type == ErrorPageType.EmptyLinks ? SonrColor.White : SonrColor.Black;
+  Color get textColor {
+    switch (this.type) {
+      case ErrorPageType.EmptyLinks:
+        return SonrColor.White;
+      case ErrorPageType.NoNetwork:
+        return SonrColor.White;
+      default:
+        return SonrColor.Black;
+    }
+  }
 
   Future<void> action() async {
     if (type == ErrorPageType.PermLocation) {

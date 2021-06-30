@@ -36,8 +36,11 @@ class LobbyService extends GetxService {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
     }
-    final result = await _nbClient.refresh();
-    _records(result.records);
+
+    if (DeviceService.hasInterent) {
+      final result = await _nbClient.refresh();
+      _records(result.records);
+    }
 
     _lobbyStream = _lobby.listen(_lobbyListener);
     return this;

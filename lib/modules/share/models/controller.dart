@@ -1,4 +1,3 @@
-
 // Imports
 import 'package:sonr_app/pages/transfer/data/arguments.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
@@ -50,6 +49,16 @@ class ShareController extends GetxController {
   /// Checks if Provided Index is Current Album
   bool isCurrent(int index) {
     return currentAlbum.value.isIndex(index);
+  }
+
+  /// Checks if AssetEntity is Selected
+  bool isSelected(AssetEntity item) {
+    for (var couple in selectedItems) {
+      if (couple.item1.id == item.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Initializes Gallery
@@ -143,8 +152,12 @@ class ShareController extends GetxController {
   }
 
   /// Removes Item from Selected Items List
-  void removeMediaItem(AssetEntity item, Uint8List thumb) {
-    selectedItems.remove(Tuple(item, thumb));
+  void removeMediaItem(AssetEntity item) {
+    for (var couple in selectedItems) {
+      if (couple.item1.id == item.id) {
+        selectedItems.remove(couple);
+      }
+    }
     selectedItems.refresh();
     hasSelected(selectedItems.length > 0);
   }
