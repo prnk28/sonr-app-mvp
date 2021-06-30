@@ -41,6 +41,7 @@ class HomeBinding implements Bindings {
       Get.put<PersonalController>(PersonalController(), permanent: true);
       Get.put<EditorController>(EditorController(), permanent: true);
       Get.create<TileController>(() => TileController());
+      Get.create<MediaItemController>(() => MediaItemController());
     }
   }
 }
