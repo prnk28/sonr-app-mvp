@@ -117,5 +117,12 @@ class ReceiverService extends GetxService {
     Logger.info("Node(Callback) Received: " + data.toString());
     _session.reset();
     _hasActiveSession(false);
+
+    // Update Has Had Transfer
+    if (!Logger.to.hasHadTransfer.val) {
+      Future.delayed(3.seconds, () {
+        Logger.to.hasHadTransfer.val = true;
+      });
+    }
   }
 }
