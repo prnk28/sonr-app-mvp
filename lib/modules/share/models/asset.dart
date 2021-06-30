@@ -125,10 +125,6 @@ extension AssetPathEntityUtils on AssetPathEntity {
       return this.name;
     }
   }
-
-  // IconData get iconData {
-
-  // }
 }
 
 extension AssetPathEntityListUtils on List<AssetPathEntity> {

@@ -5,7 +5,6 @@ export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 export 'package:showcaseview/showcaseview.dart';
-export 'package:feedback/feedback.dart';
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';

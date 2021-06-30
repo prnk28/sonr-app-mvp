@@ -24,11 +24,6 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
-        if (DeviceService.isMobile) {
-          BetterFeedback.of(context).show(ContactService.sendFeedback);
-        }
-      },
       child: Container(
         padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
         child: NavigationToolbar(
@@ -111,11 +106,6 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SafeArea(
       top: true,
       child: GestureDetector(
-        onLongPress: () {
-          if (DeviceService.isMobile) {
-            BetterFeedback.of(context).show(ContactService.sendFeedback);
-          }
-        },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 14),
           padding: EdgeInsets.only(top: 24, bottom: 24),

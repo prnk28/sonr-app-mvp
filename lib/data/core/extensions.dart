@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:connectivity/connectivity.dart';
+import 'package:sonr_app/data/data.dart';
+
 extension ListUtils<T> on List<T> {
   random() {
     final rand = Random();
@@ -33,4 +36,20 @@ extension NumUtils on int {
     });
     return contains;
   }
+}
+
+extension ConnectivityResultUtils on ConnectivityResult {
+  /// Convert Package Enum to ConnectionRequest_InternetType enum
+  ConnectionRequest_InternetType toInternetType() {
+    switch (this) {
+      case ConnectivityResult.wifi:
+        return ConnectionRequest_InternetType.Wifi;
+      case ConnectivityResult.mobile:
+        return ConnectionRequest_InternetType.Mobile;
+      case ConnectivityResult.none:
+        return ConnectionRequest_InternetType.None;
+    }
+  }
+
+  bool get hasInternet => this != ConnectivityResult.none;
 }

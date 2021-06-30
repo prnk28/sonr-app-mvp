@@ -74,7 +74,7 @@ class Logger extends GetxService {
 
   /// @ Initializes Profile for Analytics
   static void initProfile(Profile profile) {
-    if (isRegistered && DeviceService.isMobile) {
+    if (isRegistered && DeviceService.isMobile && DeviceService.hasInterent) {
       // Set User Properties
       FirebaseAnalytics().setUserProperty(name: "firstname", value: profile.firstName);
       FirebaseAnalytics().setUserProperty(name: "lastName", value: profile.lastName);
@@ -90,7 +90,7 @@ class Logger extends GetxService {
     required String controller,
     Map<String, Object?>? parameters,
   }) async {
-    if (isRegistered && DeviceService.isMobile) {
+    if (isRegistered && DeviceService.isMobile && DeviceService.hasInterent) {
       // Check Paramaters
       var map = <String, Object?>{};
       if (parameters != null) {

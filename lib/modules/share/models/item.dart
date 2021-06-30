@@ -53,6 +53,5 @@ class MediaItemController extends GetxController with StateMixin<MediaItemData> 
 class MediaItemData {
   final AssetEntity item;
   final Uint8List thumbnail;
-
   MediaItemData(this.item, this.thumbnail);
 }
