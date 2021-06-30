@@ -43,11 +43,19 @@ class InviteRequestSheet extends StatelessWidget {
   // Builds View By Payload
   Widget _buildView() {
     if (invite.payload.isTransfer) {
-      return _InviteRequestFileContent(file: invite.file);
-    } else if (invite.payload == Payload.URL) {
-      return URLAuthView(invite);
+      return Container(
+        height: Height.ratio(0.275),
+        width: Get.width,
+        decoration: BoxDecoration(color: AppTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
+        padding: EdgeInsets.all(8),
+        child: FileContent(
+          width: Width.ratio(0.8),
+          height: Height.ratio(0.3),
+          file: invite.file,
+        ),
+      );
     } else {
-      return FileAuthView(invite);
+      return URLAuthView(invite);
     }
   }
 }
@@ -127,35 +135,5 @@ class _InviteRequestFileHeader extends StatelessWidget {
             ].rich())
       ]),
     );
-  }
-}
-
-/// @ Content: Auth Invite File Content
-class _InviteRequestFileContent extends StatelessWidget {
-  final SFile file;
-
-  const _InviteRequestFileContent({Key? key, required this.file}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: Height.ratio(0.275),
-      width: Get.width,
-      decoration: BoxDecoration(color: AppTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
-      padding: EdgeInsets.all(8),
-      child: _buildView(Width.ratio(0.8), Height.ratio(0.3)),
-    );
-  }
-
-  Widget _buildView(double width, double height) {
-    if (file.payload.isMedia) {
-      return file.single.thumbBuffer.length > 0
-          ? Image.memory(
-              Uint8List.fromList(file.single.thumbBuffer),
-              fit: BoxFit.fitWidth,
-            )
-          : file.single.mime.type.gradient();
-    } else {
-      return RiveContainer(type: RiveBoard.Documents, width: width, height: height);
-    }
   }
 }
