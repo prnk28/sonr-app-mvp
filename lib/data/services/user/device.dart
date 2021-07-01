@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/env.dart';
@@ -13,9 +13,9 @@ import 'package:systray/systray.dart';
 
 class DeviceService extends GetxService {
   // Accessors
+  static bool get hasInterent => to._connectivity.value.hasInternet;
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-  static bool get hasInternet => to._connectivity.value != ConnectivityResult.none;
   static bool get isDesktop => to._device.value.platform.isDesktop;
   static bool get isMobile => to._device.value.platform.isMobile;
   static bool get isAndroid => to._device.value.platform.isAndroid;
@@ -23,14 +23,14 @@ class DeviceService extends GetxService {
   static bool get isLinux => to._device.value.platform.isLinux;
   static bool get isMacOS => to._device.value.platform.isMacOS;
   static bool get isWindows => to._device.value.platform.isWindows;
-  static Rx<ConnectivityResult> get connectivity => to._connectivity;
   static Device get device => to._device.value;
   static Location get location => to._location.value;
-  // static Platform get platform => to._device.value.platform;
   static RxPosition get position => to._position;
+  static Rx<ConnectivityResult> get connectivity => to._connectivity;
 
   // Properties
   final _device = Device().obs;
+
   final _location = Location().obs;
   final _connectivity = ConnectivityResult.none.obs;
   final _position = RxPosition();
@@ -51,21 +51,25 @@ class DeviceService extends GetxService {
 
   // ^ Constructer ^ //
   Future<DeviceService> init() async {
-    // Set Properties
-    final device = await API.newDevice(
+    // Find Properties
+    final deviceRef = await API.newDevice(
       id: PlatformUtils.find().isMobile ? await PlatformDeviceId.getDeviceId : null,
     );
+    final platformRef = deviceRef.platform;
+
+    // Set Properties
+    _device(deviceRef);
 
     // Initialize Device
+    _connectivity(await Connectivity().checkConnectivity());
     _connectivity.bindStream(Connectivity().onConnectivityChanged);
-    _device(device);
 
     // @ Setup Desktop
-    if (device.platform.isDesktop) {
+    if (platformRef.isDesktop) {
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",
-        iconPath: await _getIconPath(device.platform),
+        iconPath: await _getIconPath(platformRef),
       );
 
       // @ 2. Init SystemTray
@@ -77,6 +81,11 @@ class DeviceService extends GetxService {
 
       // Init Tray
       _systemTray = Systray.init();
+    } else {
+      if (_connectivity.value.hasInternet) {
+        // Initialize Firebase
+        await Firebase.initializeApp();
+      }
     }
     return this;
   }
@@ -114,6 +123,18 @@ class DeviceService extends GetxService {
         return Location(longitude: pos.longitude, latitude: pos.latitude);
       }
     }
+    // Analytics
+    Logger.event(
+      name: 'findLocation',
+      controller: 'DeviceService',
+      parameters: {
+        'createdAt': DateTime.now().toString(),
+        'platform': platform.toString(),
+        'isMobile': platform.isMobile,
+        'type': 'IP-Location',
+      },
+    );
+
     return to._locationApi.fetchIP();
   }
 

@@ -21,6 +21,12 @@ class TransferPage extends GetView<TransferController> {
     // Build View
     return SonrScaffold(
         appBar: DetailAppBar(
+          action: ActionButton(
+            iconData: SonrIcons.Compass,
+            onPressed: () {
+              
+            },
+          ),
           onPressed: () => controller.closeToHome(),
           title: "Transfer",
           isClose: true,

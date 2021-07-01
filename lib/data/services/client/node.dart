@@ -14,15 +14,14 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   static bool get isReady => _checkReady();
   static Node get instance => to._instance;
   static Rx<Status> get status => to._status;
-  static Rx<AppLifecycleState> get lifecycle => to._lifecycle;
+  static Rx<AppState> get lifecycle => to._lifecycle;
 
   // Properties
-  final _lifecycle = AppLifecycleState.resumed.obs;
+  final _lifecycle = AppState.Started.obs;
   final _status = Rx<Status>(Status.DEFAULT);
 
   // References
   late Node _instance;
-  late ConnectivityResult _lastConnectivity;
   late StreamSubscription<ConnectivityResult> _connectionStream;
 
   // ^ Constructer ^ //
@@ -30,7 +29,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Bind Observers
     WidgetsBinding.instance!.addObserver(this);
     _connectionStream = DeviceService.connectivity.listen(_handleDeviceConnection);
-    _lastConnectivity = DeviceService.connectivity.value;
 
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
@@ -56,7 +54,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
-    if (ContactService.status.value.hasUser) {
+    if (ContactService.status.value.hasUser && DeviceService.hasInterent) {
       // Connect Node
       instance.connect(await RequestBuilder.connection);
 
@@ -118,15 +116,20 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
   /// @ Handle Device Updated Connectivity Result
   void _handleDeviceConnection(ConnectivityResult result) {
-    if (result != _lastConnectivity) {
-      if (_lastConnectivity != ConnectivityResult.none) {
-        _instance.update(API.newUpdateConnectivity(result.toInternetType()));
-      } else {}
+    // Display No Connection Error - Stop Services
+    if (result == ConnectivityResult.none) {
+      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
+      _instance.stop();
+    } else {
+      // Update Network Connection
+      NodeService.instance.update(
+        API.newUpdateConnectivity(result.toInternetType()),
+      );
     }
   }
 
   /// @ Handle Bootstrap Result
-  void _handleStatus(StatusUpdate data) {
+  void _handleStatus(StatusEvent data) {
     // Check for Homescreen Controller
     if (data.value == Status.AVAILABLE) {
       DeviceService.playSound(type: Sounds.Connected);
@@ -170,21 +173,20 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Update RX Property
-    this._lifecycle(state);
+    this._lifecycle(AppLifecycle.toAppState(state));
 
     // Check Updated State
-    switch (state) {
-      case AppLifecycleState.resumed:
-        //this._instance.resume();
+    switch (this._lifecycle.value) {
+      case AppState.Resumed:
+        this._instance.resume();
         break;
-      case AppLifecycleState.inactive:
+      case AppState.Paused:
         this._instance.pause();
         break;
-      case AppLifecycleState.paused:
-        this._instance.pause();
-        break;
-      case AppLifecycleState.detached:
+      case AppState.Stopped:
         this._instance.stop();
+        break;
+      case AppState.Started:
         break;
     }
   }

@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/data/services/user/preference.dart';
@@ -41,6 +40,7 @@ class HomeBinding implements Bindings {
       Get.put<PersonalController>(PersonalController(), permanent: true);
       Get.put<EditorController>(EditorController(), permanent: true);
       Get.create<TileController>(() => TileController());
+      Get.create<MediaItemController>(() => MediaItemController());
     }
   }
 }
@@ -67,11 +67,6 @@ class TransferBinding implements Bindings {
 class AppServices {
   /// @ Application Services
   static Future<void> init({bool isDesktop = false}) async {
-    // Firebase Reference
-    if (!isDesktop) {
-      // Initialize Firebase
-      await Firebase.initializeApp();
-    }
     await Get.putAsync(() => DeviceService().init(), permanent: true);
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);

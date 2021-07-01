@@ -25,6 +25,7 @@ class Logger extends GetxService {
   final _hasIntercom = false.obs;
   final _unreadIntercomCount = 0.obs;
   final _hasOpenedIntercom = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
+  final hasHadTransfer = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
   final _userAppOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
 
   // References
@@ -74,7 +75,7 @@ class Logger extends GetxService {
 
   /// @ Initializes Profile for Analytics
   static void initProfile(Profile profile) {
-    if (isRegistered && DeviceService.isMobile) {
+    if (isRegistered && DeviceService.isMobile && DeviceService.hasInterent) {
       // Set User Properties
       FirebaseAnalytics().setUserProperty(name: "firstname", value: profile.firstName);
       FirebaseAnalytics().setUserProperty(name: "lastName", value: profile.lastName);
@@ -90,7 +91,7 @@ class Logger extends GetxService {
     required String controller,
     Map<String, Object?>? parameters,
   }) async {
-    if (isRegistered && DeviceService.isMobile) {
+    if (isRegistered && DeviceService.isMobile && DeviceService.hasInterent) {
       // Check Paramaters
       var map = <String, Object?>{};
       if (parameters != null) {

@@ -3,6 +3,7 @@ import 'package:sonr_app/data/core/routing.dart';
 import 'package:sonr_app/data/services/client/node.dart';
 import 'package:sonr_app/data/services/user/contact.dart';
 import 'package:sonr_app/data/services/user/device.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum Permissions {
   /// Phone Camera Access
@@ -137,9 +138,14 @@ extension PermissionsUtil on Permissions {
 
 /// Current User Existence Status
 enum UserStatus {
-  Default, // Initial Status
-  New, // Brand New User
-  Existing, // Returning User
+  /// Initial Status
+  Default,
+
+  /// Brand New User
+  New,
+
+  /// Returning User
+  Existing,
 }
 
 extension UserStatusUtils on UserStatus {
@@ -163,5 +169,39 @@ extension UserStatusUtils on UserStatus {
   /// Return User Status Into Connection User Status
   ConnectionRequest_UserStatus toConnectionStatus() {
     return isNew ? ConnectionRequest_UserStatus.NEW : ConnectionRequest_UserStatus.RETURNING;
+  }
+}
+
+enum AppState {
+  /// App has Just Begun
+  Started,
+
+  /// App has been resumed from Background Process
+  Resumed,
+
+  /// App has been paused or inactive
+  Paused,
+
+  /// App has been detached from Stack.
+  Stopped,
+}
+
+extension AppLifecycle on AppState {
+  /// Static Method converts `AppLifeCycleState` into `AppState` Enum.
+  static AppState toAppState(AppLifecycleState state, {bool resumed = false}) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (resumed) {
+          return AppState.Resumed;
+        } else {
+          return AppState.Started;
+        }
+      case AppLifecycleState.inactive:
+        return AppState.Paused;
+      case AppLifecycleState.paused:
+        return AppState.Paused;
+      case AppLifecycleState.detached:
+        return AppState.Stopped;
+    }
   }
 }

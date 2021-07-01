@@ -5,7 +5,6 @@ export 'package:flutter/material.dart' hide Route;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 export 'package:showcaseview/showcaseview.dart';
-export 'package:feedback/feedback.dart';
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
@@ -45,7 +44,6 @@ export 'elements/image.dart';
 
 // Form Styles
 export 'form/checklist.dart';
-export 'form/focus.dart';
 export 'form/infolist.dart';
 export 'form/textfield.dart';
 export 'form/tabs.dart';
@@ -204,7 +202,7 @@ class AppTheme {
         scaffoldBackgroundColor: SonrColor.White.withOpacity(0.75),
         splashColor: Colors.transparent,
         errorColor: SonrColor.Critical,
-        accentColor: SonrColor.Secondary,
+        //accentColor: SonrColor.Secondary,
         focusColor: SonrColor.Black,
         hintColor: Color(0xff8E8E93),
         cardColor: Color(0xffF6F6F6),
@@ -222,7 +220,7 @@ class AppTheme {
         scaffoldBackgroundColor: SonrColor.Black.withOpacity(0.85),
         splashColor: Colors.transparent,
         errorColor: SonrColor.Critical,
-        accentColor: SonrColor.AccentPurple,
+        //accentColor: SonrColor.AccentPurple,
         focusColor: SonrColor.White,
         hintColor: Color(0xffBFBFC3),
         cardColor: Color(0xff2f2a2a).withOpacity(0.75),
@@ -264,6 +262,7 @@ class AppTheme {
           )
         ];
 
+  /// Circle Box Shadow
   static List<BoxShadow> get circleBoxShadow => [
         BoxShadow(
           offset: Offset(2, 2),

@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 
 class ReceiverService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<ReceiverService>();
+  static bool get isRegistered => Get.isRegistered<ReceiverService>() && DeviceService.hasInterent;
   static ReceiverService get to => Get.find<ReceiverService>();
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasActiveSession;
@@ -117,5 +117,12 @@ class ReceiverService extends GetxService {
     Logger.info("Node(Callback) Received: " + data.toString());
     _session.reset();
     _hasActiveSession(false);
+
+    // Update Has Had Transfer
+    if (!Logger.to.hasHadTransfer.val) {
+      Future.delayed(3.seconds, () {
+        Logger.to.hasHadTransfer.val = true;
+      });
+    }
   }
 }

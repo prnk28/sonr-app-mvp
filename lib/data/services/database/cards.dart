@@ -245,15 +245,6 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Load SFile from Metadata
-  static Future<SFile> loadSFileFromItem(SFile_Item item) async {
-    if (DeviceService.isMobile && isRegistered) {
-      return item.toSFile();
-    } else {
-      return SFile();
-    }
-  }
-
   // @ Helper: Refresh Category Count
   static void _refreshCount() {
     if (DeviceService.isMobile && isRegistered) {

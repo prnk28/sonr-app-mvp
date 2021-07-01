@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style/style.dart';
@@ -73,32 +70,6 @@ class ContactService extends GetxService {
     to._status(UserStatus.Existing);
   }
 
-  /// @ Method Collects user Feedback and Sends Email
-  static void sendFeedback(UserFeedback data) async {
-    var screenshotPath = "";
-
-    // Save Image
-    final Directory output = await getTemporaryDirectory();
-    final String screenshotFilePath = '${output.path}/feedback.png';
-    final File screenshotFile = File(screenshotFilePath);
-    await screenshotFile.writeAsBytes(data.screenshot);
-    screenshotPath = screenshotFilePath;
-
-    // Check if Has Screenshot
-    // Create Instance
-    Reference ref = FirebaseStorage.instance.ref().child('screenshots').child(screenshotPath);
-
-    // Set Metadata
-    final feedback = SettableMetadata(
-      contentType: 'image/jpeg',
-      customMetadata: {'path': screenshotPath},
-    );
-
-    // Upload to Firebase
-    UploadTask uploadTask = ref.putFile(File(screenshotPath), feedback);
-    await uploadTask.whenComplete(() => to._handleUploadScreenshot(ref, data.text));
-  }
-
   // # Helper: Method to Handle Contact Updates
   void _handleContact(Contact data) async {
     // Save Updated User to Disk
@@ -108,37 +79,5 @@ class ContactService extends GetxService {
     if (NodeService.status.value.isConnected) {
       NodeService.setProfile(data);
     }
-  }
-
-// * ------------------- Callbacks ----------------------------
-  /// @ Helper: Posts User Feedback
-  Future<void> _handlePostFeedback(String message, {String? link}) async {
-    // Update Firestore
-    DocumentReference docRef = FirebaseFirestore.instance.collection("feedback").doc();
-
-    // Check for Link
-    if (link != null) {
-      docRef.update({
-        "firstname": ContactService.contact.value.profile.firstName,
-        "lastname": ContactService.contact.value.profile.lastName,
-        "message": message,
-        "screenshot": link,
-        "hasScreenshot": true,
-      });
-    } else {
-      docRef.update({
-        "firstname": ContactService.contact.value.profile.firstName,
-        "lastname": ContactService.contact.value.profile.lastName,
-        "message": message,
-        "hasScreenshot": false,
-      });
-    }
-  }
-
-  // # Helper: Uploads User Screenshot
-  FutureOr<dynamic> _handleUploadScreenshot(Reference ref, String message) async {
-    // Fetch Link
-    String link = await ref.getDownloadURL();
-    await _handlePostFeedback(message, link: link);
   }
 }

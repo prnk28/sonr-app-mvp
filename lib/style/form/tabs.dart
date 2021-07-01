@@ -36,7 +36,10 @@ class GradientTabs extends StatelessWidget {
                 alignment: Alignment.center,
                 child: AnimatedScale(
                     scale: currentIndex.value == index ? 1.1 : 1.0,
-                    child: tabs[index].light(color: currentIndex.value == index ? SonrColor.White : SonrColor.Black)),
+                    child: tabs[index].light(
+                      color: currentIndex.value == index ? SonrColor.White : SonrColor.Black,
+                      align: TextAlign.center,
+                    )),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     gradient: currentIndex.value == index

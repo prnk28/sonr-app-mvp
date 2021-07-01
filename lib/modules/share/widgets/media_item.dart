@@ -2,104 +2,78 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/style/style.dart';
 
-class MediaItem extends StatefulWidget {
+class MediaItem extends GetWidget<MediaItemController> {
   final AssetEntity item;
 
-  const MediaItem({Key? key, required this.item}) : super(key: key);
-
-  @override
-  _MediaItemState createState() => _MediaItemState();
-}
-
-class _MediaItemState extends State<MediaItem> {
-  bool hasLoaded = false;
-  bool isSelected = false;
-  Uint8List? thumbnail;
-
-  @override
-  void initState() {
-    _setThumbnail();
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(MediaItem oldWidget) {
-    if (oldWidget.item != widget.item) {
-      hasLoaded = false;
-      _setThumbnail();
-    }
-    super.didUpdateWidget(oldWidget);
-  }
+  MediaItem({required this.item});
 
   @override
   Widget build(BuildContext context) {
-    if (hasLoaded) {
-      if (thumbnail != null) {
-        return GestureDetector(
-          onTap: _toggleImage,
-          onLongPress: _openMedia,
-          child: Container(
-            alignment: Alignment.center,
-            child: Stack(children: [
-              // Thumbnail
-              Container(
-                  foregroundDecoration: isSelected ? BoxDecoration(color: Colors.black54) : null,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: MemoryImage(thumbnail!),
-                    fit: BoxFit.fitWidth,
-                  ))),
+    controller.initialize(item);
+    return controller.obx(
+      (state) => Obx(() => GestureDetector(
+            onTap: () => controller.toggleImage(),
+            onLongPress: () => controller.open(),
+            child: Container(
+              alignment: Alignment.center,
+              child: Stack(children: [
+                // Thumbnail
+                Container(
+                  foregroundDecoration: _buildForegroundDecoration(controller.isSelected.value),
+                  decoration: _buildThumbnailDecoration(state!.thumbnail),
+                ),
 
-              // Video Icon
-              widget.item.type == AssetType.video
-                  ? Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
-                            borderRadius: BorderRadius.circular(16)),
-                        padding: EdgeInsets.all(4),
-                        child: SonrIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
-                      ),
-                    )
-                  : Container(),
+                // Video Icon
+                _buildVideoIcon(),
 
-              // Select Icon
-              isSelected ? Center(child: SonrIcons.Check.whiteWith(size: 42)) : Container(),
-            ]),
-          ),
-        );
-      } else {
-        return widget.item.icon();
-      }
+                // Select Icon
+                _buildSelectedIcon(controller.isSelected.value),
+              ]),
+            ),
+          )),
+      onLoading: HourglassIndicator(),
+      onError: (_) => item.icon(),
+    );
+  }
+
+  Widget _buildVideoIcon() {
+    if (item.type == AssetType.video) {
+      return Align(
+        alignment: Alignment.bottomLeft,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
+              borderRadius: BorderRadius.circular(16)),
+          padding: EdgeInsets.all(4),
+          child: SonrIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
+        ),
+      );
     } else {
-      return HourglassIndicator();
+      return Container();
     }
   }
 
-  Future<void> _openMedia() async {
-    var file = await widget.item.file;
-    if (file != null) {
-      OpenFile.open(file.path);
-    }
-  }
-
-  Future<void> _setThumbnail() async {
-    var data = await widget.item.thumbData;
-    if (data != null) {
-      thumbnail = data;
-    }
-    hasLoaded = true;
-    setState(() {});
-  }
-
-  void _toggleImage() {
-    isSelected = !isSelected;
+  Widget _buildSelectedIcon(bool isSelected) {
     if (isSelected) {
-      Get.find<ShareController>().chooseMediaItem(widget.item, thumbnail!);
+      return Center(child: SonrIcons.Check.whiteWith(size: 42));
     } else {
-      Get.find<ShareController>().removeMediaItem(widget.item, thumbnail!);
+      return Container();
     }
-    setState(() {});
+  }
+
+  Decoration? _buildForegroundDecoration(bool isSelected) {
+    if (isSelected) {
+      return BoxDecoration(color: Colors.black54);
+    } else {
+      return null;
+    }
+  }
+
+  Decoration _buildThumbnailDecoration(Uint8List thumb) {
+    return BoxDecoration(
+        image: DecorationImage(
+      image: MemoryImage(thumb),
+      fit: BoxFit.fitWidth,
+    ));
   }
 }

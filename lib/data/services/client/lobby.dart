@@ -36,8 +36,11 @@ class LobbyService extends GetxService {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
     }
-    final result = await _nbClient.refresh();
-    _records(result.records);
+
+    if (DeviceService.hasInterent) {
+      final result = await _nbClient.refresh();
+      _records(result.records);
+    }
 
     _lobbyStream = _lobby.listen(_lobbyListener);
     return this;
@@ -65,7 +68,21 @@ class LobbyService extends GetxService {
     });
   }
 
-  
+  /// @ Method finds a user from typed query, cross checking from Namebase Records.
+  static Future<HSRecord?> findUser(String query) async {
+    // Refresh Records from NB Client
+    final result = await to._nbClient.refresh();
+    to._records(result.records);
+    HSRecord? record;
+
+    // Iterate Through all Records
+    to._records.forEach((e) {
+      if (e.equalsName(query)) {
+        record = e;
+      }
+    });
+    return record;
+  }
 
   /// @ Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {

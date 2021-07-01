@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:feedback/feedback.dart';
 
 /// @ Main Method
 Future<void> main() async {
@@ -12,12 +11,12 @@ Future<void> main() async {
   await AppServices.init();
 
   // Check Platform
-  if (DeviceService.isMobile) {
+  if (DeviceService.hasInterent) {
     runZonedGuarded(() {
-      runApp(BetterFeedback(child: SplashPage(isDesktop: false)));
+      runApp(SplashPage(isDesktop: DeviceService.isDesktop));
     }, FirebaseCrashlytics.instance.recordError);
   } else {
-    runApp(SplashPage(isDesktop: true));
+    runApp(SplashPage(isDesktop: DeviceService.isDesktop));
   }
 }
 
@@ -102,43 +101,47 @@ class SplashPage extends StatelessWidget {
     await Future.delayed(3500.milliseconds);
 
     // # Check for User
-    if (ContactService.status.value.isNew) {
-      if (isDesktop) {
-        // Create User
-        await ContactService.newContact(Contact(
-            profile: Profile(
-          firstName: "Anonymous",
-          lastName: DeviceService.device.platform.toString(),
-        )));
+    if (DeviceService.hasInterent) {
+      if (ContactService.status.value.isNew) {
+        if (isDesktop) {
+          // Create User
+          await ContactService.newContact(Contact(
+              profile: Profile(
+            firstName: "Anonymous",
+            lastName: DeviceService.device.platform.toString(),
+          )));
 
-        // Connect to Network
-        AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
+          // Connect to Network
+          AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
+        }
+        // Register Mobile
+        else {
+          AppPage.Register.off();
+        }
       }
-      // Register Mobile
+      // # Handle Returning
       else {
-        AppPage.Register.off();
-      }
-    }
-    // # Handle Returning
-    else {
-      // Check Platform
-      if (!isDesktop) {
-        // All Valid
-        if (await Permissions.Location.isGranted) {
+        // Check Platform
+        if (!isDesktop) {
+          // All Valid
+          if (await Permissions.Location.isGranted) {
+            AppPage.Home.off(args: HomeArguments.FirstLoad);
+          }
+
+          // No Location
+          else {
+            Permissions.Location.request().then((value) {
+              if (value) {
+                AppPage.Home.off(args: HomeArguments.FirstLoad);
+              }
+            });
+          }
+        } else {
           AppPage.Home.off(args: HomeArguments.FirstLoad);
         }
-
-        // No Location
-        else {
-          Permissions.Location.request().then((value) {
-            if (value) {
-              AppPage.Home.off(args: HomeArguments.FirstLoad);
-            }
-          });
-        }
-      } else {
-        AppPage.Home.off(args: HomeArguments.FirstLoad);
       }
+    } else {
+      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
     }
   }
 }
