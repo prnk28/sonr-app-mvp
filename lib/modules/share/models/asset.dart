@@ -76,7 +76,11 @@ extension AssetEntityListUtils on List<Tuple<AssetEntity, Uint8List>> {
   /// Returns List of AssetEntity as SFile
   Future<SFile> toSFile() async {
     var items = await this._toSFileItems();
-    var file = SFile(payload: this.isSingleItem ? Payload.MEDIA : Payload.FILES, items: items);
+    var file = SFile(
+      payload: this.isSingleItem ? Payload.MEDIA : Payload.ALBUM,
+      items: items,
+      count: items.length,
+    );
     file.update();
     return file;
   }

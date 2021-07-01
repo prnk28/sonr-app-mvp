@@ -262,6 +262,7 @@ class AppTheme {
           )
         ];
 
+  /// Circle Box Shadow
   static List<BoxShadow> get circleBoxShadow => [
         BoxShadow(
           offset: Offset(2, 2),

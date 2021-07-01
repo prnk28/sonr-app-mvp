@@ -7,12 +7,12 @@ class RequestBuilder {
   static Device get device => DeviceService.device;
   static Contact get contact => ContactService.contact.value;
   static ConnectionRequest_InternetType get internetType => DeviceService.connectivity.value.toInternetType();
-  static ConnectionRequest_UserStatus get userStatus =>   ContactService.status.value.toConnectionStatus();
+  static ConnectionRequest_UserStatus get userStatus => ContactService.status.value.toConnectionStatus();
 
   /// Define Connection Request Options
   static ConnectionRequest_HostOptions get _hostOpts => ConnectionRequest_HostOptions(mdnsDiscovery: true);
   static ConnectionRequest_PubsubOptions get _pubsubOpts => ConnectionRequest_PubsubOptions(relay: true);
-  static ConnectionRequest_TextileOptions get _textileOpts => ConnectionRequest_TextileOptions(enabled: true, mailbox: true);
+  static ConnectionRequest_TextileOptions get _textileOpts => ConnectionRequest_TextileOptions(enabled: true, mailbox: DeviceService.isIOS);
 
   /// Returns New Connection Request
   static Future<ConnectionRequest> get connection async {
