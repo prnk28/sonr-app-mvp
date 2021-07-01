@@ -1,6 +1,6 @@
 // Imports
 import 'package:sonr_app/pages/transfer/data/arguments.dart';
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
+import 'package:sonr_app/pages/transfer/data/controller.dart';
 
 import 'package:get/get.dart';
 import 'package:sonr_app/data/services/services.dart';

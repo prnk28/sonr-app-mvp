@@ -1,6 +1,6 @@
 // Exports
 export 'views/flat_view.dart';
-export 'transfer_controller.dart';
+export 'data/controller.dart';
 export 'data/mode.dart';
 export 'data/animation.dart';
 export 'package:sonr_app/pages/transfer/data/filter.dart';
@@ -9,8 +9,9 @@ export 'package:sonr_app/pages/transfer/data/filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/pages/transfer/views/composer_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'transfer_controller.dart';
+import 'data/controller.dart';
 import 'views/local_view.dart';
 
 /// @ Transfer Screen Entry Point
@@ -24,7 +25,7 @@ class TransferPage extends GetView<TransferController> {
           action: ActionButton(
             iconData: SonrIcons.Compass,
             onPressed: () {
-              
+              AppRoute.popup(RemoteInviteComposer());
             },
           ),
           onPressed: () => controller.closeToHome(),
