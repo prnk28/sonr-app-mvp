@@ -42,7 +42,10 @@ class URLAuthView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(child: Container(child: URLContent(link: invite.url))),
+            Expanded(
+                child: Container(
+              child: URLContent(link: invite.url),
+            )),
           ],
         ),
 
