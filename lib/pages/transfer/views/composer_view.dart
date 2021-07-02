@@ -71,12 +71,5 @@ class InviteComposer extends GetView<ComposeController> {
         ),
       ),
     );
-  }
-
-  EdgeInsets _calculateMargin() {
-    // Fetch Height
-    final topPad = 145.0;
-    final bottomPad = Get.height - 135;
-    return EdgeInsets.only(top: 24, bottom: 135, left: 24, right: 24);
-  }
+  } 
 }
