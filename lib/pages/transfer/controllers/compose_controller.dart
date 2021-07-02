@@ -26,7 +26,7 @@ class ComposeController extends GetxController with StateMixin<Session> {
   }
 
   /// @ Check if Name Value is Value
-  Future<void> checkName(String sName) async {
+  Future<void> checkName(String sName, {bool withShare = false}) async {
     // Refresh Records
     await _refreshRecords();
 
@@ -44,6 +44,10 @@ class ComposeController extends GetxController with StateMixin<Session> {
       }
     }
     composeStatus(ComposeStatus.NonExisting);
+
+    if (withShare) {
+      await shareRemote();
+    }
   }
 
   /// @ User Sends A Remote Transfer Name Request

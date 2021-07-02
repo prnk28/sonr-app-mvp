@@ -1,25 +1,23 @@
 import '../style.dart';
 
-class DashedRect extends StatelessWidget {
+class DashedBox extends StatelessWidget {
   final Color color;
   final double strokeWidth;
   final double gap;
   final Widget? child;
+  final Decoration? decoration;
 
-  DashedRect({this.color = Colors.black, this.strokeWidth = 2.0, this.gap = 5.0, this.child});
+  DashedBox({this.color = Colors.black, this.strokeWidth = 2.0, this.gap = 5.0, this.decoration, this.child});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.all(strokeWidth / 2),
-            child: CustomPaint(
-              painter: DashedPathPainter(color: color, strokeWidth: strokeWidth, gap: gap),
-              child: child,
-            ),
-          ),
+    return Container(
+      decoration: decoration,
+      child: Padding(
+        padding: EdgeInsets.all(strokeWidth / 2),
+        child: CustomPaint(
+          painter: DashedPathPainter(color: color, strokeWidth: strokeWidth, gap: gap),
+          child: child,
         ),
       ),
     );

@@ -142,16 +142,18 @@ class _NameStatus extends GetView<RegisterController> {
             padding: EdgeInsets.all(12),
             constraints: BoxConstraints(minWidth: 140, maxWidth: 285),
             child: Container(
-              child: DashedRect(
-                strokeWidth: 1,
-                color: AppTheme.greyColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                    controller.nameStatus.value.icon(),
-                    Padding(padding: EdgeInsets.only(left: 4)),
-                    controller.nameStatus.value.label(),
-                  ]),
+              child: Center(
+                child: DashedBox(
+                  strokeWidth: 1,
+                  color: AppTheme.greyColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      controller.nameStatus.value.icon(),
+                      Padding(padding: EdgeInsets.only(left: 4)),
+                      controller.nameStatus.value.label(),
+                    ]),
+                  ),
                 ),
               ),
             ),

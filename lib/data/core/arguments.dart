@@ -170,3 +170,12 @@ class TransferArguments {
   final InviteRequest request;
   TransferArguments(this.request);
 }
+
+enum AnimatedStatusType { Initial, Loading, Error, Success }
+
+extension AnimatedStatusTypeUtils on AnimatedStatusType {
+  bool get isInitial => this == AnimatedStatusType.Initial;
+  bool get isLoading => this == AnimatedStatusType.Loading;
+  bool get isError => this == AnimatedStatusType.Error;
+  bool get isSuccess => this == AnimatedStatusType.Success;
+}

@@ -5,8 +5,11 @@ import 'package:sonr_app/style/style.dart';
 class InviteComposer extends GetView<ComposeController> {
   @override
   Widget build(BuildContext context) {
-    
     return BoxContainer(
+      footer: ColorButton.primary(
+        text: "Share File",
+        onPressed: () => controller.shareRemote(),
+      ),
       padding: EdgeInsets.all(8),
       margin: _calculateMargin(),
       child: Column(
@@ -27,11 +30,32 @@ class InviteComposer extends GetView<ComposeController> {
               CircleContainer(
                   padding: EdgeInsets.all(8),
                   child: SonrIcons.ATSign.icon(
-                    color: AppTheme.itemColor,
+                    color: AppTheme.itemColorInversed,
                     size: 36,
                   )),
-              SNameTextField(
-                onEditingComplete: (value) {},
+              Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SNameTextField(
+                      onEditingComplete: (value) {
+                        controller.checkName(value, withShare: true);
+                      },
+                      onChanged: (value) {
+                        controller.checkName(value);
+                      },
+                    ),
+                  ),
+                  DashedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Obx(() => AnimatedStatus(
+                          status: controller.composeStatus.value.toAnimatedStatus(),
+                        )),
+                  ),
+                ],
               )
             ],
           ),

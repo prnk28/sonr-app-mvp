@@ -1,4 +1,6 @@
 // Flat Mode Durations
+import 'package:sonr_app/data/data.dart';
+
 const K_TRANSLATE_DELAY = Duration(milliseconds: 150);
 const K_TRANSLATE_DURATION = Duration(milliseconds: 600);
 
@@ -51,4 +53,20 @@ enum ComposeStatus {
   Checking,
   NonExisting,
   Existing,
+}
+
+extension ComposeStatusUtil on ComposeStatus {
+  /// Convert this Enum to Animated Status Type
+  AnimatedStatusType toAnimatedStatus() {
+    switch (this) {
+      case ComposeStatus.Initial:
+        return AnimatedStatusType.Initial;
+      case ComposeStatus.Checking:
+        return AnimatedStatusType.Loading;
+      case ComposeStatus.NonExisting:
+        return AnimatedStatusType.Error;
+      case ComposeStatus.Existing:
+        return AnimatedStatusType.Success;
+    }
+  }
 }
