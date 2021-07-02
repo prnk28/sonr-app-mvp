@@ -37,11 +37,17 @@ class BoxContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (footer != null) {
-      return Stack(alignment: Alignment.center, children: [
-        _buildBox(),
-        Container(
-          margin: EdgeInsets.only(top: 356),
-          child: footer,
+      return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+        _buildBox(
+          boxPadding: EdgeInsets.only(bottom: 32),
+        ),
+        Positioned.directional(
+          textDirection: TextDirection.ltr,
+          bottom: -40,
+          child: Container(
+            margin: const EdgeInsets.only(top: 24),
+            child: footer!,
+          ),
         ),
       ]);
     }
@@ -49,13 +55,13 @@ class BoxContainer extends StatelessWidget {
   }
 
   /// Builds Default Box Container
-  Widget _buildBox() {
+  Widget _buildBox({EdgeInsets boxPadding = EdgeInsets.zero}) {
     return Container(
       key: key,
       width: width,
       height: height,
       alignment: alignment,
-      padding: padding,
+      padding: padding != null ? padding!.add(boxPadding) : boxPadding,
       foregroundDecoration: foregroundDecoration,
       constraints: constraints,
       margin: margin,

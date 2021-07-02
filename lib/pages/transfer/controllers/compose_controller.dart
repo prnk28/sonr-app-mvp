@@ -27,26 +27,30 @@ class ComposeController extends GetxController with StateMixin<Session> {
 
   /// @ Check if Name Value is Value
   Future<void> checkName(String sName, {bool withShare = false}) async {
-    // Refresh Records
-    await _refreshRecords();
+    if (sName.length > 0) {
+      // Refresh Records
+      await _refreshRecords();
 
-    // Search Record
-    final record = _records.firstWhere(
-      (e) => e.equalsName(sName) && e.isName,
-      orElse: () => HSRecord.blank(),
-    );
+      // Search Record
+      final record = _records.firstWhere(
+        (e) => e.equalsName(sName) && e.isName,
+        orElse: () => HSRecord.blank(),
+      );
 
-    // Validate Record
-    if (record.isName) {
-      _peerRef = record.toPeer();
-      if (_peerRef != null) {
-        composeStatus(ComposeStatus.Existing);
+      // Validate Record
+      if (record.isName) {
+        _peerRef = record.toPeer();
+        if (_peerRef != null) {
+          composeStatus(ComposeStatus.Existing);
+        }
       }
-    }
-    composeStatus(ComposeStatus.NonExisting);
+      composeStatus(ComposeStatus.NonExisting);
 
-    if (withShare) {
-      await shareRemote();
+      if (withShare) {
+        await shareRemote();
+      }
+    } else {
+      composeStatus(ComposeStatus.Initial);
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:sonr_app/data/services/services.dart';
+import 'package:sonr_app/pages/transfer/views/composer_view.dart';
 import 'package:sonr_app/style/style.dart';
 
 class TransferController extends GetxController {
@@ -51,6 +52,10 @@ class TransferController extends GetxController {
       offset: Offset(-80, -10),
       parentKey: localArrowButtonKey,
     );
+  }
+
+  void onRemotePressed() {
+    AppRoute.popup(InviteComposer());
   }
 
   /// @ User is Facing or No longer Facing a Peer

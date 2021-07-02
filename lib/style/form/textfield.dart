@@ -169,62 +169,60 @@ class SNameTextField extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ObxValue<RxDouble>(
-        (leftPadding) => Stack(children: [
-              ObxValue<RxString>(
-                  (value) => TextField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ],
-                        style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
-                        autofocus: true,
-                        textInputAction: TextInputAction.go,
-                        autocorrect: false,
-                        showCursor: false,
-                        textCapitalization: TextCapitalization.none,
-                        onEditingComplete: () {
-                          onEditingComplete(value.value);
-                        },
-                        onChanged: (val) {
-                          // Update Value
-                          value(val);
+    return Container(
+      width: Get.width,
+      child: ObxValue<RxDouble>(
+          (leftPadding) => Stack(children: [
+                ObxValue<RxString>(
+                    (value) => TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                          ],
+                          style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
+                          autofocus: true,
+                          textInputAction: TextInputAction.go,
+                          autocorrect: false,
+                          showCursor: false,
+                          textCapitalization: TextCapitalization.none,
+                          onEditingComplete: () {
+                            onEditingComplete(value.value);
+                          },
+                          onChanged: (val) {
+                            // Update Value
+                            value(val);
 
-                          // Handle Changed
-                          _handleChanged(val, leftPadding);
-                        },
-                        decoration: InputDecoration.collapsed(
-                          hintText: hint.item1,
+                            // Find Size
+                            final size = val.size(DisplayTextStyle.Paragraph, fontSize: 24);
+                            final length = size.width;
+
+                            // Update Padding
+                            if (length > 0) {
+                              leftPadding(length);
+                            } else {
+                              leftPadding(hint.item1.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
+                            }
+
+                            // Callback
+                            if (onChanged != null) {
+                              onChanged!(val);
+                            }
+                          },
+                          decoration: InputDecoration.collapsed(
+                            hintText: hint.item1,
+                          ),
                         ),
-                      ),
-                  "".obs),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: leftPadding.value),
-                child: Text(
-                  ".snr/",
-                  style: DisplayTextStyle.Subheading.style(color: AppTheme.itemColor, fontSize: 24),
+                    "".obs),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: leftPadding.value),
+                  child: Text(
+                    ".snr/",
+                    style: DisplayTextStyle.Subheading.style(color: AppTheme.itemColor, fontSize: 24),
+                  ),
                 ),
-              ),
-            ]),
-        (hint.item1.length * 12.0).obs);
-  }
-
-  void _handleChanged(String val, RxDouble leftPadding) {
-    // Find Size
-    final size = val.size(DisplayTextStyle.Paragraph, fontSize: 24);
-    final length = size.width;
-
-    // Update Padding
-    if (length > 0) {
-      leftPadding(length);
-    } else {
-      leftPadding(hint.item1.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
-    }
-
-    // Callback
-    if (onChanged != null) {
-      onChanged!(val);
-    }
+              ]),
+          (hint.item1.length * 12.0).obs),
+    );
   }
 }
 
