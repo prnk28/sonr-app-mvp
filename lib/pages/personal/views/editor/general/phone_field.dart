@@ -6,7 +6,7 @@ class EditPhoneView extends GetView<PersonalController> {
   EditPhoneView({Key? key}) : super(key: key);
   final FocusNode _primaryNumberFocus = FocusNode();
   final scrollController = ScrollController();
-  final hintName = SonrTextField.hintName();
+  final hintName = TextUtils.hintName;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class EditPhoneView extends GetView<PersonalController> {
       child: SingleChildScrollView(
         controller: scrollController,
         child: Column(children: [
-          SonrTextField(
+          DesignTextField(
               hint: "+1-555-555-5555",
               label: "Primary",
               textInputAction: TextInputAction.done,

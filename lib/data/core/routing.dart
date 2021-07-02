@@ -207,7 +207,7 @@ extension AppRoute on AppPage {
 
   /// Received FlatMode Invite
   Future<void> invite(Contact data) async {
-    Get.find<TransferController>().animateFlatSwap(data);
+    Get.find<PositionController>().animateFlatSwap(data);
   }
 
   /// Pop the current named [page] in the stack and push a new one in its place
@@ -255,7 +255,7 @@ extension AppRoute on AppPage {
 
   /// Received FlatMode Response
   Future<void> response(Contact data) async {
-    Get.find<TransferController>().animateFlatIn(data, delayModifier: 2);
+    Get.find<PositionController>().animateFlatIn(data, delayModifier: 2);
   }
 
   /// Pushes a new named [page] to the stack.

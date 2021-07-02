@@ -1,32 +1,19 @@
 import 'dart:async';
-import 'package:sonr_app/pages/transfer/data/arguments.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
-class TransferController extends GetxController {
-  // @ Global Property Accessor
-  static InviteRequest get invite => Get.find<TransferController>().inviteRequest;
-
-  // @ Properties
-  final title = "Nobody Here".obs;
-  final isFacingPeer = false.obs;
-  final isNotEmpty = false.obs;
-  final centerKey = ValueKey("").obs;
-
+class PositionController extends GetxController {
   // @ Direction Properties
   final angle = 0.0.obs;
   final cardinalTitle = "".obs;
   final degrees = 0.0.obs;
-  final desktopsEnabled = true.obs;
   final direction = 0.0.obs;
   final directionTitle = "".obs;
-  final hasInvite = false.obs;
-  final phonesEnabled = true.obs;
 
-  // @ FlatMode Properties
-  final received = Rx<Contact?>(null);
+  // @ Flat Mode Properties
   final status = FlatModeState.Standby.obs;
+  final received = Rx<Contact?>(null);
   final animation = FlatModeAnimation(FlatModeTransition.Standby).obs;
   final transition = FlatModeTransition.Standby.obs;
 
@@ -34,26 +21,13 @@ class TransferController extends GetxController {
   bool get hasReceived => received.value != null;
 
   // Streams
-  late StreamSubscription<Lobby?> _lobbySizeStream;
   late StreamSubscription<Position> _positionStream;
-  late StreamSubscription<Payload> _payloadStream;
   late StreamSubscription<bool> _isFlatStream;
-  late InviteRequest inviteRequest;
-
-  // References
-  final localArrowButtonKey = GlobalKey();
-  final scrollController = ScrollController();
 
   /// @ Controller Constructer
   @override
   void onInit() {
-    // Set Initial Value
-    _handlePositionUpdate(DeviceService.position.value);
-    _handleLobbyUpdate(LobbyService.lobby.value);
-
-    // Add Stream Handlers
     _positionStream = DeviceService.position.listen(_handlePositionUpdate);
-    _lobbySizeStream = LobbyService.lobby.listen(_handleLobbyUpdate);
     _isFlatStream = LobbyService.isFlatMode.listen(_handleFlatMode);
     super.onInit();
   }
@@ -61,29 +35,9 @@ class TransferController extends GetxController {
   /// @ On Dispose
   @override
   void onClose() {
-    _lobbySizeStream.cancel();
-    _payloadStream.cancel();
     _positionStream.cancel();
     _isFlatStream.cancel();
     super.onClose();
-  }
-
-  /// @ First Method Called
-  void initialize({InviteRequest? request}) {
-    // Manual Injection
-    if (request != null) {
-      inviteRequest = request;
-      hasInvite(true);
-    } else {
-      // Fetch from Arguments
-      final args = Get.arguments;
-      if (args is TransferArguments) {
-        inviteRequest = args.request;
-        hasInvite(true);
-      } else {
-        hasInvite(false);
-      }
-    }
   }
 
   /// @ Method to Animate in Responded Card
@@ -117,34 +71,8 @@ class TransferController extends GetxController {
     });
   }
 
-  /// @ Closes Window for Transfer Page
-  void closeToHome() {
-    AppPage.Home.off();
-  }
-
-  void onLocalArrowPressed() {
-    AppRoute.positioned(
-      Checklist(
-          options: [
-            ChecklistOption("Phones", phonesEnabled),
-            ChecklistOption("Desktops", desktopsEnabled),
-          ],
-          onSelectedOption: (index) {
-            print(index);
-          }),
-      offset: Offset(-80, -10),
-      parentKey: localArrowButtonKey,
-    );
-  }
-
-  /// @ User is Facing or No longer Facing a Peer
-  void setFacingPeer(bool value) {
-    isFacingPeer(value);
-    isFacingPeer.refresh();
-  }
-
   /// @ Method to Animate out Sent Card  and Update Drage Position
-  setFlatDrag(double y) {
+  void setFlatDrag(double y) {
     // @ Check for Valid State
     if (status.value == FlatModeState.Dragging || status.value == FlatModeState.Standby) {
       // # Before Drag Threshold
@@ -175,7 +103,7 @@ class TransferController extends GetxController {
   }
 
   // # Handle Flat Mode Status Change //
-  _handleFlatMode(bool val) {
+  void _handleFlatMode(bool val) {
     if (!val && status.value.isStandby) {
       Get.back();
     }
@@ -193,14 +121,6 @@ class TransferController extends GetxController {
       direction(pos.facing.direction);
       angle(pos.facing.angle);
       degrees(pos.facing.degrees);
-    }
-  }
-
-  // # Handle Lobby Size Update
-  void _handleLobbyUpdate(Lobby data) {
-    if (!isClosed) {
-      // Set Strings
-      isNotEmpty(data.isNotEmpty);
     }
   }
 }

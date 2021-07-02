@@ -17,7 +17,7 @@ export 'models/option.dart';
 export 'models/result.dart';
 export 'models/status.dart';
 export 'package:sonr_app/pages/details/details.dart';
-export 'package:sonr_app/data/services/services.dart';
+export 'services/services.dart';
 
 // Theme Models
-export 'models/type.dart';
+export 'models/animation.dart';

@@ -2,7 +2,7 @@ import 'package:rive/rive.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'dart:async';
 import 'package:sonr_app/style/style.dart';
-import '../../../pages/transfer/data/controller.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 
 /// @ Reactive Controller for Peer Bubble
 class PeerController extends GetxController with SingleGetTickerProviderMixin {

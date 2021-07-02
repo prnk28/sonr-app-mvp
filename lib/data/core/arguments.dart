@@ -165,3 +165,8 @@ class SnackArgs {
     );
   }
 }
+
+class TransferArguments {
+  final InviteRequest request;
+  TransferArguments(this.request);
+}

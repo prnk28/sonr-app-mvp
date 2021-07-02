@@ -43,7 +43,7 @@ class _NamePage extends GetView<RegisterController> {
   _NamePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final hint = SonrTextField.hintName();
+    final hint = TextUtils.hintName;
     return SingleChildScrollView(
       reverse: true,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -211,7 +211,7 @@ class _BackupCodeView extends GetView<RegisterController> {
 }
 
 class _ProfileSetupView extends GetView<RegisterController> {
-  final hintName = SonrTextField.hintName();
+  final hintName = TextUtils.hintName;
   final firstNameFocus = FocusNode();
   final lastNameFocus = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

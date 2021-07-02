@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
@@ -21,25 +20,18 @@ class LobbyService extends GetxService {
   final _lobby = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
   final _position = Position().obs;
-  final _records = RxList<HSRecord>();
   final _status = Rx<Lobby_Status>(Lobby_Status.Empty);
 
   // References
   late StreamSubscription<Position>? _positionStream;
   late StreamSubscription<Lobby> _lobbyStream;
   late Timer? _timer;
-  final _nbClient = NamebaseApi(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
   Map<Peer?, PeerCallback> _peerCallbacks = <Peer?, PeerCallback>{};
 
   // ^ Constructer ^ //
   Future<LobbyService> init() async {
     if (DeviceService.isMobile) {
       _positionStream = DeviceService.position.listen(_handlePosition);
-    }
-
-    if (DeviceService.hasInterent) {
-      final result = await _nbClient.refresh();
-      _records(result.records);
     }
 
     _lobbyStream = _lobby.listen(_lobbyListener);
@@ -66,22 +58,6 @@ class LobbyService extends GetxService {
     Future.delayed(25.seconds, () {
       _flatModeCancelled(false);
     });
-  }
-
-  /// @ Method finds a user from typed query, cross checking from Namebase Records.
-  static Future<HSRecord?> findUser(String query) async {
-    // Refresh Records from NB Client
-    final result = await to._nbClient.refresh();
-    to._records(result.records);
-    HSRecord? record;
-
-    // Iterate Through all Records
-    to._records.forEach((e) {
-      if (e.equalsName(query)) {
-        record = e;
-      }
-    });
-    return record;
   }
 
   /// @ Registers Peer to Callback
