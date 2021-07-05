@@ -23,12 +23,12 @@ class TransferPage extends GetView<TransferController> {
     // Build View
     return SonrScaffold(
         appBar: DetailAppBar(
-          action: ActionButton(
+          action: DeviceService.isIOS ? ActionButton(
             iconData: SonrIcons.Compass,
             onPressed: () {
               AppRoute.popup(InviteComposer());
             },
-          ),
+          ) : null,
           onPressed: () => AppPage.Home.off(),
           title: "Transfer",
           isClose: true,
