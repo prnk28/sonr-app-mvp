@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/intel/intel.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'home_controller.dart';
 import 'package:sonr_app/style/style.dart';
@@ -118,10 +119,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                       ),
                     )
                   : null,
-              title: controller.title.value.heading(
-                color: Get.theme.focusColor,
-                align: TextAlign.start,
-              ),
+              title: IntelHeader()
             ),
           ),
         ));

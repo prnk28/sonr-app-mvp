@@ -9,9 +9,10 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
   final sonrStatus = Rx<Status>(NodeService.status.value);
 
   // References
+
   late StreamSubscription<Lobby?> _lobbyStream;
   late StreamSubscription<Status> _statusStream;
-  int _lastCount = 0;
+  Lobby _lastLobby = LobbyService.lobby.value;
   bool _timeoutActive = false;
 
   /// @ Controller Constructer
@@ -20,7 +21,7 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
     // Handle Streams
     _lobbyStream = LobbyService.lobby.listen(_handleLobbyStream);
     _statusStream = NodeService.status.listen(_handleStatus);
-
+    change(null, status: RxStatus.empty());
     // Initialize
     super.onInit();
   }
@@ -53,19 +54,12 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
   }
 
   // @ Handle Size Update
-  _handleLobbyStream(Lobby? onData) {
-    // Peer Joined
-    if (onData!.count > _lastCount) {
-      var diff = onData.count - _lastCount;
-      swapTitleText("$diff Joined");
-      DeviceService.playSound(type: Sounds.Joined);
-    }
-    // Peer Left
-    else if (onData.count < _lastCount) {
-      var diff = _lastCount - onData.count;
-      swapTitleText("$diff Left");
-    }
-    _lastCount = onData.count;
+  _handleLobbyStream(Lobby onData) {
+    change(
+      LobbyInfo(lastLobby: _lastLobby, newLobby: onData),
+      status: RxStatus.success(),
+    );
+    _lastLobby = onData;
   }
 
   // @ Handle Status Update
@@ -79,7 +73,6 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
       // Revert Text
       Future.delayed(const Duration(milliseconds: 3500), () {
         if (!isClosed) {
-
           _timeoutActive = false;
         }
       });

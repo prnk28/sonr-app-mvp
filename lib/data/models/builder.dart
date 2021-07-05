@@ -3,7 +3,6 @@ import 'package:sonr_app/style/style.dart';
 
 class RequestBuilder {
   // Request References
-  static APIKeys get apiKeys => AppServices.apiKeys;
   static Device get device => DeviceService.device;
   static Contact get contact => ContactService.contact.value;
   static ConnectionRequest_InternetType get internetType => DeviceService.connectivity.value.toInternetType();
@@ -17,7 +16,7 @@ class RequestBuilder {
   /// Returns New Connection Request
   static Future<ConnectionRequest> get connection async {
     return ConnectionRequest(
-      apiKeys: apiKeys,
+      apiKeys: AppServices.apiKeys,
       location: await DeviceService.location,
       contact: contact,
       type: internetType,
@@ -31,7 +30,7 @@ class RequestBuilder {
   /// Returns New Initialize Request
   static InitializeRequest get initialize {
     return InitializeRequest(
-      apiKeys: apiKeys,
+      apiKeys: AppServices.apiKeys,
       device: DeviceService.device,
     );
   }

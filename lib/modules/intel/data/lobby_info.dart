@@ -1,4 +1,3 @@
-import 'package:geolocator/geolocator.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -8,9 +7,6 @@ class LobbyInfo {
 
   /// New Lobby Reference
   final Lobby? newLobby;
-
-  /// Returns Current Location
-  late Location location;
 
   // @ Calculations
   /// Fetch Difference Count
@@ -32,12 +28,6 @@ class LobbyInfo {
 
   // Constructer: Takes Last Lobby and New Lobby
   LobbyInfo({this.lastLobby, this.newLobby}) {
-    _fetchLocation();
-  }
-
-  // Helper Method to Fetch Location
-  void _fetchLocation() async {
-    var pos = await Geolocator.getCurrentPosition();
-    location = pos.toSonrLocation();
+    //_fetchLocation();
   }
 }
