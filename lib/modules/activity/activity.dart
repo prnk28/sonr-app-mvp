@@ -1,4 +1,4 @@
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter_contacts/flutter_contacts.dart' as pub;
 

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
