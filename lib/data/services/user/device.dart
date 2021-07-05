@@ -3,7 +3,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:geolocator/geolocator.dart';
@@ -38,7 +37,9 @@ class DeviceService extends GetxService {
   // References
   late MainEntry _main;
   late Systray _systemTray;
-  final _locationApi = LocationApi(ip_key: Env.ip_key, rapid_host: Env.rapid_host, rapid_key: Env.rapid_key);
+  final _locationApi = LocationApi(
+    keys: AppServices.apiKeys,
+  );
 
   // ^ Initialization ^ //
   DeviceService() {
@@ -120,7 +121,7 @@ class DeviceService extends GetxService {
         );
 
         // Return Location
-        return Location(longitude: pos.longitude, latitude: pos.latitude);
+        return pos.toSonrLocation();
       }
     }
     // Analytics
@@ -135,7 +136,7 @@ class DeviceService extends GetxService {
       },
     );
 
-    return to._locationApi.fetchIP();
+    return to._locationApi.fetch();
   }
 
   /// @ Method Hides Keyboard

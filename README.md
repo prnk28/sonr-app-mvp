@@ -14,7 +14,7 @@ Generate SQL Table fields by running this Command.
 ### Enviornment Keys
 Wrap Enviornment Variables with this command.
 `flutter pub get`
-`flutter pub run environment_config:generate --ip_key=$ip_key --rapid_host=$rapid_host  --rapid_key=$rapid_key --hs_key=$hs_key  --hs_secret=$hs_secret --storj_key=$storj_key --storj_root_password=$storj_root_password --sentry_dsn=$sentry_dsn --hub_key=$hub_key --hub_secret=$hub_secret`
+`flutter pub run environment_config:generate --ip_key=$ip_key --rapid_key=$rapid_key --hs_key=$hs_key  --hs_secret=$hs_secret --storj_key=$storj_key --storj_root_password=$storj_root_password --sentry_dsn=$sentry_dsn --hub_key=$hub_key --hub_secret=$hub_secret --map_key=$map_key --map_secret=$map_secret`
 
 ### Proto-Dart
 Add Protocol Buffer Generation for Dart Types with this command.

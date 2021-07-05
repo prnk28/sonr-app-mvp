@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:geolocator/geolocator.dart' as geo;
 import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/data/data.dart';
 
@@ -52,4 +52,15 @@ extension ConnectivityResultUtils on ConnectivityResult {
   }
 
   bool get hasInternet => this != ConnectivityResult.none;
+}
+
+extension GeoLocaterPosition on geo.Position {
+  /// Convert this Position to Sonr Proto Location
+  Location toSonrLocation() {
+    // Return Location
+    return Location(
+      longitude: this.longitude,
+      latitude: this.latitude,
+    );
+  }
 }

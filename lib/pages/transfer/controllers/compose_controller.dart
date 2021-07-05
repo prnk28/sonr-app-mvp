@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -10,10 +9,7 @@ class ComposeController extends GetxController with StateMixin<Session> {
 
   // API Managers
   final _records = RxList<HSRecord>();
-  final _nbClient = NamebaseApi(
-    hsKey: Env.hs_key,
-    hsSecret: Env.hs_secret,
-  );
+  final _nbClient = NamebaseApi(keys: AppServices.apiKeys);
 
   // References
   Peer? _peerRef;

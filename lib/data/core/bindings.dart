@@ -102,7 +102,6 @@ class AppServices {
         textileKey: Env.hub_key,
         textileSecret: Env.hub_secret,
         ipApiKey: Env.ip_key,
-        rapidApiHost: Env.rapid_host,
         rapidApiKey: Env.rapid_key,
       );
 }
