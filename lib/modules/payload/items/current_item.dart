@@ -1,9 +1,10 @@
+import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/style/style.dart';
-import '../activity.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
-class CurrentActivityItem extends GetView<ActivityController> {
+
+class CurrentReceiveItem extends GetView<ActivityController> {
   final Session session;
-  const CurrentActivityItem({required this.session, Key? key}) : super(key: key);
+  const CurrentReceiveItem({required this.session, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BoxContainer(

@@ -92,7 +92,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               centerTitle: controller.view.value.isDefault,
               key: ValueKey(false),
               subtitle: Padding(
-                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
+                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 24) : EdgeInsets.zero,
                 child: controller.view.value == HomeView.Dashboard
                     ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
                         color: Get.theme.focusColor.withOpacity(0.8),
@@ -105,7 +105,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               ),
               leading: controller.view.value != HomeView.Contact
                   ? Padding(
-                      padding: const EdgeInsets.only(bottom: 32.0, left: 8),
+                      padding: const EdgeInsets.only(bottom: 24.0, left: 8),
                       child: Container(
                         child: Obx(() => ShowcaseItem.fromType(
                               type: ShowcaseType.Help,
@@ -155,7 +155,7 @@ class HomeActionButton extends GetView<HomeController> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 32.0, right: 8),
+        padding: const EdgeInsets.only(bottom: 24.0, right: 8),
         child: ShowcaseItem.fromType(
           type: ShowcaseType.Alerts,
           child: ActionButton(

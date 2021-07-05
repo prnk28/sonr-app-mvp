@@ -54,11 +54,9 @@ class AppServices {
   static APIKeys get apiKeys => APIKeys(
         handshakeKey: Env.hs_key,
         handshakeSecret: Env.hs_secret,
-        textileKey: Env.hub_key,
-        textileSecret: Env.hub_secret,
         ipApiKey: Env.ip_key,
         rapidApiKey: Env.rapid_key,
-        mapQuestKey: Env.map_key,
-        mapQuestSecret: Env.map_secret,
+        textileKey: Env.hub_key,
+        textileSecret: Env.hub_secret,
       );
 }

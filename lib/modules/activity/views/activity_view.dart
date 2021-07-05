@@ -90,7 +90,7 @@ class _CurrentActivityView extends GetView<ActivityController> {
     return Container(
       alignment: Alignment.topCenter,
       padding: EdgeInsets.only(top: 24),
-      child: CurrentActivityItem(session: ReceiverService.session),
+      child: CurrentReceiveItem(session: ReceiverService.session),
     );
   }
 }

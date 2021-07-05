@@ -4,27 +4,43 @@ import 'package:sonr_app/style/style.dart';
 class InfolistOption {
   final String title;
   final IconData iconData;
-  final Function onPressed;
+  final Function? onPressed;
+  final bool isHeader;
+  final Color? iconColor;
+  final Color? textColor;
+
   InfolistOption(
     this.title,
-    this.iconData,
+    this.iconData, {
     this.onPressed,
-  );
+    this.iconColor,
+    this.textColor,
+    this.isHeader = false,
+  });
 
   /// Returns Icon for Checklist Option based on State
   Widget icon() {
     return iconData.icon(
-      color: AppTheme.itemColor,
+      color: iconColor ?? AppTheme.itemColor,
       size: 24,
     );
   }
 
   /// Returns this Widgets Size
-  Size get size => this.title.size(DisplayTextStyle.Light, fontSize: 24);
+  Size get size => this.title.size(
+        isHeader ? DisplayTextStyle.Subheading : DisplayTextStyle.Light,
+        fontSize: isHeader ? 26 : 24,
+      );
 
   /// Returns Text for Checklist Option based on State
   Widget text() {
-    return title.light(color: AppTheme.itemColor, fontSize: 24);
+    if (isHeader) {
+      return title.subheading(
+        color: textColor ?? AppTheme.itemColor,
+        fontSize: 26,
+      );
+    }
+    return title.light(color: textColor ?? AppTheme.itemColor, fontSize: 24);
   }
 }
 
@@ -47,7 +63,11 @@ class Infolist extends StatelessWidget {
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) => GestureDetector(
-              onTap: () => options[index].onPressed(),
+              onTap: () {
+                if (options[index].onPressed != null) {
+                  options[index].onPressed!();
+                }
+              },
               child: Container(
                 constraints: options.boxConstraints,
                 child: Column(children: [

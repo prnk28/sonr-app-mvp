@@ -37,7 +37,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 subtitle != null ? subtitle! : Container(),
-                title,
+                Expanded(child: title),
               ],
             ),
           ),
@@ -47,7 +47,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 72);
 
   Widget _buildTrailing() {
     if (action != null && secondAction != null) {
