@@ -6,24 +6,31 @@ class IntelHeader extends GetView<IntelController> {
   Widget build(BuildContext context) {
     return Container(
         child: Obx(
-          () => AnimatedSlider.slideDown(
-              child: Column(
-            children: [
-              Obx(() => GestureDetector(
-                    onTap: () async {
-                      if (NodeService.status.value == Status.FAILED) {
-                        await Logger.openIntercom();
-                      }
-                    },
-                    child: controller.title.value.heading(
-                      color: Get.theme.focusColor,
-                      align: TextAlign.start,
-                      fontSize: 34,
-                    ),
-                  ))
-            ],
-          )),
-        ));
+      () => AnimatedSlider.slideDown(
+          child: Column(children: [
+        Obx(() => GestureDetector(
+            onTap: () async {
+              if (NodeService.status.value == Status.FAILED) {
+                await Logger.openIntercom();
+              }
+            },
+            child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: [
+                  WidgetSpan(
+                      alignment: PlaceholderAlignment.aboveBaseline,
+                      baseline: TextBaseline.alphabetic,
+                      child: SonrIcons.Location.icon(
+                        size: 22,
+                        color: AppTheme.itemColor,
+                      )),
+                  (" " + controller.title.value).headingSpan(
+                    color: Get.theme.focusColor,
+                    fontSize: 32,
+                  ),
+                ])))),
+      ])),
+    ));
   }
 }
 
@@ -53,44 +60,51 @@ class _NearbyPeersRow extends GetView<IntelController> {
           if (state != null) {
             if (state.hasMoreThanVisible) {
               final moreKey = GlobalKey();
-              return Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Row(
-                      children: state.mapNearby(),
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.min,
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: state.mapNearby(),
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                      ),
                     ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    key: moreKey,
-                    width: 32,
-                    height: 32,
-                    child: "${state.additionalPeers}+".light(
-                      fontSize: 16,
-                      color: AppTheme.greyColor,
+                    Container(
+                      alignment: Alignment.center,
+                      key: moreKey,
+                      width: 36,
+                      height: 36,
+                      child: "${state.additionalPeers}+".light(
+                        fontSize: 16,
+                        color: AppTheme.greyColor,
+                      ),
+                      decoration: BoxDecoration(
+                        color: SonrColor.AccentBlue,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color: SonrColor.AccentBlue,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               );
             } else {
-              return Row(
-                children: state.mapNearby(),
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  children: state.mapNearby(),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                ),
               );
             }
           }
           return Container();
         },
         onEmpty: Container(
+          padding: EdgeInsets.only(bottom: 16),
           child: "Nobody Around".light(
             fontSize: 16,
             color: AppTheme.greyColor,

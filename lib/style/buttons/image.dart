@@ -47,6 +47,7 @@ class ImageButton extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(maxHeight: 160, maxWidth: 160),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

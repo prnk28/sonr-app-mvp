@@ -41,6 +41,13 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 subtitle != null ? subtitle! : Container(),
                 Expanded(child: title),
+                footer != null
+                    ? Divider(
+                        color: AppTheme.dividerColor,
+                        indent: 8,
+                        endIndent: 8,
+                      )
+                    : Container(),
                 footer != null ? footer! : Container(),
               ],
             ),
@@ -51,19 +58,25 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 72);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 80);
 
   Widget _buildTrailing() {
     if (action != null && secondAction != null) {
-      return Container(
-          width: 94,
-          child: Row(
-            children: [action!, secondAction!],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ));
-    } else if (action != null && secondAction == null) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              width: 94,
+              child: Row(
+                children: [action!, secondAction!],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              ))
+        ],
+      );
+    } else if (action != null) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           action!,
@@ -77,7 +90,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget? _buildLeading() {
     if (leading != null) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           leading!,

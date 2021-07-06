@@ -35,16 +35,15 @@ class DashboardView extends GetView<HomeController> {
   Widget _buildView(HomeView status) {
     if (status == HomeView.Dashboard) {
       return Container(
-        height: Height.ratio(0.46),
+        height: Height.ratio(0.44),
         width: Width.full,
         key: ValueKey(HomeView.Dashboard),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(padding: EdgeInsets.only(top: 8)),
           "My Stuff".section(align: TextAlign.start, color: Get.theme.focusColor),
           Padding(padding: EdgeInsets.only(top: 4)),
           Center(
             child: Container(
-                height: Height.ratio(0.435),
+                height: Height.ratio(0.36),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -57,7 +56,8 @@ class DashboardView extends GetView<HomeController> {
                             path: PostItemType.Media.imagePath(),
                             label: PostItemType.Media.name(),
                             imageFit: BoxFit.fitWidth,
-                            imageWidth: 130,
+                            imageWidth: 100,
+                            circleSize: 80,
                             onPressed: () {
                               if (PostItemType.Media.count() > 0) {
                                 AppPage.Posts.to(args: PostsPageArgs.media());
@@ -70,6 +70,8 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
+                            circleSize: 80,
+                            imageHeight: 80,
                             path: PostItemType.Files.imagePath(),
                             label: PostItemType.Files.name(),
                             onPressed: () {
@@ -89,6 +91,8 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
+                            circleSize: 80,
+                            imageHeight: 80,
                             path: PostItemType.Contacts.imagePath(),
                             label: PostItemType.Contacts.name(),
                             onPressed: () {
@@ -104,8 +108,9 @@ class DashboardView extends GetView<HomeController> {
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
                             path: PostItemType.Links.imagePath(),
-                            imageWidth: 90,
-                            imageHeight: 90,
+                            imageWidth: 60,
+                            imageHeight: 60,
+                            circleSize: 80,
                             label: PostItemType.Links.name(),
                             onPressed: () {
                               if (PostItemType.Links.count() > 0) {

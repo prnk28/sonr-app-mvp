@@ -18,7 +18,6 @@ class PeerBubbleView extends GetView<PeerController> {
                   peer.platform.iconData,
                   isHeader: true,
                   iconColor: peer.platform.defaultIconColor,
-
                 ),
                 InfolistOption("Media", SonrIcons.Camera, onPressed: () {
                   SenderService.choose(ChooseOption.Camera).then((value) {
@@ -55,8 +54,8 @@ class PeerBubbleView extends GetView<PeerController> {
       },
       child: Container(
         key: peerKey,
-        width: 32,
-        height: 32,
+        width: 36,
+        height: 36,
         margin: EdgeInsets.symmetric(horizontal: 6),
         decoration: _buildDecoration(),
         child: Center(child: _buildPeerInitials()),
@@ -80,7 +79,7 @@ class PeerBubbleView extends GetView<PeerController> {
 
   Widget _buildPeerInitials() {
     return peer.profile.initials.light(
-      fontSize: 16,
+      fontSize: 18,
       color: AppTheme.greyColor,
     );
   }

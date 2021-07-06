@@ -96,7 +96,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               centerTitle: controller.view.value.isDefault,
               key: ValueKey(false),
               subtitle: Padding(
-                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 34) : EdgeInsets.zero,
+                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 68) : EdgeInsets.zero,
                 child: controller.view.value == HomeView.Dashboard
                     ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
                         fontSize: 22,
@@ -110,7 +110,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               ),
               leading: controller.view.value != HomeView.Contact
                   ? Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0, left: 8),
+                      padding: const EdgeInsets.only(top: 32.0, left: 8),
                       child: Container(
                         child: Obx(() => ShowcaseItem.fromType(
                               type: ShowcaseType.Help,
@@ -133,12 +133,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         align: TextAlign.start,
                       ),
                     ),
-              footer: controller.view.value != HomeView.Contact
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: IntelFooter(),
-                    )
-                  : null,
+              footer: controller.view.value != HomeView.Contact ? IntelFooter() : null,
             ),
           ),
         ));
@@ -147,7 +142,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
   @override
   Size get preferredSize {
     if (controller.view.value != HomeView.Contact) {
-      return Size(Get.width, Height.ratio(0.18));
+      return Size(Get.width, 186);
     } else {
       return Size(Get.width, kToolbarHeight + 64);
     }
@@ -171,7 +166,7 @@ class HomeActionButton extends GetView<HomeController> {
     // Return View
     if (page == HomeView.Contact) {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 36.0, right: 8),
+        padding: const EdgeInsets.only(bottom: 42.0, right: 8),
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Contact),
           iconData: SonrIcons.Settings,
@@ -182,10 +177,10 @@ class HomeActionButton extends GetView<HomeController> {
         ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 24.0, right: 8),
-        child: ShowcaseItem.fromType(
-          type: ShowcaseType.Alerts,
+      return ShowcaseItem.fromType(
+        type: ShowcaseType.Alerts,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 108.0, right: 8),
           child: ActionButton(
             key: ValueKey<HomeView>(HomeView.Dashboard),
             iconData: SonrIcons.Alerts,
