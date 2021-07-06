@@ -416,10 +416,13 @@ class AnimatedSlider extends StatelessWidget {
 
 /// @ Lottie Based Progress Indicator
 class HourglassIndicator extends StatelessWidget {
+  final double scale;
+
+  const HourglassIndicator({Key? key, this.scale = 0.2}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
-      scale: 0.2,
+      scale: scale,
       child: SizedBox(
         width: 24,
         height: 24,

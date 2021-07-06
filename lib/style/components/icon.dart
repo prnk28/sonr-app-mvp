@@ -5,306 +5,258 @@ import 'color.dart';
 import 'gradient.dart';
 
 extension MimeIcon on MIME_Type {
-  Widget gradient({double size = 32}) {
+  Widget gradient({double size = 32, Gradient? gradient}) {
+    return this.iconData.gradient(value: gradient ?? this.defaultIconGradient, size: size);
+  }
+
+  Icon icon({double size = 32, Color color = SonrColor.White}) {
+    return this.iconData.icon(size: size, color: color) as Icon;
+  }
+
+  Icon black({double size = 32}) {
+    return this.iconData.blackWith(size: size) as Icon;
+  }
+
+  Icon grey({double size = 32}) {
+    return this.iconData.greyWith(size: size) as Icon;
+  }
+
+  Icon white({double size = 32}) {
+    return this.iconData.whiteWith(size: size) as Icon;
+  }
+
+  IconData get iconData {
     switch (this) {
       case MIME_Type.AUDIO:
-        return SonrIcons.Audio.gradient(value: SonrGradients.FlyingLemon, size: size);
+        return SonrIcons.Audio;
       case MIME_Type.IMAGE:
-        return SonrIcons.Image.gradient(value: SonrGradients.JuicyCake, size: size);
+        return SonrIcons.Image;
       case MIME_Type.TEXT:
-        return SonrIcons.Document.gradient(value: SonrGradients.FarawayRiver, size: size);
+        return SonrIcons.Document;
       case MIME_Type.VIDEO:
-        return SonrIcons.Video.gradient(value: SonrGradients.NightCall, size: size);
+        return SonrIcons.Video;
       default:
         if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF.gradient(value: SonrGradients.RoyalGarden, size: size);
+          return SonrIcons.PDF;
         } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet.gradient(value: SonrGradients.ItmeoBranding, size: size);
+          return SonrIcons.Spreadsheet;
         } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation.gradient(value: SonrGradients.OrangeJuice, size: size);
+          return SonrIcons.Presentation;
         }
-        return SonrIcons.Unknown.gradient(value: SonrGradients.SolidStone, size: size);
+        return SonrIcons.Unknown;
     }
   }
 
-  Widget icon({double size = 32, Color color = SonrColor.White}) {
+  Gradient get defaultIconGradient {
     switch (this) {
       case MIME_Type.AUDIO:
-        return SonrIcons.Audio.icon(color: color, size: size);
+        return SonrGradients.FlyingLemon;
       case MIME_Type.IMAGE:
-        return SonrIcons.Image.icon(color: color, size: size);
+        return SonrGradients.JuicyCake;
       case MIME_Type.TEXT:
-        return SonrIcons.Document.icon(color: color, size: size);
+        return SonrGradients.FarawayRiver;
       case MIME_Type.VIDEO:
-        return SonrIcons.Video.icon(color: color, size: size);
+        return SonrGradients.NightCall;
       default:
         if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF.icon(color: color, size: size);
+          return SonrGradients.RoyalGarden;
         } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet.icon(color: color, size: size);
+          return SonrGradients.ItmeoBranding;
         } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation.icon(color: color, size: size);
+          return SonrGradients.OrangeJuice;
         }
-        return SonrIcons.Unknown.icon(color: color, size: size);
-    }
-  }
-
-  Icon get black {
-    switch (this) {
-      case MIME_Type.AUDIO:
-        return SonrIcons.Audio.black;
-      case MIME_Type.IMAGE:
-        return SonrIcons.Image.black;
-      case MIME_Type.TEXT:
-        return SonrIcons.Document.black;
-      case MIME_Type.VIDEO:
-        return SonrIcons.Video.black;
-      default:
-        if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF.black;
-        } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet.black;
-        } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation.black;
-        }
-        return SonrIcons.Unknown.black;
-    }
-  }
-
-  Icon get white {
-    switch (this) {
-      case MIME_Type.AUDIO:
-        return SonrIcons.Audio.white;
-      case MIME_Type.IMAGE:
-        return SonrIcons.Image.white;
-      case MIME_Type.TEXT:
-        return SonrIcons.Document.white;
-      case MIME_Type.VIDEO:
-        return SonrIcons.Video.white;
-      default:
-        if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF.white;
-        } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet.white;
-        } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation.white;
-        }
-        return SonrIcons.Unknown.white;
+        return SonrGradients.SolidStone;
     }
   }
 }
 
 extension PayloadIcon on Payload {
-  Widget gradient({double size = 32}) {
+  Widget gradient({double size = 32, Gradient? gradient}) {
+    return this.iconData.gradient(value: gradient ?? this.defaultIconGradient, size: size);
+  }
+
+  Icon icon({double size = 32, Color color = SonrColor.White}) {
+    return this.iconData.icon(size: size, color: color) as Icon;
+  }
+
+  Icon black({double size = 32}) {
+    return this.iconData.blackWith(size: size) as Icon;
+  }
+
+  Icon grey({double size = 32}) {
+    return this.iconData.greyWith(size: size) as Icon;
+  }
+
+  Icon white({double size = 32}) {
+    return this.iconData.whiteWith(size: size) as Icon;
+  }
+
+  IconData get iconData {
     if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar.gradient(value: SonrGradients.SunnyMorning, size: size);
+      return SonrIcons.Avatar;
     } else if (this == Payload.URL) {
-      return SonrIcons.Discover.gradient(value: SonrGradients.Lollipop, size: size);
+      return SonrIcons.Discover;
     } else if (this == Payload.FILE) {
-      return SonrIcons.Document.gradient(value: SonrGradients.FarawayRiver, size: size);
+      return SonrIcons.Document;
     } else if (this == Payload.MEDIA) {
-      return SonrIcons.Photos.gradient(value: SonrGradients.FarawayRiver, size: size);
+      return SonrIcons.Photos;
     } else if (this == Payload.FILES) {
-      return SonrIcons.Files.gradient(value: SonrGradients.FarawayRiver, size: size);
+      return SonrIcons.Files;
     } else {
-      return SonrIcons.Unknown.gradient(value: SonrGradients.SolidStone, size: size);
+      return SonrIcons.Unknown;
     }
   }
 
-  Widget icon({double size = 32, Color color = SonrColor.White}) {
+  Gradient get defaultIconGradient {
     if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar.icon(color: color, size: size);
+      return SonrGradients.SunnyMorning;
     } else if (this == Payload.URL) {
-      return SonrIcons.Discover.icon(color: color, size: size);
+      return SonrGradients.Lollipop;
     } else if (this == Payload.FILE) {
-      return SonrIcons.Document.icon(color: color, size: size);
+      return SonrGradients.FarawayRiver;
     } else if (this == Payload.MEDIA) {
-      return SonrIcons.Photos.icon(color: color, size: size);
+      return SonrGradients.FarawayRiver;
     } else if (this == Payload.FILES) {
-      return SonrIcons.Files.icon(color: color, size: size);
+      return SonrGradients.FarawayRiver;
     } else {
-      return SonrIcons.Unknown.icon(color: color, size: size);
-    }
-  }
-
-  Icon get black {
-    if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar.black;
-    } else if (this == Payload.URL) {
-      return SonrIcons.Discover.black;
-    } else if (this == Payload.FILE) {
-      return SonrIcons.Document.black;
-    } else if (this == Payload.MEDIA) {
-      return SonrIcons.Photos.black;
-    } else if (this == Payload.FILES) {
-      return SonrIcons.Files.black;
-    } else {
-      return SonrIcons.Unknown.black;
-    }
-  }
-
-  Icon get white {
-    if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar.white;
-    } else if (this == Payload.URL) {
-      return SonrIcons.Discover.white;
-    } else if (this == Payload.FILE) {
-      return SonrIcons.Document.white;
-    } else if (this == Payload.MEDIA) {
-      return SonrIcons.Photos.white;
-    } else if (this == Payload.FILES) {
-      return SonrIcons.Files.white;
-    } else {
-      return SonrIcons.Unknown.white;
+      return SonrGradients.SolidStone;
     }
   }
 }
 
 extension PlatformIcon on Platform {
   ///-- Returns Icon Widget -- //
-  Widget gradient({double size = 32}) {
-    switch (this) {
-      case Platform.Android:
-        return SonrIcons.Android.gradient(value: SonrGradients.PremiumWhite, size: size);
-      case Platform.IOS:
-        return SonrIcons.IPhone.gradient(value: SonrGradients.PremiumWhite, size: size);
-      case Platform.MacOS:
-        return SonrIcons.IMac.gradient(value: SonrGradients.PremiumWhite, size: size);
-      case Platform.Windows:
-        return SonrIcons.Windows.gradient(value: SonrGradients.PremiumWhite, size: size);
-      default:
-        return SonrIcons.Unknown.gradient(value: SonrGradients.PremiumWhite, size: size);
-    }
+  Widget gradient({double size = 32, Gradient? gradient}) {
+    return this.iconData.gradient(value: gradient ?? SonrGradients.PremiumWhite, size: size);
   }
 
-  Widget icon({double size = 32, Color color = SonrColor.White}) {
-    switch (this) {
-      case Platform.Android:
-        return SonrIcons.Android.icon(color: color, size: size);
-      case Platform.IOS:
-        return SonrIcons.IPhone.icon(color: color, size: size);
-      case Platform.MacOS:
-        return SonrIcons.IMac.icon(color: color, size: size);
-      case Platform.Windows:
-        return SonrIcons.Windows.icon(color: color, size: size);
-      default:
-        return SonrIcons.Unknown.icon(color: color, size: size);
-    }
+  Icon icon({double size = 32, Color color = SonrColor.White}) {
+    return this.iconData.icon(size: size, color: color) as Icon;
   }
 
   Icon black({double size = 32}) {
-    switch (this) {
-      case Platform.Android:
-        return SonrIcons.Android.blackWith(size: size) as Icon;
-      case Platform.IOS:
-        return SonrIcons.IPhone.blackWith(size: size) as Icon;
-      case Platform.MacOS:
-        return SonrIcons.IMac.blackWith(size: size) as Icon;
-      case Platform.Windows:
-        return SonrIcons.Windows.blackWith(size: size) as Icon;
-      default:
-        return SonrIcons.Unknown.blackWith(size: size) as Icon;
-    }
+    return this.iconData.blackWith(size: size) as Icon;
   }
 
   Icon grey({double size = 32}) {
-    switch (this) {
-      case Platform.Android:
-        return SonrIcons.Android.greyWith(size: size) as Icon;
-      case Platform.IOS:
-        return SonrIcons.IPhone.greyWith(size: size) as Icon;
-      case Platform.MacOS:
-        return SonrIcons.IMac.greyWith(size: size) as Icon;
-      case Platform.Windows:
-        return SonrIcons.Windows.greyWith(size: size) as Icon;
-      default:
-        return SonrIcons.Unknown.greyWith(size: size) as Icon;
-    }
+    return this.iconData.greyWith(size: size) as Icon;
   }
 
   Icon white({double size = 32}) {
+    return this.iconData.whiteWith(size: size) as Icon;
+  }
+
+  /// Returns `IconData` based on Platform
+  IconData get iconData {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android.whiteWith(size: size) as Icon;
+        return SonrIcons.Android;
       case Platform.IOS:
-        return SonrIcons.IPhone.whiteWith(size: size) as Icon;
+        return SonrIcons.IPhone;
       case Platform.MacOS:
-        return SonrIcons.IMac.whiteWith(size: size) as Icon;
+        return SonrIcons.IMac;
       case Platform.Windows:
-        return SonrIcons.Windows.whiteWith(size: size) as Icon;
+        return SonrIcons.Windows;
       default:
-        return SonrIcons.Unknown.whiteWith(size: size) as Icon;
+        return SonrIcons.Unknown;
+    }
+  }
+
+  Color get defaultIconColor {
+    switch (this) {
+      case Platform.Android:
+        return Colors.greenAccent.shade400;
+      case Platform.IOS:
+        return Colors.lightBlueAccent.shade400;
+      case Platform.MacOS:
+        return Colors.lightBlueAccent;
+      case Platform.Windows:
+        return Colors.blueAccent.shade700;
+      default:
+        return Colors.black87;
+    }
+  }
+
+  Gradient get defaultIconGradient {
+    switch (this) {
+      case Platform.Android:
+        return SonrGradients.ItmeoBranding;
+      case Platform.IOS:
+        return SonrGradients.PerfectBlue;
+      case Platform.MacOS:
+        return SonrGradients.PlumBath;
+      case Platform.Windows:
+        return SonrGradients.CrystalRiver;
+      default:
+        return SonrGradients.SolidStone;
     }
   }
 }
 
 extension SocialIconUtils on Contact_Social_Media {
-  Widget gradient({double size = 32}) {
+  Widget gradient({double size = 32, Gradient? gradient}) {
+    return this.iconData.gradient(value: gradient ?? this.defaultIconGradient, size: size);
+  }
+
+  Icon icon({double size = 32, Color color = SonrColor.White}) {
+    return this.iconData.icon(size: size, color: color) as Icon;
+  }
+
+  Icon black({double size = 32}) {
+    return this.iconData.blackWith(size: size) as Icon;
+  }
+
+  Icon grey({double size = 32}) {
+    return this.iconData.greyWith(size: size) as Icon;
+  }
+
+  Icon white({double size = 32}) {
+    return this.iconData.whiteWith(size: size) as Icon;
+  }
+
+  IconData get iconData {
     switch (this) {
       case Contact_Social_Media.Snapchat:
-        return SonrIcons.Snapchat.gradient(value: SonrGradients.SunnyMorning, size: size);
+        return SonrIcons.Snapchat;
       case Contact_Social_Media.Github:
-        return SonrIcons.Github.gradient(value: SonrGradients.SolidStone, size: size);
+        return SonrIcons.Github;
       case Contact_Social_Media.Facebook:
-        return SonrIcons.Facebook.gradient(value: SonrGradients.PerfectBlue, size: size);
+        return SonrIcons.Facebook;
       case Contact_Social_Media.Medium:
-        return SonrIcons.Medium.gradient(value: SonrGradients.SolidStone, size: size);
+        return SonrIcons.Medium;
       case Contact_Social_Media.YouTube:
-        return SonrIcons.YouTube.gradient(value: SonrGradients.LoveKiss, size: size);
+        return SonrIcons.YouTube;
       case Contact_Social_Media.Twitter:
-        return SonrIcons.Twitter.gradient(value: SonrGradients.MalibuBeach, size: size);
+        return SonrIcons.Twitter;
       case Contact_Social_Media.Instagram:
-        return SonrIcons.Instagram.gradient(value: SonrGradients.AmourAmour, size: size);
+        return SonrIcons.Instagram;
       case Contact_Social_Media.TikTok:
-        return SonrIcons.Tiktok.gradient(value: SonrGradients.PremiumDark, size: size);
+        return SonrIcons.Tiktok;
       default:
-        return SonrIcons.Spotify.gradient(value: SonrGradients.SummerGames, size: size);
+        return SonrIcons.Spotify;
     }
   }
 
-  Icon get black {
+  Gradient get defaultIconGradient {
     switch (this) {
       case Contact_Social_Media.Snapchat:
-        return SonrIcons.Snapchat.blackWith(size: 30) as Icon;
+        return SonrGradients.SunnyMorning;
       case Contact_Social_Media.Github:
-        return SonrIcons.Github.blackWith(size: 30) as Icon;
+        return SonrGradients.SolidStone;
       case Contact_Social_Media.Facebook:
-        return SonrIcons.Facebook.blackWith(size: 30) as Icon;
+        return SonrGradients.PerfectBlue;
       case Contact_Social_Media.Medium:
-        return SonrIcons.Medium.blackWith(size: 30) as Icon;
+        return SonrGradients.SolidStone;
       case Contact_Social_Media.YouTube:
-        return SonrIcons.YouTube.blackWith(size: 30) as Icon;
+        return SonrGradients.LoveKiss;
       case Contact_Social_Media.Twitter:
-        return SonrIcons.Twitter.blackWith(size: 30) as Icon;
+        return SonrGradients.MalibuBeach;
       case Contact_Social_Media.Instagram:
-        return SonrIcons.Instagram.blackWith(size: 30) as Icon;
+        return SonrGradients.AmourAmour;
       case Contact_Social_Media.TikTok:
-        return SonrIcons.Tiktok.blackWith(size: 30) as Icon;
+        return SonrGradients.PremiumDark;
       default:
-        return SonrIcons.Spotify.blackWith(size: 30) as Icon;
-    }
-  }
-
-  Icon get white {
-    switch (this) {
-      case Contact_Social_Media.Snapchat:
-        return SonrIcons.Snapchat.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.Github:
-        return SonrIcons.Github.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.Facebook:
-        return SonrIcons.Facebook.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.Medium:
-        return SonrIcons.Medium.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.YouTube:
-        return SonrIcons.YouTube.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.Twitter:
-        return SonrIcons.Twitter.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.Instagram:
-        return SonrIcons.Instagram.whiteWith(size: 30) as Icon;
-      case Contact_Social_Media.TikTok:
-        return SonrIcons.Tiktok.whiteWith(size: 30) as Icon;
-      default:
-        return SonrIcons.Spotify.whiteWith(size: 30) as Icon;
+        return SonrGradients.SummerGames;
     }
   }
 }

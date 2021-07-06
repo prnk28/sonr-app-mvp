@@ -38,6 +38,7 @@ class InfolistOption {
       return title.subheading(
         color: textColor ?? AppTheme.itemColor,
         fontSize: 26,
+        align: TextAlign.center,
       );
     }
     return title.light(color: textColor ?? AppTheme.itemColor, fontSize: 24);
@@ -72,24 +73,36 @@ class Infolist extends StatelessWidget {
                 constraints: options.boxConstraints,
                 child: Column(children: [
                   Padding(padding: EdgeWith.top(4)),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    options[index].icon(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: options[index].text(),
-                    ),
-                  ]),
-                  index + 1 != options.length
-                      ? Divider(
-                          color: AppTheme.greyColor.withOpacity(0.25),
-                          endIndent: 8,
-                          indent: 8,
-                        )
-                      : Container(),
+                  Row(
+                    mainAxisAlignment: options[index].isHeader ? MainAxisAlignment.center : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      options[index].icon(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: options[index].text(),
+                      ),
+                    ],
+                  ),
+                  _buildDivider(index),
                 ]),
               )),
           itemCount: options.length,
         ));
+  }
+
+  Widget _buildDivider(int index) {
+    if (options[index].isHeader) {
+      return Padding(padding: EdgeInsets.only(top: 16));
+    } else if (index + 1 != options.length) {
+      return Divider(
+        color: AppTheme.greyColor.withOpacity(0.25),
+        endIndent: 8,
+        indent: 8,
+      );
+    } else {
+      return Container();
+    }
   }
 }
 

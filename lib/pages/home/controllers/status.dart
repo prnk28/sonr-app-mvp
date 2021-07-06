@@ -74,9 +74,9 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
     if (this.current != null) {
       if (hasMoreThanVisible) {
         final firstValues = this.current!.peers.values.take(4).toList();
-        return firstValues.map<Widget>((value) => PeerItem.mini(value)).toList();
+        return firstValues.map<Widget>((value) => PeerItem.bubble(value)).toList();
       } else {
-        return this.current!.peers.values.map<Widget>((value) => PeerItem.mini(value)).toList();
+        return this.current!.peers.values.map<Widget>((value) => PeerItem.bubble(value)).toList();
       }
     } else {
       return [];

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:share_plus/share_plus.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/pages/home/controllers/home_controller.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:bip39/bip39.dart' as bip39;

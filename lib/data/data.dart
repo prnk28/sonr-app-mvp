@@ -9,15 +9,16 @@ export 'core/logger.dart';
 export 'services/database/converter.dart';
 export 'services/database/database.dart';
 export 'services/database/cards.dart';
-
-// Models
-export '../modules/share/share.dart';
-export 'models/builder.dart';
-export 'models/option.dart';
-export 'models/result.dart';
-export 'models/status.dart';
-export 'package:sonr_app/pages/details/details.dart';
 export 'services/services.dart';
 
-// Theme Models
+// Models
+
 export 'models/animation.dart';
+export 'models/builder.dart';
+export 'models/option.dart';
+export 'models/status.dart';
+export 'models/orientation.dart';
+
+// References
+export 'package:sonr_app/modules/share/share.dart';
+export 'package:sonr_app/pages/details/details.dart';

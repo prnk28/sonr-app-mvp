@@ -1,14 +1,14 @@
 export 'controllers/home_controller.dart';
 export 'controllers/intel_controller.dart';
-export 'models/status.dart';
+export 'controllers/status.dart';
 
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'controllers/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'models/status.dart';
+import 'controllers/status.dart';
 import 'views/dashboard_view.dart';
 import 'package:sonr_app/pages/home/controllers/home_controller.dart';
-import 'package:sonr_app/pages/home/models/status.dart';
+import 'package:sonr_app/pages/home/controllers/status.dart';
 import 'package:sonr_app/pages/personal/controllers/editor_controller.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'views/panels_view.dart';
@@ -93,43 +93,65 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
           child: AnimatedSlider.fade(
             duration: 2.seconds,
             child: PageAppBar(
-                centerTitle: controller.view.value.isDefault,
-                key: ValueKey(false),
-                subtitle: Padding(
-                  padding: controller.view.value.isDefault ? EdgeInsets.only(top: 24) : EdgeInsets.zero,
-                  child: controller.view.value == HomeView.Dashboard
-                      ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
-                          color: Get.theme.focusColor.withOpacity(0.8),
-                          align: TextAlign.start,
-                        )
-                      : Container(),
-                ),
-                action: HomeActionButton(
-                  dashboardKey: controller.keyTwo,
-                ),
-                leading: controller.view.value != HomeView.Contact
-                    ? Padding(
-                        padding: const EdgeInsets.only(bottom: 24.0, left: 8),
-                        child: Container(
-                          child: Obx(() => ShowcaseItem.fromType(
-                                type: ShowcaseType.Help,
-                                child: ActionButton(
-                                  banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
-                                  key: ValueKey<HomeView>(HomeView.Dashboard),
-                                  iconData: SonrIcons.Help,
-                                  onPressed: () async => await Logger.openIntercom(),
-                                ),
-                              )),
-                        ),
+              centerTitle: controller.view.value.isDefault,
+              key: ValueKey(false),
+              subtitle: Padding(
+                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 34) : EdgeInsets.zero,
+                child: controller.view.value == HomeView.Dashboard
+                    ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
+                        fontSize: 22,
+                        color: Get.theme.focusColor.withOpacity(0.7),
+                        align: TextAlign.start,
                       )
-                    : null,
-                title: IntelHeader()),
+                    : Container(),
+              ),
+              action: HomeActionButton(
+                dashboardKey: controller.keyTwo,
+              ),
+              leading: controller.view.value != HomeView.Contact
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 24.0, left: 8),
+                      child: Container(
+                        child: Obx(() => ShowcaseItem.fromType(
+                              type: ShowcaseType.Help,
+                              child: ActionButton(
+                                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                                key: ValueKey<HomeView>(HomeView.Dashboard),
+                                iconData: SonrIcons.Help,
+                                onPressed: () async => await Logger.openIntercom(),
+                              ),
+                            )),
+                      ),
+                    )
+                  : null,
+              title: controller.view.value != HomeView.Contact
+                  ? IntelHeader()
+                  : Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: controller.view.value.title.heading(
+                        color: AppTheme.itemColor,
+                        align: TextAlign.start,
+                      ),
+                    ),
+              footer: controller.view.value != HomeView.Contact
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: IntelFooter(),
+                    )
+                  : null,
+            ),
           ),
         ));
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+  Size get preferredSize {
+    if (controller.view.value != HomeView.Contact) {
+      return Size(Get.width, Height.ratio(0.18));
+    } else {
+      return Size(Get.width, kToolbarHeight + 64);
+    }
+  }
 }
 
 class HomeActionButton extends GetView<HomeController> {
@@ -148,13 +170,16 @@ class HomeActionButton extends GetView<HomeController> {
   Widget _buildView(HomeView page) {
     // Return View
     if (page == HomeView.Contact) {
-      return ActionButton(
-        key: ValueKey<HomeView>(HomeView.Contact),
-        iconData: SonrIcons.Settings,
-        onPressed: () {
-          HapticFeedback.heavyImpact();
-          EditorController.open();
-        },
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 36.0, right: 8),
+        child: ActionButton(
+          key: ValueKey<HomeView>(HomeView.Contact),
+          iconData: SonrIcons.Settings,
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            EditorController.open();
+          },
+        ),
       );
     } else {
       return Padding(

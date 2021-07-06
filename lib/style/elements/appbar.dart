@@ -8,6 +8,8 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Appears above Title with Light Font
   final Widget? subtitle;
+
+  final Widget? footer;
   final Widget? leading;
   final Widget? action;
   final Widget? secondAction;
@@ -20,6 +22,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     this.centerTitle = false,
     this.secondAction,
+    this.footer,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 subtitle != null ? subtitle! : Container(),
                 Expanded(child: title),
+                footer != null ? footer! : Container(),
               ],
             ),
           ),

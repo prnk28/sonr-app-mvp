@@ -5,7 +5,6 @@ class IntelHeader extends GetView<IntelController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 200,
         child: Obx(
           () => AnimatedSlider.slideDown(
               child: Column(
@@ -19,9 +18,9 @@ class IntelHeader extends GetView<IntelController> {
                     child: controller.title.value.heading(
                       color: Get.theme.focusColor,
                       align: TextAlign.start,
+                      fontSize: 34,
                     ),
-                  )),
-              IntelFooter(),
+                  ))
             ],
           )),
         ));
@@ -71,7 +70,7 @@ class _NearbyPeersRow extends GetView<IntelController> {
                     width: 32,
                     height: 32,
                     child: "${state.additionalPeers}+".light(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: AppTheme.greyColor,
                     ),
                     decoration: BoxDecoration(
@@ -93,13 +92,13 @@ class _NearbyPeersRow extends GetView<IntelController> {
         },
         onEmpty: Container(
           child: "Nobody Around".light(
-            fontSize: 18,
+            fontSize: 16,
             color: AppTheme.greyColor,
           ),
         ),
         onLoading: Opacity(
           opacity: 0.7,
-          child: HourglassIndicator(),
+          child: HourglassIndicator(scale: 1),
         ),
         onError: (_) => Container(),
       ),

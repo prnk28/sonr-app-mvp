@@ -2,10 +2,10 @@ import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 
-class PeerMiniView extends GetView<PeerController> {
+class PeerBubbleView extends GetView<PeerController> {
   final Peer peer;
   final GlobalKey peerKey = GlobalKey();
-  PeerMiniView(this.peer) : super(key: ValueKey(peer.id.peer));
+  PeerBubbleView(this.peer) : super(key: ValueKey(peer.id.peer));
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -15,8 +15,10 @@ class PeerMiniView extends GetView<PeerController> {
               options: [
                 InfolistOption(
                   peer.profile.fullName,
-                  SonrIcons.ATSign,
+                  peer.platform.iconData,
                   isHeader: true,
+                  iconColor: peer.platform.defaultIconColor,
+
                 ),
                 InfolistOption("Media", SonrIcons.Camera, onPressed: () {
                   SenderService.choose(ChooseOption.Camera).then((value) {
@@ -78,7 +80,7 @@ class PeerMiniView extends GetView<PeerController> {
 
   Widget _buildPeerInitials() {
     return peer.profile.initials.light(
-      fontSize: 18,
+      fontSize: 16,
       color: AppTheme.greyColor,
     );
   }

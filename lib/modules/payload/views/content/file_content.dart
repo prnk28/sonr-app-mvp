@@ -188,7 +188,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
     File(widget.fileItem.path).exists().then((value) {
       isFile = value;
       if (value) {
-        CardService.loadFileFromItem(widget.fileItem).then((value) => {
+        widget.fileItem.loadFile().then((value) => {
               setState(() {
                 sourceFile = value;
                 fileLoaded = true;
