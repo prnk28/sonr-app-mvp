@@ -1,6 +1,6 @@
 export 'controllers/home_controller.dart';
 export 'controllers/intel_controller.dart';
-export 'models/comparator.dart';
+export 'models/status.dart';
 
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'controllers/home_controller.dart';
