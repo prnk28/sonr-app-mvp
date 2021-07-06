@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:sonr_app/modules/intel/intel.dart';
 import 'package:sonr_app/style/style.dart';
 
-class IntelController extends GetxController with StateMixin<LobbyInfo> {
+class IntelController extends GetxController with StateMixin<CompareLobbyResult> {
   // Properties
   final title = "".obs;
   final badgeVisible = false.obs;
@@ -19,9 +18,9 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
 
     // Check Lobby Size
     if (LobbyService.lobby.value.count > 0) {
-      change(LobbyInfo(newLobby: LobbyService.lobby.value), status: RxStatus.success());
+      change(CompareLobbyResult(current: LobbyService.lobby.value), status: RxStatus.success());
     } else {
-      change(LobbyInfo(newLobby: LobbyService.lobby.value), status: RxStatus.empty());
+      change(CompareLobbyResult(current: LobbyService.lobby.value), status: RxStatus.empty());
     }
 
     // Initialize
@@ -39,8 +38,9 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
   _handleLobbyStream(Lobby onData) {
     // Check Valid
     if (!badgeVisible.value && !isClosed) {
-      // Check Lobby Size
-      if (onData.count > 0) {
+      final compareResult = CompareLobbyResult(current: onData, previous: _lastLobby);
+
+      if (!compareResult.hasStayed) {
         // Swap Text
         HapticFeedback.mediumImpact();
         badgeVisible(true);
@@ -54,17 +54,11 @@ class IntelController extends GetxController with StateMixin<LobbyInfo> {
 
         // Change State
         change(
-            LobbyInfo(
-              newLobby: onData,
-              lastLobby: _lastLobby,
+            CompareLobbyResult(
+              current: onData,
+              previous: _lastLobby,
             ),
             status: RxStatus.success());
-      } else {
-        // Change State
-        change(
-          LobbyInfo(),
-          status: RxStatus.empty(),
-        );
       }
 
       // Update Reference

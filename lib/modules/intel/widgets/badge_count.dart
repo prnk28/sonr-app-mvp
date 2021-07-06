@@ -13,7 +13,6 @@ class IntelBadgeCount extends GetView<IntelController> {
               return Obx(() => FadeOut(
                     animate: !controller.badgeVisible.value,
                     duration: 400.milliseconds,
-                    delay: 300.milliseconds,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

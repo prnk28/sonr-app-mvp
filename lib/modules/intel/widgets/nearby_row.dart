@@ -10,7 +10,7 @@ class NearbyPeersRow extends GetView<IntelController> {
       child: controller.obx(
         (state) {
           if (state != null) {
-            if (state.needsMoreLabel) {
+            if (state.hasMoreThanVisible) {
               final moreKey = GlobalKey();
               return Stack(
                 alignment: Alignment.centerRight,
