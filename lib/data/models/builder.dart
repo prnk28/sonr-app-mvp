@@ -13,39 +13,29 @@ class RequestBuilder {
   static ConnectionRequest_TextileOptions get _textileOpts => ConnectionRequest_TextileOptions(enabled: true, mailbox: DeviceService.isIOS);
 
   /// Returns New Connection Request
-  static Future<ConnectionRequest> get connection async {
-    return ConnectionRequest(
-      apiKeys: AppServices.apiKeys,
-      location: await DeviceService.location,
-      contact: ContactService.contact.value,
-      type: internetType,
-      status: userStatus,
-      textileOptions: _textileOpts,
-      hostOptions: _hostOpts,
-      pubsubOptions: _pubsubOpts,
-    );
-  }
+  static Future<ConnectionRequest> get connection async => ConnectionRequest(
+        apiKeys: AppServices.apiKeys,
+        location: await DeviceService.location,
+        contact: ContactService.contact.value,
+        type: internetType,
+        status: userStatus,
+        textileOptions: _textileOpts,
+        hostOptions: _hostOpts,
+        pubsubOptions: _pubsubOpts,
+      );
 
   /// Returns New Initialize Request
-  static InitializeRequest get initialize {
-    return InitializeRequest(
-      apiKeys: AppServices.apiKeys,
-      device: DeviceService.device,
-    );
-  }
+  static InitializeRequest get initialize => InitializeRequest(
+        apiKeys: AppServices.apiKeys,
+        device: DeviceService.device,
+      );
 
   /// Returns New Contact Update Request
-  static UpdateRequest get updateContact {
-    return API.newUpdateContact(contact);
-  }
+  static UpdateRequest get updateContact => API.newUpdateContact(contact);
 
   /// Returns New Position Update Request
-  static UpdateRequest get updatePosition {
-    return API.newUpdatePosition(DeviceService.position.value);
-  }
+  static UpdateRequest get updatePosition => API.newUpdatePosition(DeviceService.position.value);
 
   /// Returns New Properties Update Request
-  static UpdateRequest get updateProperties {
-    return API.newUpdateProperties(Preferences.properties.value);
-  }
+  static UpdateRequest get updateProperties => API.newUpdateProperties(Preferences.properties.value);
 }
