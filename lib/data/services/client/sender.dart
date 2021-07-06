@@ -99,9 +99,9 @@ class SenderService extends GetxService {
           case ChooseOption.Contact:
             return await to._handleContactChoice();
           case ChooseOption.Media:
-            return await to._handleFileChoice();
-          case ChooseOption.File:
             return await to._handleMediaChoice();
+          case ChooseOption.File:
+            return await to._handleFileChoice();
         }
       }
     }
