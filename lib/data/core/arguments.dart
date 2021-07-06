@@ -71,7 +71,7 @@ class SnackArgs {
       switch (error.severity) {
         // Orange - Title Failed
         case ErrorMessage_Severity.CRITICAL:
-          DeviceService.playSound(type: Sounds.Critical);
+          Sound.Critical.play();
           return SnackArgs(
             "Failed",
             error.message,
@@ -84,7 +84,7 @@ class SnackArgs {
 
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
-          DeviceService.playSound(type: Sounds.Fatal);
+          Sound.Fatal.play();
           return SnackArgs(
             "Error",
             error.message,
@@ -97,7 +97,7 @@ class SnackArgs {
 
         // Yellow - Title Warning
         default:
-          DeviceService.playSound(type: Sounds.Warning);
+          Sound.Warning.play();
           return SnackArgs(
             "Warning",
             error.message,
@@ -111,7 +111,7 @@ class SnackArgs {
     }
     // @ App Error
     else {
-      DeviceService.playSound(type: Sounds.Warning);
+      Sound.Warning.play();
       return SnackArgs(
         "Error",
         message,

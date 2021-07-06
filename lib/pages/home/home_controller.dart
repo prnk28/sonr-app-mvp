@@ -163,7 +163,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData!.count > _lobbySizeRef) {
       var diff = onData.count - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      DeviceService.playSound(type: Sounds.Joined);
+      Sound.Joined.play();
     }
     // Peer Left
     else if (onData.count < _lobbySizeRef) {

@@ -33,6 +33,7 @@ class AppServices {
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => NodeService().init(), permanent: true);
+    
   }
 
   /// @ Method Validates Required Services Registered

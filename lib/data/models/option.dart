@@ -1,6 +1,7 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+import 'package:soundpool/soundpool.dart';
 
 /// Option for Share Choice
 enum ChooseOption { Camera, Contact, Media, File }
@@ -101,7 +102,7 @@ extension ChooseOptionUtils on ChooseOption {
 }
 
 /// @ Asset Sound Types
-enum Sounds {
+enum Sound {
   Confirmed,
   Connected,
   Critical,
@@ -116,13 +117,52 @@ enum Sounds {
 }
 
 // @ Asset Sound Type Utility
-extension SoundsUtil on Sounds {
-  String get file {
-    return '${this.value.toLowerCase()}.wav';
+extension Sounds on Sound {
+  /// Checks if Platform can play Sounds
+  static bool get isCompatible => (PlatformUtils.find().isMobile || PlatformUtils.find().isWeb || PlatformUtils.find().isMacOS);
+
+  /// Constant Soundpool Reference
+  static late Soundpool _pool;
+
+  /// Map with Sound Type and ID
+  static Map<Sound, int> _soundIds = {};
+
+  /// Initialize Soundpool
+  static Future<void> init() async {
+    if (isCompatible) {
+      // Init Pool
+      _pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.notification));
+
+      // Add Sounds
+      for (Sound s in Sound.values) {
+        int soundId = await rootBundle.load(s.path).then((ByteData soundData) {
+          return _pool.load(soundData);
+        });
+        _soundIds[s] = soundId;
+      }
+    }
   }
 
-  // @ Returns Value Name of Enum Type //
-  String get value {
+  /// Play this Current Sound
+  Future<void> play() async {
+    if (isCompatible && _soundIds[this] != null) {
+      await _pool.play(_soundIds[this]!);
+      await _pool.release();
+    }
+  }
+
+  /// Return File Name of Sound
+  String get file {
+    return '${this.name.toLowerCase()}.wav';
+  }
+
+  /// Return Full Path of File
+  String get path {
+    return 'assets/sounds/$file';
+  }
+
+  /// Return Enum Value as String without Prefix
+  String get name {
     return this.toString().substring(this.toString().indexOf('.') + 1);
   }
 }

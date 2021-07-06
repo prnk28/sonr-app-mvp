@@ -92,6 +92,7 @@ class DeviceService extends GetxService {
         await Firebase.initializeApp();
       }
     }
+    await Sounds.init();
     return this;
   }
 
@@ -140,7 +141,7 @@ class DeviceService extends GetxService {
       },
     );
 
-    return _locationApi.fetch();
+    return _locationApi.fetchIP(logging: true);
   }
 
   /// @ Method Hides Keyboard
@@ -148,11 +149,6 @@ class DeviceService extends GetxService {
 
   /// @ Method Shows Keyboard
   static void keyboardShow() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.show') : print("");
-
-  /// @ Method Plays a UI Sound
-  static void playSound({required Sounds type}) async {
-    if (isMobile) {}
-  }
 
   /// @ Add Event Handler to Tray Action
   void registerEventHandler(String handlerKey, Function handler) {

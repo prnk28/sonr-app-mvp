@@ -132,7 +132,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleStatus(StatusEvent data) {
     // Check for Homescreen Controller
     if (data.value == Status.AVAILABLE) {
-      DeviceService.playSound(type: Sounds.Connected);
+      Sound.Connected.play();
 
       // Handle Available
       instance.update(API.newUpdatePosition(DeviceService.position.value));

@@ -24,7 +24,7 @@ class ReceiverService extends GetxService {
     to._session.incoming(data);
 
     // Handle Feedback
-    DeviceService.playSound(type: Sounds.Swipe);
+    Sound.Swipe.play();
     HapticFeedback.heavyImpact();
 
     // Check for Flat
@@ -106,7 +106,7 @@ class ReceiverService extends GetxService {
 
     // Present Feedback
     await HapticFeedback.heavyImpact();
-    DeviceService.playSound(type: Sounds.Received);
+    await Sound.Received.play();
 
     // Display Released Card
     Future.delayed(2.seconds, () {

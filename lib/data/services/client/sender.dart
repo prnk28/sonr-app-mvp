@@ -156,7 +156,7 @@ class SenderService extends GetxService {
     _session.onComplete(data);
 
     // Feedback
-    DeviceService.playSound(type: Sounds.Transmitted);
+    await Sound.Transmitted.play();
     await HapticFeedback.heavyImpact();
 
     // Logging Activity
