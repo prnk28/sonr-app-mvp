@@ -122,7 +122,7 @@ class _IntelBadgeCount extends GetView<IntelController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: 8),
+        height: 30,
         child: controller.obx(
           (state) {
             if (state != null) {

@@ -56,7 +56,10 @@ build.android:
 ##
 ## [profile]     :   Run App for Profiling and Save SKSL File
 profile:
+	@echo '-----------------------------------------------'
 	@echo 'Hit Shift+M during Run to Save Profiling Result'
+	@echo '-----------------------------------------------'
+	@echo ''
 	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl
 
 ## [update]      :   Fetch Plugin Submodule, and Upgrade Dependencies
