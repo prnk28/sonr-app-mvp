@@ -275,25 +275,47 @@ extension RiveBoardUtils on RiveBoard {
 }
 
 /// Lottie File Options
-enum LottieFile { Loader, Celebrate }
+enum LottieFile { Loader, Celebrate, Sending, Complete, Decline, Pending, NONE }
 
 /// #### Extension For Lottie File
 extension LottieFileUtils on LottieFile {
   /// Returns Path for Lottie File
   String get path {
+    // Set Base Path
+    final basePath = 'assets/animations/';
+
+    // Check Type
     switch (this) {
       case LottieFile.Loader:
-        if (Preferences.isDarkMode) {
-          return 'assets/animations/loader-white.json';
+        if (Get.isDarkMode) {
+          return basePath + 'loader-light.json';
         } else {
-          return 'assets/animations/loader-black.json';
+          return basePath + 'loader-dark.json';
         }
+      case LottieFile.Pending:
+        if (Get.isDarkMode) {
+          return basePath + 'pending-light.json';
+        } else {
+          return basePath + 'pending-dark.json';
+        }
+      case LottieFile.Sending:
+        if (Get.isDarkMode) {
+          return basePath + 'transfer-light.json';
+        } else {
+          return basePath + 'transfer-dark.json';
+        }
+      case LottieFile.Complete:
+        return basePath + 'send-complete.json';
+      case LottieFile.Decline:
+        return basePath + 'send-decline.json';
       case LottieFile.Celebrate:
-        return 'assets/animations/celebrate.json';
+        return basePath + 'celebrate.json';
+      case LottieFile.NONE:
+        return '';
     }
   }
 
-  /// Create LottieBuilder for this Asset
+  /// Creates a widget that displays an [LottieComposition] obtained from this Files [AssetBundle].
   LottieBuilder lottie(
       {Animation<double>? controller,
       bool? animate,
@@ -313,6 +335,7 @@ extension LottieFileUtils on LottieFile {
       Alignment? alignment,
       String? package,
       bool? addRepaintBoundary}) {
+    assert(this != LottieFile.NONE);
     return Lottie.asset(
       this.path,
       controller: controller,

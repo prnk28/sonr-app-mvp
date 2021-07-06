@@ -1,5 +1,5 @@
-import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/modules/peer/widgets/peer_border.dart';
 import 'package:sonr_app/style/style.dart';
 
 const double K_CARD_WIDTH = 160;
@@ -24,7 +24,7 @@ class PeerCardView extends GetWidget<PeerController> {
                     children: [
                       // Rive Board
                       IgnorePointer(
-                        child: _PeerAvatar(
+                        child: PeerAvatarBorder(
                           controller: controller,
                         ),
                       ),
@@ -48,47 +48,6 @@ class PeerCardView extends GetWidget<PeerController> {
                     ],
                   ),
               false.obs)),
-    );
-  }
-}
-
-/// @ Peer Avatar with Rive Board Border
-class _PeerAvatar extends StatelessWidget {
-  final PeerController controller;
-
-  const _PeerAvatar({Key? key, required this.controller}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 34),
-              child: Container(
-                  alignment: Alignment.center,
-                  height: 96,
-                  width: 96,
-                  child: Obx(
-                    () => Rive(artboard: controller.board.value),
-                  )),
-            ),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: Obx(
-                () => AnimatedOpacity(
-                    opacity: controller.opacity.value,
-                    duration: 150.milliseconds,
-                    child: ProfileAvatar.fromPeer(
-                      controller.peer.value,
-                      size: 80,
-                    )),
-              )),
-        ],
-      ),
     );
   }
 }

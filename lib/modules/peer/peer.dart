@@ -3,6 +3,7 @@ export 'views/bubble_view.dart';
 export 'views/item_view.dart';
 export 'data/peer_controller.dart';
 export 'data/profile_utils.dart';
+export 'data/session_utils.dart';
 
 import 'package:sonr_app/style/style.dart';
 import 'views/card_view.dart';

@@ -1,4 +1,3 @@
-import 'package:rive/rive.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'dart:async';
 import 'package:sonr_app/style/style.dart';
@@ -6,14 +5,8 @@ import 'package:sonr_app/pages/transfer/transfer.dart';
 
 /// @ Reactive Controller for Peer Bubble
 class PeerController extends GetxController with StateMixin<Session> {
-  // Required Properties
-  final Future<RiveFile> riveFile;
-
   // Reactive Elements
-  final board = Rx<Artboard>(Artboard());
   final counter = 0.0.obs;
-  final isReady = false.obs;
-
   final isComplete = false.obs;
   final opacity = 0.85.obs;
   final peer = Rx<Peer>(Peer());
@@ -24,20 +17,17 @@ class PeerController extends GetxController with StateMixin<Session> {
   final relativePosition = RelativePosition.Center.obs;
   final borderWidth = 0.0.obs;
   final buttonData = DynamicSolidButtonData.invite().obs;
+  final Rx<SessionStatus?> sessionStatus = SessionStatus.Default.obs;
 
   // References
   late final Session session;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
+  bool _hasInvited = false;
   bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value);
 
   // State Machine
-  SMIInput<bool>? _isIdle;
-  SMIInput<bool>? _isPending;
-  SMIInput<bool>? _hasAccepted;
-  SMIInput<bool>? _hasDenied;
-  SMIInput<bool>? _isComplete;
-  PeerController(this.riveFile);
+  PeerController();
 
   @override
   void onInit() {
@@ -57,42 +47,6 @@ class PeerController extends GetxController with StateMixin<Session> {
     if (DeviceService.isMobile) {
       _userStream = DeviceService.position.listen(_handlePosition);
     }
-
-    // Set If Animated
-    if (setAnimated) {
-      // Get Values
-      final file = await riveFile;
-      final artboard = file.mainArtboard;
-      var controller = StateMachineController.fromArtboard(artboard, 'State');
-
-      // @ Set Controller
-      if (controller != null) {
-        // Import State Machine
-        artboard.addController(controller);
-        _isIdle = controller.findInput('IsIdle');
-        _isPending = controller.findInput('IsPending');
-        _hasAccepted = controller.findInput('HasAccepted');
-        _hasDenied = controller.findInput('HasDenied');
-        _isComplete = controller.findInput('IsComplete');
-
-        // Set Defaults
-        _isComplete!.value = false;
-        _isPending!.value = false;
-        _hasAccepted!.value = false;
-        _hasDenied!.value = false;
-        _isIdle!.value = true;
-
-        // Observable Artboard
-        board(artboard);
-        isReady(true);
-      }
-
-      // Handle Error
-      else {
-        Logger.error("Failed to find animation controller");
-        isReady(false);
-      }
-    }
   }
 
   /// ** Dispose on Close ** //
@@ -108,47 +62,48 @@ class PeerController extends GetxController with StateMixin<Session> {
   /// @ Handle User Invitation
   void invite() {
     // Check Animated
-    if (isReady.value) {
-      // Handle Mobile Invite - Payload Set
-      if (DeviceService.isMobile) {
-        // Check not already Pending
-        if (!_isPending!.value) {
-          // Perform Invite
-          var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
+    // Handle Mobile Invite - Payload Set
+    if (DeviceService.isMobile) {
+      // Check not already Pending
+      if (!_hasInvited) {
+        // Perform Invite
+        var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
+
+        // Create Session
+        var newSession = SenderService.invite(invite);
+        if (newSession != null) {
+          // Set Session
+          session = newSession;
+          sessionStatus.bindStream(session.status.stream);
+          change(session, status: RxStatus.loading());
+          _hasInvited = true;
+          sessionStatus.listen(_handleTransferStatus);
+        }
+      }
+    }
+    // Handle Other Invite - Payload NOT Set
+    else {
+      // Choose File then Set Session
+      SenderService.choose(ChooseOption.File).then((value) {
+        if (value != null) {
+          // Set Peer for Invite
+          value.setPeer(this.peer.value);
 
           // Create Session
-          var newSession = SenderService.invite(invite);
+          var newSession = SenderService.invite(value);
           if (newSession != null) {
             // Set Session
             session = newSession;
-            change(newSession, status: RxStatus.loading());
+            sessionStatus.bindStream(session.status.stream);
+            change(session, status: RxStatus.loading());
 
             // Listen to Session
             session.status.listen(_handleTransferStatus);
+            _hasInvited = true;
+            sessionStatus.listen(_handleTransferStatus);
           }
         }
-      }
-      // Handle Other Invite - Payload NOT Set
-      else {
-        // Choose File then Set Session
-        SenderService.choose(ChooseOption.File).then((value) {
-          if (value != null) {
-            // Set Peer for Invite
-            value.setPeer(this.peer.value);
-
-            // Create Session
-            var newSession = SenderService.invite(value);
-            if (newSession != null) {
-              // Set Session
-              session = newSession;
-              change(newSession, status: RxStatus.loading());
-
-              // Listen to Session
-              session.status.listen(_handleTransferStatus);
-            }
-          }
-        });
-      }
+      });
     }
   }
 
@@ -156,56 +111,52 @@ class PeerController extends GetxController with StateMixin<Session> {
   void _handlePeerUpdate(Peer data) {
     if (!isClosed && !isComplete.value) {
       // Update Direction
-      if (data.id.peer == peer.value.id.peer && !_isPending!.value) {
+      if (data.id.peer == peer.value.id.peer && status != RxStatus.loading() || status != RxStatus.loadingMore() || status != RxStatus.success()) {
         peer(data);
       }
     }
   }
 
   // @ Handle Peer Response
-  _handleTransferStatus(SessionStatus data) {
-    // Update Opacity
-    opacity(data.opacity());
+  void _handleTransferStatus(SessionStatus? data) {
+    if (data != null) {
+      // Update Opacity
+      opacity(data.opacity());
 
-    // Set Animation
-    switch (data) {
-      case SessionStatus.Pending:
-        _isPending!.value = true;
-        buttonData(DynamicSolidButtonData.pending());
-        buttonData.refresh();
-        break;
-      case SessionStatus.Accepted:
-        _hasAccepted!.value = true;
-        buttonData(DynamicSolidButtonData.inProgress());
-        buttonData.refresh();
-        break;
-      case SessionStatus.Denied:
-        _hasDenied!.value = true;
-        break;
-      case SessionStatus.InProgress:
-        break;
-      case SessionStatus.Completed:
-        _isComplete!.value = true;
-        buttonData(DynamicSolidButtonData.complete());
-        buttonData.refresh();
-        // Reset Status
-        Future.delayed(1200.milliseconds, () {
-          isComplete(true);
-          _isComplete!.value = false;
-          _isPending!.value = false;
-          _hasAccepted!.value = false;
-          _hasDenied!.value = false;
-          _isIdle!.value = true;
-        });
-        break;
-      default:
-        _isComplete!.value = false;
-        _isPending!.value = false;
-        _hasAccepted!.value = false;
-        _hasDenied!.value = false;
-        _isIdle!.value = true;
-        buttonData(DynamicSolidButtonData.invite());
-        break;
+      // Set Animation
+      switch (data) {
+        case SessionStatus.Pending:
+          change(session, status: RxStatus.loading());
+          buttonData(DynamicSolidButtonData.pending());
+          buttonData.refresh();
+          break;
+        case SessionStatus.Accepted:
+          change(session, status: RxStatus.empty());
+          buttonData(DynamicSolidButtonData.inProgress());
+          buttonData.refresh();
+          break;
+        case SessionStatus.Denied:
+          change(session, status: RxStatus.error());
+          break;
+        case SessionStatus.InProgress:
+          change(session, status: RxStatus.success());
+          break;
+        case SessionStatus.Completed:
+          change(session, status: RxStatus.success());
+          buttonData(DynamicSolidButtonData.complete());
+          buttonData.refresh();
+          // Reset Status
+          Future.delayed(1200.milliseconds, () {
+            isComplete(true);
+            change(session, status: RxStatus.empty());
+            _hasInvited = false;
+          });
+          break;
+        default:
+          change(session, status: RxStatus.empty());
+          buttonData(DynamicSolidButtonData.invite());
+          break;
+      }
     }
   }
 
