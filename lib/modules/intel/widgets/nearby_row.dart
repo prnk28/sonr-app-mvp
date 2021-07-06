@@ -27,7 +27,10 @@ class NearbyPeersRow extends GetView<IntelController> {
                     key: moreKey,
                     width: 32,
                     height: 32,
-                    child: "${state.additionalPeers} +".light(),
+                    child: "${state.additionalPeers}+".light(
+                      fontSize: 18,
+                      color: AppTheme.greyColor,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.foregroundColor,
                       shape: BoxShape.circle,

@@ -63,7 +63,7 @@ class ComposeController extends GetxController with StateMixin<Session> {
   }
 
   Future<void> _refreshRecords() async {
-    if (DeviceService.hasInterent) {
+    if (DeviceService.hasInternet) {
       final result = await _nbClient.refresh();
       _records(result.records);
       _records.refresh();

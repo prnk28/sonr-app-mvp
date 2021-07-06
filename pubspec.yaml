@@ -67,7 +67,6 @@ dependencies:
   connectivity: ^3.0.6
   geolocator: ^7.0.3
   permission_handler: ^8.0.1
-  platform_device_id: ^1.0.1
   url_launcher: ^6.0.3
 
   # -- Data --

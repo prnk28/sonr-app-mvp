@@ -6,7 +6,7 @@ import 'package:sonr_app/style/style.dart';
 
 class SenderService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<SenderService>() && DeviceService.hasInterent;
+  static bool get isRegistered => Get.isRegistered<SenderService>() && DeviceService.hasInternet;
   static SenderService get to => Get.find<SenderService>();
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasSession;

@@ -1,10 +1,9 @@
 export 'data/data.dart';
-export 'widgets/widgets.dart';
 import 'package:sonr_app/style/style.dart';
 
 import 'data/data.dart';
+import 'widgets/badge_count.dart';
 import 'widgets/nearby_row.dart';
-import 'widgets/widgets.dart';
 
 class IntelHeader extends GetView<IntelController> {
   IntelHeader();

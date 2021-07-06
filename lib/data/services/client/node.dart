@@ -54,7 +54,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
-    if (ContactService.status.value.hasUser && DeviceService.hasInterent) {
+    if (ContactService.status.value.hasUser && DeviceService.hasInternet) {
       // Connect Node
       instance.connect(await RequestBuilder.connection);
 

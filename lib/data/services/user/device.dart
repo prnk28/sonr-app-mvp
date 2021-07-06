@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
@@ -12,16 +11,29 @@ import 'package:systray/systray.dart';
 
 class DeviceService extends GetxService {
   // Accessors
-  static bool get hasInterent => to._connectivity.value.hasInternet;
+  static bool get hasInternet => to._connectivity.value.hasInternet;
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-  static bool get isDesktop => to._device.value.platform.isDesktop;
-  static bool get isMobile => to._device.value.platform.isMobile;
-  static bool get isAndroid => to._device.value.platform.isAndroid;
-  static bool get isIOS => to._device.value.platform.isIOS;
-  static bool get isLinux => to._device.value.platform.isLinux;
-  static bool get isMacOS => to._device.value.platform.isMacOS;
-  static bool get isWindows => to._device.value.platform.isWindows;
+
+  // Fetch Platform for Device
+  static Platform get platform {
+    if (isRegistered) {
+      return to._device.value.platform;
+    } else {
+      return PlatformUtils.find();
+    }
+  }
+
+  // Platform Utilities
+  static bool get isDesktop => platform.isDesktop;
+  static bool get isMobile => platform.isMobile;
+  static bool get isAndroid => platform.isAndroid;
+  static bool get isIOS => platform.isIOS;
+  static bool get isLinux => platform.isLinux;
+  static bool get isMacOS => platform.isMacOS;
+  static bool get isWindows => platform.isWindows;
+
+  // Properties
   static Device get device => to._device.value;
   static Location get location => to._location.value;
   static RxPosition get position => to._position;
@@ -29,7 +41,6 @@ class DeviceService extends GetxService {
 
   // Properties
   final _device = Device().obs;
-
   final _location = Location().obs;
   final _connectivity = ConnectivityResult.none.obs;
   final _position = RxPosition();
@@ -37,9 +48,7 @@ class DeviceService extends GetxService {
   // References
   late MainEntry _main;
   late Systray _systemTray;
-  final _locationApi = LocationApi(
-    keys: AppServices.apiKeys,
-  );
+  final _locationApi = LocationApi(keys: AppServices.apiKeys);
 
   // ^ Initialization ^ //
   DeviceService() {
@@ -53,24 +62,19 @@ class DeviceService extends GetxService {
   // ^ Constructer ^ //
   Future<DeviceService> init() async {
     // Find Properties
-    final deviceRef = await API.newDevice(
-      id: PlatformUtils.find().isMobile ? await PlatformDeviceId.getDeviceId : null,
-    );
-    final platformRef = deviceRef.platform;
-
-    // Set Properties
-    _device(deviceRef);
+    _device(await DeviceUtils.create());
 
     // Initialize Device
     _connectivity(await Connectivity().checkConnectivity());
     _connectivity.bindStream(Connectivity().onConnectivityChanged);
+    _location(await findLocation());
 
     // @ Setup Desktop
-    if (platformRef.isDesktop) {
+    if (platform.isDesktop) {
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",
-        iconPath: await _getIconPath(platformRef),
+        iconPath: await _getIconPath(),
       );
 
       // @ 2. Init SystemTray
@@ -100,11 +104,11 @@ class DeviceService extends GetxService {
 
 // * ------------------- Methods ----------------------------
   /// @ Retreive Location by IP Address
-  static Future<Location> findLocation(Platform platform) async {
+  Future<Location> findLocation() async {
     // # Check Platform
     if (platform.isMobile) {
       // Check for Mobile Data
-      if (to._connectivity.value == ConnectivityResult.mobile) {
+      if (_connectivity.value == ConnectivityResult.mobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
 
@@ -136,7 +140,7 @@ class DeviceService extends GetxService {
       },
     );
 
-    return to._locationApi.fetch();
+    return _locationApi.fetch();
   }
 
   /// @ Method Hides Keyboard
@@ -197,7 +201,7 @@ class DeviceService extends GetxService {
 
 // * ------------------- Helpers ----------------------------
   // # Returns Icon Path
-  Future<String> _getIconPath(Platform platform) async {
+  Future<String> _getIconPath() async {
     // Set Temporary Directory
     Directory directory = await getApplicationDocumentsDirectory();
     String name = "";
