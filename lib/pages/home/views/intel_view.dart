@@ -1,4 +1,4 @@
-import 'package:sonr_app/pages/home/controllers/intel_controller.dart';
+import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/style/style.dart';
 
 class IntelHeader extends GetView<IntelController> {
@@ -116,16 +116,16 @@ class _IntelBadgeCount extends GetView<IntelController> {
         child: controller.obx(
           (state) {
             if (state != null) {
-              return Obx(() => Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.min,
-                    textBaseline: TextBaseline.ideographic,
-                    children: [
-                      state.text(),
-                      state.icon(),
-                    ],
-                  ));
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                textBaseline: TextBaseline.ideographic,
+                children: [
+                  state.text(),
+                  state.icon(),
+                ],
+              );
             } else {
               return Container();
             }

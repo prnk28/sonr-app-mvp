@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/style/style.dart';
 
 class IntelController extends GetxController with StateMixin<CompareLobbyResult> {
@@ -13,6 +12,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
 
   // References
   Lobby _lastLobby = LobbyService.lobby.value;
+  int _lastLobbyCount = 0;
 
   /// @ Controller Constructer
   @override
@@ -41,16 +41,18 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
     // Check Valid
     final compareResult = CompareLobbyResult(current: onData, previous: _lastLobby);
 
-    // Swap Text
-    HapticFeedback.mediumImpact();
-    badgeVisible(true);
+    if (onData.count != _lastLobbyCount) {
+      // Swap Text
+      HapticFeedback.mediumImpact();
+      badgeVisible(true);
 
-    // Revert Text
-    Future.delayed(1200.milliseconds, () {
-      if (!isClosed) {
-        badgeVisible(false);
-      }
-    });
+      // Revert Text
+      Future.delayed(1200.milliseconds, () {
+        if (!isClosed) {
+          badgeVisible(false);
+        }
+      });
+    }
 
     // Change State
     change(
@@ -60,6 +62,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
 
     // Update Reference
     _lastLobby = onData;
+    _lastLobbyCount = onData.count;
   }
 
   void _handleStatusStream(Status onData) {
@@ -87,64 +90,6 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
       title("Failed");
     } else {
       title("Connecting");
-    }
-  }
-}
-
-
-extension CompareLobbyResultUtil on CompareLobbyResult {
-  List<Widget> mapNearby() {
-    if (this.current != null) {
-      if (hasMoreThanVisible) {
-        final firstValues = this.current!.peers.values.take(4).toList();
-        return firstValues.map<Widget>((value) => PeerItem.mini(value)).toList();
-      } else {
-        return this.current!.peers.values.map<Widget>((value) => PeerItem.mini(value)).toList();
-      }
-    } else {
-      return [];
-    }
-  }
-
-  Widget text() {
-    if (!this.hasStayed) {
-      return FadeIn(
-        animate: true,
-        child: this.differenceCount.toString().light(
-              color: this.hasJoined ? SonrColor.Tertiary : SonrColor.Critical,
-            ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
-  Widget icon() {
-    if (this.hasJoined) {
-      return Center(
-        child: FadeInUp(
-          animate: true,
-          duration: 300.milliseconds,
-          child: SonrIcons.Up.icon(
-            color: AppTheme.itemColor,
-            size: 14,
-          ),
-        ),
-      );
-    } else if (this.hasLeft) {
-      return Center(
-        child: FadeInDown(
-          animate: true,
-          from: 40,
-          duration: 300.milliseconds,
-          child: SonrIcons.Down.icon(
-            color: SonrColor.Critical,
-            size: 14,
-          ),
-        ),
-      );
-    } else {
-      return Container();
     }
   }
 }
