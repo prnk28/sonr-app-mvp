@@ -20,8 +20,6 @@ environment_config:
       env_var: map_secret
     ip_key:
       env_var: ip_key
-    rapid_host:
-      env_var: rapid_host
     rapid_key:
       env_var: rapid_key
     hs_key:
