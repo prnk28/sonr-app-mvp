@@ -39,10 +39,14 @@ class _HomePageState extends State<HomePage> {
           floatingAction: HomeFloatingBar(),
           appBar: _buildAppBar(controller.view.value),
           body: Container(
-              child: TabBarView(controller: controller.tabController, children: [
-            DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-            PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
-          ])),
+              child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: controller.tabController,
+            children: [
+              DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
+              PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
+            ],
+          )),
         ));
   }
 
