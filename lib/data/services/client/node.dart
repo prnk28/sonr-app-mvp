@@ -23,6 +23,8 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // References
   late Node _instance;
   late StreamSubscription<ConnectivityResult> _connectionStream;
+  late StreamSubscription<LobbyEvent> _lobbyEventStream;
+  late StreamSubscription<ProgressEvent> _progressEventStream;
 
   // ^ Constructer ^ //
   Future<NodeService> init() async {
@@ -32,21 +34,30 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
+
+    // Set Callbacks
     _instance.onConnected = _handleConnected;
     _instance.onStatus = _handleStatus;
     _instance.onError = _handleError;
-    _instance.onEvent = LobbyService.to.handleEvent;
     _instance.onInvite = ReceiverService.to.handleInvite;
     _instance.onReply = SenderService.to.handleReply;
-    _instance.onProgress = ReceiverService.to.handleProgress;
     _instance.onReceived = ReceiverService.to.handleReceived;
     _instance.onTransmitted = SenderService.to.handleTransmitted;
+
+    // Set Stream Handlers
+    _lobbyEventStream = _instance.onEvent(LobbyService.to.handleEvent);
+    _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
+    _instance.onMail((data) {
+      print(data.toString());
+    });
     return this;
   }
 
   @override
   onClose() {
     _connectionStream.cancel();
+    _lobbyEventStream.cancel();
+    _progressEventStream.cancel();
     super.onClose();
   }
 
@@ -54,7 +65,12 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// @ Connect to Service Method
   Future<bool> connect() async {
     // Check for User
-    if (ContactService.status.value.hasUser && DeviceService.hasInterent) {
+    if (ContactService.status.value.hasUser && DeviceService.hasInternet) {
+      // End Host if Connected
+      if (status.value.isConnected) {
+        instance.stop();
+      }
+
       // Connect Node
       instance.connect(await RequestBuilder.connection);
 
@@ -132,7 +148,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleStatus(StatusEvent data) {
     // Check for Homescreen Controller
     if (data.value == Status.AVAILABLE) {
-      DeviceService.playSound(type: Sounds.Connected);
+      Sound.Connected.play();
 
       // Handle Available
       instance.update(API.newUpdatePosition(DeviceService.position.value));

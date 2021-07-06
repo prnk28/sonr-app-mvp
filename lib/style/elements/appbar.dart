@@ -8,6 +8,8 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Appears above Title with Light Font
   final Widget? subtitle;
+
+  final Widget? footer;
   final Widget? leading;
   final Widget? action;
   final Widget? secondAction;
@@ -20,6 +22,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     this.centerTitle = false,
     this.secondAction,
+    this.footer,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,15 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 subtitle != null ? subtitle! : Container(),
-                title,
+                Expanded(child: title),
+                footer != null
+                    ? Divider(
+                        color: AppTheme.dividerColor,
+                        indent: 8,
+                        endIndent: 8,
+                      )
+                    : Container(),
+                footer != null ? footer! : Container(),
               ],
             ),
           ),
@@ -47,19 +58,25 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 80);
 
   Widget _buildTrailing() {
     if (action != null && secondAction != null) {
-      return Container(
-          width: 94,
-          child: Row(
-            children: [action!, secondAction!],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ));
-    } else if (action != null && secondAction == null) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              width: 94,
+              child: Row(
+                children: [action!, secondAction!],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              ))
+        ],
+      );
+    } else if (action != null) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           action!,
@@ -73,7 +90,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget? _buildLeading() {
     if (leading != null) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           leading!,

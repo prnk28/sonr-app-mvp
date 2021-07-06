@@ -86,9 +86,9 @@ class PayloadListItem extends GetView<ItemController> {
           onPressed: () {
             AppRoute.positioned(
               Infolist(options: [
-                InfolistOption("Replace", SonrIcons.Reload, controller.replace),
-                InfolistOption("Remove", SonrIcons.Trash, controller.delete),
-                InfolistOption("Cancel", SonrIcons.Cancel, controller.cancel),
+                InfolistOption("Replace", SonrIcons.Reload, onPressed: controller.replace),
+                InfolistOption("Remove", SonrIcons.Trash, onPressed: controller.delete),
+                InfolistOption("Cancel", SonrIcons.Cancel, onPressed: controller.cancel),
               ]),
               offset: Offset(35, 0),
               parentKey: key,

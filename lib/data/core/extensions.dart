@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:geolocator/geolocator.dart' as geo;
 import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/data/data.dart';
 
@@ -24,6 +24,16 @@ extension ListUtils<T> on List<T> {
 extension StringUtils on String {
   /// Check if this String is any of the Given list of Strings
   bool isAny(List<String> opts) => opts.any((element) => element == this);
+
+  bool isOneOf(List<String> options) {
+    bool contains = false;
+    options.forEach((i) {
+      if (this == i) {
+        contains = true;
+      }
+    });
+    return contains;
+  }
 }
 
 extension NumUtils on int {
@@ -52,4 +62,15 @@ extension ConnectivityResultUtils on ConnectivityResult {
   }
 
   bool get hasInternet => this != ConnectivityResult.none;
+}
+
+extension GeoLocaterPosition on geo.Position {
+  /// Convert this Position to Sonr Proto Location
+  Location toSonrLocation() {
+    // Return Location
+    return Location(
+      longitude: this.longitude,
+      latitude: this.latitude,
+    );
+  }
 }

@@ -2,7 +2,7 @@ import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
 /// ** Flat Mode View ** //
-class FlatModeOverlay extends GetView<TransferController> {
+class FlatModeOverlay extends GetView<PositionController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => GestureDetector(
@@ -23,7 +23,7 @@ class FlatModeOverlay extends GetView<TransferController> {
   }
 }
 
-class _FlatModeCard extends GetView<TransferController> {
+class _FlatModeCard extends GetView<PositionController> {
   @override
   Widget build(BuildContext context) {
     if (controller.status.value.isIncoming) {

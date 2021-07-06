@@ -1,10 +1,8 @@
-export 'models/arguments.dart';
-export 'models/status.dart';
+export 'status.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
-import 'models/arguments.dart';
-import 'models/status.dart';
+import 'status.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -163,7 +161,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData!.count > _lobbySizeRef) {
       var diff = onData.count - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      DeviceService.playSound(type: Sounds.Joined);
+      Sound.Joined.play();
     }
     // Peer Left
     else if (onData.count < _lobbySizeRef) {

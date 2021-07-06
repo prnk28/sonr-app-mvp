@@ -119,7 +119,7 @@ extension DefaultAlbumUtils on DefaultAlbum {
     if (DefaultAlbumUtils.isDefault(entity)) {
       iconData = DefaultAlbumUtils.toDefault(entity).iconData;
     }
-    return InfolistOption(title, iconData, onPressed);
+    return InfolistOption(title, iconData, onPressed: onPressed);
   }
 
   /// ### (Static) isDefault:

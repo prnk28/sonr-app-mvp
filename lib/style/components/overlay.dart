@@ -59,7 +59,6 @@ class PositionedOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     RenderBox renderBox = parentKey.currentContext!.findRenderObject() as RenderBox;
     Offset offset = renderBox.localToGlobal(Offset.zero);
-    Logger.info(offset.toString());
     return Obx(() => Container(
           width: Get.width,
           height: Get.height,

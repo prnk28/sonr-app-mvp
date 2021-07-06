@@ -43,7 +43,7 @@ class _NamePage extends GetView<RegisterController> {
   _NamePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final hint = SonrTextField.hintName();
+    final hint = TextUtils.hintName;
     return SingleChildScrollView(
       reverse: true,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -142,16 +142,18 @@ class _NameStatus extends GetView<RegisterController> {
             padding: EdgeInsets.all(12),
             constraints: BoxConstraints(minWidth: 140, maxWidth: 285),
             child: Container(
-              child: DashedRect(
-                strokeWidth: 1,
-                color: AppTheme.greyColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                    controller.nameStatus.value.icon(),
-                    Padding(padding: EdgeInsets.only(left: 4)),
-                    controller.nameStatus.value.label(),
-                  ]),
+              child: Center(
+                child: DashedBox(
+                  strokeWidth: 1,
+                  color: AppTheme.greyColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      controller.nameStatus.value.icon(),
+                      Padding(padding: EdgeInsets.only(left: 4)),
+                      controller.nameStatus.value.label(),
+                    ]),
+                  ),
                 ),
               ),
             ),
@@ -211,7 +213,7 @@ class _BackupCodeView extends GetView<RegisterController> {
 }
 
 class _ProfileSetupView extends GetView<RegisterController> {
-  final hintName = SonrTextField.hintName();
+  final hintName = TextUtils.hintName;
   final firstNameFocus = FocusNode();
   final lastNameFocus = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

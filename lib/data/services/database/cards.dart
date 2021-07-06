@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
@@ -226,22 +223,6 @@ class CardService extends GetxService {
       if (totalCount > 0) {
         await to._database.deleteAllCards();
       }
-    }
-  }
-
-  /// @ Load IO File from Metadata
-  static Future<File> loadFileFromItem(SFile_Item item) async {
-    if (DeviceService.isMobile && isRegistered) {
-      var asset = await AssetEntity.fromId(item.id);
-      if (asset != null) {
-        var file = await asset.file;
-        if (file != null) {
-          return file;
-        }
-      }
-      return item.file;
-    } else {
-      return File("");
     }
   }
 

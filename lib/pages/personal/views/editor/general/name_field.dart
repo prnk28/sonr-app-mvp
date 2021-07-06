@@ -10,7 +10,7 @@ class EditNameView extends GetView<PersonalController> {
   final FocusNode _lastNameFocus = FocusNode();
   final FocusNode _suffixNameFocus = FocusNode();
   final FocusNode _nickNameFocus = FocusNode();
-  final hintName = SonrTextField.hintName();
+  final hintName = TextUtils.hintName;
   final scrollController = ScrollController();
 
   @override
@@ -20,7 +20,7 @@ class EditNameView extends GetView<PersonalController> {
           child: SingleChildScrollView(
             controller: scrollController,
             child: Column(children: [
-              SonrTextField(
+              DesignTextField(
                   hint: "Dr.",
                   label: "Prefix",
                   autoFocus: true,
@@ -33,7 +33,7 @@ class EditNameView extends GetView<PersonalController> {
                   },
                   value: controller.editedFirstName.value,
                   onChanged: (val) => controller.editedFirstName(val)),
-              SonrTextField(
+              DesignTextField(
                   hint: hintName.item1,
                   label: "First Name",
                   focusNode: _firstNameFocus,
@@ -45,7 +45,7 @@ class EditNameView extends GetView<PersonalController> {
                   },
                   value: controller.editedFirstName.value,
                   onChanged: (val) => controller.editedFirstName(val)),
-              SonrTextField(
+              DesignTextField(
                   hint: "A.",
                   label: "Middle Name",
                   focusNode: _middleNameFocus,
@@ -57,7 +57,7 @@ class EditNameView extends GetView<PersonalController> {
                   },
                   value: controller.editedFirstName.value,
                   onChanged: (val) => controller.editedFirstName(val)),
-              SonrTextField(
+              DesignTextField(
                   hint: hintName.item2,
                   label: "Last Name",
                   textInputAction: TextInputAction.next,
@@ -69,7 +69,7 @@ class EditNameView extends GetView<PersonalController> {
                     scrollController.animateTo(160, duration: 250.milliseconds, curve: Curves.easeOut);
                   },
                   onChanged: (val) => controller.editedLastName(val)),
-              SonrTextField(
+              DesignTextField(
                   hint: "Jr.",
                   label: "Suffix",
                   textInputAction: TextInputAction.next,
@@ -81,7 +81,7 @@ class EditNameView extends GetView<PersonalController> {
                     scrollController.animateTo(200, duration: 250.milliseconds, curve: Curves.easeOut);
                   },
                   onChanged: (val) => controller.editedPhone(val)),
-              SonrTextField(
+              DesignTextField(
                   hint: "Rocket",
                   label: "Nick Name",
                   textInputAction: TextInputAction.done,

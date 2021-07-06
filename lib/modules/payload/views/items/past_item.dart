@@ -1,6 +1,5 @@
+import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/data/data.dart';
-import '../activity.dart';
 
 class PastActivityItem extends GetView<ActivityController> {
   final TransferActivity item;

@@ -4,27 +4,44 @@ import 'package:sonr_app/style/style.dart';
 class InfolistOption {
   final String title;
   final IconData iconData;
-  final Function onPressed;
+  final Function? onPressed;
+  final bool isHeader;
+  final Color? iconColor;
+  final Color? textColor;
+
   InfolistOption(
     this.title,
-    this.iconData,
+    this.iconData, {
     this.onPressed,
-  );
+    this.iconColor,
+    this.textColor,
+    this.isHeader = false,
+  });
 
   /// Returns Icon for Checklist Option based on State
   Widget icon() {
     return iconData.icon(
-      color: AppTheme.itemColor,
+      color: iconColor ?? AppTheme.itemColor,
       size: 24,
     );
   }
 
   /// Returns this Widgets Size
-  Size get size => this.title.size(DisplayTextStyle.Light, fontSize: 24);
+  Size get size => this.title.size(
+        isHeader ? DisplayTextStyle.Subheading : DisplayTextStyle.Light,
+        fontSize: isHeader ? 26 : 24,
+      );
 
   /// Returns Text for Checklist Option based on State
   Widget text() {
-    return title.light(color: AppTheme.itemColor, fontSize: 24);
+    if (isHeader) {
+      return title.subheading(
+        color: textColor ?? AppTheme.itemColor,
+        fontSize: 26,
+        align: TextAlign.center,
+      );
+    }
+    return title.light(color: textColor ?? AppTheme.itemColor, fontSize: 24);
   }
 }
 
@@ -47,29 +64,45 @@ class Infolist extends StatelessWidget {
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) => GestureDetector(
-              onTap: () => options[index].onPressed(),
+              onTap: () {
+                if (options[index].onPressed != null) {
+                  options[index].onPressed!();
+                }
+              },
               child: Container(
                 constraints: options.boxConstraints,
                 child: Column(children: [
                   Padding(padding: EdgeWith.top(4)),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    options[index].icon(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: options[index].text(),
-                    ),
-                  ]),
-                  index + 1 != options.length
-                      ? Divider(
-                          color: AppTheme.greyColor.withOpacity(0.25),
-                          endIndent: 8,
-                          indent: 8,
-                        )
-                      : Container(),
+                  Row(
+                    mainAxisAlignment: options[index].isHeader ? MainAxisAlignment.center : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      options[index].icon(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: options[index].text(),
+                      ),
+                    ],
+                  ),
+                  _buildDivider(index),
                 ]),
               )),
           itemCount: options.length,
         ));
+  }
+
+  Widget _buildDivider(int index) {
+    if (options[index].isHeader) {
+      return Padding(padding: EdgeInsets.only(top: 16));
+    } else if (index + 1 != options.length) {
+      return Divider(
+        color: AppTheme.greyColor.withOpacity(0.25),
+        endIndent: 8,
+        indent: 8,
+      );
+    } else {
+      return Container();
+    }
   }
 }
 

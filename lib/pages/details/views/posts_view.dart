@@ -1,7 +1,5 @@
 import 'package:sonr_app/style/style.dart';
 
-import '../details.dart';
-
 class PostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:sonr_app/style/style.dart';
 
 class ReceiverService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<ReceiverService>() && DeviceService.hasInterent;
+  static bool get isRegistered => Get.isRegistered<ReceiverService>() && DeviceService.hasInternet;
   static ReceiverService get to => Get.find<ReceiverService>();
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasActiveSession;
@@ -24,7 +24,7 @@ class ReceiverService extends GetxService {
     to._session.incoming(data);
 
     // Handle Feedback
-    DeviceService.playSound(type: Sounds.Swipe);
+    Sound.Swipe.play();
     HapticFeedback.heavyImpact();
 
     // Check for Flat
@@ -106,7 +106,7 @@ class ReceiverService extends GetxService {
 
     // Present Feedback
     await HapticFeedback.heavyImpact();
-    DeviceService.playSound(type: Sounds.Received);
+    await Sound.Received.play();
 
     // Display Released Card
     Future.delayed(2.seconds, () {

@@ -11,9 +11,12 @@ class ProfileFullName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (this.isHeader) {
-      return "${profile.firstName} ${profile.lastName}".gradient(value: SonrGradients.SolidStone);
+      return profile.fullName.gradient(value: SonrGradients.SolidStone);
     } else {
-      return Row(children: ["${profile.firstName} ".paragraph(), profile.lastName.light()]);
+      return Row(children: [
+        "${profile.firstName.capitalizeFirst} ".paragraph(),
+        profile.lastName.capitalizeFirst!.light(),
+      ]);
     }
   }
 }
@@ -27,29 +30,17 @@ class ProfileSName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () async {
-        await HapticFeedback.mediumImpact();
-        Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
-          Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
-          AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
-        });
-      },
-      child: RichText(
-        text: TextSpan(children: [
-          TextSpan(
-              text: profile.sName,
-              style: TextStyle(
-                  fontFamily: "RFlex", fontWeight: FontWeight.w300, fontSize: 20, color: Preferences.isDarkMode ? SonrColor.White : SonrColor.Black)),
-          TextSpan(
-              text: ".snr/",
-              style: TextStyle(
-                  fontFamily: "RFlex",
-                  fontWeight: FontWeight.w100,
-                  fontSize: 20,
-                  color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.8) : SonrColor.Black.withOpacity(0.8))),
-        ]),
-      ),
-    );
+        onLongPress: () async {
+          await HapticFeedback.mediumImpact();
+          Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+            Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
+            AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
+          });
+        },
+        child: [
+          profile.sName.lightSpan(fontSize: 20, color: AppTheme.itemColor),
+          ".snr/".paragraphSpan(fontSize: 20, color: AppTheme.greyColor),
+        ].rich());
   }
 }
 
@@ -81,22 +72,19 @@ class ProfileAvatar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        width: size,
-        height: size,
-        margin: EdgeInsets.all(8),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: backgroundColor ?? AppTheme.foregroundColor,
-          shape: BoxShape.circle,
-        ),
-        child: profile.hasPicture()
-            ? Image.memory(
-                Uint8List.fromList(profile.picture),
-                width: size * 0.7,
-                height: size * 0.7,
-              )
-            : SonrIcons.User.gradient(size: size * 0.7),
-      ),
+          width: size,
+          height: size,
+          margin: EdgeInsets.all(8),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: backgroundColor ?? AppTheme.foregroundColor,
+            shape: BoxShape.circle,
+          ),
+          child: profile.profileImage(
+            width: size * 0.7,
+            height: size * 0.7,
+            placeholder: SonrIcons.User.gradient(size: size * 0.7),
+          )),
     );
   }
 }

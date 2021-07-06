@@ -4,6 +4,7 @@ import 'package:sonr_app/style/style.dart';
 /// Builds **Rounded Square** Neumorphic Shape Container.
 class BoxContainer extends StatelessWidget {
   final Widget? child;
+  final Widget? footer;
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
   final Decoration? foregroundDecoration;
@@ -17,7 +18,8 @@ class BoxContainer extends StatelessWidget {
   final double? height;
 
   const BoxContainer({
-    required this.child,
+    this.child,
+    this.footer,
     Key? key,
     this.alignment,
     this.padding,
@@ -34,12 +36,32 @@ class BoxContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (footer != null) {
+      return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+        _buildBox(
+          boxPadding: EdgeInsets.only(bottom: 32),
+        ),
+        Positioned.directional(
+          textDirection: TextDirection.ltr,
+          bottom: -40,
+          child: Container(
+            margin: const EdgeInsets.only(top: 24),
+            child: footer!,
+          ),
+        ),
+      ]);
+    }
+    return _buildBox();
+  }
+
+  /// Builds Default Box Container
+  Widget _buildBox({EdgeInsets boxPadding = EdgeInsets.zero}) {
     return Container(
       key: key,
       width: width,
       height: height,
       alignment: alignment,
-      padding: padding,
+      padding: padding != null ? padding!.add(boxPadding) : boxPadding,
       foregroundDecoration: foregroundDecoration,
       constraints: constraints,
       margin: margin,

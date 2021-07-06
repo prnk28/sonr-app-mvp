@@ -18,10 +18,20 @@ class FileContent extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // # Check for Media File Type
-    if (file.isMedia) {
+    if (file.isMultiple) {
+      if (file.isAllMedia) {
+        return FileAlbumBox(
+          file: file,
+          width: Get.width,
+          height: 100,
+          fit: BoxFit.fitHeight,
+          iconSize: iconSize,
+        );
+      }
+    } else {
+      final item = file.single;
       // Image
-      if (file.single.mime.isImage) {
+      if (item.mime.isImage) {
         return FileItemImageBox(
           fileItem: file.single,
           width: Get.width,
@@ -31,30 +41,12 @@ class FileContent extends StatelessWidget {
       }
 
       // Video
-      else if (file.single.mime.isVideo) {
+      else if (item.mime.isVideo) {
         return FileItemVideoBox(
           fileItem: file.single,
           width: Get.width,
         );
       }
-
-      // Other Media (Video, Audio)
-      else {
-        return FileItemIconBox(
-          iconSize: Height.ratio(0.125),
-          fileItem: file.single,
-          height: height,
-          width: width,
-        );
-      }
-    } else if (file.isMultiple) {
-      return FileAlbumBox(
-        file: file,
-        width: Get.width,
-        height: 100,
-        fit: BoxFit.fitHeight,
-        iconSize: iconSize,
-      );
     }
 
     // # Other File
@@ -196,14 +188,16 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
     File(widget.fileItem.path).exists().then((value) {
       isFile = value;
       if (value) {
-        CardService.loadFileFromItem(widget.fileItem).then((value) => {
+        widget.fileItem.loadFile().then((value) => {
               setState(() {
                 sourceFile = value;
                 fileLoaded = true;
               })
             });
       } else {
-        fileLoaded = true;
+        setState(() {
+          fileLoaded = true;
+        });
       }
     });
   }

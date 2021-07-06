@@ -1,10 +1,8 @@
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter_contacts/flutter_contacts.dart' as pub;
 
 export 'activity.dart';
-export 'widgets/current_item.dart';
-export 'widgets/past_item.dart';
 export 'views/activity_view.dart';
 export 'models/arguments.dart';
 export 'models/type.dart';

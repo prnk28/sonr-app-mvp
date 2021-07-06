@@ -1,13 +1,18 @@
+export 'controllers/home_controller.dart';
+export 'controllers/intel_controller.dart';
+export 'controllers/status.dart';
+
 import 'package:sonr_app/pages/personal/personal.dart';
-import 'home_controller.dart';
+import 'controllers/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'models/status.dart';
+import 'controllers/status.dart';
 import 'views/dashboard_view.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/models/status.dart';
+import 'package:sonr_app/pages/home/controllers/home_controller.dart';
+import 'package:sonr_app/pages/home/controllers/status.dart';
 import 'package:sonr_app/pages/personal/controllers/editor_controller.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'views/panels_view.dart';
+import 'views/intel_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -91,10 +96,11 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               centerTitle: controller.view.value.isDefault,
               key: ValueKey(false),
               subtitle: Padding(
-                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 42) : EdgeInsets.zero,
+                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 68) : EdgeInsets.zero,
                 child: controller.view.value == HomeView.Dashboard
                     ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
-                        color: Get.theme.focusColor.withOpacity(0.8),
+                        fontSize: 22,
+                        color: Get.theme.focusColor.withOpacity(0.7),
                         align: TextAlign.start,
                       )
                     : Container(),
@@ -104,7 +110,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               ),
               leading: controller.view.value != HomeView.Contact
                   ? Padding(
-                      padding: const EdgeInsets.only(bottom: 32.0, left: 8),
+                      padding: const EdgeInsets.only(top: 32.0, left: 8),
                       child: Container(
                         child: Obx(() => ShowcaseItem.fromType(
                               type: ShowcaseType.Help,
@@ -118,17 +124,29 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                       ),
                     )
                   : null,
-              title: controller.title.value.heading(
-                color: Get.theme.focusColor,
-                align: TextAlign.start,
-              ),
+              title: controller.view.value != HomeView.Contact
+                  ? IntelHeader()
+                  : Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: controller.view.value.title.heading(
+                        color: AppTheme.itemColor,
+                        align: TextAlign.start,
+                      ),
+                    ),
+              footer: controller.view.value != HomeView.Contact ? IntelFooter() : null,
             ),
           ),
         ));
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 64);
+  Size get preferredSize {
+    if (controller.view.value != HomeView.Contact) {
+      return Size(Get.width, 186);
+    } else {
+      return Size(Get.width, kToolbarHeight + 64);
+    }
+  }
 }
 
 class HomeActionButton extends GetView<HomeController> {
@@ -147,19 +165,22 @@ class HomeActionButton extends GetView<HomeController> {
   Widget _buildView(HomeView page) {
     // Return View
     if (page == HomeView.Contact) {
-      return ActionButton(
-        key: ValueKey<HomeView>(HomeView.Contact),
-        iconData: SonrIcons.Settings,
-        onPressed: () {
-          HapticFeedback.heavyImpact();
-          EditorController.open();
-        },
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 42.0, right: 8),
+        child: ActionButton(
+          key: ValueKey<HomeView>(HomeView.Contact),
+          iconData: SonrIcons.Settings,
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            EditorController.open();
+          },
+        ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 32.0, right: 8),
-        child: ShowcaseItem.fromType(
-          type: ShowcaseType.Alerts,
+      return ShowcaseItem.fromType(
+        type: ShowcaseType.Alerts,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 108.0, right: 8),
           child: ActionButton(
             key: ValueKey<HomeView>(HomeView.Dashboard),
             iconData: SonrIcons.Alerts,

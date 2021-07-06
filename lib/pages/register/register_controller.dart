@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/env.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -27,7 +25,7 @@ class RegisterController extends GetxController {
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
   // References
-  final _nbClient = NamebaseApi(hsKey: Env.hs_key, hsSecret: Env.hs_secret);
+  final _nbClient = NamebaseApi(keys: AppServices.apiKeys);
   late ValueNotifier<double> panelNotifier;
   late PageController introPageController;
   late PageController setupPageController;

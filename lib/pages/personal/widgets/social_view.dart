@@ -22,17 +22,17 @@ class SocialView extends StatelessWidget {
           // Medium
           case Contact_Social_Media.Medium:
             var posts = controller.medium.value;
-            return Stack(children: [_MediumItem(posts, 0, true), item.media.black]);
+            return Stack(children: [_MediumItem(posts, 0, true), item.media.black()]);
 
           // Twitter
           case Contact_Social_Media.Twitter:
             var twitter = controller.twitter.value;
-            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.media.black]);
+            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.media.black()]);
 
           // Youtube
           case Contact_Social_Media.YouTube:
             var youtube = controller.youtube.value;
-            return Stack(children: [_YoutubeItem(youtube, 0, true), item.media.black]);
+            return Stack(children: [_YoutubeItem(youtube, 0, true), item.media.black()]);
 
           // Other
           default:

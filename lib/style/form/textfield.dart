@@ -26,7 +26,7 @@ extension TextInputValidStatusUtils on TextInputValidStatus {
 }
 
 /// @ Builds Neumorphic Text Field
-class SonrTextField extends StatelessWidget {
+class DesignTextField extends StatelessWidget {
   final String? label;
   final String hint;
   final String value;
@@ -40,26 +40,7 @@ class SonrTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final void Function()? onEditingComplete;
 
-  /// @ Returns Random Hint Name
-  static Tuple<String, String> hintName() {
-    final list = <Tuple<String, String>>[
-      !DeviceService.isIOS && !DeviceService.isMacOS ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
-      Tuple("Michelangelo", "Buonarroti"),
-      Tuple("Albert", "Einstein"),
-      Tuple("Douglas", "Engelbart"),
-      Tuple("Kendrick", "Lamar"),
-      Tuple("David", "Chaum"),
-      Tuple("Ada", "Lovelace"),
-      Tuple("Madam", "Curie"),
-      Tuple("Amelia", "Earhart"),
-      Tuple("Oprah", "Winfrey"),
-      Tuple("Maya", "Angelou"),
-      Tuple("Frida", "Kahlo"),
-    ];
-    return list.random();
-  }
-
-  SonrTextField({
+  DesignTextField({
     required this.hint,
     required this.value,
     this.label,
@@ -171,5 +152,109 @@ class SonrTextField extends StatelessWidget {
   Offset shakeOffset(double animation) {
     var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
     return Offset(18 * shake, 0);
+  }
+}
+
+/// ### SNameTextField
+/// Creates TextField for SName Field.
+class SNameTextField extends StatelessWidget {
+  final void Function(String value) onEditingComplete;
+  final void Function(String value)? onChanged;
+  final hint = TextUtils.hintName;
+
+  SNameTextField({
+    Key? key,
+    required this.onEditingComplete,
+    this.onChanged,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Get.width,
+      child: ObxValue<RxDouble>(
+          (leftPadding) => Stack(children: [
+                ObxValue<RxString>(
+                    (value) => TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                          ],
+                          style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
+                          autofocus: true,
+                          textInputAction: TextInputAction.go,
+                          autocorrect: false,
+                          showCursor: false,
+                          textCapitalization: TextCapitalization.none,
+                          onEditingComplete: () {
+                            onEditingComplete(value.value);
+                          },
+                          onChanged: (val) {
+                            // Update Value
+                            value(val);
+
+                            // Find Size
+                            final size = val.size(DisplayTextStyle.Paragraph, fontSize: 24);
+                            final length = size.width;
+
+                            // Update Padding
+                            if (length > 0) {
+                              leftPadding(length);
+                            } else {
+                              leftPadding(hint.item1.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
+                            }
+
+                            // Callback
+                            if (onChanged != null) {
+                              onChanged!(val);
+                            }
+                          },
+                          decoration: InputDecoration.collapsed(
+                            hintText: hint.item1,
+                          ),
+                        ),
+                    "".obs),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: leftPadding.value),
+                  child: Text(
+                    ".snr/",
+                    style: DisplayTextStyle.Subheading.style(color: AppTheme.itemColor, fontSize: 24),
+                  ),
+                ),
+              ]),
+          (hint.item1.length * 12.0).obs),
+    );
+  }
+}
+
+class TextUtils {
+  /// @ Returns Random Hint Name
+  static Tuple<String, String> get hintName {
+    switch (DeviceService.device.platform) {
+      case Platform.Android:
+        return [
+          Tuple("Larry", "Page"),
+          Tuple("Sergei", "Bring"),
+          Tuple("Eric", "Schmidt"),
+        ].random();
+      case Platform.IOS:
+        return [Tuple("Steve", "Jobs"), Tuple("Steve", "Wozniak"), Tuple("Jony", "Ive")].random();
+      case Platform.Linux:
+        return Tuple("Linus", "Trovalds");
+      case Platform.MacOS:
+        return [Tuple("Steve", "Jobs"), Tuple("Jony", "Ive"), Tuple("Andy", "Hertzeld")].random();
+      case Platform.Web:
+        return [Tuple("Vitalik", "Buterin"), Tuple("Elon", "Musk"), Tuple("Jeff", "Bezos"), Tuple("Tim", "Berners-Lee")].random();
+      case Platform.Windows:
+        return [Tuple("Bill", "Gates"), Tuple("Paul", "Allen")].random();
+      default:
+        return [
+          Tuple("Michelangelo", "Buonarroti"),
+          Tuple("Kendrick", "Lamar"),
+          Tuple("Madam", "Curie"),
+          Tuple("Amelia", "Earhart"),
+          Tuple("Oprah", "Winfrey"),
+          Tuple("Frida", "Kahlo"),
+        ].random();
+    }
   }
 }
