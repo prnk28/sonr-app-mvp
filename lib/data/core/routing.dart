@@ -453,6 +453,9 @@ extension AppRoute on AppPage {
       Get.bottomSheet(
           dismissible
               ? BlurredBackground(
+                  onTapped: () {
+                    onDismissed!(DismissDirection.down);
+                  },
                   child: Dismissible(
                     key: key!,
                     child: child,
