@@ -94,7 +94,10 @@ class LobbyService extends GetxService {
   }
 
   // # Handle Individual user event
-  void handleEvent(LobbyEvent data) => _lobby.handleEvent(data);
+  void handleEvent(LobbyEvent data) {
+    _lobby.handleEvent(data);
+    _lobby.refresh();
+  }
 
   // # Handle Incoming Position Stream
   void _handlePosition(Position data) {

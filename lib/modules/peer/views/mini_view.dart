@@ -18,9 +18,34 @@ class PeerMiniView extends GetView<PeerController> {
                   SonrIcons.ATSign,
                   isHeader: true,
                 ),
-                InfolistOption("Media", SonrIcons.Photos),
-                InfolistOption("File", SonrIcons.Files),
-                InfolistOption("Contact", SonrIcons.ContactCard),
+                InfolistOption("Media", SonrIcons.Camera, onPressed: () {
+                  SenderService.choose(ChooseOption.Camera).then((value) {
+                    if (value != null) {
+                      SenderService.invite(value);
+                    }
+                  });
+                }),
+                InfolistOption("Media", SonrIcons.Photos, onPressed: () {
+                  SenderService.choose(ChooseOption.Media).then((value) {
+                    if (value != null) {
+                      SenderService.invite(value);
+                    }
+                  });
+                }),
+                InfolistOption("File", SonrIcons.Files, onPressed: () {
+                  SenderService.choose(ChooseOption.File).then((value) {
+                    if (value != null) {
+                      SenderService.invite(value);
+                    }
+                  });
+                }),
+                InfolistOption("Contact", SonrIcons.ContactCard, onPressed: () {
+                  SenderService.choose(ChooseOption.Contact).then((value) {
+                    if (value != null) {
+                      SenderService.invite(value);
+                    }
+                  });
+                }),
               ],
             ),
             parentKey: peerKey,

@@ -123,7 +123,7 @@ class DeviceService extends GetxService {
         );
 
         // Return Location
-        return pos.toSonrLocation();
+        return pos.toSonrLocation()..initPlacemark();
       }
     }
     // Analytics

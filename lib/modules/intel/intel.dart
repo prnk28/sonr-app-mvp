@@ -1,96 +1,139 @@
-export 'data/data.dart';
+import 'package:sonr_app/modules/intel/data/lobby_info.dart';
+import 'package:sonr_app/modules/intel/data/intel_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
-import 'data/data.dart';
-import 'widgets/badge_count.dart';
-import 'widgets/nearby_row.dart';
-
 class IntelHeader extends GetView<IntelController> {
-  IntelHeader();
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 200,
         child: Obx(
           () => AnimatedSlider.slideDown(
-              child: _buildView(
-            NodeService.status.value,
+              child: Column(
+            children: [
+              Obx(() => GestureDetector(
+                    onTap: () async {
+                      if (NodeService.status.value == Status.FAILED) {
+                        await Logger.openIntercom();
+                      }
+                    },
+                    child: controller.title.value.heading(
+                      color: Get.theme.focusColor,
+                      align: TextAlign.start,
+                    ),
+                  )),
+              IntelFooter(),
+            ],
           )),
         ));
   }
+}
 
-  Widget _buildView(Status status) {
-    if (status.isConnected) {
-      return _IntelHeaderStatusActive(
-        key: ValueKey<Status>(Status.CONNECTED),
-      );
-    } else if (status == Status.FAILED) {
-      return _IntelHeaderStatusFailed(
-        key: ValueKey<Status>(Status.FAILED),
-      );
-    } else {
-      return _IntelHeaderStatusInitial(
-        key: ValueKey<Status>(Status.IDLE),
-      );
-    }
+class IntelFooter extends GetView<IntelController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => AnimatedSlider.fade(
+          duration: 200.milliseconds,
+          child: controller.badgeVisible.value
+              ? _IntelBadgeCount(
+                  key: ValueKey(true),
+                )
+              : _NearbyPeersRow(
+                  key: ValueKey(false),
+                ),
+        ));
   }
 }
 
-class _IntelHeaderStatusInitial extends GetView<IntelController> {
-  const _IntelHeaderStatusInitial({Key? key}) : super(key: key);
+class _NearbyPeersRow extends GetView<IntelController> {
+  const _NearbyPeersRow({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        "Connecting..".heading(
-          color: Get.theme.focusColor,
-          align: TextAlign.start,
+    return Container(
+      child: controller.obx(
+        (state) {
+          if (state != null) {
+            if (state.hasMoreThanVisible) {
+              final moreKey = GlobalKey();
+              return Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: state.mapNearby(),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    key: moreKey,
+                    width: 32,
+                    height: 32,
+                    child: "${state.additionalPeers}+".light(
+                      fontSize: 18,
+                      color: AppTheme.greyColor,
+                    ),
+                    decoration: BoxDecoration(
+                      color: SonrColor.AccentBlue,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Row(
+                children: state.mapNearby(),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+              );
+            }
+          }
+          return Container();
+        },
+        onEmpty: Container(
+          child: "Nobody Around".light(
+            fontSize: 18,
+            color: AppTheme.greyColor,
+          ),
         ),
-        Opacity(
+        onLoading: Opacity(
           opacity: 0.7,
           child: HourglassIndicator(),
         ),
-      ],
-    );
-  }
-}
-
-class _IntelHeaderStatusActive extends GetView<IntelController> {
-  const _IntelHeaderStatusActive({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Obx(() => controller.title.value.heading(
-              color: Get.theme.focusColor,
-              align: TextAlign.start,
-            )),
-        Obx(() => AnimatedSlider.fade(child: _buildChildView(controller.badgeVisible.value)))
-      ],
-    );
-  }
-
-  Widget _buildChildView(bool isBadgeVisible) {
-    if (isBadgeVisible) {
-      return IntelBadgeCount(key: ValueKey(true));
-    } else {
-      return NearbyPeersRow(key: ValueKey(false));
-    }
-  }
-}
-
-class _IntelHeaderStatusFailed extends GetView<IntelController> {
-  const _IntelHeaderStatusFailed({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async => await Logger.openIntercom(),
-      child: "Failed".heading(
-        color: SonrColor.Critical,
-        align: TextAlign.center,
+        onError: (_) => Container(),
       ),
     );
+  }
+}
+
+class _IntelBadgeCount extends GetView<IntelController> {
+  const _IntelBadgeCount({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.only(top: 8),
+        child: controller.obx(
+          (state) {
+            if (state != null) {
+              return Obx(() => Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    textBaseline: TextBaseline.ideographic,
+                    children: [
+                      state.text(),
+                      state.icon(),
+                    ],
+                  ));
+            } else {
+              return Container();
+            }
+          },
+          onEmpty: Container(),
+          onLoading: Container(),
+          onError: (_) => Container(),
+        ));
   }
 }
