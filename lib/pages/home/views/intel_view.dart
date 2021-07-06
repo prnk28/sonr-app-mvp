@@ -1,5 +1,4 @@
-import 'package:sonr_app/modules/intel/data/lobby_info.dart';
-import 'package:sonr_app/modules/intel/data/intel_controller.dart';
+import 'package:sonr_app/pages/home/controllers/intel_controller.dart';
 import 'package:sonr_app/style/style.dart';
 
 class IntelHeader extends GetView<IntelController> {

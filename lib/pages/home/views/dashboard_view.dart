@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../home_controller.dart';
+import '../controllers/home_controller.dart';
 import 'search_view.dart';
 
 const K_LIST_HEIGHT = 225.0;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/style/style.dart';
 
 class IntelController extends GetxController with StateMixin<CompareLobbyResult> {
@@ -22,7 +23,6 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
 
     // Set Default Values
     _handleStatusStream(NodeService.status.value);
-    change(CompareLobbyResult(current: LobbyService.lobby.value), status: RxStatus.loading());
 
     // Initialize
     super.onInit();
@@ -40,24 +40,23 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
   void _handleLobbyStream(Lobby onData) {
     // Check Valid
     final compareResult = CompareLobbyResult(current: onData, previous: _lastLobby);
-    if (compareResult.hasLeft || compareResult.hasJoined) {
-      // Swap Text
-      HapticFeedback.mediumImpact();
-      badgeVisible(true);
 
-      // Change State
-      change(
-        compareResult,
-        status: RxStatus.success(),
-      );
+    // Swap Text
+    HapticFeedback.mediumImpact();
+    badgeVisible(true);
 
-      // Revert Text
-      Future.delayed(1200.milliseconds, () {
-        if (!isClosed) {
-          badgeVisible(false);
-        }
-      });
-    }
+    // Revert Text
+    Future.delayed(1200.milliseconds, () {
+      if (!isClosed) {
+        badgeVisible(false);
+      }
+    });
+
+    // Change State
+    change(
+      compareResult,
+      status: onData.isEmpty ? RxStatus.empty() : RxStatus.success(),
+    );
 
     // Update Reference
     _lastLobby = onData;
@@ -83,12 +82,69 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
       });
 
       // Check Lobby Size
-      change(CompareLobbyResult(current: LobbyService.lobby.value, previous: _lastLobby),
-          status: _lastLobby.isEmpty ? RxStatus.empty() : RxStatus.success());
+      _handleLobbyStream(LobbyService.lobby.value);
     } else if (onData == Status.FAILED) {
       title("Failed");
     } else {
       title("Connecting");
+    }
+  }
+}
+
+
+extension CompareLobbyResultUtil on CompareLobbyResult {
+  List<Widget> mapNearby() {
+    if (this.current != null) {
+      if (hasMoreThanVisible) {
+        final firstValues = this.current!.peers.values.take(4).toList();
+        return firstValues.map<Widget>((value) => PeerItem.mini(value)).toList();
+      } else {
+        return this.current!.peers.values.map<Widget>((value) => PeerItem.mini(value)).toList();
+      }
+    } else {
+      return [];
+    }
+  }
+
+  Widget text() {
+    if (!this.hasStayed) {
+      return FadeIn(
+        animate: true,
+        child: this.differenceCount.toString().light(
+              color: this.hasJoined ? SonrColor.Tertiary : SonrColor.Critical,
+            ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget icon() {
+    if (this.hasJoined) {
+      return Center(
+        child: FadeInUp(
+          animate: true,
+          duration: 300.milliseconds,
+          child: SonrIcons.Up.icon(
+            color: AppTheme.itemColor,
+            size: 14,
+          ),
+        ),
+      );
+    } else if (this.hasLeft) {
+      return Center(
+        child: FadeInDown(
+          animate: true,
+          from: 40,
+          duration: 300.milliseconds,
+          child: SonrIcons.Down.icon(
+            color: SonrColor.Critical,
+            size: 14,
+          ),
+        ),
+      );
+    } else {
+      return Container();
     }
   }
 }

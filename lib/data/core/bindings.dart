@@ -1,15 +1,13 @@
-import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
-import 'package:sonr_app/modules/intel/data/intel_controller.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/register/register_controller.dart';
-import 'package:sonr_app/pages/transfer/transfer.dart';
+
+import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
-import 'package:sonr_app/style/style.dart';
+import 'package:sonr_app/pages/register/register.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 
 /// @ Initial Controller Bindings
 class InitialBinding implements Bindings {

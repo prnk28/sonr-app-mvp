@@ -1,10 +1,10 @@
-export 'models/arguments.dart';
-export 'models/status.dart';
+export '../models/arguments.dart';
+export '../models/status.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
-import 'models/arguments.dart';
-import 'models/status.dart';
+import '../models/arguments.dart';
+import '../models/status.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties

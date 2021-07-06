@@ -1,14 +1,17 @@
-import 'package:sonr_app/modules/intel/intel.dart';
+export 'controllers/home_controller.dart';
+export 'controllers/intel_controller.dart';
+
 import 'package:sonr_app/pages/personal/personal.dart';
-import 'home_controller.dart';
+import 'controllers/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'models/status.dart';
 import 'views/dashboard_view.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
+import 'package:sonr_app/pages/home/controllers/home_controller.dart';
 import 'package:sonr_app/pages/home/models/status.dart';
 import 'package:sonr_app/pages/personal/controllers/editor_controller.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'views/panels_view.dart';
+import 'views/intel_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -89,38 +92,37 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
           child: AnimatedSlider.fade(
             duration: 2.seconds,
             child: PageAppBar(
-              centerTitle: controller.view.value.isDefault,
-              key: ValueKey(false),
-              subtitle: Padding(
-                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 24) : EdgeInsets.zero,
-                child: controller.view.value == HomeView.Dashboard
-                    ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
-                        color: Get.theme.focusColor.withOpacity(0.8),
-                        align: TextAlign.start,
+                centerTitle: controller.view.value.isDefault,
+                key: ValueKey(false),
+                subtitle: Padding(
+                  padding: controller.view.value.isDefault ? EdgeInsets.only(top: 24) : EdgeInsets.zero,
+                  child: controller.view.value == HomeView.Dashboard
+                      ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
+                          color: Get.theme.focusColor.withOpacity(0.8),
+                          align: TextAlign.start,
+                        )
+                      : Container(),
+                ),
+                action: HomeActionButton(
+                  dashboardKey: controller.keyTwo,
+                ),
+                leading: controller.view.value != HomeView.Contact
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 24.0, left: 8),
+                        child: Container(
+                          child: Obx(() => ShowcaseItem.fromType(
+                                type: ShowcaseType.Help,
+                                child: ActionButton(
+                                  banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                                  key: ValueKey<HomeView>(HomeView.Dashboard),
+                                  iconData: SonrIcons.Help,
+                                  onPressed: () async => await Logger.openIntercom(),
+                                ),
+                              )),
+                        ),
                       )
-                    : Container(),
-              ),
-              action: HomeActionButton(
-                dashboardKey: controller.keyTwo,
-              ),
-              leading: controller.view.value != HomeView.Contact
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0, left: 8),
-                      child: Container(
-                        child: Obx(() => ShowcaseItem.fromType(
-                              type: ShowcaseType.Help,
-                              child: ActionButton(
-                                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
-                                key: ValueKey<HomeView>(HomeView.Dashboard),
-                                iconData: SonrIcons.Help,
-                                onPressed: () async => await Logger.openIntercom(),
-                              ),
-                            )),
-                      ),
-                    )
-                  : null,
-              title: IntelHeader()
-            ),
+                    : null,
+                title: IntelHeader()),
           ),
         ));
   }

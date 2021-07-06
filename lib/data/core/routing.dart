@@ -6,7 +6,7 @@ import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/popup_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
+import 'package:sonr_app/pages/home/controllers/home_controller.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';

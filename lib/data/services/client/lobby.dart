@@ -95,7 +95,20 @@ class LobbyService extends GetxService {
 
   // # Handle Individual user event
   void handleEvent(LobbyEvent data) {
-    _lobby.handleEvent(data);
+    // User Joined
+    if (data.shouldAdd) {
+      _lobby.value.peers[data.id] = data.peer;
+    }
+
+    // User Exited
+    else if (data.shouldRemove) {
+      _lobby.value.peers.remove(data.id);
+    }
+
+    // Update Status
+    _lobby.value.status = LobbyStatusUtils.localStatusFromCount(_lobby.value.peers.length);
+
+    // Refresh Lobby
     _lobby.refresh();
   }
 
