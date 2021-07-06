@@ -18,7 +18,7 @@ class RequestBuilder {
     return ConnectionRequest(
       apiKeys: AppServices.apiKeys,
       location: await DeviceService.location,
-      contact: contact,
+      contact: ContactService.contact.value,
       type: internetType,
       status: userStatus,
       textileOptions: _textileOpts,

@@ -18,7 +18,7 @@ class DeviceService extends GetxService {
   // Fetch Platform for Device
   static Platform get platform {
     if (isRegistered) {
-      return to._device.value.platform;
+      return to._device.platform;
     } else {
       return PlatformUtils.find();
     }
@@ -34,14 +34,12 @@ class DeviceService extends GetxService {
   static bool get isWindows => platform.isWindows;
 
   // Properties
-  static Device get device => to._device.value;
-  static Location get location => to._location.value;
+  static Device get device => to._device;
   static RxPosition get position => to._position;
   static Rx<ConnectivityResult> get connectivity => to._connectivity;
 
   // Properties
-  final _device = Device().obs;
-  final _location = Location().obs;
+  late final Device _device;
   final _connectivity = ConnectivityResult.none.obs;
   final _position = RxPosition();
 
@@ -53,7 +51,7 @@ class DeviceService extends GetxService {
   // ^ Initialization ^ //
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (AppServices.areServicesRegistered && isRegistered && NodeService.isRegistered) {
+      if (AppServices.isReadyToCommunicate) {
         NodeService.update(_position.value);
       }
     });
@@ -62,12 +60,11 @@ class DeviceService extends GetxService {
   // ^ Constructer ^ //
   Future<DeviceService> init() async {
     // Find Properties
-    _device(await DeviceUtils.create());
+    _device = await DeviceUtils.create();
 
     // Initialize Device
     _connectivity(await Connectivity().checkConnectivity());
     _connectivity.bindStream(Connectivity().onConnectivityChanged);
-    _location(await findLocation());
 
     // @ Setup Desktop
     if (platform.isDesktop) {
@@ -105,11 +102,11 @@ class DeviceService extends GetxService {
 
 // * ------------------- Methods ----------------------------
   /// @ Retreive Location by IP Address
-  Future<Location> findLocation() async {
+  static Future<Location> get location async {
     // # Check Platform
     if (platform.isMobile) {
       // Check for Mobile Data
-      if (_connectivity.value == ConnectivityResult.mobile) {
+      if (to._connectivity.value == ConnectivityResult.mobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
 
@@ -141,7 +138,7 @@ class DeviceService extends GetxService {
       },
     );
 
-    return _locationApi.fetchIP(logging: true);
+    return to._locationApi.fetchIP();
   }
 
   /// @ Method Hides Keyboard
