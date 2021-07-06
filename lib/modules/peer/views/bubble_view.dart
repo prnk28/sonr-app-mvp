@@ -19,31 +19,35 @@ class PeerBubbleView extends GetView<PeerController> {
                   isHeader: true,
                   iconColor: peer.platform.defaultIconColor,
                 ),
-                InfolistOption("Media", SonrIcons.Camera, onPressed: () {
+                InfolistOption("Camera", SonrIcons.Camera, onPressed: () {
                   SenderService.choose(ChooseOption.Camera).then((value) {
                     if (value != null) {
-                      SenderService.invite(value);
+                      // Create Invite and Send
+                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
                     }
                   });
                 }),
                 InfolistOption("Media", SonrIcons.Photos, onPressed: () {
                   SenderService.choose(ChooseOption.Media).then((value) {
                     if (value != null) {
-                      SenderService.invite(value);
+                      // Create Invite and Send
+                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
                     }
                   });
                 }),
                 InfolistOption("File", SonrIcons.Files, onPressed: () {
                   SenderService.choose(ChooseOption.File).then((value) {
                     if (value != null) {
-                      SenderService.invite(value);
+                      // Create Invite and Send
+                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
                     }
                   });
                 }),
                 InfolistOption("Contact", SonrIcons.ContactCard, onPressed: () {
                   SenderService.choose(ChooseOption.Contact).then((value) {
                     if (value != null) {
-                      SenderService.invite(value);
+                      // Create Invite and Send
+                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
                     }
                   });
                 }),

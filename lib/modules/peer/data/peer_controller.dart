@@ -5,7 +5,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 
 /// @ Reactive Controller for Peer Bubble
-class PeerController extends GetxController with SingleGetTickerProviderMixin {
+class PeerController extends GetxController with StateMixin<Session> {
   // Required Properties
   final Future<RiveFile> riveFile;
 
@@ -17,7 +17,6 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   final isComplete = false.obs;
   final opacity = 0.85.obs;
   final peer = Rx<Peer>(Peer());
-  final status = SessionStatus.Default.obs;
 
   // Vector Properties
   final isHitting = false.obs;
@@ -30,7 +29,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
   late final Session session;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
-  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value) && status.value.isNone;
+  bool get isHittingValid => peer.value.isHitFrom(DeviceService.position.value);
 
   // State Machine
   SMIInput<bool>? _isIdle;
@@ -42,6 +41,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onInit() {
+    change(Session(), status: RxStatus.empty());
     super.onInit();
   }
 
@@ -121,6 +121,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
           if (newSession != null) {
             // Set Session
             session = newSession;
+            change(newSession, status: RxStatus.loading());
 
             // Listen to Session
             session.status.listen(_handleTransferStatus);
@@ -140,6 +141,7 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
             if (newSession != null) {
               // Set Session
               session = newSession;
+              change(newSession, status: RxStatus.loading());
 
               // Listen to Session
               session.status.listen(_handleTransferStatus);
@@ -218,15 +220,13 @@ class PeerController extends GetxController with SingleGetTickerProviderMixin {
       }
 
       // Feedback
-      if (status.value.isNone) {
-        // Vibration
-        if (isHitting.value) {
-          HapticFeedback.lightImpact();
-        }
-
-        // Border
-        borderWidth(relative.value.clamp(0, 5));
+      // Vibration
+      if (isHitting.value) {
+        HapticFeedback.lightImpact();
       }
+
+      // Border
+      borderWidth(relative.value.clamp(0, 5));
 
       // Check if Facing
       if (!_handlingHit) {

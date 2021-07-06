@@ -5,32 +5,29 @@ class IntelHeader extends GetView<IntelController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Obx(
-      () => AnimatedSlider.slideDown(
-          child: Column(children: [
-        Obx(() => GestureDetector(
-            onTap: () async {
-              if (NodeService.status.value == Status.FAILED) {
-                await Logger.openIntercom();
-              }
-            },
-            child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(children: [
-                  WidgetSpan(
-                      alignment: PlaceholderAlignment.aboveBaseline,
-                      baseline: TextBaseline.alphabetic,
-                      child: SonrIcons.Location.icon(
-                        size: 22,
-                        color: AppTheme.itemColor,
-                      )),
-                  (" " + controller.title.value).headingSpan(
-                    color: Get.theme.focusColor,
-                    fontSize: 32,
-                  ),
-                ])))),
-      ])),
-    ));
+        child: Column(children: [
+      Obx(() => GestureDetector(
+          onTap: () async {
+            if (NodeService.status.value == Status.FAILED) {
+              await Logger.openIntercom();
+            }
+          },
+          child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(children: [
+                WidgetSpan(
+                    alignment: PlaceholderAlignment.aboveBaseline,
+                    baseline: TextBaseline.alphabetic,
+                    child: SonrIcons.Location.icon(
+                      size: 22,
+                      color: AppTheme.itemColor,
+                    )),
+                (" " + controller.title.value).headingSpan(
+                  color: Get.theme.focusColor,
+                  fontSize: 32,
+                ),
+              ])))),
+    ]));
   }
 }
 
