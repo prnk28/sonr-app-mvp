@@ -22,13 +22,13 @@ class ChecklistOption {
         alignment: Alignment.center,
         children: [
           SonrIcons.CheckboxActive.icon(color: AppTheme.itemColor, size: 24),
-          SonrIcons.Check.icon(color: AppTheme.itemColorInversed, size: 24)
+          SonrIcons.Check.icon(color: AppTheme.itemColorInversed, size: 32)
         ],
       );
     } else {
       return SonrIcons.CheckboxInactive.icon(
         color: AppTheme.itemColor,
-        size: 24,
+        size: 32,
       );
     }
   }

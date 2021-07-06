@@ -19,7 +19,7 @@ class PeerBubbleView extends GetView<PeerController> {
                   isHeader: true,
                   iconColor: peer.platform.defaultIconColor,
                 ),
-                InfolistOption("Camera", SonrIcons.Camera, onPressed: () {
+                InfolistOption("Camera", SonrIcons.Camera, iconColor: Colors.blue, onPressed: () {
                   SenderService.choose(ChooseOption.Camera).then((value) {
                     if (value != null) {
                       // Create Invite and Send
@@ -27,7 +27,7 @@ class PeerBubbleView extends GetView<PeerController> {
                     }
                   });
                 }),
-                InfolistOption("Media", SonrIcons.Photos, onPressed: () {
+                InfolistOption("Media", SonrIcons.Photos, iconColor: Colors.purple, onPressed: () {
                   SenderService.choose(ChooseOption.Media).then((value) {
                     if (value != null) {
                       // Create Invite and Send
@@ -35,7 +35,7 @@ class PeerBubbleView extends GetView<PeerController> {
                     }
                   });
                 }),
-                InfolistOption("File", SonrIcons.Files, onPressed: () {
+                InfolistOption("File", SonrIcons.Files, iconColor: Colors.green, onPressed: () {
                   SenderService.choose(ChooseOption.File).then((value) {
                     if (value != null) {
                       // Create Invite and Send
@@ -43,7 +43,7 @@ class PeerBubbleView extends GetView<PeerController> {
                     }
                   });
                 }),
-                InfolistOption("Contact", SonrIcons.ContactCard, onPressed: () {
+                InfolistOption("Contact", SonrIcons.ContactCard, iconColor: Colors.orange, onPressed: () {
                   SenderService.choose(ChooseOption.Contact).then((value) {
                     if (value != null) {
                       // Create Invite and Send

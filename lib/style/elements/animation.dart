@@ -47,53 +47,6 @@ class _AnimatedBounce extends State<AnimatedBounce> {
   }
 }
 
-class AnimatedStatus extends StatefulWidget {
-  final AnimatedStatusType status;
-  const AnimatedStatus({Key? key, required this.status}) : super(key: key);
-
-  @override
-  _AnimatedStatusState createState() => _AnimatedStatusState();
-}
-
-class _AnimatedStatusState extends State<AnimatedStatus> {
-  AnimatedStatusType oldStatus = AnimatedStatusType.Initial;
-  @override
-  void didUpdateWidget(AnimatedStatus oldWidget) {
-    if (oldWidget.status != widget.status) {
-      oldStatus = oldWidget.status;
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSlider.fade(
-      child: Container(
-        key: ValueKey(widget.status),
-        child: _buildStatusIcon(),
-      ),
-    );
-  }
-
-  Widget _buildStatusIcon() {
-    switch (widget.status) {
-      case AnimatedStatusType.Initial:
-        return Container();
-      case AnimatedStatusType.Loading:
-        return HourglassIndicator();
-      case AnimatedStatusType.Error:
-        return SonrIcons.Close.icon(color: SonrColor.Critical, size: 36);
-      case AnimatedStatusType.Success:
-        return SonrIcons.Check.icon(color: SonrColor.Critical, size: 36);
-    }
-  }
-}
-
 /// @ Animated Down Big/ Up Big
 class AnimatedBig extends StatefulWidget {
   final Widget child;

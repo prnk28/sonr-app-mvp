@@ -178,7 +178,7 @@ class SNameTextField extends StatelessWidget {
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
                           ],
-                          style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
+                          style: DisplayTextStyle.Light.style(color: AppTheme.itemColor, fontSize: 24),
                           autofocus: true,
                           textInputAction: TextInputAction.go,
                           autocorrect: false,
@@ -192,14 +192,14 @@ class SNameTextField extends StatelessWidget {
                             value(val);
 
                             // Find Size
-                            final size = val.size(DisplayTextStyle.Paragraph, fontSize: 24);
+                            final size = val.size(DisplayTextStyle.Light, fontSize: 24);
                             final length = size.width;
 
                             // Update Padding
                             if (length > 0) {
                               leftPadding(length);
                             } else {
-                              leftPadding(hint.item1.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
+                              leftPadding(hint.item1.size(DisplayTextStyle.Light, fontSize: 24).width + 1);
                             }
 
                             // Callback
@@ -217,7 +217,7 @@ class SNameTextField extends StatelessWidget {
                   padding: EdgeInsets.only(left: leftPadding.value),
                   child: Text(
                     ".snr/",
-                    style: DisplayTextStyle.Subheading.style(color: AppTheme.itemColor, fontSize: 24),
+                    style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
                   ),
                 ),
               ]),

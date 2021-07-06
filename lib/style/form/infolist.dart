@@ -22,7 +22,7 @@ class InfolistOption {
   Widget icon() {
     return iconData.icon(
       color: iconColor ?? AppTheme.itemColor,
-      size: 24,
+      size: 32,
     );
   }
 

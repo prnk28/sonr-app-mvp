@@ -1,5 +1,6 @@
 // Flat Mode Durations
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/style/style.dart';
 
 const K_TRANSLATE_DELAY = Duration(milliseconds: 150);
 const K_TRANSLATE_DURATION = Duration(milliseconds: 600);
@@ -68,5 +69,14 @@ extension ComposeStatusUtil on ComposeStatus {
       case ComposeStatus.Existing:
         return AnimatedStatusType.Success;
     }
+  }
+}
+
+class ComposeInviteQuery {
+  final query = "Nobody Here".obs;
+  HSRecord record = HSRecord.blank();
+
+  Peer? getPeer() {
+    return record.toPeer();
   }
 }
