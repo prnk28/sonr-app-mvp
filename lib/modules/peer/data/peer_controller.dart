@@ -131,7 +131,7 @@ class PeerController extends GetxController with StateMixin<Session> {
           buttonData.refresh();
           break;
         case SessionStatus.Accepted:
-          change(session, status: RxStatus.empty());
+          change(session, status: RxStatus.success());
           buttonData(DynamicSolidButtonData.inProgress());
           buttonData.refresh();
           break;

@@ -54,10 +54,10 @@ class _PeerLottieBorder extends StatelessWidget {
         child: controller.obx(
           (session) {
             return Obx(() {
-              if (session!.progress.value > 0) {
-                return Lottie.asset(LottieFile.Sending.path);
+              if (session!.status.value == SessionStatus.Accepted) {
+                return Lottie.asset(LottieFile.Sending.path, animate: true, repeat: true);
               } else {
-                return Lottie.asset(LottieFile.Complete.path);
+                return Lottie.asset(LottieFile.Complete.path, animate: false, repeat: false);
               }
             });
           },

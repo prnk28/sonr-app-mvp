@@ -101,9 +101,9 @@ class _NearbyPeersRow extends GetView<IntelController> {
           return Container();
         },
         onEmpty: Container(
-          padding: EdgeInsets.only(bottom: 16),
+          padding: EdgeInsets.only(top: 8),
           child: "Nobody Around".light(
-            fontSize: 16,
+            fontSize: 18,
             color: AppTheme.greyColor,
           ),
         ),
