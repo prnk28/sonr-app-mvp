@@ -90,7 +90,8 @@ extension IntricateIconUtils on IntricateIcons {
   }) {
     return SvgPicture.asset(
       this.path,
-      color: color ?? AppTheme.itemColorInversed,
+      // color: color ?? AppTheme.itemColor,
+      bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,
       fit: fit,
