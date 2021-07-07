@@ -11,7 +11,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
   late StreamSubscription<Status> _statusStream;
 
   // References
-  Lobby _lastLobby = LobbyService.lobby.value;
+  Lobby _lastLobby = Lobby();
   int _lastLobbyCount = 0;
 
   /// @ Controller Constructer
@@ -53,16 +53,15 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
         }
       });
     }
-
     // Change State
     change(
       compareResult,
-      status: onData.isEmpty ? RxStatus.empty() : RxStatus.success(),
+      status: onData.peers.length == 0 ? RxStatus.empty() : RxStatus.success(),
     );
 
     // Update Reference
-    _lastLobby = onData;
     _lastLobbyCount = onData.count;
+    _lastLobby = onData;
   }
 
   void _handleStatusStream(Status onData) {

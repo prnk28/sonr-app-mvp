@@ -93,6 +93,7 @@ dependencies:
   # -- UI/UX --
   animate_do: ^2.0.0
   card_settings: ^2.0.3
+  flutter_svg: ^0.22.0
   introduction_screen: ^2.1.0
   lottie: ^1.0.1
   rive: ^0.7.7

@@ -29,6 +29,7 @@ export 'components/gradient.dart';
 export 'components/icon.dart';
 export 'components/overlay.dart';
 export 'components/shape.dart';
+export 'components/svg.dart';
 export 'components/text.dart';
 
 // Common Widgets
