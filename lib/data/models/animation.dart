@@ -260,11 +260,11 @@ extension RiveBoardUtils on RiveBoard {
   String get path {
     switch (this) {
       case RiveBoard.Splash:
-        return 'assets/animations/splash.riv';
+        return 'assets/animations/rive/splash.riv';
       case RiveBoard.Documents:
-        return 'assets/animations/documents.riv';
+        return 'assets/animations/rive/documents.riv';
       case RiveBoard.Bubble:
-        return 'assets/animations/bubble.riv';
+        return 'assets/animations/rive/bubble.riv';
     }
   }
 
@@ -282,7 +282,7 @@ extension LottieFileUtils on LottieFile {
   /// Returns Path for Lottie File
   String get path {
     // Set Base Path
-    final basePath = 'assets/animations/';
+    final basePath = 'assets/animations/lottie/';
 
     // Check Type
     switch (this) {

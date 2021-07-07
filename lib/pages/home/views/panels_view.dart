@@ -156,7 +156,7 @@ class _LocalEmptyView extends GetView<HomeController> {
       child: Container(
         child: [
           Image.asset(
-            'assets/illustrations/EmptyLobby.png',
+            'assets/images/illustrations/EmptyLobby.png',
             height: Height.ratio(0.45),
             fit: BoxFit.fitWidth,
           ),

@@ -29,7 +29,7 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
   Triple<String, FontWeight, double> get _defaultParams {
     switch (this) {
       case DisplayTextStyle.Hero:
-        return Triple("AlongSans", FontWeight.w800, 72);
+        return Triple("RFlex", FontWeight.w900, 72);
       case DisplayTextStyle.Heading:
         return Triple("RFlex", FontWeight.w700, 32);
       case DisplayTextStyle.Section:

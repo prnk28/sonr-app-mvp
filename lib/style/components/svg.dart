@@ -65,7 +65,7 @@ extension IntricateIconUtils on IntricateIcons {
   /// Returns Path for this Icon
   String get path {
     // Set Base Path
-    var path = 'assets/svg/';
+    var path = 'assets/images/svg/';
 
     // Iterate Words
     for (var word in this.pascalWords) {

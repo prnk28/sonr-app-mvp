@@ -67,7 +67,7 @@ class _LocalEmptyView extends GetView<TransferController> {
         child: [
           Padding(padding: EdgeInsets.only(top: 24)),
           Image.asset(
-            'assets/illustrations/EmptyLobby.png',
+            'assets/images/illustrations/EmptyLobby.png',
             height: Height.ratio(0.35),
             fit: BoxFit.fitHeight,
           ),

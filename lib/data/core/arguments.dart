@@ -290,7 +290,7 @@ class ErrorPageArgs {
   /// Returns Image Asset Path for Error
   String get imagePath {
     // Initialize Base Path
-    final basePath = "assets/illustrations/";
+    final basePath = "assets/images/illustrations/";
     // Get Path
     switch (type) {
       case ErrorPageType.EmptyContacts:

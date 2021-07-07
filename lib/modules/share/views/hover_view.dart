@@ -42,7 +42,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
         height: K_ROW_BUTTON_SIZE,
         // circleSize: K_ROW_CIRCLE_SIZE,
         // onPressed: controller.chooseCamera,
-        // path: 'assets/images/Camera.png',
+        // path: 'assets/images/icons/Camera.png',
       ),
     );
   }
@@ -62,7 +62,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
           imageHeight: K_ROW_BUTTON_SIZE,
           circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
-          path: 'assets/images/Folder.png',
+          path: 'assets/images/icons/Folder.png',
         ));
   }
 }
@@ -81,7 +81,7 @@ class _ShareContactButtonItem extends GetView<ShareController> {
           imageHeight: K_ROW_BUTTON_SIZE,
           circleSize: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
-          path: 'assets/images/Contact.png',
+          path: 'assets/images/icons/Contact.png',
         ));
   }
 }

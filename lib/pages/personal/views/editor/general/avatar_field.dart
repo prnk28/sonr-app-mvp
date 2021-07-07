@@ -139,7 +139,7 @@ class _CameraPermissionsView extends GetView<PersonalController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/illustrations/Camera.png'), fit: BoxFit.fitWidth),
+          image: DecorationImage(image: AssetImage('assets/images/illustrations/Camera.png'), fit: BoxFit.fitWidth),
           borderRadius: BorderRadius.circular(12)),
       padding: EdgeInsets.only(bottom: 24),
       child: Align(

@@ -116,10 +116,6 @@ flutter:
   uses-material-design: true
 
   fonts:
-  - family: AlongSans
-    fonts:
-    - asset: assets/fonts/AlongSans.otf
-
   - family:  RFlex
     fonts:
       - asset: assets/fonts/RFlex-100.otf
@@ -166,12 +162,10 @@ flutter:
 
   # -- Media --
   assets:
+    - assets/animations/
     - assets/fonts/
     - assets/images/
-    - assets/illustrations/
-    - assets/animations/
     - assets/sounds/
-    - assets/svg/
 
 
 

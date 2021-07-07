@@ -92,13 +92,13 @@ extension PostItemTypeUtils on PostItemType {
   String imagePath() {
     switch (this) {
       case PostItemType.Media:
-        return "assets/images/Gallery.png";
+        return "assets/images/icons/Gallery.png";
       case PostItemType.Files:
-        return "assets/images/Files.png";
+        return "assets/images/icons/Files.png";
       case PostItemType.Contacts:
-        return "assets/images/Contacts.png";
+        return "assets/images/icons/Contacts.png";
       case PostItemType.Links:
-        return "assets/images/Links.png";
+        return "assets/images/icons/Links.png";
     }
   }
 

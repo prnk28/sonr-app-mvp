@@ -45,7 +45,7 @@ extension IntroPanelTypeUtils on IntroPageType {
 
   /// Return Image Path for Type
   String get imagePath {
-    final basePath = "assets/illustrations/";
+    final basePath = "assets/images/illustrations/";
     switch (this) {
       case IntroPageType.Welcome:
         return basePath + "Welcome.png";
@@ -167,7 +167,7 @@ enum PermsPageType {
 extension PermsPageTypeUtils on PermsPageType {
   /// Return Image Path for Type
   String get imagePath {
-    final basePath = "assets/illustrations/";
+    final basePath = "assets/images/illustrations/";
     switch (this) {
       case PermsPageType.Location:
         return basePath + "LocationPerm.png";
