@@ -1,0 +1,14 @@
+<svg width="45" height="91" viewBox="0 0 45 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="22" cy="82.5" r="3" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 9.15333C1 5.57841 3.30714 3 6.70091 3C10.0947 3 34.8125 3 38.1407 3C41.4689 3 44 5.75183 44 9.15333C44 12.5548 44 79.2117 44 82.7759C44 86.34 41.1809 88 38.7408 88C36.3007 88 9.41548 88 6.28987 88C3.16426 88 1 85.3362 1 82.3195C1 79.3027 1 12.7283 1 9.15333Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="4" y="12" width="37" height="66" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="22" cy="3" r="2.25" transform="rotate(-90 22 3)" fill="#C2C2C2"/>
+<circle cx="22" cy="3" r="2.25" transform="rotate(-90 22 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="22" cy="3" r="2.25" transform="rotate(-90 22 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="36" cy="88" r="2.25" transform="rotate(-90 36 88)" fill="#C2C2C2"/>
+<circle cx="36" cy="88" r="2.25" transform="rotate(-90 36 88)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="36" cy="88" r="2.25" transform="rotate(-90 36 88)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="9" cy="88" r="2.25" transform="rotate(-90 9 88)" fill="#C2C2C2"/>
+<circle cx="9" cy="88" r="2.25" transform="rotate(-90 9 88)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="9" cy="88" r="2.25" transform="rotate(-90 9 88)" stroke="#151515" stroke-width="1.5"/>
+</svg>

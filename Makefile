@@ -86,6 +86,7 @@ clean:
 	cd $(PROJECT_DIR) && flutter pub get
 	pub global activate cider
 	pub global activate protoc_plugin
+	pub global activate devtools
 
 ##
 ##

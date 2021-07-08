@@ -2,27 +2,19 @@ import 'package:sonr_app/style/style.dart';
 
 import 'utility.dart';
 
+
 class ImageButton extends StatelessWidget {
   /// Function called on Tap Up
   final Function onPressed;
 
   /// Widget for Action Icon: Max Size 32
-  final String path;
+  final SVGIcons icon;
 
   /// String for Text Below Button
   final String label;
 
-  /// Current Image Fit
-  final BoxFit imageFit;
-
-  /// Button Image Width
-  final double imageWidth;
-
-  /// Button Image Height
-  final double imageHeight;
-
   /// Circle Size
-  final double circleSize;
+  final double size;
 
   /// Text Label Size
   final double fontSize;
@@ -33,12 +25,9 @@ class ImageButton extends StatelessWidget {
   const ImageButton({
     Key? key,
     required this.onPressed,
-    required this.path,
+    required this.icon,
     required this.label,
-    this.circleSize = 110,
-    this.imageFit = BoxFit.contain,
-    this.imageWidth = 100,
-    this.imageHeight = 100,
+    this.size = 100,
     this.fontSize = 20,
     this.textColor,
   }) : super(key: key);
@@ -68,8 +57,8 @@ class ImageButton extends StatelessWidget {
                       AnimatedScale(
                         scale: isPressed.value ? 0.9 : 1.0,
                         child: Container(
-                          width: circleSize,
-                          height: circleSize,
+                          width: size,
+                          height: size,
                           decoration: BoxDecoration(
                             color: AppTheme.foregroundColor,
                             shape: BoxShape.circle,
@@ -79,13 +68,10 @@ class ImageButton extends StatelessWidget {
                       ),
                       AnimatedScale(
                         scale: isPressed.value ? 1.1 : 1.0,
-                        child: Container(
-                          width: imageWidth,
-                          height: imageHeight,
-                          child: Image.asset(
-                            path,
-                            fit: imageFit,
-                          ),
+                        child: icon.normal(
+                          color: AppTheme.itemColor,
+                          width: size * 0.5,
+                          height: size * 0.5,
                         ),
                       )
                     ],
@@ -93,7 +79,7 @@ class ImageButton extends StatelessWidget {
               false.obs),
 
           // Build Label
-          Preferences.isDarkMode
+          Get.isDarkMode
               ? label.subheading(
                   color: textColor ?? SonrColor.White.withOpacity(0.8),
                   fontSize: fontSize,

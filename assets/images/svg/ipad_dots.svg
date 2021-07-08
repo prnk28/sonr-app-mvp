@@ -1,0 +1,17 @@
+<svg width="64" height="90" viewBox="0 0 64 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="3" width="62" height="84" rx="5" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="5" y="11" width="54" height="65" rx="1" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="32" cy="81" r="3" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="54" cy="87" r="2.25" transform="rotate(-90 54 87)" fill="#C2C2C2"/>
+<circle cx="54" cy="87" r="2.25" transform="rotate(-90 54 87)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="54" cy="87" r="2.25" transform="rotate(-90 54 87)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="54" cy="3" r="2.25" transform="rotate(-90 54 3)" fill="#C2C2C2"/>
+<circle cx="54" cy="3" r="2.25" transform="rotate(-90 54 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="54" cy="3" r="2.25" transform="rotate(-90 54 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="9" cy="87" r="2.25" transform="rotate(-90 9 87)" fill="#C2C2C2"/>
+<circle cx="9" cy="87" r="2.25" transform="rotate(-90 9 87)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="9" cy="87" r="2.25" transform="rotate(-90 9 87)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="9" cy="3" r="2.25" transform="rotate(-90 9 3)" fill="#C2C2C2"/>
+<circle cx="9" cy="3" r="2.25" transform="rotate(-90 9 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="9" cy="3" r="2.25" transform="rotate(-90 9 3)" stroke="#151515" stroke-width="1.5"/>
+</svg>

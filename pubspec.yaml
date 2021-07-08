@@ -162,9 +162,13 @@ flutter:
 
   # -- Media --
   assets:
-    - assets/animations/
+    - assets/animations/lottie/
+    - assets/animations/rive/
     - assets/fonts/
-    - assets/images/
+    - assets/images/icons/
+    - assets/images/illustrations/
+    - assets/images/svg/
+    - assets/images/utility/
     - assets/sounds/
 
 

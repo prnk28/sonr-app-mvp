@@ -53,11 +53,9 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
-                            path: PostItemType.Media.imagePath(),
+                            icon: SVGIcons.MediaSelect,
                             label: PostItemType.Media.name(),
-                            imageFit: BoxFit.fitWidth,
-                            imageWidth: 100,
-                            circleSize: 80,
+                            size: 100,
                             onPressed: () {
                               if (PostItemType.Media.count() > 0) {
                                 AppPage.Posts.to(args: PostsPageArgs.media());
@@ -70,9 +68,8 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
-                            circleSize: 80,
-                            imageHeight: 80,
-                            path: PostItemType.Files.imagePath(),
+                            size: 100,
+                            icon: SVGIcons.DocumentsBox,
                             label: PostItemType.Files.name(),
                             onPressed: () {
                               if (PostItemType.Files.count() > 0) {
@@ -91,9 +88,8 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
-                            circleSize: 80,
-                            imageHeight: 80,
-                            path: PostItemType.Contacts.imagePath(),
+                            size: 100,
+                            icon: SVGIcons.LobbyGroup,
                             label: PostItemType.Contacts.name(),
                             onPressed: () {
                               if (PostItemType.Contacts.count() > 0) {
@@ -107,10 +103,8 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
-                            path: PostItemType.Links.imagePath(),
-                            imageWidth: 60,
-                            imageHeight: 60,
-                            circleSize: 80,
+                            icon: SVGIcons.Clip,
+                            size: 100,
                             label: PostItemType.Links.name(),
                             onPressed: () {
                               if (PostItemType.Links.count() > 0) {

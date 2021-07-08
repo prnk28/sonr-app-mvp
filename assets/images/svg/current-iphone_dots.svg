@@ -1,0 +1,14 @@
+<svg width="45" height="95" viewBox="0 0 45 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1 9.4429C1 5.69975 3.30714 3 6.70091 3C10.0947 3 34.8125 3 38.1407 3C41.4689 3 44 5.88133 44 9.4429C44 13.0045 44 82.7981 44 86.53C44 90.2619 41.1809 92 38.7408 92C36.3007 92 9.41548 92 6.28987 92C3.16426 92 1 89.2108 1 86.0521C1 82.8935 1 13.1861 1 9.4429Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.5165 87.6751C22.5165 87.6751 12.2571 87.6751 8.03418 87.6751C3.81121 87.6751 4.00883 83.6497 4.00883 83.6497V44.4877C4.00883 44.4877 4.00883 12.8229 4.00883 9.57365C4.00883 6.32436 7.58249 6 7.58249 6H12.7643C12.7643 6 12.8293 8.50848 15.2728 8.50848C17.7164 8.50848 22.5599 8.50848 22.5599 8.50848" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.0434 87.6751C22.0434 87.6751 32.3028 87.6751 36.5257 87.6751C40.7487 87.6751 40.5511 83.6497 40.5511 83.6497V44.4877C40.5511 44.4877 40.5511 12.8229 40.5511 9.57365C40.5511 6.32436 36.9774 6 36.9774 6H31.7956C31.7956 6 31.7306 8.50848 29.2871 8.50848C26.8435 8.50848 22 8.50848 22 8.50848" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="22" cy="3" r="2.25" transform="rotate(-90 22 3)" fill="#C2C2C2"/>
+<circle cx="22" cy="3" r="2.25" transform="rotate(-90 22 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="22" cy="3" r="2.25" transform="rotate(-90 22 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="10" cy="92" r="2.25" transform="rotate(-90 10 92)" fill="#C2C2C2"/>
+<circle cx="10" cy="92" r="2.25" transform="rotate(-90 10 92)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="10" cy="92" r="2.25" transform="rotate(-90 10 92)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="34" cy="92" r="2.25" transform="rotate(-90 34 92)" fill="#C2C2C2"/>
+<circle cx="34" cy="92" r="2.25" transform="rotate(-90 34 92)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="34" cy="92" r="2.25" transform="rotate(-90 34 92)" stroke="#151515" stroke-width="1.5"/>
+</svg>

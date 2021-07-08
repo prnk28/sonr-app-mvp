@@ -127,11 +127,9 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: ImageButton(
         label: 'Camera',
-        imageWidth: K_ROW_BUTTON_SIZE,
-        imageHeight: K_ROW_BUTTON_SIZE,
-        circleSize: K_ROW_CIRCLE_SIZE,
         onPressed: controller.chooseCamera,
-        path: 'assets/images/icons/Camera.png',
+        icon: SVGIcons.Camera,
+        size: K_ROW_CIRCLE_SIZE,
       ),
     );
   }
@@ -147,11 +145,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
-          imageWidth: K_ROW_BUTTON_SIZE,
-          imageHeight: K_ROW_BUTTON_SIZE,
-          circleSize: K_ROW_CIRCLE_SIZE,
+          icon: SVGIcons.Document,
+          size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
-          path: 'assets/images/icons/Folder.png',
         ));
   }
 }
@@ -166,11 +162,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
-          imageWidth: K_ROW_BUTTON_SIZE,
-          imageHeight: K_ROW_BUTTON_SIZE,
-          circleSize: K_ROW_CIRCLE_SIZE,
+          icon: SVGIcons.ContactCard,
+          size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
-          path: 'assets/images/icons/Contact.png',
         ));
   }
 }

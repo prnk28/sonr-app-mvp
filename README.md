@@ -19,3 +19,13 @@ Wrap Enviornment Variables with this command.
 ### Proto-Dart
 Add Protocol Buffer Generation for Dart Types with this command.
 `pub global activate protoc_plugin`
+
+### Icon Comments
+PCRE (PHP < 7.3)
+`^.*(\s([a-zA-Z]+\s)+).*$ `
+Substitution:
+```
+/// SonrIcons -$2![Icon of $2 ](/Users/prad/Sonr/docs/icons/PNG/$2.png)\n\0\n
+```
+  * Expression for Comment Generation
+  * Dont use underscores for fonts

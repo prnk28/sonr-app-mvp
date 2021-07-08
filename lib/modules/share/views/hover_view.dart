@@ -36,7 +36,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: IntricateIcons.Camera.svg(
+      child: SVGIcons.Camera.normal(
         //label: 'Camera',
         width: K_ROW_BUTTON_SIZE,
         height: K_ROW_BUTTON_SIZE,
@@ -58,11 +58,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
-          imageWidth: K_ROW_BUTTON_SIZE,
-          imageHeight: K_ROW_BUTTON_SIZE,
-          circleSize: K_ROW_CIRCLE_SIZE,
+          size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
-          path: 'assets/images/icons/Folder.png',
+          icon: SVGIcons.Document,
         ));
   }
 }
@@ -77,11 +75,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
-          imageWidth: K_ROW_BUTTON_SIZE,
-          imageHeight: K_ROW_BUTTON_SIZE,
-          circleSize: K_ROW_CIRCLE_SIZE,
+          icon: SVGIcons.ContactCard,
           onPressed: controller.chooseContact,
-          path: 'assets/images/icons/Contact.png',
+          size: K_ROW_CIRCLE_SIZE,
         ));
   }
 }

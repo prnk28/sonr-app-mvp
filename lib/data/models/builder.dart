@@ -1,4 +1,5 @@
 import 'package:sonr_app/style/style.dart';
+import 'package:flutter/foundation.dart';
 
 class RequestBuilder {
   // Request References
@@ -41,4 +42,23 @@ class RequestBuilder {
 
   /// Returns New Properties Update Request
   static UpdateRequest get updateProperties => API.newUpdateProperties(Preferences.properties.value);
+}
+
+class CommentGenerator {
+  /// Prints SVG Icons to Console
+  /// - Copy and Paste into Enum to make it visible project wide.
+  /// - Set the Project Directory Variable
+  static void logSVGIcons() {
+    // Update Me
+    final projectDir = '/Users/prad/Sonr/app/';
+
+    // Iterate and Print
+    for (var s in SVGIcons.values) {
+      debugPrint('/// ### SVGIcons - `${s.value}`');
+      debugPrint('/// !["Image of ${s.value}"](${s.fullPath(projectDir)})');
+      debugPrint('/// !["Image of ${s.value} as Dots"](${s.fullPath(projectDir, withDots: true)})');
+      debugPrint('${s.value},');
+      debugPrint('\n');
+    }
+  }
 }

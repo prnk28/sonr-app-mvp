@@ -1,0 +1,12 @@
+<svg width="48" height="95" viewBox="0 0 48 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 68.2826V38.6087C13 32.0567 16.372 26.7391 23 26.7391C29.628 26.7391 33 32.0567 33 38.6087V76.1957C33 86.0316 26.944 94 17 94C7.06 94 1 86.0316 1 76.1957V26.7391C1 13.6272 9.748 3 23 3C36.256 3 45 13.6272 45 26.7391V54.4987" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="45" cy="54" r="2.25" transform="rotate(-90 45 54)" fill="#C2C2C2"/>
+<circle cx="45" cy="54" r="2.25" transform="rotate(-90 45 54)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="45" cy="54" r="2.25" transform="rotate(-90 45 54)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="13" cy="68" r="2.25" transform="rotate(-90 13 68)" fill="#C2C2C2"/>
+<circle cx="13" cy="68" r="2.25" transform="rotate(-90 13 68)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="13" cy="68" r="2.25" transform="rotate(-90 13 68)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="22.5" cy="3" r="2.25" transform="rotate(-90 22.5 3)" fill="#C2C2C2"/>
+<circle cx="22.5" cy="3" r="2.25" transform="rotate(-90 22.5 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="22.5" cy="3" r="2.25" transform="rotate(-90 22.5 3)" stroke="#151515" stroke-width="1.5"/>
+</svg>
