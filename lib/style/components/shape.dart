@@ -124,8 +124,8 @@ class CircleContainer extends StatelessWidget {
       clipBehavior: clipBehavior,
       child: child,
       decoration: BoxDecoration(
-        border: Get.isDarkMode ? null : Border.all(color: AppTheme.foregroundColor, width: 1),
-        color: Preferences.isDarkMode ? SonrColor.Black : SonrColor.White,
+        border: Get.isDarkMode ? null : Border.all(color: AppTheme.backgroundColor, width: 1),
+        color: AppTheme.foregroundColor,
         shape: BoxShape.circle,
         boxShadow: AppTheme.circleBoxShadow,
       ),

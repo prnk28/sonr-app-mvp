@@ -70,34 +70,29 @@ class _DefaultToolsView extends StatelessWidget {
         // Switch Camera
         Obx(() {
           var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
-          return GestureDetector(
-              child: AnimatedSlider.slideUp(
-                  child: Container(
-                      key: ValueKey<IconData>(iconData),
-                      child: iconData.gradient(
-                        value: SonrGradients.LoveKiss,
-                        size: 36,
-                      ))),
-              onTap: () async {
+          return AnimatedSlider.slideUp(
+            child: ActionButton(
+              iconData: iconData,
+              onPressed: () async {
                 await HapticFeedback.heavyImpact();
                 controller.toggleCameraSensor();
-              });
+              },
+            ),
+          );
         }),
 
         // Neumorphic Camera Button Stack
-        CaptureButton(controller: controller),
+        ActionButton(
+          iconData: SonrIcons.Photos,
+          onPressed: () async {
+            await HapticFeedback.heavyImpact();
+            // Check for Permssions
+            await SenderService.choose(ChooseOption.Media);
+          },
+        ),
 
         // Media Gallery Picker
-        GestureDetector(
-            child: SonrIcons.Photos.gradient(
-              value: SonrGradients.OctoberSilence,
-              size: 36,
-            ),
-            onTap: () async {
-              await HapticFeedback.heavyImpact();
-              // Check for Permssions
-              await SenderService.choose(ChooseOption.Media);
-            }),
+        CaptureButton(controller: controller),
       ]),
     );
   }
