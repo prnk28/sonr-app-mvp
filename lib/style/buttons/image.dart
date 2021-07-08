@@ -2,7 +2,6 @@ import 'package:sonr_app/style/style.dart';
 
 import 'utility.dart';
 
-
 class ImageButton extends StatelessWidget {
   /// Function called on Tap Up
   final Function onPressed;
@@ -68,8 +67,7 @@ class ImageButton extends StatelessWidget {
                       ),
                       AnimatedScale(
                         scale: isPressed.value ? 1.1 : 1.0,
-                        child: icon.normal(
-                          color: AppTheme.itemColor,
+                        child: icon.dots(
                           width: size * 0.5,
                           height: size * 0.5,
                         ),
@@ -80,11 +78,11 @@ class ImageButton extends StatelessWidget {
 
           // Build Label
           Get.isDarkMode
-              ? label.subheading(
+              ? label.light(
                   color: textColor ?? SonrColor.White.withOpacity(0.8),
                   fontSize: fontSize,
                 )
-              : label.subheading(
+              : label.light(
                   color: textColor ?? SonrColor.Black.withOpacity(0.8),
                   fontSize: fontSize,
                 ),

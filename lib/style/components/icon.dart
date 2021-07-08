@@ -71,18 +71,18 @@ extension IntricateIconUtils on SVGIcons {
     double? height,
     BoxFit fit = BoxFit.contain,
     AlignmentGeometry alignment = Alignment.center,
-    Color? color,
     Clip clipBehavior = Clip.hardEdge,
   }) {
     return SvgPicture.asset(
       this.path,
-      color: color ?? AppTheme.itemColor,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,
       fit: fit,
       width: width,
       height: height,
+      colorBlendMode: BlendMode.overlay,
       alignment: alignment,
     );
   }
