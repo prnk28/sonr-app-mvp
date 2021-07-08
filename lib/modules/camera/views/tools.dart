@@ -13,9 +13,7 @@ class CameraToolsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomCenter,
-        child: BoxContainer(
-            padding: EdgeInsets.only(top: 20, bottom: 40), child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
+        alignment: Alignment.bottomCenter, child: BoxContainer(child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
   }
 
   Widget _buildToolsView(CameraViewStatus status) {
@@ -81,6 +79,9 @@ class _DefaultToolsView extends StatelessWidget {
           );
         }),
 
+        // Media Gallery Picker
+        CaptureButton(controller: controller),
+
         // Neumorphic Camera Button Stack
         ActionButton(
           iconData: SonrIcons.Photos,
@@ -90,9 +91,6 @@ class _DefaultToolsView extends StatelessWidget {
             await SenderService.choose(ChooseOption.Media);
           },
         ),
-
-        // Media Gallery Picker
-        CaptureButton(controller: controller),
       ]),
     );
   }

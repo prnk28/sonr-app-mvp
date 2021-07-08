@@ -8,14 +8,14 @@ class InviteComposer extends GetView<ComposeController> {
     return Container(
         alignment: Alignment.topCenter,
         height: Get.height,
-        margin: EdgeInsets.only(top: 24, bottom: 135, left: 24, right: 24),
+        margin: EdgeInsets.only(top: 64, bottom: 135, left: 24, right: 24),
         child: BoxContainer(
             footer: ColorButton.primary(
               text: "Share File",
               onPressed: () => controller.shareRemote(),
             ),
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(16),
+            // margin: EdgeInsets.all(8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
