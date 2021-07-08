@@ -49,8 +49,8 @@ class _PeerLottieBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        height: 96,
-        width: 96,
+        height: 108,
+        width: 108,
         child: controller.obx(
           (session) {
             return Obx(() {
