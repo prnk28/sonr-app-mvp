@@ -122,6 +122,26 @@ class ShareController extends GetxController {
     }
   }
 
+  /// Open Media Picker and Select Media for Share
+  Future<void> chooseMedia() async {
+    // Check Permissions
+    if (await Permissions.Gallery.isGranted) {
+      var done = await SenderService.choose(ChooseOption.Media);
+      _handleConfirmation(done);
+    } else {
+      // Request Permissions
+      var status = await Permissions.Gallery.request();
+
+      // Check Status
+      if (status) {
+        var done = await SenderService.choose(ChooseOption.Media);
+        _handleConfirmation(done);
+      } else {
+        AppRoute.snack(SnackArgs.error("Cannot pick Media without Permissions"));
+      }
+    }
+  }
+
   /// Adds Item to Selected Items List for Share
   void chooseMediaItem(AssetEntity item, Uint8List thumb) {
     selectedItems.add(Tuple(item, thumb));

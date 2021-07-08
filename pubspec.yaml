@@ -165,7 +165,6 @@ flutter:
     - assets/animations/lottie/
     - assets/animations/rive/
     - assets/fonts/
-    - assets/images/icons/
     - assets/images/illustrations/
     - assets/images/svg/
     - assets/images/utility/

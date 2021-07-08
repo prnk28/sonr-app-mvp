@@ -100,7 +100,7 @@ extension IntricateIconUtils on SVGIcons {
   }) {
     return SvgPicture.asset(
       this.pathDots,
-      color: color ?? AppTheme.itemColor,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,

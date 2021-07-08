@@ -31,11 +31,14 @@ extension ShareViewTypeUtils on ShareViewType {
   bool get isViewDialog => this == ShareViewType.Alert;
 }
 
-/// Row Button Size
+/// Row Button Size - 75.0
 const K_ROW_BUTTON_SIZE = 75.0;
 
-/// Row Circle Size
+/// Row Circle Size - 95.0
 const K_ROW_CIRCLE_SIZE = 95.0;
+
+/// Share Hover Button Size -  60.0
+const K_HOVER_BUTTON_SIZE = 60.0;
 
 /// System Generated Albums
 const SYSTEM_ALBUM_NAMES = ["panoramas", "videos", "favorites", "downloads"];

@@ -10,6 +10,7 @@ class PeerBubbleView extends GetView<PeerController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        ShareController.initPopup();
         AppRoute.positioned(
           ShareHoverView(peer: peer),
           parentKey: peerKey,

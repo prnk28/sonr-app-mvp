@@ -16,13 +16,25 @@ class ShareHoverView extends GetView<ShareController> {
             )),
         constraints: BoxConstraints(maxWidth: 200, maxHeight: 300),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-        child: GridView(
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 24),
+        child: Column(
           children: [
-            _ShareCameraButtonItem(),
-            _ShareFileButtonItem(),
-            _ShareContactButtonItem(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _ShareCameraButtonItem(),
+                Padding(padding: EdgeInsets.only(left: 24)),
+                _ShareMediaButtonItem(),
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 24)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _ShareFileButtonItem(),
+                Padding(padding: EdgeInsets.only(left: 24)),
+                _ShareContactButtonItem(),
+              ],
+            ),
           ],
         ));
   }
@@ -34,17 +46,31 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
-      delay: 225.milliseconds,
-      duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: SVGIcons.Camera.normal(
-        //label: 'Camera',
-        width: K_ROW_BUTTON_SIZE,
-        height: K_ROW_BUTTON_SIZE,
-        // circleSize: K_ROW_CIRCLE_SIZE,
-        // onPressed: controller.chooseCamera,
-        // path: 'assets/images/icons/Camera.png',
-      ),
-    );
+        delay: 225.milliseconds,
+        duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
+        child: ImageButton(
+          label: 'Camera',
+          size: K_HOVER_BUTTON_SIZE,
+          onPressed: controller.chooseCamera,
+          icon: SVGIcons.Camera,
+        ));
+  }
+}
+
+/// @ Camera Share Button
+class _ShareMediaButtonItem extends GetView<ShareController> {
+  const _ShareMediaButtonItem();
+  @override
+  Widget build(BuildContext context) {
+    return FadeInDownBig(
+        delay: 225.milliseconds,
+        duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
+        child: ImageButton(
+          label: 'Media',
+          size: K_HOVER_BUTTON_SIZE,
+          onPressed: controller.chooseMedia,
+          icon: SVGIcons.MediaSelect,
+        ));
   }
 }
 
@@ -58,7 +84,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
-          size: K_ROW_CIRCLE_SIZE,
+          size: K_HOVER_BUTTON_SIZE,
           onPressed: controller.chooseFile,
           icon: SVGIcons.Document,
         ));
@@ -77,7 +103,7 @@ class _ShareContactButtonItem extends GetView<ShareController> {
           label: 'Contact',
           icon: SVGIcons.ContactCard,
           onPressed: controller.chooseContact,
-          size: K_ROW_CIRCLE_SIZE,
+          size: K_HOVER_BUTTON_SIZE,
         ));
   }
 }
