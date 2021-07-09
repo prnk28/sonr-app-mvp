@@ -142,6 +142,19 @@ class ShareController extends GetxController {
     }
   }
 
+  /// Choose Payload then Immedietly Send Invite to Peer
+  Future<Session?> chooseThenInvite({required Peer peer, required ChooseOption option}) async {
+    SenderService.choose(option).then((value) {
+      if (value != null) {
+        // Set Peer for Invite
+        value.setPeer(peer);
+
+        // Create Session
+        return SenderService.invite(value);
+      }
+    });
+  }
+
   /// Adds Item to Selected Items List for Share
   void chooseMediaItem(AssetEntity item, Uint8List thumb) {
     selectedItems.add(Tuple(item, thumb));

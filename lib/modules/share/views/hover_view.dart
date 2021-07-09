@@ -24,18 +24,18 @@ class ShareHoverView extends GetView<ShareController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _ShareHoverCameraButtonItem(),
+                _ShareHoverCameraButtonItem(peer: peer),
                 Padding(padding: EdgeInsets.only(left: 24)),
-                _ShareHoverMediaButtonItem(),
+                _ShareHoverMediaButtonItem(peer: peer),
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 24)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _ShareHoverFileButtonItem(),
+                _ShareHoverFileButtonItem(peer: peer),
                 Padding(padding: EdgeInsets.only(left: 24)),
-                _ShareHoverContactButtonItem(),
+                _ShareHoverContactButtonItem(peer: peer),
               ],
             ),
           ],
@@ -71,7 +71,8 @@ class _ShareHoverPeerInfo extends StatelessWidget {
 
 /// @ Camera Share Button
 class _ShareHoverCameraButtonItem extends GetView<ShareController> {
-  const _ShareHoverCameraButtonItem();
+  final Peer peer;
+  const _ShareHoverCameraButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -80,7 +81,7 @@ class _ShareHoverCameraButtonItem extends GetView<ShareController> {
         child: ImageButton(
           label: 'Camera',
           size: K_HOVER_BUTTON_SIZE,
-          onPressed: controller.chooseCamera,
+          onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.Camera),
           icon: ComplexIcons.Camera,
           fontSize: 18,
         ));
@@ -89,7 +90,8 @@ class _ShareHoverCameraButtonItem extends GetView<ShareController> {
 
 /// @ Camera Share Button
 class _ShareHoverMediaButtonItem extends GetView<ShareController> {
-  const _ShareHoverMediaButtonItem();
+  final Peer peer;
+  const _ShareHoverMediaButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -98,7 +100,7 @@ class _ShareHoverMediaButtonItem extends GetView<ShareController> {
         child: ImageButton(
           label: 'Media',
           size: K_HOVER_BUTTON_SIZE,
-          onPressed: controller.chooseMedia,
+          onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.Media),
           icon: ComplexIcons.MediaSelect,
           fontSize: 18,
         ));
@@ -107,7 +109,8 @@ class _ShareHoverMediaButtonItem extends GetView<ShareController> {
 
 /// @ File Share Button
 class _ShareHoverFileButtonItem extends GetView<ShareController> {
-  const _ShareHoverFileButtonItem();
+  final Peer peer;
+  const _ShareHoverFileButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -116,7 +119,7 @@ class _ShareHoverFileButtonItem extends GetView<ShareController> {
         child: ImageButton(
           label: 'File',
           size: K_HOVER_BUTTON_SIZE,
-          onPressed: controller.chooseFile,
+          onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.File),
           icon: ComplexIcons.Document,
           fontSize: 18,
         ));
@@ -125,7 +128,8 @@ class _ShareHoverFileButtonItem extends GetView<ShareController> {
 
 /// @ Contact Share Button
 class _ShareHoverContactButtonItem extends GetView<ShareController> {
-  const _ShareHoverContactButtonItem();
+  final Peer peer;
+  const _ShareHoverContactButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -134,7 +138,7 @@ class _ShareHoverContactButtonItem extends GetView<ShareController> {
         child: ImageButton(
           label: 'Contact',
           icon: ComplexIcons.ContactCard,
-          onPressed: controller.chooseContact,
+          onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.Contact),
           size: K_HOVER_BUTTON_SIZE,
           fontSize: 18,
         ));

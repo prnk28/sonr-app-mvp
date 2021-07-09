@@ -177,6 +177,7 @@ class HomeActionButton extends GetView<HomeController> {
           onPressed: () {
             HapticFeedback.heavyImpact();
             EditorController.open();
+            // AppPage.Settings.to();
           },
         ),
       );
