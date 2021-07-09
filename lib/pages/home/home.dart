@@ -239,13 +239,8 @@ class HomeFloatingBar extends GetWidget<HomeController> {
     final controller = Get.find<HomeController>();
     return Container(
       child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Get.isDarkMode ? null : Border.all(color: AppTheme.BackgroundColor, width: 1),
-            color: AppTheme.ForegroundColor,
-            borderRadius: BorderRadius.circular(28.13),
-            boxShadow: AppTheme.RectBoxShadow,
-          ),
+        BoxContainer(
+          radius: 28.13,
           margin: EdgeInsets.symmetric(horizontal: 72),
           height: 72,
           child: Row(
