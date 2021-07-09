@@ -74,7 +74,7 @@ class _PeerMainCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.MoreVertical.icon(color: AppTheme.greyColor, size: 24),
+                  child: SimpleIcons.MoreVertical.icon(color: AppTheme.GreyColor, size: 24),
                 ),
               )),
 
@@ -91,14 +91,14 @@ class _PeerMainCard extends StatelessWidget {
 
   Widget _buildName() {
     if (peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
-      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.itemColor);
+      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.ItemColor);
     } else {
-      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.itemColor);
+      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.ItemColor);
     }
   }
 
   Widget _buildModel() {
-    return "${peer.value.platform}".paragraph(color: AppTheme.greyColor);
+    return "${peer.value.platform}".paragraph(color: AppTheme.GreyColor);
   }
 }
 
@@ -123,7 +123,7 @@ class _PeerDetailsCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
+                  child: SimpleIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
                 )),
 
             // Align Compass

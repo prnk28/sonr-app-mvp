@@ -13,7 +13,7 @@ class LocalView extends GetView<TransferController> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            "Around Me".section(align: TextAlign.start, color: AppTheme.itemColor),
+            "Around Me".section(align: TextAlign.start, color: AppTheme.ItemColor),
             Obx(() => ArrowButton.checkList(
                   title: _buildArrowTitle(controller.phonesEnabled.value, controller.desktopsEnabled.value),
                   onSelectedOption: (index) {

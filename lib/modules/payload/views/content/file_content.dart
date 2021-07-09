@@ -230,7 +230,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
           fit: BoxFit.fitHeight,
         );
       } else {
-        return SonrIcons.Unknown.icon(color: AppTheme.itemColor);
+        return SimpleIcons.Unknown.icon(color: AppTheme.ItemColor);
       }
     }
   }
@@ -328,7 +328,7 @@ class FilePayloadText extends StatelessWidget {
     return Text(
       _buildType(),
       style: textStyle.style(
-        color: color ?? AppTheme.itemColor,
+        color: color ?? AppTheme.ItemColor,
         fontSize: fontSize,
         fontStyle: fontStyle,
       ),

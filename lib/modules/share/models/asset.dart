@@ -108,13 +108,13 @@ extension AssetEntityUtils on AssetEntity {
   Widget icon() {
     switch (this.type) {
       case AssetType.other:
-        return SonrIcons.Unknown.gradient(size: 46);
+        return SimpleIcons.Unknown.gradient(size: 46);
       case AssetType.image:
-        return SonrIcons.Image.gradient(size: 46);
+        return SimpleIcons.Image.gradient(size: 46);
       case AssetType.video:
-        return SonrIcons.Video.gradient(size: 46);
+        return SimpleIcons.Video.gradient(size: 46);
       case AssetType.audio:
-        return SonrIcons.Audio.gradient(size: 46);
+        return SimpleIcons.Audio.gradient(size: 46);
     }
   }
 }

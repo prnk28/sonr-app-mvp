@@ -40,7 +40,7 @@ class _CaptureToolsView extends StatelessWidget {
             HapticFeedback.heavyImpact();
             controller.handleCapture(false);
           },
-          child: [SonrIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".paragraph()].row(),
+          child: [SimpleIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".paragraph()].row(),
         ),
 
         // Right Button - Continue
@@ -50,7 +50,7 @@ class _CaptureToolsView extends StatelessWidget {
               controller.handleCapture(true);
             },
             text: "Continue",
-            icon: SonrIcons.Check),
+            icon: SimpleIcons.Check),
       ]),
     );
   }
@@ -84,7 +84,7 @@ class _DefaultToolsView extends StatelessWidget {
 
         // Neumorphic Camera Button Stack
         ActionButton(
-          iconData: SonrIcons.Photos,
+          iconData: SimpleIcons.Photos,
           onPressed: () async {
             await HapticFeedback.heavyImpact();
             // Check for Permssions

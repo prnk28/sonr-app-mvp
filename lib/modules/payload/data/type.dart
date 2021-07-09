@@ -78,13 +78,13 @@ extension PostItemTypeUtils on PostItemType {
   IconData iconData() {
     switch (this) {
       case PostItemType.Media:
-        return SonrIcons.Album;
+        return SimpleIcons.Album;
       case PostItemType.Files:
-        return SonrIcons.Folder;
+        return SimpleIcons.Folder;
       case PostItemType.Contacts:
-        return SonrIcons.ContactCard;
+        return SimpleIcons.ContactCard;
       case PostItemType.Links:
-        return SonrIcons.Clip;
+        return SimpleIcons.Clip;
     }
   }
 

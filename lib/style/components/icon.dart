@@ -6,7 +6,7 @@ import 'gradient.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sonr_app/style/style.dart';
 
-extension IntricateIconUtils on SVGIcons {
+extension IntricateIconUtils on ComplexIcons {
   /// @ Constant Regex Expression for Fuzzy Path
   static final K_PASCAL_REGEX = RegExp(r"(?:[A-Z]+|^)[a-z]*");
 
@@ -142,22 +142,22 @@ extension MimeIcon on MIME_Type {
   IconData get iconData {
     switch (this) {
       case MIME_Type.AUDIO:
-        return SonrIcons.Audio;
+        return SimpleIcons.Audio;
       case MIME_Type.IMAGE:
-        return SonrIcons.Image;
+        return SimpleIcons.Image;
       case MIME_Type.TEXT:
-        return SonrIcons.Document;
+        return SimpleIcons.Document;
       case MIME_Type.VIDEO:
-        return SonrIcons.Video;
+        return SimpleIcons.Video;
       default:
         if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF;
+          return SimpleIcons.PDF;
         } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet;
+          return SimpleIcons.Spreadsheet;
         } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation;
+          return SimpleIcons.Presentation;
         }
-        return SonrIcons.Unknown;
+        return SimpleIcons.Unknown;
     }
   }
 
@@ -207,17 +207,17 @@ extension PayloadIcon on Payload {
 
   IconData get iconData {
     if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar;
+      return SimpleIcons.Avatar;
     } else if (this == Payload.URL) {
-      return SonrIcons.Discover;
+      return SimpleIcons.Discover;
     } else if (this == Payload.FILE) {
-      return SonrIcons.Document;
+      return SimpleIcons.Document;
     } else if (this == Payload.MEDIA) {
-      return SonrIcons.Photos;
+      return SimpleIcons.Photos;
     } else if (this == Payload.FILES) {
-      return SonrIcons.Files;
+      return SimpleIcons.Files;
     } else {
-      return SonrIcons.Unknown;
+      return SimpleIcons.Unknown;
     }
   }
 
@@ -264,15 +264,15 @@ extension PlatformIcon on Platform {
   IconData get iconData {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android;
+        return SimpleIcons.Android;
       case Platform.IOS:
-        return SonrIcons.IPhone;
+        return SimpleIcons.IPhone;
       case Platform.MacOS:
-        return SonrIcons.IMac;
+        return SimpleIcons.IMac;
       case Platform.Windows:
-        return SonrIcons.Windows;
+        return SimpleIcons.Windows;
       default:
-        return SonrIcons.Unknown;
+        return SimpleIcons.Unknown;
     }
   }
 
@@ -331,23 +331,23 @@ extension SocialIconUtils on Contact_Social_Media {
   IconData get iconData {
     switch (this) {
       case Contact_Social_Media.Snapchat:
-        return SonrIcons.Snapchat;
+        return SimpleIcons.Snapchat;
       case Contact_Social_Media.Github:
-        return SonrIcons.Github;
+        return SimpleIcons.Github;
       case Contact_Social_Media.Facebook:
-        return SonrIcons.Facebook;
+        return SimpleIcons.Facebook;
       case Contact_Social_Media.Medium:
-        return SonrIcons.Medium;
+        return SimpleIcons.Medium;
       case Contact_Social_Media.YouTube:
-        return SonrIcons.YouTube;
+        return SimpleIcons.YouTube;
       case Contact_Social_Media.Twitter:
-        return SonrIcons.Twitter;
+        return SimpleIcons.Twitter;
       case Contact_Social_Media.Instagram:
-        return SonrIcons.Instagram;
+        return SimpleIcons.Instagram;
       case Contact_Social_Media.TikTok:
-        return SonrIcons.Tiktok;
+        return SimpleIcons.Tiktok;
       default:
-        return SonrIcons.Spotify;
+        return SimpleIcons.Spotify;
     }
   }
 
@@ -445,14 +445,14 @@ extension DesignIcon on IconData {
 }
 
 /// ## Sonr Icon Class
-class SonrIcons {
+class SimpleIcons {
   // PCRE (PHP < 7.3)
   /// -> ^.*(\s([a-zA-Z]+\s)+).*$ > Regex
   // Substitution: /// SonrIcons -$2![Icon of $2 ](/Users/prad/Sonr/docs/icons/PNG/$2.png)\n\0\n
   // Expression for Comment Generation * //
   //! Dont use underscores for fonts //
 
-  SonrIcons._();
+  SimpleIcons._();
   static const String _fontFamily = 'SonrIcons';
   static const String _fontNavFamily = 'SonrNavIcons';
 
@@ -1124,7 +1124,7 @@ class SonrIcons {
   static const IconData Verified = IconData(0xe9b0, fontFamily: _fontFamily);
 }
 
-enum SVGIcons {
+enum ComplexIcons {
   /// ### SVGIcons - `SecureKeys`
   /// !["Image of SecureKeys"](/Users/prad/Sonr/app/assets/images/svg/secure-keys.svg)
   /// !["Image of SecureKeys as Dots"](/Users/prad/Sonr/app/assets/images/svg/secure-keys_dots.svg)

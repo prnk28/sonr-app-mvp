@@ -97,7 +97,7 @@ class DesignTextField extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'R-Flex',
               fontWeight: FontWeight.w500,
-              color: AppTheme.itemColor,
+              color: AppTheme.ItemColor,
             ),
             controller: controller,
             autofocus: autoFocus,
@@ -114,7 +114,7 @@ class DesignTextField extends StatelessWidget {
                     hintStyle: TextStyle(
                       fontFamily: 'R-Flex',
                       fontWeight: FontWeight.w300,
-                      color: AppTheme.itemColor,
+                      color: AppTheme.ItemColor,
                     )),
           ),
         )
@@ -143,7 +143,7 @@ class DesignTextField extends StatelessWidget {
               hintStyle: TextStyle(
                 fontFamily: 'R-Flex',
                 fontWeight: FontWeight.w300,
-                color: AppTheme.itemColor,
+                color: AppTheme.ItemColor,
               ))),
     );
   }
@@ -178,7 +178,7 @@ class SNameTextField extends StatelessWidget {
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
                           ],
-                          style: DisplayTextStyle.Light.style(color: AppTheme.itemColor, fontSize: 24),
+                          style: DisplayTextStyle.Light.style(color: AppTheme.ItemColor, fontSize: 24),
                           autofocus: true,
                           textInputAction: TextInputAction.go,
                           autocorrect: false,
@@ -217,7 +217,7 @@ class SNameTextField extends StatelessWidget {
                   padding: EdgeInsets.only(left: leftPadding.value),
                   child: Text(
                     ".snr/",
-                    style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
+                    style: DisplayTextStyle.Paragraph.style(color: AppTheme.ItemColor, fontSize: 24),
                   ),
                 ),
               ]),

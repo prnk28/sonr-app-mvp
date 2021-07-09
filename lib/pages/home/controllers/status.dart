@@ -15,9 +15,9 @@ extension HomeViewUtils on HomeView {
   IconData iconData(bool isSelected) {
     switch (this) {
       case HomeView.Dashboard:
-        return isSelected ? SonrIcons.HomeActive : SonrIcons.HomeInactive;
+        return isSelected ? SimpleIcons.HomeActive : SimpleIcons.HomeInactive;
       case HomeView.Contact:
-        return isSelected ? SonrIcons.PersonalActive : SonrIcons.PersonalInactive;
+        return isSelected ? SimpleIcons.PersonalActive : SimpleIcons.PersonalInactive;
       default:
         return Icons.deck;
     }
@@ -102,8 +102,8 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
         child: FadeInUp(
           animate: true,
           duration: 300.milliseconds,
-          child: SonrIcons.Up.icon(
-            color: AppTheme.itemColor,
+          child: SimpleIcons.Up.icon(
+            color: AppTheme.ItemColor,
             size: 14,
           ),
         ),
@@ -114,7 +114,7 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
           animate: true,
           from: 40,
           duration: 300.milliseconds,
-          child: SonrIcons.Down.icon(
+          child: SimpleIcons.Down.icon(
             color: SonrColor.Critical,
             size: 14,
           ),

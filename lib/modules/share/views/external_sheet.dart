@@ -59,7 +59,7 @@ class ShareSheet extends StatelessWidget {
           // @ Top Banner
           Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             // Bottom Left Close/Cancel Button
-            ActionButton(onPressed: () => Get.back(), iconData: SonrIcons.Close),
+            ActionButton(onPressed: () => Get.back(), iconData: SimpleIcons.Close),
 
             "Share".heading(),
 
@@ -72,7 +72,7 @@ class ShareSheet extends StatelessWidget {
                   //   TransferService.setMedia(mediaFile!);
                   // }
                 },
-                iconData: SonrIcons.Check),
+                iconData: SimpleIcons.Check),
           ]),
 
           // @ Window Content
@@ -129,7 +129,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Sonr Icon
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: SonrIcons.Link.white,
+          child: SimpleIcons.Link.white,
         ),
 
         // @ Indent View
@@ -178,7 +178,7 @@ class _ShareItemURL extends StatelessWidget {
                 // URL Icon
                 Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcons.Link.white,
+                  child: SimpleIcons.Link.white,
                 ),
 
                 // Link Preview
@@ -225,7 +225,7 @@ class _ShareItemURL extends StatelessWidget {
                 // URL Icon
                 Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcons.Link.white,
+                  child: SimpleIcons.Link.white,
                 ),
 
                 // Link Preview

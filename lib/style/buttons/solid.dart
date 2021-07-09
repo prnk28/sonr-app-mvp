@@ -36,7 +36,7 @@ class SolidButton extends StatelessWidget {
   factory SolidButton.grey({required String title, required void Function() onPressed}) {
     return SolidButton(
       title: title,
-      color: AppTheme.greyColor,
+      color: AppTheme.GreyColor,
       onPressed: onPressed,
       textColor: Color(0xff000000),
     );
@@ -123,24 +123,24 @@ class DynamicSolidButtonData {
   factory DynamicSolidButtonData.invite() => DynamicSolidButtonData(
         "Invite",
         Color(0xff000000),
-        AppTheme.greyColor,
+        AppTheme.GreyColor,
       );
 
   factory DynamicSolidButtonData.pending() => DynamicSolidButtonData(
         "Pending",
-        AppTheme.greyColor,
+        AppTheme.GreyColor,
         Colors.orange,
       );
 
   factory DynamicSolidButtonData.inProgress() => DynamicSolidButtonData(
         "In Progress",
-        AppTheme.greyColor,
+        AppTheme.GreyColor,
         SonrColor.Primary,
       );
 
   factory DynamicSolidButtonData.complete() => DynamicSolidButtonData(
         "Sent!",
-        AppTheme.greyColor,
+        AppTheme.GreyColor,
         SonrColor.Tertiary,
       );
 

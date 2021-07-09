@@ -33,7 +33,7 @@ class PeerListItem extends GetWidget<PeerController> {
           Divider(
             indent: 8,
             endIndent: 8,
-            color: AppTheme.dividerColor,
+            color: AppTheme.DividerColor,
           ),
         ]));
   }
@@ -59,7 +59,7 @@ class PeerListItem extends GetWidget<PeerController> {
         ),
         Positioned.directional(
           textDirection: TextDirection.rtl,
-          child: peer.platform.icon(color: AppTheme.itemColor.withOpacity(0.75), size: 26),
+          child: peer.platform.icon(color: AppTheme.ItemColor.withOpacity(0.75), size: 26),
           start: 14,
           bottom: 4,
         )

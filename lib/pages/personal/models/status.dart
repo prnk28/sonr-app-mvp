@@ -54,5 +54,5 @@ extension EditorFieldStatusUtils on EditorFieldStatus {
   bool get isMainView => this == EditorFieldStatus.Default;
   bool get isNotMainView => this != EditorFieldStatus.Default;
 
-  IconData get leadingIcon => this.isMainView ? SonrIcons.Close : SonrIcons.Backward;
+  IconData get leadingIcon => this.isMainView ? SimpleIcons.Close : SimpleIcons.Backward;
 }

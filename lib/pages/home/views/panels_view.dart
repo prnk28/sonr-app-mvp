@@ -29,7 +29,7 @@ class AccessView extends GetView<HomeController> {
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ImageButton(
-                          icon: SVGIcons.MediaSelect,
+                          icon: ComplexIcons.MediaSelect,
                           label: PostItemType.Media.name(),
                           size: 100,
                           onPressed: () {
@@ -45,7 +45,7 @@ class AccessView extends GetView<HomeController> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: ImageButton(
                           size: 100,
-                          icon: SVGIcons.DocumentsBox,
+                          icon: ComplexIcons.DocumentsBox,
                           label: PostItemType.Files.name(),
                           onPressed: () {
                             if (PostItemType.Files.count() > 0) {
@@ -65,7 +65,7 @@ class AccessView extends GetView<HomeController> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ImageButton(
                           size: 100,
-                          icon: SVGIcons.LobbyGroup,
+                          icon: ComplexIcons.LobbyGroup,
                           label: PostItemType.Contacts.name(),
                           onPressed: () {
                             if (PostItemType.Contacts.count() > 0) {
@@ -79,7 +79,7 @@ class AccessView extends GetView<HomeController> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: ImageButton(
-                          icon: SVGIcons.Clip,
+                          icon: ComplexIcons.Clip,
                           size: 100,
                           label: PostItemType.Links.name(),
                           onPressed: () {
@@ -116,7 +116,7 @@ class NearbyListView extends GetView<HomeController> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 8),
-              child: "Nearby Devices".subheading(align: TextAlign.start, color: AppTheme.itemColor),
+              child: "Nearby Devices".subheading(align: TextAlign.start, color: AppTheme.ItemColor),
             ),
           ),
           Padding(

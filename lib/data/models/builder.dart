@@ -53,7 +53,7 @@ class CommentGenerator {
     final projectDir = '/Users/prad/Sonr/app/';
 
     // Iterate and Print
-    for (var s in SVGIcons.values) {
+    for (var s in ComplexIcons.values) {
       debugPrint('/// ### SVGIcons - `${s.value}`');
       debugPrint('/// !["Image of ${s.value}"](${s.fullPath(projectDir)})');
       debugPrint('/// !["Image of ${s.value} as Dots"](${s.fullPath(projectDir, withDots: true)})');

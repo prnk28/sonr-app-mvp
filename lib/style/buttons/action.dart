@@ -91,12 +91,12 @@ class _ActionIconButton extends StatelessWidget {
                     height: 40,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Preferences.isDarkMode ? AppTheme.foregroundColor : Color(0xffEAEAEA),
+                      color: Preferences.isDarkMode ? AppTheme.ForegroundColor : Color(0xffEAEAEA),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(
                       iconData,
-                      color: AppTheme.itemColor,
+                      color: AppTheme.ItemColor,
                       size: 24,
                     ),
                   ),

@@ -36,7 +36,7 @@ class PeerBubbleView extends GetView<PeerController> {
       );
     } else {
       return BoxDecoration(
-        color: AppTheme.foregroundColor,
+        color: AppTheme.ForegroundColor,
         shape: BoxShape.circle,
       );
     }
@@ -45,7 +45,7 @@ class PeerBubbleView extends GetView<PeerController> {
   Widget _buildPeerInitials() {
     return peer.profile.initials.light(
       fontSize: 18,
-      color: AppTheme.greyColor,
+      color: AppTheme.GreyColor,
     );
   }
 }

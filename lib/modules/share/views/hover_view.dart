@@ -9,41 +9,33 @@ class ShareHoverView extends GetView<ShareController> {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: AppTheme.backgroundColor,
+            color: AppTheme.BackgroundColor,
             border: Border.all(
-              color: AppTheme.foregroundColor,
+              color: AppTheme.ForegroundColor,
               width: 1.5,
             )),
         constraints: BoxConstraints(maxWidth: 200, maxHeight: 314),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                peer.platform.icon(color: AppTheme.greyColor, size: 24),
-                Padding(padding: EdgeInsets.only(left: 8)),
-                peer.profile.fullName.subheading(fontSize: 28),
-              ],
-            ),
+            _ShareHoverPeerInfo(peer: peer),
             Divider(),
             Padding(padding: EdgeInsets.only(top: 8)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _ShareCameraButtonItem(),
+                _ShareHoverCameraButtonItem(),
                 Padding(padding: EdgeInsets.only(left: 24)),
-                _ShareMediaButtonItem(),
+                _ShareHoverMediaButtonItem(),
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 24)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _ShareFileButtonItem(),
+                _ShareHoverFileButtonItem(),
                 Padding(padding: EdgeInsets.only(left: 24)),
-                _ShareContactButtonItem(),
+                _ShareHoverContactButtonItem(),
               ],
             ),
           ],
@@ -51,9 +43,35 @@ class ShareHoverView extends GetView<ShareController> {
   }
 }
 
+class _ShareHoverPeerInfo extends StatelessWidget {
+  final Peer peer;
+
+  const _ShareHoverPeerInfo({Key? key, required this.peer}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        peer.platform.icon(color: AppTheme.GreyColor, size: 24),
+        Padding(padding: EdgeInsets.only(left: 8)),
+        _buildName().subheading(fontSize: 28),
+      ],
+    );
+  }
+
+  String _buildName() {
+    String name = peer.profile.fullName;
+    if (peer.profile.isLongFullName) {
+      name = "${peer.profile.firstName} ${peer.profile.lastInitialDot}";
+    }
+    return name;
+  }
+}
+
 /// @ Camera Share Button
-class _ShareCameraButtonItem extends GetView<ShareController> {
-  const _ShareCameraButtonItem();
+class _ShareHoverCameraButtonItem extends GetView<ShareController> {
+  const _ShareHoverCameraButtonItem();
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -63,14 +81,15 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
           label: 'Camera',
           size: K_HOVER_BUTTON_SIZE,
           onPressed: controller.chooseCamera,
-          icon: SVGIcons.Camera,
+          icon: ComplexIcons.Camera,
+          fontSize: 18,
         ));
   }
 }
 
 /// @ Camera Share Button
-class _ShareMediaButtonItem extends GetView<ShareController> {
-  const _ShareMediaButtonItem();
+class _ShareHoverMediaButtonItem extends GetView<ShareController> {
+  const _ShareHoverMediaButtonItem();
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -80,14 +99,15 @@ class _ShareMediaButtonItem extends GetView<ShareController> {
           label: 'Media',
           size: K_HOVER_BUTTON_SIZE,
           onPressed: controller.chooseMedia,
-          icon: SVGIcons.MediaSelect,
+          icon: ComplexIcons.MediaSelect,
+          fontSize: 18,
         ));
   }
 }
 
 /// @ File Share Button
-class _ShareFileButtonItem extends GetView<ShareController> {
-  const _ShareFileButtonItem();
+class _ShareHoverFileButtonItem extends GetView<ShareController> {
+  const _ShareHoverFileButtonItem();
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -97,14 +117,15 @@ class _ShareFileButtonItem extends GetView<ShareController> {
           label: 'File',
           size: K_HOVER_BUTTON_SIZE,
           onPressed: controller.chooseFile,
-          icon: SVGIcons.Document,
+          icon: ComplexIcons.Document,
+          fontSize: 18,
         ));
   }
 }
 
 /// @ Contact Share Button
-class _ShareContactButtonItem extends GetView<ShareController> {
-  const _ShareContactButtonItem();
+class _ShareHoverContactButtonItem extends GetView<ShareController> {
+  const _ShareHoverContactButtonItem();
   @override
   Widget build(BuildContext context) {
     return FadeInDownBig(
@@ -112,9 +133,10 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
-          icon: SVGIcons.ContactCard,
+          icon: ComplexIcons.ContactCard,
           onPressed: controller.chooseContact,
           size: K_HOVER_BUTTON_SIZE,
+          fontSize: 18,
         ));
   }
 }

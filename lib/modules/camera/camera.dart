@@ -40,7 +40,7 @@ class CameraView extends StatelessWidget {
                       onPressed: () {
                         Get.back();
                       },
-                      icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart)),
+                      icon: SimpleIcons.Close.gradient(value: SonrGradients.PhoenixStart)),
                 ),
 
                 // Video Duration

@@ -23,12 +23,12 @@ class InviteComposer extends GetView<ComposeController> {
               children: [
                 "Remote Invite".heading(
                   fontSize: 32,
-                  color: AppTheme.itemColor,
+                  color: AppTheme.ItemColor,
                   align: TextAlign.start,
                 ),
                 "Type the SName of the User you want to Share with.".light(
                   fontSize: 20,
-                  color: AppTheme.greyColor,
+                  color: AppTheme.GreyColor,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 16, left: 8, right: 16),
@@ -37,8 +37,8 @@ class InviteComposer extends GetView<ComposeController> {
                     children: [
                       CircleContainer(
                           padding: EdgeInsets.all(4),
-                          child: SonrIcons.ATSign.icon(
-                            color: AppTheme.itemColor,
+                          child: SimpleIcons.ATSign.icon(
+                            color: AppTheme.ItemColor,
                             size: 24,
                           )),
                       Stack(
@@ -95,9 +95,9 @@ class AnimatedStatus extends GetView<ComposeController> {
       case ComposeStatus.Checking:
         return HourglassIndicator();
       case ComposeStatus.NonExisting:
-        return SonrIcons.Close.icon(color: SonrColor.Critical, size: 36);
+        return SimpleIcons.Close.icon(color: SonrColor.Critical, size: 36);
       case ComposeStatus.Existing:
-        return SonrIcons.Check.icon(color: SonrColor.Critical, size: 36);
+        return SimpleIcons.Check.icon(color: SonrColor.Critical, size: 36);
     }
   }
 }

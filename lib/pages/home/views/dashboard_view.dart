@@ -53,7 +53,7 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
-                            icon: SVGIcons.MediaSelect,
+                            icon: ComplexIcons.MediaSelect,
                             label: PostItemType.Media.name(),
                             size: 100,
                             onPressed: () {
@@ -69,7 +69,7 @@ class DashboardView extends GetView<HomeController> {
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
                             size: 100,
-                            icon: SVGIcons.DocumentsBox,
+                            icon: ComplexIcons.DocumentsBox,
                             label: PostItemType.Files.name(),
                             onPressed: () {
                               if (PostItemType.Files.count() > 0) {
@@ -89,7 +89,7 @@ class DashboardView extends GetView<HomeController> {
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ImageButton(
                             size: 100,
-                            icon: SVGIcons.LobbyGroup,
+                            icon: ComplexIcons.LobbyGroup,
                             label: PostItemType.Contacts.name(),
                             onPressed: () {
                               if (PostItemType.Contacts.count() > 0) {
@@ -103,7 +103,7 @@ class DashboardView extends GetView<HomeController> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: ImageButton(
-                            icon: SVGIcons.Clip,
+                            icon: ComplexIcons.Clip,
                             size: 100,
                             label: PostItemType.Links.name(),
                             onPressed: () {

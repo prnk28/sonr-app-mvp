@@ -47,7 +47,7 @@ class SnackArgs {
     Color color = Colors.purple,
     SnackPosition position = SnackPosition.BOTTOM,
   }) {
-    return SnackArgs("Remote Code", message, SonrIcons.Remote.white, color, duration, true, position);
+    return SnackArgs("Remote Code", message, SimpleIcons.Remote.white, color, duration, true, position);
   }
 
   /// @ Custom Alert
@@ -63,7 +63,7 @@ class SnackArgs {
 
   /// @ Cancelled Operation
   factory SnackArgs.cancelled(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
-    return SnackArgs("Cancelled.", message, SonrIcons.Stop.white, Colors.yellow, 2600, false, position);
+    return SnackArgs("Cancelled.", message, SimpleIcons.Stop.white, Colors.yellow, 2600, false, position);
   }
 
   /// @ Error on Operation
@@ -90,7 +90,7 @@ class SnackArgs {
           return SnackArgs(
             "Error",
             error.message,
-            SonrIcons.Caution.white,
+            SimpleIcons.Caution.white,
             Colors.red,
             2600,
             false,
@@ -103,7 +103,7 @@ class SnackArgs {
           return SnackArgs(
             "Warning",
             error.message,
-            SonrIcons.Warning.white,
+            SimpleIcons.Warning.white,
             Colors.yellow,
             2600,
             false,
@@ -117,7 +117,7 @@ class SnackArgs {
       return SnackArgs(
         "Error",
         message,
-        SonrIcons.Caution.white,
+        SimpleIcons.Caution.white,
         Colors.red,
         2600,
         false,
@@ -131,7 +131,7 @@ class SnackArgs {
     return SnackArgs(
       "Uh Oh!",
       message,
-      SonrIcons.Warning.white,
+      SimpleIcons.Warning.white,
       Colors.orange[900],
       2600,
       false,
@@ -146,7 +146,7 @@ class SnackArgs {
     return SnackArgs(
       isLast ? "Almost There!" : list.random(),
       message,
-      SonrIcons.Warning.white,
+      SimpleIcons.Warning.white,
       SonrColor.Critical,
       2600,
       false,
@@ -159,7 +159,7 @@ class SnackArgs {
     return SnackArgs(
       "Success!!",
       message,
-      SonrIcons.Success.white,
+      SimpleIcons.Success.white,
       Colors.green,
       2600,
       true,
@@ -283,7 +283,7 @@ class ErrorPageArgs {
       case ErrorPageType.EmptyMedia:
         return Color.fromRGBO(240, 244, 244, 1.0);
       default:
-        return AppTheme.backgroundColor;
+        return AppTheme.BackgroundColor;
     }
   }
 

@@ -45,7 +45,7 @@ class MediaItem extends GetWidget<MediaItemController> {
               color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
               borderRadius: BorderRadius.circular(16)),
           padding: EdgeInsets.all(4),
-          child: SonrIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
+          child: SimpleIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
         ),
       );
     } else {
@@ -55,7 +55,7 @@ class MediaItem extends GetWidget<MediaItemController> {
 
   Widget _buildSelectedIcon(bool isSelected) {
     if (isSelected) {
-      return Center(child: SonrIcons.Check.whiteWith(size: 42));
+      return Center(child: SimpleIcons.Check.whiteWith(size: 42));
     } else {
       return Container();
     }

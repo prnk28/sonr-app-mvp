@@ -31,7 +31,7 @@ class InviteRequestSheet extends StatelessWidget {
                     ReceiverService.decide(true);
                   },
                   text: "Accept",
-                  icon: SonrIcons.Check,
+                  icon: SimpleIcons.Check,
                   margin: EdgeInsets.symmetric(horizontal: 54),
                 ),
               ),
@@ -46,7 +46,7 @@ class InviteRequestSheet extends StatelessWidget {
       return Container(
         height: Height.ratio(0.275),
         width: Get.width,
-        decoration: BoxDecoration(color: AppTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
+        decoration: BoxDecoration(color: AppTheme.BackgroundColor, borderRadius: BorderRadius.circular(22)),
         padding: EdgeInsets.all(8),
         child: FileContent(
           width: Width.ratio(0.8),
@@ -87,7 +87,7 @@ class _InviteRequestFileHeader extends StatelessWidget {
                           ? CircleAvatar(
                               backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                             )
-                          : SonrIcons.User.gradient(size: 42),
+                          : SimpleIcons.User.gradient(size: 42),
                     )),
               ),
               Padding(
@@ -96,10 +96,10 @@ class _InviteRequestFileHeader extends StatelessWidget {
                   message: profile.sName + ".snr/",
                   child: "View SName".light(fontSize: 16, color: SonrColor.Primary),
                   height: 50,
-                  decoration: BoxDecoration(color: AppTheme.itemColor.withOpacity(0.9), borderRadius: BorderRadius.circular(22)),
+                  decoration: BoxDecoration(color: AppTheme.ItemColor.withOpacity(0.9), borderRadius: BorderRadius.circular(22)),
                   padding: const EdgeInsets.all(16.0),
                   preferBelow: false,
-                  textStyle: DisplayTextStyle.Light.style(color: AppTheme.itemColorInversed, fontSize: 24),
+                  textStyle: DisplayTextStyle.Light.style(color: AppTheme.ItemColorInversed, fontSize: 24),
                   showDuration: 1800.milliseconds,
                   waitDuration: 0.milliseconds,
                 ),
@@ -114,23 +114,23 @@ class _InviteRequestFileHeader extends StatelessWidget {
             child: [
               profile.firstName.capitalizeFirst!.headingSpan(
                 fontSize: 20,
-                color: AppTheme.itemColor,
+                color: AppTheme.ItemColor,
               ),
               " wants to share an ".lightSpan(
                 fontSize: 19,
-                color: AppTheme.itemColor,
+                color: AppTheme.ItemColor,
               ),
               file.prettyType().headingSpan(
                     fontSize: 20,
-                    color: AppTheme.itemColor,
+                    color: AppTheme.ItemColor,
                   ),
               " of size ".lightSpan(
                 fontSize: 19,
-                color: AppTheme.itemColor,
+                color: AppTheme.ItemColor,
               ),
               file.prettySize().headingSpan(
                     fontSize: 20,
-                    color: AppTheme.itemColor,
+                    color: AppTheme.ItemColor,
                   )
             ].rich())
       ]),

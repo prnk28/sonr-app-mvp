@@ -43,7 +43,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Expanded(child: title),
                 footer != null
                     ? Divider(
-                        color: AppTheme.dividerColor,
+                        color: AppTheme.DividerColor,
                         indent: 8,
                         endIndent: 8,
                       )
@@ -130,10 +130,10 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
             centerMiddle: false,
             leading: ActionButton(
               onPressed: onPressed,
-              iconData: isClose ? SonrIcons.Close : SonrIcons.Back,
+              iconData: isClose ? SimpleIcons.Close : SimpleIcons.Back,
             ),
             trailing: _buildTrailing(),
-            middle: title.toUpperCase().light(color: AppTheme.itemColor, fontSize: 24),
+            middle: title.toUpperCase().light(color: AppTheme.ItemColor, fontSize: 24),
           ),
         ),
       ),

@@ -30,7 +30,7 @@ class CurrentReceiveItem extends GetView<ActivityController> {
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: ActionButton(
                     onPressed: () {},
-                    iconData: SonrIcons.Category,
+                    iconData: SimpleIcons.Category,
                   ),
                 ),
               ],
@@ -98,11 +98,11 @@ class _CurrentActivityContent extends GetView<ActivityController> {
           [
             "${payload.toString().capitalizeFirst} from ".lightSpan(
               fontSize: 18,
-              color: AppTheme.itemColor,
+              color: AppTheme.ItemColor,
             ),
             firstName.subheadingSpan(
               fontSize: 18,
-              color: AppTheme.itemColor,
+              color: AppTheme.ItemColor,
             )
           ].rich(),
 
@@ -110,7 +110,7 @@ class _CurrentActivityContent extends GetView<ActivityController> {
           DateText(
             date: DateTime.now(),
             fontSize: 16,
-            color: AppTheme.itemColor,
+            color: AppTheme.ItemColor,
           )
         ],
       ),
@@ -141,7 +141,7 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
                   width: maxWidth,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22),
-                    color: AppTheme.foregroundColor,
+                    color: AppTheme.ForegroundColor,
                   ),
                 ),
 
@@ -196,9 +196,9 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   Color _calculateTextColor(double current) {
     int adjusted = (current * 100).round();
     if (adjusted < 60) {
-      return AppTheme.itemColor;
+      return AppTheme.ItemColor;
     }
-    return AppTheme.itemColorInversed;
+    return AppTheme.ItemColorInversed;
   }
 }
 
@@ -219,7 +219,7 @@ class _CurrentActivityIndexLabel extends StatelessWidget {
   Widget _buildLabel(int current, int total) {
     return "($current / $total)".light(
       fontSize: 14,
-      color: AppTheme.greyColor,
+      color: AppTheme.GreyColor,
     );
   }
 }

@@ -66,25 +66,25 @@ extension DefaultAlbumUtils on DefaultAlbum {
   IconData get iconData {
     switch (this) {
       case DefaultAlbum.Panoramas:
-        return SonrIcons.Panorama;
+        return SimpleIcons.Panorama;
       case DefaultAlbum.Videos:
-        return SonrIcons.Video;
+        return SimpleIcons.Video;
       case DefaultAlbum.Recent:
-        return SonrIcons.Clock;
+        return SimpleIcons.Clock;
       case DefaultAlbum.Movies:
-        return SonrIcons.Video;
+        return SimpleIcons.Video;
       case DefaultAlbum.Markup:
-        return SonrIcons.Pen;
+        return SimpleIcons.Pen;
       case DefaultAlbum.Download:
-        return SonrIcons.Download;
+        return SimpleIcons.Download;
       case DefaultAlbum.Screenshots:
-        return SonrIcons.Screenshot;
+        return SimpleIcons.Screenshot;
       case DefaultAlbum.Favorites:
-        return SonrIcons.Star;
+        return SimpleIcons.Star;
       case DefaultAlbum.Bursts:
-        return SonrIcons.Bolt;
+        return SimpleIcons.Bolt;
       default:
-        return SonrIcons.Album;
+        return SimpleIcons.Album;
     }
   }
 
@@ -118,7 +118,7 @@ extension DefaultAlbumUtils on DefaultAlbum {
     }
 
     // Set IconData
-    IconData iconData = SonrIcons.Album;
+    IconData iconData = SimpleIcons.Album;
     if (DefaultAlbumUtils.isDefault(entity)) {
       iconData = DefaultAlbumUtils.toDefault(entity).iconData;
     }

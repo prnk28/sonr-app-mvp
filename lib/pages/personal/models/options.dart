@@ -18,13 +18,13 @@ extension ContactOptionUtils on ContactOptions {
   IconData get iconData {
     switch (this) {
       case ContactOptions.Names:
-        return SonrIcons.Pen;
+        return SimpleIcons.Pen;
       case ContactOptions.Phone:
-        return SonrIcons.Call;
+        return SimpleIcons.Call;
       case ContactOptions.Addresses:
-        return SonrIcons.Location;
+        return SimpleIcons.Location;
       case ContactOptions.Gender:
-        return SonrIcons.User;
+        return SimpleIcons.User;
     }
   }
 

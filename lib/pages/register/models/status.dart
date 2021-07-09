@@ -28,19 +28,19 @@ extension NewSNameStatusUtil on NewSNameStatus {
     final size = 28.0;
     switch (this) {
       case NewSNameStatus.Default:
-        return SonrIcons.ATSign.icon(color: AppTheme.itemColorInversed, size: size);
+        return SimpleIcons.ATSign.icon(color: AppTheme.ItemColorInversed, size: size);
       case NewSNameStatus.Available:
-        return SonrIcons.Check.icon(color: SonrColor.Tertiary, size: size);
+        return SimpleIcons.Check.icon(color: SonrColor.Tertiary, size: size);
       case NewSNameStatus.Returning:
-        return SonrIcons.Zap.icon(color: SonrColor.Secondary, size: size);
+        return SimpleIcons.Zap.icon(color: SonrColor.Secondary, size: size);
       default:
-        return SonrIcons.Alert.icon(color: SonrColor.AccentPink, size: size);
+        return SimpleIcons.Alert.icon(color: SonrColor.AccentPink, size: size);
     }
   }
 
   /// Returns Label for Status
   Widget label() {
-    final color = AppTheme.greyColor;
+    final color = AppTheme.GreyColor;
     switch (this) {
       case NewSNameStatus.Default:
         return "Pick Name".light(color: color);

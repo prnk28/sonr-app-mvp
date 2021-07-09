@@ -7,7 +7,7 @@ class ImageButton extends StatelessWidget {
   final Function onPressed;
 
   /// Widget for Action Icon: Max Size 32
-  final SVGIcons icon;
+  final ComplexIcons icon;
 
   /// String for Text Below Button
   final String label;
@@ -58,7 +58,7 @@ class ImageButton extends StatelessWidget {
                           width: size,
                           height: size,
                           decoration: BoxDecoration(
-                            color: AppTheme.foregroundColor,
+                            color: AppTheme.ForegroundColor,
                             shape: BoxShape.circle,
                           ),
                           padding: EdgeInsets.all(24),

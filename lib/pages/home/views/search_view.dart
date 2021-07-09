@@ -25,7 +25,7 @@ class CardSearchField extends GetView<HomeController> {
                     Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                          Preferences.isDarkMode ? SonrIcons.Search.whiteWith(size: 32) : SonrIcons.Search.blackWith(size: 32),
+                          Preferences.isDarkMode ? SimpleIcons.Search.whiteWith(size: 32) : SimpleIcons.Search.blackWith(size: 32),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 14.0),
@@ -34,7 +34,7 @@ class CardSearchField extends GetView<HomeController> {
                                     fontFamily: 'RFlex',
                                     fontSize: 24,
                                     fontWeight: FontWeight.w400,
-                                    color: AppTheme.itemColor,
+                                    color: AppTheme.ItemColor,
                                   ),
                                   showCursor: false,
                                   autofocus: false,

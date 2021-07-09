@@ -14,7 +14,7 @@ class ContactSName extends StatelessWidget {
                 Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
                   Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
                   AppRoute.snack(
-                      SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
+                      SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
                 });
               },
               child: AnimatedScale(
@@ -33,7 +33,7 @@ class ContactSName extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
-                            SonrIcons.ATSign,
+                            SimpleIcons.ATSign,
                             color: Colors.white,
                             size: 18,
                           ),
@@ -41,8 +41,8 @@ class ContactSName extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(left: 4, bottom: 4),
                           child: [
-                            "${ContactService.contact.value.sName}".lightSpan(color: AppTheme.itemColor, fontSize: 24),
-                            ".snr/".lightSpan(color: AppTheme.greyColor, fontSize: 24),
+                            "${ContactService.contact.value.sName}".lightSpan(color: AppTheme.ItemColor, fontSize: 24),
+                            ".snr/".lightSpan(color: AppTheme.GreyColor, fontSize: 24),
                           ].rich(),
                         ),
                       ],

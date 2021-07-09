@@ -18,9 +18,9 @@ class IntelHeader extends GetView<IntelController> {
                 WidgetSpan(
                     alignment: PlaceholderAlignment.aboveBaseline,
                     baseline: TextBaseline.alphabetic,
-                    child: SonrIcons.Location.icon(
+                    child: SimpleIcons.Location.icon(
                       size: 22,
-                      color: AppTheme.itemColor,
+                      color: AppTheme.ItemColor,
                     )),
                 (" " + controller.title.value).headingSpan(
                   color: Get.theme.focusColor,
@@ -77,7 +77,7 @@ class _NearbyPeersRow extends GetView<IntelController> {
                       height: 36,
                       child: "${state.additionalPeers}+".light(
                         fontSize: 16,
-                        color: AppTheme.greyColor,
+                        color: AppTheme.GreyColor,
                       ),
                       decoration: BoxDecoration(
                         color: SonrColor.AccentBlue,
@@ -104,7 +104,7 @@ class _NearbyPeersRow extends GetView<IntelController> {
           padding: EdgeInsets.only(top: 8),
           child: "Nobody Around".light(
             fontSize: 18,
-            color: AppTheme.greyColor,
+            color: AppTheme.GreyColor,
           ),
         ),
         onLoading: Opacity(

@@ -19,15 +19,13 @@ class ComposeController extends GetxController with StateMixin<Session> {
     _refreshRecords();
     change(Session(), status: RxStatus.empty());
     super.onInit();
-    Timer.periodic(10.seconds, (timer) async {
-      // Refresh Records
-      await _refreshRecords();
-    });
   }
 
   /// @ Check if Name Value is Value
   Future<HSRecord?> checkName(String sName, {bool withShare = false}) async {
+    await _refreshRecords();
     _query(sName);
+
     if (sName.length > 0) {
       // Search Record
       final record = _records.firstWhere(
@@ -63,7 +61,10 @@ class ComposeController extends GetxController with StateMixin<Session> {
 
       // Change Session for Status Success
       var newSession = SenderService.invite(
-        InviteRequestUtils.copyWithPeer(TransferController.invite, peer)..type = InviteRequest_Type.Remote,
+        InviteRequestUtils.copyWithPeer(
+          TransferController.invite,
+          peer,
+        )..type = InviteRequest_Type.Remote,
       );
       composeStatus(ComposeStatus.Existing);
       change(newSession, status: RxStatus.success());

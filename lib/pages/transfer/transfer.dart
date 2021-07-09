@@ -24,7 +24,7 @@ class TransferPage extends GetView<TransferController> {
     return SonrScaffold(
         appBar: DetailAppBar(
           action: DeviceService.isIOS ? ActionButton(
-            iconData: SonrIcons.Compass,
+            iconData: SimpleIcons.Compass,
             onPressed: () {
               AppRoute.popup(InviteComposer());
             },
@@ -69,7 +69,7 @@ class PayloadSheetView extends GetView<TransferController> {
                     final file = controller.inviteRequest.file;
                     return Container(
                       padding: EdgeInsets.only(top: 24),
-                      decoration: BoxDecoration(color: AppTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
+                      decoration: BoxDecoration(color: AppTheme.ForegroundColor, borderRadius: BorderRadius.circular(37)),
                       child: CustomScrollView(
                         controller: scrollController,
                         slivers: [
@@ -78,10 +78,10 @@ class PayloadSheetView extends GetView<TransferController> {
                             pinned: true,
                             floating: false,
                             automaticallyImplyLeading: false,
-                            backgroundColor: AppTheme.foregroundColor,
+                            backgroundColor: AppTheme.ForegroundColor,
                             toolbarHeight: 80,
                             forceElevated: false,
-                            shadowColor: AppTheme.shadowColor,
+                            shadowColor: AppTheme.ShadowColor,
                           ),
                           SliverList(
                               delegate: SliverChildBuilderDelegate(
@@ -117,7 +117,7 @@ class PayloadSheetView extends GetView<TransferController> {
             child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 42, vertical: 24),
                 child: ColorButton.primary(
-                  icon: SonrIcons.Add,
+                  icon: SimpleIcons.Add,
                   text: "Add File",
                   onPressed: () => AppPage.Share.to(init: ShareController.initAlert),
                 )),

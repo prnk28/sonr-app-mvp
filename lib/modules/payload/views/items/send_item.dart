@@ -14,11 +14,11 @@ class PayloadItemInfo extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: item.prettyName().subheading(color: AppTheme.itemColor),
+            child: item.prettyName().subheading(color: AppTheme.ItemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: item.prettySize().light(color: AppTheme.itemColor),
+            child: item.prettySize().light(color: AppTheme.ItemColor),
           )
         ],
       ),
@@ -31,7 +31,7 @@ class PayloadListItemHeader extends GetView<ItemController> {
   Widget build(BuildContext context) {
     final file = TransferController.invite.file;
     return Container(
-      decoration: BoxDecoration(color: AppTheme.foregroundColor, borderRadius: BorderRadius.circular(37)),
+      decoration: BoxDecoration(color: AppTheme.ForegroundColor, borderRadius: BorderRadius.circular(37)),
       width: Get.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -39,11 +39,11 @@ class PayloadListItemHeader extends GetView<ItemController> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: file.prettyName().subheading(color: AppTheme.itemColor),
+            child: file.prettyName().subheading(color: AppTheme.ItemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: file.prettySize().light(color: AppTheme.itemColor),
+            child: file.prettySize().light(color: AppTheme.ItemColor),
           )
         ],
       ),
@@ -86,9 +86,9 @@ class PayloadListItem extends GetView<ItemController> {
           onPressed: () {
             AppRoute.positioned(
               Infolist(options: [
-                InfolistOption("Replace", SonrIcons.Reload, onPressed: controller.replace),
-                InfolistOption("Remove", SonrIcons.Trash, onPressed: controller.delete),
-                InfolistOption("Cancel", SonrIcons.Cancel, onPressed: controller.cancel),
+                InfolistOption("Replace", SimpleIcons.Reload, onPressed: controller.replace),
+                InfolistOption("Remove", SimpleIcons.Trash, onPressed: controller.delete),
+                InfolistOption("Cancel", SimpleIcons.Cancel, onPressed: controller.cancel),
               ]),
               offset: Offset(35, 0),
               parentKey: key,
@@ -138,9 +138,9 @@ class _PayloadListItemTitle extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: [
-                ContactService.contact.value.firstName.paragraph(color: AppTheme.itemColor),
-                " ".paragraph(color: AppTheme.itemColor),
-                ContactService.contact.value.lastName.light(color: AppTheme.itemColor)
+                ContactService.contact.value.firstName.paragraph(color: AppTheme.ItemColor),
+                " ".paragraph(color: AppTheme.ItemColor),
+                ContactService.contact.value.lastName.light(color: AppTheme.ItemColor)
               ].row(),
             ),
             Padding(
@@ -157,7 +157,7 @@ class _PayloadListItemTitle extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: invite!.file.prettyName().paragraph(color: AppTheme.itemColor),
+              child: invite!.file.prettyName().paragraph(color: AppTheme.ItemColor),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -171,7 +171,7 @@ class _PayloadListItemTitle extends StatelessWidget {
           height: Height.ratio(0.15),
           padding: EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 8),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-            Padding(padding: const EdgeInsets.only(top: 16.0), child: invite!.file.prettyType().subheading(color: AppTheme.itemColor)),
+            Padding(padding: const EdgeInsets.only(top: 16.0), child: invite!.file.prettyType().subheading(color: AppTheme.ItemColor)),
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: invite!.file.prettyName().light(color: Get.theme.hintColor),
@@ -192,7 +192,7 @@ class _PayloadListItemTitle extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: item!.prettyType().subheading(color: AppTheme.itemColor),
+            child: item!.prettyType().subheading(color: AppTheme.ItemColor),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4.0),

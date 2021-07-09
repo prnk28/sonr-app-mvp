@@ -18,7 +18,7 @@ class AddTileView extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 8, left: 8),
                 child: PlainIconButton(
-                    onPressed: controller.exitToViewing, icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart, size: 38))),
+                    onPressed: controller.exitToViewing, icon: SimpleIcons.Close.gradient(value: SonrGradients.PhoenixStart, size: 38))),
             Container(
               // height: controller.step.value!.height,
               child: PageView.builder(
