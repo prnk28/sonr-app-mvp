@@ -72,7 +72,7 @@ class EditPictureView extends GetView<PersonalController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PlainButton(icon: SimpleIcons.Close, onPressed: controller.exitToViewing),
+                        ActionButton(iconData: SimpleIcons.Close, onPressed: controller.exitToViewing),
                         headerText.subheading(),
                         Padding(padding: EdgeInsets.all(16))
                       ]),

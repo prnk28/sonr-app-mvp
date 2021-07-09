@@ -35,12 +35,12 @@ class _CaptureToolsView extends StatelessWidget {
       height: Height.ratio(0.15),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         // Left Button - Cancel and Retake
-        PlainButton(
+        ColorButton.neutral(
           onPressed: () {
             HapticFeedback.heavyImpact();
             controller.handleCapture(false);
           },
-          child: [SimpleIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".paragraph()].row(),
+          text: 'Redo',
         ),
 
         // Right Button - Continue
