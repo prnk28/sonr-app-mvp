@@ -67,7 +67,7 @@ class PeerController extends GetxController with StateMixin<Session> {
       // Check not already Pending
       if (!_hasInvited) {
         // Perform Invite
-        var invite = InviteRequestUtils.copyWithPeer(TransferController.invite, this.peer.value);
+        var invite = InviteRequestUtils.copy(TransferController.invite, peer: this.peer.value);
 
         // Create Session
         var newSession = SenderService.invite(invite);

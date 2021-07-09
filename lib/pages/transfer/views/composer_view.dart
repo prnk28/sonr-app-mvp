@@ -77,11 +77,13 @@ class AnimatedStatus extends GetView<ComposeController> {
   Widget build(BuildContext context) {
     return Obx(() => controller.shouldUpdate.value
         ? FadeInLeftBig(
+            from: 30,
             animate: controller.shouldUpdate.value,
             child: Container(
               child: _buildStatusIcon(controller.composeStatus.value),
             ))
         : FadeOutRight(
+            from: 30,
             animate: !controller.shouldUpdate.value,
             child: Container(
               child: _buildStatusIcon(controller.composeStatus.value),

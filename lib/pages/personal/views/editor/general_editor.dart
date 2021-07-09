@@ -37,7 +37,7 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ Dark Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Dark Mode Title
-                  "Dark Mode".light(),
+                  "Dark Mode".light(color: AppTheme.ItemColor),
 
                   // Dark Mode Switch
                   Switch(

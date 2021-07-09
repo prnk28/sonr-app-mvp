@@ -10,7 +10,6 @@ class ComposeController extends GetxController with StateMixin<Session> {
   // API Managers
   final _records = RxList<HSRecord>();
   final _nbClient = NamebaseApi(keys: AppServices.apiKeys);
-  final _peerRecord = HSRecord.blank().obs;
   final _query = "".obs;
   final shouldUpdate = false.obs;
 
@@ -23,49 +22,31 @@ class ComposeController extends GetxController with StateMixin<Session> {
 
   /// @ Check if Name Value is Value
   Future<HSRecord?> checkName(String sName, {bool withShare = false}) async {
-    await _refreshRecords();
     _query(sName);
-
-    if (sName.length > 0) {
-      // Search Record
-      final record = _records.firstWhere(
-        (e) => e.equalsName(sName) && e.isName,
-        orElse: () => HSRecord.blank(),
-      );
-
-      // Validate Record
-      if (record.isName) {
-        composeStatus(ComposeStatus.Existing);
-        _peerRecord(record);
-        if (withShare) {
-          await shareRemote();
-        }
-        return record;
-      } else {
-        composeStatus(ComposeStatus.NonExisting);
-      }
-    } else {
-      composeStatus(ComposeStatus.Initial);
+    if (withShare) {
+      await shareRemote();
     }
-    shouldUpdate(true);
     return null;
   }
 
   /// @ User Sends A Remote Transfer Name Request
   Future<bool> shareRemote() async {
-    // Check Record
-    final record = _peerRecord.value;
+    // Search Record
+    await _refreshRecords();
+    final record = _records.firstWhere(
+      (e) => e.equalsName(_query.value),
+      orElse: () => HSRecord.blank(),
+    );
+
     if (record.toPeer() != null) {
+      print("Valid Peer");
+
       // Find Peer
       final peer = record.toPeer()!;
+      print(peer.toString());
 
       // Change Session for Status Success
-      var newSession = SenderService.invite(
-        InviteRequestUtils.copyWithPeer(
-          TransferController.invite,
-          peer,
-        )..type = InviteRequest_Type.Remote,
-      );
+      var newSession = SenderService.invite(InviteRequestUtils.copy(TransferController.invite, peer: peer, type: InviteRequest_Type.Remote));
       composeStatus(ComposeStatus.Existing);
       change(newSession, status: RxStatus.success());
       return true;
