@@ -112,7 +112,7 @@ class _InviteRequestFileHeader extends StatelessWidget {
         Container(
             width: Width.ratio(0.6),
             child: [
-              profile.firstName.headingSpan(
+              profile.firstName.capitalizeFirst!.headingSpan(
                 fontSize: 20,
                 color: AppTheme.itemColor,
               ),

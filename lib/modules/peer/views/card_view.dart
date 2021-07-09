@@ -91,9 +91,9 @@ class _PeerMainCard extends StatelessWidget {
 
   Widget _buildName() {
     if (peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
-      return "${peer.value.profile.firstName}".subheading(color: AppTheme.itemColor);
+      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.itemColor);
     } else {
-      return "${peer.value.profile.firstName}".subheading(color: AppTheme.itemColor);
+      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.itemColor);
     }
   }
 

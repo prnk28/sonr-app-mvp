@@ -88,7 +88,7 @@ class LobbyService extends GetxService {
       _flatModeCancelled(false);
     });
     var flatPeer = LobbyService.lobby.value.flatFirst()!;
-    AppRoute.snack(SnackArgs.success("Sent Contact to ${flatPeer.profile.firstName}"));
+    AppRoute.snack(SnackArgs.success("Sent Contact to ${flatPeer.profile.firstName.capitalizeFirst}"));
     Get.back();
     return true;
   }

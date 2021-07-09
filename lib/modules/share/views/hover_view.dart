@@ -14,10 +14,21 @@ class ShareHoverView extends GetView<ShareController> {
               color: AppTheme.foregroundColor,
               width: 1.5,
             )),
-        constraints: BoxConstraints(maxWidth: 200, maxHeight: 300),
+        constraints: BoxConstraints(maxWidth: 200, maxHeight: 314),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                peer.platform.icon(color: AppTheme.greyColor, size: 24),
+                Padding(padding: EdgeInsets.only(left: 8)),
+                peer.profile.fullName.subheading(fontSize: 28),
+              ],
+            ),
+            Divider(),
+            Padding(padding: EdgeInsets.only(top: 8)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
