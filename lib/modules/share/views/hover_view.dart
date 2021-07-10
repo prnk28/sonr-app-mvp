@@ -72,7 +72,7 @@ class _ShareHoverSession extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: SonrColor.Primary,
+              color: AppColor.Primary,
             ),
             "Sending".section(color: AppTheme.GreyColor, fontSize: 14),
           ],
@@ -102,7 +102,7 @@ class _ShareHoverSession extends StatelessWidget {
       Future.delayed(1500.milliseconds, () {
         AppRoute.closePopup();
       });
-      return SimpleIcons.Check.gradient(value: SonrGradients.ItmeoBranding);
+      return SimpleIcons.Check.gradient(value: DesignGradients.ItmeoBranding);
     });
   }
 }

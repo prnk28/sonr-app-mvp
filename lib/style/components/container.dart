@@ -186,7 +186,7 @@ class PolyContainer extends StatelessWidget {
       sides: sides,
       child: Container(
         decoration: BoxDecoration(
-          gradient: gradient ?? SonrGradient.Theme(),
+          gradient: gradient ?? AppGradients.Theme(),
           boxShadow: AppTheme.RectBoxShadow,
           border: Get.isDarkMode ? null : Border.all(color: AppTheme.ForegroundColor, width: 1),
         ),

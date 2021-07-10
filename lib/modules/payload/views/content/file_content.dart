@@ -120,7 +120,7 @@ class FileAlbumBox extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 24),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: SonrColor.Black.withOpacity(0.75),
+                      color: AppColor.Black.withOpacity(0.75),
                       borderRadius: BorderRadius.circular(22),
                     ),
                     padding: EdgeInsets.all(8),

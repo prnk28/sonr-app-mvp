@@ -123,14 +123,17 @@ class _PeerDetailsCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SimpleIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
+                  child: SimpleIcons.Backward.gradient(
+                    value: DesignGradients.CrystalRiver,
+                    size: 24,
+                  ),
                 )),
 
             // Align Compass
             Container(
               padding: EdgeInsets.symmetric(horizontal: 6),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-              child: Obx(() => peer.value.prettyHeadingDirection().paragraph(color: SonrColor.White)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColor.AccentNavy.withOpacity(0.75)),
+              child: Obx(() => peer.value.prettyHeadingDirection().paragraph(color: AppColor.White)),
             ),
           ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center),
 

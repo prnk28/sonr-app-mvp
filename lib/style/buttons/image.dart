@@ -78,11 +78,11 @@ class ImageButton extends StatelessWidget {
           // Build Label
           Get.isDarkMode
               ? label.light(
-                  color: textColor ?? SonrColor.White.withOpacity(0.8),
+                  color: textColor ?? AppColor.White.withOpacity(0.8),
                   fontSize: fontSize,
                 )
               : label.light(
-                  color: textColor ?? SonrColor.Black.withOpacity(0.8),
+                  color: textColor ?? AppColor.Black.withOpacity(0.8),
                   fontSize: fontSize,
                 ),
         ],

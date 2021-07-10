@@ -63,7 +63,7 @@ class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
                   child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     ShaderMask(
                       shaderCallback: (bounds) {
-                        return SonrGradients.AmourAmour.createShader(bounds);
+                        return DesignGradients.AmourAmour.createShader(bounds);
                       },
                       child: Icon(
                         Icons.search,

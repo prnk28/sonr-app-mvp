@@ -97,9 +97,9 @@ class AnimatedStatus extends GetView<ComposeController> {
       case ComposeStatus.Checking:
         return HourglassIndicator();
       case ComposeStatus.NonExisting:
-        return SimpleIcons.Close.icon(color: SonrColor.Critical, size: 36);
+        return SimpleIcons.Close.icon(color: AppColor.Critical, size: 36);
       case ComposeStatus.Existing:
-        return SimpleIcons.Check.icon(color: SonrColor.Critical, size: 36);
+        return SimpleIcons.Check.icon(color: AppColor.Critical, size: 36);
     }
   }
 }

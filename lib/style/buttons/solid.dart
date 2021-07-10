@@ -135,13 +135,13 @@ class DynamicSolidButtonData {
   factory DynamicSolidButtonData.inProgress() => DynamicSolidButtonData(
         "In Progress",
         AppTheme.GreyColor,
-        SonrColor.Primary,
+        AppColor.Primary,
       );
 
   factory DynamicSolidButtonData.complete() => DynamicSolidButtonData(
         "Sent!",
         AppTheme.GreyColor,
-        SonrColor.Tertiary,
+        AppColor.Tertiary,
       );
 
   Widget build() {

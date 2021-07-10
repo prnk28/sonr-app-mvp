@@ -59,21 +59,21 @@ class ConfirmButton extends StatelessWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-      gradient: SonrGradient.Neutral,
+      color: CGUtility.hexColor("#a2a2a2"),
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
-      gradient: SonrGradient.Primary,
+      gradient: DesignGradients.MalibuBeach,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
-      gradient: SonrGradient.Tertiary,
+      gradient: DesignGradients.ItmeoBranding,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );
@@ -121,21 +121,21 @@ class ConfirmButton extends StatelessWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-      gradient: SonrGradient.Neutral,
+      color: CGUtility.hexColor("#a2a2a2"),
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
-      gradient: SonrGradient.Primary,
+      gradient: DesignGradients.MalibuBeach,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
-      gradient: SonrGradient.Critical,
+      gradient: DesignGradients.ItmeoBranding,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );

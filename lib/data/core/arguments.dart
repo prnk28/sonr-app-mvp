@@ -147,7 +147,7 @@ class SnackArgs {
       isLast ? "Almost There!" : list.random(),
       message,
       SimpleIcons.Warning.white,
-      SonrColor.Critical,
+      AppColor.Critical,
       2600,
       false,
       position,
@@ -325,11 +325,11 @@ class ErrorPageArgs {
   Color get textColor {
     switch (this.type) {
       case ErrorPageType.EmptyLinks:
-        return SonrColor.White;
+        return AppColor.White;
       case ErrorPageType.NoNetwork:
-        return SonrColor.White;
+        return AppColor.White;
       default:
-        return SonrColor.Black;
+        return AppColor.Black;
     }
   }
 

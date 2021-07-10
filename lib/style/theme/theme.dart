@@ -24,13 +24,13 @@ class AppTheme {
   /// Returns Light Theme for App
   static ThemeData get LightTheme => ThemeData(
         brightness: Brightness.light,
-        primaryColor: SonrColor.Primary,
+        primaryColor: AppColor.Primary,
         backgroundColor: Colors.white,
         dividerColor: Color(0xffEBEBEB),
-        scaffoldBackgroundColor: SonrColor.White.withOpacity(0.75),
+        scaffoldBackgroundColor: AppColor.White.withOpacity(0.75),
         splashColor: Colors.transparent,
-        errorColor: SonrColor.Critical,
-        focusColor: SonrColor.Black,
+        errorColor: AppColor.Critical,
+        focusColor: AppColor.Black,
         hintColor: Color(0xff8E8E93),
         cardColor: Color(0xffF6F6F6),
         canvasColor: Color(0xffF6F6F6),
@@ -42,12 +42,12 @@ class AppTheme {
   static ThemeData get DarkTheme => ThemeData(
         brightness: Brightness.dark,
         dividerColor: Color(0xff4E4949),
-        primaryColor: SonrColor.Primary,
+        primaryColor: AppColor.Primary,
         backgroundColor: Color(0xff15162D),
-        scaffoldBackgroundColor: SonrColor.Black.withOpacity(0.85),
+        scaffoldBackgroundColor: AppColor.Black.withOpacity(0.85),
         splashColor: Colors.transparent,
-        errorColor: SonrColor.Critical,
-        focusColor: SonrColor.White,
+        errorColor: AppColor.Critical,
+        focusColor: AppColor.White,
         hintColor: Color(0xffBFBFC3),
         cardColor: Color(0xff2f2a2a).withOpacity(0.75),
         canvasColor: Color(0xff212244),
@@ -63,10 +63,10 @@ class AppTheme {
   static Color get ForegroundColor => Get.isDarkMode ? Color(0xff212244) : Color(0xffF6F6F6);
 
   /// Returns Current Text Color
-  static Color get ItemColor => Get.isDarkMode ? SonrColor.White : SonrColor.Black;
+  static Color get ItemColor => Get.isDarkMode ? AppColor.White : AppColor.Black;
 
   /// Returns Current Text Color
-  static Color get ItemColorInversed => Get.isDarkMode ? SonrColor.Black : SonrColor.White;
+  static Color get ItemColorInversed => Get.isDarkMode ? AppColor.Black : AppColor.White;
 
   /// Returns Current Shadow Color
   static Color get ShadowColor => Get.isDarkMode ? Colors.black.withOpacity(0.4) : Color(0xffD4D7E0).withOpacity(0.75);
@@ -93,7 +93,7 @@ class AppTheme {
         BoxShadow(
           offset: Offset(2, 2),
           blurRadius: 8,
-          color: SonrColor.Black.withOpacity(0.2),
+          color: AppColor.Black.withOpacity(0.2),
         ),
       ];
 

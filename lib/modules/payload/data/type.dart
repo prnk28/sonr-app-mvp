@@ -35,9 +35,9 @@ extension PostItemTypeUtils on PostItemType {
   /// Returns `name()` for Button Label
   Widget label() {
     if (Preferences.isDarkMode) {
-      return this.name().light(color: SonrColor.White.withOpacity(0.8));
+      return this.name().light(color: AppColor.White.withOpacity(0.8));
     } else {
-      return this.name().light(color: SonrColor.Black.withOpacity(0.8));
+      return this.name().light(color: AppColor.Black.withOpacity(0.8));
     }
   }
 
@@ -64,13 +64,13 @@ extension PostItemTypeUtils on PostItemType {
   Gradient gradient() {
     switch (this) {
       case PostItemType.Media:
-        return SonrGradients.PerfectBlue;
+        return DesignGradients.PerfectBlue;
       case PostItemType.Files:
-        return SonrGradients.ItmeoBranding;
+        return DesignGradients.ItmeoBranding;
       case PostItemType.Contacts:
-        return SonrGradients.AmourAmour;
+        return DesignGradients.AmourAmour;
       case PostItemType.Links:
-        return SonrGradients.FrozenHeat;
+        return DesignGradients.FrozenHeat;
     }
   }
 

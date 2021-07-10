@@ -65,7 +65,7 @@ extension IntroPanelTypeUtils on IntroPageType {
         return BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: SonrColor.Black,
+              color: AppColor.Black,
               width: 2,
             ));
       case IntroPageType.Universal:
@@ -74,14 +74,14 @@ extension IntroPanelTypeUtils on IntroPageType {
         return BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: SonrColor.Black,
+              color: AppColor.Black,
               width: 2,
             ));
       case IntroPageType.Start:
         return BoxDecoration(
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
-              color: SonrColor.Black.withOpacity(0.4),
+              color: AppColor.Black.withOpacity(0.4),
               width: 2,
             ));
     }
@@ -121,7 +121,7 @@ extension IntroPanelTypeUtils on IntroPageType {
 
   /// Returns this Panels Title as Heading Widget
   Widget title() {
-    final color = SonrColor.Black;
+    final color = AppColor.Black;
     switch (this) {
       case IntroPageType.Welcome:
         return 'Welcome'.heading(color: color, fontSize: 36);
@@ -136,7 +136,7 @@ extension IntroPanelTypeUtils on IntroPageType {
 
   /// Returns this Panels Description as Rich Text
   Widget description() {
-    final color = SonrColor.Grey;
+    final color = AppColor.Grey;
     final size = 20.0;
     switch (this) {
       case IntroPageType.Welcome:

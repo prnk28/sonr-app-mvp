@@ -501,7 +501,7 @@ extension AppRoute on AppPage {
         reverseAnimationCurve: Curves.elasticOut,
         backgroundColor: args.color,
         icon: args.icon,
-        colorText: SonrColor.White,
+        colorText: AppColor.White,
       );
     }
   }

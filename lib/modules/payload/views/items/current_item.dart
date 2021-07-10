@@ -67,7 +67,7 @@ class _CurrentActivityPeer extends GetView<ActivityController> {
               alignment: Alignment.center,
               width: 28,
               height: 28,
-              child: payload.icon(color: SonrColor.Primary, size: 20),
+              child: payload.icon(color: AppColor.Primary, size: 20),
             ),
           )
         ],
@@ -175,9 +175,9 @@ class _CurrentActivityProgress extends GetView<ActivityController> {
   Gradient _calculateGradient(double current) {
     int adjusted = (current * 100).round();
     if (adjusted != 100) {
-      return SonrGradients.SeaShore;
+      return DesignGradients.SeaShore;
     }
-    return SonrGradient.Tertiary;
+    return DesignGradients.ItmeoBranding;
   }
 
   double _calculateWidth(double current) {

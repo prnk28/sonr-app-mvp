@@ -11,7 +11,7 @@ class ProfileFullName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (this.isHeader) {
-      return profile.fullName.gradient(value: SonrGradients.SolidStone);
+      return profile.fullName.gradient(value: DesignGradients.SolidStone);
     } else {
       return Row(children: [
         "${profile.firstName.capitalizeFirst} ".paragraph(),
@@ -102,8 +102,8 @@ class ProfileOwnerRow extends StatelessWidget {
           children: [
             Container(
                 margin: EdgeInsets.only(top: 8, left: 8),
-                decoration: BoxDecoration(color: SonrColor.White, shape: BoxShape.circle, boxShadow: [
-                  BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: SonrColor.Black.withOpacity(0.2)),
+                decoration: BoxDecoration(color: AppColor.White, shape: BoxShape.circle, boxShadow: [
+                  BoxShadow(offset: Offset(2, 2), blurRadius: 8, color: AppColor.Black.withOpacity(0.2)),
                 ]),
                 padding: EdgeInsets.all(4),
                 child: Container(

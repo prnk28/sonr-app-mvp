@@ -69,7 +69,7 @@ class ButtonUtility {
   }
 
   static Widget buildPrimaryText(String text) {
-    return Container(child: text.heading(color: SonrColor.White, fontSize: 22));
+    return Container(child: text.heading(color: AppColor.White, fontSize: 22));
   }
 
   static Widget buildNeutralText(String text, Color? textColor) {

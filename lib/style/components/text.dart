@@ -105,7 +105,7 @@ extension TextSpanListUtils on List<TextSpan> {
 extension DisplayTextUtils on String {
   /// Hero
   DisplayText hero({
-    Color color = SonrColor.White,
+    Color color = AppColor.White,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
@@ -114,7 +114,7 @@ extension DisplayTextUtils on String {
 
   /// Heading - Default Size = 32, FontWeight.w700
   DisplayText heading({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
@@ -123,7 +123,7 @@ extension DisplayTextUtils on String {
 
   /// Heading **Span** - Default Size = 32, FontWeight.w700
   TextSpan headingSpan({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
@@ -134,7 +134,7 @@ extension DisplayTextUtils on String {
 
   /// Subheading - Default Size = 26, FontWeight.w500
   DisplayText subheading({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
@@ -143,7 +143,7 @@ extension DisplayTextUtils on String {
 
   /// Subheading **Span** - Default Size = 26, FontWeight.w500
   TextSpan subheadingSpan({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
@@ -154,7 +154,7 @@ extension DisplayTextUtils on String {
 
   /// Section - Default Size = 20, FontWeight.w700
   DisplayText section({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
@@ -163,7 +163,7 @@ extension DisplayTextUtils on String {
 
   /// Section **Span** - Default Size = 20, FontWeight.w700
   TextSpan sectionSpan({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
@@ -174,7 +174,7 @@ extension DisplayTextUtils on String {
 
   /// Paragraph - Default Size = 20, FontWeight.w100
   DisplayText paragraph({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
@@ -183,7 +183,7 @@ extension DisplayTextUtils on String {
 
   /// Paragraph **Span** - Default Size = 20, FontWeight.w100
   TextSpan paragraphSpan({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
@@ -194,7 +194,7 @@ extension DisplayTextUtils on String {
 
   /// Light - Default Size = 20,  FontWeight.w300
   DisplayText light({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     TextAlign align = TextAlign.start,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
@@ -203,7 +203,7 @@ extension DisplayTextUtils on String {
 
   /// Light **Span** - Default Size = 20, FontWeight.w300
   TextSpan lightSpan({
-    Color color = SonrColor.Black,
+    Color color = AppColor.Black,
     FontStyle fontStyle = FontStyle.normal,
     double? fontSize,
   }) =>
@@ -300,7 +300,7 @@ class DisplayText extends StatelessWidget {
     if (style == DisplayTextStyle.Hero) {
       return Center(
         child: ShaderMask(
-            shaderCallback: (bounds) => SonrGradients.CrystalRiver.createShader(
+            shaderCallback: (bounds) => DesignGradients.CrystalRiver.createShader(
                   Rect.fromLTWH(0, 0, bounds.width, bounds.height),
                 ),
             child: _buildText(context, TextAlign.center)),

@@ -32,7 +32,6 @@ class ColorButton extends StatelessWidget {
   // @ Primary Button //
   factory ColorButton.primary({
     required Function onPressed,
-    Gradient? gradient,
     Function? onLongPressed,
     Widget? child,
     String? tooltip,
@@ -46,7 +45,7 @@ class ColorButton extends StatelessWidget {
     // Build Child
     return ColorButton(
         decoration: BoxDecoration(
-            gradient: SonrGradient.Theme(radius: 2),
+            gradient: AppGradients.Theme(radius: 2),
             borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
             boxShadow: AppTheme.RectBoxShadow),
         onPressed: onPressed,
@@ -76,7 +75,7 @@ class ColorButton extends StatelessWidget {
     // Build Child
     return ColorButton(
         decoration: BoxDecoration(
-          color: color != null ? color : SonrColor.AccentPurple,
+          color: color != null ? color : AppColor.AccentPurple,
           borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         ),
         onPressed: onPressed,

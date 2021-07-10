@@ -160,17 +160,17 @@ class ShowcaseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Showcase(
         key: globalKey,
-        showcaseBackgroundColor: SonrColor.Primary,
+        showcaseBackgroundColor: AppColor.Primary,
         shapeBorder: shapeBorder,
         contentPadding: EdgeInsets.all(8),
         showArrow: true,
         disableAnimation: false,
         description: description,
-        descTextStyle: DisplayTextStyle.Light.style(color: SonrColor.White, fontSize: 20),
+        descTextStyle: DisplayTextStyle.Light.style(color: AppColor.White, fontSize: 20),
         overlayColor: Colors.black,
         overlayOpacity: 0.85,
         title: "$title",
-        titleTextStyle: DisplayTextStyle.Subheading.style(color: SonrColor.White, fontSize: 28),
+        titleTextStyle: DisplayTextStyle.Subheading.style(color: AppColor.White, fontSize: 28),
         child: child,
       );
 }

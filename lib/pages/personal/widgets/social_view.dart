@@ -83,7 +83,7 @@ class _MediumItem extends StatelessWidget {
           child: Column(
             children: [
               ShapeContainer.wave(child: Image.network(medium!.posts!.first.thumbnail!), width: 150, height: 120),
-              medium!.posts!.first.title!.gradient(value: SonrGradients.PremiumDark, size: 16)
+              medium!.posts!.first.title!.gradient(value: DesignGradients.PremiumDark, size: 16)
             ],
           ),
         ),
@@ -96,7 +96,7 @@ class _MediumItem extends StatelessWidget {
         child: Column(
           children: [
             ShapeContainer.wave(child: Image.network(medium!.posts![index].thumbnail!), width: 275, height: 140),
-            medium!.posts![index].title!.gradient(value: SonrGradients.PremiumDark, size: 20),
+            medium!.posts![index].title!.gradient(value: DesignGradients.PremiumDark, size: 20),
             PostText.description(medium!.posts![index].title!.length, medium!.posts![index].description!),
             PostText.date(medium!.posts![index].pubDate!)
           ],
