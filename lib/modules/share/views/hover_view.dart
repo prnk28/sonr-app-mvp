@@ -99,7 +99,10 @@ class _ShareHoverSession extends StatelessWidget {
           ],
         ));
       }
-      return SimpleIcons.Check.gradient();
+      Future.delayed(1500.milliseconds, () {
+        AppRoute.closePopup();
+      });
+      return SimpleIcons.Check.gradient(value: SonrGradients.ItmeoBranding);
     });
   }
 }
