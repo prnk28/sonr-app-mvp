@@ -63,11 +63,20 @@ class DeviceService extends GetxService {
     _device = await DeviceUtils.create();
 
     // Initialize Device
-    _connectivity(await Connectivity().checkConnectivity());
-    _connectivity.bindStream(Connectivity().onConnectivityChanged);
+    if (platform.isMobile) {
+      _connectivity(await Connectivity().checkConnectivity());
+      _connectivity.bindStream(Connectivity().onConnectivityChanged);
+      await Sounds.init();
+      // Analytics
+      if (_connectivity.value.hasInternet) {
+        // Initialize Firebase
+        await Firebase.initializeApp();
+      }
+    }
 
     // @ Setup Desktop
-    if (platform.isDesktop) {
+    else {
+      _connectivity(ConnectivityResult.wifi);
       // @ 1. Root Main Entry
       _main = MainEntry(
         title: "Sonr",
@@ -83,13 +92,7 @@ class DeviceService extends GetxService {
 
       // Init Tray
       _systemTray = Systray.init();
-    } else {
-      if (_connectivity.value.hasInternet) {
-        // Initialize Firebase
-        await Firebase.initializeApp();
-      }
     }
-    await Sounds.init();
     return this;
   }
 
