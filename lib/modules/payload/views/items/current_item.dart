@@ -100,7 +100,7 @@ class _CurrentActivityContent extends GetView<ActivityController> {
               fontSize: 18,
               color: AppTheme.ItemColor,
             ),
-            firstName.subheadingSpan(
+            firstName.capitalizeFirst!.subheadingSpan(
               fontSize: 18,
               color: AppTheme.ItemColor,
             )
