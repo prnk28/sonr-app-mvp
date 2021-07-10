@@ -87,8 +87,8 @@ class RegisterBottomSheet extends StatelessWidget {
         width: Get.width,
         height: 120,
         decoration: BoxDecoration(
-            boxShadow: AppTheme.boxShadow,
-            color: AppTheme.backgroundColor,
+            boxShadow: AppTheme.RectBoxShadow,
+            color: AppTheme.BackgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(37),
               topRight: Radius.circular(37),
@@ -141,7 +141,7 @@ class RegisterTextField extends GetView<RegisterController> {
               alignment: Alignment.centerLeft,
               child: [
                 type.label.toUpperCase().lightSpan(
-                      color: AppTheme.greyColor,
+                      color: AppTheme.GreyColor,
                       fontSize: 20,
                     ),
                 isError
@@ -153,13 +153,13 @@ class RegisterTextField extends GetView<RegisterController> {
               ].rich()),
           Container(
             decoration: BoxDecoration(
-              color: AppTheme.backgroundColor,
+              color: AppTheme.BackgroundColor,
               borderRadius: BorderRadius.circular(22),
             ),
             margin: EdgeInsets.only(left: 16, right: 16, top: 8),
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: TextField(
-              style: DisplayTextStyle.Light.style(color: AppTheme.itemColor, fontSize: 20),
+              style: DisplayTextStyle.Light.style(color: AppTheme.ItemColor, fontSize: 20),
               keyboardType: type.textInputType,
               autofocus: type.autoFocus,
               textInputAction: type.textInputAction,
@@ -176,7 +176,7 @@ class RegisterTextField extends GetView<RegisterController> {
                   ? decoration
                   : InputDecoration.collapsed(
                       hintText: hint,
-                      hintStyle: DisplayTextStyle.Paragraph.style(color: AppTheme.greyColor, fontSize: 20),
+                      hintStyle: DisplayTextStyle.Paragraph.style(color: AppTheme.GreyColor, fontSize: 20),
                     ),
             ),
           )

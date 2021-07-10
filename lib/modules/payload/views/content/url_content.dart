@@ -60,7 +60,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.primary(
               onPressed: () => _launchURL(),
               text: "Open",
-              icon: SonrIcons.Discover,
+              icon: SimpleIcons.Discover,
             ),
           ],
         ),
@@ -132,7 +132,7 @@ class URLContent extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
                 // URL Icon
-                Padding(padding: const EdgeInsets.only(left: 14.0, right: 8), child: SonrIcons.Link.gradient()),
+                Padding(padding: const EdgeInsets.only(left: 14.0, right: 8), child: SimpleIcons.Link.gradient()),
 
                 // Link Preview
                 Container(

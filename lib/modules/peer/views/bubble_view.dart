@@ -10,51 +10,12 @@ class PeerBubbleView extends GetView<PeerController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        ShareController.initPopup();
         AppRoute.positioned(
-            Infolist(
-              options: [
-                InfolistOption(
-                  peer.profile.fullName,
-                  peer.platform.iconData,
-                  isHeader: true,
-                  iconColor: peer.platform.defaultIconColor,
-                ),
-                InfolistOption("Camera", SonrIcons.Camera, onPressed: () {
-                  SenderService.choose(ChooseOption.Camera).then((value) {
-                    if (value != null) {
-                      // Create Invite and Send
-                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
-                    }
-                  });
-                }),
-                InfolistOption("Media", SonrIcons.Photos, onPressed: () {
-                  SenderService.choose(ChooseOption.Media).then((value) {
-                    if (value != null) {
-                      // Create Invite and Send
-                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
-                    }
-                  });
-                }),
-                InfolistOption("File", SonrIcons.Files, onPressed: () {
-                  SenderService.choose(ChooseOption.File).then((value) {
-                    if (value != null) {
-                      // Create Invite and Send
-                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
-                    }
-                  });
-                }),
-                InfolistOption("Contact", SonrIcons.ContactCard, onPressed: () {
-                  SenderService.choose(ChooseOption.Contact).then((value) {
-                    if (value != null) {
-                      // Create Invite and Send
-                      SenderService.invite(InviteRequestUtils.copyWithPeer(value, this.peer));
-                    }
-                  });
-                }),
-              ],
-            ),
-            parentKey: peerKey,
-            offset: Offset(-Get.width / 2, 20));
+          ShareHoverView(peer: peer),
+          parentKey: peerKey,
+          offset: Offset(-Get.width / 2, 20),
+        );
       },
       child: Container(
         key: peerKey,
@@ -75,7 +36,7 @@ class PeerBubbleView extends GetView<PeerController> {
       );
     } else {
       return BoxDecoration(
-        color: AppTheme.foregroundColor,
+        color: AppTheme.ForegroundColor,
         shape: BoxShape.circle,
       );
     }
@@ -84,7 +45,7 @@ class PeerBubbleView extends GetView<PeerController> {
   Widget _buildPeerInitials() {
     return peer.profile.initials.light(
       fontSize: 18,
-      color: AppTheme.greyColor,
+      color: AppTheme.GreyColor,
     );
   }
 }

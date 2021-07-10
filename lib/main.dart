@@ -28,7 +28,8 @@ class SplashPage extends StatelessWidget {
     DeviceService.keyboardHide();
     return GetMaterialApp(
       onInit: () => _checkInitialPage(),
-      themeMode: ThemeMode.system,
+      // debugShowCheckedModeBanner: false,
+      themeMode: Preferences.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       theme: AppTheme.LightTheme,
       darkTheme: AppTheme.DarkTheme,
       getPages: [

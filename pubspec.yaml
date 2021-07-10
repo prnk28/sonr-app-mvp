@@ -93,6 +93,7 @@ dependencies:
   # -- UI/UX --
   animate_do: ^2.0.0
   card_settings: ^2.0.3
+  flutter_svg: ^0.22.0
   introduction_screen: ^2.1.0
   lottie: ^1.0.1
   rive: ^0.7.7
@@ -115,10 +116,6 @@ flutter:
   uses-material-design: true
 
   fonts:
-  - family: AlongSans
-    fonts:
-    - asset: assets/fonts/AlongSans.otf
-
   - family:  RFlex
     fonts:
       - asset: assets/fonts/RFlex-100.otf
@@ -165,10 +162,12 @@ flutter:
 
   # -- Media --
   assets:
+    - assets/animations/lottie/
+    - assets/animations/rive/
     - assets/fonts/
-    - assets/images/
-    - assets/illustrations/
-    - assets/animations/
+    - assets/images/illustrations/
+    - assets/images/svg/
+    - assets/images/utility/
     - assets/sounds/
 
 

@@ -13,7 +13,7 @@ class PastActivityItem extends GetView<ActivityController> {
       child: BoxContainer(
         child: ListTile(
           title: item.messageText(),
-          trailing: ActionButton(onPressed: () => CardService.clearActivity(item), iconData: SonrIcons.Close),
+          trailing: ActionButton(onPressed: () => CardService.clearActivity(item), iconData: SimpleIcons.Close),
         ),
       ),
     );

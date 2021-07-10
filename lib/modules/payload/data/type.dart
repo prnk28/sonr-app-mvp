@@ -78,13 +78,13 @@ extension PostItemTypeUtils on PostItemType {
   IconData iconData() {
     switch (this) {
       case PostItemType.Media:
-        return SonrIcons.Album;
+        return SimpleIcons.Album;
       case PostItemType.Files:
-        return SonrIcons.Folder;
+        return SimpleIcons.Folder;
       case PostItemType.Contacts:
-        return SonrIcons.ContactCard;
+        return SimpleIcons.ContactCard;
       case PostItemType.Links:
-        return SonrIcons.Clip;
+        return SimpleIcons.Clip;
     }
   }
 
@@ -92,13 +92,13 @@ extension PostItemTypeUtils on PostItemType {
   String imagePath() {
     switch (this) {
       case PostItemType.Media:
-        return "assets/images/Gallery.png";
+        return "assets/images/icons/Gallery.png";
       case PostItemType.Files:
-        return "assets/images/Files.png";
+        return "assets/images/icons/Files.png";
       case PostItemType.Contacts:
-        return "assets/images/Contacts.png";
+        return "assets/images/icons/Contacts.png";
       case PostItemType.Links:
-        return "assets/images/Links.png";
+        return "assets/images/icons/Links.png";
     }
   }
 

@@ -69,11 +69,11 @@ class _ProfileInfoView extends GetView<PersonalController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(padding: EdgeInsets.only(top: 12)),
-          Divider(color: AppTheme.dividerColor, indent: 16, endIndent: 16),
+          Divider(color: AppTheme.DividerColor, indent: 16, endIndent: 16),
           Padding(padding: EdgeInsets.only(top: 12)),
 
           // First/Last Name
-          ContactService.contact.value.fullName.subheading(color: AppTheme.itemColor, fontSize: 32),
+          ContactService.contact.value.fullName.subheading(color: AppTheme.ItemColor, fontSize: 32),
 
           // Username
           ContactSName(),
@@ -110,7 +110,7 @@ class _ProfileInfoView extends GetView<PersonalController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [SonrIcons.Twitter.gradient(size: 32), Padding(padding: EdgeInsets.all(8)), "Tap to Link Twitter".paragraph()],
+                      children: [SimpleIcons.Twitter.gradient(size: 32), Padding(padding: EdgeInsets.all(8)), "Tap to Link Twitter".paragraph()],
                     ),
                   ),
                 ),
@@ -131,22 +131,22 @@ class _ProfileContactButtons extends GetView<PersonalController> {
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
           ActionButton(
             onPressed: () {},
-            iconData: SonrIcons.Call,
+            iconData: SimpleIcons.Call,
             label: "Call",
           ),
           ActionButton(
             onPressed: () {},
-            iconData: SonrIcons.Message,
+            iconData: SimpleIcons.Message,
             label: "SMS",
           ),
           ActionButton(
             onPressed: () {},
-            iconData: SonrIcons.Video,
+            iconData: SimpleIcons.Video,
             label: "Video",
           ),
           ActionButton(
             onPressed: () {},
-            iconData: SonrIcons.ATSign,
+            iconData: SimpleIcons.ATSign,
             label: "Me",
           ),
         ]),

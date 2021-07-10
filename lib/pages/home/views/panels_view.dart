@@ -29,10 +29,9 @@ class AccessView extends GetView<HomeController> {
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ImageButton(
-                          path: PostItemType.Media.imagePath(),
+                          icon: ComplexIcons.MediaSelect,
                           label: PostItemType.Media.name(),
-                          imageFit: BoxFit.fitWidth,
-                          imageWidth: 130,
+                          size: 100,
                           onPressed: () {
                             if (PostItemType.Media.count() > 0) {
                               AppPage.Posts.to(args: PostsPageArgs.media());
@@ -45,7 +44,8 @@ class AccessView extends GetView<HomeController> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: ImageButton(
-                          path: PostItemType.Files.imagePath(),
+                          size: 100,
+                          icon: ComplexIcons.DocumentsBox,
                           label: PostItemType.Files.name(),
                           onPressed: () {
                             if (PostItemType.Files.count() > 0) {
@@ -64,7 +64,8 @@ class AccessView extends GetView<HomeController> {
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ImageButton(
-                          path: PostItemType.Contacts.imagePath(),
+                          size: 100,
+                          icon: ComplexIcons.LobbyGroup,
                           label: PostItemType.Contacts.name(),
                           onPressed: () {
                             if (PostItemType.Contacts.count() > 0) {
@@ -78,9 +79,8 @@ class AccessView extends GetView<HomeController> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: ImageButton(
-                          path: PostItemType.Links.imagePath(),
-                          imageWidth: 90,
-                          imageHeight: 90,
+                          icon: ComplexIcons.Clip,
+                          size: 100,
                           label: PostItemType.Links.name(),
                           onPressed: () {
                             if (PostItemType.Links.count() > 0) {
@@ -116,7 +116,7 @@ class NearbyListView extends GetView<HomeController> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 8),
-              child: "Nearby Devices".subheading(align: TextAlign.start, color: AppTheme.itemColor),
+              child: "Nearby Devices".subheading(align: TextAlign.start, color: AppTheme.ItemColor),
             ),
           ),
           Padding(
@@ -156,7 +156,7 @@ class _LocalEmptyView extends GetView<HomeController> {
       child: Container(
         child: [
           Image.asset(
-            'assets/illustrations/EmptyLobby.png',
+            'assets/images/illustrations/EmptyLobby.png',
             height: Height.ratio(0.45),
             fit: BoxFit.fitWidth,
           ),

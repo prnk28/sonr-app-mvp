@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:sonr_app/style/style.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 import 'package:flutter/material.dart';
 import 'color.dart';
@@ -45,18 +46,26 @@ class SonrGradient {
   static Gradient get Critical => _bottomUp([SonrColor.fromHex('#ff176b'), SonrColor.fromHex('#ff176b', opacity: 0.7)]);
 
   /// Returns Theme Gradient
-  static Gradient Theme({double radius = 0.72}) => RadialGradient(
-        colors: [
-          Color(0xffFFCF14),
-          Color(0xffF3ACFF),
-          Color(0xff8AECFF),
-        ],
-        stops: [0, 0.45, 1],
-        center: Alignment.center,
-        focal: Alignment.topRight,
-        tileMode: TileMode.clamp,
-        radius: radius,
-      );
+  static Gradient Theme({double radius = 0.72}) {
+    final lightColors = [
+      Color(0xffFFCF14),
+      Color(0xffF3ACFF),
+      Color(0xff8AECFF),
+    ];
+    final darkColors = [
+      Color(0xffFFCF14),
+      Color(0xffEE8FFF),
+      Color(0xff38DEFF),
+    ];
+    return RadialGradient(
+      colors: Get.isDarkMode ? darkColors : lightColors,
+      stops: [0, 0.45, 1],
+      center: Alignment.center,
+      focal: Alignment.topRight,
+      tileMode: TileMode.clamp,
+      radius: radius,
+    );
+  }
 }
 
 class SonrGradients {

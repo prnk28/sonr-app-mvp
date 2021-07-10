@@ -1,0 +1,19 @@
+<svg width="73" height="44" viewBox="0 0 73 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="3.5" y="3" width="67" height="38" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M70 3.5L37 24.5" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 32.3641L27.5 18.6865L4 32.3641Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M70 32.3641L46.5 18.6865L70 32.3641Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M37 24.5L4 3.5" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="70" cy="3" r="2.25" transform="rotate(-90 70 3)" fill="#C2C2C2"/>
+<circle cx="70" cy="3" r="2.25" transform="rotate(-90 70 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="70" cy="3" r="2.25" transform="rotate(-90 70 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="26.5" cy="18" r="2.25" transform="rotate(-90 26.5 18)" fill="#C2C2C2"/>
+<circle cx="26.5" cy="18" r="2.25" transform="rotate(-90 26.5 18)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="26.5" cy="18" r="2.25" transform="rotate(-90 26.5 18)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="46.5" cy="18" r="2.25" transform="rotate(-90 46.5 18)" fill="#C2C2C2"/>
+<circle cx="46.5" cy="18" r="2.25" transform="rotate(-90 46.5 18)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="46.5" cy="18" r="2.25" transform="rotate(-90 46.5 18)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3" cy="41" r="2.25" transform="rotate(-90 3 41)" fill="#C2C2C2"/>
+<circle cx="3" cy="41" r="2.25" transform="rotate(-90 3 41)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3" cy="41" r="2.25" transform="rotate(-90 3 41)" stroke="#151515" stroke-width="1.5"/>
+</svg>

@@ -36,11 +36,11 @@ class CameraView extends StatelessWidget {
                 Container(
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
-                  child: PlainIconButton(
+                  child: ActionButton(
                       onPressed: () {
                         Get.back();
                       },
-                      icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart)),
+                      iconData: SimpleIcons.Close),
                 ),
 
                 // Video Duration

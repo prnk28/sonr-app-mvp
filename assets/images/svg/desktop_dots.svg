@@ -1,0 +1,18 @@
+<svg width="90" height="72" viewBox="0 0 90 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="3" y="1" width="84" height="58" rx="2" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.5 51.5H86.5241" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M36.5042 59C36.5042 59 35.7367 67.0155 35.57 67.6223C35.4033 68.2291 34.9204 68.5059 34.7177 68.6525C34.5149 68.799 32.1448 70.2665 32.0069 70.5405C31.869 70.8146 33.8219 70.9704 35.0854 70.9704C36.3489 70.9704 45.562 70.9704 45.562 70.9704" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M53.0578 59C53.0578 59 53.8253 67.0155 53.992 67.6223C54.1586 68.2291 54.6415 68.5059 54.8443 68.6525C55.047 68.799 57.4172 70.2665 57.555 70.5405C57.6929 70.8146 55.7401 70.9704 54.4766 70.9704C53.2131 70.9704 44 70.9704 44 70.9704" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="3" cy="51" r="2.25" transform="rotate(-90 3 51)" fill="#C2C2C2"/>
+<circle cx="3" cy="51" r="2.25" transform="rotate(-90 3 51)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3" cy="51" r="2.25" transform="rotate(-90 3 51)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="87" cy="51" r="2.25" transform="rotate(-90 87 51)" fill="#C2C2C2"/>
+<circle cx="87" cy="51" r="2.25" transform="rotate(-90 87 51)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="87" cy="51" r="2.25" transform="rotate(-90 87 51)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="36" cy="59" r="2.25" transform="rotate(-90 36 59)" fill="#C2C2C2"/>
+<circle cx="36" cy="59" r="2.25" transform="rotate(-90 36 59)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="36" cy="59" r="2.25" transform="rotate(-90 36 59)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="53" cy="59" r="2.25" transform="rotate(-90 53 59)" fill="#C2C2C2"/>
+<circle cx="53" cy="59" r="2.25" transform="rotate(-90 53 59)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="53" cy="59" r="2.25" transform="rotate(-90 53 59)" stroke="#151515" stroke-width="1.5"/>
+</svg>

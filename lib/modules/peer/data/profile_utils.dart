@@ -34,12 +34,12 @@ class ProfileSName extends StatelessWidget {
           await HapticFeedback.mediumImpact();
           Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
             Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
-            AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
+            AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
           });
         },
         child: [
-          profile.sName.lightSpan(fontSize: 20, color: AppTheme.itemColor),
-          ".snr/".paragraphSpan(fontSize: 20, color: AppTheme.greyColor),
+          profile.sName.lightSpan(fontSize: 20, color: AppTheme.ItemColor),
+          ".snr/".paragraphSpan(fontSize: 20, color: AppTheme.GreyColor),
         ].rich());
   }
 }
@@ -77,13 +77,13 @@ class ProfileAvatar extends StatelessWidget {
           margin: EdgeInsets.all(8),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: backgroundColor ?? AppTheme.foregroundColor,
+            color: backgroundColor ?? AppTheme.ForegroundColor,
             shape: BoxShape.circle,
           ),
           child: profile.profileImage(
             width: size * 0.7,
             height: size * 0.7,
-            placeholder: SonrIcons.User.gradient(size: size * 0.7),
+            placeholder: SimpleIcons.User.gradient(size: size * 0.7),
           )),
     );
   }
@@ -111,19 +111,19 @@ class ProfileOwnerRow extends StatelessWidget {
                       ? CircleAvatar(
                           backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
                         )
-                      : SonrIcons.User.gradient(size: 24),
+                      : SimpleIcons.User.gradient(size: 24),
                 )),
             Padding(child: ProfileSName(profile: profile), padding: EdgeInsets.only(left: 4)),
             Spacer(),
             Padding(
                 child: ActionButton(
                   onPressed: () {},
-                  iconData: SonrIcons.Statistic,
+                  iconData: SimpleIcons.Statistic,
                 ),
                 padding: EdgeInsets.only(right: 4)),
             ActionButton(
               onPressed: () {},
-              iconData: SonrIcons.Menu,
+              iconData: SimpleIcons.Menu,
             ),
           ],
         ));

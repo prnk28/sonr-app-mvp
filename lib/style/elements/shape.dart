@@ -59,8 +59,13 @@ class ShapeContainer extends StatelessWidget {
     return ClipPath(
       clipper: path,
       child: Container(
-          //decoration: SonrTheme.boxDecoration,
-          child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
+          decoration: decoration,
+          child: Container(
+            height: height,
+            width: width,
+            decoration: decoration ?? BoxDecoration(),
+            child: child,
+          )),
     );
   }
 }

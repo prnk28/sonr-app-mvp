@@ -8,6 +8,7 @@ import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/pages/home/controllers/home_controller.dart';
 import 'package:sonr_app/pages/register/register.dart';
+import 'package:sonr_app/pages/settings/settings.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
@@ -33,6 +34,10 @@ enum AppPage {
   /// ### Activity `To`
   /// Current Sessions, Past Cards
   Activity,
+
+  /// ### Settings `To`
+  /// Profile Settings, App Settings
+  Settings,
 
   /// ### Error `To`
   /// Empty Items, No Connection, No Permission
@@ -115,7 +120,13 @@ extension AppRoute on AppPage {
   }
 
   /// If this Page is Full Screen Dialog
-  bool get isDialog => this == AppPage.Activity || this == AppPage.Share || this == AppPage.Detail || this == AppPage.Error || this == AppPage.Posts;
+  bool get isDialog =>
+      this == AppPage.Activity ||
+      this == AppPage.Share ||
+      this == AppPage.Detail ||
+      this == AppPage.Error ||
+      this == AppPage.Posts ||
+      this == AppPage.Settings;
 
   /// Returns Page Name
   String get name {
@@ -178,6 +189,8 @@ extension AppRoute on AppPage {
         return () => ActivityPopup();
       case AppPage.Flat:
         return () => FlatModeOverlay();
+      case AppPage.Settings:
+        return () => SettingsPage();
       default:
         return () {
           if (DeviceService.isMobile) {
@@ -453,6 +466,9 @@ extension AppRoute on AppPage {
       Get.bottomSheet(
           dismissible
               ? BlurredBackground(
+                  onTapped: () {
+                    onDismissed!(DismissDirection.down);
+                  },
                   child: Dismissible(
                     key: key!,
                     child: child,

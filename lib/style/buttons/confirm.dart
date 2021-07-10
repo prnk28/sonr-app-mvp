@@ -61,21 +61,21 @@ class ConfirmButton extends StatelessWidget {
     BoxDecoration defaultDecoration = BoxDecoration(
       gradient: SonrGradient.Neutral,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: AppTheme.boxShadow,
+      boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
       gradient: SonrGradient.Primary,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: AppTheme.boxShadow,
+      boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
       gradient: SonrGradient.Tertiary,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: AppTheme.boxShadow,
+      boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Build Child
@@ -87,7 +87,7 @@ class ConfirmButton extends StatelessWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildCompleteChild(SonrIcons.CheckShield, "Saved!"),
+      completeChild: ButtonUtility.buildCompleteChild(SimpleIcons.CheckShield, "Saved!"),
       width: width,
       padding: padding,
       margin: margin,
@@ -123,21 +123,21 @@ class ConfirmButton extends StatelessWidget {
     BoxDecoration defaultDecoration = BoxDecoration(
       gradient: SonrGradient.Neutral,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: AppTheme.boxShadow,
+      boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
       gradient: SonrGradient.Primary,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: AppTheme.boxShadow,
+      boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
       gradient: SonrGradient.Critical,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-      boxShadow: AppTheme.boxShadow,
+      boxShadow: AppTheme.RectBoxShadow,
     );
 
     // Build Child
@@ -149,7 +149,7 @@ class ConfirmButton extends StatelessWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildCompleteChild(SonrIcons.Trash, "Deleted."),
+      completeChild: ButtonUtility.buildCompleteChild(SimpleIcons.Trash, "Deleted."),
       width: width,
       padding: padding,
       margin: margin,

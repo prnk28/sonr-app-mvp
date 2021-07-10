@@ -13,7 +13,7 @@ class LocalView extends GetView<TransferController> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            "Around Me".section(align: TextAlign.start, color: AppTheme.itemColor),
+            "Around Me".section(align: TextAlign.start, color: AppTheme.ItemColor),
             Obx(() => ArrowButton.checkList(
                   title: _buildArrowTitle(controller.phonesEnabled.value, controller.desktopsEnabled.value),
                   onSelectedOption: (index) {
@@ -67,7 +67,7 @@ class _LocalEmptyView extends GetView<TransferController> {
         child: [
           Padding(padding: EdgeInsets.only(top: 24)),
           Image.asset(
-            'assets/illustrations/EmptyLobby.png',
+            'assets/images/illustrations/EmptyLobby.png',
             height: Height.ratio(0.35),
             fit: BoxFit.fitHeight,
           ),

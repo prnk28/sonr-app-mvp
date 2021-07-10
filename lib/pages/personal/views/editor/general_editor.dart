@@ -37,13 +37,13 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ Dark Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Dark Mode Title
-                  "Dark Mode".light(),
+                  "Dark Mode".light(color: AppTheme.ItemColor),
 
                   // Dark Mode Switch
                   Switch(
-                    activeColor: AppTheme.backgroundColor,
+                    activeColor: AppTheme.BackgroundColor,
                     activeTrackColor: SonrColor.Primary,
-                    inactiveTrackColor: AppTheme.itemColor,
+                    inactiveTrackColor: AppTheme.ItemColor,
                     value: controller.isDarkModeEnabled.value,
                     onChanged: (val) => controller.setDarkMode(val),
                   )
@@ -53,13 +53,13 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ Flat Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Dark Mode Title
-                  "Flat Mode".light(color: AppTheme.itemColor),
+                  "Flat Mode".light(color: AppTheme.ItemColor),
 
                   // Dark Mode Switch
                   Switch(
-                    activeColor: AppTheme.backgroundColor,
+                    activeColor: AppTheme.BackgroundColor,
                     activeTrackColor: SonrColor.Primary,
-                    inactiveTrackColor: AppTheme.itemColor,
+                    inactiveTrackColor: AppTheme.ItemColor,
                     value: controller.isFlatModeEnabled.value,
                     onChanged: (val) => controller.setFlatMode(val),
                   )
@@ -69,13 +69,13 @@ class GeneralEditorView extends GetView<EditorController> {
                 // @ PointShare Mode
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // Point Share Title
-                  "Point To Share".light(color: AppTheme.itemColor),
+                  "Point To Share".light(color: AppTheme.ItemColor),
 
                   // Point Share Mode Switch
                   Switch(
-                      activeColor: AppTheme.backgroundColor,
+                      activeColor: AppTheme.BackgroundColor,
                       activeTrackColor: SonrColor.Primary,
-                      inactiveTrackColor: AppTheme.itemColor,
+                      inactiveTrackColor: AppTheme.ItemColor,
                       value: controller.isPointToShareEnabled.value,
                       onChanged: (val) async {
                         controller.setPointShare(val);
@@ -86,7 +86,7 @@ class GeneralEditorView extends GetView<EditorController> {
                 Container(
                   padding: EdgeInsets.only(bottom: 8),
                   alignment: Alignment.topCenter,
-                  child: "Alpha - 0.9.3".light(color: AppTheme.itemColor),
+                  child: "Alpha - 0.9.3".light(color: AppTheme.ItemColor),
                 ),
               ]),
             ))
@@ -108,7 +108,7 @@ class _EditOptionsButton extends GetView<EditorController> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Preferences.isDarkMode ? option.iconData.whiteWith(size: 40) : option.iconData.blackWith(size: 40),
           Padding(padding: EdgeInsets.only(top: 4)),
-          Preferences.isDarkMode ? option.name.light(color: AppTheme.itemColor) : option.name.light(color: AppTheme.itemColor),
+          Preferences.isDarkMode ? option.name.light(color: AppTheme.ItemColor) : option.name.light(color: AppTheme.ItemColor),
         ]),
       ),
     );

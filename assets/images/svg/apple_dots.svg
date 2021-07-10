@@ -1,0 +1,24 @@
+<svg width="68" height="81" viewBox="0 0 68 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M34 77.5294C39.2105 77.5294 35.7368 81 46.1579 81C56.5789 81 67 60.1765 67 46.2941C67 32.4118 58.3158 22 47.8947 22C37.4737 22 37.4737 25.4706 34 25.4706C30.5263 25.4706 30.5263 22 20.1053 22C9.68421 22 1 32.4118 1 46.2941C1 60.1765 11.4211 81 21.8421 81C32.2632 81 28.7895 77.5294 34 77.5294Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M35 23V16.5C35 12.925 31.85 10 28 10H21" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M42 16C50.2833 16 57 8.83556 57 0C48.7167 0 42 7.168 42 16Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="46" cy="5" r="2.25" transform="rotate(-90 46 5)" fill="#C2C2C2"/>
+<circle cx="46" cy="5" r="2.25" transform="rotate(-90 46 5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="46" cy="5" r="2.25" transform="rotate(-90 46 5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="22" cy="10" r="2.25" transform="rotate(-90 22 10)" fill="#C2C2C2"/>
+<circle cx="22" cy="10" r="2.25" transform="rotate(-90 22 10)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="22" cy="10" r="2.25" transform="rotate(-90 22 10)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3.5" cy="60" r="2.25" transform="rotate(-90 3.5 60)" fill="#C2C2C2"/>
+<circle cx="3.5" cy="60" r="2.25" transform="rotate(-90 3.5 60)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3.5" cy="60" r="2.25" transform="rotate(-90 3.5 60)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="64.5" cy="59" r="2.25" transform="rotate(-90 64.5 59)" fill="#C2C2C2"/>
+<circle cx="64.5" cy="59" r="2.25" transform="rotate(-90 64.5 59)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="64.5" cy="59" r="2.25" transform="rotate(-90 64.5 59)" stroke="#151515" stroke-width="1.5"/>
+</g>
+<defs>
+<clipPath id="clip0">
+<rect width="68" height="81" fill="white"/>
+</clipPath>
+</defs>
+</svg>

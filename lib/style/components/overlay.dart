@@ -34,7 +34,7 @@ class AlertOverlay extends StatelessWidget {
                         hasDecided(true);
                         Future.delayed(250.milliseconds, () => Get.back());
                       },
-                      icon: SonrIcons.Check,
+                      icon: SimpleIcons.Check,
                       text: buttonText,
                     ),
                   ]),
@@ -172,7 +172,7 @@ class QuestionOverlay extends StatelessWidget {
                           hasDecided(true);
                           Future.delayed(250.milliseconds, () => onDecision(true));
                         },
-                        icon: SonrIcons.Check,
+                        icon: SimpleIcons.Check,
                         text: acceptTitle,
                       ),
                     ]),

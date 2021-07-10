@@ -40,14 +40,14 @@ class ContactContent extends StatelessWidget {
             ActionButton(
               onPressed: () {},
               label: "Mobile",
-              iconData: SonrIcons.Call,
+              iconData: SimpleIcons.Call,
               //    size: 72,
             ),
             Padding(padding: EdgeInsets.all(6)),
             ActionButton(
               onPressed: () {},
               label: "Text",
-              iconData: SonrIcons.Mail,
+              iconData: SimpleIcons.Mail,
               //    size: 72,
             ),
             Padding(padding: EdgeInsets.all(6)),
@@ -55,7 +55,7 @@ class ContactContent extends StatelessWidget {
                 onPressed: () {},
                 label: "Video",
                 //    size: 72,
-                iconData: SonrIcons.VideoCamera),
+                iconData: SimpleIcons.VideoCamera),
           ])),
 
           Divider(),
@@ -145,7 +145,7 @@ class ContactAuthView extends StatelessWidget {
               },
               text: "Accept",
               gradient: SonrGradient.Tertiary,
-              icon: SonrIcons.Check,
+              icon: SimpleIcons.Check,
             ),
           ],
         ),
@@ -188,11 +188,11 @@ class ContactItemView extends StatelessWidget {
               ActionButton(
                 onPressed: () {},
                 label: "Mobile",
-                iconData: SonrIcons.Call,
+                iconData: SimpleIcons.Call,
                 //              size: 72,
               ),
               Padding(padding: EdgeInsets.all(6)),
-              ActionButton(onPressed: () {}, label: "Text", iconData: SonrIcons.Mail
+              ActionButton(onPressed: () {}, label: "Text", iconData: SimpleIcons.Mail
                   //            size: 72,
                   ),
               Padding(padding: EdgeInsets.all(6)),
@@ -200,7 +200,7 @@ class ContactItemView extends StatelessWidget {
                   onPressed: () {},
                   label: "Video",
                   //            size: 72,
-                  iconData: SonrIcons.VideoCamera),
+                  iconData: SimpleIcons.VideoCamera),
             ])),
 
             Divider(),

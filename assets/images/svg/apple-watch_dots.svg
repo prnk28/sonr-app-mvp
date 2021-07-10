@@ -1,0 +1,19 @@
+<svg width="51" height="86" viewBox="0 0 51 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="16.5" width="49" height="53" rx="9" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M42.0778 69.0001C42.0778 69.0001 39.6402 72.6137 39.6402 76.7667C39.6402 80.9196 37.7649 85.2275 33.8894 85.2275C30.0139 85.2275 26 85.2275 26 85.2275" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 69.0001C10 69.0001 12.4376 72.6137 12.4376 76.7667C12.4376 80.9196 14.3129 85.2275 18.1884 85.2275C22.0639 85.2275 26.0778 85.2275 26.0778 85.2275" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M42.0778 17.2274C42.0778 17.2274 39.6402 13.6138 39.6402 9.46088C39.6402 5.30795 37.7649 1 33.8894 1C30.0139 1 26 1 26 1" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 17.2274C10 17.2274 12.4376 13.6138 12.4376 9.46088C12.4376 5.30795 14.3129 1 18.1884 1C22.0639 1 26.0778 1 26.0778 1" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="11" cy="69.5" r="2.25" transform="rotate(-90 11 69.5)" fill="#C2C2C2"/>
+<circle cx="11" cy="69.5" r="2.25" transform="rotate(-90 11 69.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="11" cy="69.5" r="2.25" transform="rotate(-90 11 69.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="11" cy="16.5" r="2.25" transform="rotate(-90 11 16.5)" fill="#C2C2C2"/>
+<circle cx="11" cy="16.5" r="2.25" transform="rotate(-90 11 16.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="11" cy="16.5" r="2.25" transform="rotate(-90 11 16.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="41" cy="69.5" r="2.25" transform="rotate(-90 41 69.5)" fill="#C2C2C2"/>
+<circle cx="41" cy="69.5" r="2.25" transform="rotate(-90 41 69.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="41" cy="69.5" r="2.25" transform="rotate(-90 41 69.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="41" cy="16.5" r="2.25" transform="rotate(-90 41 16.5)" fill="#C2C2C2"/>
+<circle cx="41" cy="16.5" r="2.25" transform="rotate(-90 41 16.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="41" cy="16.5" r="2.25" transform="rotate(-90 41 16.5)" stroke="#151515" stroke-width="1.5"/>
+</svg>

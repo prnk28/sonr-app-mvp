@@ -15,16 +15,16 @@ class ProfileAvatarField extends GetView<PersonalController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(color: AppTheme.foregroundColor, shape: BoxShape.circle, boxShadow: AppTheme.boxShadow),
+                decoration: BoxDecoration(color: AppTheme.ForegroundColor, shape: BoxShape.circle, boxShadow: AppTheme.RectBoxShadow),
                 child: Container(
                   width: 100,
                   height: 100,
                   child: ContactService.contact.value.hasPicture()
                       ? CircleAvatar(
-                          backgroundColor: AppTheme.foregroundColor,
+                          backgroundColor: AppTheme.ForegroundColor,
                           foregroundImage: MemoryImage(Uint8List.fromList(ContactService.contact.value.picture)),
                         )
-                      : SonrIcons.Avatar.greyWith(size: 100),
+                      : SimpleIcons.Avatar.greyWith(size: 100),
                 )),
           ),
         );
@@ -37,13 +37,13 @@ class ProfileAvatarField extends GetView<PersonalController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(color: AppTheme.foregroundColor, shape: BoxShape.circle, boxShadow: AppTheme.boxShadow),
+                decoration: BoxDecoration(color: AppTheme.ForegroundColor, shape: BoxShape.circle, boxShadow: AppTheme.RectBoxShadow),
                 child: Container(
                     width: 100,
                     height: 100,
                     child: CircleAvatar(
-                      child: SonrIcons.Avatar.greyWith(size: 80),
-                      backgroundColor: AppTheme.foregroundColor,
+                      child: SimpleIcons.Avatar.greyWith(size: 80),
+                      backgroundColor: AppTheme.ForegroundColor,
                     ))),
           ),
         );
@@ -72,7 +72,7 @@ class EditPictureView extends GetView<PersonalController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PlainButton(icon: SonrIcons.Close, onPressed: controller.exitToViewing),
+                        ActionButton(iconData: SimpleIcons.Close, onPressed: controller.exitToViewing),
                         headerText.subheading(),
                         Padding(padding: EdgeInsets.all(16))
                       ]),
@@ -139,7 +139,7 @@ class _CameraPermissionsView extends GetView<PersonalController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/illustrations/Camera.png'), fit: BoxFit.fitWidth),
+          image: DecorationImage(image: AssetImage('assets/images/illustrations/Camera.png'), fit: BoxFit.fitWidth),
           borderRadius: BorderRadius.circular(12)),
       padding: EdgeInsets.only(bottom: 24),
       child: Align(

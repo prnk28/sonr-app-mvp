@@ -1,4 +1,3 @@
-import 'package:rive/rive.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
@@ -13,13 +12,7 @@ import 'package:sonr_app/pages/transfer/transfer.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
-  }
-
-  // Get Rive File for Peer Bubble
-  Future<RiveFile> _getRiveDataFile() async {
-    var data = await RiveBoard.Bubble.load();
-    return RiveFile.import(data);
+    Get.create<PeerController>(() => PeerController());
   }
 }
 
@@ -27,14 +20,14 @@ class InitialBinding implements Bindings {
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<HomeController>(HomeController(), permanent: true);
+    Get.put<HomeController>(HomeController());
     // Subsidary Controllers
     Get.put(ActivityController());
 
     // Place Device Specific Controllers
     if (DeviceService.isMobile) {
-      Get.put(ShareController(), permanent: true);
-      Get.put<PersonalController>(PersonalController(), permanent: true);
+      Get.put(ShareController());
+      Get.put<PersonalController>(PersonalController());
       Get.put<IntelController>(IntelController(), permanent: true);
       Get.put<EditorController>(EditorController(), permanent: true);
       Get.create<TileController>(() => TileController());
@@ -57,7 +50,7 @@ class TransferBinding implements Bindings {
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
     Get.put<PositionController>(PositionController(), permanent: true);
-    Get.put<ComposeController>(ComposeController(), permanent: true);
+    Get.put<ComposeController>(ComposeController());
     Get.create<ItemController>(() => ItemController());
   }
 }

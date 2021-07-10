@@ -21,7 +21,7 @@ class CompletedPopup extends GetView<ActivityController> {
         child: ColorButton.primary(
           onPressed: () => controller.exportTransfer(transfer),
           text: "Export",
-          icon: SonrIcons.ShareOutside,
+          icon: SimpleIcons.ShareOutside,
         ),
       ),
     ]);

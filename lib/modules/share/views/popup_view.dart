@@ -28,7 +28,7 @@ class _SharePopupViewState extends State<SharePopupView> {
         extendBodyBehindAppBar: false,
         extendBody: true,
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppTheme.backgroundColor,
+        backgroundColor: AppTheme.BackgroundColor,
         appBar: DetailAppBar(
           title: "Share",
           onPressed: () => controller.close(),
@@ -38,7 +38,7 @@ class _SharePopupViewState extends State<SharePopupView> {
                 type: ShowcaseType.ShareConfirm,
                 child: ActionButton(
                   onPressed: () => controller.confirmMediaSelection(),
-                  iconData: SonrIcons.Share,
+                  iconData: SimpleIcons.Share,
                   banner: Logger.userAppFirstTime ? null : ActionBanner.count(controller.selectedItems.length),
                 ),
               )),
@@ -53,13 +53,13 @@ class _SharePopupViewState extends State<SharePopupView> {
               pinned: true,
               floating: true,
               automaticallyImplyLeading: false,
-              backgroundColor: AppTheme.backgroundColor,
+              backgroundColor: AppTheme.BackgroundColor,
               forceElevated: false,
             ),
             SliverPadding(padding: EdgeInsets.only(top: 24)),
             // @ Builds List of Social Tile
             Obx(() {
-              if (controller.status.value.isReady) {
+              if (controller.viewStatus.value.isReady) {
                 return SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -108,9 +108,9 @@ class ShareOptionsRow extends StatelessWidget {
       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         ShowcaseItem.fromType(type: ShowcaseType.CameraPick, child: const _ShareCameraButtonItem()),
-        VerticalDivider(color: AppTheme.dividerColor),
+        VerticalDivider(color: AppTheme.DividerColor),
         ShowcaseItem.fromType(type: ShowcaseType.ContactPick, child: const _ShareContactButtonItem()),
-        VerticalDivider(color: AppTheme.dividerColor),
+        VerticalDivider(color: AppTheme.DividerColor),
         ShowcaseItem.fromType(type: ShowcaseType.FilePick, child: const _ShareFileButtonItem()),
       ]),
     );
@@ -127,11 +127,9 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
       child: ImageButton(
         label: 'Camera',
-        imageWidth: K_ROW_BUTTON_SIZE,
-        imageHeight: K_ROW_BUTTON_SIZE,
-        circleSize: K_ROW_CIRCLE_SIZE,
         onPressed: controller.chooseCamera,
-        path: 'assets/images/Camera.png',
+        icon: ComplexIcons.Camera,
+        size: K_ROW_CIRCLE_SIZE,
       ),
     );
   }
@@ -147,11 +145,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'File',
-          imageWidth: K_ROW_BUTTON_SIZE,
-          imageHeight: K_ROW_BUTTON_SIZE,
-          circleSize: K_ROW_CIRCLE_SIZE,
+          icon: ComplexIcons.Document,
+          size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
-          path: 'assets/images/Folder.png',
         ));
   }
 }
@@ -166,11 +162,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
         child: ImageButton(
           label: 'Contact',
-          imageWidth: K_ROW_BUTTON_SIZE,
-          imageHeight: K_ROW_BUTTON_SIZE,
-          circleSize: K_ROW_CIRCLE_SIZE,
+          icon: ComplexIcons.ContactCard,
+          size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
-          path: 'assets/images/Contact.png',
         ));
   }
 }

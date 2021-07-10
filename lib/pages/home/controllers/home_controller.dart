@@ -50,6 +50,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Listen for Updates
       tabController.addListener(() {
         // Set Index
+        if (tabController.indexIsChanging) {
+          appbarOpacity(0);
+        } else {
+          appbarOpacity(1);
+        }
+
         bottomIndex(tabController.index);
 
         // Set Page

@@ -21,8 +21,8 @@ class InfolistOption {
   /// Returns Icon for Checklist Option based on State
   Widget icon() {
     return iconData.icon(
-      color: iconColor ?? AppTheme.itemColor,
-      size: 24,
+      color: iconColor ?? AppTheme.ItemColor,
+      size: 32,
     );
   }
 
@@ -36,12 +36,12 @@ class InfolistOption {
   Widget text() {
     if (isHeader) {
       return title.subheading(
-        color: textColor ?? AppTheme.itemColor,
+        color: textColor ?? AppTheme.ItemColor,
         fontSize: 26,
         align: TextAlign.center,
       );
     }
-    return title.light(color: textColor ?? AppTheme.itemColor, fontSize: 24);
+    return title.light(color: textColor ?? AppTheme.ItemColor, fontSize: 24);
   }
 }
 
@@ -54,9 +54,9 @@ class Infolist extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: AppTheme.backgroundColor,
+            color: AppTheme.BackgroundColor,
             border: Border.all(
-              color: AppTheme.foregroundColor,
+              color: AppTheme.ForegroundColor,
               width: 1.5,
             )),
         constraints: options.boxConstraints,
@@ -96,7 +96,7 @@ class Infolist extends StatelessWidget {
       return Padding(padding: EdgeInsets.only(top: 16));
     } else if (index + 1 != options.length) {
       return Divider(
-        color: AppTheme.greyColor.withOpacity(0.25),
+        color: AppTheme.GreyColor.withOpacity(0.25),
         endIndent: 8,
         indent: 8,
       );

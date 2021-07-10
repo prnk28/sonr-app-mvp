@@ -111,7 +111,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Returns Image Path for Permissions
   String permissionsImagePath() {
     if (isPermissions) {
-      return this == RegisterPageType.Location ? "assets/illustrations/LocationPerm.png" : "assets/illustrations/MediaPerm.png";
+      return this == RegisterPageType.Location ? "assets/images/illustrations/LocationPerm.png" : "assets/images/illustrations/MediaPerm.png";
     } else {
       return "";
     }

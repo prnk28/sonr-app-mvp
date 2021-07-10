@@ -3,6 +3,120 @@ import 'package:flutter/material.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'color.dart';
 import 'gradient.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sonr_app/style/style.dart';
+
+extension IntricateIconUtils on ComplexIcons {
+  /// @ Constant Regex Expression for Fuzzy Path
+  static final K_PASCAL_REGEX = RegExp(r"(?:[A-Z]+|^)[a-z]*");
+
+  /// Returns Full System Path - For Comment Generation
+  String fullPath(String dir, {bool withDots = false}) => withDots ? dir + this.pathDots : dir + this.path;
+
+  /// Returns Path for this Icon
+  String get path {
+    // Set Base Path
+    var path = 'assets/images/svg/';
+
+    // Iterate Words
+    bool isFirst = true;
+    for (var word in this.pascalWords) {
+      // Verify Value
+      if (word != null) {
+        // Check if first element
+        if (isFirst) {
+          path += word.toLowerCase();
+          isFirst = false;
+        }
+        // Add Hyphen for consecutive words
+        else {
+          path += "-${word.toLowerCase()}";
+        }
+      }
+    }
+    // Return with extension
+    return path + '.svg';
+  }
+
+  /// Returns Path for this Icon
+  String get pathDots {
+    // Set Base Path
+    var path = 'assets/images/svg/';
+
+    // Iterate Words
+    bool isFirst = true;
+    for (var word in this.pascalWords) {
+      // Verify Value
+      if (word != null) {
+        // Check if first element
+        if (isFirst) {
+          path += word.toLowerCase();
+          isFirst = false;
+        }
+        // Add Hyphen for consecutive words
+        else {
+          path += "-${word.toLowerCase()}";
+        }
+      }
+    }
+    // Return with extension
+    return path + '_dots.svg';
+  }
+
+  /// ## IntricateIcons: SVG
+  /// Returns SVGPicture Widget, contains all Default properties for SVGPicture package.
+  SvgPicture normal({
+    Key? key,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.contain,
+    AlignmentGeometry alignment = Alignment.center,
+    Clip clipBehavior = Clip.hardEdge,
+  }) {
+    return SvgPicture.asset(
+      this.path,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
+      bundle: rootBundle,
+      key: key,
+      clipBehavior: clipBehavior,
+      fit: fit,
+      width: width,
+      height: height,
+      colorBlendMode: BlendMode.overlay,
+      alignment: alignment,
+    );
+  }
+
+  /// ## IntricateIcons: SVG
+  /// Returns SVGPicture Widget, contains all Default properties for SVGPicture package.
+  SvgPicture dots({
+    Key? key,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.contain,
+    AlignmentGeometry alignment = Alignment.center,
+    Color? color,
+    Clip clipBehavior = Clip.hardEdge,
+  }) {
+    return SvgPicture.asset(
+      this.pathDots,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
+      bundle: rootBundle,
+      key: key,
+      clipBehavior: clipBehavior,
+      fit: fit,
+      width: width,
+      height: height,
+      alignment: alignment,
+    );
+  }
+
+  /// Get All pascal words in Enum Value
+  List<String?> get pascalWords => K_PASCAL_REGEX.allMatches(this.value).map((m) => m[0]).toList();
+
+  /// Get the Name of This Value
+  String get value => this.toString().substring(this.toString().indexOf('.') + 1);
+}
 
 extension MimeIcon on MIME_Type {
   Widget gradient({double size = 32, Gradient? gradient}) {
@@ -28,22 +142,22 @@ extension MimeIcon on MIME_Type {
   IconData get iconData {
     switch (this) {
       case MIME_Type.AUDIO:
-        return SonrIcons.Audio;
+        return SimpleIcons.Audio;
       case MIME_Type.IMAGE:
-        return SonrIcons.Image;
+        return SimpleIcons.Image;
       case MIME_Type.TEXT:
-        return SonrIcons.Document;
+        return SimpleIcons.Document;
       case MIME_Type.VIDEO:
-        return SonrIcons.Video;
+        return SimpleIcons.Video;
       default:
         if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF;
+          return SimpleIcons.PDF;
         } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet;
+          return SimpleIcons.Spreadsheet;
         } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation;
+          return SimpleIcons.Presentation;
         }
-        return SonrIcons.Unknown;
+        return SimpleIcons.Unknown;
     }
   }
 
@@ -93,17 +207,17 @@ extension PayloadIcon on Payload {
 
   IconData get iconData {
     if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar;
+      return SimpleIcons.Avatar;
     } else if (this == Payload.URL) {
-      return SonrIcons.Discover;
+      return SimpleIcons.Discover;
     } else if (this == Payload.FILE) {
-      return SonrIcons.Document;
+      return SimpleIcons.Document;
     } else if (this == Payload.MEDIA) {
-      return SonrIcons.Photos;
+      return SimpleIcons.Photos;
     } else if (this == Payload.FILES) {
-      return SonrIcons.Files;
+      return SimpleIcons.Files;
     } else {
-      return SonrIcons.Unknown;
+      return SimpleIcons.Unknown;
     }
   }
 
@@ -150,15 +264,15 @@ extension PlatformIcon on Platform {
   IconData get iconData {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android;
+        return SimpleIcons.Android;
       case Platform.IOS:
-        return SonrIcons.IPhone;
+        return SimpleIcons.IPhone;
       case Platform.MacOS:
-        return SonrIcons.IMac;
+        return SimpleIcons.IMac;
       case Platform.Windows:
-        return SonrIcons.Windows;
+        return SimpleIcons.Windows;
       default:
-        return SonrIcons.Unknown;
+        return SimpleIcons.Unknown;
     }
   }
 
@@ -217,23 +331,23 @@ extension SocialIconUtils on Contact_Social_Media {
   IconData get iconData {
     switch (this) {
       case Contact_Social_Media.Snapchat:
-        return SonrIcons.Snapchat;
+        return SimpleIcons.Snapchat;
       case Contact_Social_Media.Github:
-        return SonrIcons.Github;
+        return SimpleIcons.Github;
       case Contact_Social_Media.Facebook:
-        return SonrIcons.Facebook;
+        return SimpleIcons.Facebook;
       case Contact_Social_Media.Medium:
-        return SonrIcons.Medium;
+        return SimpleIcons.Medium;
       case Contact_Social_Media.YouTube:
-        return SonrIcons.YouTube;
+        return SimpleIcons.YouTube;
       case Contact_Social_Media.Twitter:
-        return SonrIcons.Twitter;
+        return SimpleIcons.Twitter;
       case Contact_Social_Media.Instagram:
-        return SonrIcons.Instagram;
+        return SimpleIcons.Instagram;
       case Contact_Social_Media.TikTok:
-        return SonrIcons.Tiktok;
+        return SimpleIcons.Tiktok;
       default:
-        return SonrIcons.Spotify;
+        return SimpleIcons.Spotify;
     }
   }
 
@@ -331,14 +445,14 @@ extension DesignIcon on IconData {
 }
 
 /// ## Sonr Icon Class
-class SonrIcons {
+class SimpleIcons {
   // PCRE (PHP < 7.3)
   /// -> ^.*(\s([a-zA-Z]+\s)+).*$ > Regex
   // Substitution: /// SonrIcons -$2![Icon of $2 ](/Users/prad/Sonr/docs/icons/PNG/$2.png)\n\0\n
   // Expression for Comment Generation * //
   //! Dont use underscores for fonts //
 
-  SonrIcons._();
+  SimpleIcons._();
   static const String _fontFamily = 'SonrIcons';
   static const String _fontNavFamily = 'SonrNavIcons';
 
@@ -1008,4 +1122,276 @@ class SonrIcons {
 
   /// SonrIcons - Verified ![Icon of Verified](/Users/prad/Sonr/docs/icons/PNG/Verified.png)
   static const IconData Verified = IconData(0xe9b0, fontFamily: _fontFamily);
+}
+
+enum ComplexIcons {
+  /// ### SVGIcons - `SecureKeys`
+  /// !["Image of SecureKeys"](/Users/prad/Sonr/app/assets/images/svg/secure-keys.svg)
+  /// !["Image of SecureKeys as Dots"](/Users/prad/Sonr/app/assets/images/svg/secure-keys_dots.svg)
+  SecureKeys,
+
+  /// ### SVGIcons - `Book`
+  /// !["Image of Book"](/Users/prad/Sonr/app/assets/images/svg/book.svg)
+  /// !["Image of Book as Dots"](/Users/prad/Sonr/app/assets/images/svg/book_dots.svg)
+  Book,
+
+  /// ### SVGIcons - `HandShake`
+  /// !["Image of HandShake"](/Users/prad/Sonr/app/assets/images/svg/hand-shake.svg)
+  /// !["Image of HandShake as Dots"](/Users/prad/Sonr/app/assets/images/svg/hand-shake_dots.svg)
+  HandShake,
+
+  /// ### SVGIcons - `Mail`
+  /// !["Image of Mail"](/Users/prad/Sonr/app/assets/images/svg/mail.svg)
+  /// !["Image of Mail as Dots"](/Users/prad/Sonr/app/assets/images/svg/mail_dots.svg)
+  Mail,
+
+  /// ### SVGIcons - `Video`
+  /// !["Image of Video"](/Users/prad/Sonr/app/assets/images/svg/video.svg)
+  /// !["Image of Video as Dots"](/Users/prad/Sonr/app/assets/images/svg/video_dots.svg)
+  Video,
+
+  /// ### SVGIcons - `Article`
+  /// !["Image of Article"](/Users/prad/Sonr/app/assets/images/svg/article.svg)
+  /// !["Image of Article as Dots"](/Users/prad/Sonr/app/assets/images/svg/article_dots.svg)
+  Article,
+
+  /// ### SVGIcons - `PowerpointDocument`
+  /// !["Image of PowerpointDocument"](/Users/prad/Sonr/app/assets/images/svg/powerpoint-document.svg)
+  /// !["Image of PowerpointDocument as Dots"](/Users/prad/Sonr/app/assets/images/svg/powerpoint-document_dots.svg)
+  PowerpointDocument,
+
+  /// ### SVGIcons - `ExcelDocument`
+  /// !["Image of ExcelDocument"](/Users/prad/Sonr/app/assets/images/svg/excel-document.svg)
+  /// !["Image of ExcelDocument as Dots"](/Users/prad/Sonr/app/assets/images/svg/excel-document_dots.svg)
+  ExcelDocument,
+
+  /// ### SVGIcons - `MobileConnection`
+  /// !["Image of MobileConnection"](/Users/prad/Sonr/app/assets/images/svg/mobile-connection.svg)
+  /// !["Image of MobileConnection as Dots"](/Users/prad/Sonr/app/assets/images/svg/mobile-connection_dots.svg)
+  MobileConnection,
+
+  /// ### SVGIcons - `ViralPost`
+  /// !["Image of ViralPost"](/Users/prad/Sonr/app/assets/images/svg/viral-post.svg)
+  /// !["Image of ViralPost as Dots"](/Users/prad/Sonr/app/assets/images/svg/viral-post_dots.svg)
+  ViralPost,
+
+  /// ### SVGIcons - `UserSocialEngineering`
+  /// !["Image of UserSocialEngineering"](/Users/prad/Sonr/app/assets/images/svg/user-social-engineering.svg)
+  /// !["Image of UserSocialEngineering as Dots"](/Users/prad/Sonr/app/assets/images/svg/user-social-engineering_dots.svg)
+  UserSocialEngineering,
+
+  /// ### SVGIcons - `Diamond`
+  /// !["Image of Diamond"](/Users/prad/Sonr/app/assets/images/svg/diamond.svg)
+  /// !["Image of Diamond as Dots"](/Users/prad/Sonr/app/assets/images/svg/diamond_dots.svg)
+  Diamond,
+
+  /// ### SVGIcons - `SecurityLock`
+  /// !["Image of SecurityLock"](/Users/prad/Sonr/app/assets/images/svg/security-lock.svg)
+  /// !["Image of SecurityLock as Dots"](/Users/prad/Sonr/app/assets/images/svg/security-lock_dots.svg)
+  SecurityLock,
+
+  /// ### SVGIcons - `Search`
+  /// !["Image of Search"](/Users/prad/Sonr/app/assets/images/svg/search.svg)
+  /// !["Image of Search as Dots"](/Users/prad/Sonr/app/assets/images/svg/search_dots.svg)
+  Search,
+
+  /// ### SVGIcons - `Clip`
+  /// !["Image of Clip"](/Users/prad/Sonr/app/assets/images/svg/clip.svg)
+  /// !["Image of Clip as Dots"](/Users/prad/Sonr/app/assets/images/svg/clip_dots.svg)
+  Clip,
+
+  /// ### SVGIcons - `Calendar`
+  /// !["Image of Calendar"](/Users/prad/Sonr/app/assets/images/svg/calendar.svg)
+  /// !["Image of Calendar as Dots"](/Users/prad/Sonr/app/assets/images/svg/calendar_dots.svg)
+  Calendar,
+
+  /// ### SVGIcons - `Presentation`
+  /// !["Image of Presentation"](/Users/prad/Sonr/app/assets/images/svg/presentation.svg)
+  /// !["Image of Presentation as Dots"](/Users/prad/Sonr/app/assets/images/svg/presentation_dots.svg)
+  Presentation,
+
+  /// ### SVGIcons - `PeopleSearch`
+  /// !["Image of PeopleSearch"](/Users/prad/Sonr/app/assets/images/svg/people-search.svg)
+  /// !["Image of PeopleSearch as Dots"](/Users/prad/Sonr/app/assets/images/svg/people-search_dots.svg)
+  PeopleSearch,
+
+  /// ### SVGIcons - `CreditCard`
+  /// !["Image of CreditCard"](/Users/prad/Sonr/app/assets/images/svg/credit-card.svg)
+  /// !["Image of CreditCard as Dots"](/Users/prad/Sonr/app/assets/images/svg/credit-card_dots.svg)
+  CreditCard,
+
+  /// ### SVGIcons - `Apple`
+  /// !["Image of Apple"](/Users/prad/Sonr/app/assets/images/svg/apple.svg)
+  /// !["Image of Apple as Dots"](/Users/prad/Sonr/app/assets/images/svg/apple_dots.svg)
+  Apple,
+
+  /// ### SVGIcons - `LocationPin`
+  /// !["Image of LocationPin"](/Users/prad/Sonr/app/assets/images/svg/location-pin.svg)
+  /// !["Image of LocationPin as Dots"](/Users/prad/Sonr/app/assets/images/svg/location-pin_dots.svg)
+  LocationPin,
+
+  /// ### SVGIcons - `Earth`
+  /// !["Image of Earth"](/Users/prad/Sonr/app/assets/images/svg/earth.svg)
+  /// !["Image of Earth as Dots"](/Users/prad/Sonr/app/assets/images/svg/earth_dots.svg)
+  Earth,
+
+  /// ### SVGIcons - `Camera`
+  /// !["Image of Camera"](/Users/prad/Sonr/app/assets/images/svg/camera.svg)
+  /// !["Image of Camera as Dots"](/Users/prad/Sonr/app/assets/images/svg/camera_dots.svg)
+  Camera,
+
+  /// ### SVGIcons - `DocumentsBox`
+  /// !["Image of DocumentsBox"](/Users/prad/Sonr/app/assets/images/svg/documents-box.svg)
+  /// !["Image of DocumentsBox as Dots"](/Users/prad/Sonr/app/assets/images/svg/documents-box_dots.svg)
+  DocumentsBox,
+
+  /// ### SVGIcons - `AdminGroup`
+  /// !["Image of AdminGroup"](/Users/prad/Sonr/app/assets/images/svg/admin-group.svg)
+  /// !["Image of AdminGroup as Dots"](/Users/prad/Sonr/app/assets/images/svg/admin-group_dots.svg)
+  AdminGroup,
+
+  /// ### SVGIcons - `UserContact`
+  /// !["Image of UserContact"](/Users/prad/Sonr/app/assets/images/svg/user-contact.svg)
+  /// !["Image of UserContact as Dots"](/Users/prad/Sonr/app/assets/images/svg/user-contact_dots.svg)
+  UserContact,
+
+  /// ### SVGIcons - `Eye`
+  /// !["Image of Eye"](/Users/prad/Sonr/app/assets/images/svg/eye.svg)
+  /// !["Image of Eye as Dots"](/Users/prad/Sonr/app/assets/images/svg/eye_dots.svg)
+  Eye,
+
+  /// ### SVGIcons - `Anchor`
+  /// !["Image of Anchor"](/Users/prad/Sonr/app/assets/images/svg/anchor.svg)
+  /// !["Image of Anchor as Dots"](/Users/prad/Sonr/app/assets/images/svg/anchor_dots.svg)
+  Anchor,
+
+  /// ### SVGIcons - `DesktopBrowser`
+  /// !["Image of DesktopBrowser"](/Users/prad/Sonr/app/assets/images/svg/desktop-browser.svg)
+  /// !["Image of DesktopBrowser as Dots"](/Users/prad/Sonr/app/assets/images/svg/desktop-browser_dots.svg)
+  DesktopBrowser,
+
+  /// ### SVGIcons - `UserPortfolio`
+  /// !["Image of UserPortfolio"](/Users/prad/Sonr/app/assets/images/svg/user-portfolio.svg)
+  /// !["Image of UserPortfolio as Dots"](/Users/prad/Sonr/app/assets/images/svg/user-portfolio_dots.svg)
+  UserPortfolio,
+
+  /// ### SVGIcons - `Document`
+  /// !["Image of Document"](/Users/prad/Sonr/app/assets/images/svg/document.svg)
+  /// !["Image of Document as Dots"](/Users/prad/Sonr/app/assets/images/svg/document_dots.svg)
+  Document,
+
+  /// ### SVGIcons - `LobbyGroup`
+  /// !["Image of LobbyGroup"](/Users/prad/Sonr/app/assets/images/svg/lobby-group.svg)
+  /// !["Image of LobbyGroup as Dots"](/Users/prad/Sonr/app/assets/images/svg/lobby-group_dots.svg)
+  LobbyGroup,
+
+  /// ### SVGIcons - `InternetOfThings`
+  /// !["Image of InternetOfThings"](/Users/prad/Sonr/app/assets/images/svg/internet-of-things.svg)
+  /// !["Image of InternetOfThings as Dots"](/Users/prad/Sonr/app/assets/images/svg/internet-of-things_dots.svg)
+  InternetOfThings,
+
+  /// ### SVGIcons - `ArGlasses`
+  /// !["Image of ArGlasses"](/Users/prad/Sonr/app/assets/images/svg/ar-glasses.svg)
+  /// !["Image of ArGlasses as Dots"](/Users/prad/Sonr/app/assets/images/svg/ar-glasses_dots.svg)
+  ArGlasses,
+
+  /// ### SVGIcons - `DesktopLink`
+  /// !["Image of DesktopLink"](/Users/prad/Sonr/app/assets/images/svg/desktop-link.svg)
+  /// !["Image of DesktopLink as Dots"](/Users/prad/Sonr/app/assets/images/svg/desktop-link_dots.svg)
+  DesktopLink,
+
+  /// ### SVGIcons - `ArEarth`
+  /// !["Image of ArEarth"](/Users/prad/Sonr/app/assets/images/svg/ar-earth.svg)
+  /// !["Image of ArEarth as Dots"](/Users/prad/Sonr/app/assets/images/svg/ar-earth_dots.svg)
+  ArEarth,
+
+  /// ### SVGIcons - `PdfDocument`
+  /// !["Image of PdfDocument"](/Users/prad/Sonr/app/assets/images/svg/pdf-document.svg)
+  /// !["Image of PdfDocument as Dots"](/Users/prad/Sonr/app/assets/images/svg/pdf-document_dots.svg)
+  PdfDocument,
+
+  /// ### SVGIcons - `LockedFolder`
+  /// !["Image of LockedFolder"](/Users/prad/Sonr/app/assets/images/svg/locked-folder.svg)
+  /// !["Image of LockedFolder as Dots"](/Users/prad/Sonr/app/assets/images/svg/locked-folder_dots.svg)
+  LockedFolder,
+
+  /// ### SVGIcons - `Internet`
+  /// !["Image of Internet"](/Users/prad/Sonr/app/assets/images/svg/internet.svg)
+  /// !["Image of Internet as Dots"](/Users/prad/Sonr/app/assets/images/svg/internet_dots.svg)
+  Internet,
+
+  /// ### SVGIcons - `ContactCard`
+  /// !["Image of ContactCard"](/Users/prad/Sonr/app/assets/images/svg/contact-card.svg)
+  /// !["Image of ContactCard as Dots"](/Users/prad/Sonr/app/assets/images/svg/contact-card_dots.svg)
+  ContactCard,
+
+  /// ### SVGIcons - `MediaSelect`
+  /// !["Image of MediaSelect"](/Users/prad/Sonr/app/assets/images/svg/media-select.svg)
+  /// !["Image of MediaSelect as Dots"](/Users/prad/Sonr/app/assets/images/svg/media-select_dots.svg)
+  MediaSelect,
+
+  /// ### SVGIcons - `AppleWatch`
+  /// !["Image of AppleWatch"](/Users/prad/Sonr/app/assets/images/svg/apple-watch.svg)
+  /// !["Image of AppleWatch as Dots"](/Users/prad/Sonr/app/assets/images/svg/apple-watch_dots.svg)
+  AppleWatch,
+
+  /// ### SVGIcons - `AndroidWear`
+  /// !["Image of AndroidWear"](/Users/prad/Sonr/app/assets/images/svg/android-wear.svg)
+  /// !["Image of AndroidWear as Dots"](/Users/prad/Sonr/app/assets/images/svg/android-wear_dots.svg)
+  AndroidWear,
+
+  /// ### SVGIcons - `OldIPhone`
+  /// !["Image of OldIPhone"](/Users/prad/Sonr/app/assets/images/svg/old-iphone.svg)
+  /// !["Image of OldIPhone as Dots"](/Users/prad/Sonr/app/assets/images/svg/old-iphone_dots.svg)
+  OldIPhone,
+
+  /// ### SVGIcons - `CurrentIPhone`
+  /// !["Image of CurrentIPhone"](/Users/prad/Sonr/app/assets/images/svg/current-iphone.svg)
+  /// !["Image of CurrentIPhone as Dots"](/Users/prad/Sonr/app/assets/images/svg/current-iphone_dots.svg)
+  CurrentIPhone,
+
+  /// ### SVGIcons - `AndroidPhone`
+  /// !["Image of AndroidPhone"](/Users/prad/Sonr/app/assets/images/svg/android-phone.svg)
+  /// !["Image of AndroidPhone as Dots"](/Users/prad/Sonr/app/assets/images/svg/android-phone_dots.svg)
+  AndroidPhone,
+
+  /// ### SVGIcons - `IPad`
+  /// !["Image of IPad"](/Users/prad/Sonr/app/assets/images/svg/ipad.svg)
+  /// !["Image of IPad as Dots"](/Users/prad/Sonr/app/assets/images/svg/ipad_dots.svg)
+  IPad,
+
+  /// ### SVGIcons - `Laptop`
+  /// !["Image of Laptop"](/Users/prad/Sonr/app/assets/images/svg/laptop.svg)
+  /// !["Image of Laptop as Dots"](/Users/prad/Sonr/app/assets/images/svg/laptop_dots.svg)
+  Laptop,
+
+  /// ### SVGIcons - `Desktop`
+  /// !["Image of Desktop"](/Users/prad/Sonr/app/assets/images/svg/desktop.svg)
+  /// !["Image of Desktop as Dots"](/Users/prad/Sonr/app/assets/images/svg/desktop_dots.svg)
+  Desktop,
+
+  /// ### SVGIcons - `Devices`
+  /// !["Image of Devices"](/Users/prad/Sonr/app/assets/images/svg/devices.svg)
+  /// !["Image of Devices as Dots"](/Users/prad/Sonr/app/assets/images/svg/devices_dots.svg)
+  Devices,
+
+  /// ### SVGIcons - `Oculus`
+  /// !["Image of Oculus"](/Users/prad/Sonr/app/assets/images/svg/oculus.svg)
+  /// !["Image of Oculus as Dots"](/Users/prad/Sonr/app/assets/images/svg/oculus_dots.svg)
+  Oculus,
+
+  /// ### SVGIcons - `NintendoSwitch`
+  /// !["Image of NintendoSwitch"](/Users/prad/Sonr/app/assets/images/svg/nintendo-switch.svg)
+  /// !["Image of NintendoSwitch as Dots"](/Users/prad/Sonr/app/assets/images/svg/nintendo-switch_dots.svg)
+  NintendoSwitch,
+
+  /// ### SVGIcons - `Xbox`
+  /// !["Image of Xbox"](/Users/prad/Sonr/app/assets/images/svg/xbox.svg)
+  /// !["Image of Xbox as Dots"](/Users/prad/Sonr/app/assets/images/svg/xbox_dots.svg)
+  Xbox,
+
+  /// ### SVGIcons - `Playstation`
+  /// !["Image of Playstation"](/Users/prad/Sonr/app/assets/images/svg/playstation.svg)
+  /// !["Image of Playstation as Dots"](/Users/prad/Sonr/app/assets/images/svg/playstation_dots.svg)
+  Playstation,
 }

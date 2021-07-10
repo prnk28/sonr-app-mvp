@@ -7,7 +7,7 @@ class SetupView extends GetView<RegisterController> {
     return Obx(() => Scaffold(
         extendBody: true,
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppTheme.foregroundColor,
+        backgroundColor: AppTheme.ForegroundColor,
         appBar: RegisterSetupTitleBar(
           title: controller.status.value.title,
           instruction: controller.status.value.instruction,
@@ -56,7 +56,7 @@ class _NamePage extends GetView<RegisterController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 "Sonr Name".toUpperCase().light(
-                      color: AppTheme.greyColor,
+                      color: AppTheme.GreyColor,
                       fontSize: 20,
                     ),
                 Obx(() => Container(
@@ -66,13 +66,13 @@ class _NamePage extends GetView<RegisterController> {
                                 controller.sName("");
                                 controller.sName.refresh();
                               },
-                              iconData: SonrIcons.Clear)
+                              iconData: SimpleIcons.Clear)
                           : Container(),
                     ))
               ],
             )),
         Container(
-            decoration: BoxDecoration(color: AppTheme.backgroundColor, borderRadius: BorderRadius.circular(22)),
+            decoration: BoxDecoration(color: AppTheme.BackgroundColor, borderRadius: BorderRadius.circular(22)),
             margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
             padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
             child: ObxValue<RxDouble>(
@@ -81,7 +81,7 @@ class _NamePage extends GetView<RegisterController> {
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
                         ],
-                        style: DisplayTextStyle.Paragraph.style(color: AppTheme.itemColor, fontSize: 24),
+                        style: DisplayTextStyle.Paragraph.style(color: AppTheme.ItemColor, fontSize: 24),
                         autofocus: true,
                         textInputAction: TextInputAction.go,
                         autocorrect: false,
@@ -103,7 +103,7 @@ class _NamePage extends GetView<RegisterController> {
                         padding: EdgeInsets.only(left: leftPadding.value),
                         child: Text(
                           ".snr/",
-                          style: DisplayTextStyle.Subheading.style(color: AppTheme.itemColor, fontSize: 24),
+                          style: DisplayTextStyle.Subheading.style(color: AppTheme.ItemColor, fontSize: 24),
                         ),
                       ),
                     ]),
@@ -126,15 +126,15 @@ class _NameStatus extends GetView<RegisterController> {
             children: [
               "- Must be more than 3 characters".light(
                 fontSize: 14,
-                color: AppTheme.greyColor,
+                color: AppTheme.GreyColor,
               ),
               "- No Numbers, Spaces, and Special Characters.".light(
                 fontSize: 14,
-                color: AppTheme.greyColor,
+                color: AppTheme.GreyColor,
               ),
               "- Ideally a Combo of First & Last Name.".light(
                 fontSize: 14,
-                color: AppTheme.greyColor,
+                color: AppTheme.GreyColor,
               ),
             ],
           ))
@@ -145,7 +145,7 @@ class _NameStatus extends GetView<RegisterController> {
               child: Center(
                 child: DashedBox(
                   strokeWidth: 1,
-                  color: AppTheme.greyColor,
+                  color: AppTheme.GreyColor,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -178,7 +178,7 @@ class _BackupCodeView extends GetView<RegisterController> {
                 onLongPress: () {
                   Clipboard.setData(ClipboardData(text: controller.mnemonic.value));
                   AppRoute.snack(
-                      SnackArgs.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(SonrIcons.Copy, color: Colors.white)));
+                      SnackArgs.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
                 },
                 child: BoxContainer(
                   padding: EdgeInsets.all(24),
@@ -187,7 +187,7 @@ class _BackupCodeView extends GetView<RegisterController> {
                       Align(
                         alignment: Alignment.topRight,
                         child: ActionButton(
-                          iconData: SonrIcons.Info,
+                          iconData: SimpleIcons.Info,
                           onPressed: () {
                             AppRoute.alert(
                                 title: "About Code",
@@ -197,7 +197,7 @@ class _BackupCodeView extends GetView<RegisterController> {
                         ),
                       ),
                       Divider(
-                        color: AppTheme.dividerColor,
+                        color: AppTheme.DividerColor,
                       ),
                       Container(
                         padding: EdgeInsets.only(bottom: 24),
@@ -239,6 +239,7 @@ class _ProfileSetupView extends GetView<RegisterController> {
           RegisterTextField(
             type: RegisterTextFieldType.FirstName,
             focusNode: firstNameFocus,
+            
             hint: hintName.item1,
             onEditingComplete: () {
               firstNameFocus.unfocus();

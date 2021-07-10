@@ -13,9 +13,7 @@ class CameraToolsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomCenter,
-        child: BoxContainer(
-            padding: EdgeInsets.only(top: 20, bottom: 40), child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
+        alignment: Alignment.bottomCenter, child: BoxContainer(child: AnimatedSlider.slideUp(child: _buildToolsView(controller.status.value))));
   }
 
   Widget _buildToolsView(CameraViewStatus status) {
@@ -37,12 +35,12 @@ class _CaptureToolsView extends StatelessWidget {
       height: Height.ratio(0.15),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         // Left Button - Cancel and Retake
-        PlainButton(
+        ColorButton.neutral(
           onPressed: () {
             HapticFeedback.heavyImpact();
             controller.handleCapture(false);
           },
-          child: [SonrIcons.Refresh.black, Padding(padding: EdgeInsets.all(8)), "Redo".paragraph()].row(),
+          text: 'Redo',
         ),
 
         // Right Button - Continue
@@ -52,7 +50,7 @@ class _CaptureToolsView extends StatelessWidget {
               controller.handleCapture(true);
             },
             text: "Continue",
-            icon: SonrIcons.Check),
+            icon: SimpleIcons.Check),
       ]),
     );
   }
@@ -70,34 +68,29 @@ class _DefaultToolsView extends StatelessWidget {
         // Switch Camera
         Obx(() {
           var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
-          return GestureDetector(
-              child: AnimatedSlider.slideUp(
-                  child: Container(
-                      key: ValueKey<IconData>(iconData),
-                      child: iconData.gradient(
-                        value: SonrGradients.LoveKiss,
-                        size: 36,
-                      ))),
-              onTap: () async {
+          return AnimatedSlider.slideUp(
+            child: ActionButton(
+              iconData: iconData,
+              onPressed: () async {
                 await HapticFeedback.heavyImpact();
                 controller.toggleCameraSensor();
-              });
+              },
+            ),
+          );
         }),
 
-        // Neumorphic Camera Button Stack
+        // Media Gallery Picker
         CaptureButton(controller: controller),
 
-        // Media Gallery Picker
-        GestureDetector(
-            child: SonrIcons.Photos.gradient(
-              value: SonrGradients.OctoberSilence,
-              size: 36,
-            ),
-            onTap: () async {
-              await HapticFeedback.heavyImpact();
-              // Check for Permssions
-              await SenderService.choose(ChooseOption.Media);
-            }),
+        // Neumorphic Camera Button Stack
+        ActionButton(
+          iconData: SimpleIcons.Photos,
+          onPressed: () async {
+            await HapticFeedback.heavyImpact();
+            // Check for Permssions
+            await SenderService.choose(ChooseOption.Media);
+          },
+        ),
       ]),
     );
   }

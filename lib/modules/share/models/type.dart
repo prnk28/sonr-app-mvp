@@ -10,7 +10,10 @@ enum ShareViewType {
   Popup,
 
   /// For when ShareView Presented from Transfer Screen
-  Alert
+  Alert,
+
+  /// For When Quick Access Peer Tapped
+  Hover,
 }
 
 enum ShareViewStatus { Default, Loading, Ready }
@@ -31,11 +34,14 @@ extension ShareViewTypeUtils on ShareViewType {
   bool get isViewDialog => this == ShareViewType.Alert;
 }
 
-/// Row Button Size
+/// Row Button Size - 75.0
 const K_ROW_BUTTON_SIZE = 75.0;
 
-/// Row Circle Size
+/// Row Circle Size - 95.0
 const K_ROW_CIRCLE_SIZE = 95.0;
+
+/// Share Hover Button Size -  60.0
+const K_HOVER_BUTTON_SIZE = 60.0;
 
 /// System Generated Albums
 const SYSTEM_ALBUM_NAMES = ["panoramas", "videos", "favorites", "downloads"];
@@ -63,25 +69,25 @@ extension DefaultAlbumUtils on DefaultAlbum {
   IconData get iconData {
     switch (this) {
       case DefaultAlbum.Panoramas:
-        return SonrIcons.Panorama;
+        return SimpleIcons.Panorama;
       case DefaultAlbum.Videos:
-        return SonrIcons.Video;
+        return SimpleIcons.Video;
       case DefaultAlbum.Recent:
-        return SonrIcons.Clock;
+        return SimpleIcons.Clock;
       case DefaultAlbum.Movies:
-        return SonrIcons.Video;
+        return SimpleIcons.Video;
       case DefaultAlbum.Markup:
-        return SonrIcons.Pen;
+        return SimpleIcons.Pen;
       case DefaultAlbum.Download:
-        return SonrIcons.Download;
+        return SimpleIcons.Download;
       case DefaultAlbum.Screenshots:
-        return SonrIcons.Screenshot;
+        return SimpleIcons.Screenshot;
       case DefaultAlbum.Favorites:
-        return SonrIcons.Star;
+        return SimpleIcons.Star;
       case DefaultAlbum.Bursts:
-        return SonrIcons.Bolt;
+        return SimpleIcons.Bolt;
       default:
-        return SonrIcons.Album;
+        return SimpleIcons.Album;
     }
   }
 
@@ -115,7 +121,7 @@ extension DefaultAlbumUtils on DefaultAlbum {
     }
 
     // Set IconData
-    IconData iconData = SonrIcons.Album;
+    IconData iconData = SimpleIcons.Album;
     if (DefaultAlbumUtils.isDefault(entity)) {
       iconData = DefaultAlbumUtils.toDefault(entity).iconData;
     }

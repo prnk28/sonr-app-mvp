@@ -39,10 +39,14 @@ class _HomePageState extends State<HomePage> {
           floatingAction: HomeFloatingBar(),
           appBar: _buildAppBar(controller.view.value),
           body: Container(
-              child: TabBarView(controller: controller.tabController, children: [
-            DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-            PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
-          ])),
+              child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: controller.tabController,
+            children: [
+              DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
+              PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
+            ],
+          )),
         ));
   }
 
@@ -60,7 +64,7 @@ class ExplorerPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageAppBar(title: "Welcome".heading()),
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: AppTheme.BackgroundColor,
       body: Center(
         child: Container(
           width: 1280,
@@ -117,7 +121,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                               child: ActionButton(
                                 banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
                                 key: ValueKey<HomeView>(HomeView.Dashboard),
-                                iconData: SonrIcons.Help,
+                                iconData: SimpleIcons.Help,
                                 onPressed: () async => await Logger.openIntercom(),
                               ),
                             )),
@@ -129,7 +133,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   : Padding(
                       padding: EdgeInsets.only(top: 32),
                       child: controller.view.value.title.heading(
-                        color: AppTheme.itemColor,
+                        color: AppTheme.ItemColor,
                         align: TextAlign.start,
                       ),
                     ),
@@ -169,10 +173,11 @@ class HomeActionButton extends GetView<HomeController> {
         padding: const EdgeInsets.only(bottom: 42.0, right: 8),
         child: ActionButton(
           key: ValueKey<HomeView>(HomeView.Contact),
-          iconData: SonrIcons.Settings,
+          iconData: SimpleIcons.Settings,
           onPressed: () {
             HapticFeedback.heavyImpact();
             EditorController.open();
+            // AppPage.Settings.to();
           },
         ),
       );
@@ -183,7 +188,7 @@ class HomeActionButton extends GetView<HomeController> {
           padding: const EdgeInsets.only(bottom: 108.0, right: 8),
           child: ActionButton(
             key: ValueKey<HomeView>(HomeView.Dashboard),
-            iconData: SonrIcons.Alerts,
+            iconData: SimpleIcons.Alerts,
             onPressed: () => AppPage.Activity.to(),
           ),
         ),
@@ -218,8 +223,8 @@ class HomeBottomTabButton extends GetView<HomeController> {
                     child: Container(
                         key: ValueKey(idx.value == view.index),
                         child: idx.value == view.index
-                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: AppTheme.itemColor)
-                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: AppTheme.itemColor)),
+                            ? Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: AppTheme.ItemColor)
+                            : Icon(view.iconData(idx.value == view.index), size: view.iconSize, color: AppTheme.ItemColor)),
                     scale: idx.value == view.index ? 1.0 : 0.9,
                   ),
               currentIndex),
@@ -234,13 +239,8 @@ class HomeFloatingBar extends GetWidget<HomeController> {
     final controller = Get.find<HomeController>();
     return Container(
       child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Get.isDarkMode ? null : Border.all(color: AppTheme.backgroundColor, width: 1),
-            color: AppTheme.foregroundColor,
-            borderRadius: BorderRadius.circular(28.13),
-            boxShadow: AppTheme.boxShadow,
-          ),
+        BoxContainer(
+          radius: 28.13,
           margin: EdgeInsets.symmetric(horizontal: 72),
           height: 72,
           child: Row(

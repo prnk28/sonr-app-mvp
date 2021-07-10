@@ -1,5 +1,5 @@
-import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/modules/peer/widgets/peer_border.dart';
 import 'package:sonr_app/style/style.dart';
 
 const double K_CARD_WIDTH = 160;
@@ -24,7 +24,7 @@ class PeerCardView extends GetWidget<PeerController> {
                     children: [
                       // Rive Board
                       IgnorePointer(
-                        child: _PeerAvatar(
+                        child: PeerAvatarBorder(
                           controller: controller,
                         ),
                       ),
@@ -52,47 +52,6 @@ class PeerCardView extends GetWidget<PeerController> {
   }
 }
 
-/// @ Peer Avatar with Rive Board Border
-class _PeerAvatar extends StatelessWidget {
-  final PeerController controller;
-
-  const _PeerAvatar({Key? key, required this.controller}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 34),
-              child: Container(
-                  alignment: Alignment.center,
-                  height: 96,
-                  width: 96,
-                  child: Obx(
-                    () => Rive(artboard: controller.board.value),
-                  )),
-            ),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: Obx(
-                () => AnimatedOpacity(
-                    opacity: controller.opacity.value,
-                    duration: 150.milliseconds,
-                    child: ProfileAvatar.fromPeer(
-                      controller.peer.value,
-                      size: 80,
-                    )),
-              )),
-        ],
-      ),
-    );
-  }
-}
-
 /// @ Main Peer Card View
 class _PeerMainCard extends StatelessWidget {
   final RxBool isFlipped;
@@ -115,7 +74,7 @@ class _PeerMainCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.MoreVertical.icon(color: AppTheme.greyColor, size: 24),
+                  child: SimpleIcons.MoreVertical.icon(color: AppTheme.GreyColor, size: 24),
                 ),
               )),
 
@@ -132,14 +91,14 @@ class _PeerMainCard extends StatelessWidget {
 
   Widget _buildName() {
     if (peer.value.profile.firstName.toLowerCase().contains('anonymous')) {
-      return "${peer.value.profile.firstName}".subheading(color: AppTheme.itemColor);
+      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.ItemColor);
     } else {
-      return "${peer.value.profile.firstName}".subheading(color: AppTheme.itemColor);
+      return "${peer.value.profile.firstName.capitalizeFirst}".subheading(color: AppTheme.ItemColor);
     }
   }
 
   Widget _buildModel() {
-    return "${peer.value.platform}".paragraph(color: AppTheme.greyColor);
+    return "${peer.value.platform}".paragraph(color: AppTheme.GreyColor);
   }
 }
 
@@ -164,7 +123,7 @@ class _PeerDetailsCard extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
+                  child: SimpleIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
                 )),
 
             // Align Compass

@@ -13,7 +13,7 @@ class ActivityPopup extends GetView<ActivityController> {
         onPressed: () => AppRoute.close(),
         action: ActionButton(
           key: controller.clearButtonKey,
-          iconData: SonrIcons.Clear,
+          iconData: SimpleIcons.Clear,
           onPressed: controller.clearAllActivity,
         ),
       ),
@@ -70,7 +70,7 @@ class _PastActivityView extends GetView<ActivityController> {
                     child: [
                       Padding(padding: EdgeInsets.all(24)),
                       Image.asset(
-                        'assets/illustrations/EmptyNotif.png',
+                        'assets/images/illustrations/EmptyNotif.png',
                         height: Height.ratio(0.4),
                         fit: BoxFit.fitHeight,
                       ),

@@ -208,7 +208,7 @@ class DeviceService extends GetxService {
 
     // Load into DB
     var dbPath = join(directory.path, name);
-    ByteData data = await rootBundle.load("assets/images/$name");
+    ByteData data = await rootBundle.load("assets/images/utility/$name");
 
     // Write File
     List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);

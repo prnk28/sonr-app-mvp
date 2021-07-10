@@ -1,0 +1,23 @@
+<svg width="80" height="64" viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M3.1665 18.9797H76.3753V2.99414H3.1665V18.9797Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6 60.5625H72.8428V19H6V60.5625Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M28 38H52V29H28V38Z" stroke="#3F3F3F" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="73" cy="60.5" r="2.25" transform="rotate(-90 73 60.5)" fill="#C2C2C2"/>
+<circle cx="73" cy="60.5" r="2.25" transform="rotate(-90 73 60.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="73" cy="60.5" r="2.25" transform="rotate(-90 73 60.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="6" cy="60.5" r="2.25" transform="rotate(-90 6 60.5)" fill="#C2C2C2"/>
+<circle cx="6" cy="60.5" r="2.25" transform="rotate(-90 6 60.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="6" cy="60.5" r="2.25" transform="rotate(-90 6 60.5)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="52" cy="29" r="2.25" transform="rotate(-90 52 29)" fill="#C2C2C2"/>
+<circle cx="52" cy="29" r="2.25" transform="rotate(-90 52 29)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="52" cy="29" r="2.25" transform="rotate(-90 52 29)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="28" cy="29" r="2.25" transform="rotate(-90 28 29)" fill="#C2C2C2"/>
+<circle cx="28" cy="29" r="2.25" transform="rotate(-90 28 29)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="28" cy="29" r="2.25" transform="rotate(-90 28 29)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="77" cy="3" r="2.25" transform="rotate(-90 77 3)" fill="#C2C2C2"/>
+<circle cx="77" cy="3" r="2.25" transform="rotate(-90 77 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="77" cy="3" r="2.25" transform="rotate(-90 77 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3" cy="3" r="2.25" transform="rotate(-90 3 3)" fill="#C2C2C2"/>
+<circle cx="3" cy="3" r="2.25" transform="rotate(-90 3 3)" stroke="#151515" stroke-width="1.5"/>
+<circle cx="3" cy="3" r="2.25" transform="rotate(-90 3 3)" stroke="#151515" stroke-width="1.5"/>
+</svg>
