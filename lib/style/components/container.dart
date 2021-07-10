@@ -70,7 +70,7 @@ class BoxContainer extends StatelessWidget {
       clipBehavior: clipBehavior,
       child: child,
       decoration: BoxDecoration(
-        border: Get.isDarkMode ? null : Border.all(color: AppTheme.BackgroundColor, width: 1),
+        border: Get.isDarkMode ? null : Border.all(color: AppTheme.DividerColor, width: 1),
         gradient: AppGradients.Foreground,
         borderRadius: BorderRadius.circular(radius),
         boxShadow: AppTheme.RectBoxShadow,

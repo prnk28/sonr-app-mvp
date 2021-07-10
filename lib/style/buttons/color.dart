@@ -46,6 +46,7 @@ class ColorButton extends StatelessWidget {
     return ColorButton(
         decoration: BoxDecoration(
             gradient: AppGradients.Primary,
+            backgroundBlendMode: Get.isDarkMode ? BlendMode.color : BlendMode.overlay,
             borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
             boxShadow: AppTheme.RectBoxShadow),
         onPressed: onPressed,

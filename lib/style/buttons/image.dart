@@ -58,7 +58,7 @@ class ImageButton extends StatelessWidget {
                           width: size,
                           height: size,
                           decoration: BoxDecoration(
-                            color: AppTheme.ForegroundColor,
+                            gradient: AppGradients.Foreground,
                             shape: BoxShape.circle,
                           ),
                           padding: EdgeInsets.all(24),

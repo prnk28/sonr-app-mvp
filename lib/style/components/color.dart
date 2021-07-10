@@ -22,7 +22,7 @@ class AppColor {
 
   // ** Theme Colors ** //
   static const Color BackgroundLight = Colors.white;
-  static const Color BackgroundDark = Color(0xff15162D);
+  static const Color BackgroundDark = Color(0xff151515);
   static const Color DividerLight = Color(0xffEBEBEB);
   static const Color DividerDark = Color(0xff4E4949);
   static const Color ForegroundLight = Color(0xffF8F8F9);
@@ -77,25 +77,23 @@ class AppGradientColor {
 
   /// ### First Foreground Gradient Color
   /// Returns Foreground Gradient Start Color By Theme Mode
-  /// - Gradient Black (1) `#2B2B2B`
-  /// - Gradient White (1) `#F4F7FA`
+  /// - Gradient Black (1) `#3E3E3F`
   static Tuple<Color, double> foregroundStart(bool darkMode) {
     if (darkMode) {
-      return Tuple(Color(0xff2B2B2B), 0);
+      return Tuple(Color(0xff3E3E3F), 0);
     } else {
-      return Tuple(Color(0xffF4F7FA), 0);
+      return Tuple(Color(0xffF4FBFC), 0);
     }
   }
 
   /// ### Final Foreground Gradient Color
   /// Returns Foreground Gradient Final Color By Theme Mode
-  /// - Gradient Black (2) `#35363A`
-  /// - Gradient White (2) `#FFFFFF`
+  /// - Gradient Black (2) `#25272C`
   static Tuple<Color, double> foregroundEnd(bool darkMode) {
     if (darkMode) {
-      return Tuple(Color(0xff35363A), 1);
+      return Tuple(Color(0xff25272C), 1);
     } else {
-      return Tuple(Color(0xffFFFFFF), 1);
+      return Tuple(Color(0xffF1F3F3), 1);
     }
   }
 }
