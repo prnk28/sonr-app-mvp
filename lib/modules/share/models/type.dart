@@ -10,7 +10,10 @@ enum ShareViewType {
   Popup,
 
   /// For when ShareView Presented from Transfer Screen
-  Alert
+  Alert,
+
+  /// For When Quick Access Peer Tapped
+  Hover,
 }
 
 enum ShareViewStatus { Default, Loading, Ready }

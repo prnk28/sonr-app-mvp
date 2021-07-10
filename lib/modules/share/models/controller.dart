@@ -5,13 +5,13 @@ import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class ShareController extends GetxController {
+class ShareController extends GetxController with StateMixin<Session> {
   // Properties
   final gallery = RxList<AssetPathEntity>();
   final currentAlbum = Rx<AssetPathAlbum>(AssetPathAlbum.blank());
   final selectedItems = RxList<Tuple<AssetEntity, Uint8List>>();
   final hasSelected = false.obs;
-  final status = ShareViewStatus.Default.obs;
+  final viewStatus = ShareViewStatus.Default.obs;
   final type = ShareViewType.None.obs;
 
   // References
@@ -27,14 +27,19 @@ class ShareController extends GetxController {
     super.onInit();
   }
 
+  void initialize(ShareViewType givenType) {
+    type(givenType);
+    change(Session(), status: RxStatus.empty());
+  }
+
   /// Initializes Controller for Popup - Popup is for when in HomeScreen
   static void initPopup() {
-    Get.find<ShareController>().type(ShareViewType.Popup);
+    Get.find<ShareController>().initialize(ShareViewType.Popup);
   }
 
   /// Initializes Controller for Dialog - Dialog is for when in TransferScreen
   static void initAlert() {
-    Get.find<ShareController>().type(ShareViewType.Alert);
+    Get.find<ShareController>().initialize(ShareViewType.Alert);
   }
 
   /// Closes Current Window
@@ -62,7 +67,7 @@ class ShareController extends GetxController {
   /// Initializes Gallery
   Future<void> initGallery() async {
     // Set Loading
-    status(ShareViewStatus.Loading);
+    viewStatus(ShareViewStatus.Loading);
 
     // Setup Gallery
     var list = await PhotoManager.getAssetPathList();
@@ -73,7 +78,7 @@ class ShareController extends GetxController {
     }
 
     // Set Loading
-    status(ShareViewStatus.Ready);
+    viewStatus(ShareViewStatus.Ready);
   }
 
   /// Open Camera and Take Picture for Share
@@ -143,14 +148,14 @@ class ShareController extends GetxController {
   }
 
   /// Choose Payload then Immedietly Send Invite to Peer
-  Future<Session?> chooseThenInvite({required Peer peer, required ChooseOption option}) async {
+  Future<void> chooseThenInvite({required Peer peer, required ChooseOption option}) async {
     SenderService.choose(option).then((value) {
       if (value != null) {
         // Set Peer for Invite
         value.setPeer(peer);
 
         // Create Session
-        return SenderService.invite(value);
+        change(SenderService.invite(value), status: RxStatus.success());
       }
     });
   }
@@ -175,11 +180,11 @@ class ShareController extends GetxController {
 
   /// Changes Album to New Album
   Future<void> setAlbum(int index) async {
-    status(ShareViewStatus.Loading);
+    viewStatus(ShareViewStatus.Loading);
     currentAlbum.call();
     currentAlbum(await AssetPathAlbum.init(index, gallery[index]));
     currentAlbum.refresh();
-    status(ShareViewStatus.Ready);
+    viewStatus(ShareViewStatus.Ready);
   }
 
   /// Removes Item from Selected Items List

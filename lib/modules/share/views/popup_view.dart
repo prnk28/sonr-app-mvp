@@ -59,7 +59,7 @@ class _SharePopupViewState extends State<SharePopupView> {
             SliverPadding(padding: EdgeInsets.only(top: 24)),
             // @ Builds List of Social Tile
             Obx(() {
-              if (controller.status.value.isReady) {
+              if (controller.viewStatus.value.isReady) {
                 return SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {

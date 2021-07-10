@@ -6,7 +6,7 @@ class ShareHoverView extends GetView<ShareController> {
   ShareHoverView({required this.peer});
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             color: AppTheme.BackgroundColor,
@@ -16,30 +16,91 @@ class ShareHoverView extends GetView<ShareController> {
             )),
         constraints: BoxConstraints(maxWidth: 200, maxHeight: 314),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-        child: Column(
+        duration: 1500.milliseconds,
+        child: controller.obx((state) {
+          if (state != null) {
+            return Column(mainAxisSize: MainAxisSize.min, children: [
+              _ShareHoverPeerInfo(peer: peer),
+              Divider(),
+              Padding(padding: EdgeInsets.only(top: 8)),
+              _ShareHoverSession(
+                session: state,
+              ),
+            ]);
+          }
+          return Container();
+        },
+            onEmpty: Column(
+              children: [
+                _ShareHoverPeerInfo(peer: peer),
+                Divider(),
+                Padding(padding: EdgeInsets.only(top: 8)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _ShareHoverCameraButtonItem(peer: peer),
+                    Padding(padding: EdgeInsets.only(left: 24)),
+                    _ShareHoverMediaButtonItem(peer: peer),
+                  ],
+                ),
+                Padding(padding: EdgeInsets.only(top: 24)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _ShareHoverFileButtonItem(peer: peer),
+                    Padding(padding: EdgeInsets.only(left: 24)),
+                    _ShareHoverContactButtonItem(peer: peer),
+                  ],
+                ),
+              ],
+            )));
+  }
+}
+
+class _ShareHoverSession extends StatelessWidget {
+  final Session session;
+
+  const _ShareHoverSession({Key? key, required this.session}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (session.status.value == SessionStatus.Accepted) {
+        return Container(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _ShareHoverPeerInfo(peer: peer),
-            Divider(),
-            Padding(padding: EdgeInsets.only(top: 8)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _ShareHoverCameraButtonItem(peer: peer),
-                Padding(padding: EdgeInsets.only(left: 24)),
-                _ShareHoverMediaButtonItem(peer: peer),
-              ],
+            CircularProgressIndicator(
+              color: SonrColor.Primary,
             ),
-            Padding(padding: EdgeInsets.only(top: 24)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _ShareHoverFileButtonItem(peer: peer),
-                Padding(padding: EdgeInsets.only(left: 24)),
-                _ShareHoverContactButtonItem(peer: peer),
-              ],
-            ),
+            "Sending".section(color: AppTheme.GreyColor, fontSize: 14),
           ],
         ));
+      } else if (session.status.value == SessionStatus.Denied) {
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SimpleIcons.Close.gradient(),
+              "Denied".section(color: AppTheme.GreyColor, fontSize: 14),
+            ],
+          ),
+        );
+      } else if (session.status.value == SessionStatus.Pending) {
+        return Container(
+            child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            HourglassIndicator(scale: 1),
+            "Pending".section(color: AppTheme.GreyColor, fontSize: 14),
+          ],
+        ));
+      }
+      return SimpleIcons.Check.gradient();
+    });
   }
 }
 
