@@ -147,7 +147,7 @@ class SnackArgs {
       isLast ? "Almost There!" : list.random(),
       message,
       SimpleIcons.Warning.white,
-      AppColor.Critical,
+      AppColor.Red,
       2600,
       false,
       position,

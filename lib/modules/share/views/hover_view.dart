@@ -72,7 +72,7 @@ class _ShareHoverSession extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: AppColor.Primary,
+              color: AppColor.Blue,
             ),
             "Sending".section(color: AppTheme.GreyColor, fontSize: 14),
           ],

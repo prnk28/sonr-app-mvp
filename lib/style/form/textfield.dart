@@ -85,7 +85,7 @@ class DesignTextField extends StatelessWidget {
                   isError
                       ? Text(
                           " *Error",
-                          style: TextStyle(fontWeight: FontWeight.w500, color: AppColor.Critical),
+                          style: TextStyle(fontWeight: FontWeight.w500, color: AppColor.Red),
                         )
                       : Container(),
                 ]))
@@ -136,7 +136,7 @@ class DesignTextField extends StatelessWidget {
           decoration: InputDecoration.collapsed(
               border: UnderlineInputBorder(
                   borderSide: BorderSide(
-                color: AppColor.Critical,
+                color: AppColor.Red,
                 width: 2,
               )),
               hintText: hint,

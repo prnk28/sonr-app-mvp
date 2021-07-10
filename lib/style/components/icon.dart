@@ -396,7 +396,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: 24,
-      color: AppColor.Grey,
+      color: AppColor.DarkGrey,
     );
   }
 
@@ -404,7 +404,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: size,
-      color: AppColor.Grey,
+      color: AppColor.DarkGrey,
     );
   }
 
@@ -432,7 +432,7 @@ extension DesignIcon on IconData {
     return ShaderMask(
       blendMode: BlendMode.modulate,
       shaderCallback: (bounds) {
-        var grad = value ?? AppGradients.Theme();
+        var grad = value ?? AppGradients.Primary;
         return grad.createShader(bounds);
       },
       child: Icon(

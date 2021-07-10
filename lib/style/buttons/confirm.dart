@@ -59,7 +59,7 @@ class ConfirmButton extends StatelessWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-      color: CGUtility.hexColor("#a2a2a2"),
+      color: CGUtility.hex("#a2a2a2"),
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );
@@ -121,7 +121,7 @@ class ConfirmButton extends StatelessWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-      color: CGUtility.hexColor("#a2a2a2"),
+      color: CGUtility.hex("#a2a2a2"),
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
       boxShadow: AppTheme.RectBoxShadow,
     );

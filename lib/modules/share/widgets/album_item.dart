@@ -10,7 +10,7 @@ class AlbumItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-        decoration: isSelected ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColor.Primary.withOpacity(0.9)) : BoxDecoration(),
+        decoration: isSelected ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColor.Blue.withOpacity(0.9)) : BoxDecoration(),
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         duration: 150.milliseconds,

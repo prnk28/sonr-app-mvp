@@ -29,7 +29,7 @@ class ContactSName extends StatelessWidget {
                           width: 24,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: AppColor.Primary.withOpacity(0.75),
+                            color: AppColor.Blue.withOpacity(0.75),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(

@@ -61,7 +61,7 @@ class RegisterSetupTitleBar extends StatelessWidget implements PreferredSizeWidg
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               instruction != null ? instruction!.light(fontSize: 42) : Container(),
-              isGradient ? title.gradient(value: AppGradients.Theme(radius: 2), size: 48) : title.heading(fontSize: 42),
+              isGradient ? title.gradient(value: AppGradients.Primary, size: 48) : title.heading(fontSize: 42),
             ],
           ),
         ),
@@ -146,7 +146,7 @@ class RegisterTextField extends GetView<RegisterController> {
                     ),
                 isError
                     ? " Error".sectionSpan(
-                        color: AppColor.Critical,
+                        color: AppColor.Red,
                         fontSize: 20,
                       )
                     : "".lightSpan(),
@@ -197,7 +197,7 @@ class RegisterTextField extends GetView<RegisterController> {
       child: buildDefault(context,
           isError: true,
           decoration: InputDecoration.collapsed(
-              border: UnderlineInputBorder(borderSide: BorderSide(color: AppColor.Critical, width: 4)),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: AppColor.Red, width: 4)),
               hintText: hint,
               hintStyle:
                   TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),

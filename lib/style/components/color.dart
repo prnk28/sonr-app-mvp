@@ -2,40 +2,102 @@ import 'package:sonr_app/style/style.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 import 'package:flutter/material.dart';
 
-
 class AppColor {
-  /// #### Gradient Red (1) `#FD4DF6`
-  /// First Color in Dark Mode Primary Gradient
-  static const Color gradientRedStart = Color(0xffFD4DF6);
-
-  /// #### Gradient Red (2) `#FDA14D`
-  /// Last Color in Dark Mode Primary Gradient
-  static const Color gradientRedEnd = Color(0xffFDA14D);
-
-  /// #### Gradient Blue (1) `#6587FD`
-  /// First Color in Light Mode Primary Gradient
-  static const Color gradientBlueStart = Color(0xff6587FD);
-
-  /// #### Gradient Blue (2) `#65FDF4`
-  /// Last Color in Light Mode Primary Gradient
-  static const Color gradientBlueEnd = Color(0xff65FDF4);
-
   // ** General Theme Color Properties ** //
   static const Color Black = Color(0xff15162D);
   static const Color White = Color(0xfff0f6fa);
-  static const Color Grey = Color(0xff62666a);
-  static const Color LightGrey = Color(0xffa4a4a4);
+  static const Color DarkGrey = Color(0xff8E8E93);
+  static const Color LightGrey = Color(0xffBFBFC3);
 
   // ** Palette Colors ** //
-  static const Color Primary = Color(0xff1792ff);
-  static const Color Secondary = Color(0xff9665FD);
-  static const Color Tertiary = Color(0xff14B69A);
-  static const Color Critical = Color(0xffFF2866);
+  static const Color Blue = Color(0xff1792ff);
+  static const Color Purple = Color(0xff9665FD);
+  static const Color Green = Color(0xff14B69A);
+  static const Color Red = Color(0xffFF2866);
 
   static const Color AccentPink = Color(0xffFF84B1);
   static const Color AccentBlue = Color(0xffC8E9FF);
   static const Color AccentNavy = Color(0xff245379);
   static const Color AccentPurple = Color(0xffD0CCFF);
+
+  // ** Theme Colors ** //
+  static const Color BackgroundLight = Colors.white;
+  static const Color BackgroundDark = Color(0xff15162D);
+  static const Color DividerLight = Color(0xffEBEBEB);
+  static const Color DividerDark = Color(0xff4E4949);
+  static const Color ForegroundLight = Color(0xffF8F8F9);
+  static const Color ForegroundDark = Color(0xff2B2B2B);
+  static Color ShadowLight = Color(0xffD4D7E0);
+  static Color ShadowDark = Colors.black;
+
+  static Color Background(bool isDarkMode) => isDarkMode ? BackgroundDark : BackgroundLight;
+
+  static Color Divider(bool isDarkMode) => isDarkMode ? DividerDark : DividerLight;
+
+  static Color Foreground(bool isDarkMode) => isDarkMode ? ForegroundDark : ForegroundLight;
+
+  static Color Item(bool isDarkMode) => isDarkMode ? White : Black;
+
+  static Color Grey(bool isDarkMode) => isDarkMode ? LightGrey : DarkGrey;
+
+  static Color Shadow(bool isDarkMode, {double lightOpacity = 0.75, double darkOpacity = 0.4}) =>
+      isDarkMode ? ShadowDark.withOpacity(darkOpacity) : ShadowLight.withOpacity(lightOpacity);
+}
+
+class AppGradientColor {
+  /// Angle of Primary Gradient
+  static const K_PRIMARY_ANGLE = 314.65;
+
+  /// Angle of Foreground Gradient
+  static const K_FOREGROUND_ANGLE = 50.39;
+
+  /// ### First Primary Gradient Color
+  /// Returns Primary Gradient Start Color By Theme Mode
+  /// - Gradient Red (1) `#FD4DF6`
+  /// - Gradient Blue (1) `#6587FD`
+  static Tuple<Color, double> primaryStart(bool darkMode) {
+    if (darkMode) {
+      return Tuple(Color(0xffFD4DF6), 0);
+    } else {
+      return Tuple(Color(0xff6587FD), 0);
+    }
+  }
+
+  /// ### Final Primary Gradient Color
+  /// Returns Primary Gradient Final Color By Theme Mode
+  /// - Gradient Red (2) `#FDA14D`
+  /// - Gradient Blue (2) `#65FDF4`
+  static Tuple<Color, double> primaryEnd(bool darkMode) {
+    if (darkMode) {
+      return Tuple(Color(0xffFDA14D), 1);
+    } else {
+      return Tuple(Color(0xff65FDF4), 1);
+    }
+  }
+
+  /// ### First Foreground Gradient Color
+  /// Returns Foreground Gradient Start Color By Theme Mode
+  /// - Gradient Black (1) `#2B2B2B`
+  /// - Gradient White (1) `#F4F7FA`
+  static Tuple<Color, double> foregroundStart(bool darkMode) {
+    if (darkMode) {
+      return Tuple(Color(0xff2B2B2B), 0);
+    } else {
+      return Tuple(Color(0xffF4F7FA), 0);
+    }
+  }
+
+  /// ### Final Foreground Gradient Color
+  /// Returns Foreground Gradient Final Color By Theme Mode
+  /// - Gradient Black (2) `#35363A`
+  /// - Gradient White (2) `#FFFFFF`
+  static Tuple<Color, double> foregroundEnd(bool darkMode) {
+    if (darkMode) {
+      return Tuple(Color(0xff35363A), 1);
+    } else {
+      return Tuple(Color(0xffFFFFFF), 1);
+    }
+  }
 }
 
 class NoSplashFactory extends InteractiveInkFeatureFactory {
@@ -77,7 +139,7 @@ class NoSplash extends InteractiveInkFeature {
 
 class CGUtility {
   /// String To Material color
-  static Color hexColor(String hex, {double opacity = 1.0}) => _intToColor(int.parse(_textSubString(hex)!, radix: 16)).withOpacity(opacity);
+  static Color hex(String hex, {double opacity = 1.0}) => _intToColor(int.parse(_textSubString(hex)!, radix: 16)).withOpacity(opacity);
 
   static Color _intToColor(int hexNumber) => Color.fromARGB(255, (hexNumber >> 16) & 0xFF, ((hexNumber >> 8) & 0xFF), (hexNumber >> 0) & 0xFF);
 
@@ -88,14 +150,14 @@ class CGUtility {
     return text.substring(1, text.length);
   }
 
-  static LinearGradient bottomUpGradient(List<Color> colors) =>
+  static LinearGradient bottomUp(List<Color> colors) =>
       LinearGradient(colors: colors, begin: Alignment.bottomCenter, end: Alignment.topCenter, tileMode: TileMode.clamp);
 
-  static LinearGradient angledGradient(double angle, List<Color> colors, List<double> stops) =>
+  static LinearGradient angled(double angle, List<Color> colors, List<double> stops) =>
       LinearGradient(colors: colors, stops: stops, transform: GradientRotation(radians(angle)), tileMode: TileMode.clamp);
 
-  static LinearGradient angledGradientWith({required double angle, required List<Tuple<String, double>> values}) {
-    final colors = values.map((e) => CGUtility.hexColor(e.item1)).toList();
+  static LinearGradient angledFrom({required double angle, required List<Tuple<Color, double>> values}) {
+    final colors = values.map((e) => e.item1).toList();
     final stops = values.map((e) => e.item2).toList();
     return LinearGradient(colors: colors, stops: stops, transform: GradientRotation(radians(angle)), tileMode: TileMode.clamp);
   }

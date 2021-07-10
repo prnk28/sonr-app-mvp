@@ -136,7 +136,7 @@ extension IntroPanelTypeUtils on IntroPageType {
 
   /// Returns this Panels Description as Rich Text
   Widget description() {
-    final color = AppColor.Grey;
+    final color = AppColor.DarkGrey;
     final size = 20.0;
     switch (this) {
       case IntroPageType.Welcome:

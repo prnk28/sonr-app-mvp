@@ -30,9 +30,9 @@ extension NewSNameStatusUtil on NewSNameStatus {
       case NewSNameStatus.Default:
         return SimpleIcons.ATSign.icon(color: AppTheme.ItemColorInversed, size: size);
       case NewSNameStatus.Available:
-        return SimpleIcons.Check.icon(color: AppColor.Tertiary, size: size);
+        return SimpleIcons.Check.icon(color: AppColor.Green, size: size);
       case NewSNameStatus.Returning:
-        return SimpleIcons.Zap.icon(color: AppColor.Secondary, size: size);
+        return SimpleIcons.Zap.icon(color: AppColor.Purple, size: size);
       default:
         return SimpleIcons.Alert.icon(color: AppColor.AccentPink, size: size);
     }

@@ -67,7 +67,7 @@ class _CurrentActivityPeer extends GetView<ActivityController> {
               alignment: Alignment.center,
               width: 28,
               height: 28,
-              child: payload.icon(color: AppColor.Primary, size: 20),
+              child: payload.icon(color: AppColor.Blue, size: 20),
             ),
           )
         ],

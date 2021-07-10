@@ -160,7 +160,7 @@ class ShowcaseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Showcase(
         key: globalKey,
-        showcaseBackgroundColor: AppColor.Primary,
+        showcaseBackgroundColor: AppColor.Blue,
         shapeBorder: shapeBorder,
         contentPadding: EdgeInsets.all(8),
         showArrow: true,
