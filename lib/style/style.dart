@@ -36,7 +36,6 @@ export 'elements/painter.dart';
 export 'elements/scaffold.dart';
 export 'elements/appbar.dart';
 export 'elements/animation.dart';
-export 'elements/image.dart';
 
 // Form Styles
 export 'form/checklist.dart';

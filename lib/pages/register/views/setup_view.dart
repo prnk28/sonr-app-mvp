@@ -239,6 +239,7 @@ class _ProfileSetupView extends GetView<RegisterController> {
           RegisterTextField(
             type: RegisterTextFieldType.FirstName,
             focusNode: firstNameFocus,
+            
             hint: hintName.item1,
             onEditingComplete: () {
               firstNameFocus.unfocus();
