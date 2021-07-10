@@ -119,7 +119,7 @@ class _ShareHoverPeerInfo extends StatelessWidget {
       children: [
         peer.platform.icon(color: AppTheme.GreyColor, size: 24),
         Padding(padding: EdgeInsets.only(left: 8)),
-        _buildName().subheading(fontSize: 28),
+        _buildName().subheading(fontSize: 28, color: AppTheme.ItemColor),
       ],
     );
   }
