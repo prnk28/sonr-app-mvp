@@ -114,7 +114,7 @@ extension InviteRequestDisplayUtils on InviteRequest {
     } else {
       AppRoute.sheet(InviteRequestSheet(invite: this), key: ValueKey(this), dismissible: true, onDismissed: (direction) {
         NodeService.instance.respond(this.newDeclineResponse());
-        AppRoute.closeSheet();
+        AppRoute.close();
       });
     }
   }

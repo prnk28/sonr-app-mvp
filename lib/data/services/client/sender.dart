@@ -10,8 +10,10 @@ class SenderService extends GetxService {
   static SenderService get to => Get.find<SenderService>();
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasSession;
+  static Rx<bool> get hasSelected => to._hasSelected;
 
   // Properties
+  final _hasSelected = false.obs;
   final _hasSession = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -123,6 +125,7 @@ class SenderService extends GetxService {
       // Send Invite
       NodeService.instance.invite(request);
       to._session.outgoing(request);
+      to._hasSession(true);
       return to._session;
     }
     return null;
@@ -170,6 +173,7 @@ class SenderService extends GetxService {
     Logger.info("Node(Callback) Transmitted: " + data.toString());
     _session.reset();
     _hasSession(false);
+    _hasSelected(false);
   }
 
   // * ------------------- Helpers ----------------------------
@@ -184,6 +188,7 @@ class SenderService extends GetxService {
         ChooseOption.Camera.logConfirm();
 
         // Complete Result
+        _hasSelected(true);
         return result;
       });
     }
@@ -192,6 +197,7 @@ class SenderService extends GetxService {
 
   // @ Helper: Handles CONTACT Choice
   Future<InviteRequest?> _handleContactChoice() async {
+    _hasSelected(true);
     return await _handlePayload(Payload.CONTACT);
   }
 
@@ -207,12 +213,14 @@ class SenderService extends GetxService {
         }
 
         // Confirm File
+        _hasSelected(true);
         var file = result.toSFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
         var filePath = await NodeService.instance.pickFile();
         var file = SFile(payload: Payload.FILE, items: [SFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
+          _hasSelected(true);
           return await _handlePayload(file.payload, file: file);
         }
       }
@@ -237,6 +245,7 @@ class SenderService extends GetxService {
           ChooseOption.Media.logConfirm();
         }
         // Convert To File
+        _hasSelected(true);
         var file = result.toSFile(payload: Payload.MEDIA);
         return await _handlePayload(file.payload, file: file);
       }

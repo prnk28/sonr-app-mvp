@@ -8,13 +8,25 @@ const double K_CARD_HEIGHT = 190;
 /// @ Root Peer Card View
 class PeerCardView extends GetWidget<PeerController> {
   final Peer peer;
+  final GlobalKey peerKey = GlobalKey();
   PeerCardView(this.peer) : super(key: ValueKey(peer.id.peer));
 
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer);
     return GestureDetector(
-      onTap: controller.invite,
+      onTap: () {
+        if (SenderService.hasSelected.value) {
+          controller.invite();
+        } else {
+          AppRoute.positioned(
+            ShareHoverView(peer: peer),
+            init: () => ShareController.initPopup(),
+            parentKey: peerKey,
+            offset: Offset(-Get.width / 2, 20),
+          );
+        }
+      },
       child: BoxContainer(
           constraints: BoxConstraints.tight(Size(K_CARD_WIDTH, K_CARD_HEIGHT)),
           clipBehavior: Clip.antiAlias,

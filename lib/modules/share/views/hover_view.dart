@@ -100,7 +100,7 @@ class _ShareHoverSession extends StatelessWidget {
         ));
       }
       Future.delayed(1500.milliseconds, () {
-        AppRoute.closePopup();
+        AppRoute.close();
       });
       return SimpleIcons.Check.gradient(value: DesignGradients.ItmeoBranding);
     });

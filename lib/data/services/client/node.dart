@@ -25,6 +25,8 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   late StreamSubscription<ConnectivityResult> _connectionStream;
   late StreamSubscription<LobbyEvent> _lobbyEventStream;
   late StreamSubscription<ProgressEvent> _progressEventStream;
+  late StreamSubscription<StatusEvent> _statusEventStream;
+  late StreamSubscription<MailEvent> _mailEventStream;
 
   // ^ Constructer ^ //
   Future<NodeService> init() async {
@@ -37,7 +39,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Set Callbacks
     _instance.onConnected = _handleConnected;
-    _instance.onStatus = _handleStatus;
     _instance.onError = _handleError;
     _instance.onInvite = ReceiverService.to.handleInvite;
     _instance.onReply = SenderService.to.handleReply;
@@ -47,9 +48,8 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Set Stream Handlers
     _lobbyEventStream = _instance.onEvent(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
-    _instance.onMail((data) {
-      print(data.toString());
-    });
+    _statusEventStream = _instance.onStatus(_handleStatus);
+    _mailEventStream = _instance.onMail(_handleMail);
     return this;
   }
 
@@ -57,7 +57,9 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   onClose() {
     _connectionStream.cancel();
     _lobbyEventStream.cancel();
+    _mailEventStream.cancel();
     _progressEventStream.cancel();
+    _statusEventStream.cancel();
     super.onClose();
   }
 
@@ -160,6 +162,12 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Logging
     Logger.info("Node(Callback) Status: " + data.value.toString());
+  }
+
+  /// @ Handle Bootstrap Result
+  void _handleMail(MailEvent data) {
+    // Logging
+    Logger.info("Node(Callback) Status: " + data.toString());
   }
 
   /// @ An Error Has Occurred

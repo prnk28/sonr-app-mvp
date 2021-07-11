@@ -310,6 +310,7 @@ extension AppRoute on AppPage {
     String buttonText = "Okay",
     bool closeOnResponse = true,
     bool ignoreSafeArea = false,
+    void Function()? onDismissed,
     bool dismissible = true,
   }) async {
     // Hide Keyboard Before Route
@@ -343,6 +344,7 @@ extension AppRoute on AppPage {
     bool dismissible = true,
     dynamic args,
     void Function()? init,
+    void Function()? onDismissed,
     Duration? delay,
   }) async {
     if (isPopupClosed) {
@@ -359,7 +361,12 @@ extension AppRoute on AppPage {
         BlurredBackground(
             child: child,
             onTapped: () {
-              Future.delayed(300.milliseconds, () => Get.back());
+              Future.delayed(300.milliseconds, () {
+                if (onDismissed != null) {
+                  onDismissed();
+                }
+                Get.back();
+              });
             }),
         barrierDismissible: dismissible,
         barrierColor: Colors.transparent,
@@ -373,10 +380,20 @@ extension AppRoute on AppPage {
     Widget child, {
     required GlobalKey parentKey,
     bool ignoreSafeArea = false,
+    bool dismissible = true,
+    dynamic args,
+    void Function()? init,
+    void Function()? onDismissed,
+    Duration? delay,
     Offset? offset,
   }) async {
     // Hide Keyboard Before Route
     DeviceService.keyboardHide();
+
+    // Init Function
+    if (init != null) {
+      init();
+    }
 
     final RxBool hasDismissed = false.obs;
     Get.dialog(
@@ -417,15 +434,21 @@ extension AppRoute on AppPage {
     Get.dialog(
       BlurredBackground(
           child: QuestionOverlay(
-        title,
-        description,
-        (result) {
-          completer.complete(result);
-          Get.back();
-        },
-        acceptTitle,
-        declineTitle,
-      )),
+            title,
+            description,
+            (result) {
+              completer.complete(result);
+              Get.back();
+            },
+            acceptTitle,
+            declineTitle,
+          ),
+          onTapped: () {
+            Future.delayed(300.milliseconds, () {
+              completer.complete(false);
+              Get.back();
+            });
+          }),
       transitionDuration: 0.seconds,
       barrierDismissible: dismissible,
       barrierColor: Colors.transparent,
@@ -453,7 +476,7 @@ extension AppRoute on AppPage {
 
     // Check if Forced Open
     if (forced) {
-      closeSheet();
+      close();
     }
 
     // Init Method
@@ -467,7 +490,10 @@ extension AppRoute on AppPage {
           dismissible
               ? BlurredBackground(
                   onTapped: () {
-                    onDismissed!(DismissDirection.down);
+                    Future.delayed(300.milliseconds, () {
+                      onDismissed!(DismissDirection.down);
+                      Get.back();
+                    });
                   },
                   child: Dismissible(
                     key: key!,
@@ -507,21 +533,7 @@ extension AppRoute on AppPage {
   }
 
   /// Closes Current Page
-  static void close() {
-    Get.back(closeOverlays: true);
-  }
-
-  /// Closes Active Popup
-  static void closePopup() {
-    if (isPopupOpen) {
-      Get.back();
-    }
-  }
-
-  /// Closes Active Popup
-  static void closeSheet() {
-    if (isSheetOpen) {
-      Get.back();
-    }
+  static void close({bool removeAll = false}) {
+    Get.back(closeOverlays: removeAll);
   }
 }

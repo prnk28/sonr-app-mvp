@@ -18,23 +18,6 @@ class ReceiverService extends GetxService {
     return this;
   }
 
-  /// Peer has Invited User
-  void handleInvite(InviteRequest data) {
-    // Create Incoming Session
-    to._session.incoming(data);
-
-    // Handle Feedback
-    Sound.Swipe.play();
-    HapticFeedback.heavyImpact();
-
-    // Check for Flat
-    if (data.type == InviteRequest_Type.Flat && data.payload == Payload.CONTACT) {
-      AppPage.Flat.invite(data.contact);
-    } else {
-      data.show();
-    }
-  }
-
   // * ------------------- Methods ----------------------------
   static void decide(bool decision, {bool sendBackContact = false, bool closeOverlay = false}) {
     if (isRegistered) {
@@ -70,7 +53,7 @@ class ReceiverService extends GetxService {
           if (NodeService.isReady) {
             NodeService.instance.respond(to._session.buildReply(decision: true));
           }
-          AppRoute.closeSheet();
+          AppRoute.close();
           AppPage.Activity.to();
         }
         // Send Declined
@@ -84,6 +67,31 @@ class ReceiverService extends GetxService {
   }
 
   // * ------------------- Callbacks ----------------------------
+  /// Peer has Invited User
+  void handleInvite(InviteRequest data) {
+    // Create Incoming Session
+    to._session.incoming(data);
+
+    // Handle Feedback
+    Sound.Swipe.play();
+    HapticFeedback.heavyImpact();
+
+    // Check for Flat
+    if (data.type == InviteRequest_Type.Flat && data.payload == Payload.CONTACT) {
+      AppPage.Flat.invite(data.contact);
+    } else {
+      // Place Controller
+      if (data.payload == Payload.CONTACT) {
+        AppRoute.popup(ContactAuthView(false, invite: data), dismissible: false);
+      } else {
+        AppRoute.sheet(InviteRequestSheet(invite: data), key: ValueKey(this), dismissible: true, onDismissed: (direction) {
+          NodeService.instance.respond(data.newDeclineResponse());
+          AppRoute.close();
+        });
+      }
+    }
+  }
+
   /// Session Has Updated Progress
   void handleProgress(ProgressEvent data) {
     _session.onProgress(data);

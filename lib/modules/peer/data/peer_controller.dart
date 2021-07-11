@@ -63,7 +63,7 @@ class PeerController extends GetxController with StateMixin<Session> {
   void invite() {
     // Check Animated
     // Handle Mobile Invite - Payload Set
-    if (DeviceService.isMobile) {
+    if (SenderService.hasSelected.value) {
       // Check not already Pending
       if (!_hasInvited) {
         // Perform Invite

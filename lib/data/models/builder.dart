@@ -1,3 +1,4 @@
+import 'package:sonr_app/env.dart';
 import 'package:sonr_app/pages/register/models/status.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,7 @@ class RequestBuilder {
   static ConnectionRequest_TextileOptions get _textileOpts => ConnectionRequest_TextileOptions(
         enabled: true,
         mailbox: DeviceService.isIOS,
+        threadDB: Env.thread_db,
       );
 
   /// Returns New Connection Request
@@ -102,7 +104,7 @@ class NamebaseClient {
   /// Refresh Records with Result
   static Future<NamebaseResult> refresh() => _nbClient.refresh();
 
-  /// @ Validates SName as Valid characters
+  /// Validates SName as Valid characters
   static Future<NewSNameStatus> validateName(String sName) async {
     final result = await refresh();
     // Check Alphabet Only
