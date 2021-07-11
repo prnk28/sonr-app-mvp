@@ -181,7 +181,7 @@ class SenderService extends GetxService {
   Future<InviteRequest?> _handleCameraChoice() async {
     if (DeviceService.isMobile) {
       // Move to View
-      CameraView.open(onMediaSelected: (SFile file) async {
+      AppRoute.camera(onMediaSelected: (SFile file) async {
         var result = await _handlePayload(Payload.MEDIA, file: file);
 
         // Analytics

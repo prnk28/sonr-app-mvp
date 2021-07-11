@@ -197,17 +197,14 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     if (!Logger.to.userHasUpdatedSName.val) {
       // Retreive Public Key
       final response = await instance.verify(API.newVerifyRead());
+
+      // Validate SName
       if (response.publicKey.length > 0) {
-        // Create New Record
-        final newRecord = HSRecord.newName(AuthResponse(
+        // Create New Record and Update Status
+        Logger.setMigration(HSRecord.newName(AuthResponse(
           publicKey: response.publicKey,
           givenSName: ContactService.sName.toLowerCase(),
-        ));
-
-        // Update Status
-        Logger.to.userHasUpdatedSName.val = await NamebaseClient.addRecords([newRecord]);
-      } else {
-        print("Failed to Return Public Key");
+        )));
       }
     }
   }

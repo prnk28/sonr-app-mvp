@@ -146,3 +146,69 @@ class _IntelBadgeCount extends GetView<IntelController> {
         ));
   }
 }
+
+class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
+    return Obx(() => AnimatedOpacity(
+          duration: 200.milliseconds,
+          opacity: controller.appbarOpacity.value,
+          child: AnimatedSlider.fade(
+            duration: 2.seconds,
+            child: PageAppBar(
+              centerTitle: controller.view.value.isDefault,
+              key: ValueKey(false),
+              subtitle: Padding(
+                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 68) : EdgeInsets.zero,
+                child: controller.view.value == HomeView.Dashboard
+                    ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
+                        fontSize: 22,
+                        color: Get.theme.focusColor.withOpacity(0.7),
+                        align: TextAlign.start,
+                      )
+                    : Container(),
+              ),
+              action: HomeActionButton(
+                dashboardKey: controller.keyTwo,
+              ),
+              leading: controller.view.value != HomeView.Contact
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 32.0, left: 8),
+                      child: Container(
+                        child: Obx(() => ShowcaseItem.fromType(
+                              type: ShowcaseType.Help,
+                              child: ActionButton(
+                                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                                key: ValueKey<HomeView>(HomeView.Dashboard),
+                                iconData: SimpleIcons.Help,
+                                onPressed: () async => await Logger.openIntercom(),
+                              ),
+                            )),
+                      ),
+                    )
+                  : null,
+              title: controller.view.value != HomeView.Contact
+                  ? IntelHeader()
+                  : Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: controller.view.value.title.heading(
+                        color: AppTheme.ItemColor,
+                        align: TextAlign.start,
+                      ),
+                    ),
+              footer: controller.view.value != HomeView.Contact ? IntelFooter() : null,
+            ),
+          ),
+        ));
+  }
+
+  @override
+  Size get preferredSize {
+    if (controller.view.value != HomeView.Contact) {
+      return Size(Get.width, 186);
+    } else {
+      return Size(Get.width, kToolbarHeight + 64);
+    }
+  }
+}

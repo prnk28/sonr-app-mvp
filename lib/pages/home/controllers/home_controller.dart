@@ -12,7 +12,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final pageIndex = 0.obs;
   final bottomIndex = 0.obs;
   final view = HomeView.Dashboard.obs;
-  final sonrStatus = Rx<Status>(NodeService.status.value);
 
   // Propeties
   final query = "".obs;
@@ -29,11 +28,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final keyFive = GlobalKey();
 
   // References
-  late StreamSubscription<Lobby?> _lobbyStream;
-  late StreamSubscription<Status> _statusStream;
   late ScrollController scrollController;
-  int _lobbySizeRef = 0;
-  bool _timeoutActive = false;
 
   /// @ Controller Constructer
   @override
@@ -41,29 +36,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Check Platform
     if (DeviceService.isMobile) {
       // Handle Tab Controller
-      tabController = TabController(vsync: this, length: 2);
+      tabController = TabController(vsync: this, length: 3);
       scrollController = ScrollController(keepScrollOffset: false);
 
       // Handle Search Query
       query.listen(_handleQuery);
-
-      // Listen for Updates
-      tabController.addListener(() {
-        // Set Index
-        if (tabController.indexIsChanging) {
-          appbarOpacity(0);
-        } else {
-          appbarOpacity(1);
-        }
-
-        bottomIndex(tabController.index);
-
-        // Set Page
-        view(HomeView.values[tabController.index]);
-
-        // Update Title
-        title(view.value.title);
-      });
     } else {
       // Set View
       view(HomeView.Explorer);
@@ -71,10 +48,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Initialize
     super.onInit();
-
-    // Handle Streams
-    _lobbyStream = LobbyService.lobby.listen(_handleLobbyStream);
-    _statusStream = NodeService.status.listen(_handleStatus);
   }
 
   @override
@@ -90,8 +63,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ On Dispose
   @override
   void onClose() {
-    _lobbyStream.cancel();
-    _statusStream.cancel();
     pageIndex(0);
     super.onClose();
   }
@@ -119,13 +90,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  /// @ Handle Title Tap
-  void onTitleTap() {
-    if (LobbyService.lobby.value.count > 0) {
-      AppPage.Transfer.off();
-    }
-  }
-
   /// @ Update Bottom Bar Index
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
@@ -139,59 +103,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Update Title
       title(view.value.title);
-    }
-  }
-
-  // @ Swaps Title when Lobby Size Changes
-  void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    // Check Valid
-    if (!_timeoutActive && !isClosed) {
-      // Swap Text
-      title(val);
-      HapticFeedback.mediumImpact();
-      _timeoutActive = true;
-
-      // Revert Text
-      Future.delayed(timeout, () {
-        if (!isClosed) {
-          title("${LobbyService.lobby.value.count} Around");
-          _timeoutActive = false;
-        }
-      });
-    }
-  }
-
-  // @ Handle Size Update
-  _handleLobbyStream(Lobby? onData) {
-    // Peer Joined
-    if (onData!.count > _lobbySizeRef) {
-      var diff = onData.count - _lobbySizeRef;
-      swapTitleText("$diff Joined");
-      Sound.Joined.play();
-    }
-    // Peer Left
-    else if (onData.count < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData.count;
-      swapTitleText("$diff Left");
-    }
-    _lobbySizeRef = onData.count;
-  }
-
-  // @ Handle Status Update
-  _handleStatus(Status val) {
-    sonrStatus(val);
-    if (val.isConnected) {
-      // Entry Text
-      title("${LobbyService.lobby.value.count} Nearby");
-      _timeoutActive = true;
-
-      // Revert Text
-      Future.delayed(const Duration(milliseconds: 3500), () {
-        if (!isClosed) {
-          title(view.value.title);
-          _timeoutActive = false;
-        }
-      });
     }
   }
 

@@ -337,6 +337,15 @@ extension AppRoute on AppPage {
     return completer.future;
   }
 
+  /// Pushes a Camera Modal
+  static Future<void> camera({required Function(SFile file) onMediaSelected}) async {
+    Get.to(
+      CameraView(onMediaSelected: onMediaSelected),
+      fullscreenDialog: true,
+      transition: Transition.downToUp,
+    );
+  }
+
   /// Pushes a Popup Modal
   static Future<void> popup(
     Widget child, {
@@ -528,6 +537,7 @@ extension AppRoute on AppPage {
         backgroundColor: args.color,
         icon: args.icon,
         colorText: AppColor.White,
+        borderRadius: 22,
       );
     }
   }

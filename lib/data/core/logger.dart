@@ -156,4 +156,18 @@ class Logger extends GetxService {
       await Intercom.displayMessenger();
     }
   }
+
+  /// @ Sets Migration as True
+  static Future<void> setMigration(HSRecord record) async {
+    if (isRegistered) {
+      // Set Result
+      to.userHasUpdatedSName.val = await NamebaseClient.addRecords([record]);
+
+      // Log Event
+      Logger.event(name: "setMigration", controller: "NodeService", parameters: {
+        "status": to.userHasUpdatedSName.val,
+        "sName": record.name,
+      });
+    }
+  }
 }

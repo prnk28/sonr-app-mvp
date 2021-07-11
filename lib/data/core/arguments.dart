@@ -37,18 +37,21 @@ class SnackArgs {
   final int duration;
   final bool shouldIconPulse;
   final SnackPosition position;
+  final AnimationController? progressIndicatorController;
+  final Color? progressIndicatorBackgroundColor;
+  final Animation<Color>? progressIndicatorValueColor;
 
-  SnackArgs(this.title, this.message, this.icon, this.color, this.duration, this.shouldIconPulse, this.position);
-
-  /// @ Custom Alert
-  factory SnackArgs.remote({
-    required String message,
-    int duration = 45000,
-    Color color = Colors.purple,
-    SnackPosition position = SnackPosition.BOTTOM,
-  }) {
-    return SnackArgs("Remote Code", message, SimpleIcons.Remote.white, color, duration, true, position);
-  }
+  SnackArgs(
+      {this.title,
+      required this.message,
+      required this.icon,
+      this.color,
+      required this.duration,
+      required this.shouldIconPulse,
+      required this.position,
+      this.progressIndicatorController,
+      this.progressIndicatorBackgroundColor,
+      this.progressIndicatorValueColor});
 
   /// @ Custom Alert
   factory SnackArgs.alert({
@@ -58,12 +61,19 @@ class SnackArgs {
     Color color = Colors.orange,
     SnackPosition position = SnackPosition.BOTTOM,
   }) {
-    return SnackArgs(title, message, icon, color, 2600, false, position);
+    return SnackArgs(title: title, message: message, icon: icon, color: color, duration: 2600, shouldIconPulse: false, position: position);
   }
 
   /// @ Cancelled Operation
   factory SnackArgs.cancelled(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
-    return SnackArgs("Cancelled.", message, SimpleIcons.Stop.white, Colors.yellow, 2600, false, position);
+    return SnackArgs(
+        title: "Cancelled.",
+        message: message,
+        icon: SimpleIcons.Stop.white,
+        color: Colors.yellow,
+        duration: 2600,
+        shouldIconPulse: false,
+        position: position);
   }
 
   /// @ Error on Operation
@@ -75,39 +85,39 @@ class SnackArgs {
         case ErrorMessage_Severity.CRITICAL:
           Sound.Critical.play();
           return SnackArgs(
-            "Failed",
-            error.message,
-            Icon(Icons.sms_failed_outlined),
-            Colors.orange,
-            2600,
-            false,
-            SnackPosition.TOP,
+            title: "Failed",
+            message: error.message,
+            icon: Icon(Icons.sms_failed_outlined),
+            color: Colors.orange,
+            duration: 2600,
+            shouldIconPulse: false,
+            position: SnackPosition.BOTTOM,
           );
 
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
           Sound.Fatal.play();
           return SnackArgs(
-            "Error",
-            error.message,
-            SimpleIcons.Caution.white,
-            Colors.red,
-            2600,
-            false,
-            SnackPosition.TOP,
+            title: "Error",
+            message: error.message,
+            icon: SimpleIcons.Caution.white,
+            color: Colors.red,
+            duration: 2600,
+            shouldIconPulse: false,
+            position: SnackPosition.BOTTOM,
           );
 
         // Yellow - Title Warning
         default:
           Sound.Warning.play();
           return SnackArgs(
-            "Warning",
-            error.message,
-            SimpleIcons.Warning.white,
-            Colors.yellow,
-            2600,
-            false,
-            SnackPosition.BOTTOM,
+            title: "Warning",
+            message: error.message,
+            icon: SimpleIcons.Caution.white,
+            color: Colors.yellow,
+            duration: 2600,
+            shouldIconPulse: false,
+            position: SnackPosition.BOTTOM,
           );
       }
     }
@@ -115,13 +125,13 @@ class SnackArgs {
     else {
       Sound.Warning.play();
       return SnackArgs(
-        "Error",
-        message,
-        SimpleIcons.Caution.white,
-        Colors.red,
-        2600,
-        false,
-        SnackPosition.TOP,
+        title: "Error",
+        message: message,
+        icon: SimpleIcons.Caution.white,
+        color: Colors.red,
+        duration: 2600,
+        shouldIconPulse: false,
+        position: SnackPosition.BOTTOM,
       );
     }
   }
@@ -129,41 +139,40 @@ class SnackArgs {
   /// @ Invalid Operation
   factory SnackArgs.invalid(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
-      "Uh Oh!",
-      message,
-      SimpleIcons.Warning.white,
-      Colors.orange[900],
-      2600,
-      false,
-      position,
+      title: "Uh Oh!",
+      message: message,
+      icon: SimpleIcons.Warning.white,
+      color: Colors.orange[900],
+      duration: 2600,
+      shouldIconPulse: false,
+      position: position,
     );
   }
 
   /// @ Missing Data
   factory SnackArgs.missing(String message, {bool isLast = false, SnackPosition position = SnackPosition.BOTTOM}) {
     // Get Missing Title
-    final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
     return SnackArgs(
-      isLast ? "Almost There!" : list.random(),
-      message,
-      SimpleIcons.Warning.white,
-      AppColor.Red,
-      2600,
-      false,
-      position,
+      title: isLast ? "Almost There!" : ['Wait!', 'Hold Up!', "Uh Oh!"].random(),
+      message: message,
+      icon: SimpleIcons.Warning.white,
+      color: AppColor.Red,
+      duration: 2600,
+      shouldIconPulse: false,
+      position: position,
     );
   }
 
   /// @ Succesful Operation
   factory SnackArgs.success(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
-      "Success!!",
-      message,
-      SimpleIcons.Success.white,
-      Colors.green,
-      2600,
-      true,
-      position,
+      title: "Success!",
+      message: message,
+      icon: SimpleIcons.Success.white,
+      color: Colors.green,
+      duration: 2600,
+      shouldIconPulse: true,
+      position: position,
     );
   }
 }

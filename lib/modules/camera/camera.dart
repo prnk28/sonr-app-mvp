@@ -11,15 +11,6 @@ class CameraView extends StatelessWidget {
   // Properties
   final Function(SFile file) onMediaSelected;
   CameraView({required this.onMediaSelected});
-
-  static void open({required Function(SFile file) onMediaSelected}) {
-    Get.to(
-      CameraView(onMediaSelected: onMediaSelected),
-      fullscreenDialog: true,
-      transition: Transition.downToUp,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return GetX<CameraController>(
