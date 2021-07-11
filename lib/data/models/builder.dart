@@ -14,7 +14,7 @@ class RequestBuilder {
   static ConnectionRequest_PubsubOptions get _pubsubOpts => ConnectionRequest_PubsubOptions(relay: true);
   static ConnectionRequest_TextileOptions get _textileOpts => ConnectionRequest_TextileOptions(
         enabled: true,
-        mailbox: DeviceService.isIOS, // true,
+        mailbox: DeviceService.isIOS,
       );
 
   /// Returns New Connection Request

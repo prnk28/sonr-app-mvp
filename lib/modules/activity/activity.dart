@@ -22,6 +22,12 @@ class ActivityController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onReady() {
+    NodeService.instance.readMail();
+    super.onReady();
+  }
+
   /// Clear All Activity from Table
   Future<void> clearAllActivity() async {
     if (CardService.activity.length > 0) {
