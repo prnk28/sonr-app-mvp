@@ -10,7 +10,7 @@ class AlbumItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-        decoration: isSelected ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.Primary.withOpacity(0.9)) : BoxDecoration(),
+        decoration: isSelected ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColor.Blue.withOpacity(0.9)) : BoxDecoration(),
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         duration: 150.milliseconds,
@@ -19,7 +19,7 @@ class AlbumItem extends StatelessWidget {
 
   Widget _buildLabel() {
     return isSelected
-        ? entity.name.subheading(color: SonrColor.White, fontSize: 20)
+        ? entity.name.subheading(color: AppColor.White, fontSize: 20)
         : entity.name.subheading(color: Get.theme.hintColor, fontSize: 20);
   }
 }

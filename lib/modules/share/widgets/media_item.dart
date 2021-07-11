@@ -42,10 +42,10 @@ class MediaItem extends GetWidget<MediaItemController> {
         alignment: Alignment.bottomLeft,
         child: Container(
           decoration: BoxDecoration(
-              color: Preferences.isDarkMode ? SonrColor.White.withOpacity(0.75) : SonrColor.Black.withOpacity(0.75),
+              color: Preferences.isDarkMode ? AppColor.White.withOpacity(0.75) : AppColor.Black.withOpacity(0.75),
               borderRadius: BorderRadius.circular(16)),
           padding: EdgeInsets.all(4),
-          child: SimpleIcons.Video.gradient(size: 28, value: SonrGradients.NorseBeauty),
+          child: SimpleIcons.Video.gradient(size: 28, value: DesignGradients.NorseBeauty),
         ),
       );
     } else {

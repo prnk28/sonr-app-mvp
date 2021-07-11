@@ -30,7 +30,7 @@ class ContactContent extends StatelessWidget {
           ),
 
           // Build Name
-          contact!.fullName.gradient(value: SonrGradients.SolidStone),
+          contact!.fullName.gradient(value: DesignGradients.SolidStone),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
 
@@ -144,7 +144,6 @@ class ContactAuthView extends StatelessWidget {
                 }
               },
               text: "Accept",
-              gradient: SonrGradient.Tertiary,
               icon: SimpleIcons.Check,
             ),
           ],

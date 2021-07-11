@@ -80,7 +80,7 @@ class _NearbyPeersRow extends GetView<IntelController> {
                         color: AppTheme.GreyColor,
                       ),
                       decoration: BoxDecoration(
-                        color: SonrColor.AccentBlue,
+                        color: AppColor.AccentBlue,
                         shape: BoxShape.circle,
                       ),
                     ),

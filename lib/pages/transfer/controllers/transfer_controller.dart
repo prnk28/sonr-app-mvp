@@ -1,4 +1,5 @@
 import 'package:sonr_app/data/services/services.dart';
+import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/pages/transfer/views/composer_view.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -9,6 +10,11 @@ class TransferController extends GetxController {
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
+  final composeStatus = ComposeStatus.Initial.obs;
+
+  // @ API Managers
+  final findQuery = "".obs;
+  final shouldUpdate = false.obs;
 
   // @ Direction Properties
   final desktopsEnabled = true.obs;
@@ -62,5 +68,23 @@ class TransferController extends GetxController {
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
+  }
+
+  /// @ User Sends A Remote Transfer Name Request
+  Future<bool> shareRemote() async {
+    // Search Record
+    final peer = await NamebaseClient.findPeerRecord(findQuery.value);
+
+    // Validate Peer
+    if (peer != null) {
+      // Change Session for Status Success
+      SenderService.invite(InviteRequestUtils.copy(TransferController.invite, peer: peer, type: InviteRequest_Type.Remote));
+      composeStatus(ComposeStatus.Existing);
+      return true;
+    }
+
+    // Change Session for Status Error
+    composeStatus(ComposeStatus.NonExisting);
+    return false;
   }
 }

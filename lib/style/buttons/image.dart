@@ -58,7 +58,7 @@ class ImageButton extends StatelessWidget {
                           width: size,
                           height: size,
                           decoration: BoxDecoration(
-                            color: AppTheme.ForegroundColor,
+                            gradient: AppGradients.Foreground,
                             shape: BoxShape.circle,
                           ),
                           padding: EdgeInsets.all(24),
@@ -78,11 +78,11 @@ class ImageButton extends StatelessWidget {
           // Build Label
           Get.isDarkMode
               ? label.light(
-                  color: textColor ?? SonrColor.White.withOpacity(0.8),
+                  color: textColor ?? AppColor.White.withOpacity(0.8),
                   fontSize: fontSize,
                 )
               : label.light(
-                  color: textColor ?? SonrColor.Black.withOpacity(0.8),
+                  color: textColor ?? AppColor.Black.withOpacity(0.8),
                   fontSize: fontSize,
                 ),
         ],

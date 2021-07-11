@@ -42,7 +42,7 @@ class GeneralEditorView extends GetView<EditorController> {
                   // Dark Mode Switch
                   Switch(
                     activeColor: AppTheme.BackgroundColor,
-                    activeTrackColor: SonrColor.Primary,
+                    activeTrackColor: AppColor.Blue,
                     inactiveTrackColor: AppTheme.ItemColor,
                     value: controller.isDarkModeEnabled.value,
                     onChanged: (val) => controller.setDarkMode(val),
@@ -58,7 +58,7 @@ class GeneralEditorView extends GetView<EditorController> {
                   // Dark Mode Switch
                   Switch(
                     activeColor: AppTheme.BackgroundColor,
-                    activeTrackColor: SonrColor.Primary,
+                    activeTrackColor: AppColor.Blue,
                     inactiveTrackColor: AppTheme.ItemColor,
                     value: controller.isFlatModeEnabled.value,
                     onChanged: (val) => controller.setFlatMode(val),
@@ -74,7 +74,7 @@ class GeneralEditorView extends GetView<EditorController> {
                   // Point Share Mode Switch
                   Switch(
                       activeColor: AppTheme.BackgroundColor,
-                      activeTrackColor: SonrColor.Primary,
+                      activeTrackColor: AppColor.Blue,
                       inactiveTrackColor: AppTheme.ItemColor,
                       value: controller.isPointToShareEnabled.value,
                       onChanged: (val) async {

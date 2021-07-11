@@ -123,7 +123,7 @@ extension MimeIcon on MIME_Type {
     return this.iconData.gradient(value: gradient ?? this.defaultIconGradient, size: size);
   }
 
-  Icon icon({double size = 32, Color color = SonrColor.White}) {
+  Icon icon({double size = 32, Color color = AppColor.White}) {
     return this.iconData.icon(size: size, color: color) as Icon;
   }
 
@@ -164,22 +164,22 @@ extension MimeIcon on MIME_Type {
   Gradient get defaultIconGradient {
     switch (this) {
       case MIME_Type.AUDIO:
-        return SonrGradients.FlyingLemon;
+        return DesignGradients.FlyingLemon;
       case MIME_Type.IMAGE:
-        return SonrGradients.JuicyCake;
+        return DesignGradients.JuicyCake;
       case MIME_Type.TEXT:
-        return SonrGradients.FarawayRiver;
+        return DesignGradients.FarawayRiver;
       case MIME_Type.VIDEO:
-        return SonrGradients.NightCall;
+        return DesignGradients.NightCall;
       default:
         if (this == MIME_Type.PDF) {
-          return SonrGradients.RoyalGarden;
+          return DesignGradients.RoyalGarden;
         } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrGradients.ItmeoBranding;
+          return DesignGradients.ItmeoBranding;
         } else if (this == MIME_Type.PRESENTATION) {
-          return SonrGradients.OrangeJuice;
+          return DesignGradients.OrangeJuice;
         }
-        return SonrGradients.SolidStone;
+        return DesignGradients.SolidStone;
     }
   }
 }
@@ -189,7 +189,7 @@ extension PayloadIcon on Payload {
     return this.iconData.gradient(value: gradient ?? this.defaultIconGradient, size: size);
   }
 
-  Icon icon({double size = 32, Color color = SonrColor.White}) {
+  Icon icon({double size = 32, Color color = AppColor.White}) {
     return this.iconData.icon(size: size, color: color) as Icon;
   }
 
@@ -223,17 +223,17 @@ extension PayloadIcon on Payload {
 
   Gradient get defaultIconGradient {
     if (this == Payload.CONTACT) {
-      return SonrGradients.SunnyMorning;
+      return DesignGradients.SunnyMorning;
     } else if (this == Payload.URL) {
-      return SonrGradients.Lollipop;
+      return DesignGradients.Lollipop;
     } else if (this == Payload.FILE) {
-      return SonrGradients.FarawayRiver;
+      return DesignGradients.FarawayRiver;
     } else if (this == Payload.MEDIA) {
-      return SonrGradients.FarawayRiver;
+      return DesignGradients.FarawayRiver;
     } else if (this == Payload.FILES) {
-      return SonrGradients.FarawayRiver;
+      return DesignGradients.FarawayRiver;
     } else {
-      return SonrGradients.SolidStone;
+      return DesignGradients.SolidStone;
     }
   }
 }
@@ -241,10 +241,10 @@ extension PayloadIcon on Payload {
 extension PlatformIcon on Platform {
   ///-- Returns Icon Widget -- //
   Widget gradient({double size = 32, Gradient? gradient}) {
-    return this.iconData.gradient(value: gradient ?? SonrGradients.PremiumWhite, size: size);
+    return this.iconData.gradient(value: gradient ?? DesignGradients.PremiumWhite, size: size);
   }
 
-  Icon icon({double size = 32, Color color = SonrColor.White}) {
+  Icon icon({double size = 32, Color color = AppColor.White}) {
     return this.iconData.icon(size: size, color: color) as Icon;
   }
 
@@ -294,15 +294,15 @@ extension PlatformIcon on Platform {
   Gradient get defaultIconGradient {
     switch (this) {
       case Platform.Android:
-        return SonrGradients.ItmeoBranding;
+        return DesignGradients.ItmeoBranding;
       case Platform.IOS:
-        return SonrGradients.PerfectBlue;
+        return DesignGradients.PerfectBlue;
       case Platform.MacOS:
-        return SonrGradients.PlumBath;
+        return DesignGradients.PlumBath;
       case Platform.Windows:
-        return SonrGradients.CrystalRiver;
+        return DesignGradients.CrystalRiver;
       default:
-        return SonrGradients.SolidStone;
+        return DesignGradients.SolidStone;
     }
   }
 }
@@ -312,7 +312,7 @@ extension SocialIconUtils on Contact_Social_Media {
     return this.iconData.gradient(value: gradient ?? this.defaultIconGradient, size: size);
   }
 
-  Icon icon({double size = 32, Color color = SonrColor.White}) {
+  Icon icon({double size = 32, Color color = AppColor.White}) {
     return this.iconData.icon(size: size, color: color) as Icon;
   }
 
@@ -354,23 +354,23 @@ extension SocialIconUtils on Contact_Social_Media {
   Gradient get defaultIconGradient {
     switch (this) {
       case Contact_Social_Media.Snapchat:
-        return SonrGradients.SunnyMorning;
+        return DesignGradients.SunnyMorning;
       case Contact_Social_Media.Github:
-        return SonrGradients.SolidStone;
+        return DesignGradients.SolidStone;
       case Contact_Social_Media.Facebook:
-        return SonrGradients.PerfectBlue;
+        return DesignGradients.PerfectBlue;
       case Contact_Social_Media.Medium:
-        return SonrGradients.SolidStone;
+        return DesignGradients.SolidStone;
       case Contact_Social_Media.YouTube:
-        return SonrGradients.LoveKiss;
+        return DesignGradients.LoveKiss;
       case Contact_Social_Media.Twitter:
-        return SonrGradients.MalibuBeach;
+        return DesignGradients.MalibuBeach;
       case Contact_Social_Media.Instagram:
-        return SonrGradients.AmourAmour;
+        return DesignGradients.AmourAmour;
       case Contact_Social_Media.TikTok:
-        return SonrGradients.PremiumDark;
+        return DesignGradients.PremiumDark;
       default:
-        return SonrGradients.SummerGames;
+        return DesignGradients.SummerGames;
     }
   }
 }
@@ -380,7 +380,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: 24,
-      color: SonrColor.Black,
+      color: AppColor.Black,
     );
   }
 
@@ -388,7 +388,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: size,
-      color: SonrColor.Black,
+      color: AppColor.Black,
     );
   }
 
@@ -396,7 +396,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: 24,
-      color: SonrColor.Grey,
+      color: AppColor.DarkGrey,
     );
   }
 
@@ -404,7 +404,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: size,
-      color: SonrColor.Grey,
+      color: AppColor.DarkGrey,
     );
   }
 
@@ -412,7 +412,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: 24,
-      color: SonrColor.White,
+      color: AppColor.White,
     );
   }
 
@@ -420,11 +420,11 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: size,
-      color: SonrColor.White,
+      color: AppColor.White,
     );
   }
 
-  Widget icon({double size = 24, Color color = SonrColor.White}) {
+  Widget icon({double size = 24, Color color = AppColor.White}) {
     return Icon(this, size: size, color: color);
   }
 
@@ -432,7 +432,7 @@ extension DesignIcon on IconData {
     return ShaderMask(
       blendMode: BlendMode.modulate,
       shaderCallback: (bounds) {
-        var grad = value ?? SonrGradient.Primary;
+        var grad = value ?? AppGradients.Primary;
         return grad.createShader(bounds);
       },
       child: Icon(

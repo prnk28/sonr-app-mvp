@@ -55,7 +55,7 @@ class StartView extends GetView<RegisterController> {
         pressedScale: 1.1,
         child: "Continue".heading(
           fontSize: 20,
-          color: SonrColor.Black,
+          color: AppColor.Black,
         ),
       );
     } else {

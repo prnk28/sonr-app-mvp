@@ -201,7 +201,7 @@ class _BackupCodeView extends GetView<RegisterController> {
                       ),
                       Container(
                         padding: EdgeInsets.only(bottom: 24),
-                        child: controller.mnemonic.value.gradient(value: SonrGradients.CrystalRiver, size: 32),
+                        child: controller.mnemonic.value.gradient(value: DesignGradients.CrystalRiver, size: 32),
                       ),
                     ],
                   ),
@@ -239,7 +239,7 @@ class _ProfileSetupView extends GetView<RegisterController> {
           RegisterTextField(
             type: RegisterTextFieldType.FirstName,
             focusNode: firstNameFocus,
-            
+
             hint: hintName.item1,
             onEditingComplete: () {
               firstNameFocus.unfocus();

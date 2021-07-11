@@ -30,11 +30,11 @@ extension NewSNameStatusUtil on NewSNameStatus {
       case NewSNameStatus.Default:
         return SimpleIcons.ATSign.icon(color: AppTheme.ItemColorInversed, size: size);
       case NewSNameStatus.Available:
-        return SimpleIcons.Check.icon(color: SonrColor.Tertiary, size: size);
+        return SimpleIcons.Check.icon(color: AppColor.Green, size: size);
       case NewSNameStatus.Returning:
-        return SimpleIcons.Zap.icon(color: SonrColor.Secondary, size: size);
+        return SimpleIcons.Zap.icon(color: AppColor.Purple, size: size);
       default:
-        return SimpleIcons.Alert.icon(color: SonrColor.AccentPink, size: size);
+        return SimpleIcons.Alert.icon(color: AppColor.AccentPink, size: size);
     }
   }
 
@@ -67,13 +67,13 @@ extension NewSNameStatusUtil on NewSNameStatus {
   Gradient get gradient {
     switch (this) {
       case NewSNameStatus.Default:
-        return SonrGradient.Primary;
+        return DesignGradients.MalibuBeach;
       case NewSNameStatus.Available:
-        return SonrGradient.Tertiary;
+        return DesignGradients.ItmeoBranding;
       case NewSNameStatus.Returning:
-        return SonrGradient.Secondary;
+        return DesignGradients.CrystalRiver;
       default:
-        return SonrGradient.Critical;
+        return DesignGradients.PhoenixStart;
     }
   }
 }

@@ -8,28 +8,28 @@ extension TransferActivityUtils on TransferActivity {
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
           " You ".paragraph(color: AppTheme.ItemColor),
-          this.activity.value.paragraph(color: SonrColor.Critical),
+          this.activity.value.paragraph(color: AppColor.Red),
           _description().paragraph(color: AppTheme.ItemColor)
         ].row();
       case ActivityType.Shared:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
           " You ".paragraph(color: AppTheme.ItemColor),
-          this.activity.value.light(color: SonrColor.Primary),
+          this.activity.value.light(color: AppColor.Blue),
           _description().paragraph(color: AppTheme.ItemColor)
         ].row();
       case ActivityType.Received:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
           " You ".paragraph(color: AppTheme.ItemColor),
-          this.activity.value.paragraph(color: SonrColor.Secondary),
+          this.activity.value.paragraph(color: AppColor.Purple),
           _description().paragraph(color: AppTheme.ItemColor)
         ].row();
       default:
         return [
           this.payload.icon(size: 24, color: Get.theme.focusColor),
           " You ".paragraph(color: AppTheme.ItemColor),
-          this.activity.value.paragraph(color: SonrColor.Grey),
+          this.activity.value.paragraph(color: AppColor.DarkGrey),
           _description().paragraph(color: AppTheme.ItemColor)
         ].row(textBaseline: TextBaseline.alphabetic, mainAxisAlignment: MainAxisAlignment.start);
     }

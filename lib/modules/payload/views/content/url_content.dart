@@ -24,7 +24,7 @@ class URLAuthView extends StatelessWidget {
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
-                      color: SonrColor.Black.withOpacity(0.5),
+                      color: AppColor.Black.withOpacity(0.5),
                     ),
             ),
           ),
@@ -32,7 +32,7 @@ class URLAuthView extends StatelessWidget {
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
             ProfileFullName(profile: invite.from.profile, isHeader: true),
-            Center(child: "Website Link".gradient(value: SonrGradients.PlumBath, size: 22)),
+            Center(child: "Website Link".gradient(value: DesignGradients.PlumBath, size: 22)),
           ]),
         ]),
         Divider(),

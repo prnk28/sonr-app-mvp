@@ -70,8 +70,8 @@ class BoxContainer extends StatelessWidget {
       clipBehavior: clipBehavior,
       child: child,
       decoration: BoxDecoration(
-        border: Get.isDarkMode ? null : Border.all(color: AppTheme.BackgroundColor, width: 1),
-        color: AppTheme.ForegroundColor,
+        border: AppTheme.BoxBorder,
+        gradient: AppGradients.Foreground,
         borderRadius: BorderRadius.circular(radius),
         boxShadow: AppTheme.RectBoxShadow,
       ),
@@ -125,7 +125,7 @@ class CircleContainer extends StatelessWidget {
       child: child,
       decoration: BoxDecoration(
         border: Get.isDarkMode ? null : Border.all(color: AppTheme.BackgroundColor, width: 1),
-        color: AppTheme.ForegroundColor,
+        gradient: AppGradients.Foreground,
         shape: BoxShape.circle,
         boxShadow: AppTheme.CircleBoxShadow,
       ),
@@ -186,9 +186,9 @@ class PolyContainer extends StatelessWidget {
       sides: sides,
       child: Container(
         decoration: BoxDecoration(
-          gradient: gradient ?? SonrGradient.Theme(),
+          gradient: gradient ?? AppGradients.Primary,
           boxShadow: AppTheme.RectBoxShadow,
-          border: Get.isDarkMode ? null : Border.all(color: AppTheme.ForegroundColor, width: 1),
+          border: Get.isDarkMode ? null : Border.all(color: AppTheme.BackgroundColor, width: 1),
         ),
         key: key,
         width: width,

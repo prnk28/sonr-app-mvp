@@ -145,7 +145,7 @@ class _InfoText extends StatelessWidget {
               fontFamily: 'Manrope',
               fontSize: 34,
               fontWeight: FontWeight.bold,
-              color: Preferences.isDarkMode ? Colors.white : SonrColor.Black,
+              color: Preferences.isDarkMode ? Colors.white : AppColor.Black,
             )),
       ),
     ]);

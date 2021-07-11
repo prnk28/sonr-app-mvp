@@ -10,15 +10,15 @@ class VideoDuration extends StatelessWidget {
         ? Container(
             alignment: Alignment.topRight,
             padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColor.AccentNavy.withOpacity(0.75)),
             child: RichText(
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.fade,
                 text: TextSpan(children: [
                   TextSpan(
                       text: controller.videoDurationString.value,
-                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 16, color: SonrColor.Black)),
-                  TextSpan(text: "  s", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 16, color: SonrColor.Black)),
+                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 16, color: AppColor.Black)),
+                  TextSpan(text: "  s", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 16, color: AppColor.Black)),
                 ])),
           )
         : Container());

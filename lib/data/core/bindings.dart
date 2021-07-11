@@ -50,7 +50,6 @@ class TransferBinding implements Bindings {
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
     Get.put<PositionController>(PositionController(), permanent: true);
-    Get.put<ComposeController>(ComposeController());
     Get.create<ItemController>(() => ItemController());
   }
 }

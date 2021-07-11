@@ -88,7 +88,7 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
       return FadeIn(
         animate: true,
         child: this.differenceCount.toString().light(
-              color: this.hasJoined ? SonrColor.Tertiary : SonrColor.Critical,
+              color: this.hasJoined ? AppColor.Green : AppColor.Red,
             ),
       );
     } else {
@@ -115,7 +115,7 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
           from: 40,
           duration: 300.milliseconds,
           child: SimpleIcons.Down.icon(
-            color: SonrColor.Critical,
+            color: AppColor.Red,
             size: 14,
           ),
         ),

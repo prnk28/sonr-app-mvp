@@ -1745,8 +1745,8 @@ github.com/smola/gocompat v0.2.0/go.mod h1:1B0MlxbmoZNo3h8guHp8HztB3BSYR5itql9qt
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sonr-io/core v0.9.41 h1:SDIr6V3k/t5MgOSzr4x3Ng7PzZeYxCsQNV/bJdJGTlY=
 github.com/sonr-io/core v0.9.41/go.mod h1:JhpxnMkYLTTNnOdd5iEV2CKiTghzVlt9VNMlfpaLSHI=
-github.com/sonr-io/plugin/go v0.9.113 h1:RF+phAz5e9CUmLA7GsFfyEeeNSQ4OLBpHi7usUhMOdk=
-github.com/sonr-io/plugin/go v0.9.113/go.mod h1:kH5LzNGOuQ/YWTolYegAaUVAtBROM7t2X8AwInRljiI=
+github.com/sonr-io/plugin/go v0.9.177 h1:c2AZeoo1lcQBjfI7EaVP3uEFGCQQhsKnuOj3qTOnPs8=
+github.com/sonr-io/plugin/go v0.9.177/go.mod h1:gxEG8/jgFtVbsTPIxN42MJDrim5uGhNFh1xLI2lBM74=
 github.com/sonr-io/systray/go v0.5.1 h1:YTy87VE5e5V6x/50efwqJUpVElFB/AvQxwkgPGdNHnQ=
 github.com/sonr-io/systray/go v0.5.1/go.mod h1:o3KU3MsfKILozJFDcgxfpbI3OO8GYN9bPxvMFJf9heI=
 github.com/sony/gobreaker v0.4.1/go.mod h1:ZKptC7FHNvhBz7dN2LGjPVBz2sZJmc0/PkyDJOjmxWY=

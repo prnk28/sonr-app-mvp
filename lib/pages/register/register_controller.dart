@@ -17,7 +17,6 @@ class RegisterController extends GetxController {
   final lastName = "".obs;
   final status = Rx<RegisterPageType>(RegisterPageType.Intro);
   final auth = Rx<HSRecord>(HSRecord.blank());
-  final result = Rx<NamebaseResult>(NamebaseResult.blank());
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -25,7 +24,6 @@ class RegisterController extends GetxController {
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
   // References
-  final _nbClient = NamebaseApi(keys: AppServices.apiKeys);
   late ValueNotifier<double> panelNotifier;
   late PageController introPageController;
   late PageController setupPageController;
@@ -53,9 +51,6 @@ class RegisterController extends GetxController {
       initialPage: 0,
       viewportFraction: 1.0,
     );
-
-    // Get Records
-    refreshRecords();
     super.onInit();
   }
 
@@ -78,24 +73,23 @@ class RegisterController extends GetxController {
 
   Future<void> setName() async {
     // Refresh Records
-    refreshRecords();
+    final result = await NamebaseClient.refresh();
 
     // Validate
     if (await validateName()) {
       if (nameStatus.value != NewSNameStatus.Returning) {
         // Check Valid
-        if (result.value.isValidName(sName.value)) {
+        if (result.isValidName(sName.value)) {
           var genMnemomic = bip39.generateMnemonic();
           var result = await signUser(sName.value, genMnemomic);
 
           // Logging
           Logger.info(
-            "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicIdentity}",
+            "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicKey}",
           );
 
           // Add UserRecord Domain
-          await _nbClient.addRecord(
-              HSRecord.newAuth(result.signedPrefix, sName.value, result.signedFingerprint), HSRecord.newName(sName.value, result.publicIdentity));
+          await NamebaseClient.addRecords(HSRecord.newRegisteredRecords(result));
 
           // Analytics
           Logger.event(
@@ -201,58 +195,8 @@ class RegisterController extends GetxController {
 
   /// @ Validates SName as Valid characters
   Future<bool> validateName() async {
-    // Check Alphabet Only
-    if (!sName.value.isAlphabetOnly) {
-      nameStatus(NewSNameStatus.InvalidCharacters);
-      return false;
-    } else {
-      // Update Status
-      if (sName.value.length > 3) {
-        // Check Available
-        if (result.value.checkName(
-          NameCheckType.Unavailable,
-          sName.value,
-        )) {
-          nameStatus(NewSNameStatus.Unavailable);
-          return false;
-        }
-        // Check Unblocked
-        else if (result.value.checkName(
-          NameCheckType.Blocked,
-          sName.value,
-        )) {
-          nameStatus(NewSNameStatus.Blocked);
-          return false;
-        }
-        // Check Unrestricted
-        else if (result.value.checkName(
-          NameCheckType.Restricted,
-          sName.value,
-        )) {
-          nameStatus(NewSNameStatus.Restricted);
-          return false;
-        }
-        // Check Valid
-        else {
-          // Update Values
-          nameStatus(NewSNameStatus.Available);
-          return true;
-        }
-      } else {
-        nameStatus(NewSNameStatus.TooShort);
-        return false;
-      }
-    }
-  }
-
-  /// #### Refreshes Record Table from Namebase Client
-  Future<void> refreshRecords() async {
-    // Set Data From Response
-    var data = await _nbClient.refresh();
-    if (data.success) {
-      result(data);
-      result.refresh();
-    }
+    nameStatus(await NamebaseClient.validateName(sName.value));
+    return nameStatus.value.isValid;
   }
 
   /// #### Checks if Username matches device id and prefix from records

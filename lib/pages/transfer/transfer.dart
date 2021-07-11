@@ -1,6 +1,5 @@
 // Exports
 export 'views/flat_view.dart';
-export 'controllers/compose_controller.dart';
 export 'controllers/transfer_controller.dart';
 export 'controllers/position_controller.dart';
 export 'data/animation.dart';

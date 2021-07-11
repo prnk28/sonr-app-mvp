@@ -103,9 +103,9 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Returns Button Text Color for Permissions
   Color permissionsButtonColor() {
     if (this.indexGroup == 0) {
-      return SonrColor.Black;
+      return AppColor.Black;
     }
-    return SonrColor.White;
+    return AppColor.White;
   }
 
   /// Returns Image Path for Permissions

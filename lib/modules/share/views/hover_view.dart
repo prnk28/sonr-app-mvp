@@ -72,7 +72,7 @@ class _ShareHoverSession extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: SonrColor.Primary,
+              color: AppColor.Blue,
             ),
             "Sending".section(color: AppTheme.GreyColor, fontSize: 14),
           ],
@@ -102,7 +102,7 @@ class _ShareHoverSession extends StatelessWidget {
       Future.delayed(1500.milliseconds, () {
         AppRoute.closePopup();
       });
-      return SimpleIcons.Check.gradient(value: SonrGradients.ItmeoBranding);
+      return SimpleIcons.Check.gradient(value: DesignGradients.ItmeoBranding);
     });
   }
 }
@@ -119,7 +119,7 @@ class _ShareHoverPeerInfo extends StatelessWidget {
       children: [
         peer.platform.icon(color: AppTheme.GreyColor, size: 24),
         Padding(padding: EdgeInsets.only(left: 8)),
-        _buildName().subheading(fontSize: 28),
+        _buildName().subheading(fontSize: 28, color: AppTheme.ItemColor),
       ],
     );
   }
