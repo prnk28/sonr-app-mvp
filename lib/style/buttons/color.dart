@@ -45,10 +45,7 @@ class ColorButton extends StatelessWidget {
     // Build Child
     return ColorButton(
         decoration: BoxDecoration(
-            gradient: AppGradients.Primary,
-            backgroundBlendMode: Get.isDarkMode ? BlendMode.color : BlendMode.overlay,
-            borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-            boxShadow: AppTheme.RectBoxShadow),
+            gradient: AppGradients.Primary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: AppTheme.RectBoxShadow),
         onPressed: onPressed,
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,

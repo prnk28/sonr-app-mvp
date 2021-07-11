@@ -25,7 +25,7 @@ class AppColor {
   static const Color BackgroundDark = Color(0xff151515);
   static const Color DividerLight = Color(0xffEBEBEB);
   static const Color DividerDark = Color(0xff4E4949);
-  static const Color ForegroundLight = Color(0xffF8F8F9);
+  static const Color ForegroundLight = Color(0xffF6F6F6);
   static const Color ForegroundDark = Color(0xff2B2B2B);
   static Color ShadowLight = Color(0xffD4D7E0);
   static Color ShadowDark = Colors.black;
@@ -54,24 +54,24 @@ class AppGradientColor {
   /// ### First Primary Gradient Color
   /// Returns Primary Gradient Start Color By Theme Mode
   /// - Gradient Red (1) `#FD4DF6`
-  /// - Gradient Blue (1) `#6587FD`
+  /// - Gradient Blue (1) `#4D74FD`
   static Tuple<Color, double> primaryStart(bool darkMode) {
     if (darkMode) {
       return Tuple(Color(0xffFD4DF6), 0);
     } else {
-      return Tuple(Color(0xff6587FD), 0);
+      return Tuple(Color(0xff4D74FD), 0);
     }
   }
 
   /// ### Final Primary Gradient Color
   /// Returns Primary Gradient Final Color By Theme Mode
   /// - Gradient Red (2) `#FDA14D`
-  /// - Gradient Blue (2) `#65FDF4`
+  /// - Gradient Blue (2) `#4DFDF2`
   static Tuple<Color, double> primaryEnd(bool darkMode) {
     if (darkMode) {
       return Tuple(Color(0xffFDA14D), 1);
     } else {
-      return Tuple(Color(0xff65FDF4), 1);
+      return Tuple(Color(0xff4DFDF2), 1);
     }
   }
 
@@ -82,7 +82,7 @@ class AppGradientColor {
     if (darkMode) {
       return Tuple(Color(0xff3E3E3F), 0);
     } else {
-      return Tuple(Color(0xffF4FBFC), 0);
+      return Tuple(AppColor.ForegroundLight, 0);
     }
   }
 
@@ -93,7 +93,7 @@ class AppGradientColor {
     if (darkMode) {
       return Tuple(Color(0xff25272C), 1);
     } else {
-      return Tuple(Color(0xffF1F3F3), 1);
+      return Tuple(AppColor.ForegroundLight, 1);
     }
   }
 }

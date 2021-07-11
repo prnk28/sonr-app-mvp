@@ -27,6 +27,7 @@ class Logger extends GetxService {
   final _hasOpenedIntercom = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
   final hasHadTransfer = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
   final _userAppOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
+  final userHasUpdatedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
 
   // References
   static final BuildMode buildMode = BuildModeUtil.current();

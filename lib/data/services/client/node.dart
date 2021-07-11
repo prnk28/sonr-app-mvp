@@ -76,6 +76,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
       // Send Initial Position Update
       instance.update(RequestBuilder.updatePosition);
+      _handleSNameMigration();
       return true;
     } else {
       return false;
@@ -182,6 +183,25 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // Verifies if Node is Ready to communicate
   static bool _checkReady() {
     return isRegistered && to._status.value.isConnected && ContactService.status.value.hasUser;
+  }
+
+  Future<void> _handleSNameMigration() async {
+    if (!Logger.to.userHasUpdatedSName.val) {
+      // Retreive Public Key
+      final response = await instance.verify(API.newVerifyRead());
+      if (response.publicKey.length > 0) {
+        // Create New Record
+        final newRecord = HSRecord.newName(AuthResponse(
+          publicKey: response.publicKey,
+          givenSName: ContactService.sName.toLowerCase(),
+        ));
+
+        // Update Status
+        Logger.to.userHasUpdatedSName.val = await NamebaseClient.addRecords([newRecord]);
+      } else {
+        print("Failed to Return Public Key");
+      }
+    }
   }
 
   // * ------------------- Observers ----------------------------

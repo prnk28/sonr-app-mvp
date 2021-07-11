@@ -42,6 +42,7 @@ class ContactService extends GetxService {
 
         // Set Contact Values
         _contact(contact);
+
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
@@ -80,4 +81,5 @@ class ContactService extends GetxService {
       NodeService.setProfile(data);
     }
   }
+
 }

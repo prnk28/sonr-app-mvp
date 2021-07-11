@@ -1,3 +1,4 @@
+import 'package:sonr_app/pages/register/models/status.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter/foundation.dart';
 
@@ -59,6 +60,76 @@ class CommentGenerator {
       debugPrint('/// !["Image of ${s.value} as Dots"](${s.fullPath(projectDir, withDots: true)})');
       debugPrint('${s.value},');
       debugPrint('\n');
+    }
+  }
+}
+
+/// Class Manages Namebase DNS Entries
+class NamebaseClient {
+  // @ Internal Reference
+  static final _nbClient = NamebaseApi(keys: AppServices.apiKeys);
+
+  /// Add Records to DNS Table
+  static Future<bool> addRecords(List<HSRecord> records) => _nbClient.addRecords(records);
+
+  /// Find Matching Peer for SName Query of Record
+  static Future<Peer?> findPeerRecord(String query, {bool logging = false}) async {
+    final result = await refresh();
+    final record = result.records.firstWhere(
+      (e) => e.equalsName(query),
+      orElse: () => HSRecord.blank(),
+    );
+
+    // Return Record As Peer
+    if (!record.isBlank) {
+      return record.toPeer();
+    } else {
+      // Log All Records
+      if (logging) {
+        print("Invalid Peer");
+        print("-- All Records --");
+        result.records.forEach((r) {
+          print(r.toPeer().toString());
+        });
+      }
+      return null;
+    }
+  }
+
+  /// Replace Record
+  static Future<Response<dynamic>?> replaceRecord(HSRecord record) => _nbClient.replaceRecord(record);
+
+  /// Refresh Records with Result
+  static Future<NamebaseResult> refresh() => _nbClient.refresh();
+
+  /// @ Validates SName as Valid characters
+  static Future<NewSNameStatus> validateName(String sName) async {
+    final result = await refresh();
+    // Check Alphabet Only
+    if (!sName.isAlphabetOnly) {
+      return NewSNameStatus.InvalidCharacters;
+    } else {
+      // Update Status
+      if (sName.length > 3) {
+        // Check Available
+        if (result.checkName(NameCheckType.Unavailable, sName)) {
+          return NewSNameStatus.Unavailable;
+        }
+        // Check Unblocked
+        else if (result.checkName(NameCheckType.Blocked, sName)) {
+          return NewSNameStatus.Blocked;
+        }
+        // Check Unrestricted
+        else if (result.checkName(NameCheckType.Restricted, sName)) {
+          return NewSNameStatus.Restricted;
+        }
+        // Check Valid
+        else {
+          return NewSNameStatus.Available;
+        }
+      } else {
+        return NewSNameStatus.TooShort;
+      }
     }
   }
 }

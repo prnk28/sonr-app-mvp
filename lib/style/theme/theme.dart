@@ -68,6 +68,17 @@ class AppTheme {
   /// Returns Current Text Color
   static Color get ItemColorInversed => AppColor.Item(!Get.isDarkMode);
 
+  /// Returns Current Box Border
+  static Border get BoxBorder => Get.isDarkMode
+      ? Border.all(
+          color: AppTheme.DividerColor,
+          width: 0.5,
+        )
+      : Border.all(
+          color: AppTheme.BackgroundColor,
+          width: 1,
+        );
+
   /// Returns Current Shadow Color
   static Color get ShadowColor => AppColor.Shadow(Get.isDarkMode);
 
