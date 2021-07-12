@@ -368,10 +368,10 @@ class AnimatedSlider extends StatelessWidget {
 }
 
 /// @ Lottie Based Progress Indicator
-class HourglassIndicator extends StatelessWidget {
+class CircleLoader extends StatelessWidget {
   final double scale;
 
-  const HourglassIndicator({Key? key, this.scale = 0.2}) : super(key: key);
+  const CircleLoader({Key? key, this.scale = 0.2}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
@@ -380,7 +380,32 @@ class HourglassIndicator extends StatelessWidget {
         width: 24,
         height: 24,
         child: Lottie.asset(
-          LottieFile.Loader.path,
+          LottieFile.LoaderCircle.path,
+          fit: BoxFit.contain,
+          width: 42,
+          height: 42,
+          animate: true,
+          repeat: true,
+        ),
+      ),
+    );
+  }
+}
+
+/// @ Lottie Based Progress Indicator
+class SpringLoader extends StatelessWidget {
+  final double scale;
+
+  const SpringLoader({Key? key, this.scale = 0.2}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: scale,
+      child: SizedBox(
+        width: 24,
+        height: 24,
+        child: Lottie.asset(
+          LottieFile.LoaderSpring.path,
           fit: BoxFit.contain,
           width: 42,
           height: 42,

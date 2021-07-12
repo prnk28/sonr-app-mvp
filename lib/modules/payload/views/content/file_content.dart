@@ -216,7 +216,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
         : Container(
             width: widget.width,
             height: widget.height,
-            child: HourglassIndicator(),
+            child: CircleLoader(),
           );
   }
 
@@ -296,7 +296,7 @@ class _FileItemVideoBoxState extends State<FileItemVideoBox> {
                 : Container(
                     width: widget.width ?? widget.orientation.defaultWidth,
                     height: widget.height ?? widget.orientation.defaultHeight,
-                    child: HourglassIndicator(),
+                    child: CircleLoader(),
                   )),
       ),
     );

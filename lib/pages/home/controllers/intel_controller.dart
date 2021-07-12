@@ -5,6 +5,8 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
   // Properties
   final title = "".obs;
   final badgeVisible = false.obs;
+  final isConnecting = true.obs;
+  final hasFailed = false.obs;
 
   // Streams
   late StreamSubscription<Lobby> _lobbyStream;
@@ -67,6 +69,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
 
   void _handleStatusStream(Status onData) {
     if (onData.isConnected) {
+      isConnecting(false);
       // Update Title
       DeviceService.location.then((location) {
         location.initPlacemark().then((result) {
@@ -88,8 +91,11 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
       _handleLobbyStream(LobbyService.lobby.value);
     } else if (onData == Status.FAILED) {
       title("Failed");
+      isConnecting(false);
+      hasFailed(true);
     } else {
       title("Connecting");
+      isConnecting(true);
     }
   }
 }

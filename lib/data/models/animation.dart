@@ -275,7 +275,7 @@ extension RiveBoardUtils on RiveBoard {
 }
 
 /// Lottie File Options
-enum LottieFile { Loader, Celebrate, Sending, Complete, Decline, Pending, NONE }
+enum LottieFile { LoaderSpring, LoaderCircle, Celebrate, Sending, Complete, Decline, Pending, NONE }
 
 /// #### Extension For Lottie File
 extension LottieFileUtils on LottieFile {
@@ -286,12 +286,10 @@ extension LottieFileUtils on LottieFile {
 
     // Check Type
     switch (this) {
-      case LottieFile.Loader:
-        if (Get.isDarkMode) {
-          return basePath + 'loader-light.json';
-        } else {
-          return basePath + 'loader-dark.json';
-        }
+      case LottieFile.LoaderSpring:
+        return basePath + 'loader-spring.json';
+      case LottieFile.LoaderCircle:
+        return basePath + 'loader-circle.json';
       case LottieFile.Pending:
         if (Get.isDarkMode) {
           return basePath + 'pending-light.json';

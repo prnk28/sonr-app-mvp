@@ -63,7 +63,7 @@ class SplashPage extends StatelessWidget {
             children: [
               // @ Rive Animation
               Center(
-                child: HourglassIndicator(),
+                child: CircleLoader(),
               ),
 
               // @ Fade Animation of Text
@@ -84,7 +84,7 @@ class SplashPage extends StatelessWidget {
               type: RiveBoard.Splash,
               width: Get.width,
               height: Get.height,
-              placeholder: SizedBox(child: HourglassIndicator()),
+              placeholder: SizedBox(child: CircleLoader()),
             ),
 
             // @ Fade Animation of Text

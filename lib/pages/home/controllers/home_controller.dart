@@ -1,16 +1,15 @@
-export 'status.dart';
+export 'view.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
-import 'status.dart';
+import 'view.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final appbarOpacity = 1.0.obs;
-  final title = "Home".obs;
+  final isConnecting = true.obs;
   final subtitle = "".obs;
-  final pageIndex = 0.obs;
-  final bottomIndex = 0.obs;
+  final status = Status.IDLE.obs;
   final view = HomeView.Dashboard.obs;
 
   // Propeties
@@ -18,7 +17,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final results = RxList<TransferCard>();
 
   // Controllers
-  late final TabController tabController;
 
   // Global Keys
   final keyOne = GlobalKey();
@@ -29,6 +27,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // References
   late ScrollController scrollController;
+  late TabController tabController;
 
   /// @ Controller Constructer
   @override
@@ -54,8 +53,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void onReady() {
     // Check Entry Arguments
     HomeArguments args = Get.arguments;
-    if (args.isFirstLoad && DeviceService.isMobile) {
-      SenderService.checkInitialShare();
+    if (args.isFirstLoad) {
+      if (DeviceService.isMobile) {
+        SenderService.checkInitialShare();
+      }
+      Get.find<NodeService>().connect();
     }
     super.onReady();
   }
@@ -63,7 +65,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ On Dispose
   @override
   void onClose() {
-    pageIndex(0);
     super.onClose();
   }
 
@@ -93,16 +94,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   /// @ Update Bottom Bar Index
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
-    if (newIndex != bottomIndex.value) {
+    if (view.value.isNotIndex(newIndex)) {
       // Change Index
-      bottomIndex(newIndex);
       tabController.animateTo(newIndex);
-
       // Set Page
       view(HomeView.values[newIndex]);
-
-      // Update Title
-      title(view.value.title);
     }
   }
 
@@ -110,7 +106,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   _handleQuery(String newVal) {
     if (newVal.length > 0) {
       // Swap View to Searching if not Set
-      if (view.value.isDefault) {
+      if (view.value.isDashboard) {
         view(HomeView.Search);
       }
 

@@ -75,7 +75,7 @@ class _SharePopupViewState extends State<SharePopupView> {
                       crossAxisSpacing: 4.0,
                     ));
               } else {
-                return SliverToBoxAdapter(child: Center(child: HourglassIndicator()));
+                return SliverToBoxAdapter(child: Center(child: CircleLoader()));
               }
             })
           ]),

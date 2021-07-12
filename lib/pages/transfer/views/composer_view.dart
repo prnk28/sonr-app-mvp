@@ -95,7 +95,7 @@ class AnimatedStatus extends GetView<TransferController> {
       case ComposeStatus.Initial:
         return Container();
       case ComposeStatus.Checking:
-        return HourglassIndicator();
+        return CircleLoader();
       case ComposeStatus.NonExisting:
         return SimpleIcons.Close.icon(color: AppColor.Red, size: 36);
       case ComposeStatus.Existing:

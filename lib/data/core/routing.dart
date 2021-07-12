@@ -194,7 +194,6 @@ extension AppRoute on AppPage {
       default:
         return () {
           if (DeviceService.isMobile) {
-            Get.find<NodeService>().connect();
             return ShowCaseWidget(
                 builder: Builder(
               builder: (_) => HomePage(),

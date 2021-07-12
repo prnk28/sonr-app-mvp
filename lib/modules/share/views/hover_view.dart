@@ -94,7 +94,7 @@ class _ShareHoverSession extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            HourglassIndicator(scale: 1),
+            CircleLoader(scale: 1),
             "Pending".section(color: AppTheme.GreyColor, fontSize: 14),
           ],
         ));

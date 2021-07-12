@@ -16,11 +16,11 @@ class HomeActionButton extends GetView<HomeController> {
   // @ Build Page View by Navigation Item
   Widget _buildView(HomeView page) {
     // Return View
-    if (page == HomeView.Contact) {
+    if (page == HomeView.Personal) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 42.0, right: 8),
         child: ActionButton(
-          key: ValueKey<HomeView>(HomeView.Contact),
+          key: ValueKey<HomeView>(HomeView.Personal),
           iconData: SimpleIcons.Settings,
           onPressed: () {
             HapticFeedback.heavyImpact();

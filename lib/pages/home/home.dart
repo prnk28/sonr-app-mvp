@@ -1,18 +1,17 @@
 export 'controllers/home_controller.dart';
 export 'controllers/intel_controller.dart';
-export 'controllers/status.dart';
+export 'controllers/view.dart';
 export 'widgets/bottom_bar.dart';
-export 'widgets/bottom_button.dart';
 export 'widgets/top_button.dart';
 export 'widgets/top_header.dart';
 
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'controllers/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
-import 'controllers/status.dart';
+import 'controllers/view.dart';
 import 'views/dashboard_view.dart';
 import 'package:sonr_app/pages/home/controllers/home_controller.dart';
-import 'package:sonr_app/pages/home/controllers/status.dart';
+import 'package:sonr_app/pages/home/controllers/view.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'views/panels_view.dart';
 import 'widgets/bottom_bar.dart';
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
             controller: controller.tabController,
             children: [
               DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-              PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
+              PersonalView(key: ValueKey<HomeView>(HomeView.Personal)),
             ],
           )),
         ));

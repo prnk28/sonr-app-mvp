@@ -7,30 +7,42 @@ class IntelHeader extends GetView<IntelController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Column(children: [
-      Obx(() => GestureDetector(
+      child: Obx(
+        () => GestureDetector(
           onTap: () async {
-            if (NodeService.status.value == Status.FAILED) {
+            if (controller.hasFailed.value) {
               await Logger.openIntercom();
             }
           },
-          child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(children: [
-                WidgetSpan(
-                    alignment: PlaceholderAlignment.aboveBaseline,
-                    baseline: TextBaseline.alphabetic,
-                    child: SimpleIcons.Location.icon(
-                      size: 22,
-                      color: AppTheme.ItemColor,
-                    )),
-                (" " + controller.title.value).headingSpan(
-                  color: Get.theme.focusColor,
-                  fontSize: 32,
+          child: controller.isConnecting.value
+              ? Center(
+                  child: SpringLoader(),
+                )
+              : _buildTitle(
+                  controller.title.value,
                 ),
-              ])))),
-    ]));
+        ),
+      ),
+    );
   }
+
+  /// Builds Title Widget from Controller Text
+  Widget _buildTitle(String title) => RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(children: [
+          WidgetSpan(
+              alignment: PlaceholderAlignment.aboveBaseline,
+              baseline: TextBaseline.alphabetic,
+              child: SimpleIcons.Location.icon(
+                size: 22,
+                color: AppTheme.ItemColor,
+              )),
+          (" " + title).headingSpan(
+            color: Get.theme.focusColor,
+            fontSize: 32,
+          ),
+        ]),
+      );
 }
 
 class IntelFooter extends StatefulWidget {
@@ -167,7 +179,7 @@ class _NearbyPeersRow extends GetView<IntelController> {
         ),
         onLoading: Opacity(
           opacity: 0.7,
-          child: HourglassIndicator(scale: 1),
+          child: SpringLoader(scale: 1),
         ),
         onError: (_) => Container(),
       ),
@@ -185,10 +197,10 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
           child: AnimatedSlider.fade(
             duration: 2.seconds,
             child: PageAppBar(
-              centerTitle: controller.view.value.isDefault,
+              centerTitle: controller.view.value.isDashboard,
               key: ValueKey(false),
               subtitle: Padding(
-                padding: controller.view.value.isDefault ? EdgeInsets.only(top: 68) : EdgeInsets.zero,
+                padding: controller.view.value.isDashboard ? EdgeInsets.only(top: 68) : EdgeInsets.zero,
                 child: controller.view.value == HomeView.Dashboard
                     ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
                         fontSize: 22,
@@ -200,7 +212,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               action: HomeActionButton(
                 dashboardKey: controller.keyTwo,
               ),
-              leading: controller.view.value != HomeView.Contact
+              leading: controller.view.value != HomeView.Personal
                   ? Padding(
                       padding: const EdgeInsets.only(top: 32.0, left: 8),
                       child: Container(
@@ -216,7 +228,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                       ),
                     )
                   : null,
-              title: controller.view.value != HomeView.Contact
+              title: controller.view.value != HomeView.Personal
                   ? IntelHeader()
                   : Padding(
                       padding: EdgeInsets.only(top: 32),
@@ -225,7 +237,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         align: TextAlign.start,
                       ),
                     ),
-              footer: controller.view.value != HomeView.Contact ? IntelFooter() : null,
+              footer: controller.view.value != HomeView.Personal ? IntelFooter() : null,
             ),
           ),
         ));
@@ -233,7 +245,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
 
   @override
   Size get preferredSize {
-    if (controller.view.value != HomeView.Contact) {
+    if (controller.view.value != HomeView.Personal) {
       return Size(Get.width, 186);
     } else {
       return Size(Get.width, kToolbarHeight + 64);
