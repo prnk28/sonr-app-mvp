@@ -64,6 +64,11 @@ class TransferController extends GetxController {
     AppRoute.popup(InviteComposer());
   }
 
+  void onQueryUpdated(String query) {
+    findQuery(query);
+    findQuery.refresh();
+  }
+
   /// @ User is Facing or No longer Facing a Peer
   void setFacingPeer(bool value) {
     isFacingPeer(value);
@@ -77,16 +82,20 @@ class TransferController extends GetxController {
 
     // Validate Peer
     if (peer != null) {
+      print(peer.toString());
       // Change Session for Status Success
       SenderService.invite(InviteRequestUtils.copy(TransferController.invite, peer: peer, type: InviteRequest_Type.Remote));
       composeStatus(ComposeStatus.Existing);
       shouldUpdate(true);
       return true;
-    }
+    } else {
+      // Print Records
+      await NamebaseClient.printRecords();
 
-    // Change Session for Status Error
-    composeStatus(ComposeStatus.NonExisting);
-    shouldUpdate(false);
-    return false;
+      // Change Session for Status Error
+      composeStatus(ComposeStatus.NonExisting);
+      shouldUpdate(false);
+      return false;
+    }
   }
 }

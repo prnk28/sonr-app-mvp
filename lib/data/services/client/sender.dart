@@ -148,8 +148,16 @@ class SenderService extends GetxService {
     // For Cancel
     else if (data.type == InviteResponse_Type.Cancel) {
       await HapticFeedback.vibrate();
-    } else {
+    }
+
+    // For Transfer
+    else if (data.type == InviteResponse_Type.Default) {
       _session.onReply(data);
+    }
+
+    // For Mailbox
+    else {
+      Logger.info(data.mailInfo.toString());
     }
   }
 

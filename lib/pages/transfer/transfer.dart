@@ -30,7 +30,7 @@ class TransferPage extends GetView<TransferController> {
                   },
                 )
               : null,
-          onPressed: () => AppPage.Home.off(),
+          onPressed: () => Get.back(closeOverlays: true),
           title: "Transfer",
           isClose: true,
         ),

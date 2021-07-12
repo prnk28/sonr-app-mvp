@@ -78,24 +78,18 @@ class NamebaseClient {
   static Future<Peer?> findPeerRecord(String query, {bool logging = false}) async {
     final result = await refresh();
     final record = result.records.firstWhere(
-      (e) => e.equalsName(query),
+      (e) => e.host.toLowerCase() == query.toLowerCase(),
       orElse: () => HSRecord.blank(),
     );
+    return record.toPeer();
+  }
 
-    // Return Record As Peer
-    if (!record.isBlank) {
-      return record.toPeer();
-    } else {
-      // Log All Records
-      if (logging) {
-        print("Invalid Peer");
-        print("-- All Records --");
-        result.records.forEach((r) {
-          print(r.toPeer().toString());
-        });
-      }
-      return null;
-    }
+  /// Print all Records as Peer Data in Console
+  static Future<void> printRecords() async {
+    final result = await refresh();
+    result.records.forEach((r) {
+      Logger.info(r.toPeer().toString());
+    });
   }
 
   /// Replace Record

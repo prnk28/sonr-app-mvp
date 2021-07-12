@@ -51,13 +51,10 @@ class InviteComposer extends GetView<TransferController> {
                               padding: EdgeInsets.only(right: 24),
                               child: SNameTextField(
                                 onEditingComplete: (value) {
-                                  controller.findQuery(value);
-                                  controller.findQuery.refresh();
                                   controller.shareRemote();
                                 },
                                 onChanged: (value) {
-                                  controller.findQuery(value);
-                                  controller.findQuery.refresh();
+                                  controller.onQueryUpdated(value);
                                 },
                               ),
                             ),
