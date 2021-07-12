@@ -188,7 +188,6 @@ class SenderService extends GetxService {
         ChooseOption.Camera.logConfirm();
 
         // Complete Result
-        _hasSelected(true);
         return result;
       });
     }
@@ -197,7 +196,6 @@ class SenderService extends GetxService {
 
   // @ Helper: Handles CONTACT Choice
   Future<InviteRequest?> _handleContactChoice() async {
-    _hasSelected(true);
     return await _handlePayload(Payload.CONTACT);
   }
 
@@ -213,14 +211,12 @@ class SenderService extends GetxService {
         }
 
         // Confirm File
-        _hasSelected(true);
         var file = result.toSFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
       } else {
         var filePath = await NodeService.instance.pickFile();
         var file = SFile(payload: Payload.FILE, items: [SFile_Item(path: filePath)], count: 1);
         if (filePath != null) {
-          _hasSelected(true);
           return await _handlePayload(file.payload, file: file);
         }
       }
@@ -245,7 +241,7 @@ class SenderService extends GetxService {
           ChooseOption.Media.logConfirm();
         }
         // Convert To File
-        _hasSelected(true);
+
         var file = result.toSFile(payload: Payload.MEDIA);
         return await _handlePayload(file.payload, file: file);
       }
@@ -255,6 +251,7 @@ class SenderService extends GetxService {
   /// @ Helper: Creates Invite Request from Payload
   Future<InviteRequest> _handlePayload(Payload payload, {SFile? file, String? url}) async {
     // Initialize
+    _hasSelected(true);
     InviteRequest invite = InviteRequest();
 
     // @ Handle Payload

@@ -16,16 +16,16 @@ class PeerCardView extends GetWidget<PeerController> {
     controller.initalize(peer);
     return GestureDetector(
       onTap: () {
-        if (SenderService.hasSelected.value) {
-          controller.invite();
-        } else {
-          AppRoute.positioned(
-            ShareHoverView(peer: peer),
-            init: () => ShareController.initPopup(),
-            parentKey: peerKey,
-            offset: Offset(-Get.width / 2, 20),
-          );
-        }
+        //if (SenderService.hasSelected.value) {
+        controller.invite();
+        // } else {
+        //   AppRoute.positioned(
+        //     ShareHoverView(peer: peer),
+        //     init: () => ShareController.initPopup(),
+        //     parentKey: peerKey,
+        //     offset: Offset(-Get.width / 2, 20),
+        //   );
+        // }
       },
       child: BoxContainer(
           constraints: BoxConstraints.tight(Size(K_CARD_WIDTH, K_CARD_HEIGHT)),

@@ -161,9 +161,9 @@ class RegisterTextField extends GetView<RegisterController> {
             child: TextField(
               style: DisplayTextStyle.Light.style(color: AppTheme.ItemColor, fontSize: 20),
               keyboardType: type.textInputType,
-              autofocus: type.autoFocus,
+              autofocus: true,
               textInputAction: type.textInputAction,
-              autocorrect: type.autoCorrect,
+              autocorrect: false,
               inputFormatters: type.inputFormatters,
               textCapitalization: type.textCapitalization,
               focusNode: focusNode,

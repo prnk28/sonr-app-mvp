@@ -84,16 +84,12 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
   }
 
   Widget text() {
-    if (!this.hasStayed) {
-      return FadeIn(
-        animate: true,
-        child: this.differenceCount.toString().light(
-              color: this.hasJoined ? AppColor.Green : AppColor.Red,
-            ),
-      );
-    } else {
-      return Container();
-    }
+    return FadeIn(
+      animate: true,
+      child: this.differenceCount.toString().light(
+            color: this.hasJoined ? AppColor.Green : AppColor.Red,
+          ),
+    );
   }
 
   Widget icon() {
@@ -103,7 +99,7 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
           animate: true,
           duration: 300.milliseconds,
           child: SimpleIcons.Up.icon(
-            color: AppTheme.ItemColor,
+            color: AppColor.Blue,
             size: 14,
           ),
         ),

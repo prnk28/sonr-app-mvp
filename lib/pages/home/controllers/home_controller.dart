@@ -36,7 +36,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Check Platform
     if (DeviceService.isMobile) {
       // Handle Tab Controller
-      tabController = TabController(vsync: this, length: 3);
+      tabController = TabController(vsync: this, length: 2);
       scrollController = ScrollController(keepScrollOffset: false);
 
       // Handle Search Query

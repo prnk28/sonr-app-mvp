@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -31,19 +33,75 @@ class IntelHeader extends GetView<IntelController> {
   }
 }
 
-class IntelFooter extends GetView<IntelController> {
+class IntelFooter extends StatefulWidget {
+  IntelFooter({Key? key}) : super(key: key);
+  @override
+  _IntelFooterState createState() => _IntelFooterState();
+}
+
+class _IntelFooterState extends State<IntelFooter> {
+  // Properties
+  late StreamSubscription<Lobby> _lobbyStream;
+  final badgeVisible = false.obs;
+
+  // References
+  CompareLobbyResult _compareResult = CompareLobbyResult();
+  Lobby _lastLobby = Lobby();
+  int _lastLobbyCount = 0;
+
+  @override
+  void initState() {
+    // Listen to Streams
+    _lobbyStream = LobbyService.lobby.listen(_handleLobbyStream);
+    super.initState();
+  }
+
+  void dispose() {
+    _lobbyStream.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlider.fade(
           duration: 200.milliseconds,
-          child: controller.badgeVisible.value
-              ? _IntelBadgeCount(
+          child: badgeVisible.value
+              ? Row(
                   key: ValueKey(true),
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  textBaseline: TextBaseline.ideographic,
+                  children: [
+                    _compareResult.text(),
+                    _compareResult.icon(),
+                  ],
                 )
               : _NearbyPeersRow(
                   key: ValueKey(false),
                 ),
         ));
+  }
+
+  // @ Handle Size Update
+  void _handleLobbyStream(Lobby onData) {
+    // Check Valid
+    _compareResult = CompareLobbyResult(current: onData, previous: _lastLobby);
+
+    if (onData.count != _lastLobbyCount) {
+      // Swap Text
+      HapticFeedback.mediumImpact();
+      badgeVisible(true);
+
+      // Revert Text
+      Future.delayed(1200.milliseconds, () {
+        badgeVisible(false);
+      });
+    }
+
+    // Update References
+    _lastLobbyCount = onData.count;
+    _lastLobby = onData;
   }
 }
 
@@ -117,36 +175,6 @@ class _NearbyPeersRow extends GetView<IntelController> {
   }
 }
 
-class _IntelBadgeCount extends GetView<IntelController> {
-  const _IntelBadgeCount({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 30,
-        child: controller.obx(
-          (state) {
-            if (state != null) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                textBaseline: TextBaseline.ideographic,
-                children: [
-                  state.text(),
-                  state.icon(),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          },
-          onEmpty: Container(),
-          onLoading: Container(),
-          onError: (_) => Container(),
-        ));
-  }
-}
-
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
@@ -176,15 +204,15 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   ? Padding(
                       padding: const EdgeInsets.only(top: 32.0, left: 8),
                       child: Container(
-                        child: Obx(() => ShowcaseItem.fromType(
-                              type: ShowcaseType.Help,
-                              child: ActionButton(
-                                banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
-                                key: ValueKey<HomeView>(HomeView.Dashboard),
-                                iconData: SimpleIcons.Help,
-                                onPressed: () async => await Logger.openIntercom(),
-                              ),
-                            )),
+                        child: ShowcaseItem.fromType(
+                          type: ShowcaseType.Help,
+                          child: ActionButton(
+                            banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                            key: ValueKey<HomeView>(HomeView.Dashboard),
+                            iconData: SimpleIcons.Help,
+                            onPressed: () async => await Logger.openIntercom(),
+                          ),
+                        ).obx(),
                       ),
                     )
                   : null,

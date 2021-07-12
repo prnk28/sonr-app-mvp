@@ -80,11 +80,13 @@ class TransferController extends GetxController {
       // Change Session for Status Success
       SenderService.invite(InviteRequestUtils.copy(TransferController.invite, peer: peer, type: InviteRequest_Type.Remote));
       composeStatus(ComposeStatus.Existing);
+      shouldUpdate(true);
       return true;
     }
 
     // Change Session for Status Error
     composeStatus(ComposeStatus.NonExisting);
+    shouldUpdate(false);
     return false;
   }
 }

@@ -7,7 +7,6 @@ export 'widgets/top_button.dart';
 export 'widgets/top_header.dart';
 
 import 'package:sonr_app/pages/personal/personal.dart';
-import 'package:sonr_app/pages/transfer/views/local_view.dart';
 import 'controllers/home_controller.dart';
 import 'package:sonr_app/style/style.dart';
 import 'controllers/status.dart';
@@ -49,7 +48,6 @@ class _HomePageState extends State<HomePage> {
             controller: controller.tabController,
             children: [
               DashboardView(key: ValueKey<HomeView>(HomeView.Dashboard)),
-              LocalView(),
               PersonalView(key: ValueKey<HomeView>(HomeView.Contact)),
             ],
           )),

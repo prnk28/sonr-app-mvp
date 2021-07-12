@@ -7,7 +7,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
   final badgeVisible = false.obs;
 
   // Streams
-  late StreamSubscription<Lobby?> _lobbyStream;
+  late StreamSubscription<Lobby> _lobbyStream;
   late StreamSubscription<Status> _statusStream;
 
   // References
@@ -23,6 +23,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
 
     // Set Default Values
     _handleStatusStream(NodeService.status.value);
+    _handleLobbyStream(LobbyService.lobby.value);
 
     // Initialize
     super.onInit();

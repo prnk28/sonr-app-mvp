@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/style/style.dart';
 
 extension ListUtils<T> on List<T> {
   random() {
@@ -45,6 +46,18 @@ extension NumUtils on int {
       }
     });
     return contains;
+  }
+}
+
+extension ObxWidgetFunctionUtils on Widget Function() {
+  Obx obx() {
+    return Obx(() => this());
+  }
+}
+
+extension ObxWidgetUtils on Widget {
+  Obx obx() {
+    return Obx(() => this);
   }
 }
 
