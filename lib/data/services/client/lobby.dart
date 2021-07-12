@@ -94,7 +94,7 @@ class LobbyService extends GetxService {
   }
 
   // # Handle Individual user event
-  void handleEvent(LobbyEvent data) {
+  void handleEvent(TopicEvent data) {
     // User Joined
     if (data.shouldAdd) {
       _lobby.value.peers[data.id] = data.peer;

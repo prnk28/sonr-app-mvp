@@ -23,7 +23,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // References
   late Node _instance;
   late StreamSubscription<ConnectivityResult> _connectionStream;
-  late StreamSubscription<LobbyEvent> _lobbyEventStream;
+  late StreamSubscription<TopicEvent> _topicEventStream;
   late StreamSubscription<ProgressEvent> _progressEventStream;
   late StreamSubscription<StatusEvent> _statusEventStream;
   late StreamSubscription<MailEvent> _mailEventStream;
@@ -46,7 +46,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _instance.onTransmitted = SenderService.to.handleTransmitted;
 
     // Set Stream Handlers
-    _lobbyEventStream = _instance.onEvent(LobbyService.to.handleEvent);
+    _topicEventStream = _instance.onEvent(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
     _statusEventStream = _instance.onStatus(_handleStatus);
     _mailEventStream = _instance.onMail(_handleMail);
@@ -56,7 +56,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   @override
   onClose() {
     _connectionStream.cancel();
-    _lobbyEventStream.cancel();
+    _topicEventStream.cancel();
     _mailEventStream.cancel();
     _progressEventStream.cancel();
     _statusEventStream.cancel();
@@ -174,7 +174,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   void _handleError(ErrorMessage data) async {
     // Check for Peer Error
     if (data.type == ErrorMessage_Type.PEER_NOT_FOUND_INVITE) {
-      final removeEvent = LobbyEvent(id: data.data, subject: LobbyEvent_Subject.EXIT);
+      final removeEvent = TopicEvent(id: data.data, subject: TopicEvent_Subject.EXIT);
       LobbyService.to.handleEvent(removeEvent);
     }
 
