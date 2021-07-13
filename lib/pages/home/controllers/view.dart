@@ -41,8 +41,11 @@ extension HomeViewUtils on HomeView {
   /// #### Get Title From View Type
   String get title => this.isDashboard ? "Welcome" : this.name;
 
+  /// #### Get AppBar Padding from View Type
+  EdgeInsets get paddingAppbar => this.isDashboard ? EdgeInsets.only(top: 68) : EdgeInsets.zero;
+
   /// #### Get Icon Padding from View Type
-  EdgeInsets get iconPadding => this.isMobileView
+  EdgeInsets get paddingIcon => this.isMobileView
       ? EdgeInsets.only(
           top: 8.0,
           bottom: 8,

@@ -396,14 +396,14 @@ class CircleLoader extends StatelessWidget {
 class SpringLoader extends StatelessWidget {
   final double scale;
 
-  const SpringLoader({Key? key, this.scale = 0.2}) : super(key: key);
+  const SpringLoader({Key? key, this.scale = 1.0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
       scale: scale,
       child: SizedBox(
-        width: 24,
-        height: 24,
+        width: 42,
+        height: 42,
         child: Lottie.asset(
           LottieFile.LoaderSpring.path,
           fit: BoxFit.contain,

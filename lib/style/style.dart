@@ -19,7 +19,7 @@ export 'buttons/action.dart';
 export 'buttons/arrow.dart';
 export 'buttons/color.dart';
 export 'buttons/confirm.dart';
-export 'buttons/image.dart';
+export 'buttons/complex.dart';
 export 'buttons/solid.dart';
 
 // Theme Components

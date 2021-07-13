@@ -125,10 +125,10 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: ImageButton(
+      child: ComplexButton(
         label: 'Camera',
         onPressed: controller.chooseCamera,
-        icon: ComplexIcons.Camera,
+        type: ComplexIcons.Camera,
         size: K_ROW_CIRCLE_SIZE,
       ),
     );
@@ -143,9 +143,9 @@ class _ShareFileButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'File',
-          icon: ComplexIcons.Document,
+          type: ComplexIcons.Document,
           size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
         ));
@@ -160,9 +160,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'Contact',
-          icon: ComplexIcons.ContactCard,
+          type: ComplexIcons.ContactCard,
           size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
         ));

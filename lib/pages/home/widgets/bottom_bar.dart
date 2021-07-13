@@ -67,7 +67,7 @@ class HomeBottomTabButton extends GetView<HomeController> {
           }
         },
         child: Container(
-          padding: view.iconPadding,
+          padding: view.paddingIcon,
           child: ObxValue<Rx<HomeView>>(
               (idx) => AnimatedScale(
                     duration: K_ANIMATION_DURATION,

@@ -8,15 +8,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final appbarOpacity = 1.0.obs;
   final isConnecting = true.obs;
-  final subtitle = "".obs;
-  final status = Status.IDLE.obs;
   final view = HomeView.Dashboard.obs;
 
   // Propeties
   final query = "".obs;
   final results = RxList<TransferCard>();
-
-  // Controllers
 
   // Global Keys
   final keyOne = GlobalKey();

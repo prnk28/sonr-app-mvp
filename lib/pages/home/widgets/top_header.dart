@@ -188,6 +188,9 @@ class _NearbyPeersRow extends GetView<IntelController> {
 }
 
 class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
+  // References
+  static Duration K_ANIMATION_DURATION = 200.milliseconds;
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
@@ -200,19 +203,14 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               centerTitle: controller.view.value.isDashboard,
               key: ValueKey(false),
               subtitle: Padding(
-                padding: controller.view.value.isDashboard ? EdgeInsets.only(top: 68) : EdgeInsets.zero,
-                child: controller.view.value == HomeView.Dashboard
-                    ? "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
-                        fontSize: 22,
-                        color: Get.theme.focusColor.withOpacity(0.7),
-                        align: TextAlign.start,
-                      )
-                    : Container(),
+                padding: controller.view.value.paddingAppbar,
+                child: _buildSubtitle(
+                  controller.view.value.isDashboard,
+                  Get.find<IntelController>().isConnecting.value,
+                ),
               ),
-              action: HomeActionButton(
-                dashboardKey: controller.keyTwo,
-              ),
-              leading: controller.view.value != HomeView.Personal
+              action: HomeActionButton(dashboardKey: controller.keyTwo),
+              leading: controller.view.value.isDashboard
                   ? Padding(
                       padding: const EdgeInsets.only(top: 32.0, left: 8),
                       child: Container(
@@ -228,7 +226,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                       ),
                     )
                   : null,
-              title: controller.view.value != HomeView.Personal
+              title: controller.view.value.isDashboard
                   ? IntelHeader()
                   : Padding(
                       padding: EdgeInsets.only(top: 32),
@@ -237,10 +235,28 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         align: TextAlign.start,
                       ),
                     ),
-              footer: controller.view.value != HomeView.Personal ? IntelFooter() : null,
+              footer: controller.view.value.isDashboard ? IntelFooter() : null,
             ),
           ),
         ));
+  }
+
+  // # Helper: Builds Subtitle
+  Widget _buildSubtitle(bool isDashboard, bool isConnecting) {
+    if (isDashboard && isConnecting) {
+      return "Connecting..".subheading(
+        fontSize: 22,
+        color: Get.theme.focusColor.withOpacity(0.7),
+        align: TextAlign.start,
+      );
+    } else if (isDashboard && !isConnecting) {
+      return "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
+        fontSize: 22,
+        color: Get.theme.focusColor.withOpacity(0.7),
+        align: TextAlign.start,
+      );
+    }
+    return Container();
   }
 
   @override

@@ -9,6 +9,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
   final hasFailed = false.obs;
 
   // Streams
+  late Location _lastLocation;
   late StreamSubscription<Lobby> _lobbyStream;
   late StreamSubscription<Status> _statusStream;
 
@@ -24,8 +25,10 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
     _statusStream = NodeService.status.listen(_handleStatusStream);
 
     // Set Default Values
-    _handleStatusStream(NodeService.status.value);
-    _handleLobbyStream(LobbyService.lobby.value);
+    if (isConnecting.value) {
+      _handleStatusStream(NodeService.status.value);
+      _handleLobbyStream(LobbyService.lobby.value);
+    }
 
     // Initialize
     super.onInit();
@@ -39,7 +42,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
     super.onClose();
   }
 
-  // @ Handle Size Update
+  // # Method Handles Lobby Size Update
   void _handleLobbyStream(Lobby onData) {
     // Check Valid
     final compareResult = CompareLobbyResult(current: onData, previous: _lastLobby);
@@ -67,35 +70,39 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
     _lastLobby = onData;
   }
 
+  // # Method Handles Updated Status
   void _handleStatusStream(Status onData) {
-    if (onData.isConnected) {
-      isConnecting(false);
-      // Update Title
-      DeviceService.location.then((location) {
-        location.initPlacemark().then((result) {
-          if (result) {
-            if (location.placemark.subLocality.isNotEmpty) {
-              title(location.placemark.subLocality);
-            } else if (location.placemark.locality.isNotEmpty) {
-              title(location.placemark.locality);
-            } else if (location.placemark.name.isNotEmpty) {
-              title(location.placemark.name);
-            }
-          } else {
-            title('Welcome');
-          }
-        });
-      });
-
-      // Check Lobby Size
-      _handleLobbyStream(LobbyService.lobby.value);
-    } else if (onData == Status.FAILED) {
-      title("Failed");
-      isConnecting(false);
-      hasFailed(true);
-    } else {
-      title("Connecting");
-      isConnecting(true);
+    if (isConnecting.value) {
+      if (onData.isAvailable) {
+        // Check Lobby Size
+        _handleAvailable();
+      } else if (onData == Status.FAILED) {
+        title("Failed");
+        isConnecting(false);
+        hasFailed(true);
+      } else {
+        isConnecting(true);
+      }
     }
+  }
+
+  // # Method Handles Succesful Connection
+  void _handleAvailable() async {
+    // Find Location
+    _lastLocation = await DeviceService.location;
+    final result = await _lastLocation.lowestPlacemarkName();
+
+    // Set Title
+    if (result.isNotEmpty) {
+      title(result);
+    }
+    // No PlaceMark Found
+    else {
+      title('Welcome');
+    }
+
+    // Update Lobby Stream
+    isConnecting(false);
+    _handleLobbyStream(LobbyService.lobby.value);
   }
 }
