@@ -77,22 +77,33 @@ class _IntelFooterState extends State<IntelFooter> {
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlider.fade(
           duration: 200.milliseconds,
-          child: badgeVisible.value
-              ? Row(
-                  key: ValueKey(true),
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  textBaseline: TextBaseline.ideographic,
-                  children: [
-                    _compareResult.text(),
-                    _compareResult.icon(),
-                  ],
-                )
-              : _NearbyPeersRow(
-                  key: ValueKey(false),
-                ),
+          child: _buildChild(
+            badgeVisible.value,
+            Get.find<IntelController>().isConnecting.value,
+          ),
         ));
+  }
+
+  Widget _buildChild(bool isBadgeVisible, bool isConnecting) {
+    if (!isConnecting) {
+      return isBadgeVisible
+          ? Row(
+              key: ValueKey(true),
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              textBaseline: TextBaseline.ideographic,
+              children: [
+                _compareResult.text(),
+                _compareResult.icon(),
+              ],
+            )
+          : _NearbyPeersRow(
+              key: ValueKey(false),
+            );
+    } else {
+      return Container();
+    }
   }
 
   // @ Handle Size Update
@@ -176,10 +187,6 @@ class _NearbyPeersRow extends GetView<IntelController> {
             fontSize: 18,
             color: AppTheme.GreyColor,
           ),
-        ),
-        onLoading: Opacity(
-          opacity: 0.7,
-          child: SpringLoader(scale: 1),
         ),
         onError: (_) => Container(),
       ),

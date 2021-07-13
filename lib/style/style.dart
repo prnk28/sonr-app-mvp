@@ -23,9 +23,9 @@ export 'buttons/complex.dart';
 export 'buttons/solid.dart';
 
 // Theme Components
-export 'components/color.dart' hide NoSplash;
+export 'theme/color.dart' hide NoSplash;
 export 'components/container.dart';
-export 'components/gradient.dart';
+export 'theme/gradient.dart';
 export 'components/icon.dart';
 export 'components/overlay.dart';
 export 'components/text.dart';

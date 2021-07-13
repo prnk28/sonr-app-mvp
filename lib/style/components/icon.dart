@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'color.dart';
-import 'gradient.dart';
+import '../theme/color.dart';
+import '../theme/gradient.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sonr_app/style/style.dart';
 

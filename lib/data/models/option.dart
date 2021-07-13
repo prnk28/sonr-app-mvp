@@ -1,4 +1,3 @@
-import 'package:intercom_flutter/intercom_flutter.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -153,25 +152,18 @@ extension Sounds on Sound {
   }
 
   /// Return File Name of Sound
-  String get file {
-    return '${this.name.toLowerCase()}.wav';
-  }
+  String get file => '${this.name.toLowerCase()}.wav';
 
   /// Return Full Path of File
-  String get path {
-    return 'assets/sounds/$file';
-  }
+  String get path => 'assets/sounds/$file';
 
   /// Return Enum Value as String without Prefix
-  String get name {
-    return this.toString().substring(this.toString().indexOf('.') + 1);
-  }
+  String get name => this.toString().substring(this.toString().indexOf('.') + 1);
 }
 
 // @ Intercom Carousel Option
 enum IntercomCarousel {
   SoftwareUpdate,
-  //
 }
 
 extension IntercomCarouselUtils on IntercomCarousel {
@@ -183,8 +175,8 @@ extension IntercomCarouselUtils on IntercomCarousel {
     }
   }
 
-  /// Method Displays Intercom Carousel
-  Future<void> show() async {
-    await Intercom.displayCarousel(this.id);
-  }
+  // /// Method Displays Intercom Carousel
+  // Future<void> show() async {
+  //   await Intercom.displayCarousel(this.id);
+  // }
 }
