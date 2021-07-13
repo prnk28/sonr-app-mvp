@@ -7,9 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sonr_app/style/style.dart';
 
 extension IntricateIconUtils on ComplexIcons {
-  /// @ Constant Regex Expression for Fuzzy Path
-  static final K_PASCAL_REGEX = RegExp(r"(?:[A-Z]+|^)[a-z]*");
-
   /// Returns Full System Path - For Comment Generation
   String fullPath(String dir, {bool withDots = false}) => withDots ? dir + this.pathDots : dir + this.path;
 
@@ -116,6 +113,9 @@ extension IntricateIconUtils on ComplexIcons {
 
   /// Get the Name of This Value
   String get value => this.toString().substring(this.toString().indexOf('.') + 1);
+
+  /// #### Constant Regex Expression for Fuzzy Path
+  static final K_PASCAL_REGEX = RegExp(r"(?:[A-Z]+|^)[a-z]*");
 }
 
 extension MimeIcon on MIME_Type {

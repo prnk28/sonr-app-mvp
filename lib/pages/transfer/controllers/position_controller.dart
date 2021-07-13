@@ -24,7 +24,7 @@ class PositionController extends GetxController {
   late StreamSubscription<Position> _positionStream;
   late StreamSubscription<bool> _isFlatStream;
 
-  /// @ Controller Constructer
+  /// #### Controller Constructer
   @override
   void onInit() {
     _positionStream = DeviceService.position.listen(_handlePositionUpdate);
@@ -32,7 +32,7 @@ class PositionController extends GetxController {
     super.onInit();
   }
 
-  /// @ On Dispose
+  /// #### On Dispose
   @override
   void onClose() {
     _positionStream.cancel();
@@ -40,7 +40,7 @@ class PositionController extends GetxController {
     super.onClose();
   }
 
-  /// @ Method to Animate in Responded Card
+  /// #### Method to Animate in Responded Card
   animateFlatIn(Contact card, {double delayModifier = 1.0}) {
     received(card);
     Future.delayed(K_TRANSLATE_DURATION * delayModifier, () {
@@ -50,7 +50,7 @@ class PositionController extends GetxController {
     });
   }
 
-  /// @ Method to Animate in Invited Card
+  /// #### Method to Animate in Invited Card
   animateFlatSwap(Contact card) {
     // Set Received Card
     received(card);
@@ -71,7 +71,7 @@ class PositionController extends GetxController {
     });
   }
 
-  /// @ Method to Animate out Sent Card  and Update Drage Position
+  /// #### Method to Animate out Sent Card  and Update Drage Position
   void setFlatDrag(double y) {
     // @ Check for Valid State
     if (status.value == FlatModeState.Dragging || status.value == FlatModeState.Standby) {

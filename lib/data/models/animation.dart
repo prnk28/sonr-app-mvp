@@ -168,7 +168,7 @@ extension BigDirectionUtils on BigDirection {
   }
 }
 
-/// @ Method Builds Slide Transition
+/// #### Method Builds Slide Transition
 class FlatModeAnimation {
   final FlatModeTransition type;
   FlatModeAnimation(this.type);

@@ -25,7 +25,7 @@ extension TextInputValidStatusUtils on TextInputValidStatus {
   }
 }
 
-/// @ Builds Neumorphic Text Field
+/// #### Builds Neumorphic Text Field
 class DesignTextField extends StatelessWidget {
   final String? label;
   final String hint;
@@ -148,7 +148,7 @@ class DesignTextField extends StatelessWidget {
     );
   }
 
-  /// @ Get Animated Offset for Shake Method
+  /// #### Get Animated Offset for Shake Method
   Offset shakeOffset(double animation) {
     var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
     return Offset(18 * shake, 0);
@@ -227,7 +227,7 @@ class SNameTextField extends StatelessWidget {
 }
 
 class TextUtils {
-  /// @ Returns Random Hint Name
+  /// #### Returns Random Hint Name
   static Tuple<String, String> get hintName {
     switch (DeviceService.device.platform) {
       case Platform.Android:

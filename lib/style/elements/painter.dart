@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../style.dart';
 
-/// @ Arrow Painter for Dropdown
+/// #### Arrow Painter for Dropdown
 class ArrowClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -22,7 +22,7 @@ class ArrowClipper extends CustomClipper<Path> {
   }
 }
 
-/// @ Blurred Background Painter
+/// #### Blurred Background Painter
 class BlurredBackground extends StatelessWidget {
   final Widget child;
   final Function? onTapped;
@@ -68,7 +68,7 @@ class BlurredBackground extends StatelessWidget {
   }
 }
 
-/// @ Circle Ripple Painter
+/// #### Circle Ripple Painter
 class CirclePainter extends CustomPainter {
   CirclePainter(this._animation) : super(repaint: _animation);
 
@@ -97,7 +97,7 @@ class CirclePainter extends CustomPainter {
   bool shouldRepaint(CirclePainter oldDelegate) => true;
 }
 
-/// @ Curved Wave for Animation Curve
+/// #### Curved Wave for Animation Curve
 class CurveWave extends Curve {
   const CurveWave();
   @override
@@ -351,7 +351,7 @@ class PolygonPathSpecs {
   }) : halfBorderRadiusAngle = borderRadiusAngle / 2;
 }
 
-/// @ Offset Extension for Common Locations
+/// #### Offset Extension for Common Locations
 extension SonrOffset on Offset {
   static const Offset Top = Offset(0.0, -1.0);
   static const Offset Bottom = Offset(0.0, 1.0);
@@ -366,7 +366,7 @@ extension SonrOffset on Offset {
   }
 }
 
-/// @ Wave Painter for File Progress
+/// #### Wave Painter for File Progress
 class WavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
   final Animation<double>? waveAnimation;
@@ -407,13 +407,13 @@ class WavePainter extends CustomPainter {
   }
 }
 
-/// @ Hexagon Shape Path
+/// #### Hexagon Shape Path
 class ZoneClip extends CustomClipper<Path> {
   // References
   final Position_Proximity proximity;
   ZoneClip(this.proximity);
 
-  /// @ Returns Path Size
+  /// #### Returns Path Size
   static double arcLength(double angle) {
     return sqrt((Get.height / 2 * Get.height / 2) / 2) * angle;
   }

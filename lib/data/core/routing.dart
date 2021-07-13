@@ -13,7 +13,7 @@ import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
-/// @ Enum Values for App Page
+/// #### Enum Values for App Page
 enum AppPage {
   /// ### Home `Off`
   /// Dashboard, Search, Personal
@@ -99,7 +99,7 @@ extension AppRoute on AppPage {
   List<GetMiddleware> get middlewares => this == AppPage.Home ? [GetMiddleware()] : [];
 
   /// Checks if this Page Needs Onboarding
-  bool get needsOnboarding => Logger.userAppFirstTime && !readWriteOnboarding.val;
+  bool get needsOnboarding => Logger.appOpenFirst && !readWriteOnboarding.val;
 
   /// Instance to Determine if Page has Finished Onboarding
   ReadWriteValue<bool> get readWriteOnboarding => false.val(this.name, getBox: () => GetStorage('Onboarding'));

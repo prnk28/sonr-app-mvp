@@ -7,7 +7,7 @@ import 'search_view.dart';
 
 const K_LIST_HEIGHT = 225.0;
 
-/// @ Root Grid View
+/// #### Root Grid View
 class DashboardView extends GetView<HomeController> {
   DashboardView({Key? key}) : super(key: key);
   @override

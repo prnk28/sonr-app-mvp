@@ -64,7 +64,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   // * ------------------- Methods ----------------------------
-  /// @ Connect to Service Method
+  /// #### Connect to Service Method
   Future<bool> connect() async {
     // Check for User
     if (ContactService.status.value.hasUser && DeviceService.hasInternet) {
@@ -85,36 +85,36 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     }
   }
 
-  /// @ Sign Provided Data with Private Key
+  /// #### Sign Provided Data with Private Key
   static Future<AuthResponse> sign(AuthRequest request) async {
     return await to._instance.sign(request);
   }
 
-  /// @ Verify Provided Data with Private Key
+  /// #### Verify Provided Data with Private Key
   static Future<VerifyResponse> verify(VerifyRequest request) async {
     return await to._instance.verify(request);
   }
 
-  /// @ Retreive URLLink Metadata
+  /// #### Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
     return await SonrCore.getUrlLink(url);
   }
 
-  /// @ Send Position Update for Node
+  /// #### Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
       to._instance.update(API.newUpdatePosition(position));
     }
   }
 
-  /// @ Sets Contact for Node
+  /// #### Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
       to._instance.update(API.newUpdateContact(contact));
     }
   }
 
-  /// @ Invite Peer with Built Request
+  /// #### Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
       to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.Flat));
@@ -122,7 +122,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   // * ------------------- Callbacks ----------------------------
-  /// @ Handle Connection Result
+  /// #### Handle Connection Result
   void _handleConnected(ConnectionResponse data) {
     // Log Result
     Logger.info(data.toString());
@@ -133,7 +133,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     });
   }
 
-  /// @ Handle Device Updated Connectivity Result
+  /// #### Handle Device Updated Connectivity Result
   void _handleDeviceConnection(ConnectivityResult result) {
     // Display No Connection Error - Stop Services
     if (result == ConnectivityResult.none) {
@@ -147,7 +147,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     }
   }
 
-  /// @ Handle Bootstrap Result
+  /// #### Handle Bootstrap Result
   void _handleStatus(StatusEvent data) {
     // Check for Homescreen Controller
     if (data.value == Status.AVAILABLE) {
@@ -164,13 +164,13 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     Logger.info("Node(Callback) Status: " + data.value.toString());
   }
 
-  /// @ Handle Bootstrap Result
+  /// #### Handle Bootstrap Result
   void _handleMail(MailEvent data) {
     // Logging
     Logger.info("Node(Callback) Status: " + data.toString());
   }
 
-  /// @ An Error Has Occurred
+  /// #### An Error Has Occurred
   void _handleError(ErrorMessage data) async {
     // Check for Peer Error
     if (data.type == ErrorMessage_Type.PEER_NOT_FOUND_INVITE) {
@@ -182,9 +182,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     if (data.severity != ErrorMessage_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
     }
-
-    // Logging
-    Logger.sError(data);
   }
 
   // * ------------------- Helpers ----------------------------
@@ -194,7 +191,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   Future<void> _handleSNameMigration() async {
-    if (!Logger.to.userHasUpdatedSName.val) {
+    if (!Logger.hasMigratedSName.val) {
       // Retreive Public Key
       final response = await instance.verify(API.newVerifyRead());
 

@@ -17,7 +17,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
   Lobby _lastLobby = Lobby();
   int _lastLobbyCount = 0;
 
-  /// @ Controller Constructer
+  /// #### Controller Constructer
   @override
   onInit() {
     // Listen to Streams
@@ -34,7 +34,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
     super.onInit();
   }
 
-  /// @ On Dispose
+  /// #### On Dispose
   @override
   void onClose() {
     _lobbyStream.cancel();

@@ -14,7 +14,7 @@ import 'package:sonr_app/style/style.dart';
 import 'controllers/transfer_controller.dart';
 import 'views/local_view.dart';
 
-/// @ Transfer Screen Entry Point
+/// #### Transfer Screen Entry Point
 class TransferPage extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {

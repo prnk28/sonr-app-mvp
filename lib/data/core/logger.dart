@@ -8,14 +8,31 @@ import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
 import 'package:firebase_analytics/firebase_analytics.dart';
 
+const List<String> K_TEST_NAMES = ['sundarp', 'timc', 'pradn'];
+
 class Logger extends GetxService {
-  // Service Accessors
+  // Accessor Properties
+  static bool isTestDevice = false;
   static bool get isRegistered => Get.isRegistered<Logger>();
   static Logger get to => Get.find<Logger>();
-  static bool get hasOpenedIntercom => to._hasOpenedIntercom.val;
-  static RxInt get unreadIntercomCount => to._unreadIntercomCount;
-  static int get userAppOpenCount => to._userAppOpenCount.val;
-  static bool get userAppFirstTime => to._userAppOpenCount.val == 0 || to._userAppOpenCount.val == 1;
+
+  /// Users First Time App Open
+  static int get appOpenCount => to._appOpenCount.val;
+
+  /// Users App Open Count
+  static bool get appOpenFirst => to._appOpenCount.val == 0 || to._appOpenCount.val == 1;
+
+  /// Wether User SName has been Migrated
+  static ReadWriteValue<bool> get hasMigratedSName => to._hasMigratedSName;
+
+  /// Wether User has done a Transfer
+  static ReadWriteValue<bool> get hasTransferred => to._hasTransferred;
+
+  /// Wether User has Opened Intercom
+  static bool get intercomOpened => to._intercomOpened.val;
+
+  /// Intercome Unread Messages
+  static RxInt get intercomUnreadCount => to._intercomUnreadCount;
 
   // References
   static FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -23,11 +40,11 @@ class Logger extends GetxService {
 
   // Properties
   final _hasIntercom = false.obs;
-  final _unreadIntercomCount = 0.obs;
-  final _hasOpenedIntercom = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
-  final hasHadTransfer = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
-  final _userAppOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
-  final userHasUpdatedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
+  final _intercomUnreadCount = 0.obs;
+  final _intercomOpened = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
+  final _hasTransferred = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
+  final _appOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
+  final _hasMigratedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
 
   // References
   static final BuildMode buildMode = BuildModeUtil.current();
@@ -45,7 +62,7 @@ class Logger extends GetxService {
   Logger() {
     Timer.periodic(2.minutes, (timer) async {
       if (_hasIntercom.value) {
-        _unreadIntercomCount(await Intercom.unreadConversationCount());
+        _intercomUnreadCount(await Intercom.unreadConversationCount());
       }
     });
   }
@@ -58,7 +75,7 @@ class Logger extends GetxService {
       await GetStorage.init('Onboarding');
 
       // Update App Open Count
-      _userAppOpenCount.val = _userAppOpenCount.val + 1;
+      _appOpenCount.val = _appOpenCount.val + 1;
 
       // Configure Firebase Scope
       FirebaseAnalytics().setUserId(DeviceService.device.id);
@@ -74,7 +91,7 @@ class Logger extends GetxService {
     return this;
   }
 
-  /// @ Initializes Profile for Analytics
+  /// #### Initializes Profile for Analytics
   static void initProfile(Profile profile) {
     if (isRegistered && DeviceService.isMobile && DeviceService.hasInternet) {
       // Set User Properties
@@ -82,92 +99,82 @@ class Logger extends GetxService {
       FirebaseAnalytics().setUserProperty(name: "lastName", value: profile.lastName);
       Intercom.registerIdentifiedUser(userId: profile.sName);
       to._hasIntercom(true);
+
+      // Check for Test Device
+      if (K_TEST_NAMES.any((n) => n.toLowerCase() == ContactService.sName)) {
+        to._hasMigratedSName.val = false;
+        isTestDevice = true;
+      }
     }
   }
 
-  /// @ Logs a Firebase Analytics Event
+  /// #### Logs a Firebase Analytics Event
   /// Adds Properties: `createdAt`, `platform`, `controller`
   static void event({
-    required String name,
-    required String controller,
-    Map<String, Object?>? parameters,
+    required AnalyticsEvent event,
   }) async {
     if (isRegistered && DeviceService.isMobile && DeviceService.hasInternet) {
-      // Check Paramaters
-      var map = <String, Object?>{};
-      if (parameters != null) {
-        map.addAll(parameters);
-      }
+      // Log Intercom Event
+      await Intercom.logEvent(event.name, event.parameters);
 
-      // Add Essential Parameters
-      map["controller"] = controller;
-      map["createdAt"] = DateTime.now().toString();
-      map["platform"] = DeviceService.device.platform.toString();
-
-      // Log Event
-      FirebaseAnalytics().logEvent(
-        name: name,
-        parameters: map,
+      // Log Firebase Event
+      await FirebaseAnalytics().logEvent(
+        name: event.name,
+        parameters: event.parameters,
       );
     }
   }
 
-  /// @ Prints Debug Log
+  /// #### Prints Debug Log
   static void debug(dynamic m) {
     if (buildMode.isDebug && isRegistered) {
       to._log.d(m);
     }
   }
 
-  /// @ Prints Info Log
+  /// #### Prints Info Log
   static void info(dynamic m) {
     if (buildMode.isDebug && isRegistered) {
       to._log.i(m);
     }
   }
 
-  /// @ Prints Warn Log
+  /// #### Prints Warn Log
   static void warn(dynamic m) {
     if (buildMode.isDebug && isRegistered) {
       to._log.w(m);
     }
   }
 
-  /// @ Prints Error Log
+  /// #### Prints Error Log
   static void error(dynamic m) {
     if (buildMode.isDebug && isRegistered) {
       to._log.e(m);
     }
   }
 
-  /// @ Prints Sonr ErrorMessage Log
-  static void sError(ErrorMessage m) {
-    if (buildMode.isDebug && isRegistered) {
-      to._log.wtf("Node(Callback) Error: " + m.message);
-    }
-  }
-
-  /// @ Opens Intercom Messenger
+  /// #### Opens Intercom Messenger
   static Future<void> openIntercom() async {
     if (isRegistered && to._hasIntercom.value && DeviceService.isMobile) {
-      if (!to._hasOpenedIntercom.val) {
-        to._hasOpenedIntercom.val = true;
+      if (!to._intercomOpened.val) {
+        to._intercomOpened.val = true;
       }
       await Intercom.displayMessenger();
     }
   }
 
-  /// @ Sets Migration as True
+  /// #### Sets Migration as True
   static Future<void> setMigration(HSRecord record) async {
     if (isRegistered) {
       // Set Result
-      to.userHasUpdatedSName.val = await NamebaseClient.addRecords([record]);
+      to._hasMigratedSName.val = await NamebaseClient.addRecords([record]);
 
       // Log Event
-      Logger.event(name: "setMigration", controller: "NodeService", parameters: {
-        "status": to.userHasUpdatedSName.val,
+      Logger.event(
+          event: AnalyticsEvent.user(AnalyticsUserEvent.MigratedSName, parameters: {
+        "status": to._hasMigratedSName.val,
         "sName": record.name,
-      });
+      }));
     }
   }
 }

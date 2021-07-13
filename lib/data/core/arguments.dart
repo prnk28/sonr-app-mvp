@@ -19,11 +19,24 @@ extension BuildModeUtil on BuildMode {
     }
   }
 
+  /// Returns Current BuildMode from Foundation and
+  /// Wraps into InitializeRequest_BuildMode
+  static InitializeRequest_BuildMode currentProto() => current().toProto();
+
   /// Checks if Build Mode is Debug
   bool get isDebug => this == BuildMode.Debug && !kReleaseMode;
 
   /// Checks if Build Mode is Release
   bool get isRelease => this == BuildMode.Release && kReleaseMode;
+
+  /// Converts BuildMode from Foundation into InitializeRequest_BuildMode
+  InitializeRequest_BuildMode toProto() {
+    if (this.isDebug) {
+      return InitializeRequest_BuildMode.Debug;
+    } else {
+      return InitializeRequest_BuildMode.Release;
+    }
+  }
 }
 
 // ** ─── Snackbar Arguments ────────────────────────────────────────────────────────
@@ -53,7 +66,7 @@ class SnackArgs {
       this.progressIndicatorBackgroundColor,
       this.progressIndicatorValueColor});
 
-  /// @ Custom Alert
+  /// #### Custom Alert
   factory SnackArgs.alert({
     required String title,
     required String message,
@@ -64,7 +77,7 @@ class SnackArgs {
     return SnackArgs(title: title, message: message, icon: icon, color: color, duration: 2600, shouldIconPulse: false, position: position);
   }
 
-  /// @ Cancelled Operation
+  /// #### Cancelled Operation
   factory SnackArgs.cancelled(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
         title: "Cancelled.",
@@ -76,7 +89,7 @@ class SnackArgs {
         position: position);
   }
 
-  /// @ Error on Operation
+  /// #### Error on Operation
   factory SnackArgs.error(String message, {ErrorMessage? error}) {
     // @ Internal Error
     if (error != null) {
@@ -136,7 +149,7 @@ class SnackArgs {
     }
   }
 
-  /// @ Invalid Operation
+  /// #### Invalid Operation
   factory SnackArgs.invalid(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
       title: "Uh Oh!",
@@ -149,7 +162,7 @@ class SnackArgs {
     );
   }
 
-  /// @ Missing Data
+  /// #### Missing Data
   factory SnackArgs.missing(String message, {bool isLast = false, SnackPosition position = SnackPosition.BOTTOM}) {
     // Get Missing Title
     return SnackArgs(
@@ -163,7 +176,7 @@ class SnackArgs {
     );
   }
 
-  /// @ Succesful Operation
+  /// #### Succesful Operation
   factory SnackArgs.success(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
     return SnackArgs(
       title: "Success!",

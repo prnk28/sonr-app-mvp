@@ -39,7 +39,7 @@ class _SharePopupViewState extends State<SharePopupView> {
                 child: ActionButton(
                   onPressed: () => controller.confirmMediaSelection(),
                   iconData: SimpleIcons.Share,
-                  banner: Logger.userAppFirstTime ? null : ActionBanner.count(controller.selectedItems.length),
+                  banner: Logger.appOpenFirst ? null : ActionBanner.count(controller.selectedItems.length),
                 ),
               )),
         ),
@@ -94,7 +94,7 @@ class _SharePopupViewState extends State<SharePopupView> {
   }
 
   double _buildScale(bool hasSelected) {
-    if (Logger.userAppFirstTime) {
+    if (Logger.appOpenFirst) {
       return 1.0;
     } else {
       if (hasSelected) {
@@ -124,7 +124,7 @@ class ShareOptionsRow extends StatelessWidget {
   }
 }
 
-/// @ Camera Share Button
+/// #### Camera Share Button
 class _ShareCameraButtonItem extends GetView<ShareController> {
   const _ShareCameraButtonItem();
   @override
@@ -142,7 +142,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
   }
 }
 
-/// @ File Share Button
+/// #### File Share Button
 class _ShareFileButtonItem extends GetView<ShareController> {
   const _ShareFileButtonItem();
   @override
@@ -159,7 +159,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
   }
 }
 
-/// @ Contact Share Button
+/// #### Contact Share Button
 class _ShareContactButtonItem extends GetView<ShareController> {
   const _ShareContactButtonItem();
   @override

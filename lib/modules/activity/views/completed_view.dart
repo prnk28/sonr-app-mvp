@@ -2,7 +2,7 @@ import 'package:sonr_app/style/style.dart';
 import '../activity.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 
-/// @ Completed Transfer Popup View
+/// #### Completed Transfer Popup View
 class CompletedPopup extends GetView<ActivityController> {
   final Transfer transfer;
   CompletedPopup({Key? key, required this.transfer}) : super(key: key);
@@ -10,7 +10,7 @@ class CompletedPopup extends GetView<ActivityController> {
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
       // Lotte Animation
-      !Logger.to.hasHadTransfer.val
+      !Logger.hasTransferred.val
           ? IgnorePointer(child: LottieFile.Celebrate.lottie(width: Get.width, height: Get.height, repeat: false, fit: BoxFit.fitHeight))
           : Container(),
 
@@ -28,7 +28,7 @@ class CompletedPopup extends GetView<ActivityController> {
   }
 }
 
-/// @ TransferCard as List item View
+/// #### TransferCard as List item View
 class _PostTransferItem extends StatelessWidget {
   final Transfer transfer;
 

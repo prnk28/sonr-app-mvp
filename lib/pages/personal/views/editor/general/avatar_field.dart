@@ -52,7 +52,7 @@ class ProfileAvatarField extends GetView<PersonalController> {
   }
 }
 
-/// @ Edit Profile Picture View
+/// #### Edit Profile Picture View
 class EditPictureView extends GetView<PersonalController> {
   final String headerText;
   EditPictureView({this.headerText = "Edit Picture", Key? key}) : super(key: key);
@@ -85,7 +85,7 @@ class EditPictureView extends GetView<PersonalController> {
   }
 }
 
-/// @ Circular Camera View
+/// #### Circular Camera View
 class _ProfilePictureCameraView extends GetView<PersonalController> {
   @override
   Widget build(BuildContext context) {

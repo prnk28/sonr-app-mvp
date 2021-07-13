@@ -5,7 +5,7 @@ import 'package:sonr_app/style/style.dart';
 const double K_CARD_WIDTH = 160;
 const double K_CARD_HEIGHT = 190;
 
-/// @ Root Peer Card View
+/// #### Root Peer Card View
 class PeerCardView extends GetWidget<PeerController> {
   final Peer peer;
   final GlobalKey peerKey = GlobalKey();
@@ -64,7 +64,7 @@ class PeerCardView extends GetWidget<PeerController> {
   }
 }
 
-/// @ Main Peer Card View
+/// #### Main Peer Card View
 class _PeerMainCard extends StatelessWidget {
   final RxBool isFlipped;
   final Rx<Peer> peer;
@@ -114,7 +114,7 @@ class _PeerMainCard extends StatelessWidget {
   }
 }
 
-/// @ Details Peer Card View
+/// #### Details Peer Card View
 class _PeerDetailsCard extends StatelessWidget {
   final RxBool isFlipped;
   final Rx<Peer> peer;

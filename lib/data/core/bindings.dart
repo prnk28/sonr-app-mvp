@@ -8,7 +8,7 @@ import 'package:sonr_app/pages/personal/personal.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 
-/// @ Initial Controller Bindings
+/// #### Initial Controller Bindings
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
@@ -16,7 +16,7 @@ class InitialBinding implements Bindings {
   }
 }
 
-/// @ Home Controller Bindings
+/// #### Home Controller Bindings
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
@@ -36,7 +36,7 @@ class HomeBinding implements Bindings {
   }
 }
 
-/// @ Register Page Bindings
+/// #### Register Page Bindings
 class RegisterBinding implements Bindings {
   @override
   void dependencies() {
@@ -44,7 +44,7 @@ class RegisterBinding implements Bindings {
   }
 }
 
-/// @ Transfer Screen Bindings
+/// #### Transfer Screen Bindings
 class TransferBinding implements Bindings {
   @override
   void dependencies() {

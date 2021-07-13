@@ -1,7 +1,7 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// @ Invite Composer for Remote Transfer
+/// #### Invite Composer for Remote Transfer
 class InviteComposer extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {

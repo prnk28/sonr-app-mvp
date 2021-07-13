@@ -127,9 +127,9 @@ class ReceiverService extends GetxService {
     _hasActiveSession(false);
 
     // Update Has Had Transfer
-    if (!Logger.to.hasHadTransfer.val) {
+    if (!Logger.hasTransferred.val) {
       Future.delayed(3.seconds, () {
-        Logger.to.hasHadTransfer.val = true;
+        Logger.hasTransferred.val = true;
       });
     }
   }

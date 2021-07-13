@@ -3,7 +3,7 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 
-/// @ URL Invite from InviteRequest Proftobuf
+/// #### URL Invite from InviteRequest Proftobuf
 class URLAuthView extends StatelessWidget {
   final InviteRequest invite;
   URLAuthView(this.invite);
@@ -167,7 +167,7 @@ class URLContent extends StatelessWidget {
   }
 }
 
-/// @ Builds Image from URLLink Data
+/// #### Builds Image from URLLink Data
 class _URLLinkImage extends StatelessWidget {
   final URLLink data;
   final BoxFit fit;
@@ -185,7 +185,7 @@ class _URLLinkImage extends StatelessWidget {
   }
 }
 
-/// @ Builds Info from URLLink Data
+/// #### Builds Info from URLLink Data
 class _URLLinkInfo extends StatelessWidget {
   final URLLink data;
   const _URLLinkInfo({Key? key, required this.data}) : super(key: key);
@@ -209,7 +209,7 @@ class _URLLinkInfo extends StatelessWidget {
   }
 }
 
-/// @ Transfer Contact Item Details
+/// #### Transfer Contact Item Details
 class URLItemView extends StatelessWidget {
   final TransferCard item;
   const URLItemView({Key? key, required this.item}) : super(key: key);

@@ -133,7 +133,7 @@ class _ShareHoverPeerInfo extends StatelessWidget {
   }
 }
 
-/// @ Camera Share Button
+/// #### Camera Share Button
 class _ShareHoverCameraButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverCameraButtonItem({required this.peer});
@@ -152,7 +152,7 @@ class _ShareHoverCameraButtonItem extends GetView<ShareController> {
   }
 }
 
-/// @ Camera Share Button
+/// #### Camera Share Button
 class _ShareHoverMediaButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverMediaButtonItem({required this.peer});
@@ -171,7 +171,7 @@ class _ShareHoverMediaButtonItem extends GetView<ShareController> {
   }
 }
 
-/// @ File Share Button
+/// #### File Share Button
 class _ShareHoverFileButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverFileButtonItem({required this.peer});
@@ -190,7 +190,7 @@ class _ShareHoverFileButtonItem extends GetView<ShareController> {
   }
 }
 
-/// @ Contact Share Button
+/// #### Contact Share Button
 class _ShareHoverContactButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverContactButtonItem({required this.peer});

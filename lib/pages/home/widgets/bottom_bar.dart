@@ -1,7 +1,7 @@
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// @ Home Tab Bar Navigation
+/// #### Home Tab Bar Navigation
 class HomeFloatingBar extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class HomeFloatingBar extends GetWidget<HomeController> {
   }
 }
 
-/// @ Bottom Bar Button Widget
+/// #### Bottom Bar Button Widget
 class HomeBottomTabButton extends GetView<HomeController> {
   // References
   static double K_ICON_SIZE = 32;

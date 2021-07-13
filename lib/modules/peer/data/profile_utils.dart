@@ -34,7 +34,8 @@ class ProfileSName extends StatelessWidget {
           await HapticFeedback.mediumImpact();
           Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
             Clipboard.setData(ClipboardData(text: ContactService.contact.value.sName));
-            AppRoute.snack(SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
+            AppRoute.snack(
+                SnackArgs.alert(title: "Copied!", message: "SName copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
           });
         },
         child: [
@@ -89,7 +90,7 @@ class ProfileAvatar extends StatelessWidget {
   }
 }
 
-/// @ View for Post View owner of File Received
+/// #### View for Post View owner of File Received
 class ProfileOwnerRow extends StatelessWidget {
   final Profile profile;
   const ProfileOwnerRow({Key? key, required this.profile}) : super(key: key);

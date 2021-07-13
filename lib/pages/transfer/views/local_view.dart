@@ -58,7 +58,7 @@ class LocalView extends GetView<TransferController> {
   }
 }
 
-/// @ LobbyEmptyView: When Lobby is Empty
+/// #### LobbyEmptyView: When Lobby is Empty
 class _LocalEmptyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class _LocalEmptyView extends GetView<TransferController> {
   }
 }
 
-/// @ _LocalFewView:  When Lobby is <= 5 Peers
+/// #### _LocalFewView:  When Lobby is <= 5 Peers
 class _LocalFewView extends GetView<TransferController> {
   final LobbyFilter filter;
 
@@ -125,7 +125,7 @@ class _LocalFewView extends GetView<TransferController> {
   }
 }
 
-/// @ _LocalManyView:  When Lobby is > 5 Peers
+/// #### _LocalManyView:  When Lobby is > 5 Peers
 class _LocalManyView extends GetView<TransferController> {
   final LobbyFilter filter;
 

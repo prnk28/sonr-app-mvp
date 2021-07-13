@@ -66,7 +66,7 @@ class SocialView extends StatelessWidget {
   }
 }
 
-/// @ Medium Item
+/// #### Medium Item
 class _MediumItem extends StatelessWidget {
   final MediumModel? medium;
   final int index;
@@ -106,7 +106,7 @@ class _MediumItem extends StatelessWidget {
   }
 }
 
-/// @ Twitter Item
+/// #### Twitter Item
 class _TweetItem extends StatelessWidget {
   final TileController controller;
   final TwitterModel? twitter;
@@ -169,7 +169,7 @@ class _TweetItem extends StatelessWidget {
   }
 }
 
-/// @ Youtube Item
+/// #### Youtube Item
 class _YoutubeItem extends StatelessWidget {
   final YoutubeModel? youtube;
   final int index;

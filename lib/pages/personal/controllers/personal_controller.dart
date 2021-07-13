@@ -39,7 +39,7 @@ class PersonalController extends GetxController {
     super.onInit();
   }
 
-  /// @ Method to Capture Picture
+  /// #### Method to Capture Picture
   captureAvatar() async {
     // Set Path
     var temp = await getApplicationDocumentsDirectory();
@@ -52,7 +52,7 @@ class PersonalController extends GetxController {
     status(PersonalViewStatus.ViewPicture);
   }
 
-  /// @ Method to Confirm New Picture
+  /// #### Method to Confirm New Picture
   confirmAvatar() async {
     if (result.value != null) {
       ContactService.contact.setPicture(result.value!.readAsBytesSync());
@@ -60,26 +60,26 @@ class PersonalController extends GetxController {
     exitToViewing();
   }
 
-  /// @ Start Editing Picture
+  /// #### Start Editing Picture
   void setAddPicture() {
     HapticFeedback.heavyImpact();
     status(PersonalViewStatus.AddPicture);
   }
 
-  /// @ Start Editing for Social Tile
+  /// #### Start Editing for Social Tile
   void setAddTile() {
     HapticFeedback.heavyImpact();
     // step(TileStep(nextStep, previousStep, saveTile));
     Get.dialog(AddTileView(), barrierDismissible: false);
   }
 
-  /// @ End Add/Edit State
+  /// #### End Add/Edit State
   void exitToViewing() {
     HapticFeedback.mediumImpact();
     status(PersonalViewStatus.Viewing);
   }
 
-  /// @ Completed Editing Details
+  /// #### Completed Editing Details
   void saveEditedDetails() {
     // Update Values in Profile Controller
     ContactService.contact.setFirstName(editedFirstName.value);

@@ -25,7 +25,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   late ScrollController scrollController;
   late TabController tabController;
 
-  /// @ Controller Constructer
+  /// #### Controller Constructer
   @override
   onInit() {
     // Check Platform
@@ -58,13 +58,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onReady();
   }
 
-  /// @ On Dispose
+  /// #### On Dispose
   @override
   void onClose() {
     super.onClose();
   }
 
-  /// @ Change View
+  /// #### Change View
   void changeView(HomeView newView) {
     if (newView == HomeView.Search) {
       // Handle Keyboard/Opacity
@@ -87,7 +87,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  /// @ Update Bottom Bar Index
+  /// #### Update Bottom Bar Index
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
     if (view.value.isNotIndex(newIndex)) {

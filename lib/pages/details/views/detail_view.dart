@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:sonr_app/style/style.dart';
 
-/// @ QuickAccessScreen from Home
+/// #### QuickAccessScreen from Home
 class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

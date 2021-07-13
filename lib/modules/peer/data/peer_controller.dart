@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 
-/// @ Reactive Controller for Peer Bubble
+/// #### Reactive Controller for Peer Bubble
 class PeerController extends GetxController with StateMixin<Session> {
   // Reactive Elements
   final counter = 0.0.obs;
@@ -35,7 +35,7 @@ class PeerController extends GetxController with StateMixin<Session> {
     super.onInit();
   }
 
-  /// @ Method that Initializes Peer and Streams
+  /// #### Method that Initializes Peer and Streams
   void initalize(Peer data, {bool setAnimated = true}) async {
     // Set Initial
     peer(data);
@@ -59,7 +59,7 @@ class PeerController extends GetxController with StateMixin<Session> {
     super.onClose();
   }
 
-  /// @ Handle User Invitation
+  /// #### Handle User Invitation
   void invite() {
     // Check Animated
     // Handle Mobile Invite - Payload Set
@@ -107,7 +107,7 @@ class PeerController extends GetxController with StateMixin<Session> {
     }
   }
 
-  /// @ Handle Peer Position
+  /// #### Handle Peer Position
   void _handlePeerUpdate(Peer data) {
     if (!isClosed && !isComplete.value) {
       // Update Direction

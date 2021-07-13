@@ -2,7 +2,7 @@ import 'package:lottie/lottie.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// @ Peer Avatar with Rive Board Border
+/// #### Peer Avatar with Rive Board Border
 class PeerAvatarBorder extends StatelessWidget {
   final PeerController controller;
 

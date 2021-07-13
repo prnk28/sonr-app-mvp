@@ -4,7 +4,7 @@ import 'package:sonr_app/modules/peer/peer.dart';
 
 enum HomeView { Dashboard, Personal, Explorer, Search }
 
-/// @ Home View Enum Extension
+/// #### Home View Enum Extension
 extension HomeViewUtils on HomeView {
   /// #### Method Checks for Dashboard View
   bool get isDashboard => this == HomeView.Dashboard;

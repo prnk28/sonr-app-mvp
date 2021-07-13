@@ -26,7 +26,7 @@ class TransferController extends GetxController {
   final scrollController = ScrollController();
   late InviteRequest inviteRequest;
 
-  /// @ First Method Called
+  /// #### First Method Called
   void initialize({InviteRequest? request}) {
     // Manual Injection
     if (request != null) {
@@ -44,7 +44,7 @@ class TransferController extends GetxController {
     }
   }
 
-  /// @ Closes Window for Transfer Page
+  /// #### Closes Window for Transfer Page
   void onLocalArrowPressed() {
     AppRoute.positioned(
       Checklist(
@@ -69,13 +69,13 @@ class TransferController extends GetxController {
     findQuery.refresh();
   }
 
-  /// @ User is Facing or No longer Facing a Peer
+  /// #### User is Facing or No longer Facing a Peer
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
   }
 
-  /// @ User Sends A Remote Transfer Name Request
+  /// #### User Sends A Remote Transfer Name Request
   Future<bool> shareRemote() async {
     // Search Record
     final peer = await NamebaseClient.findPeerRecord(findQuery.value);

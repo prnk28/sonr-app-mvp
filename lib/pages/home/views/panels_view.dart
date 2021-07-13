@@ -131,7 +131,7 @@ class NearbyListView extends GetView<HomeController> {
   }
 }
 
-/// @ LocalLobbyView:  When Lobby is NOT Empty
+/// #### LocalLobbyView:  When Lobby is NOT Empty
 class _LocalLobbyView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
@@ -148,7 +148,7 @@ class _LocalLobbyView extends GetView<HomeController> {
   }
 }
 
-/// @ LobbyEmptyView: When Lobby is Empty
+/// #### LobbyEmptyView: When Lobby is Empty
 class _LocalEmptyView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {

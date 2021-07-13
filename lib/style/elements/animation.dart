@@ -3,7 +3,7 @@ import '../style.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 import 'package:lottie/lottie.dart';
 
-/// @ Animated Down Big/ Up Big
+/// #### Animated Down Big/ Up Big
 class AnimatedBounce extends StatefulWidget {
   final Widget child;
   final bool isDisplayed;
@@ -47,7 +47,7 @@ class _AnimatedBounce extends State<AnimatedBounce> {
   }
 }
 
-/// @ Animated Down Big/ Up Big
+/// #### Animated Down Big/ Up Big
 class AnimatedBig extends StatefulWidget {
   final Widget child;
   final bool isDisplayed;
@@ -261,7 +261,7 @@ class _AnimatedGlowState extends State<AnimatedGlow> with SingleTickerProviderSt
   }
 }
 
-/// @ Animated Scale
+/// #### Animated Scale
 class AnimatedScale extends StatefulWidget {
   final Widget? child;
   final double scale;
@@ -351,7 +351,7 @@ class AnimatedSlider extends StatelessWidget {
     return AnimatedSlider(SwitchType.SlideRight, child, duration);
   }
 
-  /// @ Build View Method
+  /// #### Build View Method
   @override
   Widget build(BuildContext context) {
     // Return Switcher
@@ -367,7 +367,7 @@ class AnimatedSlider extends StatelessWidget {
   }
 }
 
-/// @ Lottie Based Progress Indicator
+/// #### Lottie Based Progress Indicator
 class CircleLoader extends StatelessWidget {
   final double scale;
 
@@ -392,7 +392,7 @@ class CircleLoader extends StatelessWidget {
   }
 }
 
-/// @ Lottie Based Progress Indicator
+/// #### Lottie Based Progress Indicator
 class SpringLoader extends StatelessWidget {
   final double scale;
 
@@ -417,7 +417,7 @@ class SpringLoader extends StatelessWidget {
   }
 }
 
-/// @ Rive Animation Container Widget
+/// #### Rive Animation Container Widget
 class RiveContainer extends StatefulWidget {
   final double width;
   final double height;

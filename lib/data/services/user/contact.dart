@@ -16,7 +16,7 @@ class ContactService extends GetxService {
   // User Reactive Properties
   static Rx<UserStatus> get status => to._status;
   static Rx<Contact> get contact => to._contact;
-  static String get sName => to._status.value.hasUser ? to._contact.value.sName : "";
+  static String get sName => to._status.value.hasUser ? to._contact.value.sName.toLowerCase() : "";
 
   // References
   final _userBox = GetStorage('User');
@@ -42,7 +42,6 @@ class ContactService extends GetxService {
 
         // Set Contact Values
         _contact(contact);
-
       } catch (e) {
         // Delete User
         _userBox.remove('contact');
@@ -60,7 +59,7 @@ class ContactService extends GetxService {
   }
 
 // * ------------------- Methods ----------------------------
-  /// @ Method to Create New User from Contact
+  /// #### Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
     // Set Contact for User
     to._contact(newContact);
@@ -81,5 +80,4 @@ class ContactService extends GetxService {
       NodeService.setProfile(data);
     }
   }
-
 }

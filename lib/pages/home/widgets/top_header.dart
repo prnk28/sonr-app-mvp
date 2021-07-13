@@ -224,7 +224,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         child: ShowcaseItem.fromType(
                           type: ShowcaseType.Help,
                           child: ActionButton(
-                            banner: Logger.unreadIntercomCount.value > 0 ? ActionBanner.count(Logger.unreadIntercomCount.value) : null,
+                            banner: Logger.intercomUnreadCount.value > 0 ? ActionBanner.count(Logger.intercomUnreadCount.value) : null,
                             key: ValueKey<HomeView>(HomeView.Dashboard),
                             iconData: SimpleIcons.Help,
                             onPressed: () async => await Logger.openIntercom(),

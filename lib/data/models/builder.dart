@@ -35,6 +35,8 @@ class RequestBuilder {
   static InitializeRequest get initialize => InitializeRequest(
         apiKeys: AppServices.apiKeys,
         device: DeviceService.device,
+        buildMode: BuildModeUtil.currentProto(),
+        isTestDevice: Logger.isTestDevice,
       );
 
   /// Returns New Contact Update Request
@@ -126,6 +128,112 @@ class NamebaseClient {
       } else {
         return NewSNameStatus.TooShort;
       }
+    }
+  }
+}
+
+/// ## AnalyticsUserEvent
+/// Enum Containing Possible User Analytics Events
+enum AnalyticsUserEvent {
+  /// User Created SName
+  NewSName,
+
+  /// User Linked Device to Account
+  LinkedDevice,
+
+  /// User Migrated SName to Latest Spec
+  MigratedSName,
+
+  /// User Shared/Copied SName to Share Externally
+  SharedSName,
+
+  /// User Updated Contact Card / Profile
+  UpdatedProfile,
+
+  /// User Updated App Settings
+  UpdatedSettings,
+}
+
+/// ## AnalyticsUserEventUtil
+/// Enum Extension for `AnalyticsUserEvent`
+extension AnalyticsUserEventUtil on AnalyticsUserEvent {
+  /// Returns Name of this Event
+  String get name {
+    // Get Value String
+    final value = this.toString().substring(this.toString().indexOf('.') + 1);
+
+    // Create RegExp
+    final K_PASCAL_REGEX = RegExp(r"(?:[A-Z]+|^)[a-z]*");
+
+    // Find Words
+    final pascalWords = K_PASCAL_REGEX.allMatches(value).map((m) => m[0]).toList();
+
+    // Initialize Name
+    String name = "";
+
+    // Iterate Words and Return Name
+    pascalWords.forEach((w) {
+      if (w != null) {
+        name += w;
+      }
+    });
+    return name;
+  }
+}
+
+/// ## AnalyticsEvent
+/// - Class Creates Paramters to Log Effective Analytics event
+class AnalyticsEvent {
+  // Constructer
+  AnalyticsEvent({required this.name, required this.parameters});
+
+  /// Transfer Event Type
+  final String name;
+
+  /// User Event Type
+  final Map<String, dynamic> parameters;
+
+  /// ### AnalyticsEvent`.invited()`
+  /// - Creates Analytics Transfer Invite Shared Event
+  factory AnalyticsEvent.invited(InviteRequest request) =>
+      AnalyticsEvent(name: request.eventName, parameters: _buildMetadata(request.eventMetadata, addPlatform: false));
+
+  /// ### AnalyticsEvent`.responded()`
+  /// - Creates Analytics Transfer Invite Response Event
+  factory AnalyticsEvent.responded(InviteResponse response) =>
+      AnalyticsEvent(name: response.eventName, parameters: _buildMetadata(response.eventMetadata, addPlatform: false));
+
+  /// ### AnalyticsEvent`.user()`
+  /// Creates Analytics Transfer Event
+  factory AnalyticsEvent.user(AnalyticsUserEvent event, {Map<String, dynamic>? parameters}) => AnalyticsEvent(
+        name: event.name,
+        parameters: _buildMetadata(parameters),
+      );
+
+  /// #### Helper: Generates Event Metadata
+  static Map<String, dynamic> _buildMetadata(Map<String, dynamic>? metadata, {bool addPlatform = true}) {
+    // Check if Metadata is not Null
+    if (metadata != null) {
+      // Add to Existing Map
+      metadata["createdAt"] = DateTime.now().toString();
+
+      // Check for Platform
+      if (addPlatform) {
+        metadata["platform"] = DeviceService.device.platform.toString();
+      }
+      return metadata;
+    } else {
+      // Create New Map
+      var map = {
+        "createdAt": DateTime.now().toString(),
+        "platform": DeviceService.device.platform,
+      };
+
+      // Check Platform
+      if (addPlatform) {
+        map["platform"] = DeviceService.device.platform.toString();
+      }
+      return map;
     }
   }
 }
