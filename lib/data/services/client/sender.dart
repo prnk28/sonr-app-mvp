@@ -146,12 +146,12 @@ class SenderService extends GetxService {
     }
 
     // For Cancel
-    else if (data.type == InviteResponse_Type.Cancel) {
+    else if (data.type == InviteResponse_Type.None) {
       await HapticFeedback.vibrate();
     }
 
     // For Transfer
-    else if (data.type == InviteResponse_Type.Default) {
+    else if (data.type == InviteResponse_Type.Transfer) {
       _session.onReply(data);
     }
 
