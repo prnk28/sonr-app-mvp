@@ -1,7 +1,7 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// ** Flat Mode View ** //
+/// ### Flat Mode View
 class FlatModeOverlay extends GetView<PositionController> {
   @override
   Widget build(BuildContext context) {
