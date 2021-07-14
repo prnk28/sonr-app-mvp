@@ -96,7 +96,7 @@ class Logger extends GetxService {
   }
 
   /// #### Initializes Profile for Analytics
-  static Future<void> initProfile(Contact contact, int signUpTime) async {
+  static Future<void> initProfile(Contact contact) async {
     // Check for Test Device
     if (K_TEST_NAMES.any((n) => n.toLowerCase() == contact.sName)) {
       isTestDevice = true;
@@ -114,7 +114,6 @@ class Logger extends GetxService {
         name: contact.fullName,
         email: contact.emailPrimary.value,
         phone: contact.phonePrimary,
-        signedUpAt: signUpTime,
         customAttributes: {
           "platform": contact.platform.toString(),
           "firstName": contact.firstName,

@@ -40,7 +40,7 @@ class ContactService extends GetxService {
         contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
-        Logger.initProfile(contact, _registeredTime.val);
+        Logger.initProfile(contact);
 
         // Set Contact Values
         _contact(contact);
