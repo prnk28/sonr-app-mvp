@@ -32,7 +32,7 @@ class PayloadThumbnail extends StatelessWidget {
   }
 
   Widget _buildSingleChild() {
-    final invite = TransferController.invite;
+    final invite = TransferController.inviteRequest;
     if (invite.file.single.hasThumbnail()) {
       return Image.memory(
         invite.file.single.thumbnail!,
@@ -49,8 +49,8 @@ class PayloadThumbnail extends StatelessWidget {
     if (item != null) {
       OpenFile.open(item!.path);
     } else {
-      if (TransferController.invite.payload.isTransfer) {
-        OpenFile.open(TransferController.invite.file.single.path);
+      if (TransferController.inviteRequest.payload.isTransfer) {
+        OpenFile.open(TransferController.inviteRequest.file.single.path);
       }
     }
   }

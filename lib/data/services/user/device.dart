@@ -51,6 +51,12 @@ class DeviceService extends GetxService {
   // ^ Initialization ^ //
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
+      // Check if Stream has closed 
+      if (isClosed) {
+        timer.cancel();
+      }
+
+      // Update Position
       if (AppServices.isReadyToCommunicate) {
         NodeService.update(_position.value);
       }

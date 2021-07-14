@@ -39,11 +39,11 @@ class Logger extends GetxService {
   static FirebaseAnalyticsObserver get Observer => FirebaseAnalyticsObserver(analytics: analytics);
 
   // Properties
-  final _hasIntercom = false.obs;
+  final _appOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
+  final _intercomEnabled = false.obs;
   final _intercomUnreadCount = 0.obs;
   final _intercomOpened = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
   final _hasTransferred = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
-  final _appOpenCount = 0.val('userAppOpenCount', getBox: () => GetStorage('Configuration'));
   final _hasMigratedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
 
   // References
@@ -61,7 +61,11 @@ class Logger extends GetxService {
 
   Logger() {
     Timer.periodic(2.minutes, (timer) async {
-      if (_hasIntercom.value) {
+      if (isClosed) {
+        timer.cancel();
+      }
+
+      if (_intercomEnabled.value) {
         _intercomUnreadCount(await Intercom.unreadConversationCount());
       }
     });
@@ -92,19 +96,35 @@ class Logger extends GetxService {
   }
 
   /// #### Initializes Profile for Analytics
-  static void initProfile(Profile profile) {
-    if (isRegistered && DeviceService.isMobile && DeviceService.hasInternet) {
-      // Set User Properties
-      FirebaseAnalytics().setUserProperty(name: "firstname", value: profile.firstName);
-      FirebaseAnalytics().setUserProperty(name: "lastName", value: profile.lastName);
-      Intercom.registerIdentifiedUser(userId: profile.sName);
-      to._hasIntercom(true);
+  static Future<void> initProfile(Contact contact, int signUpTime) async {
+    // Check for Test Device
+    if (K_TEST_NAMES.any((n) => n.toLowerCase() == contact.sName)) {
+      isTestDevice = true;
+    }
 
-      // Check for Test Device
-      if (K_TEST_NAMES.any((n) => n.toLowerCase() == ContactService.sName)) {
-        to._hasMigratedSName.val = false;
-        isTestDevice = true;
-      }
+    // Setup Analytics
+    if (isRegistered && DeviceService.isMobile && DeviceService.hasInternet) {
+      // Set Firebase User Properties
+      FirebaseAnalytics().setUserProperty(name: "firstName", value: contact.firstName);
+      FirebaseAnalytics().setUserProperty(name: "lastName", value: contact.lastName);
+
+      // Set Intercom User Properties
+      Intercom.registerIdentifiedUser(userId: contact.sName);
+      Intercom.updateUser(
+        name: contact.fullName,
+        email: contact.emailPrimary.value,
+        phone: contact.phonePrimary,
+        signedUpAt: signUpTime,
+        customAttributes: {
+          "platform": contact.platform.toString(),
+          "firstName": contact.firstName,
+          "lastName": contact.lastName,
+        },
+      );
+      to._intercomEnabled(true);
+
+      // Set Migration Status
+      to._hasMigratedSName.val = await NamebaseClient.hasSNameRecord();
     }
   }
 
@@ -155,7 +175,7 @@ class Logger extends GetxService {
 
   /// #### Opens Intercom Messenger
   static Future<void> openIntercom() async {
-    if (isRegistered && to._hasIntercom.value && DeviceService.isMobile) {
+    if (isRegistered && to._intercomEnabled.value && DeviceService.isMobile) {
       if (!to._intercomOpened.val) {
         to._intercomOpened.val = true;
       }

@@ -17,9 +17,11 @@ class ContactService extends GetxService {
   static Rx<UserStatus> get status => to._status;
   static Rx<Contact> get contact => to._contact;
   static String get sName => to._status.value.hasUser ? to._contact.value.sName.toLowerCase() : "";
+  static int get registeredTime => to._registeredTime.val;
 
   // References
   final _userBox = GetStorage('User');
+  final _registeredTime = 0.val('registeredTime', getBox: () => GetStorage('User'));
 
   // ^ Constructer ^ //
   Future<ContactService> init() async {
@@ -38,7 +40,7 @@ class ContactService extends GetxService {
         contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
-        Logger.initProfile(contact.profile);
+        Logger.initProfile(contact, _registeredTime.val);
 
         // Set Contact Values
         _contact(contact);
@@ -61,12 +63,17 @@ class ContactService extends GetxService {
 // * ------------------- Methods ----------------------------
   /// #### Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
+    // Clean Data
+    newContact.profile.firstName.capitalizeFirst;
+    newContact.profile.lastName.capitalizeFirst;
+
     // Set Contact for User
     to._contact(newContact);
     to._contact.refresh();
 
     // Save User/Contact to Disk
     await to._userBox.write("contact", newContact.writeToJson());
+    to._registeredTime.val = DateTime.now().millisecondsSinceEpoch;
     to._status(UserStatus.Existing);
   }
 
@@ -74,6 +81,7 @@ class ContactService extends GetxService {
   void _handleContact(Contact data) async {
     // Save Updated User to Disk
     await to._userBox.write("contact", data.writeToJson());
+    Logger.event(event: AnalyticsEvent.user(AnalyticsUserEvent.UpdatedProfile));
 
     // Send Update to Node
     if (NodeService.status.value.isConnected) {

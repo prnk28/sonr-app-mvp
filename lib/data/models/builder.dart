@@ -76,13 +76,28 @@ class NamebaseClient {
   static Future<bool> addRecords(List<HSRecord> records) => _nbClient.addRecords(records);
 
   /// Find Matching Peer for SName Query of Record
-  static Future<Peer?> findPeerRecord(String query, {bool logging = false}) async {
+  static Future<Peer?> findPeerRecord(String query) async {
     final result = await refresh();
     final record = result.records.firstWhere(
       (e) => e.host.toLowerCase() == query.toLowerCase(),
       orElse: () => HSRecord.blank(),
     );
     return record.toPeer();
+  }
+
+  /// Find Records for User
+  static Future<List<HSRecord>> get userRecords async {
+    final result = await refresh();
+    final records = result.records.where(
+      (e) => e.host.toLowerCase() == ContactService.sName || e.name.toLowerCase() == ContactService.sName,
+    );
+    return records.toList();
+  }
+
+  /// Check if SName Record Exists
+  static Future<bool> hasSNameRecord() async {
+    final list = await userRecords;
+    return list.any((e) => e.isName);
   }
 
   /// Print all Records as Peer Data in Console

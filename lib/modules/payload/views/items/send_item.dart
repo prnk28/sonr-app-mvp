@@ -29,7 +29,7 @@ class PayloadItemInfo extends StatelessWidget {
 class PayloadListItemHeader extends GetView<ItemController> {
   @override
   Widget build(BuildContext context) {
-    final file = TransferController.invite.file;
+    final file = TransferController.inviteRequest.file;
     return Container(
       decoration: BoxDecoration(color: AppTheme.ForegroundColor, borderRadius: BorderRadius.circular(37)),
       width: Get.width,
@@ -101,7 +101,7 @@ class PayloadListItem extends GetView<ItemController> {
 
   Widget _buildTitle() {
     if (isSingle) {
-      return _PayloadListItemTitle.single(TransferController.invite);
+      return _PayloadListItemTitle.single(TransferController.inviteRequest);
     } else {
       return _PayloadListItemTitle.multi(fileItem!);
     }

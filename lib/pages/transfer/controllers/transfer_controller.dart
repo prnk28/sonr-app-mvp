@@ -4,9 +4,8 @@ import 'package:sonr_app/pages/transfer/views/composer_view.dart';
 import 'package:sonr_app/style/style.dart';
 
 class TransferController extends GetxController {
-  // @ Global Property Accessor
-  static InviteRequest get invite => Get.find<TransferController>().inviteRequest;
-
+  static InviteRequest get inviteRequest => Get.find<TransferController>().invite.value;
+  
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
@@ -24,19 +23,19 @@ class TransferController extends GetxController {
   // References
   final localArrowButtonKey = GlobalKey();
   final scrollController = ScrollController();
-  late InviteRequest inviteRequest;
+  final invite = InviteRequest().obs;
 
   /// #### First Method Called
   void initialize({InviteRequest? request}) {
     // Manual Injection
     if (request != null) {
-      inviteRequest = request;
+      invite(request);
       hasInvite(true);
     } else {
       // Fetch from Arguments
       final args = Get.arguments;
       if (args is TransferArguments) {
-        inviteRequest = args.request;
+        invite(args.request);
         hasInvite(true);
       } else {
         hasInvite(false);
@@ -84,7 +83,7 @@ class TransferController extends GetxController {
     if (peer != null) {
       print(peer.toString());
       // Change Session for Status Success
-      SenderService.invite(InviteRequestUtils.copy(TransferController.invite, peer: peer, type: InviteRequest_Type.Remote));
+      SenderService.invite(InviteRequestUtils.copy(invite.value, peer: peer, type: InviteRequest_Type.Remote));
       composeStatus(ComposeStatus.Existing);
       shouldUpdate(true);
       return true;
