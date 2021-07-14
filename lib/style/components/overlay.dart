@@ -1,6 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 
-/// @ Class Builds Alert View Widget for Overlay ** //
+/// #### Class Builds Alert View Widget for Overlay ** //
 class AlertOverlay extends StatelessWidget {
   final String title;
   final String description;
@@ -45,7 +45,7 @@ class AlertOverlay extends StatelessWidget {
   }
 }
 
-/// @ Class Builds Dropdown View Widget for Positioned Overlay ** //
+/// #### Class Builds Dropdown View Widget for Positioned Overlay ** //
 class PositionedOverlay extends StatelessWidget {
   final GlobalKey parentKey;
   final Widget child;
@@ -127,7 +127,7 @@ class PositionedOverlay extends StatelessWidget {
   static double get MAX_WIDTH => Width.reduced(0.3);
 }
 
-/// @ Class Builds Question View Widget for Overlay ** //
+/// #### Class Builds Question View Widget for Overlay ** //
 class QuestionOverlay extends StatelessWidget {
   final String title;
   final String description;

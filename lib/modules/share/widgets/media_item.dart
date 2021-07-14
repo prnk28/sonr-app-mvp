@@ -31,7 +31,7 @@ class MediaItem extends GetWidget<MediaItemController> {
               ]),
             ),
           )),
-      onLoading: HourglassIndicator(),
+      onLoading: CircleLoader(),
       onError: (_) => item.icon(),
     );
   }

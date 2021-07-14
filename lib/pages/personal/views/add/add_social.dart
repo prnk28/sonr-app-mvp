@@ -52,7 +52,7 @@ class AddTileView extends StatelessWidget {
   }
 }
 
-/// @ Step 1 Select Provider
+/// #### Step 1 Select Provider
 class DropdownAddView extends GetView<PersonalController> {
   // Build View As Stateless
   @override
@@ -85,7 +85,7 @@ class DropdownAddView extends GetView<PersonalController> {
   }
 }
 
-/// @ Step 2 Connect to the provider API
+/// #### Step 2 Connect to the provider API
 class SetInfoView extends GetView<PersonalController> {
   SetInfoView();
 
@@ -108,7 +108,7 @@ class SetInfoView extends GetView<PersonalController> {
   }
 }
 
-/// @ Step 3 Set the Social Tile type
+/// #### Step 3 Set the Social Tile type
 class SetTypeView extends GetView<PersonalController> {
   const SetTypeView({Key? key}) : super(key: key);
   @override
@@ -125,7 +125,7 @@ class SetTypeView extends GetView<PersonalController> {
   }
 }
 
-/// @ Creates Infographic Text thats used in all Views
+/// #### Creates Infographic Text thats used in all Views
 class _InfoText extends StatelessWidget {
   final int index;
   final String text;
@@ -193,7 +193,7 @@ class _SocialAddController extends GetxController {
   //   step.refresh();
   // }
 
-  // /// @ Add Social Tile Move to Next Step
+  // /// #### Add Social Tile Move to Next Step
   // nextStep() async {
   //   // @ Step 2
   //   if (step.value!.current == 0) {
@@ -230,7 +230,7 @@ class _SocialAddController extends GetxController {
   //   }
   // }
 
-  // /// @ Add Social Tile Move to Next Step
+  // /// #### Add Social Tile Move to Next Step
   // previousStep() {
   //   // Step 2
   //   if (step.value!.current == 1) {
@@ -250,7 +250,7 @@ class _SocialAddController extends GetxController {
   //   }
   // }
 
-  // /// @ Finish and Save new Tile
+  // /// #### Finish and Save new Tile
   // saveTile() {
   //   // Validate
   //   if (step.value!.hasType && step.value!.current == 2) {
@@ -273,13 +273,13 @@ class _SocialAddController extends GetxController {
   //   }
   // }
 
-  // /// @ Resets current info
+  // /// #### Resets current info
   // reset() {
   //   step(TileStep(nextStep, previousStep, saveTile));
   //   step.refresh();
   // }
 
-  // /// @ Expand a Tile
+  // /// #### Expand a Tile
   // toggleExpand(int index, bool isExpanded) {
   //   focused(FocusedTile(index, isExpanded));
   //   update(['social-grid']);

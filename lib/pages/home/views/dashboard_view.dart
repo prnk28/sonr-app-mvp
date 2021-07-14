@@ -7,7 +7,7 @@ import 'search_view.dart';
 
 const K_LIST_HEIGHT = 225.0;
 
-/// @ Root Grid View
+/// #### Root Grid View
 class DashboardView extends GetView<HomeController> {
   DashboardView({Key? key}) : super(key: key);
   @override
@@ -52,8 +52,8 @@ class DashboardView extends GetView<HomeController> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
-                          child: ImageButton(
-                            icon: ComplexIcons.MediaSelect,
+                          child: ComplexButton(
+                            type: ComplexIcons.MediaSelect,
                             label: PostItemType.Media.name(),
                             size: 100,
                             onPressed: () {
@@ -67,9 +67,9 @@ class DashboardView extends GetView<HomeController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: ImageButton(
+                          child: ComplexButton(
                             size: 100,
-                            icon: ComplexIcons.DocumentsBox,
+                            type: ComplexIcons.DocumentsBox,
                             label: PostItemType.Files.name(),
                             onPressed: () {
                               if (PostItemType.Files.count() > 0) {
@@ -87,9 +87,9 @@ class DashboardView extends GetView<HomeController> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
-                          child: ImageButton(
+                          child: ComplexButton(
                             size: 100,
-                            icon: ComplexIcons.LobbyGroup,
+                            type: ComplexIcons.LobbyGroup,
                             label: PostItemType.Contacts.name(),
                             onPressed: () {
                               if (PostItemType.Contacts.count() > 0) {
@@ -102,8 +102,8 @@ class DashboardView extends GetView<HomeController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: ImageButton(
-                            icon: ComplexIcons.Clip,
+                          child: ComplexButton(
+                            type: ComplexIcons.Clip,
                             size: 100,
                             label: PostItemType.Links.name(),
                             onPressed: () {

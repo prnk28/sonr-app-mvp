@@ -10,8 +10,10 @@ class SenderService extends GetxService {
   static SenderService get to => Get.find<SenderService>();
   static Session get session => to._session;
   static Rx<bool> get hasSession => to._hasSession;
+  static Rx<bool> get hasSelected => to._hasSelected;
 
   // Properties
+  final _hasSelected = false.obs;
   final _hasSession = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -54,7 +56,7 @@ class SenderService extends GetxService {
   }
 
   // * ------------------- Methods ----------------------------
-  /// @ Checks for Initial Media/Text to Share
+  /// #### Checks for Initial Media/Text to Share
   static checkInitialShare() async {
     if (DeviceService.isMobile && isRegistered) {
       // @ Check for Media
@@ -83,9 +85,6 @@ class SenderService extends GetxService {
   /// Method to Choose Option to Share
   static Future<InviteRequest?> choose(ChooseOption option, {SFile? file}) async {
     if (isRegistered) {
-      // Log Choice
-      option.logChoice();
-
       // Check for Provided File
       if (file != null) {
         return await to._handlePayload(file.payload, file: file);
@@ -107,22 +106,17 @@ class SenderService extends GetxService {
     }
   }
 
-  /// @ Send Invite with Peer
+  /// #### Send Invite with Peer
   static Session? invite(InviteRequest request, {bool isLocal = true}) {
     // Verify Request
     if (!request.payload.isNone && request.hasTo()) {
       // Analytics
-      Logger.event(
-        name: 'selectedPeer',
-        controller: 'SenderService',
-        parameters: {
-          'peerPlatform': request.to.platform.toString(),
-        },
-      );
+      Logger.event(event: AnalyticsEvent.invited(request));
 
       // Send Invite
       NodeService.instance.invite(request);
       to._session.outgoing(request);
+      to._hasSession(true);
       return to._session;
     }
     return null;
@@ -132,6 +126,7 @@ class SenderService extends GetxService {
   /// Peer has Responded
   void handleReply(InviteResponse data) async {
     // Logging
+    Logger.event(event: AnalyticsEvent.responded(data));
     Logger.info("Node(Callback) Responded: " + data.toString());
 
     // Handle Contact Response
@@ -143,10 +138,18 @@ class SenderService extends GetxService {
     }
 
     // For Cancel
-    else if (data.type == InviteResponse_Type.Cancel) {
+    else if (data.type == InviteResponse_Type.None) {
       await HapticFeedback.vibrate();
-    } else {
+    }
+
+    // For Transfer
+    else if (data.type == InviteResponse_Type.Transfer) {
       _session.onReply(data);
+    }
+
+    // For Mailbox
+    else {
+      Logger.info(data.mailInfo.toString());
     }
   }
 
@@ -170,6 +173,7 @@ class SenderService extends GetxService {
     Logger.info("Node(Callback) Transmitted: " + data.toString());
     _session.reset();
     _hasSession(false);
+    _hasSelected(false);
   }
 
   // * ------------------- Helpers ----------------------------
@@ -177,11 +181,8 @@ class SenderService extends GetxService {
   Future<InviteRequest?> _handleCameraChoice() async {
     if (DeviceService.isMobile) {
       // Move to View
-      CameraView.open(onMediaSelected: (SFile file) async {
+      AppRoute.camera(onMediaSelected: (SFile file) async {
         var result = await _handlePayload(Payload.MEDIA, file: file);
-
-        // Analytics
-        ChooseOption.Camera.logConfirm();
 
         // Complete Result
         return result;
@@ -201,11 +202,6 @@ class SenderService extends GetxService {
     if (DeviceService.isMobile) {
       FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
       if (result != null) {
-        // Analytics
-        if (DeviceService.isMobile) {
-          ChooseOption.File.logConfirm();
-        }
-
         // Confirm File
         var file = result.toSFile(payload: Payload.FILE);
         return await _handlePayload(file.payload, file: file);
@@ -232,10 +228,6 @@ class SenderService extends GetxService {
 
       // Check File
       if (result != null) {
-        // Analytics
-        if (DeviceService.isMobile) {
-          ChooseOption.Media.logConfirm();
-        }
         // Convert To File
         var file = result.toSFile(payload: Payload.MEDIA);
         return await _handlePayload(file.payload, file: file);
@@ -243,16 +235,14 @@ class SenderService extends GetxService {
     }
   }
 
-  /// @ Helper: Creates Invite Request from Payload
+  /// #### Helper: Creates Invite Request from Payload
   Future<InviteRequest> _handlePayload(Payload payload, {SFile? file, String? url}) async {
     // Initialize
+    _hasSelected(true);
     InviteRequest invite = InviteRequest();
 
     // @ Handle Payload
     if (payload.isTransfer && file != null) {
-      // Capture File Analytics
-      ChooseOption.File.logShared(file: file);
-
       // Check valid File Size Payload
       if (file.size > 0) {
         file.update();
@@ -267,24 +257,11 @@ class SenderService extends GetxService {
     }
     // Check for Contact
     else if (payload == Payload.CONTACT) {
-      // Capture Analytics
-      ChooseOption.Contact.logShared();
-
       // Initialize Contact
       invite.setContact(ContactService.contact.value);
     }
     // Check for URL
     else if (payload == Payload.URL) {
-      // Capture Contact Analytics
-      Logger.event(
-        name: 'sharedURL',
-        controller: 'SenderService',
-        parameters: {
-          'link': url,
-          'payload': Payload.URL.toString(),
-        },
-      );
-
       // Initialize URL
       invite.setUrl(url!);
     }

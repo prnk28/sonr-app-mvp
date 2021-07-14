@@ -1,7 +1,7 @@
 import 'dart:ui';
 import '../style.dart';
 
-/// @ Home Screen Header
+/// #### Home Screen Header
 class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Appears below Subtitle with Bold Font
   final Widget title;
@@ -102,7 +102,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// @ Home Screen Header
+/// #### Home Screen Header
 class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Appears below Subtitle with Bold Font
   final String title;

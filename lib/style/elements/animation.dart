@@ -3,7 +3,7 @@ import '../style.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 import 'package:lottie/lottie.dart';
 
-/// @ Animated Down Big/ Up Big
+/// #### Animated Down Big/ Up Big
 class AnimatedBounce extends StatefulWidget {
   final Widget child;
   final bool isDisplayed;
@@ -47,7 +47,7 @@ class _AnimatedBounce extends State<AnimatedBounce> {
   }
 }
 
-/// @ Animated Down Big/ Up Big
+/// #### Animated Down Big/ Up Big
 class AnimatedBig extends StatefulWidget {
   final Widget child;
   final bool isDisplayed;
@@ -261,7 +261,7 @@ class _AnimatedGlowState extends State<AnimatedGlow> with SingleTickerProviderSt
   }
 }
 
-/// @ Animated Scale
+/// #### Animated Scale
 class AnimatedScale extends StatefulWidget {
   final Widget? child;
   final double scale;
@@ -351,7 +351,7 @@ class AnimatedSlider extends StatelessWidget {
     return AnimatedSlider(SwitchType.SlideRight, child, duration);
   }
 
-  /// @ Build View Method
+  /// #### Build View Method
   @override
   Widget build(BuildContext context) {
     // Return Switcher
@@ -367,20 +367,45 @@ class AnimatedSlider extends StatelessWidget {
   }
 }
 
-/// @ Lottie Based Progress Indicator
-class HourglassIndicator extends StatelessWidget {
+/// #### Lottie Based Progress Indicator
+class CircleLoader extends StatelessWidget {
   final double scale;
 
-  const HourglassIndicator({Key? key, this.scale = 0.2}) : super(key: key);
+  const CircleLoader({Key? key, this.scale = 1.0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
       scale: scale,
       child: SizedBox(
-        width: 24,
-        height: 24,
+        width: 36,
+        height: 36,
         child: Lottie.asset(
-          LottieFile.Loader.path,
+          LottieFile.LoaderCircle.path,
+          fit: BoxFit.contain,
+          width: 36,
+          height: 36,
+          animate: true,
+          repeat: true,
+        ),
+      ),
+    );
+  }
+}
+
+/// #### Lottie Based Progress Indicator
+class SpringLoader extends StatelessWidget {
+  final double scale;
+
+  const SpringLoader({Key? key, this.scale = 1.0}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: scale,
+      child: SizedBox(
+        width: 42,
+        height: 42,
+        child: Lottie.asset(
+          LottieFile.LoaderSpring.path,
           fit: BoxFit.contain,
           width: 42,
           height: 42,
@@ -392,7 +417,7 @@ class HourglassIndicator extends StatelessWidget {
   }
 }
 
-/// @ Rive Animation Container Widget
+/// #### Rive Animation Container Widget
 class RiveContainer extends StatefulWidget {
   final double width;
   final double height;

@@ -1,25 +1,18 @@
-export 'status.dart';
+export 'view.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
-import 'status.dart';
+import 'view.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final appbarOpacity = 1.0.obs;
-  final title = "Home".obs;
-  final subtitle = "".obs;
-  final pageIndex = 0.obs;
-  final bottomIndex = 0.obs;
+  final isConnecting = true.obs;
   final view = HomeView.Dashboard.obs;
-  final sonrStatus = Rx<Status>(NodeService.status.value);
 
   // Propeties
   final query = "".obs;
   final results = RxList<TransferCard>();
-
-  // Controllers
-  late final TabController tabController;
 
   // Global Keys
   final keyOne = GlobalKey();
@@ -29,13 +22,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final keyFive = GlobalKey();
 
   // References
-  late StreamSubscription<Lobby?> _lobbyStream;
-  late StreamSubscription<Status> _statusStream;
   late ScrollController scrollController;
-  int _lobbySizeRef = 0;
-  bool _timeoutActive = false;
+  late TabController tabController;
 
-  /// @ Controller Constructer
+  /// #### Controller Constructer
   @override
   onInit() {
     // Check Platform
@@ -46,24 +36,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       // Handle Search Query
       query.listen(_handleQuery);
-
-      // Listen for Updates
-      tabController.addListener(() {
-        // Set Index
-        if (tabController.indexIsChanging) {
-          appbarOpacity(0);
-        } else {
-          appbarOpacity(1);
-        }
-
-        bottomIndex(tabController.index);
-
-        // Set Page
-        view(HomeView.values[tabController.index]);
-
-        // Update Title
-        title(view.value.title);
-      });
     } else {
       // Set View
       view(HomeView.Explorer);
@@ -71,32 +43,28 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Initialize
     super.onInit();
-
-    // Handle Streams
-    _lobbyStream = LobbyService.lobby.listen(_handleLobbyStream);
-    _statusStream = NodeService.status.listen(_handleStatus);
   }
 
   @override
   void onReady() {
     // Check Entry Arguments
     HomeArguments args = Get.arguments;
-    if (args.isFirstLoad && DeviceService.isMobile) {
-      SenderService.checkInitialShare();
+    if (args.isFirstLoad) {
+      if (DeviceService.isMobile) {
+        SenderService.checkInitialShare();
+      }
+      Get.find<NodeService>().connect();
     }
     super.onReady();
   }
 
-  /// @ On Dispose
+  /// #### On Dispose
   @override
   void onClose() {
-    _lobbyStream.cancel();
-    _statusStream.cancel();
-    pageIndex(0);
     super.onClose();
   }
 
-  /// @ Change View
+  /// #### Change View
   void changeView(HomeView newView) {
     if (newView == HomeView.Search) {
       // Handle Keyboard/Opacity
@@ -119,79 +87,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  /// @ Handle Title Tap
-  void onTitleTap() {
-    if (LobbyService.lobby.value.count > 0) {
-      AppPage.Transfer.off();
-    }
-  }
-
-  /// @ Update Bottom Bar Index
+  /// #### Update Bottom Bar Index
   void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
-    if (newIndex != bottomIndex.value) {
+    if (view.value.isNotIndex(newIndex)) {
       // Change Index
-      bottomIndex(newIndex);
       tabController.animateTo(newIndex);
-
       // Set Page
       view(HomeView.values[newIndex]);
-
-      // Update Title
-      title(view.value.title);
-    }
-  }
-
-  // @ Swaps Title when Lobby Size Changes
-  void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    // Check Valid
-    if (!_timeoutActive && !isClosed) {
-      // Swap Text
-      title(val);
-      HapticFeedback.mediumImpact();
-      _timeoutActive = true;
-
-      // Revert Text
-      Future.delayed(timeout, () {
-        if (!isClosed) {
-          title("${LobbyService.lobby.value.count} Around");
-          _timeoutActive = false;
-        }
-      });
-    }
-  }
-
-  // @ Handle Size Update
-  _handleLobbyStream(Lobby? onData) {
-    // Peer Joined
-    if (onData!.count > _lobbySizeRef) {
-      var diff = onData.count - _lobbySizeRef;
-      swapTitleText("$diff Joined");
-      Sound.Joined.play();
-    }
-    // Peer Left
-    else if (onData.count < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData.count;
-      swapTitleText("$diff Left");
-    }
-    _lobbySizeRef = onData.count;
-  }
-
-  // @ Handle Status Update
-  _handleStatus(Status val) {
-    sonrStatus(val);
-    if (val.isConnected) {
-      // Entry Text
-      title("${LobbyService.lobby.value.count} Nearby");
-      _timeoutActive = true;
-
-      // Revert Text
-      Future.delayed(const Duration(milliseconds: 3500), () {
-        if (!isClosed) {
-          title(view.value.title);
-          _timeoutActive = false;
-        }
-      });
     }
   }
 
@@ -199,7 +102,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   _handleQuery(String newVal) {
     if (newVal.length > 0) {
       // Swap View to Searching if not Set
-      if (view.value.isDefault) {
+      if (view.value.isDashboard) {
         view(HomeView.Search);
       }
 

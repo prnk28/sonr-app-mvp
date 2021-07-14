@@ -37,28 +37,23 @@ class GradientTabs extends StatelessWidget {
                 child: AnimatedScale(
                     scale: currentIndex.value == index ? 1.1 : 1.0,
                     child: tabs[index].light(
-                      color: currentIndex.value == index ? AppColor.White : AppColor.Black,
+                      color: _buildTextColor(currentIndex.value == index),
                       align: TextAlign.center,
                     )),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    gradient: currentIndex.value == index
-                        ? RadialGradient(
-                            colors: [
-                              Color(0xffFFCF14),
-                              Color(0xffF3ACFF),
-                              Color(0xff8AECFF),
-                            ],
-                            stops: [0, 0.45, 1],
-                            center: Alignment.center,
-                            focal: Alignment.topRight,
-                            tileMode: TileMode.clamp,
-                            radius: 2,
-                          )
-                        : null,
+                    gradient: currentIndex.value == index ? AppGradients.Primary : null,
                     color: currentIndex.value == index ? null : Colors.transparent),
                 duration: 150.milliseconds,
               ),
             ));
+  }
+
+  Color _buildTextColor(bool isCurrent) {
+    if (isCurrent) {
+      return AppColor.White;
+    } else {
+      return Get.isDarkMode ? AppTheme.GreyColor : AppColor.Black;
+    }
   }
 }

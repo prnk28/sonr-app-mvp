@@ -29,7 +29,7 @@ class Preferences extends GetxService {
     return this;
   }
 
-  /// @ Sets Properties for Node
+  /// #### Sets Properties for Node
   static void setFlatMode(bool isFlatMode) async {
     if (NodeService.isReady) {
       if (to._properties.value.isFlatMode != isFlatMode) {
@@ -41,12 +41,12 @@ class Preferences extends GetxService {
     }
   }
 
-  /// @ Trigger iOS Local Network with Alert
+  /// #### Trigger iOS Local Network with Alert
   static toggleDarkMode() => AppTheme.setDarkMode(isDark: to._isDarkMode.val = !to._isDarkMode.val);
 
-  /// @ Trigger iOS Local Network with Alert
+  /// #### Trigger iOS Local Network with Alert
   static toggleFlatMode() => to._hasFlatMode.val = !to._hasFlatMode.val;
 
-  /// @ Trigger iOS Local Network with Alert
+  /// #### Trigger iOS Local Network with Alert
   static togglePointToShare() => to._hasPointToShare.val = !to._hasPointToShare.val;
 }

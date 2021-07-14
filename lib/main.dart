@@ -3,7 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// @ Main Method
+/// #### Main Method
 Future<void> main() async {
   // Init Services
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ Future<void> main() async {
   }
 }
 
-/// @ Root App Widget
+/// #### Root App Widget
 class SplashPage extends StatelessWidget {
   final bool isDesktop;
   const SplashPage({Key? key, required this.isDesktop}) : super(key: key);
@@ -63,7 +63,7 @@ class SplashPage extends StatelessWidget {
             children: [
               // @ Rive Animation
               Center(
-                child: HourglassIndicator(),
+                child: CircleLoader(),
               ),
 
               // @ Fade Animation of Text
@@ -84,7 +84,7 @@ class SplashPage extends StatelessWidget {
               type: RiveBoard.Splash,
               width: Get.width,
               height: Get.height,
-              placeholder: SizedBox(child: HourglassIndicator()),
+              placeholder: SizedBox(child: CircleLoader()),
             ),
 
             // @ Fade Animation of Text

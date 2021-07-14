@@ -14,6 +14,8 @@ class AppColor {
   static const Color Purple = Color(0xff9665FD);
   static const Color Green = Color(0xff14B69A);
   static const Color Red = Color(0xffFF2866);
+  static const Color Orange = Color(0xffFDA14D);
+  static const Color Pink = Color(0xffFD4DF6);
 
   static const Color AccentPink = Color(0xffFF84B1);
   static const Color AccentBlue = Color(0xffC8E9FF);
@@ -39,6 +41,8 @@ class AppColor {
   static Color Item(bool isDarkMode) => isDarkMode ? White : Black;
 
   static Color Grey(bool isDarkMode) => isDarkMode ? LightGrey : DarkGrey;
+
+  static Color Accent(bool isDarkMode) => isDarkMode ? Pink : Blue;
 
   static Color Shadow(bool isDarkMode, {double lightOpacity = 0.75, double darkOpacity = 0.4}) =>
       isDarkMode ? ShadowDark.withOpacity(darkOpacity) : ShadowLight.withOpacity(lightOpacity);

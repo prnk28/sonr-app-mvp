@@ -129,7 +129,7 @@ class CardService extends GetxService {
     super.onInit();
   }
 
-  /// @ Add New Card to Database
+  /// #### Add New Card to Database
   static addCard(Transfer card, ActivityType activityType) async {
     // Update Database
     if (DeviceService.isMobile && isRegistered) {
@@ -140,7 +140,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Add New Activity for deleted card
+  /// #### Add New Activity for deleted card
   static addActivity({
     required ActivityType type,
     required Payload payload,
@@ -155,7 +155,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Returns total Card Count
+  /// #### Returns total Card Count
   static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
     if (DeviceService.isMobile && isRegistered) {
       // Get Total Entries
@@ -178,7 +178,7 @@ class CardService extends GetxService {
     return 0;
   }
 
-  /// @ Clear Single Activity
+  /// #### Clear Single Activity
   static clearActivity(TransferActivity activity) async {
     if (DeviceService.isMobile && isRegistered) {
       if (hasActivity) {
@@ -187,7 +187,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Clear All Activity
+  /// #### Clear All Activity
   static clearAllActivity() async {
     if (DeviceService.isMobile && isRegistered) {
       if (hasActivity) {
@@ -196,7 +196,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Remove Card and Add Deleted Activity to Database
+  /// #### Remove Card and Add Deleted Activity to Database
   static deleteCard(TransferCard card) async {
     if (DeviceService.isMobile && isRegistered) {
       await to._database.deleteCard(card);
@@ -209,7 +209,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Remove Card and Add Deleted Activity to Database
+  /// #### Remove Card and Add Deleted Activity to Database
   static deleteCardFromID(int id) async {
     if (DeviceService.isMobile && isRegistered) {
       await to._database.deleteCardFromID(id);
@@ -217,7 +217,7 @@ class CardService extends GetxService {
     }
   }
 
-  /// @ Remove Card and Add Deleted Activity to Database
+  /// #### Remove Card and Add Deleted Activity to Database
   static deleteAllCards() async {
     if (DeviceService.isMobile && isRegistered) {
       if (totalCount > 0) {

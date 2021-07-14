@@ -23,8 +23,10 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // References
   late Node _instance;
   late StreamSubscription<ConnectivityResult> _connectionStream;
-  late StreamSubscription<LobbyEvent> _lobbyEventStream;
+  late StreamSubscription<TopicEvent> _topicEventStream;
   late StreamSubscription<ProgressEvent> _progressEventStream;
+  late StreamSubscription<StatusEvent> _statusEventStream;
+  late StreamSubscription<MailEvent> _mailEventStream;
 
   // ^ Constructer ^ //
   Future<NodeService> init() async {
@@ -37,7 +39,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Set Callbacks
     _instance.onConnected = _handleConnected;
-    _instance.onStatus = _handleStatus;
     _instance.onError = _handleError;
     _instance.onInvite = ReceiverService.to.handleInvite;
     _instance.onReply = SenderService.to.handleReply;
@@ -45,24 +46,25 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _instance.onTransmitted = SenderService.to.handleTransmitted;
 
     // Set Stream Handlers
-    _lobbyEventStream = _instance.onEvent(LobbyService.to.handleEvent);
+    _topicEventStream = _instance.onEvent(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
-    _instance.onMail((data) {
-      print(data.toString());
-    });
+    _statusEventStream = _instance.onStatus(_handleStatus);
+    _mailEventStream = _instance.onMail(_handleMail);
     return this;
   }
 
   @override
   onClose() {
     _connectionStream.cancel();
-    _lobbyEventStream.cancel();
+    _topicEventStream.cancel();
+    _mailEventStream.cancel();
     _progressEventStream.cancel();
+    _statusEventStream.cancel();
     super.onClose();
   }
 
   // * ------------------- Methods ----------------------------
-  /// @ Connect to Service Method
+  /// #### Connect to Service Method
   Future<bool> connect() async {
     // Check for User
     if (ContactService.status.value.hasUser && DeviceService.hasInternet) {
@@ -83,36 +85,36 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     }
   }
 
-  /// @ Sign Provided Data with Private Key
+  /// #### Sign Provided Data with Private Key
   static Future<AuthResponse> sign(AuthRequest request) async {
     return await to._instance.sign(request);
   }
 
-  /// @ Verify Provided Data with Private Key
+  /// #### Verify Provided Data with Private Key
   static Future<VerifyResponse> verify(VerifyRequest request) async {
     return await to._instance.verify(request);
   }
 
-  /// @ Retreive URLLink Metadata
+  /// #### Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
     return await SonrCore.getUrlLink(url);
   }
 
-  /// @ Send Position Update for Node
+  /// #### Send Position Update for Node
   static void update(Position position) {
     if (status.value.isConnected && isRegistered) {
       to._instance.update(API.newUpdatePosition(position));
     }
   }
 
-  /// @ Sets Contact for Node
+  /// #### Sets Contact for Node
   static void setProfile(Contact contact) async {
     if (status.value.isConnected && isRegistered) {
       to._instance.update(API.newUpdateContact(contact));
     }
   }
 
-  /// @ Invite Peer with Built Request
+  /// #### Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
       to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.Flat));
@@ -120,7 +122,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   // * ------------------- Callbacks ----------------------------
-  /// @ Handle Connection Result
+  /// #### Handle Connection Result
   void _handleConnected(ConnectionResponse data) {
     // Log Result
     Logger.info(data.toString());
@@ -131,7 +133,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     });
   }
 
-  /// @ Handle Device Updated Connectivity Result
+  /// #### Handle Device Updated Connectivity Result
   void _handleDeviceConnection(ConnectivityResult result) {
     // Display No Connection Error - Stop Services
     if (result == ConnectivityResult.none) {
@@ -145,7 +147,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     }
   }
 
-  /// @ Handle Bootstrap Result
+  /// #### Handle Bootstrap Result
   void _handleStatus(StatusEvent data) {
     // Check for Homescreen Controller
     if (data.value == Status.AVAILABLE) {
@@ -162,11 +164,17 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     Logger.info("Node(Callback) Status: " + data.value.toString());
   }
 
-  /// @ An Error Has Occurred
+  /// #### Handle Bootstrap Result
+  void _handleMail(MailEvent data) {
+    // Logging
+    Logger.info("Node(Callback) Status: " + data.toString());
+  }
+
+  /// #### An Error Has Occurred
   void _handleError(ErrorMessage data) async {
     // Check for Peer Error
     if (data.type == ErrorMessage_Type.PEER_NOT_FOUND_INVITE) {
-      final removeEvent = LobbyEvent(id: data.data, subject: LobbyEvent_Subject.EXIT);
+      final removeEvent = TopicEvent(id: data.data, subject: TopicEvent_Subject.EXIT);
       LobbyService.to.handleEvent(removeEvent);
     }
 
@@ -174,9 +182,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     if (data.severity != ErrorMessage_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
     }
-
-    // Logging
-    Logger.sError(data);
   }
 
   // * ------------------- Helpers ----------------------------
@@ -186,20 +191,17 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   Future<void> _handleSNameMigration() async {
-    if (!Logger.to.userHasUpdatedSName.val) {
+    if (!Logger.hasMigratedSName.val) {
       // Retreive Public Key
       final response = await instance.verify(API.newVerifyRead());
+
+      // Validate SName
       if (response.publicKey.length > 0) {
-        // Create New Record
-        final newRecord = HSRecord.newName(AuthResponse(
+        // Create New Record and Update Status
+        Logger.setMigration(HSRecord.newName(AuthResponse(
           publicKey: response.publicKey,
           givenSName: ContactService.sName.toLowerCase(),
-        ));
-
-        // Update Status
-        Logger.to.userHasUpdatedSName.val = await NamebaseClient.addRecords([newRecord]);
-      } else {
-        print("Failed to Return Public Key");
+        )));
       }
     }
   }

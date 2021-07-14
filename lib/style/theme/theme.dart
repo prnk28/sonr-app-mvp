@@ -58,8 +58,10 @@ class AppTheme {
   /// Returns Current Text Color
   static Color get BackgroundColor => AppColor.Background(Get.isDarkMode);
 
+  /// Returns Current Divider Color
   static Color get DividerColor => AppColor.Divider(Get.isDarkMode);
 
+  /// Returns Current Foreground Color
   static Color get ForegroundColor => AppColor.Foreground(Get.isDarkMode);
 
   /// Returns Current Text Color
@@ -67,6 +69,9 @@ class AppTheme {
 
   /// Returns Current Text Color
   static Color get ItemColorInversed => AppColor.Item(!Get.isDarkMode);
+
+  /// Returns Accent Palette Color
+  static Color get AccentColor => AppColor.Accent(Get.isDarkMode);
 
   /// Returns Current Box Border
   static Border get BoxBorder => Get.isDarkMode

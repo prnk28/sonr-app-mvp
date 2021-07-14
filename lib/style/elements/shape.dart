@@ -70,7 +70,7 @@ class ShapeContainer extends StatelessWidget {
   }
 }
 
-/// @ Message Neumorphic Path
+/// #### Message Neumorphic Path
 class MessagePath extends CustomClipper<Path> {
   final double borderRadius;
   MessagePath({this.borderRadius = 8});
@@ -100,7 +100,7 @@ class MessagePath extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-/// @ Oval Bottom Neumorphic Path
+/// #### Oval Bottom Neumorphic Path
 class OvalBottomPath extends CustomClipper<Path> {
   @override
   getClip(Size size) {
@@ -124,7 +124,7 @@ class OvalBottomPath extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-/// @ Oval Top Neumorphic Path
+/// #### Oval Top Neumorphic Path
 class OvalTopPath extends CustomClipper<Path> {
   @override
   getClip(Size size) {
@@ -142,7 +142,7 @@ class OvalTopPath extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-/// @ Wave Default Right Path
+/// #### Wave Default Right Path
 class WavePath extends CustomClipper<Path> {
   @override
   getClip(Size size) {
@@ -164,7 +164,7 @@ class WavePath extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-/// @ Wave Strong Right Path
+/// #### Wave Strong Right Path
 class WaveStrongPath extends CustomClipper<Path> {
   @override
   getClip(Size size) {

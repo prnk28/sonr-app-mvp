@@ -39,7 +39,7 @@ class _SharePopupViewState extends State<SharePopupView> {
                 child: ActionButton(
                   onPressed: () => controller.confirmMediaSelection(),
                   iconData: SimpleIcons.Share,
-                  banner: Logger.userAppFirstTime ? null : ActionBanner.count(controller.selectedItems.length),
+                  banner: Logger.appOpenFirst ? null : ActionBanner.count(controller.selectedItems.length),
                 ),
               )),
         ),
@@ -75,7 +75,14 @@ class _SharePopupViewState extends State<SharePopupView> {
                       crossAxisSpacing: 4.0,
                     ));
               } else {
-                return SliverToBoxAdapter(child: Center(child: HourglassIndicator()));
+                return SliverToBoxAdapter(
+                    child: Container(
+                        width: Get.width,
+                        height: Get.height / 2.5,
+                        child: Center(
+                            child: CircleLoader(
+                          scale: 2,
+                        ))));
               }
             })
           ]),
@@ -87,7 +94,7 @@ class _SharePopupViewState extends State<SharePopupView> {
   }
 
   double _buildScale(bool hasSelected) {
-    if (Logger.userAppFirstTime) {
+    if (Logger.appOpenFirst) {
       return 1.0;
     } else {
       if (hasSelected) {
@@ -117,7 +124,7 @@ class ShareOptionsRow extends StatelessWidget {
   }
 }
 
-/// @ Camera Share Button
+/// #### Camera Share Button
 class _ShareCameraButtonItem extends GetView<ShareController> {
   const _ShareCameraButtonItem();
   @override
@@ -125,17 +132,17 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
       delay: 225.milliseconds,
       duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-      child: ImageButton(
+      child: ComplexButton(
         label: 'Camera',
         onPressed: controller.chooseCamera,
-        icon: ComplexIcons.Camera,
+        type: ComplexIcons.Camera,
         size: K_ROW_CIRCLE_SIZE,
       ),
     );
   }
 }
 
-/// @ File Share Button
+/// #### File Share Button
 class _ShareFileButtonItem extends GetView<ShareController> {
   const _ShareFileButtonItem();
   @override
@@ -143,16 +150,16 @@ class _ShareFileButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'File',
-          icon: ComplexIcons.Document,
+          type: ComplexIcons.Document,
           size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseFile,
         ));
   }
 }
 
-/// @ Contact Share Button
+/// #### Contact Share Button
 class _ShareContactButtonItem extends GetView<ShareController> {
   const _ShareContactButtonItem();
   @override
@@ -160,9 +167,9 @@ class _ShareContactButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'Contact',
-          icon: ComplexIcons.ContactCard,
+          type: ComplexIcons.ContactCard,
           size: K_ROW_CIRCLE_SIZE,
           onPressed: controller.chooseContact,
         ));

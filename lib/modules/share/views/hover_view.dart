@@ -94,13 +94,13 @@ class _ShareHoverSession extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            HourglassIndicator(scale: 1),
+            CircleLoader(scale: 1),
             "Pending".section(color: AppTheme.GreyColor, fontSize: 14),
           ],
         ));
       }
       Future.delayed(1500.milliseconds, () {
-        AppRoute.closePopup();
+        AppRoute.close();
       });
       return SimpleIcons.Check.gradient(value: DesignGradients.ItmeoBranding);
     });
@@ -133,7 +133,7 @@ class _ShareHoverPeerInfo extends StatelessWidget {
   }
 }
 
-/// @ Camera Share Button
+/// #### Camera Share Button
 class _ShareHoverCameraButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverCameraButtonItem({required this.peer});
@@ -142,17 +142,17 @@ class _ShareHoverCameraButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'Camera',
           size: K_HOVER_BUTTON_SIZE,
           onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.Camera),
-          icon: ComplexIcons.Camera,
+          type: ComplexIcons.Camera,
           fontSize: 18,
         ));
   }
 }
 
-/// @ Camera Share Button
+/// #### Camera Share Button
 class _ShareHoverMediaButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverMediaButtonItem({required this.peer});
@@ -161,17 +161,17 @@ class _ShareHoverMediaButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'Media',
           size: K_HOVER_BUTTON_SIZE,
           onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.Media),
-          icon: ComplexIcons.MediaSelect,
+          type: ComplexIcons.MediaSelect,
           fontSize: 18,
         ));
   }
 }
 
-/// @ File Share Button
+/// #### File Share Button
 class _ShareHoverFileButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverFileButtonItem({required this.peer});
@@ -180,17 +180,17 @@ class _ShareHoverFileButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'File',
           size: K_HOVER_BUTTON_SIZE,
           onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.File),
-          icon: ComplexIcons.Document,
+          type: ComplexIcons.Document,
           fontSize: 18,
         ));
   }
 }
 
-/// @ Contact Share Button
+/// #### Contact Share Button
 class _ShareHoverContactButtonItem extends GetView<ShareController> {
   final Peer peer;
   const _ShareHoverContactButtonItem({required this.peer});
@@ -199,9 +199,9 @@ class _ShareHoverContactButtonItem extends GetView<ShareController> {
     return FadeInDownBig(
         delay: 225.milliseconds,
         duration: [265.milliseconds, 225.milliseconds, 285.milliseconds, 245.milliseconds, 300.milliseconds].random(),
-        child: ImageButton(
+        child: ComplexButton(
           label: 'Contact',
-          icon: ComplexIcons.ContactCard,
+          type: ComplexIcons.ContactCard,
           onPressed: () => controller.chooseThenInvite(peer: peer, option: ChooseOption.Contact),
           size: K_HOVER_BUTTON_SIZE,
           fontSize: 18,

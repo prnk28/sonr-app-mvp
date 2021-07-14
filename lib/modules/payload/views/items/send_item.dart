@@ -29,7 +29,7 @@ class PayloadItemInfo extends StatelessWidget {
 class PayloadListItemHeader extends GetView<ItemController> {
   @override
   Widget build(BuildContext context) {
-    final file = TransferController.invite.file;
+    final file = TransferController.inviteRequest.file;
     return Container(
       decoration: BoxDecoration(color: AppTheme.ForegroundColor, borderRadius: BorderRadius.circular(37)),
       width: Get.width,
@@ -101,7 +101,7 @@ class PayloadListItem extends GetView<ItemController> {
 
   Widget _buildTitle() {
     if (isSingle) {
-      return _PayloadListItemTitle.single(TransferController.invite);
+      return _PayloadListItemTitle.single(TransferController.inviteRequest);
     } else {
       return _PayloadListItemTitle.multi(fileItem!);
     }
@@ -206,7 +206,7 @@ class _PayloadListItemTitle extends StatelessWidget {
   }
 }
 
-//// @ TransferView: Builds View based on TransferItem Payload Type
+//// #### TransferView: Builds View based on TransferItem Payload Type
 class PostItem extends StatelessWidget {
   /// TransferItem: SQL Reference to Protobuf
   final TransferCard item;
@@ -233,7 +233,7 @@ class PostItem extends StatelessWidget {
   }
 }
 
-/// @ Item Controller to Manage Payload
+/// #### Item Controller to Manage Payload
 class ItemController extends GetxController {
   late final SFile_Item item;
   late final int index;

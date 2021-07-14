@@ -7,7 +7,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:video_player/video_player.dart';
 
-/// @ Post Content for File
+/// #### Post Content for File
 class FileContent extends StatelessWidget {
   final SFile file;
   final double iconSize;
@@ -216,7 +216,7 @@ class _FileItemImageBoxState extends State<FileItemImageBox> {
         : Container(
             width: widget.width,
             height: widget.height,
-            child: HourglassIndicator(),
+            child: CircleLoader(),
           );
   }
 
@@ -296,7 +296,7 @@ class _FileItemVideoBoxState extends State<FileItemVideoBox> {
                 : Container(
                     width: widget.width ?? widget.orientation.defaultWidth,
                     height: widget.height ?? widget.orientation.defaultHeight,
-                    child: HourglassIndicator(),
+                    child: CircleLoader(),
                   )),
       ),
     );
@@ -348,7 +348,7 @@ class FilePayloadText extends StatelessWidget {
   }
 }
 
-/// @ TransferCard as List item View
+/// #### TransferCard as List item View
 class FileItemView extends StatelessWidget {
   final TransferCard item;
 

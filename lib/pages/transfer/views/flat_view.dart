@@ -1,7 +1,7 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// ** Flat Mode View ** //
+/// ### Flat Mode View
 class FlatModeOverlay extends GetView<PositionController> {
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,13 @@ class FlatModeOverlay extends GetView<PositionController> {
               color: Colors.black87,
               padding: EdgeInsets.all(24),
               child: AnimatedSwitcher(
-                  duration: K_TRANSLATE_DURATION,
-                  switchOutCurve: controller.animation.value.switchOutCurve,
-                  switchInCurve: controller.animation.value.switchInCurve,
-                  transitionBuilder: controller.animation.value.transition(),
-                  layoutBuilder: controller.animation.value.layout() as Widget Function(Widget?, List<Widget>),
-                  child: _FlatModeCard())),
+                duration: K_TRANSLATE_DURATION,
+                switchOutCurve: controller.animation.value.switchOutCurve,
+                switchInCurve: controller.animation.value.switchInCurve,
+                transitionBuilder: controller.animation.value.transition(),
+                layoutBuilder: controller.animation.value.layout() as Widget Function(Widget?, List<Widget>),
+                child: _FlatModeCard(),
+              )),
         ));
   }
 }

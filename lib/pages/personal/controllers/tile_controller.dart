@@ -13,7 +13,7 @@ class TileController extends GetxController {
   final twitter = Rx<TwitterModel?>(null);
   final youtube = Rx<YoutubeModel?>(null);
 
-  /// @ Create New Tile
+  /// #### Create New Tile
   initialize(Contact_Social tile, int i) async {
     // Medium Data
     if (tile.media == Contact_Social_Media.Medium) {
@@ -32,7 +32,7 @@ class TileController extends GetxController {
     }
   }
 
-  /// @ Launch a URL Event
+  /// #### Launch a URL Event
   Future launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -41,12 +41,12 @@ class TileController extends GetxController {
     }
   }
 
-  /// @ Removes Current Tile
+  /// #### Removes Current Tile
   deleteTile(Contact_Social tile) {
     ContactService.contact.deleteSocial(tile);
   }
 
-  /// @ Toggles Between Expanded and Normal
+  /// #### Toggles Between Expanded and Normal
   toggleExpand(int index) {
     isExpanded(!isExpanded.value);
     // Get.find<ProfileController>().toggleExpand(index, isExpanded.value);

@@ -51,6 +51,12 @@ class DeviceService extends GetxService {
   // ^ Initialization ^ //
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
+      // Check if Stream has closed 
+      if (isClosed) {
+        timer.cancel();
+      }
+
+      // Update Position
       if (AppServices.isReadyToCommunicate) {
         NodeService.update(_position.value);
       }
@@ -104,7 +110,7 @@ class DeviceService extends GetxService {
   }
 
 // * ------------------- Methods ----------------------------
-  /// @ Retreive Location by IP Address
+  /// #### Retreive Location by IP Address
   static Future<Location> get location async {
     // # Check Platform
     if (platform.isMobile) {
@@ -112,50 +118,25 @@ class DeviceService extends GetxService {
       if (to._connectivity.value == ConnectivityResult.mobile) {
         // Geolocater Position
         var pos = await Geolocator.getCurrentPosition();
-
-        // Analytics
-        Logger.event(
-          name: 'findLocation',
-          controller: 'DeviceService',
-          parameters: {
-            'createdAt': DateTime.now().toString(),
-            'platform': platform.toString(),
-            'isMobile': platform.isMobile,
-            'type': 'GPS-Location',
-          },
-        );
-
         // Return Location
         return pos.toSonrLocation()..initPlacemark();
       }
     }
-    // Analytics
-    Logger.event(
-      name: 'findLocation',
-      controller: 'DeviceService',
-      parameters: {
-        'createdAt': DateTime.now().toString(),
-        'platform': platform.toString(),
-        'isMobile': platform.isMobile,
-        'type': 'IP-Location',
-      },
-    );
-
     return to._locationApi.fetchIP();
   }
 
-  /// @ Method Hides Keyboard
+  /// #### Method Hides Keyboard
   static void keyboardHide() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.hide') : print("");
 
-  /// @ Method Shows Keyboard
+  /// #### Method Shows Keyboard
   static void keyboardShow() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.show') : print("");
 
-  /// @ Add Event Handler to Tray Action
+  /// #### Add Event Handler to Tray Action
   void registerEventHandler(String handlerKey, Function handler) {
     _systemTray.registerEventHandler(handlerKey, handler);
   }
 
-  /// @ Saves Photo to Gallery
+  /// #### Saves Photo to Gallery
   static Future<bool> saveCapture(String path, bool isVideo) async {
     if (DeviceService.isMobile && isRegistered) {
       // Validate Path
@@ -190,7 +171,7 @@ class DeviceService extends GetxService {
     return false;
   }
 
-  /// @ Method Updates Tray Items
+  /// #### Method Updates Tray Items
   void updateSystray(List<SystrayAction> actions) async {
     await Systray.updateMenu(actions);
   }

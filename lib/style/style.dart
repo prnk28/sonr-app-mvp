@@ -16,16 +16,13 @@ export 'package:sonr_app/modules/payload/payload.dart';
 
 // Custom Theme Buttons
 export 'buttons/action.dart';
-export 'buttons/arrow.dart';
 export 'buttons/color.dart';
-export 'buttons/confirm.dart';
-export 'buttons/image.dart';
 export 'buttons/solid.dart';
 
 // Theme Components
-export 'components/color.dart' hide NoSplash;
+export 'theme/color.dart' hide NoSplash;
 export 'components/container.dart';
-export 'components/gradient.dart';
+export 'theme/gradient.dart';
 export 'components/icon.dart';
 export 'components/overlay.dart';
 export 'components/text.dart';

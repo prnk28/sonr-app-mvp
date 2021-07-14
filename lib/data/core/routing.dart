@@ -6,14 +6,15 @@ import 'package:sonr_app/modules/activity/activity.dart';
 import 'package:sonr_app/modules/share/views/popup_view.dart';
 import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
-import 'package:sonr_app/pages/home/controllers/home_controller.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/settings/settings.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
-import 'bindings.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/pages/personal/personal.dart';
 
-/// @ Enum Values for App Page
+/// #### Enum Values for App Page
 enum AppPage {
   /// ### Home `Off`
   /// Dashboard, Search, Personal
@@ -99,7 +100,7 @@ extension AppRoute on AppPage {
   List<GetMiddleware> get middlewares => this == AppPage.Home ? [GetMiddleware()] : [];
 
   /// Checks if this Page Needs Onboarding
-  bool get needsOnboarding => Logger.userAppFirstTime && !readWriteOnboarding.val;
+  bool get needsOnboarding => Logger.appOpenFirst && !readWriteOnboarding.val;
 
   /// Instance to Determine if Page has Finished Onboarding
   ReadWriteValue<bool> get readWriteOnboarding => false.val(this.name, getBox: () => GetStorage('Onboarding'));
@@ -194,7 +195,6 @@ extension AppRoute on AppPage {
       default:
         return () {
           if (DeviceService.isMobile) {
-            Get.find<NodeService>().connect();
             return ShowCaseWidget(
                 builder: Builder(
               builder: (_) => HomePage(),
@@ -310,6 +310,7 @@ extension AppRoute on AppPage {
     String buttonText = "Okay",
     bool closeOnResponse = true,
     bool ignoreSafeArea = false,
+    void Function()? onDismissed,
     bool dismissible = true,
   }) async {
     // Hide Keyboard Before Route
@@ -336,6 +337,15 @@ extension AppRoute on AppPage {
     return completer.future;
   }
 
+  /// Pushes a Camera Modal
+  static Future<void> camera({required Function(SFile file) onMediaSelected}) async {
+    Get.to(
+      CameraView(onMediaSelected: onMediaSelected),
+      fullscreenDialog: true,
+      transition: Transition.downToUp,
+    );
+  }
+
   /// Pushes a Popup Modal
   static Future<void> popup(
     Widget child, {
@@ -343,6 +353,7 @@ extension AppRoute on AppPage {
     bool dismissible = true,
     dynamic args,
     void Function()? init,
+    void Function()? onDismissed,
     Duration? delay,
   }) async {
     if (isPopupClosed) {
@@ -359,7 +370,12 @@ extension AppRoute on AppPage {
         BlurredBackground(
             child: child,
             onTapped: () {
-              Future.delayed(300.milliseconds, () => Get.back());
+              Future.delayed(300.milliseconds, () {
+                if (onDismissed != null) {
+                  onDismissed();
+                }
+                Get.back();
+              });
             }),
         barrierDismissible: dismissible,
         barrierColor: Colors.transparent,
@@ -373,10 +389,20 @@ extension AppRoute on AppPage {
     Widget child, {
     required GlobalKey parentKey,
     bool ignoreSafeArea = false,
+    bool dismissible = true,
+    dynamic args,
+    void Function()? init,
+    void Function()? onDismissed,
+    Duration? delay,
     Offset? offset,
   }) async {
     // Hide Keyboard Before Route
     DeviceService.keyboardHide();
+
+    // Init Function
+    if (init != null) {
+      init();
+    }
 
     final RxBool hasDismissed = false.obs;
     Get.dialog(
@@ -417,15 +443,21 @@ extension AppRoute on AppPage {
     Get.dialog(
       BlurredBackground(
           child: QuestionOverlay(
-        title,
-        description,
-        (result) {
-          completer.complete(result);
-          Get.back();
-        },
-        acceptTitle,
-        declineTitle,
-      )),
+            title,
+            description,
+            (result) {
+              completer.complete(result);
+              Get.back();
+            },
+            acceptTitle,
+            declineTitle,
+          ),
+          onTapped: () {
+            Future.delayed(300.milliseconds, () {
+              completer.complete(false);
+              Get.back();
+            });
+          }),
       transitionDuration: 0.seconds,
       barrierDismissible: dismissible,
       barrierColor: Colors.transparent,
@@ -453,7 +485,7 @@ extension AppRoute on AppPage {
 
     // Check if Forced Open
     if (forced) {
-      closeSheet();
+      close();
     }
 
     // Init Method
@@ -467,7 +499,10 @@ extension AppRoute on AppPage {
           dismissible
               ? BlurredBackground(
                   onTapped: () {
-                    onDismissed!(DismissDirection.down);
+                    Future.delayed(300.milliseconds, () {
+                      onDismissed!(DismissDirection.down);
+                      Get.back();
+                    });
                   },
                   child: Dismissible(
                     key: key!,
@@ -502,26 +537,59 @@ extension AppRoute on AppPage {
         backgroundColor: args.color,
         icon: args.icon,
         colorText: AppColor.White,
+        borderRadius: 22,
       );
     }
   }
 
   /// Closes Current Page
-  static void close() {
-    Get.back(closeOverlays: true);
+  static void close({bool removeAll = false}) {
+    Get.back(closeOverlays: removeAll);
   }
+}
 
-  /// Closes Active Popup
-  static void closePopup() {
-    if (isPopupOpen) {
-      Get.back();
+/// #### Initial Controller Bindings
+class InitialBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.create<PeerController>(() => PeerController());
+  }
+}
+
+/// #### Home Controller Bindings
+class HomeBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<HomeController>(HomeController());
+    // Subsidary Controllers
+    Get.put(ActivityController());
+
+    // Place Device Specific Controllers
+    if (DeviceService.isMobile) {
+      Get.put(ShareController());
+      Get.put<PersonalController>(PersonalController());
+      Get.put<IntelController>(IntelController(), permanent: true);
+      Get.put<EditorController>(EditorController(), permanent: true);
+      Get.create<TileController>(() => TileController());
+      Get.create<MediaItemController>(() => MediaItemController());
     }
   }
+}
 
-  /// Closes Active Popup
-  static void closeSheet() {
-    if (isSheetOpen) {
-      Get.back();
-    }
+/// #### Register Page Bindings
+class RegisterBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<RegisterController>(RegisterController());
+  }
+}
+
+/// #### Transfer Screen Bindings
+class TransferBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<TransferController>(TransferController(), permanent: true);
+    Get.put<PositionController>(PositionController(), permanent: true);
+    Get.create<ItemController>(() => ItemController());
   }
 }

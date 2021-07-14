@@ -1,7 +1,7 @@
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// @ Invite Composer for Remote Transfer
+/// #### Invite Composer for Remote Transfer
 class InviteComposer extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
@@ -51,13 +51,10 @@ class InviteComposer extends GetView<TransferController> {
                               padding: EdgeInsets.only(right: 24),
                               child: SNameTextField(
                                 onEditingComplete: (value) {
-                                  controller.findQuery(value);
-                                  controller.findQuery.refresh();
                                   controller.shareRemote();
                                 },
                                 onChanged: (value) {
-                                  controller.findQuery(value);
-                                  controller.findQuery.refresh();
+                                  controller.onQueryUpdated(value);
                                 },
                               ),
                             ),
@@ -98,7 +95,7 @@ class AnimatedStatus extends GetView<TransferController> {
       case ComposeStatus.Initial:
         return Container();
       case ComposeStatus.Checking:
-        return HourglassIndicator();
+        return CircleLoader();
       case ComposeStatus.NonExisting:
         return SimpleIcons.Close.icon(color: AppColor.Red, size: 36);
       case ComposeStatus.Existing:

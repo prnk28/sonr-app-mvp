@@ -93,12 +93,12 @@ class RegisterController extends GetxController {
 
           // Analytics
           Logger.event(
-            name: 'createUsername',
-            controller: 'RegisterController',
+              event: AnalyticsEvent.user(
+            AnalyticsUserEvent.NewSName,
             parameters: {
               'username': sName.value,
             },
-          );
+          ));
 
           // Update Status
           mnemonic(genMnemomic);
@@ -110,7 +110,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  /// @ Next Info Panel
+  /// #### Next Info Panel
   void nextPanel(IntroPageType type) {
     panelNotifier.value = type.page;
     introPageController.animateToPage(
@@ -120,7 +120,7 @@ class RegisterController extends GetxController {
     );
   }
 
-  /// @ Next Page
+  /// #### Next Page
   void nextPage(RegisterPageType type) {
     status(type);
     status.refresh();
@@ -150,7 +150,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  /// @ Submits Contact
+  /// #### Submits Contact
   setContact() async {
     // Get Contact from Values
     var contact = Contact(
@@ -193,7 +193,7 @@ class RegisterController extends GetxController {
     }
   }
 
-  /// @ Validates SName as Valid characters
+  /// #### Validates SName as Valid characters
   Future<bool> validateName() async {
     nameStatus(await NamebaseClient.validateName(sName.value));
     return nameStatus.value.isValid;

@@ -50,7 +50,7 @@ class CameraController extends GetxController {
     super.onInit();
   }
 
-  /// @ Captures Photo
+  /// #### Captures Photo
   capturePhoto() async {
     // Set Path
     var temp = await getApplicationDocumentsDirectory();
@@ -64,7 +64,7 @@ class CameraController extends GetxController {
     status(CameraViewStatus.Preview);
   }
 
-  /// @ Decide on Capture
+  /// #### Decide on Capture
   handleCapture(bool decision) {
     if (decision) {
       Get.back(closeOverlays: true);
@@ -76,7 +76,7 @@ class CameraController extends GetxController {
     }
   }
 
-  /// @ Captures Video
+  /// #### Captures Video
   startCaptureVideo() async {
     // Set Path
     var temp = await getApplicationDocumentsDirectory();
@@ -96,7 +96,7 @@ class CameraController extends GetxController {
     });
   }
 
-  /// @ Stops Video Capture
+  /// #### Stops Video Capture
   stopCaptureVideo() async {
     // Save Video
     await videoController.stopRecordingVideo();
@@ -115,7 +115,7 @@ class CameraController extends GetxController {
     hasCaptured(true);
   }
 
-  /// @ Flip Camera
+  /// #### Flip Camera
   toggleCameraSensor() async {
     // Toggle
     isFlipped(!isFlipped.value);

@@ -14,7 +14,7 @@ import 'package:sonr_app/style/style.dart';
 import 'controllers/transfer_controller.dart';
 import 'views/local_view.dart';
 
-/// @ Transfer Screen Entry Point
+/// #### Transfer Screen Entry Point
 class TransferPage extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
@@ -22,13 +22,15 @@ class TransferPage extends GetView<TransferController> {
     // Build View
     return SonrScaffold(
         appBar: DetailAppBar(
-          action: DeviceService.isIOS ? ActionButton(
-            iconData: SimpleIcons.Compass,
-            onPressed: () {
-              AppRoute.popup(InviteComposer());
-            },
-          ) : null,
-          onPressed: () => AppPage.Home.off(),
+          action: DeviceService.isIOS
+              ? ActionButton(
+                  iconData: SimpleIcons.Compass,
+                  onPressed: () {
+                    AppRoute.popup(InviteComposer());
+                  },
+                )
+              : null,
+          onPressed: () => Get.back(closeOverlays: true),
           title: "Transfer",
           isClose: true,
         ),
@@ -57,7 +59,7 @@ class PayloadSheetView extends GetView<TransferController> {
         return Container();
       } else {
         if (controller.hasInvite.value) {
-          return controller.inviteRequest.payload.isMultipleFiles
+          return controller.invite.value.payload.isMultipleFiles
               // Build List View
               ? DraggableScrollableSheet(
                   expand: false,
@@ -65,7 +67,7 @@ class PayloadSheetView extends GetView<TransferController> {
                   maxChildSize: 0.5,
                   minChildSize: 0.2,
                   builder: (BuildContext context, ScrollController scrollController) {
-                    final file = controller.inviteRequest.file;
+                    final file = controller.invite.value.file;
                     return Container(
                       padding: EdgeInsets.only(top: 24),
                       decoration: BoxDecoration(color: AppTheme.ForegroundColor, borderRadius: BorderRadius.circular(37)),

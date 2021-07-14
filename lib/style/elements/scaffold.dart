@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:sonr_app/style/style.dart';
 
-/// @ Standardized Uniform Scaffold
+/// #### Standardized Uniform Scaffold
 class SonrScaffold extends StatelessWidget {
   final Widget? body;
   final Widget? bottomSheet;
@@ -56,7 +56,7 @@ extension FloatingActionButtonLocations on FloatingActionButtonLocation {
   static FloatingActionButtonLocation get fixedCenterDocked => _FixedCenterDockedFabLocation();
 }
 
-/// @ Fixed Location for Center Docked
+/// #### Fixed Location for Center Docked
 class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
   const _FixedCenterDockedFabLocation();
 

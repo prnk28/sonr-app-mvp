@@ -22,7 +22,7 @@ import 'package:sonr_app/data/data.dart';
 /// #### SonrServices
 /// Initialize and Check Services
 class AppServices {
-  /// @ Application Services
+  /// #### Application Services
   static Future<void> init({bool isDesktop = false}) async {
     await Get.putAsync(() => DeviceService().init(), permanent: true);
     await Get.putAsync(() => Logger().init(), permanent: true);
@@ -35,12 +35,12 @@ class AppServices {
     await Get.putAsync(() => NodeService().init(), permanent: true);
   }
 
-  /// @ Method Validates Required Services Registered
+  /// #### Method Validates Required Services Registered
   static bool get isReadyToCommunicate {
     return DeviceService.isRegistered && ContactService.isRegistered && LobbyService.isRegistered && NodeService.isRegistered;
   }
 
-  /// @ Returns Excluded Sentry Modules
+  /// #### Returns Excluded Sentry Modules
   static List<String> get excludedModules => [
         'open_file',
         'animated_widgets',
@@ -50,7 +50,7 @@ class AppServices {
         'file_picker',
       ];
 
-  /// @ Returns APIKeys from `Env.dart`
+  /// #### Returns APIKeys from `Env.dart`
   static APIKeys get apiKeys => APIKeys(
         handshakeKey: Env.hs_key,
         handshakeSecret: Env.hs_secret,

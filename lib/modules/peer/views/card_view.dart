@@ -5,16 +5,28 @@ import 'package:sonr_app/style/style.dart';
 const double K_CARD_WIDTH = 160;
 const double K_CARD_HEIGHT = 190;
 
-/// @ Root Peer Card View
+/// #### Root Peer Card View
 class PeerCardView extends GetWidget<PeerController> {
   final Peer peer;
+  final GlobalKey peerKey = GlobalKey();
   PeerCardView(this.peer) : super(key: ValueKey(peer.id.peer));
 
   @override
   Widget build(BuildContext context) {
     controller.initalize(peer);
     return GestureDetector(
-      onTap: controller.invite,
+      onTap: () {
+        //if (SenderService.hasSelected.value) {
+        controller.invite();
+        // } else {
+        //   AppRoute.positioned(
+        //     ShareHoverView(peer: peer),
+        //     init: () => ShareController.initPopup(),
+        //     parentKey: peerKey,
+        //     offset: Offset(-Get.width / 2, 20),
+        //   );
+        // }
+      },
       child: BoxContainer(
           constraints: BoxConstraints.tight(Size(K_CARD_WIDTH, K_CARD_HEIGHT)),
           clipBehavior: Clip.antiAlias,
@@ -52,7 +64,7 @@ class PeerCardView extends GetWidget<PeerController> {
   }
 }
 
-/// @ Main Peer Card View
+/// #### Main Peer Card View
 class _PeerMainCard extends StatelessWidget {
   final RxBool isFlipped;
   final Rx<Peer> peer;
@@ -102,7 +114,7 @@ class _PeerMainCard extends StatelessWidget {
   }
 }
 
-/// @ Details Peer Card View
+/// #### Details Peer Card View
 class _PeerDetailsCard extends StatelessWidget {
   final RxBool isFlipped;
   final Rx<Peer> peer;

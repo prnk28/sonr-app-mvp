@@ -7,7 +7,7 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
 
-/// @ Share from External App BottomSheet View
+/// #### Share from External App BottomSheet View
 class ShareSheet extends StatelessWidget {
   // Properties
   final Widget child;
@@ -87,7 +87,7 @@ class ShareSheet extends StatelessWidget {
   }
 }
 
-/// @ Share Item Media View
+/// #### Share Item Media View
 class _ShareItemMedia extends StatelessWidget {
   final List<SharedMediaFile>? sharedFiles;
   final Size? size;
@@ -115,7 +115,7 @@ class _ShareItemMedia extends StatelessWidget {
   }
 }
 
-/// @ Share Item URL View
+/// #### Share Item URL View
 class _ShareItemURL extends StatelessWidget {
   final URLLink? url;
   final Size? size;

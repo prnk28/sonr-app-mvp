@@ -49,7 +49,7 @@ class LobbyService extends GetxService {
   }
 
 // * ------------------- Methods ----------------------------
-  /// @ Method to Cancel Flat Mode
+  /// #### Method to Cancel Flat Mode
   void cancelFlatMode() {
     // Reset Timers
     _flatModeCancelled(true);
@@ -60,14 +60,14 @@ class LobbyService extends GetxService {
     });
   }
 
-  /// @ Registers Peer to Callback
+  /// #### Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
     if (isRegistered) {
       to._peerCallbacks[peer] = callback;
     }
   }
 
-  /// @ Removes Peer Callback
+  /// #### Removes Peer Callback
   static void unregisterPeerCallback(Peer? peer) {
     if (isRegistered) {
       if (to._peerCallbacks.containsKey(peer)) {
@@ -76,7 +76,7 @@ class LobbyService extends GetxService {
     }
   }
 
-  /// @ Method to Cancel Flat Mode
+  /// #### Method to Cancel Flat Mode
   bool sendFlatMode(Peer? peer) {
     // Send Invite
     NodeService.sendFlat(peer);
@@ -94,7 +94,7 @@ class LobbyService extends GetxService {
   }
 
   // # Handle Individual user event
-  void handleEvent(LobbyEvent data) {
+  void handleEvent(TopicEvent data) {
     // User Joined
     if (data.shouldAdd) {
       _lobby.value.peers[data.id] = data.peer;

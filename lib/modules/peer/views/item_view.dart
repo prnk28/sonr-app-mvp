@@ -2,7 +2,7 @@ import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 
-/// @ PeerListItem for Remote View
+/// #### PeerListItem for Remote View
 class PeerListItem extends GetWidget<PeerController> {
   final Peer peer;
   final int index;

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/style/style.dart';
 
 extension ListUtils<T> on List<T> {
   random() {

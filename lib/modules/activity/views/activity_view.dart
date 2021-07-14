@@ -1,7 +1,7 @@
 import 'package:sonr_app/style/style.dart';
 import '../activity.dart';
 
-/// @ Activity View
+/// #### Activity View
 class ActivityPopup extends GetView<ActivityController> {
   ActivityPopup({Key? key}) : super(key: key);
   @override

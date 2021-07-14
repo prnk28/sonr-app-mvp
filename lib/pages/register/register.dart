@@ -105,7 +105,7 @@ class RegisterBottomSheet extends StatelessWidget {
   }
 }
 
-/// @ Builds Neumorphic Text Field
+/// #### Builds Neumorphic Text Field
 class RegisterTextField extends GetView<RegisterController> {
   final FocusNode focusNode;
   final void Function() onEditingComplete;
@@ -161,9 +161,9 @@ class RegisterTextField extends GetView<RegisterController> {
             child: TextField(
               style: DisplayTextStyle.Light.style(color: AppTheme.ItemColor, fontSize: 20),
               keyboardType: type.textInputType,
-              autofocus: type.autoFocus,
+              autofocus: true,
               textInputAction: type.textInputAction,
-              autocorrect: type.autoCorrect,
+              autocorrect: false,
               inputFormatters: type.inputFormatters,
               textCapitalization: type.textCapitalization,
               focusNode: focusNode,
@@ -204,7 +204,7 @@ class RegisterTextField extends GetView<RegisterController> {
     );
   }
 
-  /// @ Get Animated Offset for Shake Method
+  /// #### Get Animated Offset for Shake Method
   Offset shakeOffset(double animation) {
     var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
     return Offset(18 * shake, 0);

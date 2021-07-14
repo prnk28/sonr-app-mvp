@@ -4,8 +4,7 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:get/get.dart';
 
-
-/// @ Flat Contact Invite/Reply from InviteRequest/InviteResponse Proftobuf
+/// #### Flat Contact Invite/Reply from InviteRequest/InviteResponse Proftobuf
 class ContactContent extends StatelessWidget {
   final double? scale;
   final Contact? contact;
@@ -71,7 +70,7 @@ class ContactContent extends StatelessWidget {
   }
 }
 
-/// @ Contact Invite from InviteRequest Proftobuf
+/// #### Contact Invite from InviteRequest Proftobuf
 class ContactAuthView extends StatelessWidget {
   final InviteRequest? invite;
   final InviteResponse? reply;
@@ -153,7 +152,7 @@ class ContactAuthView extends StatelessWidget {
   }
 }
 
-/// @ Transfer Contact Item Details
+/// #### Transfer Contact Item Details
 class ContactItemView extends StatelessWidget {
   final TransferCard item;
   ContactItemView({Key? key, required this.item}) : super(key: key);
