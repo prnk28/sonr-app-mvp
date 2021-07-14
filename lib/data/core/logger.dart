@@ -47,7 +47,7 @@ class Logger extends GetxService {
   final _hasMigratedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
 
   // References
-  static final BuildMode buildMode = BuildModeUtil.current();
+  static final BuildMode buildMode = BuildModeUtil.mode();
   final util.Logger _log = util.Logger(
     printer: util.PrettyPrinter(
       methodCount: 2,

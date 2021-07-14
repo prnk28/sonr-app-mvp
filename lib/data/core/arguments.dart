@@ -11,7 +11,7 @@ enum BuildMode { Release, Debug }
 
 extension BuildModeUtil on BuildMode {
   /// Returns Current BuildMode from Foundation
-  static BuildMode current() {
+  static BuildMode mode() {
     if (kReleaseMode) {
       return BuildMode.Release;
     } else {
@@ -20,8 +20,8 @@ extension BuildModeUtil on BuildMode {
   }
 
   /// Returns Current BuildMode from Foundation and
-  /// Wraps into InitializeRequest_BuildMode
-  static InitializeRequest_BuildMode currentProto() => current().toProto();
+  /// Wraps into InitializeRequest_LogLevel
+  static InitializeRequest_LogLevel logLevel() => mode().toLogLevel();
 
   /// Checks if Build Mode is Debug
   bool get isDebug => this == BuildMode.Debug && !kReleaseMode;
@@ -29,12 +29,18 @@ extension BuildModeUtil on BuildMode {
   /// Checks if Build Mode is Release
   bool get isRelease => this == BuildMode.Release && kReleaseMode;
 
-  /// Converts BuildMode from Foundation into InitializeRequest_BuildMode
-  InitializeRequest_BuildMode toProto() {
+  /// Converts BuildMode from Foundation into InitializeRequest_LogLevel
+  InitializeRequest_LogLevel toLogLevel() {
+    // Check if Test Device is connected
+    if (Logger.isTestDevice) {
+      return InitializeRequest_LogLevel.INFO;
+    }
+
+    // Check for Debug Mode
     if (this.isDebug) {
-      return InitializeRequest_BuildMode.Debug;
+      return InitializeRequest_LogLevel.INFO;
     } else {
-      return InitializeRequest_BuildMode.Release;
+      return InitializeRequest_LogLevel.WARNING;
     }
   }
 }
@@ -361,6 +367,11 @@ class ErrorPageArgs {
     } else if (type == ErrorPageType.PermMedia) {
       await Permissions.Gallery.request();
     } else if (type == ErrorPageType.NoNetwork) {
+      if (DeviceService.hasInternet) {
+        AppRoute.close();
+      } else {
+        AppRoute.snack(SnackArgs.error("Network has still not been found."));
+      }
     } else {
       AppRoute.close();
     }

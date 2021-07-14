@@ -221,7 +221,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   ? Padding(
                       padding: const EdgeInsets.only(top: 32.0, left: 8),
                       child: Container(
-                        child: ShowcaseItem.fromType(
+                          child: Obx(
+                        () => ShowcaseItem.fromType(
                           type: ShowcaseType.Help,
                           child: ActionButton(
                             banner: Logger.intercomUnreadCount.value > 0 ? ActionBanner.count(Logger.intercomUnreadCount.value) : null,
@@ -229,8 +230,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                             iconData: SimpleIcons.Help,
                             onPressed: () async => await Logger.openIntercom(),
                           ),
-                        ).obx(),
-                      ),
+                        ),
+                      )),
                     )
                   : null,
               title: controller.view.value.isDashboard

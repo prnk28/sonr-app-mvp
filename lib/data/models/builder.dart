@@ -35,8 +35,7 @@ class RequestBuilder {
   static InitializeRequest get initialize => InitializeRequest(
         apiKeys: AppServices.apiKeys,
         device: DeviceService.device,
-        buildMode: BuildModeUtil.currentProto(),
-        isTestDevice: Logger.isTestDevice,
+        logLevel: BuildModeUtil.logLevel(),
       );
 
   /// Returns New Contact Update Request

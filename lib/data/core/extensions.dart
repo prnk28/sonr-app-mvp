@@ -49,18 +49,6 @@ extension NumUtils on int {
   }
 }
 
-extension ObxWidgetFunctionUtils on Widget Function() {
-  Obx obx() {
-    return Obx(() => this());
-  }
-}
-
-extension ObxWidgetUtils on Widget {
-  Obx obx() {
-    return Obx(() => this);
-  }
-}
-
 extension ConnectivityResultUtils on ConnectivityResult {
   /// Convert Package Enum to ConnectionRequest_InternetType enum
   ConnectionRequest_InternetType toInternetType() {

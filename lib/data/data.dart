@@ -1,6 +1,5 @@
 // Core
 export 'core/arguments.dart';
-export 'core/bindings.dart';
 export 'core/extensions.dart';
 export 'core/routing.dart';
 export 'core/logger.dart';
