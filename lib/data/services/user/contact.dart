@@ -12,21 +12,31 @@ class ContactService extends GetxService {
   // User Status Properties
   final _contact = Contact().obs;
   final _status = UserStatus.Default.obs;
+  final _pushToken = "".obs;
 
   // User Reactive Properties
   static Rx<UserStatus> get status => to._status;
   static Rx<Contact> get contact => to._contact;
+  static RxString get pushToken => to._pushToken;
   static String get sName => to._status.value.hasUser ? to._contact.value.sName.toLowerCase() : "";
-  static int get registeredTime => to._registeredTime.val;
-
   // References
   final _userBox = GetStorage('User');
-  final _registeredTime = 0.val('registeredTime', getBox: () => GetStorage('User'));
 
   // ^ Constructer ^ //
   Future<ContactService> init() async {
+    // Fetch User
     await GetStorage.init('User');
     _status(UserStatusUtils.fromBox(_userBox.hasData("contact")));
+
+    // Check for Mobile Device
+    if (DeviceService.isMobile) {
+      // Get Push Token
+      _pushToken(await FirebaseMessaging.instance.getToken());
+      _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
+
+      // Send Token to Intercom
+      await Intercom.sendTokenToIntercom(_pushToken.value);
+    }
 
     // Check if Exists
     if (_status.value.hasUser) {
@@ -40,7 +50,7 @@ class ContactService extends GetxService {
         contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
-        Logger.initProfile(contact);
+        Logger.initProfile(contact, _pushToken.value);
 
         // Set Contact Values
         _contact(contact);
@@ -67,13 +77,15 @@ class ContactService extends GetxService {
     newContact.profile.firstName.capitalizeFirst;
     newContact.profile.lastName.capitalizeFirst;
 
+    // Set User Properties
+    Logger.initProfile(newContact, to._pushToken.value);
+
     // Set Contact for User
     to._contact(newContact);
     to._contact.refresh();
 
     // Save User/Contact to Disk
     await to._userBox.write("contact", newContact.writeToJson());
-    to._registeredTime.val = DateTime.now().millisecondsSinceEpoch;
     to._status(UserStatus.Existing);
   }
 

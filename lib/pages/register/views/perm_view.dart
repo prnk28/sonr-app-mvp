@@ -16,7 +16,7 @@ class PermissionsView extends GetView<RegisterController> {
               // Location Perms
               if (item == RegisterPageType.Location) {
                 final result = await Permissions.Location.request();
-                if (result) {
+                if (result || await Permissions.Location.isGranted) {
                   controller.nextPage(RegisterPageType.Gallery);
                 }
               }
@@ -24,7 +24,16 @@ class PermissionsView extends GetView<RegisterController> {
               // Gallery Perms
               else if (item == RegisterPageType.Gallery) {
                 final result = await Permissions.Gallery.request();
-                if (result) {
+                if (result || await Permissions.Gallery.isGranted) {
+                  if (DeviceService.isIOS) {
+                    controller.nextPage(RegisterPageType.Notifications);
+                  } else {
+                    AppPage.Home.off(args: HomeArguments.FirstLoad);
+                  }
+                }
+              } else if (item == RegisterPageType.Notifications) {
+                final result = await Permissions.Notifications.request();
+                if (result || await Permissions.Notifications.isGranted || DeviceService.isAndroid) {
                   AppPage.Home.off(args: HomeArguments.FirstLoad);
                 }
               }

@@ -8,6 +8,7 @@ import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/settings/settings.dart';
+import 'package:sonr_app/pages/settings/settings_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
@@ -530,14 +531,22 @@ extension AppRoute on AppPage {
       Get.snackbar(
         args.title!,
         args.message,
-        snackStyle: SnackStyle.FLOATING,
-        duration: Duration(milliseconds: args.duration),
-        snackPosition: SnackPosition.BOTTOM,
+        snackStyle: args.snackStyle,
+        backgroundGradient: args.backgroundGradient,
+        progressIndicatorBackgroundColor: args.progressIndicatorBackgroundColor,
+        progressIndicatorController: args.progressIndicatorController,
+        progressIndicatorValueColor: args.progressIndicatorValueColor,
+        mainButton: args.mainButton,
+        duration: args.duration,
+        snackPosition: args.position,
         reverseAnimationCurve: Curves.elasticOut,
-        backgroundColor: args.color,
+        backgroundColor: args.backgroundColor,
         icon: args.icon,
-        colorText: AppColor.White,
+        colorText: args.textColor,
         borderRadius: 22,
+        isDismissible: args.isDismissible,
+        onTap: args.onTap,
+        dismissDirection: args.dismissDirection,
       );
     }
   }
@@ -569,7 +578,7 @@ class HomeBinding implements Bindings {
       Get.put(ShareController());
       Get.put<PersonalController>(PersonalController());
       Get.put<IntelController>(IntelController(), permanent: true);
-      Get.put<EditorController>(EditorController(), permanent: true);
+      Get.put<SettingsController>(SettingsController(), permanent: true);
       Get.create<TileController>(() => TileController());
       Get.create<MediaItemController>(() => MediaItemController());
     }

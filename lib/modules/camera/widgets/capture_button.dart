@@ -30,7 +30,7 @@ class CaptureButton extends StatelessWidget {
               () => CircleContainer(
                 child: Center(
                     child: SimpleIcons.Camera.gradient(
-                  value: AppGradients.Primary,
+                  value: DesignGradients.PhoenixStart,
                   size: 40,
                 )),
               ),

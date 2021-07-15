@@ -24,7 +24,7 @@ class ActivityController extends GetxController {
 
   @override
   void onReady() {
-    NodeService.instance.readMail();
+
     super.onReady();
   }
 

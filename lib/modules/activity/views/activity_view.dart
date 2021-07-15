@@ -6,7 +6,6 @@ class ActivityPopup extends GetView<ActivityController> {
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    NodeService.instance.readMail();
     return SonrScaffold(
       appBar: DetailAppBar(
         isClose: true,
@@ -57,6 +56,11 @@ class _ActivityHeader extends GetView<ActivityController> {
 class _PastActivityView extends GetView<ActivityController> {
   @override
   Widget build(BuildContext context) {
+    Future.delayed(5.seconds, () async {
+      if (await Permissions.Notifications.isNotGranted) {
+        AppPage.Error.to(args: ErrorPageArgs.permNotifications());
+      }
+    });
     return Container(
         padding: EdgeInsets.only(top: 24),
         child: Obx(

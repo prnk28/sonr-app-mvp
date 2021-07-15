@@ -38,7 +38,7 @@ extension BuildModeUtil on BuildMode {
 
     // Check for Debug Mode
     if (this.isDebug) {
-      return InitializeRequest_LogLevel.INFO;
+      return InitializeRequest_LogLevel.DEBUG;
     } else {
       return InitializeRequest_LogLevel.WARNING;
     }
@@ -49,27 +49,41 @@ extension BuildModeUtil on BuildMode {
 /// Class to Provide Snackbar Properties to AppRoute
 class SnackArgs {
   // Properties
-  final Color? color;
+  final Color? backgroundColor;
+  final Color? textColor;
   final String? title;
   final String message;
   final Widget icon;
-  final int duration;
+  final Duration? duration;
   final bool shouldIconPulse;
   final SnackPosition position;
+  final Gradient? backgroundGradient;
+  final SnackStyle? snackStyle;
+  final TextButton? mainButton;
   final AnimationController? progressIndicatorController;
   final Color? progressIndicatorBackgroundColor;
   final Animation<Color>? progressIndicatorValueColor;
+  final void Function(GetBar<Object>)? onTap;
+  final bool? isDismissible;
+  final SnackDismissDirection? dismissDirection;
 
   SnackArgs(
-      {this.title,
+      {required this.title,
       required this.message,
       required this.icon,
-      this.color,
+      this.backgroundColor,
+      this.textColor,
+      this.backgroundGradient,
+      this.snackStyle,
+      this.mainButton,
       required this.duration,
       required this.shouldIconPulse,
       required this.position,
       this.progressIndicatorController,
+      this.dismissDirection,
       this.progressIndicatorBackgroundColor,
+      this.onTap,
+      this.isDismissible,
       this.progressIndicatorValueColor});
 
   /// #### Custom Alert
@@ -80,7 +94,7 @@ class SnackArgs {
     Color color = Colors.orange,
     SnackPosition position = SnackPosition.BOTTOM,
   }) {
-    return SnackArgs(title: title, message: message, icon: icon, color: color, duration: 2600, shouldIconPulse: false, position: position);
+    return SnackArgs(title: title, message: message, icon: icon, backgroundColor: color, duration: 2600.milliseconds, shouldIconPulse: false, position: position);
   }
 
   /// #### Cancelled Operation
@@ -89,8 +103,8 @@ class SnackArgs {
         title: "Cancelled.",
         message: message,
         icon: SimpleIcons.Stop.white,
-        color: Colors.yellow,
-        duration: 2600,
+        backgroundColor: Colors.yellow,
+        duration: 2600.milliseconds,
         shouldIconPulse: false,
         position: position);
   }
@@ -107,8 +121,8 @@ class SnackArgs {
             title: "Failed",
             message: error.message,
             icon: Icon(Icons.sms_failed_outlined),
-            color: Colors.orange,
-            duration: 2600,
+            backgroundColor: Colors.orange,
+            duration: 2600.milliseconds,
             shouldIconPulse: false,
             position: SnackPosition.BOTTOM,
           );
@@ -120,8 +134,8 @@ class SnackArgs {
             title: "Error",
             message: error.message,
             icon: SimpleIcons.Caution.white,
-            color: Colors.red,
-            duration: 2600,
+            backgroundColor: Colors.red,
+            duration: 2600.milliseconds,
             shouldIconPulse: false,
             position: SnackPosition.BOTTOM,
           );
@@ -133,8 +147,8 @@ class SnackArgs {
             title: "Warning",
             message: error.message,
             icon: SimpleIcons.Caution.white,
-            color: Colors.yellow,
-            duration: 2600,
+            backgroundColor: Colors.yellow,
+            duration: 2600.milliseconds,
             shouldIconPulse: false,
             position: SnackPosition.BOTTOM,
           );
@@ -147,8 +161,8 @@ class SnackArgs {
         title: "Error",
         message: message,
         icon: SimpleIcons.Caution.white,
-        color: Colors.red,
-        duration: 2600,
+        backgroundColor: Colors.red,
+        duration: 2600.milliseconds,
         shouldIconPulse: false,
         position: SnackPosition.BOTTOM,
       );
@@ -161,10 +175,42 @@ class SnackArgs {
       title: "Uh Oh!",
       message: message,
       icon: SimpleIcons.Warning.white,
-      color: Colors.orange[900],
-      duration: 2600,
+      backgroundColor: Colors.orange[900],
+      duration: 2600.milliseconds,
       shouldIconPulse: false,
       position: position,
+    );
+  }
+
+  /// #### MailEvent Operation
+  factory SnackArgs.mail(
+    MailEvent mail,
+  ) {
+    final inv = mail.invite;
+    return SnackArgs(
+      title: "Remote Invite",
+      message: inv.payload.toString() + " File from ${mail.invite.from.profile.firstName}",
+      icon: SimpleIcons.Compass.white,
+      backgroundColor: AppTheme.AccentColor,
+      snackStyle: SnackStyle.GROUNDED,
+      duration: 5.seconds,
+      shouldIconPulse: true,
+      position: SnackPosition.TOP,
+      dismissDirection: SnackDismissDirection.HORIZONTAL,
+      isDismissible: true,
+      onTap: (_) {
+        HapticFeedback.heavyImpact();
+
+        // Place Controller
+        if (inv.payload == Payload.CONTACT) {
+          AppRoute.popup(ContactAuthView(false, invite: inv), dismissible: false);
+        } else {
+          AppRoute.sheet(InviteRequestSheet(invite: inv), key: ValueKey(inv), dismissible: true, onDismissed: (direction) {
+            NodeService.instance.respond(inv.newDeclineResponse());
+            AppRoute.close();
+          });
+        }
+      },
     );
   }
 
@@ -175,10 +221,30 @@ class SnackArgs {
       title: isLast ? "Almost There!" : ['Wait!', 'Hold Up!', "Uh Oh!"].random(),
       message: message,
       icon: SimpleIcons.Warning.white,
-      color: AppColor.Red,
-      duration: 2600,
+      backgroundColor: AppColor.Red,
+      duration: 2600.milliseconds,
       shouldIconPulse: false,
       position: position,
+    );
+  }
+
+  /// #### RemoteNotification Operation
+  factory SnackArgs.notification(
+    RemoteNotification notification,
+  ) {
+    return SnackArgs(
+      title: notification.title,
+      message: notification.body ?? "",
+      icon: SimpleIcons.Alerts.white,
+      backgroundColor: AppTheme.AccentColor,
+      duration: 4000.milliseconds,
+      shouldIconPulse: true,
+      position: SnackPosition.TOP,
+      dismissDirection: SnackDismissDirection.HORIZONTAL,
+      isDismissible: true,
+      onTap: (_) {
+        AppPage.Activity.to();
+      },
     );
   }
 
@@ -188,8 +254,8 @@ class SnackArgs {
       title: "Success!",
       message: message,
       icon: SimpleIcons.Success.white,
-      color: Colors.green,
-      duration: 2600,
+      backgroundColor: Colors.green,
+      duration: 2600.milliseconds,
       shouldIconPulse: true,
       position: position,
     );
@@ -280,7 +346,7 @@ class DetailPageArgs {
   String get title => this.type.toString().substring(this.type.toString().indexOf('.'));
 }
 
-enum ErrorPageType { EmptyContacts, EmptyFiles, EmptyLinks, EmptyMedia, PermLocation, PermMedia, NoNetwork }
+enum ErrorPageType { EmptyContacts, EmptyFiles, EmptyLinks, EmptyMedia, PermLocation, PermMedia, PermNotifications, NoNetwork }
 
 extension ErrorPageTypeUtils on ErrorPageType {
   bool get isEmpty => this.toString().contains("Empty");
@@ -298,6 +364,7 @@ class ErrorPageArgs {
   factory ErrorPageArgs.emptyMedia() => ErrorPageArgs(ErrorPageType.EmptyMedia);
   factory ErrorPageArgs.permLocation() => ErrorPageArgs(ErrorPageType.PermLocation);
   factory ErrorPageArgs.permMedia() => ErrorPageArgs(ErrorPageType.PermMedia);
+  factory ErrorPageArgs.permNotifications() => ErrorPageArgs(ErrorPageType.PermNotifications);
   factory ErrorPageArgs.noNetwork() => ErrorPageArgs(ErrorPageType.NoNetwork);
 
   Color get backgroundColor {
@@ -333,6 +400,8 @@ class ErrorPageArgs {
         return basePath + "LocationPerm.png";
       case ErrorPageType.PermMedia:
         return basePath + "MediaPerm.png";
+      case ErrorPageType.PermNotifications:
+        return basePath + "NotificationsPerm.png";
       case ErrorPageType.NoNetwork:
         return basePath + "ErrorNetwork.png";
       default:
@@ -366,6 +435,8 @@ class ErrorPageArgs {
       await Permissions.Location.request();
     } else if (type == ErrorPageType.PermMedia) {
       await Permissions.Gallery.request();
+    } else if (type == ErrorPageType.PermNotifications) {
+      await Permissions.Notifications.request();
     } else if (type == ErrorPageType.NoNetwork) {
       if (DeviceService.hasInternet) {
         AppRoute.close();

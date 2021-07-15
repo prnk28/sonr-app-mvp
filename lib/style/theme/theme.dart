@@ -19,6 +19,7 @@ class AppTheme {
 
     // Set Theme Mode
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
+    Get.changeTheme(isDark ? AppTheme.DarkTheme : AppTheme.LightTheme);
   }
 
   /// Returns Light Theme for App

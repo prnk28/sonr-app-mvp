@@ -2,11 +2,9 @@ import 'dart:async';
 import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intercom_flutter/intercom_flutter.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 const List<String> K_TEST_NAMES = ['sundarp', 'timc', 'pradn'];
 
@@ -24,6 +22,9 @@ class Logger extends GetxService {
 
   /// Wether User SName has been Migrated
   static ReadWriteValue<bool> get hasMigratedSName => to._hasMigratedSName;
+
+  /// Wether User has done a Transfer
+  static ReadWriteValue<bool> get hasMigratedKeyPair => to._hasMigratedKeyPair;
 
   /// Wether User has done a Transfer
   static ReadWriteValue<bool> get hasTransferred => to._hasTransferred;
@@ -44,6 +45,7 @@ class Logger extends GetxService {
   final _intercomUnreadCount = 0.obs;
   final _intercomOpened = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
   final _hasTransferred = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
+  final _hasMigratedKeyPair = false.val('userHasUpdatedKeyPair', getBox: () => GetStorage('Configuration'));
   final _hasMigratedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
 
   // References
@@ -96,7 +98,7 @@ class Logger extends GetxService {
   }
 
   /// #### Initializes Profile for Analytics
-  static Future<void> initProfile(Contact contact) async {
+  static Future<void> initProfile(Contact contact, String token) async {
     // Check for Test Device
     if (K_TEST_NAMES.any((n) => n.toLowerCase() == contact.sName)) {
       isTestDevice = true;
@@ -120,9 +122,9 @@ class Logger extends GetxService {
           "lastName": contact.lastName,
         },
       );
-      to._intercomEnabled(true);
 
-      // Set Migration Status
+      // Update Status's
+      to._intercomEnabled(true);
       to._hasMigratedSName.val = await NamebaseClient.hasSNameRecord();
     }
   }

@@ -8,6 +8,7 @@ enum RegisterPageType {
   Contact,
   Location,
   Gallery,
+  Notifications,
 }
 
 extension RegisterPageTypeUtils on RegisterPageType {
@@ -21,7 +22,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   bool get isSetup => this == RegisterPageType.Name || this == RegisterPageType.Backup || this == RegisterPageType.Contact;
 
   /// Checks to User Permissions View
-  bool get isPermissions => this == RegisterPageType.Location || this == RegisterPageType.Gallery;
+  bool get isPermissions => this == RegisterPageType.Location || this == RegisterPageType.Gallery || this == RegisterPageType.Notifications;
 
   /// Checks if Page is First in Grouped List
   bool get isFirst {
@@ -36,7 +37,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Checks if Page is First in Grouped List
   bool get isLast {
     if (this.isPermissions) {
-      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == 2;
+      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == 3;
     } else if (this.isSetup) {
       return RegisterPageTypeUtils.setupPageTypes.indexOf(this) + 1 == 3;
     }
@@ -70,6 +71,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   static List<RegisterPageType> get permissionsPageTypes => [
         RegisterPageType.Location,
         RegisterPageType.Gallery,
+        RegisterPageType.Notifications,
       ];
 
   /// Returns Left Button for Setup Page
@@ -111,7 +113,13 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Returns Image Path for Permissions
   String permissionsImagePath() {
     if (isPermissions) {
-      return this == RegisterPageType.Location ? "assets/images/illustrations/LocationPerm.png" : "assets/images/illustrations/MediaPerm.png";
+      if (this == RegisterPageType.Location) {
+        return "assets/images/illustrations/LocationPerm.png";
+      } else if (this == RegisterPageType.Gallery) {
+        return "assets/images/illustrations/MediaPerm.png";
+      } else {
+        return "assets/images/illustrations/NotificationsPerm.png";
+      }
     } else {
       return "";
     }

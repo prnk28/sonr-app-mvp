@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Need BLE permission</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Need BLE permission</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -54,6 +50,10 @@
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>No Clue Ignore</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Need BLE permission</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Need BLE permission</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>No Clue Ignore</string>
 	<key>NSCameraUsageDescription</key>
@@ -80,6 +80,11 @@
 	<string>Sound Detection</string>
 	<key>SentryDSN</key>
 	<string>https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

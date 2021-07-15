@@ -71,6 +71,7 @@ update:
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && git submodule update --remote plugin
 	cd $(PROJECT_DIR) && flutter pub upgrade
+	cd $(PROJECT_DIR) && flutter pub get
 
 ## [clean]       :   Cleans App Build Cache
 clean:

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/style/style.dart';
@@ -14,6 +15,7 @@ class DeviceService extends GetxService {
   static bool get hasInternet => to._connectivity.value.hasInternet;
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
+  static String pushKeyPath = "";
 
   // Fetch Platform for Device
   static Platform get platform {
@@ -51,7 +53,7 @@ class DeviceService extends GetxService {
   // ^ Initialization ^ //
   DeviceService() {
     Timer.periodic(250.milliseconds, (timer) {
-      // Check if Stream has closed 
+      // Check if Stream has closed
       if (isClosed) {
         timer.cancel();
       }
@@ -77,7 +79,11 @@ class DeviceService extends GetxService {
       if (_connectivity.value.hasInternet) {
         // Initialize Firebase
         await Firebase.initializeApp();
+        FirebaseMessaging.onMessage.listen(_handleForegroundPush);
       }
+
+      // Set Push Key Path
+      pushKeyPath = await _getPushKeyPath();
     }
 
     // @ Setup Desktop
@@ -177,7 +183,7 @@ class DeviceService extends GetxService {
   }
 
 // * ------------------- Helpers ----------------------------
-  // # Returns Icon Path
+  /// ### Find Icon Path for Systray
   Future<String> _getIconPath() async {
     // Set Temporary Directory
     Directory directory = await getApplicationDocumentsDirectory();
@@ -200,5 +206,31 @@ class DeviceService extends GetxService {
 
     // Return Path
     return file.path;
+  }
+
+  /// ### Find Path for Push Key Service JSON
+  Future<String> _getPushKeyPath() async {
+    // Set Temporary Directory
+    final name = "push_key.json";
+    Directory directory = await getApplicationDocumentsDirectory();
+
+    // Load into DB
+    var dbPath = join(directory.path, name);
+    ByteData data = await rootBundle.load("assets/data/$name");
+
+    // Write File
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var file = await File(dbPath).writeAsBytes(bytes);
+
+    // Return Path
+    return file.path;
+  }
+
+  /// ### Handle a Foreground Push Notification
+  void _handleForegroundPush(RemoteMessage message) {
+    Logger.info('Got a message whilst in the foreground!');
+    if (message.notification != null) {
+      AppRoute.snack(SnackArgs.notification(message.notification!));
+    }
   }
 }

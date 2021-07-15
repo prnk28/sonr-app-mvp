@@ -39,7 +39,9 @@ extension IntroPanelTypeUtils on IntroPageType {
   /// Return Page Decoration for Type
   PageDecoration get pageDecoration {
     return PageDecoration(
-      titlePadding: EdgeInsets.only(top: 64.0, bottom: 24.0),
+      imageAlignment: Alignment.topCenter,
+      bodyAlignment: Alignment.bottomCenter,
+      titlePadding: EdgeInsets.only(top: isFirst? 128 : 64.0),
     );
   }
 
@@ -97,14 +99,17 @@ extension IntroPanelTypeUtils on IntroPageType {
         delay: 50.milliseconds,
         duration: 300.milliseconds,
       ),
-      bodyWidget: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: SlideInUp(
-          animate: this.isFirst,
+      bodyWidget: SlideInUp(
+        animate: this.isFirst,
+        child: Container(
+          padding: EdgeInsets.only(top: 8.0),
           child: this.description(),
-          duration: 300.milliseconds,
-          delay: 250.milliseconds,
+          margin: EdgeInsets.only(left: 8, bottom: 64),
+          height: Height.ratio(0.3),
+          alignment: Alignment.topLeft,
         ),
+        duration: 300.milliseconds,
+        delay: 250.milliseconds,
       ),
       image: Center(
           child: FadeIn(
@@ -112,7 +117,7 @@ extension IntroPanelTypeUtils on IntroPageType {
         child: Container(
           margin: EdgeInsets.only(top: 72),
           decoration: this.imageDecoration,
-          child: Image.asset(this.imagePath, height: 200.0, fit: BoxFit.fitHeight),
+          child: Image.asset(this.imagePath, height: 200.0, fit: BoxFit.fitWidth),
           padding: EdgeInsets.all(42),
         ),
       )),
@@ -149,11 +154,11 @@ extension IntroPanelTypeUtils on IntroPageType {
           )
         ].rich();
       case IntroPageType.Universal:
-        return ['Runs Natively on iOS, Android, MacOS, Windows and Linux.'.lightSpan(fontSize: size, color: color)].rich();
+        return 'Runs Natively on iOS, Android, MacOS, Windows and Linux.'.light(fontSize: size, color: color);
       case IntroPageType.Secure:
-        return ['Completely Encrypted Communication. All data is verified and signed.'.lightSpan(fontSize: size, color: color)].rich();
+        return 'Completely Encrypted Communication. All data is verified and signed.'.light(fontSize: size, color: color);
       case IntroPageType.Start:
-        return ['Lets Continue by selecting your Sonr Name.'.lightSpan(fontSize: size, color: color)].rich();
+        return 'Lets Continue by selecting your Sonr Name.'.light(fontSize: size, color: color);
     }
   }
 }

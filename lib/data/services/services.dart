@@ -14,6 +14,13 @@ export 'user/device.dart';
 export 'user/contact.dart';
 export 'user/preference.dart';
 
+// Packages
+export 'package:firebase_analytics/firebase_analytics.dart';
+export 'package:firebase_core/firebase_core.dart';
+export 'package:firebase_messaging/firebase_messaging.dart';
+export 'package:intercom_flutter/intercom_flutter.dart';
+export 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 // Imports
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
@@ -23,7 +30,8 @@ import 'package:sonr_app/data/data.dart';
 /// Initialize and Check Services
 class AppServices {
   /// #### Application Services
-  static Future<void> init({bool isDesktop = false}) async {
+  static Future<void> init() async {
+    // Initialize Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);
@@ -58,5 +66,6 @@ class AppServices {
         rapidApiKey: Env.rapid_key,
         textileKey: Env.hub_key,
         textileSecret: Env.hub_secret,
+        pushKeyPath: DeviceService.pushKeyPath,
       );
 }

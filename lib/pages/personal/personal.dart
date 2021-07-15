@@ -3,16 +3,15 @@ export 'personal.dart';
 export 'models/options.dart';
 export 'models/status.dart';
 export 'models/contact_utils.dart';
-export 'controllers/editor_controller.dart';
 export 'controllers/personal_controller.dart';
 export 'controllers/tile_controller.dart';
 
 import 'package:sonr_app/pages/personal/views/social_search.dart';
 import 'package:sonr_app/pages/personal/widgets/tile_item.dart';
+import 'package:sonr_app/pages/settings/general/avatar_field.dart';
 import 'package:sonr_app/style/style.dart';
 import 'models/contact_utils.dart';
 import 'models/status.dart';
-import 'views/editor/general/fields.dart';
 import 'package:sonr_app/pages/personal/controllers/personal_controller.dart';
 
 class PersonalView extends GetView<PersonalController> {

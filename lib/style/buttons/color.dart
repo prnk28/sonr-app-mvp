@@ -38,6 +38,7 @@ class ColorButton extends StatelessWidget {
     EdgeInsets? padding,
     EdgeInsets? margin,
     IconData? icon,
+    double? gradientRadius,
     String? text,
     double? width,
     WidgetPosition iconPosition = WidgetPosition.Left,
@@ -45,7 +46,9 @@ class ColorButton extends StatelessWidget {
     // Build Child
     return ColorButton(
         decoration: BoxDecoration(
-            gradient: AppGradients.Primary, borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS), boxShadow: AppTheme.RectBoxShadow),
+            gradient: AppGradients.Primary(radius: gradientRadius ?? 2.5),
+            borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+            boxShadow: AppTheme.RectBoxShadow),
         onPressed: onPressed,
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,

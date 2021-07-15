@@ -74,6 +74,9 @@ extension PermissionsUtil on Permissions {
     }
   }
 
+  /// If the user has NOT granted this permission.
+  Future<bool> get isNotGranted async => !await this.isGranted;
+
   // Permissions Connection Requirements for Sonr Node
   static Future<bool> get isReadyToConnect async {
     final hasUser = ContactService.status.value.hasUser;
@@ -93,7 +96,7 @@ extension PermissionsUtil on Permissions {
   ///
   /// Returns the new [PermissionStatus].
   Future<bool> request() async {
-    if (DeviceService.isMobile) {
+    if (DeviceService.isMobile && await isNotGranted) {
       switch (this) {
         case Permissions.Camera:
           return await Permission.camera.request().isGranted;
