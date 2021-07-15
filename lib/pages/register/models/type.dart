@@ -8,6 +8,7 @@ enum RegisterPageType {
   Contact,
   Location,
   Gallery,
+  Notifications,
 }
 
 extension RegisterPageTypeUtils on RegisterPageType {
@@ -36,7 +37,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Checks if Page is First in Grouped List
   bool get isLast {
     if (this.isPermissions) {
-      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == 2;
+      return RegisterPageTypeUtils.permissionsPageTypes.indexOf(this) + 1 == 3;
     } else if (this.isSetup) {
       return RegisterPageTypeUtils.setupPageTypes.indexOf(this) + 1 == 3;
     }
@@ -70,6 +71,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   static List<RegisterPageType> get permissionsPageTypes => [
         RegisterPageType.Location,
         RegisterPageType.Gallery,
+        RegisterPageType.Notifications,
       ];
 
   /// Returns Left Button for Setup Page
@@ -102,7 +104,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
 
   /// Returns Button Text Color for Permissions
   Color permissionsButtonColor() {
-    if (this.indexGroup == 0) {
+    if (this.indexGroup == 0 || this.indexGroup == 2) {
       return AppColor.Black;
     }
     return AppColor.White;
@@ -111,7 +113,13 @@ extension RegisterPageTypeUtils on RegisterPageType {
   /// Returns Image Path for Permissions
   String permissionsImagePath() {
     if (isPermissions) {
-      return this == RegisterPageType.Location ? "assets/images/illustrations/LocationPerm.png" : "assets/images/illustrations/MediaPerm.png";
+      if (this == RegisterPageType.Location) {
+        return "assets/images/illustrations/LocationPerm.png";
+      } else if (this == RegisterPageType.Gallery) {
+        return "assets/images/illustrations/MediaPerm.png";
+      } else {
+        return "assets/images/illustrations/NotificationsPerm.png";
+      }
     } else {
       return "";
     }

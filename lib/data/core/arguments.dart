@@ -280,7 +280,7 @@ class DetailPageArgs {
   String get title => this.type.toString().substring(this.type.toString().indexOf('.'));
 }
 
-enum ErrorPageType { EmptyContacts, EmptyFiles, EmptyLinks, EmptyMedia, PermLocation, PermMedia, NoNetwork }
+enum ErrorPageType { EmptyContacts, EmptyFiles, EmptyLinks, EmptyMedia, PermLocation, PermMedia, PermNotifications, NoNetwork }
 
 extension ErrorPageTypeUtils on ErrorPageType {
   bool get isEmpty => this.toString().contains("Empty");
@@ -298,6 +298,7 @@ class ErrorPageArgs {
   factory ErrorPageArgs.emptyMedia() => ErrorPageArgs(ErrorPageType.EmptyMedia);
   factory ErrorPageArgs.permLocation() => ErrorPageArgs(ErrorPageType.PermLocation);
   factory ErrorPageArgs.permMedia() => ErrorPageArgs(ErrorPageType.PermMedia);
+  factory ErrorPageArgs.permNotifications() => ErrorPageArgs(ErrorPageType.PermNotifications);
   factory ErrorPageArgs.noNetwork() => ErrorPageArgs(ErrorPageType.NoNetwork);
 
   Color get backgroundColor {
@@ -333,6 +334,8 @@ class ErrorPageArgs {
         return basePath + "LocationPerm.png";
       case ErrorPageType.PermMedia:
         return basePath + "MediaPerm.png";
+      case ErrorPageType.PermNotifications:
+        return basePath + "NotificationsPerm.png";
       case ErrorPageType.NoNetwork:
         return basePath + "ErrorNetwork.png";
       default:
@@ -366,6 +369,8 @@ class ErrorPageArgs {
       await Permissions.Location.request();
     } else if (type == ErrorPageType.PermMedia) {
       await Permissions.Gallery.request();
+    } else if (type == ErrorPageType.PermNotifications) {
+      await Permissions.Notifications.request();
     } else if (type == ErrorPageType.NoNetwork) {
       if (DeviceService.hasInternet) {
         AppRoute.close();

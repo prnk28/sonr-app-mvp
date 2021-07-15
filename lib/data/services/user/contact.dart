@@ -37,7 +37,7 @@ class ContactService extends GetxService {
       // Fetch Push Messaging Token
       _pushToken(await FirebaseMessaging.instance.getToken());
       _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
-      Logger.info("Push Token: " + _pushToken.value);
+      print("Push Token: " + _pushToken.value);
     }
 
     // Check if Exists

@@ -25,6 +25,11 @@ class PermissionsView extends GetView<RegisterController> {
               else if (item == RegisterPageType.Gallery) {
                 final result = await Permissions.Gallery.request();
                 if (result) {
+                  controller.nextPage(RegisterPageType.Notifications);
+                }
+              } else if (item == RegisterPageType.Notifications) {
+                final result = await Permissions.Notifications.request();
+                if (result) {
                   AppPage.Home.off(args: HomeArguments.FirstLoad);
                 }
               }

@@ -59,6 +59,6 @@ class AppServices {
         rapidApiKey: Env.rapid_key,
         textileKey: Env.hub_key,
         textileSecret: Env.hub_secret,
-        pushRegistrationKey: DeviceService.pushKeyPath,
+        pushKeyPath: DeviceService.pushKeyPath,
       );
 }
