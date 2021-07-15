@@ -61,7 +61,7 @@ class RegisterSetupTitleBar extends StatelessWidget implements PreferredSizeWidg
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               instruction != null ? instruction!.light(fontSize: 42) : Container(),
-              isGradient ? title.gradient(value: AppGradients.Primary, size: 48) : title.heading(fontSize: 42),
+              isGradient ? title.gradient(value: AppGradients.Primary(), size: 48) : title.heading(fontSize: 42),
             ],
           ),
         ),

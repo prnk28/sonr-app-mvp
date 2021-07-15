@@ -432,7 +432,7 @@ extension DesignIcon on IconData {
     return ShaderMask(
       blendMode: BlendMode.modulate,
       shaderCallback: (bounds) {
-        var grad = value ?? AppGradients.Primary;
+        var grad = value ?? AppGradients.Primary();
         return grad.createShader(bounds);
       },
       child: Icon(

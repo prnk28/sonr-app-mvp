@@ -7,27 +7,21 @@ class RequestBuilder {
   // Request References
   static Device get device => DeviceService.device;
   static Contact get contact => ContactService.contact.value;
-  static ConnectionRequest_InternetType get internetType => DeviceService.connectivity.value.toInternetType();
-  static ConnectionRequest_UserStatus get userStatus => ContactService.status.value.toConnectionStatus();
-
-  /// Define Connection Request Options
-  static ConnectionRequest_HostOptions get _hostOpts => ConnectionRequest_HostOptions(mdnsDiscovery: true);
-  static ConnectionRequest_ServiceOptions get _serviceOpts => ConnectionRequest_ServiceOptions(
-        textile: true,
-        mailbox: DeviceService.isIOS,
-        push: true,
-        threadDB: Env.thread_db,
-      );
 
   /// Returns New Connection Request
   static Future<ConnectionRequest> get connection async => ConnectionRequest(
         apiKeys: AppServices.apiKeys,
         location: await DeviceService.location,
         contact: ContactService.contact.value,
-        type: internetType,
-        status: userStatus,
-        serviceOptions: _serviceOpts,
-        hostOptions: _hostOpts,
+        type: DeviceService.connectivity.value.toInternetType(),
+        status: ContactService.status.value.toConnectionStatus(),
+        serviceOptions: ConnectionRequest_ServiceOptions(
+          textile: true,
+          push: true,
+          mailbox: DeviceService.isIOS,
+          threadDB: Env.thread_db,
+        ),
+        hostOptions: ConnectionRequest_HostOptions(mdnsDiscovery: true),
         pushToken: DeviceService.isMobile ? ContactService.pushToken.value : "",
       );
 

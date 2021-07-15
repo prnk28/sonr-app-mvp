@@ -22,7 +22,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
   bool get isSetup => this == RegisterPageType.Name || this == RegisterPageType.Backup || this == RegisterPageType.Contact;
 
   /// Checks to User Permissions View
-  bool get isPermissions => this == RegisterPageType.Location || this == RegisterPageType.Gallery;
+  bool get isPermissions => this == RegisterPageType.Location || this == RegisterPageType.Gallery || this == RegisterPageType.Notifications;
 
   /// Checks if Page is First in Grouped List
   bool get isFirst {
@@ -104,7 +104,7 @@ extension RegisterPageTypeUtils on RegisterPageType {
 
   /// Returns Button Text Color for Permissions
   Color permissionsButtonColor() {
-    if (this.indexGroup == 0 || this.indexGroup == 2) {
+    if (this.indexGroup == 0) {
       return AppColor.Black;
     }
     return AppColor.White;

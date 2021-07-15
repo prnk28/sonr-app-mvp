@@ -100,6 +100,37 @@ class AppGradientColor {
       return Tuple(AppColor.ForegroundLight, 1);
     }
   }
+
+  /// ### Light Mode Primary Gradient
+  /// **CSS Reference**
+  /// ``` css
+  /// background: radial-gradient(87.68% 87.68% at 95.36% 14.36%, #FFD840 0%, #F3ACFF 55.86%, #8AECFF 100%);
+  /// ```
+  ///
+  /// **Setup**
+  /// - `#FFD840` -> 0%
+  /// - `#F3ACFF` -> 55.86%
+  /// - `#8AECFF` -> 100%
+  static Tuple<List<Color>, List<double>> get lightColors => Tuple([
+        Color(0xffFFD840),
+        Color(0xffF3ACFF),
+        Color(0xff8AECFF),
+      ], [
+        0,
+        0.625,
+        1
+      ]);
+
+  /// ### Light Mode Center Alignment
+  ///   /// **CSS Reference**
+  /// ``` css
+  /// background: radial-gradient(87.68% 87.68% at 95.36% 14.36%, #FFD840 0%, #F3ACFF 55.86%, #8AECFF 100%);
+  /// ```
+  ///
+  /// **Setup**
+  /// - Focal Point 87.68%, 87.68%
+  /// - Center Point 95.36%, 14.36%
+  static Tuple<Alignment, Alignment> get lightAlignment => Tuple(Alignment(0.8768, 0.8768), Alignment(0.9536, 0.1436));
 }
 
 class NoSplashFactory extends InteractiveInkFeatureFactory {

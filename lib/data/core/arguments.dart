@@ -38,7 +38,7 @@ extension BuildModeUtil on BuildMode {
 
     // Check for Debug Mode
     if (this.isDebug) {
-      return InitializeRequest_LogLevel.INFO;
+      return InitializeRequest_LogLevel.DEBUG;
     } else {
       return InitializeRequest_LogLevel.WARNING;
     }

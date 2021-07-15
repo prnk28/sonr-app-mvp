@@ -3,13 +3,21 @@ import 'package:sonr_app/style/style.dart';
 import 'package:flutter/material.dart';
 
 class AppGradients {
-  static Gradient get Primary => CGUtility.angledFrom(
-        angle: AppGradientColor.K_PRIMARY_ANGLE,
-        values: [
-          AppGradientColor.primaryStart(Get.isDarkMode),
-          AppGradientColor.primaryEnd(Get.isDarkMode),
-        ],
-      );
+  static Gradient Primary({double radius = 1.0}) => Get.isDarkMode
+      ? CGUtility.angledFrom(
+          angle: AppGradientColor.K_PRIMARY_ANGLE,
+          values: [
+            AppGradientColor.primaryStart(Get.isDarkMode),
+            AppGradientColor.primaryEnd(Get.isDarkMode),
+          ],
+        )
+      : RadialGradient(
+          radius: radius,
+          colors: AppGradientColor.lightColors.item1,
+          center: AppGradientColor.lightAlignment.item1,
+          focal: AppGradientColor.lightAlignment.item2,
+          stops: AppGradientColor.lightColors.item2,
+        );
 
   static Gradient get Foreground => CGUtility.angledFrom(
         angle: AppGradientColor.K_FOREGROUND_ANGLE,

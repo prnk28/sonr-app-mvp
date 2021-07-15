@@ -42,7 +42,7 @@ class GradientTabs extends StatelessWidget {
                     )),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    gradient: currentIndex.value == index ? AppGradients.Primary : null,
+                    gradient: currentIndex.value == index ? AppGradients.Primary() : null,
                     color: currentIndex.value == index ? null : Colors.transparent),
                 duration: 150.milliseconds,
               ),
