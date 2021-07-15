@@ -1,6 +1,5 @@
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/style/buttons/utility.dart';
 import '../register.dart';
 import '../register_controller.dart';
 
@@ -30,7 +29,7 @@ class StartView extends GetView<RegisterController> {
                 ),
                 child: Icon(
                   SimpleIcons.Forward,
-                  color: AppTheme.ItemColor,
+                  color: AppTheme.ItemColorInversed,
                   size: 24,
                 ),
               ),
@@ -44,24 +43,15 @@ class StartView extends GetView<RegisterController> {
 
   Widget _buildSkipButton(int i) {
     if (i + 1 == IntroPageType.values.length) {
-      return ColorButton(
-        decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-            border: Border.all(width: 2, color: Color(0xffE7E7E7))),
+      return ColorButton.neutral(
         onPressed: () {
           Get.find<RegisterController>().nextPage(RegisterPageType.Name);
         },
-        pressedScale: 1.1,
-        child: "Continue".heading(
-          fontSize: 20,
-          color: AppColor.Black,
-        ),
+        text: 'Continue',
       );
     } else {
       return Container(
         child: "Skip".light(fontSize: 24, align: TextAlign.justify),
-
         height: 40,
       );
     }
@@ -87,7 +77,7 @@ class StartView extends GetView<RegisterController> {
               onPressed: () {
                 Get.find<RegisterController>().nextPage(RegisterPageType.Name);
               },
-              text: "Sign Up",
+              text: "Start",
             )
           ],
         ),

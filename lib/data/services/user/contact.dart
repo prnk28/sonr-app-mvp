@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style/style.dart';
@@ -12,10 +13,12 @@ class ContactService extends GetxService {
   // User Status Properties
   final _contact = Contact().obs;
   final _status = UserStatus.Default.obs;
+  final _pushToken = "".obs;
 
   // User Reactive Properties
   static Rx<UserStatus> get status => to._status;
   static Rx<Contact> get contact => to._contact;
+  static RxString get pushToken => to._pushToken;
   static String get sName => to._status.value.hasUser ? to._contact.value.sName.toLowerCase() : "";
   static int get registeredTime => to._registeredTime.val;
 
@@ -25,8 +28,17 @@ class ContactService extends GetxService {
 
   // ^ Constructer ^ //
   Future<ContactService> init() async {
+    // Fetch User
     await GetStorage.init('User');
     _status(UserStatusUtils.fromBox(_userBox.hasData("contact")));
+
+    // Fetch Firebase Token
+    if (DeviceService.isMobile) {
+      // Fetch Push Messaging Token
+      _pushToken(await FirebaseMessaging.instance.getToken());
+      _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
+      Logger.info("Push Token: " + _pushToken.value);
+    }
 
     // Check if Exists
     if (_status.value.hasUser) {
@@ -66,6 +78,9 @@ class ContactService extends GetxService {
     // Clean Data
     newContact.profile.firstName.capitalizeFirst;
     newContact.profile.lastName.capitalizeFirst;
+
+    // Set User Properties
+    Logger.initProfile(newContact);
 
     // Set Contact for User
     to._contact(newContact);

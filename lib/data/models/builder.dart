@@ -29,6 +29,7 @@ class RequestBuilder {
         textileOptions: _textileOpts,
         hostOptions: _hostOpts,
         pubsubOptions: _pubsubOpts,
+        pushToken: DeviceService.isMobile ? ContactService.pushToken.value : "",
       );
 
   /// Returns New Initialize Request

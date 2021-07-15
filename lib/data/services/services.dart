@@ -23,7 +23,8 @@ import 'package:sonr_app/data/data.dart';
 /// Initialize and Check Services
 class AppServices {
   /// #### Application Services
-  static Future<void> init({bool isDesktop = false}) async {
+  static Future<void> init() async {
+    // Initialize Services
     await Get.putAsync(() => DeviceService().init(), permanent: true);
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);
@@ -58,5 +59,6 @@ class AppServices {
         rapidApiKey: Env.rapid_key,
         textileKey: Env.hub_key,
         textileSecret: Env.hub_secret,
+        pushRegistrationKey: DeviceService.pushKeyPath,
       );
 }

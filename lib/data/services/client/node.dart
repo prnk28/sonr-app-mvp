@@ -23,10 +23,15 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // References
   late Node _instance;
   late StreamSubscription<ConnectivityResult> _connectionStream;
-  late StreamSubscription<TopicEvent> _topicEventStream;
-  late StreamSubscription<ProgressEvent> _progressEventStream;
-  late StreamSubscription<StatusEvent> _statusEventStream;
-  late StreamSubscription<MailEvent> _mailEventStream;
+  late TopicSubscription _topicEventStream;
+  late ProgressSubscription _progressEventStream;
+  late StatusSubscription _statusEventStream;
+  late MailSubscription _mailEventStream;
+  late InviteSubscription _inviteEventStream;
+  late ReplySubscription _replyEventStream;
+  late TransmittedSubscription _transmittedEventStream;
+  late ReceivedSubscription _receivedEventStream;
+  late ErrorSubscription _errorEventStream;
 
   // ^ Constructer ^ //
   Future<NodeService> init() async {
@@ -39,14 +44,14 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Set Callbacks
     _instance.onConnected = _handleConnected;
-    _instance.onError = _handleError;
-    _instance.onInvite = ReceiverService.to.handleInvite;
-    _instance.onReply = SenderService.to.handleReply;
-    _instance.onReceived = ReceiverService.to.handleReceived;
-    _instance.onTransmitted = SenderService.to.handleTransmitted;
 
     // Set Stream Handlers
-    _topicEventStream = _instance.onEvent(LobbyService.to.handleEvent);
+    _inviteEventStream = _instance.onInvite(ReceiverService.to.handleInvite);
+    _replyEventStream = _instance.onReply(SenderService.to.handleReply);
+    _transmittedEventStream = _instance.onTransmitted(SenderService.to.handleTransmitted);
+    _receivedEventStream = _instance.onReceived(ReceiverService.to.handleReceived);
+    _errorEventStream = _instance.onError(_handleError);
+    _topicEventStream = _instance.onTopic(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
     _statusEventStream = _instance.onStatus(_handleStatus);
     _mailEventStream = _instance.onMail(_handleMail);
@@ -60,6 +65,11 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _mailEventStream.cancel();
     _progressEventStream.cancel();
     _statusEventStream.cancel();
+    _inviteEventStream.cancel();
+    _replyEventStream.cancel();
+    _transmittedEventStream.cancel();
+    _receivedEventStream.cancel();
+    _errorEventStream.cancel();
     super.onClose();
   }
 

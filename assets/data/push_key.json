@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "trans-density-315704",
+  "private_key_id": "92ca71a02cb4d20527d3bcf3cb1b807277cac51a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDf5MkNI5qWAziK\n+Yxz4DytGc7IqQzk03iEbjf5UYAy85muGANIS0RktmJzqyrVY8129czcDOTsw1N0\noAXf+aUD1JcDo0//Co8rexLAuRCFm+MtEO3O6HwqfJwX4i738gnQvivNWi4WjtfX\nfT1vQsBsaOveTKfO/SYisVwGfPrObN+QzroZFMa5gQmFm0qnuCVSgvv7tORBSNvH\nvkdEdusMFEoYOdqRAihbGO5ZRTiarJNTzgewV1xPZ/RohcW9+6MwLM06NXo68iC+\nYyrKm0WsMs7gHkSOn3hNOr79BU+B4sRoh1WsJRAWSMiaJ0SzbM6B31houA/Ujuyi\nMyilZP4zAgMBAAECggEAS5iECdurplsQDFyV/8oGsqu0Fix+HgUI/C362EOcdZeq\nnA2fjhlbzmWGeGei3soD5da4hNQVt5t74jTlxuoTvWdaVfAeYo6+KIA1pLzXx0UL\nP3wnz2TQB8hrK+VC1pTym3iacYuxZAx29FtlEtwG/JOwkC5xuoHfDne0CrzIMkoO\nwfiVRJxdIVTfMUc0f0HjtQeRfHfhG7DajnQ3FqOr0hWghE7eiKHWJNQgGz+R5Hkl\nzqSpQtKxFKA+xiO5L5WBwjPR5zqhXhA+pDsqrlGJvvTCB0IgClTFxQdo81sZKUex\n9324lDMQmHMzgBh7lqRjwJXERSlbBFtmrTZHuqp4gQKBgQDy/M7HFf3vsDDSdv0y\n/5AHTdglO2rOIg5SYpTqyJMtkSAFpHpuXHSae4z2BuPQyoeOx39ZshS4kH3HPokB\nqrWJyZe3uOnHyCN7raT6SfgtGoDoCEyBlouwaW5AMBXa7rlXvkr7rTuN7DVsPuX8\nOL1ouOltZJXVPDk/+AGbrQ/rtQKBgQDr4jbXdsLIQTEchBXJ1otMlai6MsLNhQN9\nAEsr3GPN41YoYukJ0+yG8n5md2e7bwWduYlzmT1pWmMyFoXAVb3Ytb4hOVR7jo3l\nbht+sS2lbZ3mJhIX+SHY/b8Bi4voxSFVuK1zJdWlkj7oQfEuwoGOc1UBePZbYpR7\ngyvwuwmDRwKBgQCSpQAmJp+aiDruyeEFZjcGMXTBA5rxzJvYHKbDC0nHtk4dGabJ\n9AJrOSVZVc8nsxMcmEnDWDYpLQq7tIH6/4uQHJnzxyVP7Pl9Ks7mPr4IenZRkrCZ\nhMHJNdfT5TFLb8drrOyT93h5rpSPP2aNUbD+Aprd6laC2lWyxXoy+b8iAQKBgEGN\nk1obuhP28hQPrRJzmjDFYqekVbjR319MxpdA30enhxkgK808ZP43w+LsChrvxqrH\nlihXDNcLdIfF9JO4AFOKZnVLPmw7+Lkq+V8jFCFmLjx4lgytgreQBRYD1vTwW8w7\nz5Axkoc59luLf+BT07dn29bV6/kHk2Yj1QFIqWMfAoGBAIvAaW36LbL1/n7urJh+\n24SW+sUbwWjAC5YS03Wzmigex+gUWMeE9FAiV3eaYDN+KfKryEV4nxxuedn6rK0t\nPQU4eECCOafWUQl4Q4w2+4ozSDkv9wjLP6owpck6c5DpRhV11R1zRrciYnJeViTB\nAfJ3g3oAs3r9xGJVGlk/dIXV\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-ohrws@trans-density-315704.iam.gserviceaccount.com",
+  "client_id": "107494270303247963559",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ohrws%40trans-density-315704.iam.gserviceaccount.com"
+}

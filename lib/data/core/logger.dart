@@ -108,6 +108,7 @@ class Logger extends GetxService {
       FirebaseAnalytics().setUserProperty(name: "firstName", value: contact.firstName);
       FirebaseAnalytics().setUserProperty(name: "lastName", value: contact.lastName);
 
+
       // Set Intercom User Properties
       Intercom.registerIdentifiedUser(userId: contact.sName);
       Intercom.updateUser(

@@ -1,12 +1,28 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
+
+Future<void> _handleBackgroundPush(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
 
 /// #### Main Method
 Future<void> main() async {
   // Init Services
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Register Handler for Background Push
+  if (PlatformUtils.find().isMobile) {
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundPush);
+  }
+
+  // Services
   await AppServices.init();
 
   // Check Platform
