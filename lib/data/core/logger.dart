@@ -24,6 +24,9 @@ class Logger extends GetxService {
   static ReadWriteValue<bool> get hasMigratedSName => to._hasMigratedSName;
 
   /// Wether User has done a Transfer
+  static ReadWriteValue<bool> get hasMigratedKeyPair => to._hasMigratedKeyPair;
+
+  /// Wether User has done a Transfer
   static ReadWriteValue<bool> get hasTransferred => to._hasTransferred;
 
   /// Wether User has Opened Intercom
@@ -42,6 +45,7 @@ class Logger extends GetxService {
   final _intercomUnreadCount = 0.obs;
   final _intercomOpened = false.val('hasOpenedIntercom', getBox: () => GetStorage('Configuration'));
   final _hasTransferred = false.val('hasHadTransfer', getBox: () => GetStorage('Configuration'));
+  final _hasMigratedKeyPair = false.val('userHasUpdatedKeyPair', getBox: () => GetStorage('Configuration'));
   final _hasMigratedSName = false.val('userHasUpdatedSName', getBox: () => GetStorage('Configuration'));
 
   // References
@@ -118,10 +122,9 @@ class Logger extends GetxService {
           "lastName": contact.lastName,
         },
       );
-      Intercom.sendTokenToIntercom(token);
-      to._intercomEnabled(true);
 
-      // Set Migration Status
+      // Update Status's
+      to._intercomEnabled(true);
       to._hasMigratedSName.val = await NamebaseClient.hasSNameRecord();
     }
   }

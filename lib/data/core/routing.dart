@@ -8,6 +8,7 @@ import 'package:sonr_app/pages/details/details.dart';
 import 'package:sonr_app/pages/home/home.dart';
 import 'package:sonr_app/pages/register/register.dart';
 import 'package:sonr_app/pages/settings/settings.dart';
+import 'package:sonr_app/pages/settings/settings_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
@@ -572,7 +573,7 @@ class HomeBinding implements Bindings {
       Get.put(ShareController());
       Get.put<PersonalController>(PersonalController());
       Get.put<IntelController>(IntelController(), permanent: true);
-      Get.put<EditorController>(EditorController(), permanent: true);
+      Get.put<SettingsController>(SettingsController(), permanent: true);
       Get.create<TileController>(() => TileController());
       Get.create<MediaItemController>(() => MediaItemController());
     }

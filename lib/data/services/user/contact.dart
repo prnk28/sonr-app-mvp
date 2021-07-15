@@ -28,12 +28,14 @@ class ContactService extends GetxService {
     await GetStorage.init('User');
     _status(UserStatusUtils.fromBox(_userBox.hasData("contact")));
 
-    // Fetch Firebase Token
+    // Check for Mobile Device
     if (DeviceService.isMobile) {
-      // Fetch Push Messaging Token
+      // Get Push Token
       _pushToken(await FirebaseMessaging.instance.getToken());
       _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
-      print("Push Token: " + _pushToken.value);
+
+      // Send Token to Intercom
+      await Intercom.sendTokenToIntercom(_pushToken.value);
     }
 
     // Check if Exists

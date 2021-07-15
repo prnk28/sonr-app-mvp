@@ -201,6 +201,12 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   Future<void> _handleSNameMigration() async {
+    // Update Keypair Migration
+    if (!Logger.hasMigratedKeyPair.val) {
+      Logger.hasMigratedKeyPair.val = true;
+    }
+
+    // Migrate SName
     if (!Logger.hasMigratedSName.val) {
       // Retreive Public Key
       final response = await instance.verify(API.newVerifyRead());

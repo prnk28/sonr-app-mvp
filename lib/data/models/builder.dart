@@ -30,6 +30,7 @@ class RequestBuilder {
         apiKeys: AppServices.apiKeys,
         device: DeviceService.device,
         logLevel: BuildModeUtil.logLevel(),
+        resetKeys: Logger.hasMigratedKeyPair.val,
       );
 
   /// Returns New Contact Update Request

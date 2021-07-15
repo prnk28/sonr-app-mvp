@@ -6,7 +6,7 @@ enum ContactOptions {
   Names,
   Phone,
   Addresses,
-  Gender,
+  //Gender,
   // Music
   // Social
   // Emails
@@ -23,8 +23,8 @@ extension ContactOptionUtils on ContactOptions {
         return SimpleIcons.Call;
       case ContactOptions.Addresses:
         return SimpleIcons.Location;
-      case ContactOptions.Gender:
-        return SimpleIcons.User;
+      // case ContactOptions.Gender:
+      //   return SimpleIcons.User;
     }
   }
 
@@ -40,8 +40,8 @@ extension ContactOptionUtils on ContactOptions {
         return EditorFieldStatus.FieldPhone;
       case ContactOptions.Addresses:
         return EditorFieldStatus.FieldAddresses;
-      case ContactOptions.Gender:
-        return EditorFieldStatus.FieldGender;
+      // case ContactOptions.Gender:
+      //   return EditorFieldStatus.FieldGender;
     }
   }
 }
