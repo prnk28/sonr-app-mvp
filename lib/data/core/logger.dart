@@ -2,11 +2,9 @@ import 'dart:async';
 import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intercom_flutter/intercom_flutter.dart';
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 const List<String> K_TEST_NAMES = ['sundarp', 'timc', 'pradn'];
 
@@ -96,7 +94,7 @@ class Logger extends GetxService {
   }
 
   /// #### Initializes Profile for Analytics
-  static Future<void> initProfile(Contact contact) async {
+  static Future<void> initProfile(Contact contact, String token) async {
     // Check for Test Device
     if (K_TEST_NAMES.any((n) => n.toLowerCase() == contact.sName)) {
       isTestDevice = true;
@@ -107,7 +105,6 @@ class Logger extends GetxService {
       // Set Firebase User Properties
       FirebaseAnalytics().setUserProperty(name: "firstName", value: contact.firstName);
       FirebaseAnalytics().setUserProperty(name: "lastName", value: contact.lastName);
-
 
       // Set Intercom User Properties
       Intercom.registerIdentifiedUser(userId: contact.sName);
@@ -121,6 +118,7 @@ class Logger extends GetxService {
           "lastName": contact.lastName,
         },
       );
+      Intercom.sendTokenToIntercom(token);
       to._intercomEnabled(true);
 
       // Set Migration Status

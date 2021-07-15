@@ -59,9 +59,12 @@ class SnackArgs {
   final AnimationController? progressIndicatorController;
   final Color? progressIndicatorBackgroundColor;
   final Animation<Color>? progressIndicatorValueColor;
+  final void Function(GetBar<Object>)? onTap;
+  final bool? isDismissible;
+  final SnackDismissDirection? dismissDirection;
 
   SnackArgs(
-      {this.title,
+      {required this.title,
       required this.message,
       required this.icon,
       this.color,
@@ -69,7 +72,10 @@ class SnackArgs {
       required this.shouldIconPulse,
       required this.position,
       this.progressIndicatorController,
+      this.dismissDirection,
       this.progressIndicatorBackgroundColor,
+      this.onTap,
+      this.isDismissible,
       this.progressIndicatorValueColor});
 
   /// #### Custom Alert
@@ -179,6 +185,26 @@ class SnackArgs {
       duration: 2600,
       shouldIconPulse: false,
       position: position,
+    );
+  }
+
+  /// #### RemoteNotification Operation
+  factory SnackArgs.notification(
+    RemoteNotification notification,
+  ) {
+    return SnackArgs(
+      title: notification.title,
+      message: notification.body ?? "",
+      icon: SimpleIcons.Alerts.white,
+      color: AppTheme.AccentColor,
+      duration: 4000,
+      shouldIconPulse: true,
+      position: SnackPosition.TOP,
+      dismissDirection: SnackDismissDirection.HORIZONTAL,
+      isDismissible: true,
+      onTap: (_) {
+        AppPage.Activity.to();
+      },
     );
   }
 

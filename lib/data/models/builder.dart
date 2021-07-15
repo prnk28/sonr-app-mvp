@@ -12,10 +12,10 @@ class RequestBuilder {
 
   /// Define Connection Request Options
   static ConnectionRequest_HostOptions get _hostOpts => ConnectionRequest_HostOptions(mdnsDiscovery: true);
-  static ConnectionRequest_PubsubOptions get _pubsubOpts => ConnectionRequest_PubsubOptions(relay: true);
-  static ConnectionRequest_TextileOptions get _textileOpts => ConnectionRequest_TextileOptions(
-        enabled: true,
+  static ConnectionRequest_ServiceOptions get _serviceOpts => ConnectionRequest_ServiceOptions(
+        textile: true,
         mailbox: DeviceService.isIOS,
+        push: true,
         threadDB: Env.thread_db,
       );
 
@@ -26,9 +26,8 @@ class RequestBuilder {
         contact: ContactService.contact.value,
         type: internetType,
         status: userStatus,
-        textileOptions: _textileOpts,
+        serviceOptions: _serviceOpts,
         hostOptions: _hostOpts,
-        pubsubOptions: _pubsubOpts,
         pushToken: DeviceService.isMobile ? ContactService.pushToken.value : "",
       );
 

@@ -538,6 +538,9 @@ extension AppRoute on AppPage {
         icon: args.icon,
         colorText: AppColor.White,
         borderRadius: 22,
+        isDismissible: args.isDismissible,
+        onTap: args.onTap,
+        dismissDirection: args.dismissDirection,
       );
     }
   }

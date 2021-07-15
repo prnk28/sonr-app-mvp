@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style/style.dart';
@@ -20,11 +19,8 @@ class ContactService extends GetxService {
   static Rx<Contact> get contact => to._contact;
   static RxString get pushToken => to._pushToken;
   static String get sName => to._status.value.hasUser ? to._contact.value.sName.toLowerCase() : "";
-  static int get registeredTime => to._registeredTime.val;
-
   // References
   final _userBox = GetStorage('User');
-  final _registeredTime = 0.val('registeredTime', getBox: () => GetStorage('User'));
 
   // ^ Constructer ^ //
   Future<ContactService> init() async {
@@ -52,7 +48,7 @@ class ContactService extends GetxService {
         contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
-        Logger.initProfile(contact);
+        Logger.initProfile(contact, _pushToken.value);
 
         // Set Contact Values
         _contact(contact);
@@ -80,7 +76,7 @@ class ContactService extends GetxService {
     newContact.profile.lastName.capitalizeFirst;
 
     // Set User Properties
-    Logger.initProfile(newContact);
+    Logger.initProfile(newContact, to._pushToken.value);
 
     // Set Contact for User
     to._contact(newContact);
@@ -88,7 +84,6 @@ class ContactService extends GetxService {
 
     // Save User/Contact to Disk
     await to._userBox.write("contact", newContact.writeToJson());
-    to._registeredTime.val = DateTime.now().millisecondsSinceEpoch;
     to._status(UserStatus.Existing);
   }
 
