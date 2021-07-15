@@ -177,7 +177,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// #### Handle Bootstrap Result
   void _handleMail(MailEvent data) {
     // Logging
-    Logger.info("Node(Callback) Status: " + data.toString());
+    AppRoute.snack(SnackArgs.mail(data));
   }
 
   /// #### An Error Has Occurred

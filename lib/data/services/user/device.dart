@@ -228,11 +228,9 @@ class DeviceService extends GetxService {
 
   /// ### Handle a Foreground Push Notification
   void _handleForegroundPush(RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
+    Logger.info('Got a message whilst in the foreground!');
     if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
+      AppRoute.snack(SnackArgs.notification(message.notification!));
     }
   }
 }

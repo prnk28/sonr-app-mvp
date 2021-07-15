@@ -6,7 +6,6 @@ class ActivityPopup extends GetView<ActivityController> {
   ActivityPopup({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    NodeService.instance.readMail();
     return SonrScaffold(
       appBar: DetailAppBar(
         isClose: true,

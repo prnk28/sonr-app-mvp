@@ -146,11 +146,6 @@ class SenderService extends GetxService {
     else if (data.type == InviteResponse_Type.Transfer) {
       _session.onReply(data);
     }
-
-    // For Mailbox
-    else {
-      Logger.info(data.mailInfo.toString());
-    }
   }
 
   /// User has shared file succesfully
