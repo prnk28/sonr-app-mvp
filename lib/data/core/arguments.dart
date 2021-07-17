@@ -94,7 +94,8 @@ class SnackArgs {
     Color color = Colors.orange,
     SnackPosition position = SnackPosition.BOTTOM,
   }) {
-    return SnackArgs(title: title, message: message, icon: icon, backgroundColor: color, duration: 2600.milliseconds, shouldIconPulse: false, position: position);
+    return SnackArgs(
+        title: title, message: message, icon: icon, backgroundColor: color, duration: 2600.milliseconds, shouldIconPulse: false, position: position);
   }
 
   /// #### Cancelled Operation
@@ -461,4 +462,11 @@ class PostsPageArgs {
   factory PostsPageArgs.links({ScrollController? scrollController}) => PostsPageArgs(PostItemType.Links, scrollController: scrollController);
 
   factory PostsPageArgs.media({ScrollController? scrollController}) => PostsPageArgs(PostItemType.Media, scrollController: scrollController);
+}
+
+// ** ─── Activity Arguments ────────────────────────────────────────────────────────
+/// Class to Provide Arguments for ActivityPage
+class ActivityPageArgs {
+  final bool isNewSession;
+  ActivityPageArgs({required this.isNewSession});
 }
