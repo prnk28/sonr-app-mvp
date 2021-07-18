@@ -92,6 +92,12 @@ class ReceiverService extends GetxService {
     }
   }
 
+  // Handle Incoming Remote Mail
+  void handleMail(MailEvent event) {
+    // Logging
+    AppRoute.snack(SnackArgs.mail(event));
+  }
+
   /// Session Has Updated Progress
   void handleProgress(ProgressEvent data) {
     _session.onProgress(data);

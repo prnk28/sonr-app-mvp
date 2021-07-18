@@ -54,7 +54,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _topicEventStream = _instance.onTopic(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
     _statusEventStream = _instance.onStatus(_handleStatus);
-    _mailEventStream = _instance.onMail(_handleMail);
+    _mailEventStream = _instance.onMail(ReceiverService.to.handleMail);
     return this;
   }
 
@@ -172,12 +172,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Logging
     Logger.info("Node(Callback) Status: " + data.value.toString());
-  }
-
-  /// #### Handle Bootstrap Result
-  void _handleMail(MailEvent data) {
-    // Logging
-    AppRoute.snack(SnackArgs.mail(data));
   }
 
   /// #### An Error Has Occurred
