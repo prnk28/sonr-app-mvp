@@ -250,9 +250,14 @@ class SnackArgs {
   }
 
   /// #### Succesful Operation
-  factory SnackArgs.success(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
+  factory SnackArgs.success(
+    String message, {
+    SnackPosition position = SnackPosition.BOTTOM,
+    void Function(GetBar<Object>)? onTap,
+  }) {
     return SnackArgs(
       title: "Success!",
+      onTap: onTap,
       message: message,
       icon: SimpleIcons.Success.white,
       backgroundColor: Colors.green,
