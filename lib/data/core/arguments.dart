@@ -50,7 +50,7 @@ extension BuildModeUtil on BuildMode {
 class SnackArgs {
   // Properties
   final Color? backgroundColor;
-  final Color? textColor;
+  final Color textColor;
   final String? title;
   final String message;
   final Widget icon;
@@ -72,7 +72,7 @@ class SnackArgs {
       required this.message,
       required this.icon,
       this.backgroundColor,
-      this.textColor,
+      this.textColor = AppColor.White,
       this.backgroundGradient,
       this.snackStyle,
       this.mainButton,
@@ -193,7 +193,7 @@ class SnackArgs {
       message: inv.payload.toString() + " File from ${mail.invite.from.profile.firstName}",
       icon: SimpleIcons.Compass.white,
       backgroundColor: AppTheme.AccentColor,
-      snackStyle: SnackStyle.GROUNDED,
+      snackStyle: SnackStyle.FLOATING,
       duration: 5.seconds,
       shouldIconPulse: true,
       position: SnackPosition.TOP,
