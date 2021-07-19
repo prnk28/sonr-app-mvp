@@ -5,9 +5,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:sonr_app/style/style.dart';
 
 class StoreService extends GetxService {
-  /// Reference for Active Users
-  final CollectionReference activeUsers = FirebaseFirestore.instance.collection('push-users');
-
   /// Stream Subscription for Push Token
   late StreamSubscription<String> tokenSubscription;
 
@@ -16,6 +13,10 @@ class StoreService extends GetxService {
 
   /// Initialize PushStore Service
   Future<StoreService> init() async {
+    // Initialize Push Subscription
+    await FirebaseFirestore.instance;
+    await updateUser(ContactService.pushToken.value);
+
     // Handle Token State
     tokenSubscription = ContactService.pushToken.listen(_handlePushToken);
     return this;
@@ -28,20 +29,9 @@ class StoreService extends GetxService {
     super.onClose();
   }
 
-  Future<void> addUser(String token) {
-    return activeUsers
-        .doc(ContactService.sName)
-        .set({
-          'firstName': ContactService.contact.value.firstName,
-          'pushToken': token,
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
   /// Method finds Push Token for User
-  Future<String?> findPushToken(String sName) async {
-    return activeUsers.doc(sName).get().then((snapshot) {
+  static Future<String?> findPushToken(String sName) async {
+    return FirebaseFirestore.instance.collection('push-users').doc(sName).get().then((snapshot) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
       if (data.containsKey('pushToken')) {
@@ -52,8 +42,21 @@ class StoreService extends GetxService {
     });
   }
 
+  /// Method updates Push Token for User
+  static Future<void> updateUser(String token) {
+    return FirebaseFirestore.instance
+        .collection('push-users')
+        .doc(ContactService.sName)
+        .set({
+          'firstName': ContactService.contact.value.firstName,
+          'pushToken': token,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
   /// Helper: Handles Push Token Subscription
   void _handlePushToken(String token) {
-    addUser(token);
+    updateUser(token);
   }
 }
