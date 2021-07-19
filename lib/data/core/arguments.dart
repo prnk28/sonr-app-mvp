@@ -50,7 +50,7 @@ extension BuildModeUtil on BuildMode {
 class SnackArgs {
   // Properties
   final Color? backgroundColor;
-  final Color? textColor;
+  final Color textColor;
   final String? title;
   final String message;
   final Widget icon;
@@ -72,7 +72,7 @@ class SnackArgs {
       required this.message,
       required this.icon,
       this.backgroundColor,
-      this.textColor,
+      this.textColor = AppColor.White,
       this.backgroundGradient,
       this.snackStyle,
       this.mainButton,
@@ -94,7 +94,8 @@ class SnackArgs {
     Color color = Colors.orange,
     SnackPosition position = SnackPosition.BOTTOM,
   }) {
-    return SnackArgs(title: title, message: message, icon: icon, backgroundColor: color, duration: 2600.milliseconds, shouldIconPulse: false, position: position);
+    return SnackArgs(
+        title: title, message: message, icon: icon, backgroundColor: color, duration: 2600.milliseconds, shouldIconPulse: false, position: position);
   }
 
   /// #### Cancelled Operation
@@ -192,7 +193,7 @@ class SnackArgs {
       message: inv.payload.toString() + " File from ${mail.invite.from.profile.firstName}",
       icon: SimpleIcons.Compass.white,
       backgroundColor: AppTheme.AccentColor,
-      snackStyle: SnackStyle.GROUNDED,
+      snackStyle: SnackStyle.FLOATING,
       duration: 5.seconds,
       shouldIconPulse: true,
       position: SnackPosition.TOP,
@@ -249,9 +250,14 @@ class SnackArgs {
   }
 
   /// #### Succesful Operation
-  factory SnackArgs.success(String message, {SnackPosition position = SnackPosition.BOTTOM}) {
+  factory SnackArgs.success(
+    String message, {
+    SnackPosition position = SnackPosition.BOTTOM,
+    void Function(GetBar<Object>)? onTap,
+  }) {
     return SnackArgs(
       title: "Success!",
+      onTap: onTap,
       message: message,
       icon: SimpleIcons.Success.white,
       backgroundColor: Colors.green,
@@ -461,4 +467,11 @@ class PostsPageArgs {
   factory PostsPageArgs.links({ScrollController? scrollController}) => PostsPageArgs(PostItemType.Links, scrollController: scrollController);
 
   factory PostsPageArgs.media({ScrollController? scrollController}) => PostsPageArgs(PostItemType.Media, scrollController: scrollController);
+}
+
+// ** ─── Activity Arguments ────────────────────────────────────────────────────────
+/// Class to Provide Arguments for ActivityPage
+class ActivityPageArgs {
+  final bool isNewSession;
+  ActivityPageArgs({required this.isNewSession});
 }

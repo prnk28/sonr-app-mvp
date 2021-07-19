@@ -42,10 +42,21 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
 
+    // Test Push token
+    if (ContactService.sName == 'timc') {
+      var token = await StoreService.findPushToken('sundarp');
+      if (token != null) {
+        print(token);
+      }
+    } else {
+      var token = await StoreService.findPushToken('timc');
+      if (token != null) {
+        print(token);
+      }
+    }
+
     // Set Callbacks
     _instance.onConnected = _handleConnected;
-
-    // Set Stream Handlers
     _inviteEventStream = _instance.onInvite(ReceiverService.to.handleInvite);
     _replyEventStream = _instance.onReply(SenderService.to.handleReply);
     _transmittedEventStream = _instance.onTransmitted(SenderService.to.handleTransmitted);
@@ -54,7 +65,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _topicEventStream = _instance.onTopic(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
     _statusEventStream = _instance.onStatus(_handleStatus);
-    _mailEventStream = _instance.onMail(_handleMail);
+    _mailEventStream = _instance.onMail(ReceiverService.to.handleMail);
     return this;
   }
 
@@ -172,12 +183,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
     // Logging
     Logger.info("Node(Callback) Status: " + data.value.toString());
-  }
-
-  /// #### Handle Bootstrap Result
-  void _handleMail(MailEvent data) {
-    // Logging
-    AppRoute.snack(SnackArgs.mail(data));
   }
 
   /// #### An Error Has Occurred

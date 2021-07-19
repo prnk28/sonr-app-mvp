@@ -5,7 +5,7 @@ import 'package:sonr_app/style/style.dart';
 
 class TransferController extends GetxController {
   static InviteRequest get inviteRequest => Get.find<TransferController>().invite.value;
-  
+
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
@@ -81,9 +81,19 @@ class TransferController extends GetxController {
 
     // Validate Peer
     if (peer != null) {
-      print(peer.toString());
+      // Search Push Token
+      var token = await StoreService.findPushToken(findQuery.value);
+      if (token != null) {
+        print(token);
+      }
+
       // Change Session for Status Success
-      SenderService.invite(InviteRequestUtils.copy(invite.value, peer: peer, type: InviteRequest_Type.Remote));
+      SenderService.invite(InviteRequestUtils.copyWithPushRecord(
+        invite.value,
+        record: peer,
+        type: InviteRequest_Type.Remote,
+        pushToken: token,
+      ));
       composeStatus(ComposeStatus.Existing);
       shouldUpdate(true);
       return true;
