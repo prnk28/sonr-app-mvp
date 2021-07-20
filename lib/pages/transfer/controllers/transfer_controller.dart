@@ -59,10 +59,12 @@ class TransferController extends GetxController {
     );
   }
 
+  /// #### Handles Transfer Page
   void onRemotePressed() {
     AppRoute.popup(InviteComposer());
   }
 
+  /// #### Handles Transfer Page
   void onQueryUpdated(String query) {
     findQuery(query);
     findQuery.refresh();

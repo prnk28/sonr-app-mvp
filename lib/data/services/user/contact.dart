@@ -33,6 +33,7 @@ class ContactService extends GetxService {
       // Get Push Token
       _pushToken(await FirebaseMessaging.instance.getToken());
       _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
+      await StoreService.updateUser(_pushToken.value);
 
       // Send Token to Intercom
       await Intercom.sendTokenToIntercom(_pushToken.value);
@@ -50,7 +51,7 @@ class ContactService extends GetxService {
         contact.profile.lastName.capitalizeFirst;
 
         // Set User Properties
-        Logger.initProfile(contact, _pushToken.value);
+        await Logger.initProfile(contact);
 
         // Set Contact Values
         _contact(contact);
@@ -78,7 +79,7 @@ class ContactService extends GetxService {
     newContact.profile.lastName.capitalizeFirst;
 
     // Set User Properties
-    Logger.initProfile(newContact, to._pushToken.value);
+    Logger.initProfile(newContact);
 
     // Set Contact for User
     to._contact(newContact);
@@ -86,6 +87,12 @@ class ContactService extends GetxService {
 
     // Save User/Contact to Disk
     await to._userBox.write("contact", newContact.writeToJson());
+
+    // Set User Properties
+    await Logger.initProfile(newContact);
+    await StoreService.updateUser(ContactService.pushToken.value);
+
+    // Update Status
     to._status(UserStatus.Existing);
   }
 

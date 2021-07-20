@@ -15,8 +15,9 @@ class StoreService extends GetxService {
   Future<StoreService> init() async {
     // Initialize Push Subscription
     await FirebaseFirestore.instance;
-    await updateUser(ContactService.pushToken.value);
-
+    if (ContactService.status.value.hasUser) {
+      await updateUser(ContactService.pushToken.value);
+    }
     // Handle Token State
     tokenSubscription = ContactService.pushToken.listen(_handlePushToken);
     return this;
@@ -43,16 +44,20 @@ class StoreService extends GetxService {
   }
 
   /// Method updates Push Token for User
-  static Future<void> updateUser(String token) {
-    return FirebaseFirestore.instance
-        .collection('push-users')
-        .doc(ContactService.sName)
-        .set({
-          'firstName': ContactService.contact.value.firstName,
-          'pushToken': token,
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+  static Future<void> updateUser(String token) async {
+    if (ContactService.isRegistered) {
+      return FirebaseFirestore.instance
+          .collection('push-users')
+          .doc(ContactService.sName)
+          .set({
+            'firstName': ContactService.contact.value.firstName,
+            'pushToken': token,
+          })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+    } else {
+      return Future.value(null);
+    }
   }
 
   /// Helper: Handles Push Token Subscription
