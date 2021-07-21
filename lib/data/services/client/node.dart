@@ -42,19 +42,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
 
-    // Test Push token
-    if (ContactService.sName == 'timc') {
-      var token = await StoreService.findPushToken('sundarp');
-      if (token != null) {
-        print(token);
-      }
-    } else {
-      var token = await StoreService.findPushToken('timc');
-      if (token != null) {
-        print(token);
-      }
-    }
-
     // Set Callbacks
     _instance.onConnected = _handleConnected;
     _inviteEventStream = _instance.onInvite(ReceiverService.to.handleInvite);

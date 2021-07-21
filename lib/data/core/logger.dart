@@ -114,8 +114,8 @@ class Logger extends GetxService {
       Intercom.registerIdentifiedUser(userId: contact.sName);
       Intercom.updateUser(
         name: contact.fullName,
-        email: contact.emailPrimary.value,
-        phone: contact.phonePrimary,
+        //email: contact.emailPrimary.value,
+        // phone: contact.phonePrimary,
         customAttributes: {
           "platform": contact.platform.toString(),
           "firstName": contact.firstName,

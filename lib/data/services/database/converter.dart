@@ -135,3 +135,7 @@ class URLConverter extends TypeConverter<URLLink, String> {
     return value.writeToJson();
   }
 }
+
+extension UserConverter on User {
+  
+}

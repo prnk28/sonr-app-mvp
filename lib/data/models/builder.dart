@@ -18,10 +18,12 @@ class RequestBuilder {
         serviceOptions: ConnectionRequest_ServiceOptions(
           textile: true,
           push: true,
-          mailbox: DeviceService.isIOS,
+          mailbox: true,
           threadDB: Env.thread_db,
         ),
-        hostOptions: ConnectionRequest_HostOptions(mdnsDiscovery: true),
+        hostOptions: ConnectionRequest_HostOptions(
+          mdnsDiscovery: true,
+        ),
         pushToken: DeviceService.isMobile ? ContactService.pushToken.value : "",
       );
 

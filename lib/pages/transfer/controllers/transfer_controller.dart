@@ -84,7 +84,7 @@ class TransferController extends GetxController {
     // Validate Peer
     if (peer != null) {
       // Search Push Token
-      var token = await StoreService.findPushToken(findQuery.value);
+      var token = await ContactService.findPushToken(findQuery.value);
       if (token != null) {
         print(token);
       }

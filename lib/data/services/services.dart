@@ -39,7 +39,6 @@ class AppServices {
     await Get.putAsync(() => SenderService().init());
     await Get.putAsync(() => ReceiverService().init());
     await Get.putAsync(() => CardService().init(), permanent: true);
-    await Get.putAsync(() => StoreService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => NodeService().init(), permanent: true);
   }

@@ -8,7 +8,6 @@ export 'core/logger.dart';
 export 'services/database/converter.dart';
 export 'services/database/database.dart';
 export 'services/database/cards.dart';
-export 'services/database/store.dart';
 export 'services/services.dart';
 
 // Models
