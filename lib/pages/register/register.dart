@@ -60,8 +60,8 @@ class RegisterSetupTitleBar extends StatelessWidget implements PreferredSizeWidg
             crossAxisAlignment: instruction != null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              instruction != null ? instruction!.light(fontSize: 42) : Container(),
-              isGradient ? title.gradient(value: AppGradients.Primary(), size: 48) : title.heading(fontSize: 42),
+              instruction != null ? instruction!.light(fontSize: 42, color: AppTheme.ItemColor) : Container(),
+              isGradient ? title.gradient(value: AppGradients.Primary(), size: 48) : title.heading(fontSize: 42, color: AppTheme.ItemColor),
             ],
           ),
         ),

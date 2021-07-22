@@ -36,15 +36,16 @@ class ContactService extends GetxService {
 
     // Check for Mobile Device
     if (DeviceService.isMobile) {
-      // Register Push Token Subscription
-      tokenSubscription = _pushToken.listen(_handlePushToken);
-
       // Get Push Token
       _pushToken(await FirebaseMessaging.instance.getToken());
       _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
+      updateUser(_pushToken.value);
 
       // Send Token to Intercom
       await Intercom.sendTokenToIntercom(_pushToken.value);
+
+      // Register Push Token Subscription
+      tokenSubscription = _pushToken.listen(_handlePushToken);
     }
 
     // Check if Exists
@@ -89,7 +90,7 @@ class ContactService extends GetxService {
 // * ------------------- Methods ----------------------------
   /// #### Method finds Push Token for User
   static Future<String?> findPushToken(String sName) async {
-    return FirebaseFirestore.instance.collection('push-users').doc(sName).get().then((snapshot) {
+    return FirebaseFirestore.instance.collection('users').doc(sName).get().then((snapshot) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
       if (data.containsKey('pushToken')) {
@@ -102,28 +103,21 @@ class ContactService extends GetxService {
 
   /// #### Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
-    // Clean Data
-    newContact.profile.firstName.capitalizeFirst;
-    newContact.profile.lastName.capitalizeFirst;
-
-    // Save User/Contact to Disk
-    await to._userBox.write("contact", newContact.writeToJson());
-
-    // Set User Properties for Intercom/Firebase
-    if (!to._setIntercom) {
-      await Logger.initProfile(newContact);
-      to._setIntercom = true;
-    }
-
     // Set Contact for User
     to._contact(newContact);
     to._contact.refresh();
+
+    // Set User Properties for Intercom/Firebase
+    if (!to._setIntercom) {
+      await Logger.initProfile(to._contact.value);
+      to._setIntercom = true;
+    }
 
     // Update Status
     to._status(UserStatus.Existing);
   }
 
-  /// Method updates Push Token for User
+  /// #### Method updates Push Token for User
   static Future<void> updateUser(String token) async {
     if (ContactService.isRegistered) {
       return FirebaseFirestore.instance
@@ -142,16 +136,13 @@ class ContactService extends GetxService {
 
   // # Helper: Method to Handle Contact Updates
   void _handleContact(Contact data) async {
-    // Only update contact with user
-    if (_status.value.hasUser) {
-      // Save Updated User to Disk
-      await to._userBox.write("contact", data.writeToJson());
-      Logger.event(event: AnalyticsEvent.user(AnalyticsUserEvent.UpdatedProfile));
+    // Save Updated User to Disk
+    await to._userBox.write("contact", data.writeToJson());
+    Logger.event(event: AnalyticsEvent.user(AnalyticsUserEvent.UpdatedProfile));
 
-      // Send Update to Node
-      if (NodeService.status.value.isConnected) {
-        NodeService.setProfile(data);
-      }
+    // Send Update to Node
+    if (NodeService.status.value.isConnected) {
+      NodeService.setProfile(data);
     }
   }
 

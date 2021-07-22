@@ -18,7 +18,7 @@ class RequestBuilder {
         serviceOptions: ConnectionRequest_ServiceOptions(
           textile: true,
           push: true,
-          mailbox: true,
+          mailbox: DeviceService.isIOS,
           threadDB: Env.thread_db,
         ),
         hostOptions: ConnectionRequest_HostOptions(
