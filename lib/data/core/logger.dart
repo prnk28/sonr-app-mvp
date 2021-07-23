@@ -132,7 +132,7 @@ class Logger extends GetxService {
   /// #### Logs a Firebase Analytics Event
   /// Adds Properties: `createdAt`, `platform`, `controller`
   static void event({
-    required AnalyticsEvent event,
+    required AppEvent event,
   }) async {
     if (isRegistered && DeviceService.isMobile && DeviceService.hasInternet) {
       // Log Intercom Event
@@ -192,7 +192,7 @@ class Logger extends GetxService {
 
       // Log Event
       Logger.event(
-          event: AnalyticsEvent.user(AnalyticsUserEvent.MigratedSName, parameters: {
+          event: AppEvent.user(UserEvent.MigratedSName, parameters: {
         "status": to._hasMigratedSName.val,
         "sName": record.name,
       }));

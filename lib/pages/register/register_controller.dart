@@ -80,25 +80,10 @@ class RegisterController extends GetxController {
       if (nameStatus.value != NewSNameStatus.Returning) {
         // Check Valid
         if (result.isValidName(sName.value)) {
+          // Generate Authentication
           var genMnemomic = bip39.generateMnemonic();
           var result = await signUser(sName.value, genMnemomic);
-
-          // Logging
-          Logger.info(
-            "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicKey}",
-          );
-
-          // Add UserRecord Domain
-          await NamebaseClient.addRecords(HSRecord.newRegisteredRecords(result));
-
-          // Analytics
-          Logger.event(
-              event: AnalyticsEvent.user(
-            AnalyticsUserEvent.NewSName,
-            parameters: {
-              'username': sName.value,
-            },
-          ));
+          ContactService.newAuth(genMnemomic, sName.value, result);
 
           // Update Status
           mnemonic(genMnemomic);

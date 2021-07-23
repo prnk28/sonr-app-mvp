@@ -14,7 +14,6 @@ class RequestBuilder {
         location: await DeviceService.location,
         contact: ContactService.contact.value,
         type: DeviceService.connectivity.value.toInternetType(),
-        status: ContactService.status.value.toConnectionStatus(),
         serviceOptions: ConnectionRequest_ServiceOptions(
           textile: true,
           push: true,
@@ -82,13 +81,15 @@ class NamebaseClient {
     return record.toPeer();
   }
 
-  /// Find Records for User
-  static Future<List<HSRecord>> get userRecords async {
-    final result = await refresh();
-    final records = result.records.where(
-      (e) => e.host.toLowerCase() == ContactService.sName || e.name.toLowerCase() == ContactService.sName,
-    );
-    return records.toList();
+  /// Check if Auth Record and SName Record Exists
+  static Future<bool> hasAllRecords() async {
+    return await hasAuthRecord() && await hasSNameRecord();
+  }
+
+  /// Check if Auth Record Exists
+  static Future<bool> hasAuthRecord() async {
+    final list = await userRecords;
+    return list.any((e) => e.isAuth);
   }
 
   /// Check if SName Record Exists
@@ -110,6 +111,15 @@ class NamebaseClient {
 
   /// Refresh Records with Result
   static Future<NamebaseResult> refresh() => _nbClient.refresh();
+
+  /// Find Records for User
+  static Future<List<HSRecord>> get userRecords async {
+    final result = await refresh();
+    final records = result.records.where(
+      (e) => e.host.toLowerCase() == ContactService.sName || e.name.toLowerCase() == ContactService.sName,
+    );
+    return records.toList();
+  }
 
   /// Validates SName as Valid characters
   static Future<NewSNameStatus> validateName(String sName) async {
@@ -145,7 +155,7 @@ class NamebaseClient {
 
 /// ## AnalyticsUserEvent
 /// Enum Containing Possible User Analytics Events
-enum AnalyticsUserEvent {
+enum UserEvent {
   /// User Created SName
   NewSName,
 
@@ -167,7 +177,7 @@ enum AnalyticsUserEvent {
 
 /// ## AnalyticsUserEventUtil
 /// Enum Extension for `AnalyticsUserEvent`
-extension AnalyticsUserEventUtil on AnalyticsUserEvent {
+extension UserEventUtil on UserEvent {
   /// Returns Name of this Event
   String get name {
     // Get Value String
@@ -194,9 +204,9 @@ extension AnalyticsUserEventUtil on AnalyticsUserEvent {
 
 /// ## AnalyticsEvent
 /// - Class Creates Paramters to Log Effective Analytics event
-class AnalyticsEvent {
+class AppEvent {
   // Constructer
-  AnalyticsEvent({required this.name, required this.parameters});
+  AppEvent({required this.name, required this.parameters});
 
   /// Transfer Event Type
   final String name;
@@ -206,17 +216,17 @@ class AnalyticsEvent {
 
   /// ### AnalyticsEvent`.invited()`
   /// - Creates Analytics Transfer Invite Shared Event
-  factory AnalyticsEvent.invited(InviteRequest request) =>
-      AnalyticsEvent(name: request.eventName, parameters: _buildMetadata(request.eventMetadata, addPlatform: false));
+  factory AppEvent.invited(InviteRequest request) =>
+      AppEvent(name: request.eventName, parameters: _buildMetadata(request.eventMetadata, addPlatform: false));
 
   /// ### AnalyticsEvent`.responded()`
   /// - Creates Analytics Transfer Invite Response Event
-  factory AnalyticsEvent.responded(InviteResponse response) =>
-      AnalyticsEvent(name: response.eventName, parameters: _buildMetadata(response.eventMetadata, addPlatform: false));
+  factory AppEvent.responded(InviteResponse response) =>
+      AppEvent(name: response.eventName, parameters: _buildMetadata(response.eventMetadata, addPlatform: false));
 
   /// ### AnalyticsEvent`.user()`
   /// Creates Analytics Transfer Event
-  factory AnalyticsEvent.user(AnalyticsUserEvent event, {Map<String, dynamic>? parameters}) => AnalyticsEvent(
+  factory AppEvent.user(UserEvent event, {Map<String, dynamic>? parameters}) => AppEvent(
         name: event.name,
         parameters: _buildMetadata(parameters),
       );

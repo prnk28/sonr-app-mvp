@@ -12,13 +12,24 @@ class ContactService extends GetxService {
 
   // User Status Properties
   final _contact = Contact().obs;
-  final _status = UserStatus.Default.obs;
+  final _fingerprint = "".val("fingerprint", getBox: () => GetStorage('User'));
+  final _identity = "".val("identity", getBox: () => GetStorage('User'));
+  final _mnemonic = "".val("mnemonic", getBox: () => GetStorage('User'));
   final _pushToken = "".obs;
+  final _prefix = "".val("prefix", getBox: () => GetStorage('User'));
+  final _status = UserStatus.Default.obs;
 
   // User Reactive Properties
+  /// User Status Reactive
   static Rx<UserStatus> get status => to._status;
+
+  /// User Contact Reactive
   static Rx<Contact> get contact => to._contact;
+
+  /// User Push Token Reactive
   static RxString get pushToken => to._pushToken;
+
+  /// User SName
   static String get sName => to._status.value.hasUser ? to._contact.value.sName.toLowerCase() : "";
 
   // References
@@ -50,26 +61,9 @@ class ContactService extends GetxService {
 
     // Check if Exists
     if (_status.value.hasUser) {
-      try {
-        // Get Contact JSON
-        var profileJson = _userBox.read("contact");
-        var contact = Contact.fromJson(profileJson);
-
-        // Capitalize First and Last Name
-        contact.profile.firstName.capitalizeFirst;
-        contact.profile.lastName.capitalizeFirst;
-
-        // Set User Properties
-        await Logger.initProfile(contact);
-        _setIntercom = true;
-
-        // Set Contact Values
-        _contact(contact);
-      } catch (e) {
-        // Delete User
-        _userBox.remove('contact');
-        _status(UserStatus.New);
-        Logger.warn("RESET: Contact and User");
+      bool result = await _initExisting();
+      if (result) {
+        _status(UserStatus.Existing);
       }
     } else {
       _status(UserStatus.New);
@@ -101,6 +95,26 @@ class ContactService extends GetxService {
     });
   }
 
+  /// #### Method to Save Auth Response
+  static Future<void> newAuth(String mnemonic, String sName, AuthResponse result) async {
+    // Logging
+    Logger.info(
+      "Prefix: ${result.signedPrefix} \n Mnemonic: $mnemonic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicKey}",
+    );
+
+    // Save Info
+    to._mnemonic.val = mnemonic;
+    to._identity.val = result.publicKey;
+    to._fingerprint.val = result.signedFingerprint;
+    to._prefix.val = result.signedPrefix;
+
+    // Add UserRecord Domain
+    await NamebaseClient.addRecords(HSRecord.newRegisteredRecords(result));
+
+    // Analytics
+    Logger.event(event: AppEvent.user(UserEvent.NewSName, parameters: {'sName': sName}));
+  }
+
   /// #### Method to Create New User from Contact
   static Future<void> newContact(Contact newContact) async {
     // Set Contact for User
@@ -122,7 +136,7 @@ class ContactService extends GetxService {
     if (ContactService.isRegistered) {
       return FirebaseFirestore.instance
           .collection('push-users')
-          .doc(ContactService.sName)
+          .doc(to._contact.value.sName.toLowerCase())
           .set({
             'firstName': ContactService.contact.value.firstName,
             'pushToken': token,
@@ -130,15 +144,16 @@ class ContactService extends GetxService {
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));
     } else {
-      return Future.value(null);
+      return null;
     }
   }
 
-  // # Helper: Method to Handle Contact Updates
+  // * ------------------- Helpers ----------------------------
+  /// #### Helper: Method to Handle Contact Updates
   void _handleContact(Contact data) async {
     // Save Updated User to Disk
     await to._userBox.write("contact", data.writeToJson());
-    Logger.event(event: AnalyticsEvent.user(AnalyticsUserEvent.UpdatedProfile));
+    Logger.event(event: AppEvent.user(UserEvent.UpdatedProfile));
 
     // Send Update to Node
     if (NodeService.status.value.isConnected) {
@@ -146,8 +161,50 @@ class ContactService extends GetxService {
     }
   }
 
-  /// Helper: Handles Push Token Subscription
+  /// #### Helper: Handles Push Token Subscription
   void _handlePushToken(String token) {
     updateUser(token);
+  }
+
+  // * ------------------- Initializers ----------------------------
+  /// #### Method Initializes existing user
+  Future<bool> _initExisting() async {
+    // Checker for Try Block
+    bool hasLocalUser = false;
+    bool hasAllRecords = false;
+
+    // 1. Validate HS Record
+    if (await NamebaseClient.hasAllRecords()) {
+      // Set Record Checker
+      hasAllRecords = true;
+
+      // 2. Verify Local Copy
+      try {
+        // Get Contact JSON
+        var profileJson = _userBox.read("contact");
+        var contact = Contact.fromJson(profileJson);
+
+        // Capitalize First and Last Name
+        contact.profile.firstName.capitalizeFirst;
+        contact.profile.lastName.capitalizeFirst;
+        hasLocalUser = true;
+
+        // Set Contact Values
+        _contact(contact);
+      } catch (e) {
+        // Delete User
+        _userBox.remove('contact');
+        _status(UserStatus.New);
+        Logger.warn("RESET: Contact and User");
+      }
+    }
+
+    // 3. Push Notif Key to Services
+    if (hasLocalUser && hasAllRecords) {
+      // Set User Properties
+      await Logger.initProfile(_contact.value);
+      _setIntercom = true;
+    }
+    return hasLocalUser && hasAllRecords;
   }
 }
