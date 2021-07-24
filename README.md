@@ -30,7 +30,7 @@ Substitution: SonrIcons -$2![Icon of $2 ](/Users/prad/Sonr/docs/icons/PNG/$2.png
   * Expression for Comment Generation
   * **DONT** use underscores for fonts
 
-## 🔷 Makefile
+## 🔷 Usage
 This project contains a `makefile` with the following commands:
 ```bash
 # Activates Global Flutter Plugins
