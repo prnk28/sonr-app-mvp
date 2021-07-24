@@ -2,7 +2,6 @@
 export 'register_controller.dart';
 export 'models/field.dart';
 export 'models/intro.dart';
-export 'models/status.dart';
 export 'models/type.dart';
 
 // Imports

@@ -5,18 +5,17 @@ import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'models/intro.dart';
-import 'models/status.dart';
 import 'models/type.dart';
 
 class RegisterController extends GetxController {
   // Properties
-  final nameStatus = NewSNameStatus.Default.obs;
+  final nameStatus = NameStatus.Default.obs;
   final mnemonic = "".obs;
   final sName = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterPageType>(RegisterPageType.Intro);
-  final auth = Rx<HSRecord>(HSRecord.blank());
+  final auth = Rx<DNSRecord>(DNSRecord.blank());
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -73,11 +72,11 @@ class RegisterController extends GetxController {
 
   Future<void> setName() async {
     // Refresh Records
-    final result = await NamebaseClient.refresh();
+    final result = await Namebase.refresh();
 
     // Validate
     if (await validateName()) {
-      if (nameStatus.value != NewSNameStatus.Returning) {
+      if (nameStatus.value != NameStatus.Returning) {
         // Check Valid
         if (result.isValidName(sName.value)) {
           // Generate Authentication
@@ -180,7 +179,7 @@ class RegisterController extends GetxController {
 
   /// #### Validates SName as Valid characters
   Future<bool> validateName() async {
-    nameStatus(await NamebaseClient.validateName(sName.value));
+    nameStatus(await Namebase.validateName(sName.value));
     return nameStatus.value.isValid;
   }
 

@@ -109,7 +109,12 @@ class ContactService extends GetxService {
     to._prefix.val = result.signedPrefix;
 
     // Add UserRecord Domain
-    await NamebaseClient.addRecords(HSRecord.newRegisteredRecords(result));
+    await Namebase.addRecords(DNSRecord.newRegisteredRecords(
+      fingerprint: result.signedFingerprint,
+      prefix: result.signedPrefix,
+      name: sName,
+      publicKey: result.publicKey,
+    ));
 
     // Analytics
     Logger.event(event: AppEvent.user(UserEvent.NewSName, parameters: {'sName': sName}));
@@ -174,7 +179,7 @@ class ContactService extends GetxService {
     bool hasAllRecords = false;
 
     // 1. Validate HS Record
-    if (await NamebaseClient.hasAllRecords()) {
+    if (await Namebase.hasAllRecords()) {
       // Set Record Checker
       hasAllRecords = true;
 

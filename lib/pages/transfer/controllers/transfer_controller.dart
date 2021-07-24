@@ -79,15 +79,18 @@ class TransferController extends GetxController {
   /// #### User Sends A Remote Transfer Name Request
   Future<bool> shareRemote() async {
     // Search Record
-    final peer = await NamebaseClient.findPeerRecord(findQuery.value);
+    final record = await Namebase.findRecord(findQuery.value);
 
     // Validate Peer
-    if (peer != null) {
+    if (record != null) {
       // Search Push Token
       var token = await ContactService.findPushToken(findQuery.value);
       if (token != null) {
         print(token);
       }
+
+      // Get Peer from Record
+      final peer = await record.toPeer();
 
       // Change Session for Status Success
       SenderService.invite(InviteRequestUtils.copyWithPushRecord(
@@ -100,9 +103,6 @@ class TransferController extends GetxController {
       shouldUpdate(true);
       return true;
     } else {
-      // Print Records
-      await NamebaseClient.printRecords();
-
       // Change Session for Status Error
       composeStatus(ComposeStatus.NonExisting);
       shouldUpdate(false);

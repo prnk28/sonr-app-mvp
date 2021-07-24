@@ -1,5 +1,6 @@
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/pages/register/register.dart';
+import '../models/status.dart';
 
 class SetupView extends GetView<RegisterController> {
   @override
@@ -119,7 +120,7 @@ class _NamePage extends GetView<RegisterController> {
 class _NameStatus extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.nameStatus.value == NewSNameStatus.Default || controller.sName.value.length == 0
+    return Obx(() => controller.nameStatus.value == NameStatus.Default || controller.sName.value.length == 0
         ? Container(
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,8 +178,8 @@ class _BackupCodeView extends GetView<RegisterController> {
             GestureDetector(
                 onLongPress: () {
                   Clipboard.setData(ClipboardData(text: controller.mnemonic.value));
-                  AppRoute.snack(
-                      SnackArgs.alert(title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
+                  AppRoute.snack(SnackArgs.alert(
+                      title: "Copied!", message: "Backup Code copied to clipboard", icon: Icon(SimpleIcons.Copy, color: Colors.white)));
                 },
                 child: BoxContainer(
                   padding: EdgeInsets.all(24),
@@ -239,7 +240,6 @@ class _ProfileSetupView extends GetView<RegisterController> {
           RegisterTextField(
             type: RegisterTextFieldType.FirstName,
             focusNode: firstNameFocus,
-
             hint: hintName.item1,
             onEditingComplete: () {
               firstNameFocus.unfocus();
