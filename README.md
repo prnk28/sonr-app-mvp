@@ -6,7 +6,7 @@
 
 ---
 
-Sonr Flutter Plugin that creates bindings and `Swift` and `Kotlin` proxies for [Core]("https://github.com/sonr-io/core") framework.
+Sonr Mobile App Flutter frontend that utilizes [sonr_plugin](https://github.com/sonr-io/plugin) and [namebase](https://github.com/sonr-io/namebase).
 
 ## 🔷 Installation
 
