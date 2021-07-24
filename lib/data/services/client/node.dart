@@ -206,10 +206,10 @@ class NodeService extends GetxService with WidgetsBindingObserver {
       // Validate SName
       if (response.publicKey.length > 0) {
         // Create New Record and Update Status
-        Logger.setMigration(HSRecord.newName(AuthResponse(
+        Logger.setMigration(DNSRecord.newName(
+          name: ContactService.sName.toLowerCase(),
           publicKey: response.publicKey,
-          givenSName: ContactService.sName.toLowerCase(),
-        )));
+        ));
       }
     }
   }

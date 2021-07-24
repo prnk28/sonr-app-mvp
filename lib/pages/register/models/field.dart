@@ -1,4 +1,3 @@
-
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/style/style.dart';
 

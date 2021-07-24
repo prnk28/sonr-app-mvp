@@ -74,9 +74,15 @@ extension ComposeStatusUtil on ComposeStatus {
 
 class ComposeInviteQuery {
   final query = "Nobody Here".obs;
-  HSRecord record = HSRecord.blank();
+  DNSRecord record = DNSRecord.blank();
 
-  Peer? getPeer() {
-    return record.toPeer();
+  Future<Peer> getPeer() async {
+    final pushToken = await ContactService.findPushToken(query.value);
+    return Peer(
+        sName: query.value,
+        id: Peer_ID(
+          publicKey: record.publicKey,
+          pushToken: pushToken ?? "",
+        ));
   }
 }

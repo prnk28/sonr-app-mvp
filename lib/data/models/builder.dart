@@ -1,5 +1,4 @@
 import 'package:sonr_app/env.dart';
-import 'package:sonr_app/pages/register/models/status.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,11 +13,10 @@ class RequestBuilder {
         location: await DeviceService.location,
         contact: ContactService.contact.value,
         type: DeviceService.connectivity.value.toInternetType(),
-        status: ContactService.status.value.toConnectionStatus(),
         serviceOptions: ConnectionRequest_ServiceOptions(
           textile: true,
           push: true,
-          mailbox: true,
+          mailbox: DeviceService.isIOS,
           threadDB: Env.thread_db,
         ),
         hostOptions: ConnectionRequest_HostOptions(
@@ -64,88 +62,9 @@ class CommentGenerator {
   }
 }
 
-/// Class Manages Namebase DNS Entries
-class NamebaseClient {
-  // @ Internal Reference
-  static final _nbClient = NamebaseApi(keys: AppServices.apiKeys);
-
-  /// Add Records to DNS Table
-  static Future<bool> addRecords(List<HSRecord> records) => _nbClient.addRecords(records);
-
-  /// Find Matching Peer for SName Query of Record
-  static Future<Peer?> findPeerRecord(String query) async {
-    final result = await refresh();
-    final record = result.records.firstWhere(
-      (e) => e.host.toLowerCase() == query.toLowerCase(),
-      orElse: () => HSRecord.blank(),
-    );
-    return record.toPeer();
-  }
-
-  /// Find Records for User
-  static Future<List<HSRecord>> get userRecords async {
-    final result = await refresh();
-    final records = result.records.where(
-      (e) => e.host.toLowerCase() == ContactService.sName || e.name.toLowerCase() == ContactService.sName,
-    );
-    return records.toList();
-  }
-
-  /// Check if SName Record Exists
-  static Future<bool> hasSNameRecord() async {
-    final list = await userRecords;
-    return list.any((e) => e.isName);
-  }
-
-  /// Print all Records as Peer Data in Console
-  static Future<void> printRecords() async {
-    final result = await refresh();
-    result.records.forEach((r) {
-      Logger.info(r.toPeer().toString());
-    });
-  }
-
-  /// Replace Record
-  static Future<Response<dynamic>?> replaceRecord(HSRecord record) => _nbClient.replaceRecord(record);
-
-  /// Refresh Records with Result
-  static Future<NamebaseResult> refresh() => _nbClient.refresh();
-
-  /// Validates SName as Valid characters
-  static Future<NewSNameStatus> validateName(String sName) async {
-    final result = await refresh();
-    // Check Alphabet Only
-    if (!sName.isAlphabetOnly) {
-      return NewSNameStatus.InvalidCharacters;
-    } else {
-      // Update Status
-      if (sName.length > 3) {
-        // Check Available
-        if (result.checkName(NameCheckType.Unavailable, sName)) {
-          return NewSNameStatus.Unavailable;
-        }
-        // Check Unblocked
-        else if (result.checkName(NameCheckType.Blocked, sName)) {
-          return NewSNameStatus.Blocked;
-        }
-        // Check Unrestricted
-        else if (result.checkName(NameCheckType.Restricted, sName)) {
-          return NewSNameStatus.Restricted;
-        }
-        // Check Valid
-        else {
-          return NewSNameStatus.Available;
-        }
-      } else {
-        return NewSNameStatus.TooShort;
-      }
-    }
-  }
-}
-
 /// ## AnalyticsUserEvent
 /// Enum Containing Possible User Analytics Events
-enum AnalyticsUserEvent {
+enum UserEvent {
   /// User Created SName
   NewSName,
 
@@ -167,7 +86,7 @@ enum AnalyticsUserEvent {
 
 /// ## AnalyticsUserEventUtil
 /// Enum Extension for `AnalyticsUserEvent`
-extension AnalyticsUserEventUtil on AnalyticsUserEvent {
+extension UserEventUtil on UserEvent {
   /// Returns Name of this Event
   String get name {
     // Get Value String
@@ -194,9 +113,9 @@ extension AnalyticsUserEventUtil on AnalyticsUserEvent {
 
 /// ## AnalyticsEvent
 /// - Class Creates Paramters to Log Effective Analytics event
-class AnalyticsEvent {
+class AppEvent {
   // Constructer
-  AnalyticsEvent({required this.name, required this.parameters});
+  AppEvent({required this.name, required this.parameters});
 
   /// Transfer Event Type
   final String name;
@@ -206,17 +125,17 @@ class AnalyticsEvent {
 
   /// ### AnalyticsEvent`.invited()`
   /// - Creates Analytics Transfer Invite Shared Event
-  factory AnalyticsEvent.invited(InviteRequest request) =>
-      AnalyticsEvent(name: request.eventName, parameters: _buildMetadata(request.eventMetadata, addPlatform: false));
+  factory AppEvent.invited(InviteRequest request) =>
+      AppEvent(name: request.eventName, parameters: _buildMetadata(request.eventMetadata, addPlatform: false));
 
   /// ### AnalyticsEvent`.responded()`
   /// - Creates Analytics Transfer Invite Response Event
-  factory AnalyticsEvent.responded(InviteResponse response) =>
-      AnalyticsEvent(name: response.eventName, parameters: _buildMetadata(response.eventMetadata, addPlatform: false));
+  factory AppEvent.responded(InviteResponse response) =>
+      AppEvent(name: response.eventName, parameters: _buildMetadata(response.eventMetadata, addPlatform: false));
 
   /// ### AnalyticsEvent`.user()`
   /// Creates Analytics Transfer Event
-  factory AnalyticsEvent.user(AnalyticsUserEvent event, {Map<String, dynamic>? parameters}) => AnalyticsEvent(
+  factory AppEvent.user(UserEvent event, {Map<String, dynamic>? parameters}) => AppEvent(
         name: event.name,
         parameters: _buildMetadata(parameters),
       );

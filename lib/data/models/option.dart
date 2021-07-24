@@ -77,20 +77,21 @@ extension Sounds on Sound {
 
 // @ Intercom Carousel Option
 enum IntercomCarousel {
-  SoftwareUpdate,
+  /// Software Update v0.9.4
+  Update94,
 }
 
 extension IntercomCarouselUtils on IntercomCarousel {
   /// Returns Carousel ID by Option
   String get id {
     switch (this) {
-      case IntercomCarousel.SoftwareUpdate:
+      case IntercomCarousel.Update94:
         return '20299209';
     }
   }
 
-  // /// Method Displays Intercom Carousel
-  // Future<void> show() async {
-  //   await Intercom.displayCarousel(this.id);
-  // }
+  /// Method Displays Intercom Carousel
+  Future<void> show() async {
+    await Intercom.displayCarousel(this.id);
+  }
 }

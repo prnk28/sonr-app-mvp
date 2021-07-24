@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
@@ -125,14 +126,14 @@ class Logger extends GetxService {
 
       // Update Status's
       to._intercomEnabled(true);
-      to._hasMigratedSName.val = await NamebaseClient.hasSNameRecord();
+      to._hasMigratedSName.val = await Namebase.hasSNameRecord();
     }
   }
 
   /// #### Logs a Firebase Analytics Event
   /// Adds Properties: `createdAt`, `platform`, `controller`
   static void event({
-    required AnalyticsEvent event,
+    required AppEvent event,
   }) async {
     if (isRegistered && DeviceService.isMobile && DeviceService.hasInternet) {
       // Log Intercom Event
@@ -185,14 +186,14 @@ class Logger extends GetxService {
   }
 
   /// #### Sets Migration as True
-  static Future<void> setMigration(HSRecord record) async {
+  static Future<void> setMigration(DNSRecord record) async {
     if (isRegistered) {
       // Set Result
-      to._hasMigratedSName.val = await NamebaseClient.addRecords([record]);
+      to._hasMigratedSName.val = await Namebase.addRecords([record]);
 
       // Log Event
       Logger.event(
-          event: AnalyticsEvent.user(AnalyticsUserEvent.MigratedSName, parameters: {
+          event: AppEvent.user(UserEvent.MigratedSName, parameters: {
         "status": to._hasMigratedSName.val,
         "sName": record.name,
       }));

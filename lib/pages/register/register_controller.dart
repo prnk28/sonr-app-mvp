@@ -5,18 +5,17 @@ import 'package:sonr_app/data/services/services.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'models/intro.dart';
-import 'models/status.dart';
 import 'models/type.dart';
 
 class RegisterController extends GetxController {
   // Properties
-  final nameStatus = NewSNameStatus.Default.obs;
+  final nameStatus = NameStatus.Default.obs;
   final mnemonic = "".obs;
   final sName = "".obs;
   final firstName = "".obs;
   final lastName = "".obs;
   final status = Rx<RegisterPageType>(RegisterPageType.Intro);
-  final auth = Rx<HSRecord>(HSRecord.blank());
+  final auth = Rx<DNSRecord>(DNSRecord.blank());
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -71,45 +70,6 @@ class RegisterController extends GetxController {
     }
   }
 
-  Future<void> setName() async {
-    // Refresh Records
-    final result = await NamebaseClient.refresh();
-
-    // Validate
-    if (await validateName()) {
-      if (nameStatus.value != NewSNameStatus.Returning) {
-        // Check Valid
-        if (result.isValidName(sName.value)) {
-          var genMnemomic = bip39.generateMnemonic();
-          var result = await signUser(sName.value, genMnemomic);
-
-          // Logging
-          Logger.info(
-            "Prefix: ${result.signedPrefix} \n Mnemonic: $genMnemomic \n Fingerprint: ${result.signedFingerprint} \n Identity: ${result.publicKey}",
-          );
-
-          // Add UserRecord Domain
-          await NamebaseClient.addRecords(HSRecord.newRegisteredRecords(result));
-
-          // Analytics
-          Logger.event(
-              event: AnalyticsEvent.user(
-            AnalyticsUserEvent.NewSName,
-            parameters: {
-              'username': sName.value,
-            },
-          ));
-
-          // Update Status
-          mnemonic(genMnemomic);
-          nextPage(RegisterPageType.Backup);
-        }
-      } else {
-        nextPage(RegisterPageType.Location);
-      }
-    }
-  }
-
   /// #### Next Info Panel
   void nextPanel(IntroPageType type) {
     panelNotifier.value = type.page;
@@ -150,14 +110,39 @@ class RegisterController extends GetxController {
     }
   }
 
+  Future<void> setName() async {
+    // Refresh Records
+    final result = await Namebase.refresh();
+    sName(sName.value.toLowerCase());
+
+    // Validate
+    if (await validateName()) {
+      if (nameStatus.value != NameStatus.Returning) {
+        // Check Valid
+        if (result.isValidName(sName.value)) {
+          // Generate Authentication
+          var genMnemomic = bip39.generateMnemonic();
+          var result = await signUser(sName.value, genMnemomic);
+          ContactService.newAuth(genMnemomic, sName.value, result);
+
+          // Update Status
+          mnemonic(genMnemomic);
+          nextPage(RegisterPageType.Backup);
+        }
+      } else {
+        nextPage(RegisterPageType.Location);
+      }
+    }
+  }
+
   /// #### Submits Contact
   setContact() async {
     // Get Contact from Values
     var contact = Contact(
         profile: Profile(
-      firstName: firstName.value,
-      lastName: lastName.value,
-      sName: sName.value,
+      firstName: firstName.value.capitalizeFirst,
+      lastName: lastName.value.capitalizeFirst,
+      sName: sName.value.toLowerCase(),
     ));
 
     // Create User
@@ -195,7 +180,7 @@ class RegisterController extends GetxController {
 
   /// #### Validates SName as Valid characters
   Future<bool> validateName() async {
-    nameStatus(await NamebaseClient.validateName(sName.value));
+    nameStatus(await Namebase.validateName(sName.value));
     return nameStatus.value.isValid;
   }
 

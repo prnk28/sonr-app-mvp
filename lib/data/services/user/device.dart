@@ -177,6 +177,39 @@ class DeviceService extends GetxService {
     return false;
   }
 
+  /// #### Method saves file to disk
+  static Future<Uint8List?> readFile(String name) async {
+    // Fetch Directory, Create Path, Create File
+    final dir = await getApplicationDocumentsDirectory();
+    final path = dir.path + "/" + name;
+    final file = File(path);
+
+    // Return File
+    var exists = await file.exists();
+    if (exists) {
+      return await file.readAsBytes();
+    }
+    return null;
+  }
+
+  /// #### Method saves file to disk
+  static Future<File> writeFile(String name, Uint8List data) async {
+    // Fetch Directory, Create Path, Create File
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File(dir.path + "/" + name);
+    // Write Data
+    if (file.existsSync()) {
+      try {
+        await file.delete();
+      } catch (e) {
+        Logger.error(e.toString());
+      }
+    }
+
+    // Return File
+    return await file.writeAsBytes(data.toList());
+  }
+
   /// #### Method Updates Tray Items
   void updateSystray(List<SystrayAction> actions) async {
     await Systray.updateMenu(actions);

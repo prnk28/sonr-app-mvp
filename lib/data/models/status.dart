@@ -168,14 +168,6 @@ extension UserStatusUtils on UserStatus {
     }
     return UserStatus.New;
   }
-
-  /// Return User Status Into Connection User Status
-  ConnectionRequest_UserStatus toConnectionStatus() {
-    if (DeviceService.isAndroid) {
-      return ConnectionRequest_UserStatus.NEW;
-    }
-    return isNew ? ConnectionRequest_UserStatus.NEW : ConnectionRequest_UserStatus.RETURNING;
-  }
 }
 
 enum AppState {

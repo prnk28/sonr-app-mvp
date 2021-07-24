@@ -111,7 +111,7 @@ class SenderService extends GetxService {
     // Verify Request
     if (!request.payload.isNone && request.hasTo()) {
       // Analytics
-      Logger.event(event: AnalyticsEvent.invited(request));
+      Logger.event(event: AppEvent.invited(request));
 
       // Send Invite
       NodeService.instance.invite(request);
@@ -126,7 +126,7 @@ class SenderService extends GetxService {
   /// Peer has Responded
   void handleReply(InviteResponse data) async {
     // Logging
-    Logger.event(event: AnalyticsEvent.responded(data));
+    Logger.event(event: AppEvent.responded(data));
     Logger.info("Node(Callback) Responded: " + data.toString());
 
     // Handle Contact Response

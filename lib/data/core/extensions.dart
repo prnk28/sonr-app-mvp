@@ -65,6 +65,19 @@ extension ConnectivityResultUtils on ConnectivityResult {
   bool get hasInternet => this != ConnectivityResult.none;
 }
 
+extension DNSRecordUtils on DNSRecord {
+  /// Convert this DNSRecord to Sonr Proto Peer
+  Future<Peer> toPeer() async {
+    final pushToken = await ContactService.findPushToken(this.name);
+    return Peer(
+        sName: this.name,
+        id: Peer_ID(
+          publicKey: this.publicKey,
+          pushToken: pushToken ?? "",
+        ));
+  }
+}
+
 extension GeoLocaterPosition on geo.Position {
   /// Convert this Position to Sonr Proto Location
   Location toSonrLocation() {
