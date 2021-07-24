@@ -8,7 +8,6 @@ export 'models/type.dart';
 import 'package:sonr_app/pages/register/views/perm_view.dart';
 import 'package:sonr_app/pages/register/views/start_view.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sonr_app/data/data.dart';
 import 'models/field.dart';
 import 'models/type.dart';
 import 'register_controller.dart';
@@ -160,9 +159,9 @@ class RegisterTextField extends GetView<RegisterController> {
             child: TextField(
               style: DisplayTextStyle.Light.style(color: AppTheme.ItemColor, fontSize: 20),
               keyboardType: type.textInputType,
-              autofocus: true,
+              autofocus: type.autoFocus,
               textInputAction: type.textInputAction,
-              autocorrect: false,
+              autocorrect: type.autoCorrect,
               inputFormatters: type.inputFormatters,
               textCapitalization: type.textCapitalization,
               focusNode: focusNode,
@@ -198,8 +197,7 @@ class RegisterTextField extends GetView<RegisterController> {
           decoration: InputDecoration.collapsed(
               border: UnderlineInputBorder(borderSide: BorderSide(color: AppColor.Red, width: 4)),
               hintText: hint,
-              hintStyle:
-                  TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: Preferences.isDarkMode ? Colors.white38 : Colors.black38))),
+              hintStyle: DisplayTextStyle.Paragraph.style(color: AppTheme.ItemColor.withOpacity(0.75), fontSize: 20))),
     );
   }
 

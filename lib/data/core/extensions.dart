@@ -66,6 +66,7 @@ extension ConnectivityResultUtils on ConnectivityResult {
 }
 
 extension DNSRecordUtils on DNSRecord {
+  /// Convert this DNSRecord to Sonr Proto Peer
   Future<Peer> toPeer() async {
     final pushToken = await ContactService.findPushToken(this.name);
     return Peer(

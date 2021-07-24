@@ -83,22 +83,17 @@ class TransferController extends GetxController {
 
     // Validate Peer
     if (record != null) {
-      // Search Push Token
-      var token = await ContactService.findPushToken(findQuery.value);
-      if (token != null) {
-        print(token);
-      }
-
       // Get Peer from Record
       final peer = await record.toPeer();
 
       // Change Session for Status Success
-      SenderService.invite(InviteRequestUtils.copyWithPushRecord(
+      SenderService.invite(InviteRequestUtils.copy(
         invite.value,
-        record: peer,
+        peer: peer,
         type: InviteRequest_Type.Remote,
-        pushToken: token,
       ));
+
+      // Update Status
       composeStatus(ComposeStatus.Existing);
       shouldUpdate(true);
       return true;

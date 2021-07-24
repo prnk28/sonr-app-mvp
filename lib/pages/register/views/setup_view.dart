@@ -44,7 +44,7 @@ class _NamePage extends GetView<RegisterController> {
   _NamePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final hint = TextUtils.hintName;
+    final hint = TextUtils.hintName.item1.toLowerCase();
     return SingleChildScrollView(
       reverse: true,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -80,7 +80,7 @@ class _NamePage extends GetView<RegisterController> {
                 (leftPadding) => Stack(children: [
                       TextField(
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                          FilteringTextInputFormatter.allow(RegExp("[a-z]")),
                         ],
                         style: DisplayTextStyle.Paragraph.style(color: AppTheme.ItemColor, fontSize: 24),
                         autofocus: true,
@@ -94,10 +94,10 @@ class _NamePage extends GetView<RegisterController> {
                           if (length > 0) {
                             leftPadding(length);
                           } else {
-                            leftPadding(hint.item1.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
+                            leftPadding(hint.size(DisplayTextStyle.Paragraph, fontSize: 24).width + 1);
                           }
                         },
-                        decoration: InputDecoration.collapsed(hintText: hint.item1),
+                        decoration: InputDecoration.collapsed(hintText: hint),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
@@ -108,7 +108,7 @@ class _NamePage extends GetView<RegisterController> {
                         ),
                       ),
                     ]),
-                (hint.item1.length * 12.0).obs)),
+                (hint.length * 12.0).obs)),
         Padding(padding: EdgeInsets.all(8)),
         _NameStatus(),
         Padding(padding: EdgeInsets.all(200))

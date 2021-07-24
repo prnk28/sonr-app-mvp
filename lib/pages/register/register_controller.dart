@@ -70,30 +70,6 @@ class RegisterController extends GetxController {
     }
   }
 
-  Future<void> setName() async {
-    // Refresh Records
-    final result = await Namebase.refresh();
-
-    // Validate
-    if (await validateName()) {
-      if (nameStatus.value != NameStatus.Returning) {
-        // Check Valid
-        if (result.isValidName(sName.value)) {
-          // Generate Authentication
-          var genMnemomic = bip39.generateMnemonic();
-          var result = await signUser(sName.value, genMnemomic);
-          ContactService.newAuth(genMnemomic, sName.value, result);
-
-          // Update Status
-          mnemonic(genMnemomic);
-          nextPage(RegisterPageType.Backup);
-        }
-      } else {
-        nextPage(RegisterPageType.Location);
-      }
-    }
-  }
-
   /// #### Next Info Panel
   void nextPanel(IntroPageType type) {
     panelNotifier.value = type.page;
@@ -134,14 +110,39 @@ class RegisterController extends GetxController {
     }
   }
 
+  Future<void> setName() async {
+    // Refresh Records
+    final result = await Namebase.refresh();
+    sName(sName.value.toLowerCase());
+
+    // Validate
+    if (await validateName()) {
+      if (nameStatus.value != NameStatus.Returning) {
+        // Check Valid
+        if (result.isValidName(sName.value)) {
+          // Generate Authentication
+          var genMnemomic = bip39.generateMnemonic();
+          var result = await signUser(sName.value, genMnemomic);
+          ContactService.newAuth(genMnemomic, sName.value, result);
+
+          // Update Status
+          mnemonic(genMnemomic);
+          nextPage(RegisterPageType.Backup);
+        }
+      } else {
+        nextPage(RegisterPageType.Location);
+      }
+    }
+  }
+
   /// #### Submits Contact
   setContact() async {
     // Get Contact from Values
     var contact = Contact(
         profile: Profile(
-      firstName: firstName.value,
-      lastName: lastName.value,
-      sName: sName.value,
+      firstName: firstName.value.capitalizeFirst,
+      lastName: lastName.value.capitalizeFirst,
+      sName: sName.value.toLowerCase(),
     ));
 
     // Create User
