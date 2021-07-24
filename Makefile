@@ -27,6 +27,13 @@ all: Makefile
 	@echo ""
 	@sed -n 's/^##//p' $<
 
+## activate      :   Activates Global Flutter Plugins
+activate:
+	pub global activate dartdoc
+	pub global activate dhttpd
+	pub global activate protoc_plugin
+	pub global activate cider
+
 ## build         :   Builds IPA and APB for Sonr App
 build: build.ios build.android
 	@cd /System/Library/Sounds && afplay Hero.aiff
@@ -90,9 +97,12 @@ clean:
 
 ##
 ##
-## Shortcuts   : (b) => build                |      (p) => profile
+## Shortcuts   : (a) => activate             |      (c) => clean
+##               (b) => build                |      (p) => profile
 ##               └─ (bi) => build.ios        |      (u) => update
-##               └─ (ba) => build.android    |      (c) => clean
+##               └─ (ba) => build.android    |
+##
+a:activate
 b:build
 bi:build.ios
 ba:build.android

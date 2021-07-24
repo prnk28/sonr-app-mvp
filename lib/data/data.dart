@@ -1,4 +1,5 @@
 // Core
+export 'core/api.dart';
 export 'core/arguments.dart';
 export 'core/extensions.dart';
 export 'core/routing.dart';
