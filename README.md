@@ -9,7 +9,6 @@
 Sonr Mobile App Flutter frontend that utilizes [sonr_plugin](https://github.com/sonr-io/plugin) and [namebase](https://github.com/sonr-io/namebase).
 
 ## 🔷 Installation
-
 Generate **SQL** Table fields by running this command:
 ```bash
 flutter packages pub run build_runner build
@@ -21,21 +20,41 @@ flutter pub get
 flutter pub run environment_config:generate --ip_key=$ip_key --rapid_key=$rapid_key --hs_key=$hs_key  --hs_secret=$hs_secret --storj_key=$storj_key --storj_root_password=$storj_root_password --sentry_dsn=$sentry_dsn --hub_key=$hub_key --hub_secret=$hub_secret --map_key=$map_key --map_secret=$map_secret`
 ```
 
-Activate **Global Plugins** with this command:
-``` bash
-make activate
-```
-
 Generate **Icon Comments** using this command:
-```PCRE (PHP < 7.3)
+```regex
+// PCRE (PHP < 7.3)
 ^.*(\s([a-zA-Z]+\s)+).*$
+
 Substitution: SonrIcons -$2![Icon of $2 ](/Users/prad/Sonr/docs/icons/PNG/$2.png)\n\0\n
 ```
   * Expression for Comment Generation
   * **DONT** use underscores for fonts
 
+## 🔷 Makefile
+This project contains a `makefile` with the following commands:
+```bash
+# Activates Global Flutter Plugins
+make activate
 
-#
+# Builds IPA and APB for Sonr App
+make build
+
+# Builds IPA ONLY for iOS Sonr App
+make build.ios
+
+# Builds APB ONLY for Android Sonr App
+make build.android
+
+# Run App for Profiling and Save SKSL File
+make profile
+
+# Fetch Plugin Submodule, and Upgrade Dependencies
+make update
+
+# Cleans App Build Cache
+make clean
+```
+
 ## 🔷 Type Conversion
 Table for **Gomobile** type conversions from bind.
 ```
