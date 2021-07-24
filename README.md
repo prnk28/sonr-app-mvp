@@ -1,5 +1,5 @@
 <p align="center">
-<img width="500" src="https://uploads-ssl.webflow.com/60e4b57e5960f8d0456720e7/60fbafc11d4e827c3ebc44ce_Github%20-%20App.png">
+<img width="500" src="https://uploads-ssl.webflow.com/60e4b57e5960f8d0456720e7/60fbc0e3804457746c22c731_Github%20-%20App.png">
 </p>
 
 *By [Sonr](https://www.sonr.io), creators of [The Sonr App](https://www.twitter.com/TheSonrApp)*
