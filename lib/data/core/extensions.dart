@@ -54,11 +54,11 @@ extension ConnectivityResultUtils on ConnectivityResult {
   ConnectionRequest_InternetType toInternetType() {
     switch (this) {
       case ConnectivityResult.wifi:
-        return ConnectionRequest_InternetType.Wifi;
+        return ConnectionRequest_InternetType.WIFI;
       case ConnectivityResult.mobile:
-        return ConnectionRequest_InternetType.Mobile;
+        return ConnectionRequest_InternetType.MOBILE;
       case ConnectivityResult.none:
-        return ConnectionRequest_InternetType.None;
+        return ConnectionRequest_InternetType.OFFLINE;
     }
   }
 

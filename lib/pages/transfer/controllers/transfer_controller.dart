@@ -90,7 +90,7 @@ class TransferController extends GetxController {
       SenderService.invite(InviteRequestUtils.copy(
         invite.value,
         peer: peer,
-        type: InviteRequest_Type.Remote,
+        type: InviteRequest_Type.REMOTE,
       ));
 
       // Update Status

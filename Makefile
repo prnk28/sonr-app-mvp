@@ -21,18 +21,15 @@ IOS_ARCHIVE_DIR=/Users/prad/Sonr/app/build/ios/archive/
 ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/app/build/app/outputs/bundle/release/
 SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
 
+# References
+PLUGIN_VERSION=`cd $(PLUGIN_DIR) && cider version`
+COMMIT_MESSAGE="Updated Core Binary to ${PLUGIN_VERSION}"
+
 # Lists Options
 all: Makefile
 	@figlet -f larry3d "Sonr App"
 	@echo ""
 	@sed -n 's/^##//p' $<
-
-## activate      :   Activates Global Flutter Plugins
-activate:
-	pub global activate dartdoc
-	pub global activate dhttpd
-	pub global activate protoc_plugin
-	pub global activate cider
 
 ## build         :   Builds IPA and APB for Sonr App
 build: build.ios build.android
@@ -47,18 +44,16 @@ build: build.ios build.android
 build.ios:
 	@cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
-	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
-	@echo "Finished Building iOS ➡ " && date
+	@echo "✅ Finished Building iOS ➡ " && date
 
 ## └─ android         - APB for Android
 build.android:
 	@cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
 	cd $(ANDROID_ARCHIVE_DIR) && open .
-	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
-	@echo "Finished Building Android ➡ " && date
+	@echo "✅ Finished Building Android ➡ " && date
 
 ##
 ## [profile]     :   Run App for Profiling and Save SKSL File
@@ -71,14 +66,19 @@ profile:
 
 ## [update]      :   Fetch Plugin Submodule, and Upgrade Dependencies
 update:
-	cd $(PLUGIN_DIR) && cider bump patch
-	cd $(PLUGIN_DIR) && git add . && git commit -m "Updated Core Binary" && git push
-# cd $(PLUGIN_DIR) && hover publish-plugin
-	cd $(PROJECT_DIR) && rm -rf build
-	cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && git submodule update --remote plugin
-	cd $(PROJECT_DIR) && flutter pub upgrade
-	cd $(PROJECT_DIR) && flutter pub get
+	@echo '🔹 Bumping Plugin Version...'
+	@cd $(PLUGIN_DIR) && cider bump patch
+	@cd $(PLUGIN_DIR) && git add . && git commit -m ${COMMIT_MESSAGE} && git push
+	@echo '🔹 Cleaning Project...'
+	@cd $(PROJECT_DIR) && rm -rf build
+	@cd $(PROJECT_DIR) && $(CLEAN)
+	@echo '🔹 Updating Submodules...'
+	@cd $(PROJECT_DIR) && git submodule update --remote plugin
+	@echo '🔹 Fetch Packages...'
+	@cd $(PROJECT_DIR) && flutter pub upgrade
+	@cd $(PROJECT_DIR) && flutter pub get
+	@cd /System/Library/Sounds && afplay Hero.aiff
+	@echo "✅ Finished Updating Binary ➡ " && date
 
 ## [clean]       :   Cleans App Build Cache
 clean:
@@ -97,12 +97,10 @@ clean:
 
 ##
 ##
-## Shortcuts   : (a) => activate             |      (c) => clean
-##               (b) => build                |      (p) => profile
-##               └─ (bi) => build.ios        |      (u) => update
-##               └─ (ba) => build.android    |
+## Shortcuts   : (b) => build                    |      (c) => clean
+##               └─ (bi) => build.ios            |      (p) => profile
+##               └─ (ba) => build.android        |      (u) => update
 ##
-a:activate
 b:build
 bi:build.ios
 ba:build.android

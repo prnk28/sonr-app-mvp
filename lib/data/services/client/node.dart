@@ -37,7 +37,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   Future<NodeService> init() async {
     // Bind Observers
     WidgetsBinding.instance!.addObserver(this);
-    _connectionStream = DeviceService.connectivity.listen(_handleDeviceConnection);
 
     // Create Node
     _instance = await SonrCore.initialize(RequestBuilder.initialize);
@@ -105,7 +104,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
 
   /// #### Retreive URLLink Metadata
   static Future<URLLink> getURL(String url) async {
-    return await SonrCore.getUrlLink(url);
+    return await to._instance.url(url);
   }
 
   /// #### Send Position Update for Node
@@ -125,7 +124,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// #### Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.Flat));
+      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.FLAT));
     }
   }
 
@@ -139,20 +138,6 @@ class NodeService extends GetxService with WidgetsBindingObserver {
       print(key);
       print(value.toString());
     });
-  }
-
-  /// #### Handle Device Updated Connectivity Result
-  void _handleDeviceConnection(ConnectivityResult result) {
-    // Display No Connection Error - Stop Services
-    if (result == ConnectivityResult.none) {
-      AppPage.Error.to(args: ErrorPageArgs.noNetwork());
-      _instance.stop();
-    } else {
-      // Update Network Connection
-      NodeService.instance.update(
-        API.newUpdateConnectivity(result.toInternetType()),
-      );
-    }
   }
 
   /// #### Handle Bootstrap Result
@@ -173,15 +158,9 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   /// #### An Error Has Occurred
-  void _handleError(ErrorMessage data) async {
-    // Check for Peer Error
-    if (data.type == ErrorMessage_Type.PEER_NOT_FOUND_INVITE) {
-      final removeEvent = TopicEvent(id: data.data, subject: TopicEvent_Subject.EXIT);
-      LobbyService.to.handleEvent(removeEvent);
-    }
-
+  void _handleError(ErrorEvent data) async {
     // Check Severity
-    if (data.severity != ErrorMessage_Severity.LOG) {
+    if (data.severity != ErrorEvent_Severity.LOG) {
       AppRoute.snack(SnackArgs.error("", error: data));
     }
   }
