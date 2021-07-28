@@ -1,4 +1,3 @@
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:flutter/foundation.dart';
 
@@ -17,7 +16,6 @@ class RequestBuilder {
           textile: true,
           push: true,
           mailbox: DeviceService.isIOS,
-          threadDB: Env.thread_db,
         ),
         hostOptions: ConnectionRequest_HostOptions(
           mdnsDiscovery: true,
