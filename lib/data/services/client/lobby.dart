@@ -20,7 +20,7 @@ class LobbyService extends GetxService {
   final _lobby = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
   final _position = Position().obs;
-  final _status = Rx<Lobby_Status>(Lobby_Status.Empty);
+  final _status = Rx<Lobby_Status>(Lobby_Status.EMPTY);
 
   // References
   late StreamSubscription<Position>? _positionStream;

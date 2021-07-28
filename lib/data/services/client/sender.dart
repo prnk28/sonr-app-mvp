@@ -130,20 +130,15 @@ class SenderService extends GetxService {
     Logger.info("Node(Callback) Responded: " + data.toString());
 
     // Handle Contact Response
-    if (data.type == InviteResponse_Type.Contact) {
+    if (data.payload == Payload.CONTACT) {
       await HapticFeedback.heavyImpact();
 
       // Check if Flat Mode
-      data.flatMode ? AppPage.Flat.response(data.transfer.contact) : data.show();
-    }
-
-    // For Cancel
-    else if (data.type == InviteResponse_Type.None) {
-      await HapticFeedback.vibrate();
+      data.type == InviteResponse_Type.FLAT ? AppPage.Flat.response(data.transfer.contact) : data.show();
     }
 
     // For Transfer
-    else if (data.type == InviteResponse_Type.Transfer) {
+    else if (data.payload.isTransfer) {
       _session.onReply(data);
     }
   }

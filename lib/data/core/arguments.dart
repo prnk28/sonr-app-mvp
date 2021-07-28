@@ -111,12 +111,12 @@ class SnackArgs {
   }
 
   /// #### Error on Operation
-  factory SnackArgs.error(String message, {ErrorMessage? error}) {
+  factory SnackArgs.error(String message, {ErrorEvent? error}) {
     // @ Internal Error
     if (error != null) {
       switch (error.severity) {
         // Orange - Title Failed
-        case ErrorMessage_Severity.CRITICAL:
+        case ErrorEvent_Severity.CRITICAL:
           Sound.Critical.play();
           return SnackArgs(
             title: "Failed",
@@ -129,7 +129,7 @@ class SnackArgs {
           );
 
         // Red - Title Error
-        case ErrorMessage_Severity.FATAL:
+        case ErrorEvent_Severity.FATAL:
           Sound.Fatal.play();
           return SnackArgs(
             title: "Error",

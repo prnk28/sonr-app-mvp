@@ -77,7 +77,7 @@ class ReceiverService extends GetxService {
     HapticFeedback.heavyImpact();
 
     // Check for Flat
-    if (data.type == InviteRequest_Type.Flat && data.payload == Payload.CONTACT) {
+    if (data.type == InviteRequest_Type.FLAT && data.payload == Payload.CONTACT) {
       AppPage.Flat.invite(data.contact);
     } else {
       // Place Controller

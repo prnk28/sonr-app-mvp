@@ -123,7 +123,7 @@ extension InviteRequestDisplayUtils on InviteRequest {
 extension InviteResponseDisplayUtils on InviteResponse {
   /// Display Invite Request as a Bottom Sheet
   void show() {
-    if (this.type == InviteResponse_Type.Contact) {
+    if (this.payload == Payload.CONTACT) {
       // Open Sheet
       AppRoute.popup(
         Container(
