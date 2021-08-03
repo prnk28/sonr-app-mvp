@@ -84,8 +84,6 @@ update:
 clean:
 	@echo '-- Removing Build Folders --'
 	cd $(PROJECT_DIR) && rm -rf build
-	cd $(DESK_BUILD_DIR) && rm -rf outputs
-	cd $(DESK_BUILD_DIR) && rm -rf intermediates
 	@echo '-- Cleaning Flutter --'
 	cd $(PROJECT_DIR) && git submodule foreach --recursive git reset --hard
 	cd $(PROJECT_DIR) && $(CLEAN)
