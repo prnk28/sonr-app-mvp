@@ -70,7 +70,7 @@ enum FileSystemIcons {
   FileTextOne,
 }
 
-extension FileSystemUtils on FileSystemIcons {
+extension FileSystemIconUtils on FileSystemIcons {
   /// Returns Raw Type of Enum
   String get type => this.toString().substring(0, this.toString().indexOf('.'));
 
@@ -104,7 +104,7 @@ extension FileSystemUtils on FileSystemIcons {
 
   /// Returns Path for this Icon by Fill
   String path(IconFill fill) {
-    return 'assets/${fill.path}/${type}/${this.fileName}';
+    return 'assets/icons/${fill.path}/${type}/${this.fileName}';
   }
 
   /// ## (SVG) ChartIcons:DuoTone
@@ -120,7 +120,7 @@ extension FileSystemUtils on FileSystemIcons {
   }) {
     return SvgPicture.asset(
       this.path(IconFill.DuoTone),
-      color: color ?? Colors.white,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,
@@ -145,7 +145,7 @@ extension FileSystemUtils on FileSystemIcons {
   }) {
     return SvgPicture.asset(
       this.path(IconFill.Line),
-      color: color ?? Colors.white,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,
@@ -169,7 +169,7 @@ extension FileSystemUtils on FileSystemIcons {
   }) {
     return SvgPicture.asset(
       this.path(IconFill.Solid),
-      color: color ?? Colors.white,
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,

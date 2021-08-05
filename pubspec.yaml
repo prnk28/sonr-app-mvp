@@ -170,6 +170,9 @@ flutter:
     - assets/animations/rive/
     - assets/data/
     - assets/fonts/
+    - assets/icons/duotone/
+    - assets/icons/line/
+    - assets/icons/solid/
     - assets/images/illustrations/
     - assets/images/svg/
     - assets/images/utility/

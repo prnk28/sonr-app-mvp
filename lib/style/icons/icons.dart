@@ -13,6 +13,7 @@ export 'selfcare.dart';
 export 'shopping.dart';
 export 'socialmedia.dart';
 export 'sports.dart';
+export 'package:sonr_app/style/style.dart';
 export 'ui.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
