@@ -1,4 +1,5 @@
 import 'package:sonr_app/pages/personal/personal.dart';
+import 'package:sonr_app/pages/settings/views/device_view.dart';
 import 'package:sonr_app/style/style.dart';
 
 class SettingsController extends GetxController {
@@ -8,6 +9,7 @@ class SettingsController extends GetxController {
   final isDarkModeEnabled = Preferences.isDarkMode.obs;
   final isFlatModeEnabled = Preferences.flatModeEnabled.obs;
   final isPointToShareEnabled = Preferences.pointShareEnabled.obs;
+  final linkers = Linkers().obs;
 
   void handleLeading() {
     HapticFeedback.heavyImpact();
@@ -53,10 +55,18 @@ class SettingsController extends GetxController {
     }
   }
 
-  void shiftScreen(ContactOptions option) {
+  void shiftScreen(UserOptions option) async {
     HapticFeedback.heavyImpact();
-    status(option.editorStatus);
-    title(status.value.name);
+    if (option == UserOptions.Devices) {
+      final data = await NodeService.instance.listLinkers();
+      if (data != null) {
+        linkers(data);
+      }
+      Get.to(DevicesView());
+    } else {
+      status(option.editorStatus);
+      title(status.value.name);
+    }
   }
 
   void reset() {

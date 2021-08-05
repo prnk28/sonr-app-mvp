@@ -230,7 +230,7 @@ class TextUtils {
   /// #### Returns Random Hint Name
   static Tuple<String, String> get hintName {
     switch (DeviceService.device.platform) {
-      case Platform.Android:
+      case Platform.ANDROID:
         return [
           Tuple("Larry", "Page"),
           Tuple("Sergei", "Bring"),
@@ -238,13 +238,13 @@ class TextUtils {
         ].random();
       case Platform.IOS:
         return [Tuple("Steve", "Jobs"), Tuple("Steve", "Wozniak"), Tuple("Jony", "Ive")].random();
-      case Platform.Linux:
+      case Platform.LINUX:
         return Tuple("Linus", "Trovalds");
-      case Platform.MacOS:
+      case Platform.MACOS:
         return [Tuple("Steve", "Jobs"), Tuple("Jony", "Ive"), Tuple("Andy", "Hertzeld")].random();
-      case Platform.Web:
+      case Platform.WEB:
         return [Tuple("Vitalik", "Buterin"), Tuple("Elon", "Musk"), Tuple("Jeff", "Bezos"), Tuple("Tim", "Berners-Lee")].random();
-      case Platform.Windows:
+      case Platform.WINDOWS:
         return [Tuple("Bill", "Gates"), Tuple("Paul", "Allen")].random();
       default:
         return [

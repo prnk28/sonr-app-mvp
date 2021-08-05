@@ -189,19 +189,11 @@ class SenderService extends GetxService {
   // @ Helper: Handles FILE Choice
   Future<InviteRequest?> _handleFileChoice() async {
     // Load Picker
-    if (DeviceService.isMobile) {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
-      if (result != null) {
-        // Confirm File
-        var file = result.toSFile(payload: Payload.FILE);
-        return await _handlePayload(file.payload, file: file);
-      } else {
-        var filePath = await NodeService.instance.pickFile();
-        var file = SFile(payload: Payload.FILE, items: [SFile_Item(path: filePath)], count: 1);
-        if (filePath != null) {
-          return await _handlePayload(file.payload, file: file);
-        }
-      }
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (result != null) {
+      // Confirm File
+      var file = result.toSFile(payload: Payload.FILE);
+      return await _handlePayload(file.payload, file: file);
     }
   }
 

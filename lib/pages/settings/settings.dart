@@ -137,13 +137,13 @@ class _SettingsAlternateView extends GetView<SettingsController> {
               padding: EdgeInsets.all(8),
               child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: ContactOptions.values.length,
+                  itemCount: UserOptions.values.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 24,
                   ),
                   itemBuilder: (context, index) {
-                    return _SettingsOptionsButton(option: ContactOptions.values[index]);
+                    return _SettingsOptionsButton(option: UserOptions.values[index]);
                   })),
           Container(
               alignment: Alignment.centerLeft,
@@ -216,7 +216,7 @@ class _SettingsAlternateView extends GetView<SettingsController> {
 }
 
 class _SettingsOptionsButton extends GetView<SettingsController> {
-  final ContactOptions option;
+  final UserOptions option;
 
   const _SettingsOptionsButton({Key? key, required this.option}) : super(key: key);
   @override

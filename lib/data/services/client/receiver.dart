@@ -77,9 +77,16 @@ class ReceiverService extends GetxService {
     HapticFeedback.heavyImpact();
 
     // Check for Flat
-    if (data.type == InviteRequest_Type.FLAT && data.payload == Payload.CONTACT) {
+    if (data.type == InviteRequest_Type.DIRECT && data.payload == Payload.CONTACT) {
       AppPage.Flat.invite(data.contact);
-    } else {
+    }
+    // Link Request
+    else if (data.type == InviteRequest_Type.LINK) {
+
+    }
+
+    // Transfer Request
+    else {
       // Place Controller
       if (data.payload == Payload.CONTACT) {
         AppRoute.popup(ContactAuthView(false, invite: data), dismissible: false);
