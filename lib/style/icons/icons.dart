@@ -28,9 +28,6 @@ enum IconFill { Line, DuoTone, Solid }
 extension IconFillUtils on IconFill {
   /// Returns Name of this Type
   String get name => this.toString().substring(this.toString().indexOf('.') + 1);
-
-  /// Returns Path of Fill Directory
-  String get path => this.name.toLowerCase();
 }
 
 String cleanWord(String word) {

@@ -18,6 +18,7 @@ export 'package:sonr_app/modules/payload/payload.dart';
 export 'buttons/action.dart';
 export 'buttons/color.dart';
 export 'buttons/solid.dart';
+export 'icons/icons.dart';
 
 // Theme Components
 export 'theme/color.dart' hide NoSplash;

@@ -195,14 +195,10 @@ extension AppRoute on AppPage {
         return () => SettingsPage();
       default:
         return () {
-          if (DeviceService.isMobile) {
-            return ShowCaseWidget(
-                builder: Builder(
-              builder: (_) => HomePage(),
-            ));
-          } else {
-            return ExplorerPage();
-          }
+          return ShowCaseWidget(
+              builder: Builder(
+            builder: (_) => HomePage(),
+          ));
         };
     }
   }

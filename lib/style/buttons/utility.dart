@@ -64,6 +64,10 @@ class ButtonUtility {
     }
   }
 
+  static Widget buildUiIcon(UIIcons ico) {
+    return ico.line(width: 24, height: 24, color: AppTheme.ItemColorInversed);
+  }
+
   static Widget buildIcon(IconData data) {
     return Icon(data, color: Colors.white, size: 24);
   }

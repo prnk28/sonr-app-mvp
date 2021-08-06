@@ -31,17 +31,16 @@ Future<void> main() async {
   // Check Platform
   if (DeviceService.hasInternet) {
     runZonedGuarded(() {
-      runApp(SplashPage(isDesktop: DeviceService.isDesktop));
+      runApp(SplashPage());
     }, FirebaseCrashlytics.instance.recordError);
   } else {
-    runApp(SplashPage(isDesktop: DeviceService.isDesktop));
+    runApp(SplashPage());
   }
 }
 
 /// #### Root App Widget
 class SplashPage extends StatelessWidget {
-  final bool isDesktop;
-  const SplashPage({Key? key, required this.isDesktop}) : super(key: key);
+  const SplashPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     DeviceService.keyboardHide();
@@ -61,38 +60,11 @@ class SplashPage extends StatelessWidget {
         GetObserver(),
         Logger.Observer,
       ],
-      title: _title(),
       home: _buildScaffold(),
     );
   }
 
-  String _title() {
-    if (isDesktop) {
-      return "Sonr Desktop";
-    }
-    return "";
-  }
-
   Widget _buildScaffold() {
-    if (isDesktop) {
-      return Scaffold(
-          backgroundColor: Get.theme.backgroundColor,
-          body: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              // @ Rive Animation
-              Center(
-                child: CircleLoader(),
-              ),
-
-              // @ Fade Animation of Text
-              Positioned(
-                bottom: 100,
-                child: FadeInUp(child: "Sonr".hero()),
-              ),
-            ],
-          ));
-    }
     return Scaffold(
         backgroundColor: Colors.black,
         body: Stack(
@@ -121,41 +93,22 @@ class SplashPage extends StatelessWidget {
     // # Check for User
     if (DeviceService.hasInternet) {
       if (ContactService.status.value.isNew) {
-        if (isDesktop) {
-          // Create User
-          await ContactService.newContact(Contact(
-              profile: Profile(
-            firstName: "Anonymous",
-            lastName: DeviceService.device.platform.toString(),
-          )));
-
-          // Connect to Network
-          AppPage.Home.off(init: NodeService.to.connect, args: HomeArguments(isFirstLoad: true));
-        }
-        // Register Mobile
-        else {
-          AppPage.Register.off();
-        }
+        AppPage.Register.off();
       }
       // # Handle Returning
       else {
-        // Check Platform
-        if (!isDesktop) {
-          // All Valid
-          if (await Permissions.Location.isGranted) {
-            AppPage.Home.off(args: HomeArguments.FirstLoad);
-          }
-
-          // No Location
-          else {
-            Permissions.Location.request().then((value) {
-              if (value) {
-                AppPage.Home.off(args: HomeArguments.FirstLoad);
-              }
-            });
-          }
-        } else {
+        // All Valid
+        if (await Permissions.Location.isGranted) {
           AppPage.Home.off(args: HomeArguments.FirstLoad);
+        }
+
+        // No Location
+        else {
+          Permissions.Location.request().then((value) {
+            if (value) {
+              AppPage.Home.off(args: HomeArguments.FirstLoad);
+            }
+          });
         }
       }
     } else {

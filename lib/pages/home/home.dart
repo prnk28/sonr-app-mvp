@@ -13,7 +13,6 @@ import 'views/dashboard_view.dart';
 import 'package:sonr_app/pages/home/controllers/home_controller.dart';
 import 'package:sonr_app/pages/home/controllers/view.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'views/panels_view.dart';
 import 'widgets/bottom_bar.dart';
 import 'widgets/top_header.dart';
 
@@ -59,33 +58,5 @@ class _HomePageState extends State<HomePage> {
     } else {
       return HomeAppBar();
     }
-  }
-}
-
-class ExplorerPage extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PageAppBar(title: "Welcome".heading()),
-      backgroundColor: AppTheme.BackgroundColor,
-      body: Center(
-        child: Container(
-          width: 1280,
-          height: 800,
-          child: Row(children: [
-            Container(
-              padding: EdgeInsets.all(24),
-              width: 1280 / 3 * 2,
-              child: AccessView(),
-            ),
-            Container(
-              padding: EdgeInsets.all(24),
-              width: 1280 / 3,
-              child: NearbyListView(),
-            ),
-          ]),
-        ),
-      ),
-    );
   }
 }

@@ -74,6 +74,9 @@ extension FoodUtils on FoodIcons {
   /// Returns Raw Type of Enum
   String get type => this.toString().substring(0, this.toString().indexOf('.'));
 
+  /// Returns Directory of Category
+  String get category => this.type.replaceAll('Icons', '');
+
   /// Returns Raw Value of Enum Type
   String get value => this.toString().substring(this.toString().indexOf('.') + 1);
 
@@ -99,12 +102,12 @@ extension FoodUtils on FoodIcons {
       }
     }
 
-    return path + '.svg';
+    return path;
   }
 
   /// Returns Path for this Icon by Fill
   String path(IconFill fill) {
-    return 'assets/icons/${fill.path}/${type}/${this.fileName}';
+    return 'assets/icons/${category}/${this.fileName}@${fill.name}.svg';
   }
 
   /// ## (SVG) ChartIcons:DuoTone
@@ -120,7 +123,7 @@ extension FoodUtils on FoodIcons {
   }) {
     return SvgPicture.asset(
       this.path(IconFill.DuoTone),
-      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : null,
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,
@@ -145,7 +148,7 @@ extension FoodUtils on FoodIcons {
   }) {
     return SvgPicture.asset(
       this.path(IconFill.Line),
-      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : null,
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,
@@ -169,7 +172,7 @@ extension FoodUtils on FoodIcons {
   }) {
     return SvgPicture.asset(
       this.path(IconFill.Solid),
-      color: Get.isDarkMode ? Color(0xffC2C2C2) : Color(0xff515151),
+      color: Get.isDarkMode ? Color(0xffC2C2C2) : null,
       bundle: rootBundle,
       key: key,
       clipBehavior: clipBehavior,

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'package:sonr_app/pages/settings/views/device_view.dart';
 import 'package:sonr_app/style/style.dart';
@@ -11,6 +14,54 @@ class SettingsController extends GetxController {
   final isPointToShareEnabled = Preferences.pointShareEnabled.obs;
   final linkers = Linkers().obs;
 
+  // Linker View Properties
+  final formKey = GlobalKey<FormState>();
+  final hasError = false.obs;
+  final currentText = "".obs;
+
+  // Controllers
+  late StreamController<ErrorAnimationType> errorController;
+  late TextEditingController textEditingController;
+
+  // Initialization
+  @override
+  void onInit() {
+    errorController = StreamController<ErrorAnimationType>();
+    textEditingController = TextEditingController();
+    super.onInit();
+  }
+
+  // Disposal
+  @override
+  void onClose() {
+    errorController.close();
+    super.onClose();
+  }
+
+  /// ### Clears current text input
+  void clearTextInput() {
+    textEditingController.clear();
+  }
+
+  /// ### Displays Snackbar with Message
+  void displaySnackbar(String message) {
+    AppRoute.snack(SnackArgs.success(message));
+  }
+
+  /// #### Handles OnCompleted Input
+  void onLinkInputCompleted(String s) {
+    print("Completed: " + s);
+  }
+
+  /// #### Handles OnChanged Input
+  void onLinkInputChanged(String s) {
+    currentText(s);
+  }
+
+  /// #### Handles Verify Button Press
+  void onVerifyPressed() {}
+
+  
   void handleLeading() {
     HapticFeedback.heavyImpact();
     if (status.value != EditorFieldStatus.Default) {
@@ -58,10 +109,8 @@ class SettingsController extends GetxController {
   void shiftScreen(UserOptions option) async {
     HapticFeedback.heavyImpact();
     if (option == UserOptions.Devices) {
-      final data = await NodeService.instance.listLinkers();
-      if (data != null) {
-        linkers(data);
-      }
+      linkers(await NodeService.instance.listLinkers());
+      print(linkers.value.list);
       Get.to(DevicesView());
     } else {
       status(option.editorStatus);

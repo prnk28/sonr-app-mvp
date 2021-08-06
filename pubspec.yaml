@@ -96,14 +96,13 @@ dependencies:
   # -- UI/UX --
   animate_do: ^2.0.0
   card_settings: ^2.0.3
-  code_input: ^2.0.0
   flutter_svg: ^0.22.0
   introduction_screen: ^2.1.0
   lottie: ^1.0.1
+  pin_code_fields: ^7.3.0
   rive: ^0.7.7
   showcaseview: ^1.0.0
   supercharged: ^2.0.0
-  systray: ^0.5.3
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
@@ -170,9 +169,23 @@ flutter:
     - assets/animations/rive/
     - assets/data/
     - assets/fonts/
-    - assets/icons/duotone/
-    - assets/icons/line/
-    - assets/icons/solid/
+    - assets/icons/Chart/
+    - assets/icons/Communication/
+    - assets/icons/DateTime/
+    - assets/icons/Design/
+    - assets/icons/Device/
+    - assets/icons/FileSystem/
+    - assets/icons/Finance/
+    - assets/icons/Food/
+    - assets/icons/Formatting/
+    - assets/icons/MediaControl/
+    - assets/icons/Medical/
+    - assets/icons/Navigation/
+    - assets/icons/SelfCare/
+    - assets/icons/Shopping/
+    - assets/icons/SocialMedia/
+    - assets/icons/Sports/
+    - assets/icons/UI/
     - assets/images/illustrations/
     - assets/images/svg/
     - assets/images/utility/

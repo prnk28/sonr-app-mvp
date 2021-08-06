@@ -106,6 +106,13 @@ class SenderService extends GetxService {
     }
   }
 
+  /// #### Sends Invite Link Request with Peer
+  static void link(Peer peer, String shortID) {
+    NodeService.instance.invite(
+      InviteRequest(to: peer, type: InviteRequest_Type.LINK, payload: Payload.NONE, shortID: shortID),
+    );
+  }
+
   /// #### Send Invite with Peer
   static Session? invite(InviteRequest request, {bool isLocal = true}) {
     // Verify Request

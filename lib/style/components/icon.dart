@@ -32,7 +32,7 @@ extension IntricateIconUtils on ComplexIcons {
       }
     }
     // Return with extension
-    return path + '.svg';
+    return path;
   }
 
   /// Returns Path for this Icon
