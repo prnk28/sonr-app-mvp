@@ -9,18 +9,18 @@ class PeerLinkerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(12),
         child: Column(children: [
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 4.0),
-                child: _buildAvatar(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 4.0),
-                child: _buildTitle(),
-              ),
+                  padding: const EdgeInsets.only(right: 4.0, left: 8.0),
+                  child: RichText(
+                      text: TextSpan(children: [
+                    "${peer.prettyHostName()} \n".subheadingSpan(fontSize: 24),
+                    WidgetSpan(child: peer.platform.icon(size: 18, color: AppTheme.ItemColor.withOpacity(0.75))),
+                    " ${peer.prettyPlatform()}".paragraphSpan(fontSize: 18),
+                  ]))),
               Spacer(),
               ColorButton.neutral(
                 text: 'Link',
@@ -28,41 +28,12 @@ class PeerLinkerItem extends StatelessWidget {
               )
             ],
           ),
+          Padding(padding: EdgeInsets.only(bottom: 8)),
           Divider(
             indent: 8,
             endIndent: 8,
             color: AppTheme.DividerColor,
           ),
         ]));
-  }
-
-  /// #### Method Builds Host Name Cleaned
-  String get _cleanHostName => peer.hostName.substring(peer.hostName.indexOf('.') + 1);
-
-  /// ### Method Builds Title Widget
-  Widget _buildTitle() {
-    return [
-      "${_cleanHostName} \n".subheadingSpan(fontSize: 20),
-      " ${peer.sName}.snr/".paragraphSpan(fontSize: 16),
-    ].rich();
-  }
-
-  /// ### Method Builds Avatar Widget
-  Widget _buildAvatar() {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Align(
-          alignment: Alignment.center,
-          child: peer.platform.icon(size: 32),
-        ),
-        Positioned.directional(
-          textDirection: TextDirection.rtl,
-          child: peer.platform.icon(color: AppTheme.ItemColor.withOpacity(0.75), size: 26),
-          start: 14,
-          bottom: 4,
-        )
-      ],
-    );
   }
 }

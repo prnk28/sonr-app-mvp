@@ -5,6 +5,14 @@ import 'package:sonr_app/pages/personal/personal.dart';
 import 'package:sonr_app/pages/settings/views/device_view.dart';
 import 'package:sonr_app/style/style.dart';
 
+enum LinkStatus {
+  None,
+  Pending,
+  Unverified,
+  Label,
+  Verified,
+}
+
 class SettingsController extends GetxController {
   // Properties
   final status = EditorFieldStatus.Default.obs;
@@ -12,7 +20,8 @@ class SettingsController extends GetxController {
   final isDarkModeEnabled = Preferences.isDarkMode.obs;
   final isFlatModeEnabled = Preferences.flatModeEnabled.obs;
   final isPointToShareEnabled = Preferences.pointShareEnabled.obs;
-  final linkers = Linkers().obs;
+  final linkEvent = LinkEvent().obs;
+  final linkStatus = LinkStatus.None.obs;
 
   // Linker View Properties
   final formKey = GlobalKey<FormState>();
@@ -21,13 +30,13 @@ class SettingsController extends GetxController {
 
   // Controllers
   late StreamController<ErrorAnimationType> errorController;
-  late TextEditingController textEditingController;
+  late LinkSubscription linkerSubscription;
 
   // Initialization
   @override
   void onInit() {
     errorController = StreamController<ErrorAnimationType>();
-    textEditingController = TextEditingController();
+    linkerSubscription = NodeService.instance.onLink(handleLinkEvent);
     super.onInit();
   }
 
@@ -35,12 +44,8 @@ class SettingsController extends GetxController {
   @override
   void onClose() {
     errorController.close();
+    linkerSubscription.cancel();
     super.onClose();
-  }
-
-  /// ### Clears current text input
-  void clearTextInput() {
-    textEditingController.clear();
   }
 
   /// ### Displays Snackbar with Message
@@ -49,8 +54,9 @@ class SettingsController extends GetxController {
   }
 
   /// #### Handles OnCompleted Input
-  void onLinkInputCompleted(String s) {
-    print("Completed: " + s);
+  void onLinkInputCompleted(String s, Peer p) {
+    currentText(s);
+    SenderService.link(p, s);
   }
 
   /// #### Handles OnChanged Input
@@ -59,9 +65,10 @@ class SettingsController extends GetxController {
   }
 
   /// #### Handles Verify Button Press
-  void onVerifyPressed() {}
+  void onVerifyPressed(Peer p) {
+    SenderService.link(p, currentText.value);
+  }
 
-  
   void handleLeading() {
     HapticFeedback.heavyImpact();
     if (status.value != EditorFieldStatus.Default) {
@@ -71,6 +78,16 @@ class SettingsController extends GetxController {
       reset();
       Get.back();
     }
+  }
+
+  void handleLinkEvent(LinkEvent event) {
+    if (event.success) {
+      linkStatus(LinkStatus.Label);
+    } else {
+      linkStatus(LinkStatus.Unverified);
+    }
+    linkEvent(event);
+    Logger.info(event.toString());
   }
 
   setDarkMode(bool val) {
@@ -109,8 +126,8 @@ class SettingsController extends GetxController {
   void shiftScreen(UserOptions option) async {
     HapticFeedback.heavyImpact();
     if (option == UserOptions.Devices) {
-      linkers(await NodeService.instance.listLinkers());
-      print(linkers.value.list);
+      linkStatus(LinkStatus.Pending);
+      LobbyService.refreshLinkers();
       Get.to(DevicesView());
     } else {
       status(option.editorStatus);

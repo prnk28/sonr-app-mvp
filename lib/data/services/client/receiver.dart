@@ -80,11 +80,6 @@ class ReceiverService extends GetxService {
     if (data.type == InviteRequest_Type.DIRECT && data.payload == Payload.CONTACT) {
       AppPage.Flat.invite(data.contact);
     }
-    // Link Request
-    else if (data.type == InviteRequest_Type.LINK) {
-
-    }
-
     // Transfer Request
     else {
       // Place Controller

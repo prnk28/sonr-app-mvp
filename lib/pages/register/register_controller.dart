@@ -188,7 +188,7 @@ class RegisterController extends GetxController {
   static Future<bool> validateUser(String n, String mnemonic) async {
     var request = API.newVerifyText(original: mnemonic, signature: mnemonic);
     var response = await NodeService.verify(request);
-    return response.isVerified;
+    return response.success;
   }
 
   // Helper Method to Generate Prefix

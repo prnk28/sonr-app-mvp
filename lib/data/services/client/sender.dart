@@ -108,8 +108,8 @@ class SenderService extends GetxService {
 
   /// #### Sends Invite Link Request with Peer
   static void link(Peer peer, String shortID) {
-    NodeService.instance.invite(
-      InviteRequest(to: peer, type: InviteRequest_Type.LINK, payload: Payload.NONE, shortID: shortID),
+    NodeService.instance.link(
+      LinkRequest(to: peer, type: LinkRequest_Type.SEND, shortID: shortID),
     );
   }
 

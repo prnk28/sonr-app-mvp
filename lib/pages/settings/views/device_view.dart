@@ -11,38 +11,20 @@ class DevicesView extends GetView<SettingsController> {
     return Obx(() => SonrScaffold(
         appBar: DetailAppBar(
           onPressed: controller.handleLeading,
-          title: "Nearby Linker Devices",
+          title: "Nearby Linkers",
           isClose: true,
         ),
-        body:
-            //controller.linkers.value.list.length > 0?
-            ListView.builder(
+        body: ListView.builder(
           itemBuilder: (context, i) => PeerItem.linker(
-            controller.linkers.value.list[i],
+            LobbyService.linkers[i],
             onPressed: () => AppRoute.popup(
               _DeviceLinkCodePopup(
-                peer: controller.linkers.value.list[i],
+                peer: LobbyService.linkers[i],
               ),
             ),
           ),
-          itemCount: controller.linkers.value.list.length,
-        )
-        // : Container(
-        //     width: Width.full,
-        //     height: Height.full,
-        //     margin: EdgeInsets.only(top: Height.ratio(0.125)),
-        //     child: Center(
-        //       child: [
-        //         Image.asset(
-        //           'assets/images/illustrations/EmptyLobby.png',
-        //           height: Height.ratio(0.35),
-        //           fit: BoxFit.fitHeight,
-        //         ),
-        //         Padding(padding: EdgeInsets.only(top: 8)),
-        //         "Nobody Here..".subheading(color: Get.theme.hintColor, fontSize: 20)
-        //       ].column(),
-        //     ),)
-        ));
+          itemCount: LobbyService.linkers.length,
+        )));
   }
 }
 
@@ -51,12 +33,13 @@ class _DeviceLinkCodePopup extends GetView<SettingsController> {
   const _DeviceLinkCodePopup({Key? key, required this.peer}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    TextEditingController textEditingController = TextEditingController();
     return Obx(() => SonrScaffold(
           appBar: DetailAppBar(
             onPressed: () => Get.back(),
             action: ActionButton(
               iconData: SimpleIcons.Clear,
-              onPressed: () => controller.clearTextInput(),
+              onPressed: () => textEditingController.clear(),
             ),
             title: "Link",
             isClose: true,
@@ -69,7 +52,7 @@ class _DeviceLinkCodePopup extends GetView<SettingsController> {
                 SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: 'Phone Number Verification'.subheading(
+                  child: 'Device Verification'.subheading(
                     align: TextAlign.center,
                   ),
                 ),
@@ -111,7 +94,7 @@ class _DeviceLinkCodePopup extends GetView<SettingsController> {
                         animationDuration: Duration(milliseconds: 300),
                         enableActiveFill: true,
                         errorAnimationController: controller.errorController,
-                        controller: controller.textEditingController,
+                        controller: textEditingController,
                         autoFocus: true,
                         keyboardType: TextInputType.number,
                         boxShadows: [
@@ -121,14 +104,14 @@ class _DeviceLinkCodePopup extends GetView<SettingsController> {
                             blurRadius: 10,
                           )
                         ],
-                        onCompleted: controller.onLinkInputCompleted,
+                        onCompleted: (String s) => controller.onLinkInputCompleted(s, this.peer),
                         onChanged: controller.onLinkInputChanged,
                       )),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Text(
-                    controller.hasError.value ? "*Please fill up all the cells properly" : "",
+                    controller.hasError.value ? "*Please fill up the code properly" : "",
                     style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                 ),
@@ -140,7 +123,7 @@ class _DeviceLinkCodePopup extends GetView<SettingsController> {
                   margin: EdgeInsets.symmetric(horizontal: 120),
                   child: ColorButton.primary(
                       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                      onPressed: controller.onVerifyPressed,
+                      onPressed: () => controller.onVerifyPressed(peer),
                       child: Container(
                           padding: EdgeInsets.all(8),
                           child: Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
