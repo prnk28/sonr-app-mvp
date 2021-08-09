@@ -32,7 +32,7 @@ extension IntricateIconUtils on ComplexIcons {
       }
     }
     // Return with extension
-    return path + '.svg';
+    return path;
   }
 
   /// Returns Path for this Icon
@@ -263,13 +263,13 @@ extension PlatformIcon on Platform {
   /// Returns `IconData` based on Platform
   IconData get iconData {
     switch (this) {
-      case Platform.Android:
+      case Platform.ANDROID:
         return SimpleIcons.Android;
       case Platform.IOS:
         return SimpleIcons.IPhone;
-      case Platform.MacOS:
+      case Platform.MACOS:
         return SimpleIcons.IMac;
-      case Platform.Windows:
+      case Platform.WINDOWS:
         return SimpleIcons.Windows;
       default:
         return SimpleIcons.Unknown;
@@ -278,13 +278,13 @@ extension PlatformIcon on Platform {
 
   Color get defaultIconColor {
     switch (this) {
-      case Platform.Android:
+      case Platform.ANDROID:
         return Colors.greenAccent.shade400;
       case Platform.IOS:
         return Colors.lightBlueAccent.shade400;
-      case Platform.MacOS:
+      case Platform.MACOS:
         return Colors.lightBlueAccent;
-      case Platform.Windows:
+      case Platform.WINDOWS:
         return Colors.blueAccent.shade700;
       default:
         return Colors.black87;
@@ -293,13 +293,13 @@ extension PlatformIcon on Platform {
 
   Gradient get defaultIconGradient {
     switch (this) {
-      case Platform.Android:
+      case Platform.ANDROID:
         return DesignGradients.ItmeoBranding;
       case Platform.IOS:
         return DesignGradients.PerfectBlue;
-      case Platform.MacOS:
+      case Platform.MACOS:
         return DesignGradients.PlumBath;
-      case Platform.Windows:
+      case Platform.WINDOWS:
         return DesignGradients.CrystalRiver;
       default:
         return DesignGradients.SolidStone;

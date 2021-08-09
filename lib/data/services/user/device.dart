@@ -8,7 +8,6 @@ import 'package:sonr_app/style/style.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:sonr_app/data/services/services.dart';
-import 'package:systray/systray.dart';
 
 class DeviceService extends GetxService {
   // Accessors
@@ -46,8 +45,6 @@ class DeviceService extends GetxService {
   final _position = RxPosition();
 
   // References
-  late MainEntry _main;
-  late Systray _systemTray;
   final _locationApi = LocationApi(keys: AppServices.apiKeys);
 
   // ^ Initialization ^ //
@@ -70,41 +67,18 @@ class DeviceService extends GetxService {
     // Find Properties
     _device = await DeviceUtils.create();
 
-    // Initialize Device
-    if (platform.isMobile) {
-      _connectivity(await Connectivity().checkConnectivity());
-      _connectivity.bindStream(Connectivity().onConnectivityChanged);
-      await Sounds.init();
-      // Analytics
-      if (_connectivity.value.hasInternet) {
-        // Initialize Firebase
-        await Firebase.initializeApp();
-        FirebaseMessaging.onMessage.listen(_handleForegroundPush);
-      }
-
-      // Set Push Key Path
-      pushKeyPath = await _getPushKeyPath();
+    _connectivity(await Connectivity().checkConnectivity());
+    _connectivity.bindStream(Connectivity().onConnectivityChanged);
+    await Sounds.init();
+    // Analytics
+    if (_connectivity.value.hasInternet) {
+      // Initialize Firebase
+      await Firebase.initializeApp();
+      FirebaseMessaging.onMessage.listen(_handleForegroundPush);
     }
 
-    // @ Setup Desktop
-    else {
-      _connectivity(ConnectivityResult.wifi);
-      // @ 1. Root Main Entry
-      _main = MainEntry(
-        title: "Sonr",
-        iconPath: await _getIconPath(),
-      );
-
-      // @ 2. Init SystemTray
-      await Systray.initSystray(_main);
-      await Systray.updateMenu([
-        SystrayAction(name: "focus", label: "Open Window", actionType: ActionType.SystrayEvent),
-        SystrayAction(name: "quit", label: "Quit", actionType: ActionType.Quit)
-      ]);
-
-      // Init Tray
-      _systemTray = Systray.init();
-    }
+    // Set Push Key Path
+    pushKeyPath = await _getPushKeyPath();
     return this;
   }
 
@@ -118,15 +92,12 @@ class DeviceService extends GetxService {
 // * ------------------- Methods ----------------------------
   /// #### Retreive Location by IP Address
   static Future<Location> get location async {
-    // # Check Platform
-    if (platform.isMobile) {
-      // Check for Mobile Data
-      if (to._connectivity.value == ConnectivityResult.mobile) {
-        // Geolocater Position
-        var pos = await Geolocator.getCurrentPosition();
-        // Return Location
-        return pos.toSonrLocation()..initPlacemark();
-      }
+    // Check for Mobile Data
+    if (to._connectivity.value == ConnectivityResult.mobile) {
+      // Geolocater Position
+      var pos = await Geolocator.getCurrentPosition();
+      // Return Location
+      return pos.toSonrLocation()..initPlacemark();
     }
     return to._locationApi.fetchIP();
   }
@@ -137,10 +108,6 @@ class DeviceService extends GetxService {
   /// #### Method Shows Keyboard
   static void keyboardShow() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.show') : print("");
 
-  /// #### Add Event Handler to Tray Action
-  void registerEventHandler(String handlerKey, Function handler) {
-    _systemTray.registerEventHandler(handlerKey, handler);
-  }
 
   /// #### Saves Photo to Gallery
   static Future<bool> saveCapture(String path, bool isVideo) async {
@@ -208,37 +175,6 @@ class DeviceService extends GetxService {
 
     // Return File
     return await file.writeAsBytes(data.toList());
-  }
-
-  /// #### Method Updates Tray Items
-  void updateSystray(List<SystrayAction> actions) async {
-    await Systray.updateMenu(actions);
-  }
-
-// * ------------------- Helpers ----------------------------
-  /// ### Find Icon Path for Systray
-  Future<String> _getIconPath() async {
-    // Set Temporary Directory
-    Directory directory = await getApplicationDocumentsDirectory();
-    String name = "";
-
-    // Get File Name
-    if (platform.isWindows) {
-      name = "tray.ico";
-    } else {
-      name = "tray.png";
-    }
-
-    // Load into DB
-    var dbPath = join(directory.path, name);
-    ByteData data = await rootBundle.load("assets/images/utility/$name");
-
-    // Write File
-    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var file = await File(dbPath).writeAsBytes(bytes);
-
-    // Return Path
-    return file.path;
   }
 
   /// ### Find Path for Push Key Service JSON

@@ -11,12 +11,14 @@ class LobbyService extends GetxService {
   static RxBool get isFlatMode => to._isFlatMode;
   static Rx<Lobby> get lobby => to._lobby;
   static Rx<Lobby_Status> get status => to._status;
+  static RxList<Peer> get linkers => to._linkers;
 
   // Properties
   final counter = 0.0.obs;
   final _flatModeCancelled = false.obs;
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
+  final _linkers = RxList<Peer>();
   final _lobby = Lobby().obs;
   final _localFlatPeers = RxMap<String, Peer>();
   final _position = Position().obs;
@@ -60,6 +62,15 @@ class LobbyService extends GetxService {
     });
   }
 
+  /// #### Refreshes Linker List
+  static Future<void> refreshLinkers() async {
+    if (isRegistered) {
+      final list = await NodeService.instance.listLinkers();
+      to._linkers.assignAll(list.list);
+      to._linkers.refresh();
+    }
+  }
+
   /// #### Registers Peer to Callback
   static void registerPeerCallback(Peer peer, PeerCallback callback) {
     if (isRegistered) {
@@ -95,21 +106,26 @@ class LobbyService extends GetxService {
 
   // # Handle Individual user event
   void handleEvent(TopicEvent data) {
-    // User Joined
-    if (data.shouldAdd) {
-      _lobby.value.peers[data.id] = data.peer;
+    if (data.isLinker) {
+      _linkers.add(data.peer);
+      _linkers.refresh();
+    } else {
+      // User Joined
+      if (data.shouldAdd) {
+        _lobby.value.peers[data.id] = data.peer;
+      }
+
+      // User Exited
+      else if (data.shouldRemove) {
+        _lobby.value.peers.remove(data.id);
+      }
+
+      // Update Status
+      _lobby.value.status = LobbyStatusUtils.localStatusFromCount(_lobby.value.peers.length);
+
+      // Refresh Lobby
+      _lobby.refresh();
     }
-
-    // User Exited
-    else if (data.shouldRemove) {
-      _lobby.value.peers.remove(data.id);
-    }
-
-    // Update Status
-    _lobby.value.status = LobbyStatusUtils.localStatusFromCount(_lobby.value.peers.length);
-
-    // Refresh Lobby
-    _lobby.refresh();
   }
 
   // # Handle Incoming Position Stream

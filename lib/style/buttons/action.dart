@@ -280,7 +280,7 @@ class InfoButton extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(color: AppTheme.ForegroundColor, borderRadius: BorderRadius.circular(12)),
-                  child: SimpleIcons.Menu.icon(size: 28, color: AppTheme.GreyColor),
+                  child: UIIcons.Bell.line(width: 28, height: 28, color: AppTheme.GreyColor),
                 ),
               ),
             ),

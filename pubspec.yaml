@@ -9,7 +9,7 @@ publish_to: none
 
 # -- Flutter Settings --
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: ">=2.13.0 <3.0.0"
 
 environment_config:
   path: env.dart # optional, result file path against `lib/` folder
@@ -99,10 +99,10 @@ dependencies:
   flutter_svg: ^0.22.0
   introduction_screen: ^2.1.0
   lottie: ^1.0.1
+  pin_code_fields: ^7.3.0
   rive: ^0.7.7
   showcaseview: ^1.0.0
   supercharged: ^2.0.0
-  systray: ^0.5.3
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
@@ -119,49 +119,49 @@ flutter:
   uses-material-design: true
 
   fonts:
-  - family:  RFlex
-    fonts:
-      - asset: assets/fonts/RFlex-100.otf
-        weight: 100
-      - asset: assets/fonts/RFlex-100-italic.otf
-        weight: 100
-        style: italic
-      - asset: assets/fonts/RFlex-300.otf
-        weight: 300
-      - asset: assets/fonts/RFlex-300-italic.otf
-        weight: 300
-        style: italic
-      - asset: assets/fonts/RFlex-400.otf
-        weight: 400
-      - asset: assets/fonts/RFlex-400-italic.otf
-        weight: 400
-        style: italic
-      - asset: assets/fonts/RFlex-500.otf
-        weight: 500
-      - asset: assets/fonts/RFlex-500-italic.otf
-        weight: 500
-        style: italic
-      - asset: assets/fonts/RFlex-700-italic.otf
-        weight: 700
-        style: italic
-      - asset: assets/fonts/RFlex-700.otf
-        weight: 700
-      - asset: assets/fonts/RFlex-700-italic.otf
-        weight: 700
-        style: italic
-      - asset: assets/fonts/RFlex-900.otf
-        weight: 900
-      - asset: assets/fonts/RFlex-900-italic.otf
-        weight: 900
-        style: italic
+    - family: RFlex
+      fonts:
+        - asset: assets/fonts/RFlex-100.otf
+          weight: 100
+        - asset: assets/fonts/RFlex-100-italic.otf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/RFlex-300.otf
+          weight: 300
+        - asset: assets/fonts/RFlex-300-italic.otf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/RFlex-400.otf
+          weight: 400
+        - asset: assets/fonts/RFlex-400-italic.otf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/RFlex-500.otf
+          weight: 500
+        - asset: assets/fonts/RFlex-500-italic.otf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/RFlex-700-italic.otf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/RFlex-700.otf
+          weight: 700
+        - asset: assets/fonts/RFlex-700-italic.otf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/RFlex-900.otf
+          weight: 900
+        - asset: assets/fonts/RFlex-900-italic.otf
+          weight: 900
+          style: italic
 
-  - family:  SonrIcons
-    fonts:
-      - asset: assets/fonts/Sonricons.ttf
+    - family: SonrIcons
+      fonts:
+        - asset: assets/fonts/Sonricons.ttf
 
-  - family:  SonrNavIcons
-    fonts:
-      - asset: assets/fonts/SonrNavIcons.ttf
+    - family: SonrNavIcons
+      fonts:
+        - asset: assets/fonts/SonrNavIcons.ttf
 
   # -- Media --
   assets:
@@ -169,10 +169,24 @@ flutter:
     - assets/animations/rive/
     - assets/data/
     - assets/fonts/
+    - assets/icons/Chart/
+    - assets/icons/Communication/
+    - assets/icons/DateTime/
+    - assets/icons/Design/
+    - assets/icons/Device/
+    - assets/icons/FileSystem/
+    - assets/icons/Finance/
+    - assets/icons/Food/
+    - assets/icons/Formatting/
+    - assets/icons/MediaControl/
+    - assets/icons/Medical/
+    - assets/icons/Navigation/
+    - assets/icons/SelfCare/
+    - assets/icons/Shopping/
+    - assets/icons/SocialMedia/
+    - assets/icons/Sports/
+    - assets/icons/UI/
     - assets/images/illustrations/
     - assets/images/svg/
     - assets/images/utility/
     - assets/sounds/
-
-
-

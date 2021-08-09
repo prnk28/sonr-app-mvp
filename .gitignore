@@ -9,7 +9,6 @@
 .buildlog/
 .history
 .svn/
-.github/
 assets/keys.json
 android/fastlane-keys.json
 fastlane/
@@ -40,7 +39,6 @@ workspace.code-workspace
 .pub-cache/
 .pub/
 build/
-plugins/
 
 # Android related
 **/android/**/gradle-wrapper.jar

@@ -124,7 +124,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   /// #### Invite Peer with Built Request
   static void sendFlat(Peer? peer) async {
     if (status.value.isConnected && isRegistered) {
-      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.FLAT));
+      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.DIRECT));
     }
   }
 

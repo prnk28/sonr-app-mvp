@@ -2,7 +2,8 @@ import 'package:sonr_app/style/style.dart';
 
 import 'status.dart';
 
-enum ContactOptions {
+enum UserOptions {
+  Devices,
   Names,
   Phone,
   Addresses,
@@ -14,14 +15,16 @@ enum ContactOptions {
   // Payments
 }
 
-extension ContactOptionUtils on ContactOptions {
+extension UserOptionsUtils on UserOptions {
   IconData get iconData {
     switch (this) {
-      case ContactOptions.Names:
+      case UserOptions.Devices:
+        return SimpleIcons.IPhoneClassic;
+      case UserOptions.Names:
         return SimpleIcons.Pen;
-      case ContactOptions.Phone:
+      case UserOptions.Phone:
         return SimpleIcons.Call;
-      case ContactOptions.Addresses:
+      case UserOptions.Addresses:
         return SimpleIcons.Location;
       // case ContactOptions.Gender:
       //   return SimpleIcons.User;
@@ -34,14 +37,14 @@ extension ContactOptionUtils on ContactOptions {
 
   EditorFieldStatus get editorStatus {
     switch (this) {
-      case ContactOptions.Names:
+      case UserOptions.Names:
         return EditorFieldStatus.FieldName;
-      case ContactOptions.Phone:
+      case UserOptions.Phone:
         return EditorFieldStatus.FieldPhone;
-      case ContactOptions.Addresses:
+      case UserOptions.Addresses:
         return EditorFieldStatus.FieldAddresses;
-      // case ContactOptions.Gender:
-      //   return EditorFieldStatus.FieldGender;
+      default:
+        return EditorFieldStatus.Default;
     }
   }
 }
