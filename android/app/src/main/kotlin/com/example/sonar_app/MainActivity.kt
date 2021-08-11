@@ -1,4 +1,4 @@
-package io.sonr.android
+package io.sonr.petitfour
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

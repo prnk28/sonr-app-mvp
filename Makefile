@@ -50,8 +50,8 @@ build.ios:
 ## └─ android         - APB for Android
 build.android:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
-	cd $(ANDROID_ARCHIVE_DIR) && open .
+	cd $(PROJECT_DIR) && $(BUILDANDROID)
+	cd android && fastlane internal
 	@echo '--------------------------------------------------'
 	@echo "✅ Finished Building Android ➡ " && date
 

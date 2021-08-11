@@ -10,11 +10,12 @@
 .history
 .svn/
 assets/keys.json
-android/fastlane-keys.json
+android/fastlane_keys.json
 Runner.app.*
 Runner.ipa
 Gemfile
 .env
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -23,7 +24,6 @@ Gemfile
 .sonr/
 env_gen.txt
 /lib/env.dart
-
 
 # Visual Studio Code related
 .vscode/
