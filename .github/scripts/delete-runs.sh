@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 org=sonr-io
-repo=core
+repo=app
 
 # Get workflow IDs with status "disabled_manually"
 workflow_ids=($(gh api repos/$org/$repo/actions/workflows | jq '.workflows[] | .id'))
