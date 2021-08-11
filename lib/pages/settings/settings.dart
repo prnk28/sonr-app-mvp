@@ -200,18 +200,26 @@ class _SettingsAlternateView extends GetView<SettingsController> {
                           controller.setPointShare(val);
                         })
                   ]),
-                  Spacer(),
                   // @ Version Number
                   Container(
-                    padding: EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.only(bottom: 4, top: 16),
                     alignment: Alignment.topCenter,
-                    child: "Alpha - 0.9.3".light(color: AppTheme.ItemColor),
+                    child: _buildInfoText(controller.buildTrack.value, controller.buildVersion.value, controller.buildNumber.value),
                   ),
                 ]),
               ))
         ]),
       ),
     );
+  }
+
+  // Method Builds bottom info text
+  Widget _buildInfoText(String track, String version, String build) {
+    if (build == "") {
+      return "${track} - ${version}".light(color: AppTheme.ItemColor);
+    } else {
+      return "${track} - ${version}+${build}".light(color: AppTheme.ItemColor);
+    }
   }
 }
 
