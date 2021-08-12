@@ -105,7 +105,7 @@ class LobbyService extends GetxService {
   }
 
   // # Handle Individual user event
-  void handleEvent(TopicEvent data) {
+  void handleEvent(RoomEvent data) {
     if (data.isLinker) {
       _linkers.add(data.peer);
       _linkers.refresh();
@@ -200,8 +200,8 @@ class LobbyService extends GetxService {
       }
     });
 
-    // @ Update Local Topics
-    if (data.topic.type == Topic_Type.LOCAL) {
+    // @ Update Local Rooms
+    if (data.room.type == Room_Type.LOCAL) {
       // Update Status
       _status(LobbyStatusUtils.localStatusFromCount(data.count));
 

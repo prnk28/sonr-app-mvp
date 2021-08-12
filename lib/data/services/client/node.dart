@@ -23,7 +23,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   // References
   late Node _instance;
   late StreamSubscription<ConnectivityResult> _connectionStream;
-  late TopicSubscription _topicEventStream;
+  late RoomSubscription _roomEventStream;
   late ProgressSubscription _progressEventStream;
   late StatusSubscription _statusEventStream;
   late MailSubscription _mailEventStream;
@@ -48,7 +48,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     _transmittedEventStream = _instance.onTransmitted(SenderService.to.handleTransmitted);
     _receivedEventStream = _instance.onReceived(ReceiverService.to.handleReceived);
     _errorEventStream = _instance.onError(_handleError);
-    _topicEventStream = _instance.onTopic(LobbyService.to.handleEvent);
+    _roomEventStream = _instance.onRoom(LobbyService.to.handleEvent);
     _progressEventStream = _instance.onProgress(ReceiverService.to.handleProgress);
     _statusEventStream = _instance.onStatus(_handleStatus);
     _mailEventStream = _instance.onMail(ReceiverService.to.handleMail);
@@ -58,7 +58,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   @override
   onClose() {
     _connectionStream.cancel();
-    _topicEventStream.cancel();
+    _roomEventStream.cancel();
     _mailEventStream.cancel();
     _progressEventStream.cancel();
     _statusEventStream.cancel();
