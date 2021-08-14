@@ -68,7 +68,6 @@ dependencies:
   geolocator: ^7.0.3
   package_info: ^2.0.2
   permission_handler: ^8.0.1
-  soundpool: ^2.1.0
   url_launcher: ^6.0.3
 
   # -- Data --
