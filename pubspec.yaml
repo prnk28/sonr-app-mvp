@@ -92,7 +92,7 @@ dependencies:
 
   # -- Plugins --
   sonr_plugin:
-    path: plugin/
+    path: ../plugin
 
   # -- UI/UX --
   animate_do: ^2.0.0
