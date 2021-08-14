@@ -4,6 +4,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sonr_app/pages/personal/personal.dart';
 import 'package:sonr_app/pages/settings/views/device_view.dart';
 import 'package:sonr_app/style/style.dart';
+import 'package:package_info/package_info.dart';
 
 enum LinkStatus {
   None,
@@ -28,6 +29,11 @@ class SettingsController extends GetxController {
   final hasError = false.obs;
   final currentText = "".obs;
 
+  // Package Info Properties
+  final buildNumber = "".obs;
+  final buildVersion = "".obs;
+  final buildTrack = "".obs;
+
   // Controllers
   late StreamController<ErrorAnimationType> errorController;
   late LinkSubscription linkerSubscription;
@@ -35,6 +41,7 @@ class SettingsController extends GetxController {
   // Initialization
   @override
   void onInit() {
+    _fetchPackageInfo();
     errorController = StreamController<ErrorAnimationType>();
     linkerSubscription = NodeService.instance.onLink(handleLinkEvent);
     super.onInit();
@@ -138,5 +145,36 @@ class SettingsController extends GetxController {
   void reset() {
     status(EditorFieldStatus.Default);
     title(status.value.name);
+  }
+
+  void _fetchPackageInfo() async {
+    // Fetch Info
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    // Set Version and Build
+    buildVersion(packageInfo.version);
+    buildNumber(packageInfo.buildNumber);
+
+    // Handle Build Track from Version
+    final version = _extractVersion(packageInfo.version);
+    final major = version.item1;
+    final minor = version.item2;
+
+    // Check Major Version
+    if (major == 1) {
+      buildTrack("Stable");
+    } else {
+      if (minor >= 10) {
+        buildTrack("Beta");
+      } else {
+        buildTrack("Alpha");
+      }
+    }
+  }
+
+  Triple<int, int, int> _extractVersion(String version) {
+    // Extract Version
+    final match = version.split('.');
+    return Triple(match[0].toInt() ?? 0, match[1].toInt() ?? 0, match[2].toInt() ?? 0);
   }
 }

@@ -50,8 +50,8 @@ build.ios:
 ## └─ android         - APB for Android
 build.android:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
-	cd $(ANDROID_ARCHIVE_DIR) && open .
+	cd $(PROJECT_DIR) && $(BUILDANDROID)
+	cd android && fastlane internal
 	@echo '--------------------------------------------------'
 	@echo "✅ Finished Building Android ➡ " && date
 
@@ -75,7 +75,6 @@ update:
 	@echo '🔹 Updating Submodules...'
 	@cd $(PROJECT_DIR) && git submodule update --remote plugin
 	@echo '🔹 Fetch Packages...'
-	@cd $(PROJECT_DIR) && flutter pub upgrade
 	@cd $(PROJECT_DIR) && flutter pub get
 	@cd /System/Library/Sounds && afplay Hero.aiff
 	@echo "✅ Finished Updating Binary ➡ " && date
@@ -87,7 +86,6 @@ clean:
 	@echo '-- Cleaning Flutter --'
 	cd $(PROJECT_DIR) && git submodule foreach --recursive git reset --hard
 	cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && hover clean-cache
 	cd $(PROJECT_DIR) && flutter pub get
 	pub global activate cider
 	pub global activate protoc_plugin

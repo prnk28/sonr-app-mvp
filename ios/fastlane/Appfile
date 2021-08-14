@@ -1,0 +1,8 @@
+app_identifier("io.sonr.apple") # The bundle identifier of your app
+apple_id("pradn@sonr.io") # Your Apple email address
+
+itc_team_id("123025145") # App Store Connect Team ID
+team_id("S6SPZ444RB") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
