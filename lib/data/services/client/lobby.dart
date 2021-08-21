@@ -107,21 +107,21 @@ class LobbyService extends GetxService {
   // # Handle Individual user event
   void handleEvent(RoomEvent data) {
     if (data.isLinker) {
-      _linkers.add(data.peer);
+      _linkers.add(data.member.active);
       _linkers.refresh();
     } else {
       // User Joined
       if (data.shouldAdd) {
-        _lobby.value.peers[data.id] = data.peer;
+        _lobby.value.members[data.id] = data.member;
       }
 
       // User Exited
       else if (data.shouldRemove) {
-        _lobby.value.peers.remove(data.id);
+        _lobby.value.members.remove(data.id);
       }
 
       // Update Status
-      _lobby.value.status = LobbyStatusUtils.localStatusFromCount(_lobby.value.peers.length);
+      _lobby.value.status = LobbyStatusUtils.localStatusFromCount(_lobby.value.members.length);
 
       // Refresh Lobby
       _lobby.refresh();
@@ -193,10 +193,10 @@ class LobbyService extends GetxService {
   // # Handle Lobby Update //
   void _lobbyListener(Lobby data) {
     // Handle Peer Callbacks
-    data.peers.forEach((id, peer) {
+    data.members.forEach((id, peer) {
       if (_peerCallbacks.containsKey(peer)) {
         var call = _peerCallbacks[peer]!;
-        call(peer);
+        call(peer.active);
       }
     });
 
@@ -207,9 +207,9 @@ class LobbyService extends GetxService {
 
       // Update Flat Peers
       var flatPeers = <String, Peer>{};
-      data.peers.forEach((id, peer) {
-        if (peer.properties.isFlatMode) {
-          flatPeers[id] = peer;
+      data.members.forEach((id, peer) {
+        if (peer.active.properties.isFlatMode) {
+          flatPeers[id] = peer.active;
         }
       });
       _localFlatPeers(flatPeers);
