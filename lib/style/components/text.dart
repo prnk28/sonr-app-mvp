@@ -29,17 +29,17 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
   Triple<String, FontWeight, double> get _defaultParams {
     switch (this) {
       case DisplayTextStyle.Hero:
-        return Triple("RFlex", FontWeight.w900, 72);
+        return Triple("Montserrat", FontWeight.w900, 72);
       case DisplayTextStyle.Heading:
-        return Triple("RFlex", FontWeight.w700, 32);
+        return Triple("Montserrat", FontWeight.w700, 32);
       case DisplayTextStyle.Section:
-        return Triple("RFlex", FontWeight.w700, 26);
+        return Triple("Montserrat", FontWeight.w700, 26);
       case DisplayTextStyle.Subheading:
-        return Triple("RFlex", FontWeight.w500, 26);
+        return Triple("Montserrat", FontWeight.w500, 26);
       case DisplayTextStyle.Paragraph:
-        return Triple("RFlex", FontWeight.w100, 20);
+        return Triple("Montserrat", FontWeight.w100, 20);
       case DisplayTextStyle.Light:
-        return Triple("RFlex", FontWeight.w300, 20);
+        return Triple("Montserrat", FontWeight.w300, 20);
     }
   }
 

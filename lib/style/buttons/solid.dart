@@ -454,7 +454,7 @@ class ComplexButton extends StatelessWidget {
     required this.type,
     required this.label,
     this.size = 100,
-    this.fontSize = 20,
+    this.fontSize = 16,
     this.textColor,
   }) : super(key: key);
   @override

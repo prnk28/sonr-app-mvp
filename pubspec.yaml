@@ -118,39 +118,39 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: RFlex
+    - family: Montserrat
       fonts:
-        - asset: assets/fonts/RFlex-100.otf
+        - asset: assets/fonts/Montserrat-100.ttf
           weight: 100
-        - asset: assets/fonts/RFlex-100-italic.otf
+        - asset: assets/fonts/Montserrat-100-italic.ttf
           weight: 100
           style: italic
-        - asset: assets/fonts/RFlex-300.otf
+        - asset: assets/fonts/Montserrat-300.ttf
           weight: 300
-        - asset: assets/fonts/RFlex-300-italic.otf
+        - asset: assets/fonts/Montserrat-300-italic.ttf
           weight: 300
           style: italic
-        - asset: assets/fonts/RFlex-400.otf
+        - asset: assets/fonts/Montserrat-400.ttf
           weight: 400
-        - asset: assets/fonts/RFlex-400-italic.otf
+        - asset: assets/fonts/Montserrat-400-italic.ttf
           weight: 400
           style: italic
-        - asset: assets/fonts/RFlex-500.otf
+        - asset: assets/fonts/Montserrat-500.ttf
           weight: 500
-        - asset: assets/fonts/RFlex-500-italic.otf
+        - asset: assets/fonts/Montserrat-500-italic.ttf
           weight: 500
           style: italic
-        - asset: assets/fonts/RFlex-700-italic.otf
+        - asset: assets/fonts/Montserrat-700-italic.ttf
           weight: 700
           style: italic
-        - asset: assets/fonts/RFlex-700.otf
+        - asset: assets/fonts/Montserrat-700.ttf
           weight: 700
-        - asset: assets/fonts/RFlex-700-italic.otf
+        - asset: assets/fonts/Montserrat-700-italic.ttf
           weight: 700
           style: italic
-        - asset: assets/fonts/RFlex-900.otf
+        - asset: assets/fonts/Montserrat-900.ttf
           weight: 900
-        - asset: assets/fonts/RFlex-900-italic.otf
+        - asset: assets/fonts/Montserrat-900-italic.ttf
           weight: 900
           style: italic
 
