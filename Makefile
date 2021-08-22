@@ -109,10 +109,8 @@ update:
 	@echo '🔹 Cleaning Project...'
 	@cd $(PROJECT_DIR) && rm -rf build
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	@echo '🔹 Updating Submodules...'
-	@cd $(PROJECT_DIR) && git submodule update --remote plugin
 	@echo '🔹 Fetch Packages...'
-	@cd $(PROJECT_DIR) && flutter pub get
+	@cd $(PROJECT_DIR) && flutter pub upgrade
 	@cd /System/Library/Sounds && afplay Hero.aiff
 	@echo "✅ Finished Updating Binary ➡ " && date
 
