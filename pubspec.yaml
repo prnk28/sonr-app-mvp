@@ -9,7 +9,7 @@ publish_to: none
 
 # -- Flutter Settings --
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  sdk: '>=2.13.0 <3.0.0'
 
 environment_config:
   path: env.dart # optional, result file path against `lib/` folder

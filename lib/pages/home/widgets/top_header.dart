@@ -258,7 +258,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
         align: TextAlign.start,
       );
     } else if (isDashboard && !isConnecting) {
-      return "Hi ${ContactService.contact.value.firstName.capitalizeFirst},".subheading(
+      return "Hi ${ContactService.contact.value.firstName.capitalizeFirst}".subheading(
         fontSize: 22,
         color: Get.theme.focusColor.withOpacity(0.7),
         align: TextAlign.start,

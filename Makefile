@@ -104,8 +104,7 @@ profile:
 ## [update]      :   Fetch Plugin Submodule, and Upgrade Dependencies
 update:
 	@echo '🔹 Bumping Plugin Version...'
-	@cd $(PLUGIN_DIR) && cider bump patch
-	@cd $(PLUGIN_DIR) && git add . && git commit -m ${COMMIT_MESSAGE} && git push
+	@cd $(PLUGIN_DIR) && make update
 	@echo '🔹 Cleaning Project...'
 	@cd $(PROJECT_DIR) && rm -rf build
 	@cd $(PROJECT_DIR) && $(CLEAN)
