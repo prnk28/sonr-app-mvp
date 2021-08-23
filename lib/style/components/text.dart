@@ -37,9 +37,9 @@ extension DisplayTextStyleUtils on DisplayTextStyle {
       case DisplayTextStyle.Subheading:
         return Triple("Montserrat", FontWeight.w500, 26);
       case DisplayTextStyle.Paragraph:
-        return Triple("Montserrat", FontWeight.w100, 20);
+        return Triple("Montserrat", FontWeight.w100, 18);
       case DisplayTextStyle.Light:
-        return Triple("Montserrat", FontWeight.w300, 20);
+        return Triple("Montserrat", FontWeight.w300, 18);
     }
   }
 

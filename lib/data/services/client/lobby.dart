@@ -106,7 +106,6 @@ class LobbyService extends GetxService {
 
   // # Handle Individual user event
   void handleEvent(RoomEvent data) {
-    Logger.info(data);
     if (data.isLinker) {
       _linkers.add(data.member.active);
       _linkers.refresh();
