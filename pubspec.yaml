@@ -14,10 +14,6 @@ environment:
 environment_config:
   path: env.dart # optional, result file path against `lib/` folder
   fields: # set of fields for command
-    map_key:
-      env_var: map_key
-    map_secret:
-      env_var: map_secret
     ip_key:
       env_var: ip_key
     rapid_key:
