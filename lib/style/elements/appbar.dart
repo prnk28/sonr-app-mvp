@@ -133,7 +133,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
               iconData: isClose ? SimpleIcons.Close : SimpleIcons.Back,
             ),
             trailing: _buildTrailing(),
-            middle: title.toUpperCase().light(color: AppTheme.ItemColor, fontSize: 24),
+            middle: title.toUpperCase().section(color: AppTheme.ItemColor, fontSize: 20),
           ),
         ),
       ),

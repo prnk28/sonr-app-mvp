@@ -17,9 +17,16 @@ default_platform(:ios)
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
-  lane :beta do
-    increment_build_number(xcodeproj: "Runner.xcodeproj")
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
-    upload_to_testflight
+  lane :internal do
+    increment_build_number
+    increment_version_number(
+      version_number: "0.9.4"
+    )
+    build_app(scheme: "Runner",
+            workspace: "Runner.xcworkspace",
+            export_options: {
+              method: "app-store",
+            })
+    upload_to_testflight(skip_waiting_for_build_processing: false, expire_previous_builds: true)
   end
 end

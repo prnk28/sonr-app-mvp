@@ -36,6 +36,7 @@ class GradientTabs extends StatelessWidget {
                 alignment: Alignment.center,
                 child: AnimatedScale(
                     scale: currentIndex.value == index ? 1.1 : 1.0,
+                    duration: 300.milliseconds,
                     child: tabs[index].light(
                       color: _buildTextColor(currentIndex.value == index),
                       align: TextAlign.center,

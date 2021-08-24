@@ -15,9 +15,9 @@ export 'socialmedia.dart';
 export 'sports.dart';
 export 'package:sonr_app/style/style.dart';
 export 'ui.dart';
-export 'package:flutter/material.dart';
+export 'package:flutter/material.dart' hide AnimatedScale;
 export 'package:flutter/services.dart';
-export 'package:flutter/widgets.dart';
+export 'package:flutter/widgets.dart' hide AnimatedScale;
 export 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 

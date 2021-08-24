@@ -37,6 +37,7 @@ class ChecklistOption {
   Widget text() {
     return AnimatedScale(
       scale: isEnabled.value ? 1.05 : 1.0,
+      duration: 300.milliseconds,
       child: title.light(color: AppTheme.ItemColor, fontSize: 24),
     );
   }

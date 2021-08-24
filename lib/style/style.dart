@@ -1,7 +1,7 @@
 // Common Widgets
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
-export 'package:flutter/material.dart' hide Route;
+export 'package:flutter/material.dart' hide Route, AnimatedScale;
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 export 'package:showcaseview/showcaseview.dart';

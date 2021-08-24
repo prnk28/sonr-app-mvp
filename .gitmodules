@@ -1,4 +1,0 @@
-[submodule "plugin"]
-	path = plugin
-	url = git@github.com:sonr-io/plugin.git
-	branch = implement/member
