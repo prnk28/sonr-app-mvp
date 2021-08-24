@@ -4,8 +4,7 @@ SONR_ROOT_DIR=/Users/prad/Sonr # Set this to Folder of Sonr
 PROJECT_DIR=/Users/prad/Sonr/app
 ANDROID_DIR=/Users/prad/Sonr/app/android
 IOS_DIR=/Users/prad/Sonr/app/ios
-DESK_BUILD_DIR=/Users/prad/Sonr/app/go/build
-PLUGIN_DIR=/Users/prad/Sonr/plugin
+PLUGIN_DIR=/Users/prad/Sonr/app/plugin
 
 # Mobile Actions
 FLUTTER=flutter
@@ -22,8 +21,10 @@ ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/app/build/app/outputs/bundle/release/
 SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
 
 # References
-PLUGIN_VERSION=`cd $(PLUGIN_DIR) && cider version`
-COMMIT_MESSAGE="Updated Core Binary to ${PLUGIN_VERSION}"
+PLUGIN_VERSION=`cider version`
+COMMIT_MESSAGE=":arrow_up: (version): Updated Core Binary to ${PLUGIN_VERSION}"
+IOS_FRAMEWORK_DIR=${PLUGIN_DIR}/ios/Frameworks
+ANDROID_AAR_DIR=${PLUGIN_DIR}/android/libs
 
 # Lists Options
 all: Makefile
@@ -57,7 +58,7 @@ build.android:
 
 
 ## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
-deploy: deploy.ios deploy.android
+deploy: fetch deploy.ios deploy.android
 	@echo 'Cleaning Builds'
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
@@ -93,6 +94,26 @@ deploy.android:
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
 
 ##
+## [fetch]        :   Fetch latest version of frameworks
+fetch:
+	@echo "🔹 Fetching Sonr Frameworks"
+	@echo '	1. Setup Directories...'
+	@rm -rf ${IOS_FRAMEWORK_DIR}
+	@rm -rf ${ANDROID_AAR_DIR}
+	@mkdir -p ${IOS_FRAMEWORK_DIR}
+	@mkdir -p ${ANDROID_AAR_DIR}
+	@echo '	2. Fetching Frameworks...'
+	@gh release download --repo 'sonr-io/core' --pattern *_android.zip --dir ${ANDROID_AAR_DIR}
+	@gh release download --repo 'sonr-io/core' --pattern *_ios.zip --dir ${IOS_FRAMEWORK_DIR}
+	@echo '	3. Unzipping Frameworks...'
+	@unzip ${ANDROID_AAR_DIR}/*_android.zip -d ${ANDROID_AAR_DIR}
+	@unzip ${IOS_FRAMEWORK_DIR}/*_ios.zip -d ${IOS_FRAMEWORK_DIR}
+	@echo '	4. Cleaning Up...'
+	@cd ${ANDROID_AAR_DIR} && find . -name "*.zip" -type f -delete
+	@cd ${IOS_FRAMEWORK_DIR} && find . -name "*.zip" -type f -delete
+	@cd /System/Library/Sounds && afplay Hero.aiff
+	@echo '✅ Done!'
+
 ## [profile]     :   Run App for Profiling and Save SKSL File
 profile:
 	@echo '-----------------------------------------------'
