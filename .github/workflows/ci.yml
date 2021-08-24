@@ -10,6 +10,9 @@ jobs:
   # Android Flutter Build
   build-android:
     runs-on: ubuntu-latest
+    env:
+        BUILD_PATH: ${{ github.workspace }}/dist
+        FLUTTER_PATH: /opt/hostedtoolcache/flutter
     steps:
       # 1. Checkout
       - name: Checkout Repo
@@ -33,20 +36,27 @@ jobs:
         with:
           java-version: '12.x'
 
-      # 4. Setup Flutter
+      # 4. Cache Flutter
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: $FLUTTER_PATH
+          key: ${{ runner.os }}-flutter
+
+      # 5. Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
 
-      # 5. Configure Folder Structure
+      # 6. Configure Folder Structure
       - name: Configure Structure
         run: |
             echo "Configuring Folder structure..."
-            mkdir -p ${{ github.workspace }}/dist
-            flutter config --build-dir={{ github.workspace }}/dist
+            mkdir -p $BUILD_PATH
+            flutter config --build-dir=$BUILD_PATH
 
-      # 6. Fetch Packages and Generate Env Variables
+      # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
             echo "Fetching packages..."
@@ -55,21 +65,25 @@ jobs:
             echo "Generating Env Variables..."
             flutter pub run environment_config:generate --ip_key=${{ secrets.ip_key }} --rapid_key=${{ secrets.ip_rapid_keykey }} --hs_key=${{ secrets.hs_key }}  --hs_secret=${{ secrets.hs_secret }} --hub_key=${{ secrets.hub_key }} --hub_secret=${{ secrets.hub_secret }} --icom_appID=${{ secrets.icom_appID }} --icom_iosKey=${{ secrets.icom_iosKey }} --icom_androidKey=${{ secrets.icom_androidKey }} --thread_db=${{ secrets.thread_db }}
 
-      # 7. Build Android App
+      # 8. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-      # 8. Upload Artifact to Github
+      # 9. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: android-app-bundle
-          path: ${{ github.workspace }}/dist/*.aab
+          path: ${{ github.workspace }}/dist/**/*.aab
+          if-no-files-found: error
 
   # iOS Flutter Build
   build-ios:
     runs-on: macos-latest
+    env:
+        BUILD_PATH: ${{ github.workspace }}/dist
+        FLUTTER_PATH: /Users/runner/hostedtoolcache/flutter
     steps:
       # 1. Checkout
       - name: Checkout Repo
@@ -87,27 +101,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
 
-
       # 3. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: '12.x'
 
-      # 4. Setup Flutter
+      # 4. Cache Flutter
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: $FLUTTER_PATH
+          key: ${{ runner.os }}-flutter
+
+      # 5. Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
 
-      # 5. Configure Folder Structure
+      # 6. Configure Folder Structure
       - name: Configure Structure
         run: |
             echo "Configuring Folder structure..."
-            mkdir -p ${{ github.workspace }}/dist
-            flutter config --build-dir={{ github.workspace }}/dist
+            mkdir -p $BUILD_PATH
+            flutter config --build-dir=$BUILD_PATH
 
-      # 6. Fetch Packages and Generate Env Variables
+      # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
             echo "Fetching packages..."
@@ -116,14 +136,15 @@ jobs:
             echo "Generating Env Variables..."
             flutter pub run environment_config:generate --ip_key=${{ secrets.ip_key }} --rapid_key=${{ secrets.ip_rapid_keykey }} --hs_key=${{ secrets.hs_key }}  --hs_secret=${{ secrets.hs_secret }} --hub_key=${{ secrets.hub_key }} --hub_secret=${{ secrets.hub_secret }} --icom_appID=${{ secrets.icom_appID }} --icom_iosKey=${{ secrets.icom_iosKey }} --icom_androidKey=${{ secrets.icom_androidKey }} --thread_db=${{ secrets.thread_db }}
 
-      # 7. Build iOS App
+      # 8. Build iOS App
       - name: Build iOS IPA
         run: flutter build ios --release --no-codesign
         timeout-minutes: 45
 
-      # 8. Upload Artifact to Github
+      # 9. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: android-app-bundle
-          path: ${{ github.workspace }}/dist/*.ipa
+          path: ${{ github.workspace }}/dist/**/*.app
+          if-no-files-found: error
