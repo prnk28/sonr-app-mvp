@@ -28,26 +28,38 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
 
       # 3. Setup Java
-      - uses: actions/setup-java@v1
+      - name: Setup Java
+        uses: actions/setup-java@v1
         with:
           java-version: '12.x'
 
       # 4. Setup Flutter
-      - uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
 
       # 5. Configure Folder Structure
       - name: Configure Structure
         run: |
+            echo "Configuring Folder structure..."
             mkdir -p ${{ github.workspace }}/dist
             flutter config --build-dir={{ github.workspace }}/dist
 
-      # 6. Fetch Packages
-      - run: flutter pub upgrade
-      - run: flutter build appbundle --release
+      # 6. Fetch Packages and Generate Env Variables
+      - name: Fetch Packages and Generate Env
+        run: |
+            echo "Fetching packages..."
+            flutter packages upgrade
+            flutter packages get
+            echo "Generating Env Variables..."
+            flutter pub run environment_config:generate --ip_key=${{ secrets.ip_key }} --rapid_key=${{ secrets.ip_rapid_keykey }} --hs_key=${{ secrets.hs_key }}  --hs_secret=${{ secrets.hs_secret }} --hub_key=${{ secrets.hub_key }} --hub_secret=${{ secrets.hub_secret }} --icom_appID=${{ secrets.icom_appID }} --icom_iosKey=${{ secrets.icom_iosKey }} --icom_androidKey=${{ secrets.icom_androidKey }} --thread_db=${{ secrets.thread_db }}
 
-      # 7. Upload Artifact to Github
+      # 7. Build Android App
+      - name: Build Android AAB
+        run: flutter build appbundle --release
+
+      # 8. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -74,30 +86,42 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
 
+
       # 3. Setup Java
-      - uses: actions/setup-java@v1
+      - name: Setup Java
+        uses: actions/setup-java@v1
         with:
           java-version: '12.x'
 
       # 4. Setup Flutter
-      - uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
 
       # 5. Configure Folder Structure
       - name: Configure Structure
         run: |
+            echo "Configuring Folder structure..."
             mkdir -p ${{ github.workspace }}/dist
             flutter config --build-dir={{ github.workspace }}/dist
 
-      # 6. Fetch Packages
-      - run: flutter pub upgrade
-      - run: flutter build ios --release --no-codesign
+      # 6. Fetch Packages and Generate Env Variables
+      - name: Fetch Packages and Generate Env
+        run: |
+            echo "Fetching packages..."
+            flutter packages upgrade
+            flutter packages get
+            echo "Generating Env Variables..."
+            flutter pub run environment_config:generate --ip_key=${{ secrets.ip_key }} --rapid_key=${{ secrets.ip_rapid_keykey }} --hs_key=${{ secrets.hs_key }}  --hs_secret=${{ secrets.hs_secret }} --hub_key=${{ secrets.hub_key }} --hub_secret=${{ secrets.hub_secret }} --icom_appID=${{ secrets.icom_appID }} --icom_iosKey=${{ secrets.icom_iosKey }} --icom_androidKey=${{ secrets.icom_androidKey }} --thread_db=${{ secrets.thread_db }}
 
-      # 7. Upload Artifact to Github
+      # 7. Build iOS App
+      - name: Build iOS IPA
+        run: flutter build ios --release --no-codesign
+
+      # 8. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ios-ipa
+          name: android-app-bundle
           path: ${{ github.workspace }}/dist/*.ipa
-
