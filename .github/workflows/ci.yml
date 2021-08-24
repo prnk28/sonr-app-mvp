@@ -54,7 +54,7 @@ jobs:
         run: |
             echo "Configuring Folder structure..."
             mkdir -p $BUILD_PATH
-            flutter config --build-dir=$BUILD_PATH
+            flutter config --build-dir=dist
 
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
@@ -125,7 +125,7 @@ jobs:
         run: |
             echo "Configuring Folder structure..."
             mkdir -p $BUILD_PATH
-            flutter config --build-dir=$BUILD_PATH
+            flutter config --build-dir=dist
 
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
