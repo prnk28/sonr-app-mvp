@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide AnimatedScale;
 
 import '../style.dart';
 import 'utility.dart';
@@ -58,6 +58,7 @@ class SolidButton extends StatelessWidget {
               },
               child: AnimatedScale(
                   scale: pressed.value ? 0.95 : 1.0,
+                  duration: 300.milliseconds,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     decoration: BoxDecoration(
@@ -98,7 +99,7 @@ class DynamicSolidButton extends StatelessWidget {
                   onPressed();
                 });
               },
-              child: AnimatedScale(scale: pressed.value ? 0.95 : 1.0, child: Obx(() => data.value.build()))),
+              child: AnimatedScale(scale: pressed.value ? 0.95 : 1.0, duration: 400.milliseconds, child: Obx(() => data.value.build()))),
           false.obs),
     );
   }
@@ -322,6 +323,7 @@ class ConfirmButton extends StatelessWidget {
           onTapCancel: controller.onTapCancel,
           child: AnimatedScale(
             scale: controller.status.value.scale,
+            duration: 275.milliseconds,
             child: Container(
               decoration: _buildDecoration(controller.status.value),
               margin: margin ?? const EdgeInsets.symmetric(horizontal: 32),
@@ -452,7 +454,7 @@ class ComplexButton extends StatelessWidget {
     required this.type,
     required this.label,
     this.size = 100,
-    this.fontSize = 20,
+    this.fontSize = 16,
     this.textColor,
   }) : super(key: key);
   @override
@@ -479,6 +481,7 @@ class ComplexButton extends StatelessWidget {
                     children: [
                       AnimatedScale(
                         scale: isPressed.value ? 0.9 : 1.0,
+                        duration: 275.milliseconds,
                         child: Container(
                           width: size,
                           height: size,
@@ -491,6 +494,7 @@ class ComplexButton extends StatelessWidget {
                       ),
                       AnimatedScale(
                         scale: isPressed.value ? 1.1 : 1.0,
+                        duration: 275.milliseconds,
                         child: type.dots(
                           width: size * 0.5,
                           height: size * 0.5,

@@ -29,6 +29,7 @@ class AppTheme {
         backgroundColor: Colors.white,
         dividerColor: Color(0xffEBEBEB),
         scaffoldBackgroundColor: AppColor.White.withOpacity(0.75),
+        fontFamily: 'Montserrat',
         splashColor: Colors.transparent,
         errorColor: AppColor.Red,
         focusColor: AppColor.Black,
@@ -43,6 +44,7 @@ class AppTheme {
   static ThemeData get DarkTheme => ThemeData(
         brightness: Brightness.dark,
         dividerColor: Color(0xff4E4949),
+        fontFamily: 'Montserrat',
         primaryColor: AppColor.Blue,
         backgroundColor: Color(0xff15162D),
         scaffoldBackgroundColor: AppColor.Black.withOpacity(0.85),

@@ -62,7 +62,7 @@ class IntelController extends GetxController with StateMixin<CompareLobbyResult>
     // Change State
     change(
       compareResult,
-      status: onData.peers.length == 0 ? RxStatus.empty() : RxStatus.success(),
+      status: onData.members.length == 0 ? RxStatus.empty() : RxStatus.success(),
     );
 
     // Update Reference

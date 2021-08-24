@@ -322,7 +322,7 @@ extension AppRoute on AppPage {
         description,
         buttonText,
         () {
-          completer.complete();
+          completer.complete(true);
           Future.delayed(300.milliseconds, () => Get.back());
         },
       )),

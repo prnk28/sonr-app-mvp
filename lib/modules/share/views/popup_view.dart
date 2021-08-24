@@ -34,6 +34,7 @@ class _SharePopupViewState extends State<SharePopupView> {
           onPressed: () => controller.close(),
           action: AnimatedScale(
               scale: _buildScale(controller.hasSelected.value),
+              duration: 700.milliseconds,
               child: ShowcaseItem.fromType(
                 type: ShowcaseType.ShareConfirm,
                 child: ActionButton(

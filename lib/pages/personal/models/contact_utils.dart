@@ -19,6 +19,7 @@ class ContactSName extends StatelessWidget {
               },
               child: AnimatedScale(
                   scale: isPressed.value ? 1.1 : 1.0,
+                  duration: 400.milliseconds,
                   child: Container(
                     constraints: BoxConstraints(maxWidth: ContactService.contact.value.sName.size(DisplayTextStyle.Light, fontSize: 24).width + 75),
                     child: Row(

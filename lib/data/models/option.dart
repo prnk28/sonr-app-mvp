@@ -1,7 +1,6 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:soundpool/soundpool.dart';
 
 /// Option for Share Choice
 enum ChooseOption { Camera, Contact, Media, File }
@@ -36,7 +35,7 @@ extension Sounds on Sound {
   static bool get isCompatible => (PlatformUtils.find().isMobile || PlatformUtils.find().isWeb || PlatformUtils.find().isMacOS);
 
   /// Constant Soundpool Reference
-  static late Soundpool _pool;
+  //static late Soundpool _pool;
 
   /// Map with Sound Type and ID
   static Map<Sound, int> _soundIds = {};
@@ -45,23 +44,23 @@ extension Sounds on Sound {
   static Future<void> init() async {
     if (isCompatible) {
       // Init Pool
-      _pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.notification));
+     // _pool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.notification));
 
       // Add Sounds
-      for (Sound s in Sound.values) {
-        int soundId = await rootBundle.load(s.path).then((ByteData soundData) {
-          return _pool.load(soundData);
-        });
-        _soundIds[s] = soundId;
-      }
+      // for (Sound s in Sound.values) {
+      //   int soundId = await rootBundle.load(s.path).then((ByteData soundData) {
+      //  //   return _pool.load(soundData);
+      //   });
+      //   _soundIds[s] = soundId;
+      // }
     }
   }
 
   /// Play this Current Sound
   Future<void> play() async {
     if (isCompatible && _soundIds[this] != null) {
-      await _pool.play(_soundIds[this]!);
-      await _pool.release();
+      // await _pool.play(_soundIds[this]!);
+      // await _pool.release();
     }
   }
 

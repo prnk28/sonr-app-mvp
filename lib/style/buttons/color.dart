@@ -144,6 +144,7 @@ class ColorButton extends StatelessWidget {
                   },
                   child: AnimatedScale(
                       scale: pressed.value ? pressedScale : 1.0,
+                      duration: 300.milliseconds,
                       child: AnimatedContainer(
                           decoration: decoration,
                           duration: ButtonUtility.K_BUTTON_DURATION,

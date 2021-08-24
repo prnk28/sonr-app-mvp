@@ -85,6 +85,7 @@ class _ActionIconButton extends StatelessWidget {
                 },
                 child: AnimatedScale(
                   scale: isPressed.value ? 1.2 : 1.0,
+                  duration: 300.milliseconds,
                   child: Container(
                     constraints: BoxConstraints.tight(Size(40, 40)),
                     width: 40,
@@ -229,6 +230,7 @@ class ArrowButton extends StatelessWidget {
               },
               child: AnimatedScale(
                 scale: isPressed.value ? 0.9 : 1.0,
+                duration: 300.milliseconds,
                 child: Container(
                   height: 20,
                   child: Row(
@@ -276,6 +278,7 @@ class InfoButton extends StatelessWidget {
               },
               child: AnimatedScale(
                 scale: isPressed.value ? 0.9 : 1.0,
+                duration: 300.milliseconds,
                 child: Container(
                   height: 40,
                   width: 40,
