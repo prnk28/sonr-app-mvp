@@ -1,4 +1,4 @@
-name: CI/CD Workflow for Flutter 🐦
+name: CI Workflow 🐦
 
 on:
   push:
@@ -58,6 +58,7 @@ jobs:
       # 7. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
+        timeout-minutes: 45
 
       # 8. Upload Artifact to Github
       - name: Upload Artifact
@@ -118,6 +119,7 @@ jobs:
       # 7. Build iOS App
       - name: Build iOS IPA
         run: flutter build ios --release --no-codesign
+        timeout-minutes: 45
 
       # 8. Upload Artifact to Github
       - name: Upload Artifact

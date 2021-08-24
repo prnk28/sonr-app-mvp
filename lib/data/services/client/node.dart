@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';

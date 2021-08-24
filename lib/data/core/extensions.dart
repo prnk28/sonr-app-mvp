@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:geolocator/geolocator.dart' as geo;
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/style/style.dart';
 
@@ -59,6 +59,8 @@ extension ConnectivityResultUtils on ConnectivityResult {
         return ConnectionRequest_InternetType.MOBILE;
       case ConnectivityResult.none:
         return ConnectionRequest_InternetType.OFFLINE;
+      case ConnectivityResult.ethernet:
+        return ConnectionRequest_InternetType.ETHERNET;
     }
   }
 
