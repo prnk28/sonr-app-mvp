@@ -108,6 +108,8 @@ update:
 	@echo '🔹 Cleaning Project...'
 	@cd $(PROJECT_DIR) && rm -rf build
 	@cd $(PROJECT_DIR) && $(CLEAN)
+	@echo '🔹 Updating Submodules...'
+	@cd $(PROJECT_DIR) && git submodule update --remote plugin
 	@echo '🔹 Fetch Packages...'
 	@cd $(PROJECT_DIR) && flutter pub upgrade
 	@cd /System/Library/Sounds && afplay Hero.aiff
@@ -124,16 +126,3 @@ clean:
 	pub global activate cider
 	pub global activate protoc_plugin
 	pub global activate devtools
-
-##
-##
-## Shortcuts   : (b) => build                    |      (c) => clean
-##               └─ (bi) => build.ios            |      (p) => profile
-##               └─ (ba) => build.android        |      (u) => update
-##
-b:build
-bi:build.ios
-ba:build.android
-p:profile
-u:update
-c:clean
