@@ -12,8 +12,8 @@ FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
 BUILDIOS=$(FLUTTER) build ios
 BUILDANDROID=$(FLUTTER) build appbundle
-BUILDIOS_SKL=$(FLUTTER) build ios --bundle-sksl-path $(SKL_FILE) --release
-BUILDANDROID_SKL=$(FLUTTER) build appbundle --bundle-sksl-path $(SKL_FILE)
+BUILDIOS_SKL=$(FLUTTER) build ios --bundle-sksl-path $(SKL_FILE) --release --no-codesign
+BUILDANDROID_SKL=$(FLUTTER) build appbundle --bundle-sksl-path $(SKL_FILE) --release
 CLEAN=$(FLUTTER) clean
 
 # Result Dirs/Files
@@ -118,7 +118,8 @@ update:
 ## [clean]       :   Cleans App Build Cache
 clean:
 	@echo '-- Removing Build Folders --'
-	cd $(PROJECT_DIR) && rm -rf build
+	@cd $(PROJECT_DIR) && rm -rf build
+	@cd $(PROJECT_DIR) && rm -rf dist
 	@echo '-- Cleaning Flutter --'
 	cd $(PROJECT_DIR) && git submodule foreach --recursive git reset --hard
 	cd $(PROJECT_DIR) && $(CLEAN)

@@ -1,23 +1,96 @@
-name: Announce App Workflow
+name: CI/CD Workflow for Flutter 🐦
 
-# Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the release branch
   push:
     tags:
       - v*
+    branches:
+      - release
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  workflow_dispatch:
+
 jobs:
-  # Runs the `gomobile bind -android` job
-  announce-twitter:
-    # The type of runner that the job will run on
+  # Android Flutter Build
+  build-android:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 1. Checkout
       - name: Checkout Repo
         uses: actions/checkout@v2
         with:
           submodules: true
+
+      # 2. Install Latest Android Binary
+      - name: Install Latest Android Binary
+        run: |
+            echo "Installing latest Android binary..."
+            gh release download --repo 'sonr-io/core' --pattern *_android.zip --dir ${{ github.workspace }}/plugin/android/libs
+            unzip ${{ github.workspace }}/plugin/android/libs/*_android.zip -d ${{ github.workspace }}/plugin/android/libs
+        env:
+          GITHUB_TOKEN: ${{secrets.PAT_GITHUB_TOKEN}}
+
+      # 3. Setup Java
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+
+      # 4. Setup Flutter
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'beta'
+
+      # 5. Configure Folder Structure
+      - name: Configure Structure
+        run: |
+            mkdir -p ${{ github.workspace }}/dist
+            flutter config --build-dir={{ github.workspace }}/dist
+
+      # 6. Fetch Packages
+      - run: flutter pub get
+      - run: flutter build appbundle
+
+      # 7. Upload Artifact to Github
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-app-bundle
+          path: ${{ github.workspace }}/build/Core.framework/
+
+  # iOS Flutter Build
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      # 1. Checkout
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # 2. Install Latest iOS Binary
+      - name: Install Latest iOS Binary
+        run: |
+          echo "Installing latest iOS binary..."
+          gh release download --repo 'sonr-io/core' --pattern *_ios.zip --dir ${{ github.workspace }}/plugin/ios/Frameworks
+          unzip ${{ github.workspace }}/plugin/ios/Frameworks/*_ios.zip -d ${{ github.workspace }}/plugin/ios/Frameworks
+        env:
+          GITHUB_TOKEN: ${{secrets.PAT_GITHUB_TOKEN}}
+
+      # 3. Setup Java
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+
+      # 4. Setup Flutter
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'beta'
+
+      # 5. Configure Folder Structure
+      - name: Configure Structure
+        run: |
+            mkdir -p ${{ github.workspace }}/dist
+            flutter config --build-dir={{ github.workspace }}/dist
+
+      # 6. Fetch Packages
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign

@@ -38,6 +38,7 @@ workspace.code-workspace
 .pub-cache/
 .pub/
 build/
+dist/
 
 # Android related
 **/android/**/gradle-wrapper.jar
