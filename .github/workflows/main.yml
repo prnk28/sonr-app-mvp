@@ -19,6 +19,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+          token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
       # 2. Install Latest Android Binary
       - name: Install Latest Android Binary
@@ -27,7 +28,7 @@ jobs:
             gh release download --repo 'sonr-io/core' --pattern *_android.zip --dir ${{ github.workspace }}/plugin/android/libs
             unzip ${{ github.workspace }}/plugin/android/libs/*_android.zip -d ${{ github.workspace }}/plugin/android/libs
         env:
-          GITHUB_TOKEN: ${{secrets.PAT_GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
 
       # 3. Setup Java
       - uses: actions/setup-java@v1
@@ -65,6 +66,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+          token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
       # 2. Install Latest iOS Binary
       - name: Install Latest iOS Binary
@@ -73,7 +75,7 @@ jobs:
           gh release download --repo 'sonr-io/core' --pattern *_ios.zip --dir ${{ github.workspace }}/plugin/ios/Frameworks
           unzip ${{ github.workspace }}/plugin/ios/Frameworks/*_ios.zip -d ${{ github.workspace }}/plugin/ios/Frameworks
         env:
-          GITHUB_TOKEN: ${{secrets.PAT_GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
 
       # 3. Setup Java
       - uses: actions/setup-java@v1
