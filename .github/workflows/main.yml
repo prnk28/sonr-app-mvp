@@ -46,15 +46,15 @@ jobs:
             flutter config --build-dir={{ github.workspace }}/dist
 
       # 6. Fetch Packages
-      - run: flutter pub get
-      - run: flutter build appbundle
+      - run: flutter pub upgrade
+      - run: flutter build appbundle --release
 
       # 7. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: android-app-bundle
-          path: ${{ github.workspace }}/build/Core.framework/
+          path: ${{ github.workspace }}/dist/*.aab
 
   # iOS Flutter Build
   build-ios:
@@ -92,5 +92,13 @@ jobs:
             flutter config --build-dir={{ github.workspace }}/dist
 
       # 6. Fetch Packages
-      - run: flutter pub get
+      - run: flutter pub upgrade
       - run: flutter build ios --release --no-codesign
+
+      # 7. Upload Artifact to Github
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-ipa
+          path: ${{ github.workspace }}/dist/*.ipa
+
