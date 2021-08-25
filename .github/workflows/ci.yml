@@ -65,13 +65,7 @@ jobs:
         with:
           channel: 'beta'
 
-      # 7. Get Tag Version
-      - name: Get Tag Version
-        id: get_version
-        uses: battila7/get-version-action@v2
-      - run: echo ${{ steps.get_version.outputs.version-without-v }}
-
-      # 8. Fetch Packages and Generate Env Variables
+      # 6. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
             echo "--------------------"
@@ -83,7 +77,7 @@ jobs:
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
-            cider version ${{ steps.get_version.outputs.version-without-v }}
+            cider version ${{ github.event.workflow_dispatch.version }}
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"
@@ -97,12 +91,12 @@ jobs:
             echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
             echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
 
-      # 9. Build Android App
+      # 7. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-      # 10. Upload Artifact to Github
+      # 8. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -152,13 +146,6 @@ jobs:
         with:
           channel: 'beta'
 
-        # 6. Get Tag Version
-      - name: Get Tag Version
-        id: get_version
-        uses: battila7/get-version-action@v2
-      - run: echo ${{ steps.get_version.outputs.version-without-v }}
-
-
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
@@ -170,7 +157,7 @@ jobs:
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
-            cider version ${{ steps.get_version.outputs.version-without-v }}
+            cider version ${{ github.event.workflow_dispatch.version }}
             echo "Fetching packages..."
             flutter packages upgrade
             flutter packages get
