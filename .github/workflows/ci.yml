@@ -67,7 +67,6 @@ jobs:
 
       # 8. Configure Android Keystore
       - name: Configure Keystore for Android
-        if: matrix.target == 'Android'
         run: |
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
           echo "storeFile=upload-keystore.jks" >> key.properties
