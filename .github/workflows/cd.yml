@@ -30,7 +30,7 @@ jobs:
           args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
 
 
-  playstore-deploy:
+  deploy-android:
     runs-on: ubuntu-latest
     steps:
       # Set up Flutter.
@@ -73,7 +73,7 @@ jobs:
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
         working-directory: android
 
-  appstore-deploy:
+  deploy-ios:
     runs-on: macos-latest
     steps:
       - name: Fastlane Action
