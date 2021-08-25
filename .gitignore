@@ -24,6 +24,7 @@ Gemfile
 .sonr/
 env_gen.txt
 /lib/env.dart
+**/android/**/play_store_config.json
 
 # Flutter/Dart/Pub related
 **/doc/api/

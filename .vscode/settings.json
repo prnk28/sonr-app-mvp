@@ -1,6 +1,5 @@
 {
   "files.exclude": {
-    "env_gen.txt": true,
     "analysis_options.yaml": true,
     "lib/style/icons": true,
     "plugin": true,
