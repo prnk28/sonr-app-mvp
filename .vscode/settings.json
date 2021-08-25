@@ -3,5 +3,9 @@
     "analysis_options.yaml": true,
     "lib/style/icons": true,
     "plugin": true,
-  }
+  },
+  "github-actions.workflows.pinned.workflows": [
+    ".github/workflows/cd.yml",
+    ".github/workflows/ci.yml"
+  ]
 }

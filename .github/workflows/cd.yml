@@ -1,86 +1,44 @@
-name: CD Workflow 📱
+name: CD Flutter Workflow
 
 # Controls when the action will run.
 on:
-  push:
-    tags:
-      - v*
+  workflow_run:
+    workflows: ["CI Flutter Workflow"]
+    branches: [release]
+    types:
+      - completed
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# Handle Succesful build by semver version and status
 jobs:
-  # Runs the `gomobile bind -android` job
-  announce-twitter:
-    # The type of runner that the job will run on
+  # Checks if Build has succeeded.
+  # Returns: `needs.result.outputs.is_success == 'failure' |  `success``
+  status:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    outputs:
+      result: ${{ steps.status.outputs.result }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+      - name: Determine Status
+        id: status
+        run: echo "::set-output name=result::${{ github.event.workflow_run.conclusion }}"
 
-  notify-discord:
+
+  # Posts Build Status to Discord
+  notify-result:
+    needs: [status]
     runs-on: ubuntu-latest
     steps:
-      - name: Discord notification
+      - name: Discord Success Notification
+        if: ${{ needs.status.outputs.result == 'success' }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+          args: 'Flutter build succeeded!.'
 
-
-  deploy-android:
-    runs-on: ubuntu-latest
-    steps:
-      # Set up Flutter.
-      - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@v1
-        with:
-          channel: beta
-      - run: flutter doctor -v
-
-      # Checkout gallery code and get packages.
-      - name: Checkout the branch
-        uses: actions/checkout@v2
-      - run: flutter pub get
-
-      # Setup Ruby, Bundler, and Gemfile dependencies
-      - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.6'
-          bundler-cache: true
-          working-directory: android
-
-      - name: Configure Keystore
-        run: |
-          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-          echo "storeFile=upload-keystore.jks" >> key.properties
-          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
-          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
-          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+      - name: Discord Failed Notification
+        if: ${{ needs.status.outputs.result == 'success' }}
         env:
-          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        working-directory: android
-
-      - name: Build and deploy with Fastlane 🚀
-        run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
-        env:
-          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
-        working-directory: android
-
-  deploy-ios:
-    runs-on: macos-latest
-    steps:
-      - name: Fastlane Action
-        uses: maierj/fastlane-action@v2.0.1
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
         with:
-          lane: beta
-          subdirectory: 'ios'
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
+          args: 'Failed to build Flutter App.'

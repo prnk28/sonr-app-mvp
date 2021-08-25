@@ -1,12 +1,28 @@
-name: CI Workflow 🐦
+name: CI Flutter Workflow
 
 on:
   push:
     tags:
       - v*
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Git tag of of semver value.'
+        required: true
+      is_release:
+        description: 'Whether Tag contains pre-release keyword.'
+        required: true
 
 jobs:
+  # Setup Project for Build
+  setup:
+    name: Setup Project for Build
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
   # Android Flutter Build
   build-android:
     runs-on: ubuntu-latest
@@ -49,27 +65,44 @@ jobs:
         with:
           channel: 'beta'
 
-      # 7. Fetch Packages and Generate Env Variables
+      # 7. Get Tag Version
+      - name: Get Tag Version
+        id: get_version
+        uses: battila7/get-version-action@v2
+      - run: echo ${{ steps.get_version.outputs.version-without-v }}
+
+      # 8. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
+            echo "--------------------"
             echo "Fetching packages..."
+            echo "--------------------"
+            pub global activate cider
             flutter packages upgrade
             flutter packages get
+            echo "------------------"
+            echo "Setting Version..."
+            echo "------------------"
+            cider version ${{ steps.get_version.outputs.version-without-v }}
+            echo "---------------------------"
             echo "Generating Env Variables..."
-            flutter pub run environment_config:generate --ip_key=${{ secrets.ip_key }} --rapid_key=${{ secrets.ip_rapid_keykey }} --hs_key=${{ secrets.hs_key }}  --hs_secret=${{ secrets.hs_secret }} --hub_key=${{ secrets.hub_key }} --hub_secret=${{ secrets.hub_secret }} --icom_appID=${{ secrets.icom_appID }} --icom_iosKey=${{ secrets.icom_iosKey }} --icom_androidKey=${{ secrets.icom_androidKey }} --thread_db=${{ secrets.thread_db }}
+            echo "---------------------------"
+            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }} --thread_db=${{ secrets.THREAD_DB }}
+            echo "-----------------------------------"
             echo "Configuring Keystore for Android..."
+            echo "-----------------------------------"
             echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
             echo "storeFile=upload-keystore.jks" >> key.properties
             echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
             echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
             echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
 
-      # 8. Build Android App
+      # 9. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-      # 9. Upload Artifact to Github
+      # 10. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -119,28 +152,100 @@ jobs:
         with:
           channel: 'beta'
 
+        # 6. Get Tag Version
+      - name: Get Tag Version
+        id: get_version
+        uses: battila7/get-version-action@v2
+      - run: echo ${{ steps.get_version.outputs.version-without-v }}
 
-      # 6. Fetch Packages and Generate Env Variables
+
+      # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
+            echo "-------------------------------"
             echo "Configuring Folder structure..."
+            echo "-------------------------------"
             mkdir -p $BUILD_PATH
             flutter config --build-dir=dist
+            echo "------------------"
+            echo "Setting Version..."
+            echo "------------------"
+            cider version ${{ steps.get_version.outputs.version-without-v }}
             echo "Fetching packages..."
             flutter packages upgrade
             flutter packages get
             echo "Generating Env Variables..."
-            flutter pub run environment_config:generate --ip_key=${{ secrets.ip_key }} --rapid_key=${{ secrets.ip_rapid_keykey }} --hs_key=${{ secrets.hs_key }}  --hs_secret=${{ secrets.hs_secret }} --hub_key=${{ secrets.hub_key }} --hub_secret=${{ secrets.hub_secret }} --icom_appID=${{ secrets.icom_appID }} --icom_iosKey=${{ secrets.icom_iosKey }} --icom_androidKey=${{ secrets.icom_androidKey }} --thread_db=${{ secrets.thread_db }}
+            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }} --thread_db=${{ secrets.THREAD_DB }}
 
-      # 7. Build iOS IPA
+      # 8. Build iOS IPA
       - name: Build iOS IPA
         run: flutter build ipa --release --no-codesign
         timeout-minutes: 45
 
-      # 8. Upload Artifact to Github
+      # 9. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: ios-build
           path: ${{ github.workspace }}/dist/**/*.ipa
           if-no-files-found: error
+
+
+  # Deploys android to correct channel
+  deploy-android:
+    needs: [build-android]
+    runs-on: ubuntu-latest
+    steps:
+      # Set up Flutter.
+      - name: Clone Flutter repository with master channel
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+      - run: flutter doctor -v
+
+      # Checkout gallery code and get packages.
+      - name: Checkout the branch
+        uses: actions/checkout@v2
+      - run: flutter pub get
+
+      # Setup Ruby, Bundler, and Gemfile dependencies
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+          bundler-cache: true
+          working-directory: android
+
+      - name: Configure Keystore
+        run: |
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "storeFile=upload-keystore.jks" >> key.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        working-directory: android
+
+      - name: Build and deploy with Fastlane 🚀
+        run: bundle exec fastlane internal
+        env:
+          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
+        working-directory: android
+
+  # Deploys iOS to correct channel
+  deploy-ios:
+    needs: [build-ios]
+    runs-on: macos-latest
+    steps:
+      - name: Fastlane Action
+        uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: beta
+          subdirectory: 'ios'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+          MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
