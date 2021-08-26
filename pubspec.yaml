@@ -32,8 +32,6 @@ environment_config:
       env_var: icom_iosKey
     icom_androidKey:
       env_var: icom_androidKey
-    thread_db:
-      env_var: thread_db
 
 # ** ================== **
 # **    DEPENDENCIES    **

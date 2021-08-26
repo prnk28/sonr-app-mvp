@@ -4,14 +4,8 @@ on:
   push:
     tags:
       - v*
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Git tag of of semver value.'
-        required: true
-      is_release:
-        description: 'Whether Tag contains pre-release keyword.'
-        required: true
+  repository_dispatch:
+    types: [build-app]
 
 jobs:
   # Setup Project for Build
@@ -77,11 +71,11 @@ jobs:
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
-            cider version ${{ github.event.workflow_dispatch.version }}
+            cider version ${{ github.event.client_payload.version }}
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"
-            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }} --thread_db=${{ secrets.THREAD_DB }}
+            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
             echo "-----------------------------------"
             echo "Configuring Keystore for Android..."
             echo "-----------------------------------"
@@ -157,12 +151,12 @@ jobs:
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
-            cider version ${{ github.event.workflow_dispatch.version }}
+            cider version ${{ github.event.client_payload.version }}
             echo "Fetching packages..."
             flutter packages upgrade
             flutter packages get
             echo "Generating Env Variables..."
-            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }} --thread_db=${{ secrets.THREAD_DB }}
+            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
 
       # 8. Build iOS IPA
       - name: Build iOS IPA
