@@ -6,6 +6,7 @@ on:
       - v*
   repository_dispatch:
     types: [build-app]
+  workflow_dispatch:
 
 jobs:
   # Android Flutter Build
