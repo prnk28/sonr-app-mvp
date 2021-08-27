@@ -69,21 +69,31 @@ jobs:
             echo "Generating Env Variables..."
             echo "---------------------------"
             flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
-            echo "-----------------------------------"
-            echo "Configuring Keystore for Android..."
-            echo "-----------------------------------"
-            echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-            echo "storeFile=upload-keystore.jks" >> key.properties
-            echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
-            echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
-            echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
 
       # 7. Build Android App
+      - name: Configure Keystore
+        run: |
+          echo "-----------------------------------"
+          echo "Configuring Keystore for Android..."
+          echo "-----------------------------------"
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "storeFile=upload-keystore.jks" >> key.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        working-directory: android
+
+      # 8. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-      # 8. Upload Artifact to Github
+      # 9. Upload Artifact to Github
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
