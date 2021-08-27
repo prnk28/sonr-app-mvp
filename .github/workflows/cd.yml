@@ -9,25 +9,11 @@ on:
 
 # Handle Succesful build by semver version and status
 jobs:
-  # Checks if Build has succeeded.
-  # Returns: `needs.result.outputs.is_success == 'failure' |  `success``
-  status:
-    runs-on: ubuntu-latest
-    outputs:
-      result: ${{ steps.status.outputs.result }}
-    steps:
-      - name: Determine Status
-        id: status
-        run: echo "::set-output name=result::${{ github.event.workflow_run.conclusion }}"
-
-
-  # Posts Build Status to Discord
   notify-result:
-    needs: [status]
     runs-on: ubuntu-latest
     steps:
       - name: Discord Success Notification
-        if: ${{ needs.status.outputs.result == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
@@ -35,7 +21,7 @@ jobs:
           args: 'Flutter build succeeded!.'
 
       - name: Discord Failed Notification
-        if: ${{ needs.status.outputs.result != 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master

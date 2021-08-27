@@ -76,11 +76,13 @@ jobs:
           echo "Configuring Keystore for Android..."
           echo "-----------------------------------"
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "$PLAY_STORE_CONFIG_JSON" | base64 --decode > app/play_store_config.json
           echo "storeFile=upload-keystore.jks" >> key.properties
           echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
           echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
           echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
         env:
+          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
           PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
@@ -92,15 +94,23 @@ jobs:
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-      # 9. Send Fastlane
+      # 9. Setup Ruby, Bundler, and Gemfile dependencies
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+          bundler-cache: true
+          working-directory: ios
+
+      # 10. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
+        timeout-minutes: 30
         with:
           lane: internal
           subdirectory: android
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
 
   # iOS Flutter Build
   deploy-ios:
@@ -173,9 +183,12 @@ jobs:
       # 10. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
+        timeout-minutes: 30
         with:
           lane: beta
           subdirectory: 'ios'
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
