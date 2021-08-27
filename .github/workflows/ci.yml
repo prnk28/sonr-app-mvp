@@ -10,7 +10,7 @@ on:
 
 jobs:
   # Android Flutter Build
-  build-android:
+  deploy-android:
     runs-on: ubuntu-latest
     env:
         BUILD_PATH: ${{ github.workspace }}/dist
@@ -63,7 +63,6 @@ jobs:
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
-            pub global activate cider
             cider version ${{ github.event.client_payload.version }}
             echo "---------------------------"
             echo "Generating Env Variables..."
@@ -93,19 +92,25 @@ jobs:
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-      # 9. Upload Artifact to Github
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+      # 9. Setup Ruby, Bundler, and Gemfile dependencies
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
         with:
-          name: android-build
-          path: build/app/outputs/bundle/release/app-release.aab
-          if-no-files-found: error
+          ruby-version: '2.6'
+          bundler-cache: true
+          working-directory: android
+
+      # 10. Send Fastlane
+      - name: Build and deploy with Fastlane 🚀
+        run: bundle exec fastlane internal
+        env:
+          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
+        working-directory: android
 
   # iOS Flutter Build
-  build-ios:
+  deploy-ios:
     runs-on: macos-latest
     env:
-        BUILD_PATH: ${{ github.workspace }}/dist
         FLUTTER_PATH: /Users/runner/hostedtoolcache/flutter
     steps:
       # 1. Checkout
@@ -146,11 +151,6 @@ jobs:
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
-            echo "-------------------------------"
-            echo "Configuring Folder structure..."
-            echo "-------------------------------"
-            mkdir -p $BUILD_PATH
-            flutter config --build-dir=dist
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
@@ -162,70 +162,20 @@ jobs:
             echo "Generating Env Variables..."
             flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
 
-      # 8. Build iOS IPA
-      - name: Build iOS IPA
-        run: flutter build ipa --release --no-codesign
+      # 8. Build iOS APP
+      - name: Build iOS APP
+        run: flutter build ios --release --no-codesign
         timeout-minutes: 45
 
-      # 9. Upload Artifact to Github
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ios-build
-          path: ${{ github.workspace }}/dist/**/*.ipa
-          if-no-files-found: error
-
-
-  # Deploys android to correct channel
-  deploy-android:
-    needs: [build-android]
-    runs-on: ubuntu-latest
-    steps:
-      # Set up Flutter.
-      - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@v1
-        with:
-          channel: beta
-      - run: flutter doctor -v
-
-      # Checkout gallery code and get packages.
-      - name: Checkout the branch
-        uses: actions/checkout@v2
-      - run: flutter pub get
-
-      # Setup Ruby, Bundler, and Gemfile dependencies
+      # 9. Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.6'
           bundler-cache: true
-          working-directory: android
+          working-directory: ios
 
-      - name: Configure Keystore
-        run: |
-          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-          echo "storeFile=upload-keystore.jks" >> key.properties
-          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
-          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
-          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
-        env:
-          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        working-directory: android
-
-      - name: Build and deploy with Fastlane 🚀
-        run: bundle exec fastlane internal
-        env:
-          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
-        working-directory: android
-
-  # Deploys iOS to correct channel
-  deploy-ios:
-    needs: [build-ios]
-    runs-on: macos-latest
-    steps:
+      # 10. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
         with:
