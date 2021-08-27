@@ -19,10 +19,6 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number
-    version = get_version_number_from_git_branch(pattern: 'v#')
-    increment_version_number(
-      version_number: version
-    )
     build_app(scheme: "Runner",
             workspace: "Runner.xcworkspace",
             export_options: {
