@@ -13,7 +13,6 @@ assets/keys.json
 android/fastlane_keys.json
 Runner.app.*
 Runner.ipa
-Gemfile
 .env
 
 # IntelliJ related

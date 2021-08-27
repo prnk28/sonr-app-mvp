@@ -76,7 +76,7 @@ jobs:
           echo "Configuring Keystore for Android..."
           echo "-----------------------------------"
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-          echo "$PLAY_STORE_CONFIG_JSON" | base64 --decode > app/play_store_config.json
+          echo "$PLAY_STORE_CONFIG_JSON" | base64 --decode > play_store_config.json
           echo "storeFile=upload-keystore.jks" >> key.properties
           echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
           echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
@@ -189,7 +189,7 @@ jobs:
           subdirectory: 'ios'
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}

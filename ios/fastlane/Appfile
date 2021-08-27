@@ -1,4 +1,3 @@
-app_name("Sonr")
 app_identifier(["io.sonr.apple", "io.sonr.apple.sharing"])
 apple_id("service@sonr.io") # Your Apple email address
 itc_team_id("123025145") # App Store Connect Team ID
