@@ -92,31 +92,15 @@ jobs:
         run: flutter build appbundle --release
         timeout-minutes: 45
 
-
-      # 10. Send Fastlane
+      # 9. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
         with:
-          lane: beta
+          lane: internal
           subdirectory: android
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
-
-      # 9. Setup Ruby, Bundler, and Gemfile dependencies
-      - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.6'
-          bundler-cache: true
-          working-directory: android
-
-      # 10. Send Fastlane
-      - name: Build and deploy with Fastlane 🚀
-        run: bundle exec fastlane internal
-        env:
-          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
-        working-directory: android
 
   # iOS Flutter Build
   deploy-ios:

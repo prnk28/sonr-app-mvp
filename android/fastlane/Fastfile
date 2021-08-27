@@ -22,7 +22,7 @@ platform :android do
   end
 
   desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'internal')
+  lane :beta do
+    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'beta')
   end
 end
