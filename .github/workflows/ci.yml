@@ -76,7 +76,7 @@ jobs:
           echo "Configuring Keystore for Android..."
           echo "-----------------------------------"
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-          echo "$PLAY_STORE_CONFIG_JSON" | base64 --decode > play_store_config.json
+          echo "$PLAY_STORE_CONFIG_JSON" >> play_store_config.json
           echo "storeFile=upload-keystore.jks" >> key.properties
           echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
           echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
@@ -180,6 +180,12 @@ jobs:
           bundler-cache: true
           working-directory: ios
 
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.FASTLANE_SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
       # 10. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
@@ -189,7 +195,8 @@ jobs:
           subdirectory: 'ios'
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
