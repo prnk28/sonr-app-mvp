@@ -60,7 +60,7 @@ extension ConnectivityResultUtils on ConnectivityResult {
       case ConnectivityResult.none:
         return ConnectionRequest_InternetType.OFFLINE;
       case ConnectivityResult.ethernet:
-        return ConnectionRequest_InternetType.ETHERNET;
+        return ConnectionRequest_InternetType.WIFI;
     }
   }
 

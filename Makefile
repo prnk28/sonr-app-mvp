@@ -10,7 +10,7 @@ PLUGIN_DIR=/Users/prad/Sonr/app/plugin
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
 BUILDIOS=$(FLUTTER) build ios
-BUILDANDROID=$(FLUTTER) build appbundle
+BUILDANDROID=$(FLUTTER) build appbundle --release
 BUILDIOS_SKL=$(FLUTTER) build ios --bundle-sksl-path $(SKL_FILE) --release --no-codesign
 BUILDANDROID_SKL=$(FLUTTER) build appbundle --bundle-sksl-path $(SKL_FILE) --release
 CLEAN=$(FLUTTER) clean
@@ -124,8 +124,6 @@ profile:
 
 ## [update]      :   Fetch Plugin Submodule, and Upgrade Dependencies
 update:
-	@echo '🔹 Bumping Plugin Version...'
-	@cd $(PLUGIN_DIR) && make update
 	@echo '🔹 Cleaning Project...'
 	@cd $(PROJECT_DIR) && rm -rf build
 	@cd $(PROJECT_DIR) && $(CLEAN)

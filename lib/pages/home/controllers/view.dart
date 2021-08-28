@@ -117,10 +117,10 @@ extension CompareLobbyResultUtil on CompareLobbyResult {
   List<Widget> mapNearby() {
     if (this.current != null) {
       if (hasMoreThanVisible) {
-        final firstValues = this.current!.members.values.take(4).toList();
+        final firstValues = this.current!.peers.values.take(4).toList();
         return firstValues.map<Widget>((value) => PeerItem.bubble(value)).toList();
       } else {
-        return this.current!.members.values.map<Widget>((value) => PeerItem.bubble(value)).toList();
+        return this.current!.peers.values.map<Widget>((value) => PeerItem.bubble(value)).toList();
       }
     } else {
       return [];

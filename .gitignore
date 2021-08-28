@@ -44,6 +44,7 @@ dist/
 **/android/gradlew.bat
 **/android/key.properties
 **/android/local.properties
+**/android/**/**.jks
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
