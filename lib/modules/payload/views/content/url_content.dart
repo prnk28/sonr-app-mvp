@@ -19,8 +19,8 @@ class URLAuthView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
             child: CircleContainer(
               padding: EdgeInsets.all(4),
-              child: invite.from.profile.hasPicture()
-                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+              child: invite.from.active.profile.hasPicture()
+                  ? Image.memory(Uint8List.fromList(invite.from.active.profile.picture))
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
@@ -31,7 +31,7 @@ class URLAuthView extends StatelessWidget {
 
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
-            ProfileFullName(profile: invite.from.profile, isHeader: true),
+            ProfileFullName(profile: invite.from.active.profile, isHeader: true),
             Center(child: "Website Link".gradient(value: DesignGradients.PlumBath, size: 22)),
           ]),
         ]),

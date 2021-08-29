@@ -148,11 +148,11 @@ class ShareController extends GetxController with StateMixin<Session> {
   }
 
   /// Choose Payload then Immedietly Send Invite to Peer
-  Future<void> chooseThenInvite({required Peer peer, required ChooseOption option}) async {
+  Future<void> chooseThenInvite({required Member peer, required ChooseOption option}) async {
     SenderService.choose(option).then((value) {
       if (value != null) {
         // Set Peer for Invite
-        value.setPeer(peer);
+        value.setMember(peer);
 
         // Create Session
         change(SenderService.invite(value), status: RxStatus.success());

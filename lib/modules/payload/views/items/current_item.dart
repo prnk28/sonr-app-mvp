@@ -20,10 +20,10 @@ class CurrentReceiveItem extends GetView<ActivityController> {
               children: [
                 _CurrentActivityPeer(
                   payload: session.payload,
-                  profile: session.from.profile,
+                  profile: session.from.active.profile,
                 ),
                 _CurrentActivityContent(
-                  firstName: session.from.profile.firstName,
+                  firstName: session.from.active.profile.firstName,
                   payload: session.payload,
                 ),
                 Padding(

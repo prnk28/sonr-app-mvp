@@ -190,7 +190,7 @@ class SnackArgs {
     final inv = mail.invite;
     return SnackArgs(
       title: "Remote Invite",
-      message: inv.payload.toString() + " File from ${mail.invite.from.profile.firstName}",
+      message: inv.payload.toString() + " File from ${mail.invite.from.active.profile.firstName}",
       icon: SimpleIcons.Compass.white,
       backgroundColor: AppTheme.AccentColor,
       snackStyle: SnackStyle.FLOATING,

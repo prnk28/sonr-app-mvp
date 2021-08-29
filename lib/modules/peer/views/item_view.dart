@@ -4,12 +4,12 @@ import 'package:sonr_app/modules/peer/peer.dart';
 
 /// #### PeerListItem for Remote View
 class PeerListItem extends GetWidget<PeerController> {
-  final Peer peer;
+  final Member member;
   final int index;
-  PeerListItem({required this.peer, required this.index});
+  PeerListItem({required this.member, required this.index});
   @override
   Widget build(BuildContext context) {
-    controller.initalize(peer, setAnimated: false);
+    controller.initalize(member, setAnimated: false);
     return Padding(
         padding: EdgeInsets.all(8),
         child: Column(children: [
@@ -40,8 +40,8 @@ class PeerListItem extends GetWidget<PeerController> {
 
   Widget _buildTitle() {
     return [
-      "${peer.profile.fullName} \n".subheadingSpan(fontSize: 20),
-      " ${peer.sName}.snr/".paragraphSpan(fontSize: 16),
+      "${member.active.profile.fullName} \n".subheadingSpan(fontSize: 20),
+      " ${member.active.sName}.snr/".paragraphSpan(fontSize: 16),
     ].rich();
   }
 
@@ -52,14 +52,14 @@ class PeerListItem extends GetWidget<PeerController> {
         Align(
           alignment: Alignment.center,
           child: ProfileAvatar.fromPeer(
-            peer,
+            member.active,
             size: 64,
             backgroundColor: Color(0xff8E8E93).withOpacity(0.3),
           ),
         ),
         Positioned.directional(
           textDirection: TextDirection.rtl,
-          child: peer.platform.icon(color: AppTheme.ItemColor.withOpacity(0.75), size: 26),
+          child: member.active.platform.icon(color: AppTheme.ItemColor.withOpacity(0.75), size: 26),
           start: 14,
           bottom: 4,
         )

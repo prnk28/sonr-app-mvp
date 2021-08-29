@@ -21,6 +21,7 @@ class PeerController extends GetxController with StateMixin<Session> {
 
   // References
   late final Session session;
+  late final Member member;
   StreamSubscription<Position>? _userStream;
   bool _handlingHit = false;
   bool _hasInvited = false;
@@ -36,9 +37,10 @@ class PeerController extends GetxController with StateMixin<Session> {
   }
 
   /// #### Method that Initializes Peer and Streams
-  void initalize(Peer data, {bool setAnimated = true}) async {
+  void initalize(Member data, {bool setAnimated = true}) async {
     // Set Initial
-    peer(data);
+    peer(data.active);
+    member = data;
 
     // Add Stream Handlers
     LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
@@ -69,7 +71,7 @@ class PeerController extends GetxController with StateMixin<Session> {
         // Perform Invite
         var invite = InviteRequestUtils.copy(
           TransferController.inviteRequest,
-          peer: this.peer.value,
+          member: this.member,
         );
 
         // Create Session
@@ -90,7 +92,7 @@ class PeerController extends GetxController with StateMixin<Session> {
       SenderService.choose(ChooseOption.File).then((value) {
         if (value != null) {
           // Set Peer for Invite
-          value.setPeer(this.peer.value);
+          value.setMember(this.member);
 
           // Create Session
           var newSession = SenderService.invite(value);

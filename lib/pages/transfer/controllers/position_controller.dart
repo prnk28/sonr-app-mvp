@@ -90,11 +90,11 @@ class PositionController extends GetxController {
           Get.back();
           AppRoute.snack(SnackArgs.error("No Peers in Flat Mode"));
         } else if (LobbyService.lobby.value.flatPeerCount() == 1) {
-          if (Get.find<LobbyService>().sendFlatMode(LobbyService.lobby.value.flatFirst())) {
-            Future.delayed(K_TRANSLATE_DURATION, () {
-              status(FlatModeState.Pending);
-            });
-          }
+          // if (Get.find<LobbyService>().sendFlatMode(LobbyService.lobby.value.flatFirst())) {
+          //   Future.delayed(K_TRANSLATE_DURATION, () {
+          //     status(FlatModeState.Pending);
+          //   });
+          // }
         } else {
           AppRoute.snack(SnackArgs.error("Too Many Peers in Flat Mode"));
         }

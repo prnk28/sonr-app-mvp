@@ -119,7 +119,7 @@ class SenderService extends GetxService {
     if (!request.payload.isNone && request.hasTo()) {
       // Analytics
       Logger.event(event: AppEvent.invited(request));
-      Logger.info("Invited: ${request.to.id.peer}");
+      Logger.info("Invited: ${request.to.active.id.peer}");
 
       // Send Invite
       NodeService.instance.invite(request);

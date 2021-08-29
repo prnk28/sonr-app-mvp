@@ -85,11 +85,12 @@ class TransferController extends GetxController {
     if (record != null) {
       // Get Peer from Record
       final peer = await record.toPeer();
+      final member = Member(active: peer, sName: peer.sName);
 
       // Change Session for Status Success
       SenderService.invite(InviteRequestUtils.copy(
         invite.value,
-        peer: peer,
+        member: member,
         type: InviteRequest_Type.REMOTE,
       ));
 

@@ -3,15 +3,15 @@ import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
 
 class PeerBubbleView extends GetView<PeerController> {
-  final Peer peer;
+  final Member member;
   final GlobalKey peerKey = GlobalKey();
-  PeerBubbleView(this.peer) : super(key: ValueKey(peer.id.peer));
+  PeerBubbleView(this.member) : super(key: ValueKey(member.active.id.peer));
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         AppRoute.positioned(
-          ShareHoverView(peer: peer),
+          ShareHoverView(member: member),
           init: () => ShareController.initPopup(),
           parentKey: peerKey,
           offset: Offset(-Get.width / 2, 20),
@@ -29,9 +29,9 @@ class PeerBubbleView extends GetView<PeerController> {
   }
 
   Decoration _buildDecoration() {
-    if (peer.profile.picture.length > 0) {
+    if (member.active.profile.picture.length > 0) {
       return BoxDecoration(
-        image: DecorationImage(image: MemoryImage(Uint8List.fromList(peer.profile.picture))),
+        image: DecorationImage(image: MemoryImage(Uint8List.fromList(member.active.profile.picture))),
         shape: BoxShape.circle,
       );
     } else {
@@ -43,7 +43,7 @@ class PeerBubbleView extends GetView<PeerController> {
   }
 
   Widget _buildPeerInitials() {
-    return peer.profile.initials.light(
+    return member.active.profile.initials.light(
       fontSize: 18,
       color: AppTheme.GreyColor,
     );

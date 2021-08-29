@@ -21,7 +21,7 @@ class InviteRequestSheet extends StatelessWidget {
               _InviteRequestFileHeader(
                 file: invite.file,
                 payload: invite.payload,
-                profile: invite.from.profile,
+                profile: invite.from.active.profile,
               ),
               _buildView(),
               Padding(
