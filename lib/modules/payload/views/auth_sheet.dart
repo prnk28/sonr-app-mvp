@@ -10,34 +10,31 @@ class InviteRequestSheet extends StatelessWidget {
   const InviteRequestSheet({Key? key, required this.invite}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return FadeInUpBig(
-      duration: 500.milliseconds,
-      child: BoxContainer(
-          padding: EdgeInsets.only(left: 8, right: 8),
-          height: 475,
-          margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
-          child: Column(
-            children: [
-              _InviteRequestFileHeader(
-                file: invite.file,
-                payload: invite.payload,
-                profile: invite.from.active.profile,
+    return BoxContainer(
+        padding: EdgeInsets.only(left: 8, right: 8),
+        height: 475,
+        margin: EdgeInsets.only(left: 10, right: 10, bottom: 24),
+        child: Column(
+          children: [
+            _InviteRequestFileHeader(
+              file: invite.file,
+              payload: invite.payload,
+              profile: invite.from.active.profile,
+            ),
+            _buildView(),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ColorButton.primary(
+                onPressed: () {
+                  ReceiverService.decide(true);
+                },
+                text: "Accept",
+                icon: SimpleIcons.Check,
+                margin: EdgeInsets.symmetric(horizontal: 54),
               ),
-              _buildView(),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: ColorButton.primary(
-                  onPressed: () {
-                    ReceiverService.decide(true);
-                  },
-                  text: "Accept",
-                  icon: SimpleIcons.Check,
-                  margin: EdgeInsets.symmetric(horizontal: 54),
-                ),
-              ),
-            ],
-          )),
-    );
+            ),
+          ],
+        ));
   }
 
   // Builds View By Payload

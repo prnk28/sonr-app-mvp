@@ -35,13 +35,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>HERECredentials</key>
-	<dict>
-		<key>AccessKeyId</key>
-		<string>WLCvm13SPXK4xSDMYbqWog</string>
-		<key>AccessKeySecret</key>
-		<string>qssKHphhuG2khFg_fTfyF0StoJJQzKMWIVRbBLkI7qko9BFTbi8U3ZxuPfndq3o9Ge6e9awG7_pQFcsJDDkikA</string>
-	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -76,10 +69,6 @@
 	<string>A reason to get the permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Requried for the App</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Sound Detection</string>
-	<key>SentryDSN</key>
-	<string>https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -101,12 +90,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>com.posthog.posthog.API_KEY</key>
-	<string>uZ7JYERY7rqx44QIQOQge_avgwS0kgs5sJqsmcow1VY</string>
-	<key>com.posthog.posthog.POSTHOG_HOST</key>
-	<string>https://app.posthog.com</string>
-	<key>com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>

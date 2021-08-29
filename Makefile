@@ -4,7 +4,6 @@ SONR_ROOT_DIR=/Users/prad/Sonr # Set this to Folder of Sonr
 PROJECT_DIR=/Users/prad/Sonr/app
 ANDROID_DIR=/Users/prad/Sonr/app/android
 IOS_DIR=/Users/prad/Sonr/app/ios
-PLUGIN_DIR=/Users/prad/Sonr/app/plugin
 
 # Mobile Actions
 FLUTTER=flutter
@@ -21,10 +20,16 @@ ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/app/build/app/outputs/bundle/release/
 SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
 
 # References
-PLUGIN_VERSION=`cider version`
-COMMIT_MESSAGE=":arrow_up: (version): Updated Core Binary to ${PLUGIN_VERSION}"
+PLUGIN_DIR=/Users/prad/Sonr/plugin
 IOS_FRAMEWORK_DIR=${PLUGIN_DIR}/ios/Frameworks
+IOS_FRAMEWORK=${IOS_FRAMEWORK_DIR}/Core.framework
 ANDROID_AAR_DIR=${PLUGIN_DIR}/android/libs
+ANDROID_AAR=${ANDROID_AAR_DIR}/io.sonr.core.aar
+
+# App References
+APP_PLUGIN_DIR="/Users/prad/Sonr/app/plugin"
+APP_IOS_FRAMEWORK=${APP_PLUGIN_DIR}/ios/Frameworks/Core.framework
+APP_ANDROID_AAR=${APP_PLUGIN_DIR}/android/libs/io.sonr.core.aar
 
 # Lists Options
 all: Makefile
@@ -127,8 +132,14 @@ update:
 	@echo '🔹 Cleaning Project...'
 	@cd $(PROJECT_DIR) && rm -rf build
 	@cd $(PROJECT_DIR) && $(CLEAN)
+	@rm -rf $(APP_IOS_FRAMEWORK)
+	@rm -rf $(APP_ANDROID_AAR)
 	@echo '🔹 Updating Submodules...'
+	@cd $(PLUGIN_DIR) && make update
 	@cd $(PROJECT_DIR) && git submodule update --remote plugin
+	@echo '🔹 Copying Frameworks to App...'
+	@cp -R ${IOS_FRAMEWORK} ${APP_IOS_FRAMEWORK}
+	@cp -R ${ANDROID_AAR} ${APP_ANDROID_AAR}
 	@echo '🔹 Fetch Packages...'
 	@cd $(PROJECT_DIR) && flutter pub upgrade
 	@cd /System/Library/Sounds && afplay Hero.aiff

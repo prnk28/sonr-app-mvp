@@ -39,7 +39,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
 
     // Create Node
-    _instance = await SonrCore.initialize(RequestBuilder.initialize, enableMulticastLock: false);
+    _instance = await SonrCore.initialize(RequestBuilder.initialize);
 
     // Set Callbacks
     _instance.onConnected = _handleConnected;
