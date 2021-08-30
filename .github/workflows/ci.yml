@@ -93,6 +93,12 @@ jobs:
       - name: Build Android AAB
         run: flutter build appbundle --release
         timeout-minutes: 45
+        env:
+          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       # 9. Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
@@ -111,6 +117,11 @@ jobs:
           subdirectory: android
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
   # iOS Flutter Build
   deploy-ios:

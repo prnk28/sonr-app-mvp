@@ -18,8 +18,6 @@
 		AC4AC67925F58C1E00CC7056 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC4AC67725F58C1E00CC7056 /* MainInterface.storyboard */; };
 		AC4AC67D25F58C1E00CC7056 /* sharing.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AC4AC67325F58C1E00CC7056 /* sharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AC94055D2676B337002B402D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AC94055C2676B337002B402D /* GoogleService-Info.plist */; };
-		ACE9F96F26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE9F96E26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.swift */; };
-		ACE9F97826C76F2400A6D1F3 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE9F97726C76F2400A6D1F3 /* SnapshotHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,13 +26,6 @@
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AC4AC67225F58C1E00CC7056;
-		};
-		ACE9F97126C76EB700A6D1F3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
-			remoteInfo = Runner;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -86,7 +77,6 @@
 		AC4AC67A25F58C1E00CC7056 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC4AC68725F58C6A00CC7056 /* sharing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sharing.entitlements; sourceTree = "<group>"; };
 		AC94055C2676B337002B402D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		ACE9F96C26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FastlaneSnapshotsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE9F96E26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastlaneSnapshotsUITests.swift; sourceTree = "<group>"; };
 		ACE9F97026C76EB700A6D1F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACE9F97726C76F2400A6D1F3 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
@@ -104,13 +94,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AC4AC67025F58C1E00CC7056 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ACE9F96926C76EB700A6D1F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -168,7 +151,6 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				AC4AC67325F58C1E00CC7056 /* sharing.appex */,
-				ACE9F96C26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -256,24 +238,6 @@
 			productReference = AC4AC67325F58C1E00CC7056 /* sharing.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		ACE9F96B26C76EB700A6D1F3 /* FastlaneSnapshotsUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = ACE9F97626C76EB700A6D1F3 /* Build configuration list for PBXNativeTarget "FastlaneSnapshotsUITests" */;
-			buildPhases = (
-				ACE9F96826C76EB700A6D1F3 /* Sources */,
-				ACE9F96926C76EB700A6D1F3 /* Frameworks */,
-				ACE9F96A26C76EB700A6D1F3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				ACE9F97226C76EB700A6D1F3 /* PBXTargetDependency */,
-			);
-			name = FastlaneSnapshotsUITests;
-			productName = FastlaneSnapshotsUITests;
-			productReference = ACE9F96C26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -290,10 +254,6 @@
 					};
 					AC4AC67225F58C1E00CC7056 = {
 						CreatedOnToolsVersion = 12.4;
-					};
-					ACE9F96B26C76EB700A6D1F3 = {
-						CreatedOnToolsVersion = 12.5.1;
-						TestTargetID = 97C146ED1CF9000F007C117D;
 					};
 				};
 			};
@@ -312,7 +272,6 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				AC4AC67225F58C1E00CC7056 /* sharing */,
-				ACE9F96B26C76EB700A6D1F3 /* FastlaneSnapshotsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -335,13 +294,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC4AC67925F58C1E00CC7056 /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ACE9F96A26C76EB700A6D1F3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,15 +404,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		ACE9F96826C76EB700A6D1F3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ACE9F96F26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.swift in Sources */,
-				ACE9F97826C76F2400A6D1F3 /* SnapshotHelper.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -468,11 +411,6 @@
 			isa = PBXTargetDependency;
 			target = AC4AC67225F58C1E00CC7056 /* sharing */;
 			targetProxy = AC4AC67B25F58C1E00CC7056 /* PBXContainerItemProxy */;
-		};
-		ACE9F97226C76EB700A6D1F3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 97C146ED1CF9000F007C117D /* Runner */;
-			targetProxy = ACE9F97126C76EB700A6D1F3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -565,8 +503,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = S6SPZ444RB;
 				ENABLE_BITCODE = NO;
@@ -580,7 +518,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.sonr.apple";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -709,8 +647,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = S6SPZ444RB;
 				ENABLE_BITCODE = NO;
@@ -724,7 +662,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.sonr.apple";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -741,8 +679,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = S6SPZ444RB;
 				ENABLE_BITCODE = NO;
@@ -757,7 +695,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.sonr.apple";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -775,8 +713,8 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = sharing/sharing.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_TEAM = S6SPZ444RB;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -792,7 +730,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple.sharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.sonr.apple.sharing";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_COMPILATION_MODE = singlefile;
@@ -828,7 +766,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple.sharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "AppStore Distribution Sharing";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.sonr.apple.sharing";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
@@ -846,8 +784,8 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = sharing/sharing.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_TEAM = S6SPZ444RB;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -862,98 +800,11 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple.sharing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.sonr.apple.sharing";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Profile;
-		};
-		ACE9F97326C76EB700A6D1F3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = S6SPZ444RB;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = FastlaneSnapshotsUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple.FastlaneSnapshotsUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Runner;
-			};
-			name = Debug;
-		};
-		ACE9F97426C76EB700A6D1F3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = FastlaneSnapshotsUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple.FastlaneSnapshotsUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Runner;
-			};
-			name = Release;
-		};
-		ACE9F97526C76EB700A6D1F3 /* Profile */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = S6SPZ444RB;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = FastlaneSnapshotsUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.sonr.apple.FastlaneSnapshotsUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Runner;
 			};
 			name = Profile;
 		};
@@ -986,16 +837,6 @@
 				AC4AC67F25F58C1E00CC7056 /* Debug */,
 				AC4AC68025F58C1E00CC7056 /* Release */,
 				AC4AC68125F58C1E00CC7056 /* Profile */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		ACE9F97626C76EB700A6D1F3 /* Build configuration list for PBXNativeTarget "FastlaneSnapshotsUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				ACE9F97326C76EB700A6D1F3 /* Debug */,
-				ACE9F97426C76EB700A6D1F3 /* Release */,
-				ACE9F97526C76EB700A6D1F3 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
