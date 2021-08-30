@@ -35,7 +35,7 @@ env_gen.txt
 .pub/
 build/
 dist/
-
+**/gc_keys.json
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle

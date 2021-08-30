@@ -7,6 +7,7 @@
 ---
 
 Sonr Mobile App Flutter frontend that utilizes [sonr_plugin](https://github.com/sonr-io/plugin) and [namebase](https://github.com/sonr-io/namebase).
+Effortlessly Share Files, Sonr is a Decentralized File Sharing Platform that works like Airdrop locally and like Email when you need to share things a bit further.
 
 ## 🔷 Installation
 Generate **SQL** Table fields by running this command:

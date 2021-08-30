@@ -8,7 +8,7 @@ IOS_DIR=/Users/prad/Sonr/app/ios
 # Mobile Actions
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
-BUILDIOS=$(FLUTTER) build ios
+BUILDIOS=$(FLUTTER) build ios --release --no-codesign
 BUILDANDROID=$(FLUTTER) build appbundle --release
 BUILDIOS_SKL=$(FLUTTER) build ios --bundle-sksl-path $(SKL_FILE) --release --no-codesign
 BUILDANDROID_SKL=$(FLUTTER) build appbundle --bundle-sksl-path $(SKL_FILE) --release
@@ -83,7 +83,7 @@ deploy: fetch deploy.ios deploy.android
 deploy.ios:
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane internal
+	cd $(IOS_DIR) && fastlane beta
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
