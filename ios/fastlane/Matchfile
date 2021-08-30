@@ -1,4 +1,4 @@
-git_url("https://github.com/sonr-io/certificates")
+git_url("git@github.com:sonr-io/certificates.git")
 storage_mode("git")
 type("appstore")
 app_identifier(["io.sonr.apple", "io.sonr.apple.sharing"])
