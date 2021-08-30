@@ -63,6 +63,7 @@ jobs:
             echo "Setting Version..."
             echo "------------------"
             cider version ${{ github.event.client_payload.version }}
+            cider bump build
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"
@@ -181,6 +182,7 @@ jobs:
             echo "------------------"
             pub global activate cider
             cider version ${{ github.event.client_payload.version }}
+            cider bump build
             echo "Fetching packages..."
             flutter pub get
             cd ./ios && pod install
