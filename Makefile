@@ -172,12 +172,14 @@ update:
 ## [clean]       :   Cleans App Build Cache
 clean:
 	@echo '-- Removing Build Folders --'
+	@cd $(PROJECT_DIR)/ios && rm -rf build
 	@cd $(PROJECT_DIR) && rm -rf build
 	@cd $(PROJECT_DIR) && rm -rf dist
-	@echo '-- Cleaning Flutter --'
-	cd $(PROJECT_DIR) && git submodule foreach --recursive git reset --hard
-	cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && flutter pub get
+	@echo 'Cleaning iOS Fastlane Cache'
+	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
+	@cd $(PROJECT_DIR)/ios/fastlane && find . -name "report.xml" -type f -delete
+	@cd $(PROJECT_DIR)/android/fastlane && find . -name "report.xml" -type f -delete
+	@cd $(PROJECT_DIR) && flutter pub get
 	pub global activate cider
 	pub global activate protoc_plugin
 	pub global activate devtools

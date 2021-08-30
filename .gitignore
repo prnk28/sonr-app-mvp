@@ -47,6 +47,8 @@ dist/
 **/android/**/**.jks
 **/android/**/GeneratedPluginRegistrant.java
 **/android/fastlane/report.xml
+**/android/app/debug
+**/android/app/release
 
 # iOS/XCode related
 **/ios/fastlane/report.xml
