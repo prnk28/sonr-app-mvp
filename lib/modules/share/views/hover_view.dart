@@ -1,9 +1,9 @@
 import 'package:sonr_app/style/style.dart';
 
 class ShareHoverView extends GetView<ShareController> {
-  final Peer peer;
+  final Member member;
 
-  ShareHoverView({required this.peer});
+  ShareHoverView({required this.member});
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -20,7 +20,7 @@ class ShareHoverView extends GetView<ShareController> {
         child: controller.obx((state) {
           if (state != null) {
             return Column(mainAxisSize: MainAxisSize.min, children: [
-              _ShareHoverPeerInfo(peer: peer),
+              _ShareHoverPeerInfo(peer: member.active),
               Divider(),
               Padding(padding: EdgeInsets.only(top: 8)),
               _ShareHoverSession(
@@ -32,24 +32,24 @@ class ShareHoverView extends GetView<ShareController> {
         },
             onEmpty: Column(
               children: [
-                _ShareHoverPeerInfo(peer: peer),
+                _ShareHoverPeerInfo(peer: member.active),
                 Divider(),
                 Padding(padding: EdgeInsets.only(top: 8)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _ShareHoverCameraButtonItem(peer: peer),
+                    _ShareHoverCameraButtonItem(peer: member),
                     Padding(padding: EdgeInsets.only(left: 24)),
-                    _ShareHoverMediaButtonItem(peer: peer),
+                    _ShareHoverMediaButtonItem(peer: member),
                   ],
                 ),
                 Padding(padding: EdgeInsets.only(top: 24)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _ShareHoverFileButtonItem(peer: peer),
+                    _ShareHoverFileButtonItem(peer: member),
                     Padding(padding: EdgeInsets.only(left: 24)),
-                    _ShareHoverContactButtonItem(peer: peer),
+                    _ShareHoverContactButtonItem(peer: member),
                   ],
                 ),
               ],
@@ -135,7 +135,7 @@ class _ShareHoverPeerInfo extends StatelessWidget {
 
 /// #### Camera Share Button
 class _ShareHoverCameraButtonItem extends GetView<ShareController> {
-  final Peer peer;
+  final Member peer;
   const _ShareHoverCameraButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class _ShareHoverCameraButtonItem extends GetView<ShareController> {
 
 /// #### Camera Share Button
 class _ShareHoverMediaButtonItem extends GetView<ShareController> {
-  final Peer peer;
+  final Member peer;
   const _ShareHoverMediaButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
@@ -173,7 +173,7 @@ class _ShareHoverMediaButtonItem extends GetView<ShareController> {
 
 /// #### File Share Button
 class _ShareHoverFileButtonItem extends GetView<ShareController> {
-  final Peer peer;
+  final Member peer;
   const _ShareHoverFileButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {
@@ -192,7 +192,7 @@ class _ShareHoverFileButtonItem extends GetView<ShareController> {
 
 /// #### Contact Share Button
 class _ShareHoverContactButtonItem extends GetView<ShareController> {
-  final Peer peer;
+  final Member peer;
   const _ShareHoverContactButtonItem({required this.peer});
   @override
   Widget build(BuildContext context) {

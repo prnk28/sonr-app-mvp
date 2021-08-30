@@ -143,11 +143,11 @@ class _LocalManyView extends GetView<TransferController> {
                 itemBuilder: (context, index) {
                   switch (filter) {
                     case LobbyFilter.All:
-                      return PeerItem.list(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
+                      return PeerItem.list(index: index, member: LobbyService.lobby.value.peerAtIndex(index));
                     case LobbyFilter.Phones:
-                      return PeerItem.list(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
+                      return PeerItem.list(index: index, member: LobbyService.lobby.value.peerAtIndex(index));
                     case LobbyFilter.Desktops:
-                      return PeerItem.list(index: index, peer: LobbyService.lobby.value.peerAtIndex(index));
+                      return PeerItem.list(index: index, member: LobbyService.lobby.value.peerAtIndex(index));
                   }
                 },
                 itemCount: LobbyService.lobby.value.count,

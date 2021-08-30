@@ -7,13 +7,13 @@ const double K_CARD_HEIGHT = 190;
 
 /// #### Root Peer Card View
 class PeerCardView extends GetWidget<PeerController> {
-  final Peer peer;
+  final Member member;
   final GlobalKey peerKey = GlobalKey();
-  PeerCardView(this.peer) : super(key: ValueKey(peer.id.peer));
+  PeerCardView(this.member) : super(key: ValueKey(member.active.id.peer));
 
   @override
   Widget build(BuildContext context) {
-    controller.initalize(peer);
+    controller.initalize(member);
     return GestureDetector(
       onTap: () {
         //if (SenderService.hasSelected.value) {

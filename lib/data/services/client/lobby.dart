@@ -88,7 +88,7 @@ class LobbyService extends GetxService {
   }
 
   /// #### Method to Cancel Flat Mode
-  bool sendFlatMode(Peer? peer) {
+  bool sendFlatMode(Member? peer) {
     // Send Invite
     NodeService.sendFlat(peer);
 

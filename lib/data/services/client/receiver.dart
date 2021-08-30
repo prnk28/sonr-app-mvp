@@ -50,17 +50,13 @@ class ReceiverService extends GetxService {
         // Check Decision
         if (decision) {
           // Check for Remote
-          if (NodeService.isReady) {
-            NodeService.instance.respond(to._session.buildReply(decision: true));
-          }
+          NodeService.instance.respond(to._session.buildReply(decision: true));
           AppRoute.close();
           AppPage.Activity.to();
         }
         // Send Declined
         else {
-          if (NodeService.isReady) {
-            NodeService.instance.respond(to._session.buildReply(decision: false));
-          }
+          NodeService.instance.respond(to._session.buildReply(decision: false));
         }
       }
     }
@@ -69,6 +65,7 @@ class ReceiverService extends GetxService {
   // * ------------------- Callbacks ----------------------------
   /// Peer has Invited User
   void handleInvite(InviteRequest data) {
+    Logger.info("RECEIVED INVITE FROM: " + data.from.sName);
     // Create Incoming Session
     to._session.incoming(data);
 

@@ -30,9 +30,7 @@ Future<void> main() async {
 
   // Check Platform
   if (DeviceService.hasInternet) {
-    runZonedGuarded(() {
-      runApp(SplashPage());
-    }, FirebaseCrashlytics.instance.recordError);
+    runApp(SplashPage());
   } else {
     runApp(SplashPage());
   }

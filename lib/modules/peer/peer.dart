@@ -14,16 +14,16 @@ import 'views/bubble_view.dart';
 import 'package:sonr_app/style/style.dart';
 
 class PeerItem {
-  static Widget bubble(Member peer) {
-    return PeerBubbleView(peer.active);
+  static Widget bubble(Member member) {
+    return PeerBubbleView(member);
   }
 
-  static Widget card(Member peer) {
-    return PeerCardView(peer.active);
+  static Widget card(Member member) {
+    return PeerCardView(member);
   }
 
-  static Widget list({required Member peer, required int index}) {
-    return PeerListItem(peer: peer.active, index: index);
+  static Widget list({required Member member, required int index}) {
+    return PeerListItem(member: member, index: index);
   }
 
   static Widget linker(Peer peer, {required Function onPressed}) {

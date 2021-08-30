@@ -39,7 +39,7 @@ class NodeService extends GetxService with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
 
     // Create Node
-    _instance = await SonrCore.initialize(RequestBuilder.initialize, enableMulticastLock: false);
+    _instance = await SonrCore.initialize(RequestBuilder.initialize);
 
     // Set Callbacks
     _instance.onConnected = _handleConnected;
@@ -122,9 +122,9 @@ class NodeService extends GetxService with WidgetsBindingObserver {
   }
 
   /// #### Invite Peer with Built Request
-  static void sendFlat(Peer? peer) async {
+  static void sendFlat(Member? member) async {
     if (status.value.isConnected && isRegistered) {
-      to._instance.invite(InviteRequest(to: peer!)..setContact(ContactService.contact.value, type: InviteRequest_Type.DIRECT));
+      to._instance.invite(InviteRequest(to: member!)..setContact(ContactService.contact.value, type: InviteRequest_Type.DIRECT));
     }
   }
 

@@ -4,12 +4,12 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.10.0
+version: 0.10.0+2
 publish_to: none
 
 # -- Flutter Settings --
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 environment_config:
   path: env.dart # optional, result file path against `lib/` folder
@@ -48,7 +48,6 @@ dependencies:
   environment_config: ^3.0.0
   firebase_analytics: ^8.3.0
   firebase_core: ^1.5.0
-  firebase_crashlytics: ^2.2.0
   firebase_messaging: ^10.0.5
   get: ^4.3.8
   get_storage: ^2.0.3
