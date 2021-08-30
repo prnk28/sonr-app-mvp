@@ -77,9 +77,6 @@
 		AC4AC67A25F58C1E00CC7056 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC4AC68725F58C6A00CC7056 /* sharing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sharing.entitlements; sourceTree = "<group>"; };
 		AC94055C2676B337002B402D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		ACE9F96E26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastlaneSnapshotsUITests.swift; sourceTree = "<group>"; };
-		ACE9F97026C76EB700A6D1F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ACE9F97726C76F2400A6D1F3 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		C4256578C3B29CA56C3C2D5F /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		F54C585E340EBD7D18DEBDF4 /* Pods-Runner.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.production.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.production.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -139,7 +136,6 @@
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				AC4AC67425F58C1E00CC7056 /* sharing */,
-				ACE9F96D26C76EB700A6D1F3 /* FastlaneSnapshotsUITests */,
 				97C146EF1CF9000F007C117D /* Products */,
 				25F9FF5E8E45B31C3EEC3E87 /* Pods */,
 				3315B12E752A51E060340364 /* Frameworks */,
@@ -181,16 +177,6 @@
 				AC4AC67A25F58C1E00CC7056 /* Info.plist */,
 			);
 			path = sharing;
-			sourceTree = "<group>";
-		};
-		ACE9F96D26C76EB700A6D1F3 /* FastlaneSnapshotsUITests */ = {
-			isa = PBXGroup;
-			children = (
-				ACE9F97726C76F2400A6D1F3 /* SnapshotHelper.swift */,
-				ACE9F96E26C76EB700A6D1F3 /* FastlaneSnapshotsUITests.swift */,
-				ACE9F97026C76EB700A6D1F3 /* Info.plist */,
-			);
-			path = FastlaneSnapshotsUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

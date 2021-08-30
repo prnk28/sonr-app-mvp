@@ -17,7 +17,7 @@ CLEAN=$(FLUTTER) clean
 # Result Dirs/Files
 IOS_ARCHIVE_DIR=/Users/prad/Sonr/app/build/ios/archive/
 ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/app/build/app/outputs/bundle/release/
-SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
+SKL_FILE=/Users/prad/Sonr/app/assets/data/flutter_01.sksl.json
 
 # References
 PLUGIN_DIR=/Users/prad/Sonr/plugin
@@ -49,7 +49,7 @@ build: build.ios build.android
 ## └─ ios             - IPA for iOS
 build.ios:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
+	cd $(PROJECT_DIR) && $(BUILDIOS)
 	@echo '--------------------------------------------------'
 	@echo "✅ Finished Building iOS ➡ " && date
 
@@ -61,6 +61,29 @@ build.android:
 	@echo '--------------------------------------------------'
 	@echo "✅ Finished Building Android ➡ " && date
 
+## build-skl     :   Builds IPA and APB for Sonr App with SKL Embedding
+build-skl: build-skl.ios build.android
+	@cd /System/Library/Sounds && afplay Hero.aiff
+	@echo ""
+	@echo ""
+	@echo "------------------------------------------------------------------"
+	@echo "-------- ✅ ✅ ✅   FINISHED FLUTTER BUILD  ✅ ✅ ✅  --------------"
+	@echo "------------------------------------------------------------------"
+
+## └─ ios             - IPA for iOS with SKL Embedding
+build-skl.ios:
+	@cd $(PROJECT_DIR) && $(CLEAN)
+	cd $(PROJECT_DIR) && $(BUILDIOS_SKL)
+	@echo '--------------------------------------------------'
+	@echo "✅ Finished Building iOS ➡ " && date
+
+## └─ android         - APB for Android with SKL Embedding
+build-skl.android:
+	@cd $(PROJECT_DIR) && $(CLEAN)
+	cd $(PROJECT_DIR) && $(BUILDANDROID_SKL)
+	cd android && fastlane internal
+	@echo '--------------------------------------------------'
+	@echo "✅ Finished Building Android ➡ " && date
 
 ## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
 deploy: fetch deploy.ios deploy.android
@@ -81,9 +104,10 @@ deploy: fetch deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
+	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane beta
+	cd $(IOS_DIR) && fastlane ios beta
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date

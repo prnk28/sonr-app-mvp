@@ -18,12 +18,15 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    increment_build_number
     match(type: "appstore")
     build_app(scheme: "Runner",
             workspace: "Runner.xcworkspace",
             export_options: {
               method: "app-store",
+              provisioningProfiles: {
+                "io.sonr.apple" => "match AppStore io.sonr.apple",
+                "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
+              },
             })
     upload_to_testflight(skip_waiting_for_build_processing: false, expire_previous_builds: true)
   end
