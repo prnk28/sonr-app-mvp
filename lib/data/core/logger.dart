@@ -3,7 +3,6 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:logger/logger.dart' as util;
 
@@ -90,9 +89,9 @@ class Logger extends GetxService {
 
       // Configure Intercom
       await Intercom.initialize(
-        Env.icom_appID,
-        iosApiKey: Env.icom_iosKey,
-        androidApiKey: Env.icom_androidKey,
+        AppServices.intercomKeys.item1,
+        iosApiKey: AppServices.intercomKeys.item2,
+        androidApiKey: AppServices.intercomKeys.item3,
       );
     }
     return this;

@@ -67,6 +67,17 @@ jobs:
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"
+            cd ${{ github.workspace }} && touch .env
+            echo IP_KEY=${{ secrets.IP_KEY }} >> .env
+            echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
+            echo HS_KEY=${{ secrets.HS_KEY }} >> .env
+            echo HS_SECRET=${{ secrets.HS_SECRET }} >> .env
+            echo HUB_KEY=${{ secrets.HUB_KEY }} >> .env
+            echo HUB_SECRET=${{ secrets.HUB_SECRET }} >> .env
+            echo INTERCOM_APP_ID=${{ secrets.INTERCOM_APP_ID }} >> .env
+            echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
+            echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
+            cat .env
             flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
 
       # 7. Build Android App
@@ -89,6 +100,13 @@ jobs:
           KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         working-directory: android
 
+      # 9. Cache Build
+      - name: Cache Android Build
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/build
+          key: ${{ runner.os }}-android-build
+
       # 8. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
@@ -100,7 +118,7 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
-      # 9. Setup Ruby, Bundler, and Gemfile dependencies
+      # 10. Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -108,7 +126,7 @@ jobs:
           bundler-cache: true
           working-directory: ios
 
-      # 10. Send Fastlane
+      # 11. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
         timeout-minutes: 30
@@ -175,15 +193,34 @@ jobs:
             echo "Fetching packages..."
             flutter packages upgrade
             flutter packages get
+            echo "---------------------------"
             echo "Generating Env Variables..."
-            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
+            echo "---------------------------"
+            cd ${{ github.workspace }} && touch .env
+            echo IP_KEY=${{ secrets.IP_KEY }} >> .env
+            echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
+            echo HS_KEY=${{ secrets.HS_KEY }} >> .env
+            echo HS_SECRET=${{ secrets.HS_SECRET }} >> .env
+            echo HUB_KEY=${{ secrets.HUB_KEY }} >> .env
+            echo HUB_SECRET=${{ secrets.HUB_SECRET }} >> .env
+            echo INTERCOM_APP_ID=${{ secrets.INTERCOM_APP_ID }} >> .env
+            echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
+            echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
+            cat .env
 
-      # 8. Build iOS APP
+      # 8. Cache Build
+      - name: Cache iOS Build
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/build
+          key: ${{ runner.os }}-ios-build
+
+      # 9. Build iOS APP
       - name: Build iOS APP
         run: flutter build ios --release --no-codesign
         timeout-minutes: 45
 
-      # 9. Setup Ruby, Bundler, and Gemfile dependencies
+      # 10. Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1
         with:
@@ -191,13 +228,14 @@ jobs:
           bundler-cache: true
           working-directory: ios
 
+      # 11. Install SSH Key
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.FASTLANE_SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-      # 10. Send Fastlane
+      # 12. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
         timeout-minutes: 30

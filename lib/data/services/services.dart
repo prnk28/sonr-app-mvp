@@ -21,7 +21,7 @@ export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:intercom_flutter/intercom_flutter.dart';
 
 // Imports
-import 'package:sonr_app/env.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
@@ -31,6 +31,7 @@ class AppServices {
   /// #### Application Services
   static Future<void> init() async {
     // Initialize Services
+    await dotenv.load(fileName: ".env");
     await Get.putAsync(() => DeviceService().init(), permanent: true);
     await Get.putAsync(() => Logger().init(), permanent: true);
     await Get.putAsync(() => ContactService().init(), permanent: true);
@@ -59,12 +60,25 @@ class AppServices {
 
   /// #### Returns APIKeys from `Env.dart`
   static APIKeys get apiKeys => APIKeys(
-        handshakeKey: Env.hs_key,
-        handshakeSecret: Env.hs_secret,
-        ipApiKey: Env.ip_key,
-        rapidApiKey: Env.rapid_key,
-        textileKey: Env.hub_key,
-        textileSecret: Env.hub_secret,
+        ipApiKey: dotenv.env['IP_KEY'],
+        rapidApiKey: dotenv.env['RAPID_KEY'],
+        handshakeKey: dotenv.env['HS_KEY'],
+        handshakeSecret: dotenv.env['HS_SECRET'],
+        textileKey: dotenv.env['HUB_KEY'],
+        textileSecret: dotenv.env['HUB_SECRET'],
         pushKeyPath: DeviceService.pushKeyPath,
+      );
+
+  /// #### Returns Handshake API Key/Secret
+  static Tuple<String, String> get handshakeKeys => Tuple(
+        dotenv.env['HS_KEY'] ?? '',
+        dotenv.env['HS_SECRET'] ?? '',
+      );
+
+  /// #### Returns Intercom App ID/iOS Key/Android Key
+  static Triple<String, String, String> get intercomKeys => Triple(
+        dotenv.env['INTERCOM_APP_ID'] ?? '',
+        dotenv.env['INTERCOM_IOS_KEY'] ?? '',
+        dotenv.env['INTERCOM_ANDROID_KEY'] ?? '',
       );
 }

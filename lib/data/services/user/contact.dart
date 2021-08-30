@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/env.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/services/services.dart';
 
@@ -48,7 +47,7 @@ class ContactService extends GetxService {
   // ^ Constructer ^ //
   Future<ContactService> init() async {
     // Initialize Namebase
-    Namebase.init(key: Env.hs_key, secret: Env.hs_secret);
+    Namebase.init(key: AppServices.handshakeKeys.item1, secret:  AppServices.handshakeKeys.item2);
 
     // Fetch User
     await GetStorage.init('User');

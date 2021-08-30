@@ -11,28 +11,6 @@ publish_to: none
 environment:
   sdk: '>=2.12.0 <3.0.0'
 
-environment_config:
-  path: env.dart # optional, result file path against `lib/` folder
-  fields: # set of fields for command
-    ip_key:
-      env_var: ip_key
-    rapid_key:
-      env_var: rapid_key
-    hs_key:
-      env_var: hs_key
-    hs_secret:
-      env_var: hs_secret
-    hub_key:
-      env_var: hub_key
-    hub_secret:
-      env_var: hub_secret
-    icom_appID:
-      env_var: icom_appID
-    icom_iosKey:
-      env_var: icom_iosKey
-    icom_androidKey:
-      env_var: icom_androidKey
-
 # ** ================== **
 # **    DEPENDENCIES    **
 # ** ================== **
@@ -44,11 +22,11 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   bip39: ^1.0.6
-  cloud_firestore: ^2.5.0
-  environment_config: ^3.0.0
-  firebase_analytics: ^8.3.0
-  firebase_core: ^1.5.0
-  firebase_messaging: ^10.0.5
+  cloud_firestore: ^2.5.1
+  flutter_dotenv: ^5.0.2
+  firebase_analytics: ^8.3.1
+  firebase_core: ^1.6.0
+  firebase_messaging: ^10.0.6
   get: ^4.3.8
   get_storage: ^2.0.3
   intercom_flutter: ^5.0.2
@@ -157,6 +135,7 @@ flutter:
 
   # -- Media --
   assets:
+    - .env
     - assets/animations/lottie/
     - assets/animations/rive/
     - assets/data/
