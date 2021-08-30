@@ -58,8 +58,7 @@ jobs:
             echo "Fetching packages..."
             echo "--------------------"
             pub global activate cider
-            flutter packages upgrade
-            flutter packages get
+            flutter pub get
             echo "------------------"
             echo "Setting Version..."
             echo "------------------"
@@ -143,6 +142,9 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
+      - name: Select Xcode version
+        run: sudo xcode-select -s '/Applications/Xcode_12.5.1.app/Contents/Developer'
+
       # 2. Install Latest iOS Binary
       - name: Install Latest iOS Binary
         run: |
@@ -180,8 +182,8 @@ jobs:
             pub global activate cider
             cider version ${{ github.event.client_payload.version }}
             echo "Fetching packages..."
-            flutter packages upgrade
-            flutter packages get
+            flutter pub get
+            cd ./ios && pod install
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"

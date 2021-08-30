@@ -16,13 +16,42 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-    match(type: "appstore")
+  desc "Push a new beta build to TestFlight (Locally)"
+  lane :beta_local do
     build_app(scheme: "Runner",
             workspace: "Runner.xcworkspace",
+            export_method: "app-store",
             export_options: {
-              method: "app-store",
+              provisioningProfiles: {
+                "io.sonr.apple" => "match AppStore io.sonr.apple",
+                "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
+              },
+            })
+    upload_to_testflight(skip_waiting_for_build_processing: false, expire_previous_builds: true)
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    if is_ci
+      create_keychain(
+        name: "fastlane-keychain",
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false,
+        require_create: true,
+      )
+      match(
+        type: "appstore",
+        readonly: is_ci,
+        keychain_name: "fastlane-keychain"
+      )
+    end
+
+    build_app(scheme: "Runner",
+            workspace: "Runner.xcworkspace",
+            export_method: "app-store",
+            export_options: {
               provisioningProfiles: {
                 "io.sonr.apple" => "match AppStore io.sonr.apple",
                 "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
