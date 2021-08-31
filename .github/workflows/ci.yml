@@ -78,8 +78,6 @@ jobs:
             echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
-            flutter pub run environment_config:generate --ip_key=${{ secrets.IP_KEY }} --rapid_key=${{ secrets.RAPID_KEY }} --hs_key=${{ secrets.HS_KEY }}  --hs_secret=${{ secrets.HS_SECRET }} --hub_key=${{ secrets.HUB_KEY }} --hub_secret=${{ secrets.HUB_SECRET }} --icom_appID=${{ secrets.ICOM_APPID }} --icom_iosKey=${{ secrets.ICOM_IOSKEY }} --icom_androidKey=${{ secrets.ICOM_ANDROIDKEY }}
-
       # 7. Build Android App
       - name: Configure Keystore
         run: |
@@ -142,9 +140,6 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.PAT_GITHUB_TOKEN }}
-
-      - name: Select Xcode version
-        run: sudo xcode-select -s '/Applications/Xcode_12.5.1.app/Contents/Developer'
 
       # 2. Install Latest iOS Binary
       - name: Install Latest iOS Binary
