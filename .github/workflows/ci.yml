@@ -84,7 +84,7 @@ jobs:
           echo "-----------------------------------"
           echo "Configuring Keystore for Android..."
           echo "-----------------------------------"
-          echo "$ANDROID_KEYSTORE" | base64 --decode > app/upload-keystore.jks
+          echo "$ANDROID_KEYSTORE" | base64 --decode > app/keystore.jks
           echo "$ANDROID_PLAYSTORE_CONFIG" >> play_store_config.json
         env:
           ANDROID_PLAYSTORE_CONFIG: ${{ secrets.ANDROID_PLAYSTORE_CONFIG }}
@@ -180,7 +180,6 @@ jobs:
             cider bump build
             echo "Fetching packages..."
             flutter pub get
-            cd ./ios && pod install
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"
@@ -223,7 +222,12 @@ jobs:
           key: ${{ secrets.FASTLANE_SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-      # 12. Send Fastlane
+      # 12. Run Pod Install
+      - name: Run Pod Install
+        run: |
+          cd ios && pod install
+
+      # 13. Send Fastlane
       - name: Fastlane Action
         uses: maierj/fastlane-action@v2.0.1
         timeout-minutes: 30
