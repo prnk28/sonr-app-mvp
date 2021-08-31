@@ -16,19 +16,14 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Android
-### android test
-```
-fastlane android test
-```
-Runs all the tests
 ### android internal
 ```
 fastlane android internal
 ```
 Submit a new internal build to play store
-### android deploy
+### android beta
 ```
-fastlane android deploy
+fastlane android beta
 ```
 Deploy a new version to the Google Play
 
