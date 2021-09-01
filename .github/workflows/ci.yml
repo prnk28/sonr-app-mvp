@@ -181,8 +181,8 @@ jobs:
             cider version ${{ github.event.client_payload.version }}
             cider bump build
             echo "Fetching packages..."
+            flutter pub upgrade
             flutter pub get
-            cd ios && pod install
             echo "---------------------------"
             echo "Generating Env Variables..."
             echo "---------------------------"

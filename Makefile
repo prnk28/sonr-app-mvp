@@ -105,7 +105,7 @@ deploy: fetch deploy.ios deploy.android
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
 	cd $(PROJECT_DIR) && cider bump build
-#cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane ios beta
 	@cd /System/Library/Sounds && afplay Glass.aiff
