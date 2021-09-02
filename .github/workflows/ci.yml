@@ -165,8 +165,10 @@ jobs:
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
-            echo "Fetching packages..."
+            pub global activate cider
             flutter pub get
+            cider version ${{ github.event.client_payload.version }}
+            cider bump build
             cd ${{ github.workspace }} && touch .env
             echo IP_KEY=${{ secrets.IP_KEY }} >> .env
             echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
@@ -178,18 +180,14 @@ jobs:
             echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
-            echo "Updating and synchronizing XCode Targets..."
-            cd ios && pod install
-            cd ios && agvtool next-version -all
-            cd ios && agvtool new-marketing-version ${{ github.event.client_payload.version }}
-
 
       # 8. Configure iOS App
-      - name: Configure iOS
+      - name: Configure iOS Version
         run: |
           echo ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }} >> GoogleService-Info.plist
           pod install
-          gpg -d --passphrase $ANDROID_KEYSTORE_PASSWORD --batch app/keystore.jks.asc > app/keystore.jks
+          agvtool new-version -all `cider version | cut -d'+' -f 2`
+          agvtool new-marketing-version `cider version | cut -d'+' -f 1`
         working-directory: ios
 
       # 8. Cache Build
