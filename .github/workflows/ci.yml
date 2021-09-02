@@ -54,19 +54,10 @@ jobs:
       # 6. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
-            echo "--------------------"
-            echo "Fetching packages..."
-            echo "--------------------"
             pub global activate cider
             flutter pub get
-            echo "------------------"
-            echo "Setting Version..."
-            echo "------------------"
             cider version ${{ github.event.client_payload.version }}
             cider bump build
-            echo "---------------------------"
-            echo "Generating Env Variables..."
-            echo "---------------------------"
             cd ${{ github.workspace }} && touch .env
             echo IP_KEY=${{ secrets.IP_KEY }} >> .env
             echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
@@ -78,6 +69,7 @@ jobs:
             echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
+
       # 7. Build Android App
       - name: Configure Keystore
         run: |
@@ -174,18 +166,11 @@ jobs:
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
-            echo "------------------"
-            echo "Setting Version..."
-            echo "------------------"
             pub global activate cider
             cider version ${{ github.event.client_payload.version }}
             cider bump build
             echo "Fetching packages..."
-            flutter pub upgrade
             flutter pub get
-            echo "---------------------------"
-            echo "Generating Env Variables..."
-            echo "---------------------------"
             cd ${{ github.workspace }} && touch .env
             echo IP_KEY=${{ secrets.IP_KEY }} >> .env
             echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
@@ -197,6 +182,7 @@ jobs:
             echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
+            cd ios && pod install
 
       # 8. Cache Build
       - name: Cache iOS Build

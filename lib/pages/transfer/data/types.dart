@@ -77,12 +77,10 @@ class ComposeInviteQuery {
   DNSRecord record = DNSRecord.blank();
 
   Future<Peer> getPeer() async {
-    final pushToken = await ContactService.findPushToken(query.value);
     return Peer(
         sName: query.value,
         id: Peer_ID(
           publicKey: record.publicKey,
-          pushToken: pushToken ?? "",
         ));
   }
 }

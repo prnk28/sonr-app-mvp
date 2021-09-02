@@ -20,7 +20,6 @@ class RequestBuilder {
         hostOptions: ConnectionRequest_HostOptions(
           mdnsDiscovery: true,
         ),
-        pushToken: DeviceService.isMobile ? ContactService.pushToken.value : "",
       );
 
   /// Returns New Initialize Request

@@ -53,7 +53,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       if (DeviceService.isMobile) {
         SenderService.checkInitialShare();
       }
-      Get.find<NodeService>().connect().then((value) => ContactService.setActive(value));
     }
     super.onReady();
   }
