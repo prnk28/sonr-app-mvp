@@ -14,7 +14,10 @@ android/fastlane_keys.json
 Runner.app.*
 Runner.ipa
 .env
-
+deployment_cert.cer
+upload_cert.cer
+**/android/app/google-services.json
+**/ios/Runner/GoogleService-Info.plist
 # IntelliJ related
 *.iml
 *.ipr

@@ -70,29 +70,28 @@ jobs:
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
 
-      # 7. Build Android App
+      # 7. Configure Android App
       - name: Configure Keystore
         run: |
-          echo "-----------------------------------"
-          echo "Configuring Keystore for Android..."
-          echo "-----------------------------------"
-          echo "$ANDROID_KEYSTORE" > app/keystore.jks.asc
-          gpg -d --passphrase $ANDROID_KEYSTORE_PASSWORD --batch app/keystore.jks.asc > app/keystore.jks
-          echo "$ANDROID_PLAYSTORE_CONFIG" >> play_store_config.json
-        env:
-          ANDROID_PLAYSTORE_CONFIG: ${{ secrets.ANDROID_PLAYSTORE_CONFIG }}
-          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          echo ${{ secrets.ANDROID_KEYSTORE }} > app/keystore.jks.asc
+          gpg -d --passphrase ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}--batch app/keystore.jks.asc > app/keystore.jks
+          echo ${{ secrets.GOOGLE_SERVICES_JSON }} >> app/google-services.json
+          echo ${{ secrets.ANDROID_PLAYSTORE_CONFIG }} >> play_store_config.json
+          touch key.properties
+          echo "storeFile=keystore.jks" >> key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> key.properties
+          echo "keyAlias=upload" >> key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> key.properties
         working-directory: android
 
-      # 9. Cache Build
+      # 8. Cache Build
       - name: Cache Android Build
         uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/build
           key: ${{ runner.os }}-android-build
 
-      # 8. Build Android App
+      # 9. Build Android App
       - name: Build Android AAB
         run: flutter build appbundle --release
         timeout-minutes: 45
@@ -166,9 +165,6 @@ jobs:
       # 7. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
-            pub global activate cider
-            cider version ${{ github.event.client_payload.version }}
-            cider bump build
             echo "Fetching packages..."
             flutter pub get
             cd ${{ github.workspace }} && touch .env
@@ -182,7 +178,19 @@ jobs:
             echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
+            echo "Updating and synchronizing XCode Targets..."
             cd ios && pod install
+            cd ios && agvtool next-version -all
+            cd ios && agvtool new-marketing-version ${{ github.event.client_payload.version }}
+
+
+      # 8. Configure iOS App
+      - name: Configure iOS
+        run: |
+          echo ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }} >> GoogleService-Info.plist
+          pod install
+          gpg -d --passphrase $ANDROID_KEYSTORE_PASSWORD --batch app/keystore.jks.asc > app/keystore.jks
+        working-directory: ios
 
       # 8. Cache Build
       - name: Cache iOS Build
