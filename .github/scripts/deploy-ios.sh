@@ -1,4 +1,3 @@
-#!/bin/bash
 # Sonr Deploy iOS Script
 #
 # This script will deploy the latest version of the Sonr iOS app to the

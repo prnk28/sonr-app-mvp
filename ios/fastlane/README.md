@@ -16,16 +16,21 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
-### ios bump
+### ios assemble
 ```
-fastlane ios bump
+fastlane ios assemble
 ```
-Push a new beta build to TestFlight (Locally)
-### ios beta
+iOS Assemble
+### ios build
 ```
-fastlane ios beta
+fastlane ios build
 ```
-Push a new beta build to TestFlight
+iOS Build
+### ios deploy_internal
+```
+fastlane ios deploy_internal
+```
+Deploy to (Internal) - App Store
 
 ----
 

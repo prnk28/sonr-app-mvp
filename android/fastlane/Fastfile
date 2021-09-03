@@ -6,7 +6,6 @@ platform :android do
     # Bump Build Version
     Dir.chdir "../.." do
       sh("pub", "global", "activate", "cider")
-      sh("cider", "version", ENV["APP_VERSION"])
       sh("cider", "bump", "build")
     end
 

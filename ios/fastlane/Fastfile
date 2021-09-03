@@ -3,11 +3,6 @@ default_platform(:ios)
 platform :ios do
   desc "iOS Assemble"
   lane :assemble do
-    Dir.chdir "../.." do
-      sh("pub", "global", "activate", "cider")
-      sh("cider", "version", ENV["APP_VERSION"])
-      sh("cider", "bump", "build")
-    end
     if is_ci
       create_keychain(
         name: "fastlane-keychain",
@@ -23,19 +18,17 @@ platform :ios do
         keychain_name: "fastlane-keychain"
       )
     end
-    increment_build_number(
-      build_number: flutter_version()["version_code"],
-    )
-    increment_version_number(
-      version_number: flutter_version()["version_name"]
-    )
+    # increment_build_number(
+    #   build_number: flutter_version()["version_code"],
+    # )
+    # increment_version_number(
+    #   version_number: flutter_version()["version_name"]
+    # )
   end
 
   desc "iOS Build"
   lane :build do
     Dir.chdir "../.." do
-      sh("flutter", "packages", "get")
-      sh("flutter", "clean")
       sh("flutter", "build", "ios", "--release", "--no-codesign")
     end
     build_app(scheme: "Runner",

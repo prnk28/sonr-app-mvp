@@ -229,25 +229,25 @@ class SnackArgs {
     );
   }
 
-  /// #### RemoteNotification Operation
-  factory SnackArgs.notification(
-    RemoteNotification notification,
-  ) {
-    return SnackArgs(
-      title: notification.title,
-      message: notification.body ?? "",
-      icon: SimpleIcons.Alerts.white,
-      backgroundColor: AppTheme.AccentColor,
-      duration: 4000.milliseconds,
-      shouldIconPulse: true,
-      position: SnackPosition.TOP,
-      dismissDirection: SnackDismissDirection.HORIZONTAL,
-      isDismissible: true,
-      onTap: (_) {
-        AppPage.Activity.to();
-      },
-    );
-  }
+  // /// #### RemoteNotification Operation
+  // factory SnackArgs.notification(
+  //   RemoteNotification notification,
+  // ) {
+  //   return SnackArgs(
+  //     title: notification.title,
+  //     message: notification.body ?? "",
+  //     icon: SimpleIcons.Alerts.white,
+  //     backgroundColor: AppTheme.AccentColor,
+  //     duration: 4000.milliseconds,
+  //     shouldIconPulse: true,
+  //     position: SnackPosition.TOP,
+  //     dismissDirection: SnackDismissDirection.HORIZONTAL,
+  //     isDismissible: true,
+  //     onTap: (_) {
+  //       AppPage.Activity.to();
+  //     },
+  //   );
+  // }
 
   /// #### Succesful Operation
   factory SnackArgs.success(

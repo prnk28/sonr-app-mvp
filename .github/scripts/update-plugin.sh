@@ -1,4 +1,3 @@
-#!/bin/bash
 echo "🔷 Updating Plugin..."
 SCRIPTDIR=$(dirname "$0")
 

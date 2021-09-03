@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:path/path.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/style/style.dart';
 import 'package:geolocator/geolocator.dart';
@@ -74,11 +72,9 @@ class DeviceService extends GetxService {
     if (_connectivity.value.hasInternet) {
       // Initialize Firebase
       await Firebase.initializeApp();
-      FirebaseMessaging.onMessage.listen(_handleForegroundPush);
     }
 
     // Set Push Key Path
-    pushKeyPath = await _getPushKeyPath();
     return this;
   }
 
@@ -107,7 +103,6 @@ class DeviceService extends GetxService {
 
   /// #### Method Shows Keyboard
   static void keyboardShow() => isMobile ? SystemChannels.textInput.invokeMethod('TextInput.show') : print("");
-
 
   /// #### Saves Photo to Gallery
   static Future<bool> saveCapture(String path, bool isVideo) async {
@@ -175,31 +170,5 @@ class DeviceService extends GetxService {
 
     // Return File
     return await file.writeAsBytes(data.toList());
-  }
-
-  /// ### Find Path for Push Key Service JSON
-  Future<String> _getPushKeyPath() async {
-    // Set Temporary Directory
-    final name = "push_key.json";
-    Directory directory = await getApplicationDocumentsDirectory();
-
-    // Load into DB
-    var dbPath = join(directory.path, name);
-    ByteData data = await rootBundle.load("assets/data/$name");
-
-    // Write File
-    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var file = await File(dbPath).writeAsBytes(bytes);
-
-    // Return Path
-    return file.path;
-  }
-
-  /// ### Handle a Foreground Push Notification
-  void _handleForegroundPush(RemoteMessage message) {
-    Logger.info('Got a message whilst in the foreground!');
-    if (message.notification != null) {
-      AppRoute.snack(SnackArgs.notification(message.notification!));
-    }
   }
 }

@@ -17,7 +17,6 @@ export 'user/preference.dart';
 // Packages
 export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_core/firebase_core.dart';
-export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:intercom_flutter/intercom_flutter.dart';
 
 // Imports

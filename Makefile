@@ -118,18 +118,19 @@ deploy: fetch bump deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
-	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane ios beta
+	cd $(IOS_DIR) && fastlane ios assemble
+	cd $(IOS_DIR) && pod install
+	cd $(IOS_DIR) && fastlane ios build
+	cd $(IOS_DIR) && fastlane ios deploy_internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
 
 ## └─ android         - APB for PlayStore
 deploy.android:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
-	@echo "Finished Building Sonr Android ➡ " && date
-	cd $(ANDROID_DIR) && fastlane android internal
+	cd $(ANDROID_DIR) && fastlane android assemble
+	cd $(ANDROID_DIR) && fastlane android build
+	cd $(ANDROID_DIR) && fastlane android deploy_internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date

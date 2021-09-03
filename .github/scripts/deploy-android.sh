@@ -1,4 +1,3 @@
-#!/bin/bash
 # Sonr Deploy Android Script
 #
 # This script will deploy the latest version of the Sonr Android app to the

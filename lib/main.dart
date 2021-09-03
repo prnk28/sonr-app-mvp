@@ -3,27 +3,10 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:sonr_app/style/style.dart';
 
-/// #### Handles Background Push Notification
-Future<void> _handleBackgroundPush(RemoteMessage message) async {
-  // Initialize App if Not Set
-  await Firebase.initializeApp();
-
-  // Handle Intercom Message
-  if (await Intercom.isIntercomPush(message.data)) {
-    await Intercom.handlePush(message.data);
-    return;
-  }
-}
-
 /// #### Main Method
 Future<void> main() async {
   // Init Services
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Register Handler for Background Push
-  if (PlatformUtils.find().isMobile) {
-    FirebaseMessaging.onBackgroundMessage(_handleBackgroundPush);
-  }
 
   // Services
   await AppServices.init();
