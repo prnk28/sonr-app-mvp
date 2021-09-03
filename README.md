@@ -73,3 +73,17 @@ Table for **Gomobile** type conversions from bind.
 | Float64List                | double[]            | DoubleArray | FlutterStandardTypedData typedDataWithFloat64: | FlutterStandardTypedData(float64: Data) |
 | List                       | java.util.ArrayList | List        | NSArray                                        | Array                                   |
 | Map                        | java.util.HashMap   | HashMap     | NSDictionary                                   | Dictionary                              |
+
+
+
+
+
+
+
+
+
+
+
+
+
+openssl base64 < play_store_config.json | tr -d '\n' | tee play_store_config.txt

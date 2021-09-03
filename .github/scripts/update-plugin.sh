@@ -17,13 +17,6 @@ ANDROID_AAR=${ANDROID_AAR_DIR}/io.sonr.core.aar
 echo "Done."
 echo "\n"
 
-echo "Cleaning Project..."
-cd ${PROJECT_DIR}/${SCRIPTDIR} && sh tidy-project.sh
-rm -rf ${APP_IOS_FRAMEWORK}
-rm -rf ${APP_ANDROID_AAR}
-echo "Done."
-echo "\n"
-
 echo 'Updating Submodules...'
 cd ${PLUGIN_DIR} && make update
 cd ${PROJECT_DIR} && git submodule update --remote plugin

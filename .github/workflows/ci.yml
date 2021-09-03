@@ -23,15 +23,6 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
-      # 2. Install Latest Android Binary
-      - name: Install Latest Android Binary
-        run: |
-            echo "Installing latest Android binary..."
-            gh release download --repo 'sonr-io/core' --pattern *_android.zip --dir ${{ github.workspace }}/plugin/android/libs
-            unzip ${{ github.workspace }}/plugin/android/libs/*_android.zip -d ${{ github.workspace }}/plugin/android/libs
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-
       # 3. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v1
@@ -51,13 +42,24 @@ jobs:
         with:
           channel: 'beta'
 
+      # 8. Cache Build
+      - name: Cache Android Build
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/build
+          key: ${{ runner.os }}-android-build
+
+      # 10. Setup Ruby, Bundler, and Gemfile dependencies
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+          bundler-cache: true
+          working-directory: android
+
       # 6. Fetch Packages and Generate Env Variables
       - name: Fetch Packages and Generate Env
         run: |
-            pub global activate cider
-            flutter pub get
-            cider version ${{ github.event.client_payload.version }}
-            cider bump build
             cd ${{ github.workspace }} && touch .env
             echo IP_KEY=${{ secrets.IP_KEY }} >> .env
             echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
@@ -70,55 +72,17 @@ jobs:
             echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
             cat .env
 
-      # 7. Configure Android App
-      - name: Configure Keystore
-        run: |
-          echo ${{ secrets.ANDROID_KEYSTORE }} | base64 -di > app/keystore.jks
-          echo ${{ secrets.GOOGLE_SERVICES_JSON }} >> app/google-services.json
-          echo ${{ secrets.ANDROID_PLAYSTORE_CONFIG }} >> play_store_config.json
-          touch key.properties
-          echo "storeFile=keystore.jks" >> key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> key.properties
-          echo "keyAlias=upload" >> key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> key.properties
-        working-directory: android
-
-      # 8. Cache Build
-      - name: Cache Android Build
-        uses: actions/cache@v1
-        with:
-          path: ${{ github.workspace }}/build
-          key: ${{ runner.os }}-android-build
-
-      # 9. Build Android App
-      - name: Build Android AAB
-        run: flutter build appbundle --release
-        timeout-minutes: 45
+      # 9. Deploy Android App
+      - name: Deploy Android AAB
+        run: ${{ github.workspace }}/.github/scripts/deploy-android.sh
+        timeout-minutes: 60
         env:
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          APP_VERSION: ${{ github.event.client_payload.version }}
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-
-      # 10. Setup Ruby, Bundler, and Gemfile dependencies
-      - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.6'
-          bundler-cache: true
-          working-directory: ios
-
-      # 11. Send Fastlane
-      - name: Fastlane Action
-        uses: maierj/fastlane-action@v2.0.1
-        timeout-minutes: 30
-        with:
-          lane: internal
-          subdirectory: android
-        env:
+          ANDROID_PLAYSTORE_CONFIG: ${{ secrets.ANDROID_PLAYSTORE_CONFIG }}
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
   # iOS Flutter Build
   deploy-ios:
@@ -133,15 +97,6 @@ jobs:
           submodules: true
           token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
-      # 2. Install Latest iOS Binary
-      - name: Install Latest iOS Binary
-        run: |
-          echo "Installing latest iOS binary..."
-          gh release download --repo 'sonr-io/core' --pattern *_ios.zip --dir ${{ github.workspace }}/plugin/ios/Frameworks
-          unzip ${{ github.workspace }}/plugin/ios/Frameworks/*_ios.zip -d ${{ github.workspace }}/plugin/ios/Frameworks
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
-
       # 3. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v1
@@ -161,46 +116,12 @@ jobs:
         with:
           channel: 'beta'
 
-      # 7. Fetch Packages and Generate Env Variables
-      - name: Fetch Packages and Generate Env
-        run: |
-            pub global activate cider
-            flutter pub get
-            cider version ${{ github.event.client_payload.version }}
-            cider bump build
-            cd ${{ github.workspace }} && touch .env
-            echo IP_KEY=${{ secrets.IP_KEY }} >> .env
-            echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
-            echo HS_KEY=${{ secrets.HS_KEY }} >> .env
-            echo HS_SECRET=${{ secrets.HS_SECRET }} >> .env
-            echo HUB_KEY=${{ secrets.HUB_KEY }} >> .env
-            echo HUB_SECRET=${{ secrets.HUB_SECRET }} >> .env
-            echo INTERCOM_APP_ID=${{ secrets.INTERCOM_APP_ID }} >> .env
-            echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
-            echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
-            cat .env
-
-      # 8. Configure iOS App
-      - name: Configure iOS Version
-        run: |
-          echo ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }} >> GoogleService-Info.plist
-          pod install
-          APP_BUILD=`cider version | cut -d'+' -f 2`
-          APP_VERSION=`cider version | cut -d'+' -f 1`
-          agvtool new-version -all ${APP_BUILD} && agvtool new-marketing-version ${APP_VERSION}
-        working-directory: ios
-
       # 8. Cache Build
       - name: Cache iOS Build
         uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/build
           key: ${{ runner.os }}-ios-build
-
-      # 9. Build iOS APP
-      - name: Build iOS APP
-        run: flutter build ios --release --no-codesign
-        timeout-minutes: 45
 
       # 10. Setup Ruby, Bundler, and Gemfile dependencies
       - name: Setup Fastlane
@@ -217,14 +138,29 @@ jobs:
           key: ${{ secrets.FASTLANE_SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
+
+      # 7.  Generate Env Variables
+      - name: Generate Client Env
+        run: |
+            cd ${{ github.workspace }} && touch .env
+            echo IP_KEY=${{ secrets.IP_KEY }} >> .env
+            echo RAPID_KEY=${{ secrets.RAPID_KEY }} >> .env
+            echo HS_KEY=${{ secrets.HS_KEY }} >> .env
+            echo HS_SECRET=${{ secrets.HS_SECRET }} >> .env
+            echo HUB_KEY=${{ secrets.HUB_KEY }} >> .env
+            echo HUB_SECRET=${{ secrets.HUB_SECRET }} >> .env
+            echo INTERCOM_APP_ID=${{ secrets.INTERCOM_APP_ID }} >> .env
+            echo INTERCOM_IOS_KEY=${{ secrets.INTERCOM_IOS_KEY }} >> .env
+            echo INTERCOM_ANDROID_KEY=${{ secrets.INTERCOM_ANDROID_KEY }} >> .env
+            cat .env
+
       # 13. Send Fastlane
-      - name: Fastlane Action
-        uses: maierj/fastlane-action@v2.0.1
-        timeout-minutes: 30
-        with:
-          lane: beta
-          subdirectory: 'ios'
+      - name: Deploy iOS App
+        run: ${{ github.workspace }}/.github/scripts/deploy-ios.sh
+        timeout-minutes: 60
         env:
+          APP_VERSION: ${{ github.event.client_payload.version }}
+          GOOGLE_SERVICE_INFO_PLIST: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }}
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}

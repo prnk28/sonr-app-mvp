@@ -1,37 +1,13 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight (Locally)"
-  lane :beta_local do
-    build_app(scheme: "Runner",
-            workspace: "Runner.xcworkspace",
-            export_method: "app-store",
-            export_options: {
-              provisioningProfiles: {
-                "io.sonr.apple" => "match AppStore io.sonr.apple",
-                "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
-              },
-            })
-    upload_to_testflight(skip_waiting_for_build_processing: false, expire_previous_builds: true)
-  end
-
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
+  desc "iOS Assemble"
+  lane :assemble do
+    Dir.chdir "../.." do
+      sh("pub", "global", "activate", "cider")
+      sh("cider", "version", ENV["APP_VERSION"])
+      sh("cider", "bump", "build")
+    end
     if is_ci
       create_keychain(
         name: "fastlane-keychain",
@@ -47,16 +23,34 @@ platform :ios do
         keychain_name: "fastlane-keychain"
       )
     end
+    increment_build_number(
+      build_number: flutter_version()["version_code"],
+    )
+    increment_version_number(
+      version_number: flutter_version()["version_name"]
+    )
+  end
 
+  desc "iOS Build"
+  lane :build do
+    Dir.chdir "../.." do
+      sh("flutter", "packages", "get")
+      sh("flutter", "clean")
+      sh("flutter", "build", "ios", "--release", "--no-codesign")
+    end
     build_app(scheme: "Runner",
-            workspace: "Runner.xcworkspace",
-            export_method: "app-store",
-            export_options: {
-              provisioningProfiles: {
-                "io.sonr.apple" => "match AppStore io.sonr.apple",
-                "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
-              },
-            })
+      workspace: "Runner.xcworkspace",
+      export_method: "app-store",
+      export_options: {
+      provisioningProfiles: {
+          "io.sonr.apple" => "match AppStore io.sonr.apple",
+          "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
+        },
+      })
+  end
+
+  desc "Deploy to (Internal) - App Store"
+  lane :deploy_internal do
     upload_to_testflight(skip_waiting_for_build_processing: !is_ci, expire_previous_builds: true)
   end
 end

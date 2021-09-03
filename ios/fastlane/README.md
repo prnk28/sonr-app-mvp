@@ -16,9 +16,9 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
-### ios beta_local
+### ios bump
 ```
-fastlane ios beta_local
+fastlane ios bump
 ```
 Push a new beta build to TestFlight (Locally)
 ### ios beta

@@ -16,8 +16,6 @@ Runner.ipa
 .env
 deployment_cert.cer
 upload_cert.cer
-google-services.json
-GoogleService-Info.plist
 
 # IntelliJ related
 *.iml

@@ -1,28 +1,63 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-  desc "Submit a new internal build to play store"
-  lane :internal do
+  desc "Android Assemble"
+  lane :assemble do
+    # Bump Build Version
+    Dir.chdir "../.." do
+      sh("pub", "global", "activate", "cider")
+      sh("cider", "version", ENV["APP_VERSION"])
+      sh("cider", "bump", "build")
+    end
+
+    # CI Assemble Tasks
+    if is_ci
+      # Base64 Decode the Keystore and Playstore config
+      sh("base64", "--decode",
+          "--input", ENV["ANDROID_KEYSTORE"],
+          "--output", "app/keystore.jks"
+        )
+      sh("base64", "--decode",
+          "--input", ENV["ANDROID_PLAYSTORE_CONFIG"],
+          "--output", "play_store_config.json"
+        )
+      # Configure Gradle
+      gradle(
+        task: "assemble",
+        build_type: "Release",
+        print_command: false,
+        properties: {
+        "android.injected.signing.store.file" => "keystore.jks",
+        "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
+        "android.injected.signing.key.alias" => "upload",
+        "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
+        }
+      )
+    end
+  end
+
+  desc "Android Build"
+  lane :build do
+    Dir.chdir "../.." do
+      sh("flutter", "pub", "get")
+      sh("flutter", "clean")
+      sh("flutter", "build", "appbundle")
+    end
+  end
+
+  desc "Deploy to (Internal) - Play Store"
+  lane :deploy_internal do
     supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'internal',  track_promote_to: 'internal')
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :beta do
+  desc "Deploy to (Beta) - Play Store"
+  lane :deploy_beta do
+    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'beta',  track_promote_to: 'beta')
+  end
+
+
+  desc "Deploy to (Release) - Play Store"
+  lane :deploy_release do
     supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'beta',  track_promote_to: 'beta')
   end
 end
