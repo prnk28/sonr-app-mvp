@@ -57,6 +57,6 @@ platform :ios do
                 "io.sonr.apple.sharing" => "match AppStore io.sonr.apple.sharing"
               },
             })
-    upload_to_testflight(skip_waiting_for_build_processing: false, expire_previous_builds: true)
+    upload_to_testflight(skip_waiting_for_build_processing: !is_ci, expire_previous_builds: true)
   end
 end

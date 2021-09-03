@@ -94,9 +94,8 @@ bump:
 	@echo "--------------------------------------------------"
 	@echo "Build: ${APP_BUILD}"
 	@echo "Version: $(APP_VERSION)"
-	@cd ios
-	@agvtool new-version -all ${APP_BUILD}
-	@agvtool new-marketing-version ${APP_VERSION}
+	@cd ios && agvtool new-version -all ${APP_BUILD}
+	@cd ios && agvtool new-marketing-version ${APP_VERSION}
 	@echo "--------------------------------------------------"
 	@echo "✅ Finished Bumping Version ➡ " && date
 
