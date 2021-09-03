@@ -27,8 +27,8 @@ echo "\n"
 
 echo "Building iOS..."
 cd ${PROJECT_DIR} && flutter build ios --release --no-codesign
-echo "✅  Finished Building iOS ➡ " && date
+echo "✅  Finished Building iOS ➡ `date`"
 
 echo "Building Android..."
 cd ${PROJECT_DIR} && flutter build appbundle --release
-echo "✅  Finished Building Android ➡ " && date
+echo "✅  Finished Building Android ➡ `date`"
