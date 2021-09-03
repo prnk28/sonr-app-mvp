@@ -74,7 +74,12 @@ jobs:
 
       # 9. Deploy Android App
       - name: Deploy Android AAB
-        run: ${{ github.workspace }}/.github/scripts/deploy-android.sh
+        run: |
+            gh release download --repo 'sonr-io/core' --pattern *_android.zip --dir ${PLUGIN_DIR}/build
+            unzip ${PLUGIN_DIR}/*_android.zip -d ${PLUGIN_DIR}
+            cd ${ANDROID_DIR} && fastlane android assemble
+            cd ${ANDROID_DIR} && fastlane android build
+            cd ${ANDROID_DIR} && fastlane android deploy_internal
         timeout-minutes: 60
         env:
           APP_VERSION: ${{ github.event.client_payload.version }}
@@ -83,6 +88,10 @@ jobs:
           ANDROID_PLAYSTORE_CONFIG: ${{ secrets.ANDROID_PLAYSTORE_CONFIG }}
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          PROJECT_DIR: ${{ github.workspace }}
+          ANDROID_DIR: ${{ github.workspace }}/android
+          PLUGIN_DIR: ${{ github.workspace }}/plugin/android/libs
+
 
   # iOS Flutter Build
   deploy-ios:
@@ -156,7 +165,12 @@ jobs:
 
       # 13. Send Fastlane
       - name: Deploy iOS App
-        run: ${{ github.workspace }}/.github/scripts/deploy-ios.sh
+        run: |
+            gh release download --repo 'sonr-io/core' --pattern *_ios.zip --dir ${PLUGIN_DIR}
+            unzip ${PLUGIN_DIR}/*_ios.zip -d ${PLUGIN_DIR}
+            cd ${IOS_DIR} && fastlane ios assemble
+            cd ${IOS_DIR} && fastlane ios build
+            cd ${IOS_DIR} && fastlane ios deploy_internal
         timeout-minutes: 60
         env:
           APP_VERSION: ${{ github.event.client_payload.version }}
@@ -168,3 +182,6 @@ jobs:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          PROJECT_DIR: ${{ github.workspace }}
+          IOS_DIR: ${{ github.workspace }}/ios
+          PLUGIN_DIR: ${{ github.workspace }}/plugin/ios/Frameworks
