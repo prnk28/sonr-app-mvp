@@ -13,6 +13,8 @@ BUILDANDROID=$(FLUTTER) build appbundle --release
 BUILDIOS_SKL=$(FLUTTER) build ios --bundle-sksl-path $(SKL_FILE) --release --no-codesign
 BUILDANDROID_SKL=$(FLUTTER) build appbundle --bundle-sksl-path $(SKL_FILE) --release
 CLEAN=$(FLUTTER) clean
+APP_BUILD=`cider version | cut -d'+' -f 2`
+APP_VERSION=`cider version | cut -d'+' -f 1`
 
 # Result Dirs/Files
 IOS_ARCHIVE_DIR=/Users/prad/Sonr/app/build/ios/archive/
@@ -85,8 +87,20 @@ build-skl.android:
 	@echo '--------------------------------------------------'
 	@echo "✅ Finished Building Android ➡ " && date
 
+## bump           :   Bumps the version number for iOS/Android (including Targets)
+bump:
+	@echo "Bumping Version"
+	@cd $(PROJECT_DIR) && cider bump build
+	@echo "--------------------------------------------------"
+	@echo "Build: ${APP_BUILD}"
+	@echo "Version: $(APP_VERSION)"
+	@cd ios && agvtool new-version -all ${APP_BUILD}
+	@cd ios && agvtool new-marketing-version ${APP_VERSION}
+	@echo "--------------------------------------------------"
+	@echo "✅ Finished Bumping Version ➡ " && date
+
 ## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
-deploy: fetch deploy.ios deploy.android
+deploy: fetch bump deploy.ios deploy.android
 	@echo 'Cleaning Builds'
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
@@ -104,8 +118,7 @@ deploy: fetch deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-	cd $(PROJECT_DIR) && cider bump build
-#cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane ios beta
 	@cd /System/Library/Sounds && afplay Glass.aiff
@@ -114,13 +127,13 @@ deploy.ios:
 
 ## └─ android         - APB for PlayStore
 deploy.android:
-	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
+
 
 ##
 ## [fetch]        :   Fetch latest version of frameworks

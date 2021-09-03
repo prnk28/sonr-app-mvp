@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/style/style.dart';
@@ -19,7 +18,6 @@ class ContactService extends GetxService {
   final _fingerprint = "".val("fingerprint", getBox: () => GetStorage('User'));
   final _identity = "".val("identity", getBox: () => GetStorage('User'));
   final _mnemonic = "".val("mnemonic", getBox: () => GetStorage('User'));
-  final _pushToken = "".obs;
   final _prefix = "".val("prefix", getBox: () => GetStorage('User'));
   final _sName = "".val("sName", getBox: () => GetStorage('User'));
   final _status = UserStatus.Default.obs;
@@ -30,9 +28,6 @@ class ContactService extends GetxService {
 
   /// User Contact Reactive
   static Rx<Contact> get contact => to._contact;
-
-  /// User Push Token Reactive
-  static RxString get pushToken => to._pushToken;
 
   /// User SName
   static String get sName => to._status.value.hasUser ? to._sName.val.toLowerCase() : "";
@@ -52,17 +47,6 @@ class ContactService extends GetxService {
     // Fetch User
     await GetStorage.init('User');
     _status(UserStatusUtils.fromBox(_hasContact.val));
-
-    // Get Push Token
-    _pushToken(await FirebaseMessaging.instance.getToken());
-    _pushToken.bindStream(FirebaseMessaging.instance.onTokenRefresh);
-    setToken(_pushToken.value);
-
-    // Send Token to Intercom
-    await Intercom.sendTokenToIntercom(_pushToken.value);
-
-    // Register Push Token Subscription
-    tokenSubscription = _pushToken.listen(_handlePushToken);
 
     // Check if Exists
     if (_status.value.hasUser) {
@@ -87,19 +71,6 @@ class ContactService extends GetxService {
   }
 
 // * ------------------- Methods ----------------------------
-  /// #### Method finds Push Token for User
-  static Future<String?> findPushToken(String sName) async {
-    return FirebaseFirestore.instance.collection('users').doc(sName).get().then((snapshot) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-
-      if (data.containsKey('pushToken')) {
-        return data['pushToken'];
-      } else {
-        return null;
-      }
-    });
-  }
-
   /// #### Method to Save Auth Response
   static Future<void> newAuth(String mnemonic, String sName, AuthResponse result) async {
     // Logging
@@ -162,39 +133,7 @@ class ContactService extends GetxService {
     to._status(UserStatus.Existing);
   }
 
-  /// #### Method updates Push Token for User
-  static Future<void> setActive(bool isActive) async {
-    if (ContactService.isRegistered) {
-      return FirebaseFirestore.instance
-          .collection('push-users')
-          .doc(sName)
-          .set({
-            'firstName': ContactService.contact.value.firstName,
-            'isActive': isActive,
-          })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
-    } else {
-      return null;
-    }
-  }
 
-  /// #### Method updates Push Token for User
-  static Future<void> setToken(String token) async {
-    if (ContactService.isRegistered) {
-      return FirebaseFirestore.instance
-          .collection('push-users')
-          .doc(sName)
-          .set({
-            'firstName': ContactService.contact.value.firstName,
-            'pushToken': token,
-          })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
-    } else {
-      return null;
-    }
-  }
 
   // * ------------------- Helpers ----------------------------
   /// #### Helper: Method to Handle Contact Updates
@@ -211,10 +150,6 @@ class ContactService extends GetxService {
     }
   }
 
-  /// #### Helper: Handles Push Token Subscription
-  void _handlePushToken(String token) {
-    setToken(token);
-  }
 
   // * ------------------- Initializers ----------------------------
   /// #### Method Initializes existing user

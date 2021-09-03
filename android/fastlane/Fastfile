@@ -18,11 +18,11 @@ default_platform(:android)
 platform :android do
   desc "Submit a new internal build to play store"
   lane :internal do
-    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'internal')
+    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'internal',  track_promote_to: 'internal')
   end
 
   desc "Deploy a new version to the Google Play"
   lane :beta do
-    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'beta')
+    supply(aab: "../build/app/outputs/bundle/release/app-release.aab", track: 'beta',  track_promote_to: 'beta')
   end
 end
